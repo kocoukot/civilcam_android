@@ -1,0 +1,139 @@
+def dependencyGroup(closure) {
+    closure.delegate = dependencies
+    return closure
+}
+
+ext {
+    retrofitVersion = '2.7.1'
+    koin_version = '2.2.2'
+    koin_compose_version = '3.2.0'
+    nav_version = "2.3.3"
+    adapter_delegates_version = "4.3.0"
+    paging_version = "3.0.0"
+    compose_version = "1.1.1"
+
+
+    jetpackCompose = dependencyGroup {
+        // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+        implementation("androidx.compose.foundation:foundation:$compose_version")
+        // Material design icons
+        implementation("androidx.compose.material:material-icons-core:$compose_version")
+        implementation("androidx.compose.material:material-icons-extended:$compose_version")
+        // Integration with observables
+        implementation("androidx.compose.runtime:runtime-livedata:$compose_version")
+        implementation("androidx.compose.runtime:runtime-rxjava2:$compose_version")
+        implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-beta02"
+
+        implementation 'androidx.activity:activity-compose:1.4.0'
+        // Compose Material Design
+        implementation "androidx.compose.material:material:$compose_version"
+        // Animations
+        implementation "androidx.compose.animation:animation:$compose_version"
+        // Tooling support (Previews, etc.)
+        implementation "androidx.compose.ui:ui-tooling:$compose_version"
+        implementation("androidx.compose.ui:ui:1.1.1")
+
+        // Integration with ViewModels
+        implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
+        // UI Tests
+        androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+
+        implementation "com.google.android.material:compose-theme-adapter:$compose_version"
+        // When using a AppCompat theme
+        implementation "com.google.accompanist:accompanist-appcompat-theme:0.16.0"
+
+        implementation "io.coil-kt:coil-compose:1.4.0"
+        implementation "io.coil-kt:coil-gif:1.4.0"
+        implementation "com.google.accompanist:accompanist-flowlayout:0.10.0"
+
+
+    }
+
+//    kotlin = dependencyGroup {
+//        implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+//    }
+
+    google = dependencyGroup {
+        implementation 'com.google.android.material:material:1.6.1'
+        implementation 'com.google.android.gms:play-services-auth:19.0.0'
+        implementation 'com.google.maps.android:android-maps-utils:2.2.2'
+        implementation 'com.google.android.libraries.places:places:2.4.0'
+        implementation 'com.google.code.gson:gson:2.8.6'
+        implementation 'com.android.volley:volley:1.2.1'
+    }
+
+//    facebook = dependencyGroup {
+//        implementation 'com.facebook.android:facebook-login:8.1.0'
+//
+//    }
+//
+//    firebase = dependencyGroup {
+//        implementation platform('com.google.firebase:firebase-bom:28.4.2')
+//        implementation 'com.google.firebase:firebase-auth'
+////        implementation 'com.google.firebase:firebase-crashlytics-ktx'
+//        implementation 'com.google.firebase:firebase-analytics-ktx'
+//        implementation 'com.google.firebase:firebase-messaging-ktx'
+//    }
+
+    retrofit = dependencyGroup {
+        implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+        implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+        implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    }
+
+    okhttp = dependencyGroup {
+        implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.0"))
+        implementation("com.squareup.okhttp3:okhttp")
+        implementation("com.squareup.okhttp3:logging-interceptor")
+    }
+
+//    rxJava = dependencyGroup {
+//        implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+//        implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
+//    }
+//
+    paging = dependencyGroup{
+        implementation "androidx.paging:paging-runtime:$paging_version"
+        implementation "androidx.paging:paging-rxjava2:$paging_version"
+    }
+
+    androidX = dependencyGroup {
+        implementation 'androidx.core:core-ktx:1.5.0-rc01'
+        implementation 'androidx.appcompat:appcompat:1.3.1'
+        implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+        implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+        implementation 'androidx.security:security-crypto:1.0.0-rc04'
+        implementation "androidx.activity:activity-ktx:1.2.2"
+        implementation "androidx.fragment:fragment-ktx:1.3.2"
+        implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    }
+
+    koin = dependencyGroup {
+        implementation "io.insert-koin:koin-core:$koin_compose_version"
+        implementation "io.insert-koin:koin-android:$koin_compose_version"
+        implementation "io.insert-koin:koin-androidx-compose:$koin_compose_version"
+    }
+
+    nav = dependencyGroup {
+        implementation "androidx.navigation:navigation-fragment:$nav_version"
+        implementation "androidx.navigation:navigation-ui:$nav_version"
+        implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+        implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+        implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+    }
+
+    adapterDelegates = dependencyGroup {
+        implementation "com.hannesdorfmann:adapterdelegates4-kotlin-dsl:$adapter_delegates_version"
+        implementation "com.hannesdorfmann:adapterdelegates4-kotlin-dsl-layoutcontainer:$adapter_delegates_version"
+        implementation "com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:$adapter_delegates_version"
+    }
+
+    glide = dependencyGroup {
+        implementation 'com.github.bumptech.glide:glide:4.12.0'
+        annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    }
+}
+//
+//dependencies {
+//    kotlin()
+//}
