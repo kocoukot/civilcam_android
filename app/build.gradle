@@ -8,8 +8,8 @@ plugins {
 }
 
 static String getKeystorePath() {
-    if (Os.isFamily(Os.FAMILY_WINDOWS)) return "c:/Keystore/hold"
-    if (Os.isFamily(Os.FAMILY_MAC)) return "${System.properties['user.home']}/Keystore/hold"
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) return "c:/Keystore/civilcam"
+    if (Os.isFamily(Os.FAMILY_MAC)) return "${System.properties['user.home']}/Keystore/civilcam"
     return System.getenv("HEAVYE_KEYSTORE_PATH")
 }
 
