@@ -1,3 +1,62 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
+    <!-- Offset/Scale -->
+    <dimen name="dim_0">0dp</dimen>
+    <dimen name="dim_1">1dp</dimen>
+    <dimen name="dim_2">2dp</dimen>
+    <dimen name="dim_3">3dp</dimen>
+    <dimen name="dim_4">4dp</dimen>
+    <dimen name="dim_5">5dp</dimen>
+    <dimen name="dim_6">6dp</dimen>
+    <dimen name="dim_7">7dp</dimen>
+    <dimen name="dim_8">8dp</dimen>
+    <dimen name="dim_9">9dp</dimen>
+    <dimen name="dim_10">10dp</dimen>
+    <dimen name="dim_12">12dp</dimen>
+    <dimen name="dim_14">14dp</dimen>
+    <dimen name="dim_15">15dp</dimen>
+    <dimen name="dim_16">16dp</dimen>
+    <dimen name="dim_18">18dp</dimen>
+    <dimen name="dim_19">19dp</dimen>
+    <dimen name="dim_20">20dp</dimen>
+    <dimen name="dim_22">22dp</dimen>
+    <dimen name="dim_24">24dp</dimen>
+    <dimen name="dim_26">26dp</dimen>
+    <dimen name="dim_28">28dp</dimen>
+    <dimen name="dim_30">30dp</dimen>
+    <dimen name="dim_32">32dp</dimen>
+    <dimen name="dim_34">34dp</dimen>
+    <dimen name="dim_36">36dp</dimen>
+    <dimen name="dim_40">40dp</dimen>
+    <dimen name="dim_44">44dp</dimen>
+    <dimen name="dim_48">48dp</dimen>
+    <dimen name="dim_54">54dp</dimen>
+    <dimen name="dim_56">56dp</dimen>
+    <dimen name="dim_58">58dp</dimen>
+    <dimen name="dim_60">60dp</dimen>
+    <dimen name="dim_64">64dp</dimen>
+    <dimen name="dim_66">66dp</dimen>
+    <dimen name="dim_70">70dp</dimen>
+    <dimen name="dim_72">72dp</dimen>
+    <dimen name="dim_74">74dp</dimen>
+    <dimen name="dim_76">76dp</dimen>
+    <dimen name="dim_80">80dp</dimen>
+    <dimen name="dim_82">82dp</dimen>
+    <dimen name="dim_100">100dp</dimen>
+    <dimen name="dim_102">102dp</dimen>
+
+    <!-- Text -->
+    <dimen name="text_dim12">12sp</dimen>
+    <dimen name="text_dim13">13sp</dimen>
+    <dimen name="text_dim14">14sp</dimen>
+    <dimen name="text_dim15">15sp</dimen>
+    <dimen name="text_dim16">16sp</dimen>
+    <dimen name="text_dim18">18sp</dimen>
+    <dimen name="text_dim20">20sp</dimen>
+    <dimen name="text_dim24">24sp</dimen>
+    <dimen name="text_dim26">26sp</dimen>
+    <dimen name="text_dim30">30sp</dimen>
+    <dimen name="text_dim32">32sp</dimen>
+
+    <!--    Text letter spacing-->
+    <dimen name="space_24">-0.24px</dimen>
 </resources>
