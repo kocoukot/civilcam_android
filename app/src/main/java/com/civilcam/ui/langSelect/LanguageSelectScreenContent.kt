@@ -72,7 +72,9 @@ fun BottomCard(tabPage: LanguageType, tabSelected: (LanguageType) -> Unit) {
                 style = CCTheme.typography.big_title,
                 color = CCTheme.colors.primaryRed,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 21.dp)
+                modifier = Modifier
+                    .padding(bottom = 21.dp)
+                    .padding(horizontal = 30.dp)
             )
 
             SegmentedDemo()
@@ -82,7 +84,7 @@ fun BottomCard(tabPage: LanguageType, tabSelected: (LanguageType) -> Unit) {
                 style = CCTheme.typography.common_text,
                 color = CCTheme.colors.grayText,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 90.dp, top = 21.dp)
+                modifier = Modifier.padding(bottom = 90.dp, top = 16.dp)
             )
 
             ComposeButton(
