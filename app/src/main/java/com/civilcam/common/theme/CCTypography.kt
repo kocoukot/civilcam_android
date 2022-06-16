@@ -13,21 +13,25 @@ data class CCTypography internal constructor(
         fontSize = 28.sp,
         lineHeight = 34.sp,
 //        fontFamily = FontFamily(Font(R.font.roboto_regular)),
-        fontWeight = FontWeight.W700
+        fontWeight = FontWeight.W700,
+        letterSpacing = (-0.5).sp
     ),
 
     val common_text: TextStyle = TextStyle(
         fontSize = 15.sp,
         lineHeight = 18.sp,
 //        fontFamily = FontFamily(Font(R.font.roboto_regular)),
-        fontWeight = FontWeight.W400
+        fontWeight = FontWeight.W400,
+        letterSpacing = (-0.5).sp,
+        color = Color(0xFF111111)
     ),
 
     val button_text: TextStyle = TextStyle(
         fontSize = 17.sp,
         lineHeight = 20.sp,
 //        fontFamily = FontFamily(Font(R.font.roboto_regular)),
-        fontWeight = FontWeight.W600
+        fontWeight = FontWeight.W600,
+        letterSpacing = (-0.5).sp,
     ),
 
 

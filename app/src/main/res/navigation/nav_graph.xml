@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/languageSelectFragment">
+    app:startDestination="@id/termsFragment">
 
 
     <fragment
@@ -17,5 +17,10 @@
         android:id="@+id/onBoardingFragment"
         android:name="com.civilcam.ui.onboarding.OnBoardingFragment"
         android:label="OnBoardingFragment" />
+
+    <fragment
+        android:id="@+id/termsFragment"
+        android:name="com.civilcam.ui.terms.TermsFragment"
+        android:label="TermsFragment" />
 
 </navigation>
