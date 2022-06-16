@@ -45,7 +45,6 @@ fun LanguageSelectScreenContent(viewModel: LanguageSelectViewModel) {
                     painter = painterResource(id = R.drawable.img_splash),
                     contentDescription = null
                 )
-
             }
         },
         bottomBar = {
@@ -78,9 +77,7 @@ fun BottomCard(
                 vertical = 16.dp
             ),
             horizontalAlignment = Alignment.CenterHorizontally,
-
             ) {
-
             Text(
                 stringResource(id = R.string.language_select_hello),
                 style = CCTheme.typography.big_title,

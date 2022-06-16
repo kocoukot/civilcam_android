@@ -20,8 +20,7 @@ class LanguageSelectFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
 
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {

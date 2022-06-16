@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.LanguageType
 import com.civilcam.utils.LocaleHelper
-import timber.log.Timber
 
 
 private const val NO_SEGMENT_INDEX = -1
@@ -62,19 +61,11 @@ fun SegmentedItem(currentLang: LanguageType, selectedLang: (LanguageType) -> Uni
                     twoSegments,
                     selectedTwoSegment,
                     onSegmentSelected = {
-                        Timber.d("selected lang $it")
-
-//                        val configuration = LocalConfiguration.current
-//                        configuration.setLocale(locale)
-//                        val resources = LocalContext.current.resources
-//                        resources.updateConfiguration(configuration, resources.displayMetrics)
-
                         LocaleHelper.setLocale(context, it.langValue)
                         selectedTwoSegment = it
                         selectedLang.invoke(it)
                     }
                 ) {
-
                     SegmentText(it, it == selectedTwoSegment)
                 }
             }

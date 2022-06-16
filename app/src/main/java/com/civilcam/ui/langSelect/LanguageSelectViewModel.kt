@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 
 class LanguageSelectViewModel : ViewModel() {
 
-
     private val _state: MutableStateFlow<LangSelectState> = MutableStateFlow(LangSelectState())
     val state: StateFlow<LangSelectState> = _state
 
@@ -26,7 +25,6 @@ class LanguageSelectViewModel : ViewModel() {
             val selectedLang = LocaleHelper.getSelectedLanguage()
             _state.value = _state.value.copy(selectedLang = selectedLang)
         }
-
     }
 
     fun setInputAction(action: LangSelectActions) {
@@ -35,7 +33,6 @@ class LanguageSelectViewModel : ViewModel() {
             LangSelectActions.ClickContinue -> toOnBoarding()
         }
     }
-
 
     private fun languageSelect(language: LanguageType) {
         _state.value = _state.value.copy(selectedLang = language)
