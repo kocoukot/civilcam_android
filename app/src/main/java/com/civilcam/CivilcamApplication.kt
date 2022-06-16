@@ -13,6 +13,7 @@ class CivilcamApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
         startTimber()
         startKoin {
             androidLogger()
@@ -28,11 +29,5 @@ class CivilcamApplication : Application() {
             private set
     }
 }
-
-
-//Ипак юли
-
-//левый выход в хвост
-
 
 

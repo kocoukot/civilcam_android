@@ -26,16 +26,19 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domain.model.LanguageType
+import com.civilcam.utils.LocaleHelper
+import timber.log.Timber
 
 
 private const val NO_SEGMENT_INDEX = -1
@@ -47,20 +50,32 @@ private const val PRESSED_UNSELECTED_ALPHA = .6f
 private val BACKGROUND_SHAPE = RoundedCornerShape(4.dp)
 
 
-@Preview
 @Composable
-fun SegmentedDemo() {
+fun SegmentedItem(currentLang: LanguageType, selectedLang: (LanguageType) -> Unit) {
+    val context = LocalContext.current
     MaterialTheme {
         Surface {
             Column(Modifier.padding(16.dp), verticalArrangement = spacedBy(16.dp)) {
-                val twoSegments = remember { listOf("English", "Español") }
-                var selectedTwoSegment by remember { mutableStateOf(twoSegments.first()) }
+                val twoSegments = remember { listOf(LanguageType.ENGLISH, LanguageType.SPAIN) }
+                var selectedTwoSegment by remember { mutableStateOf(currentLang) }
                 SegmentedControl(
                     twoSegments,
                     selectedTwoSegment,
-                    onSegmentSelected = { selectedTwoSegment = it }
+                    onSegmentSelected = {
+                        Timber.d("selected lang $it")
+
+//                        val configuration = LocalConfiguration.current
+//                        configuration.setLocale(locale)
+//                        val resources = LocalContext.current.resources
+//                        resources.updateConfiguration(configuration, resources.displayMetrics)
+
+                        LocaleHelper.setLocale(context, it.langValue)
+                        selectedTwoSegment = it
+                        selectedLang.invoke(it)
+                    }
                 ) {
-                    SegmentText(it, it.equals(selectedTwoSegment, true))
+
+                    SegmentText(it, it == selectedTwoSegment)
                 }
             }
         }
@@ -124,18 +139,15 @@ fun <T : Any> SegmentedControl(
 }
 
 @Composable
-fun SegmentText(text: String, isSelected: Boolean) {
+fun SegmentText(text: LanguageType, isSelected: Boolean) {
     Text(
-        text, maxLines = 1,
+        text.langTitle, maxLines = 1,
         color = if (isSelected) CCTheme.colors.black else CCTheme.colors.grayText,
         overflow = Ellipsis,
         modifier = Modifier.padding(vertical = 18.dp)
     )
 }
 
-/**
- * Draws the thumb (selected indicator) on a [SegmentedControl] track, underneath the [Segments].
- */
 @Composable
 private fun Thumb(state: SegmentedControlState) {
     Box(
