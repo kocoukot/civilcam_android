@@ -4,13 +4,13 @@ def dependencyGroup(closure) {
 }
 
 ext {
+    compose_version = "1.1.1"
     retrofitVersion = '2.7.1'
     koin_version = '2.2.2'
     koin_compose_version = '3.2.0'
     nav_version = "2.3.3"
     adapter_delegates_version = "4.3.0"
     paging_version = "3.0.0"
-    compose_version = "1.1.1"
 
 
     jetpackCompose = dependencyGroup {
@@ -46,6 +46,8 @@ ext {
         implementation "io.coil-kt:coil-gif:1.4.0"
         implementation "com.google.accompanist:accompanist-flowlayout:0.10.0"
 
+        implementation "com.google.accompanist:accompanist-pager:0.23.1"
+        implementation "com.google.accompanist:accompanist-pager-indicators:0.23.1"
 
     }
 
