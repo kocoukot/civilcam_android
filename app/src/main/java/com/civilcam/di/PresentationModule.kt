@@ -1,6 +1,7 @@
 package com.civilcam.di
 
 import com.civilcam.ui.langSelect.LanguageSelectViewModel
+import com.civilcam.ui.onboarding.OnBoardingViewModel
 import com.google.android.libraries.places.api.Places
 import com.standartmedia.di.source.GlobalKoinInjector
 import com.standartmedia.di.source.KoinInjector
@@ -19,6 +20,8 @@ val baseModule = module {
 
 val authModule = module {
     viewModel { LanguageSelectViewModel() }
+
+    viewModel { OnBoardingViewModel() }
 
 }
 
