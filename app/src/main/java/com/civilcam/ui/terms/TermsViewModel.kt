@@ -45,6 +45,6 @@ class TermsViewModel(
     }
 
     private fun goWebView(webLink: TermsType) {
-        _steps.value = TermsRoute.GoWebView(webLink)
+        _steps.value = TermsRoute.GoWebView(webLink.name)
     }
 }

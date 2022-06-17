@@ -26,63 +26,72 @@ fun TopAppBarContent(
     actionAction: (() -> Unit)? = null
 ) {
 
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(CCTheme.colors.white),
-        contentAlignment = Alignment.Center
+            .background(CCTheme.colors.white)
     ) {
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(0.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(top = 8.dp)
+                .background(CCTheme.colors.white),
+            contentAlignment = Alignment.Center
         ) {
-            IconButton(onClick = {
-                navigationAction.invoke()
-            }) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
 
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_back_navigation),
-                        contentDescription = null,
-                        tint = CCTheme.colors.black
-                    )
-                    Text(
-                        navigationTitle,
-                    )
-                }
-            }
-
-        }
-
-        Text(
-            color = CCTheme.colors.black,
-            textAlign = TextAlign.Center,
-            text = title,
-            style = CCTheme.typography.common_text_regular,
-            fontWeight = FontWeight.W600
-        )
-
-        if (actionTitle.isNotEmpty()) {
-            Box(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end = 8.dp),
-                contentAlignment = Alignment.CenterEnd
+                    .padding(start = 16.dp)
+                    .background(CCTheme.colors.white),
+                horizontalArrangement = Arrangement.spacedBy(0.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-
-                TextButton(onClick = {
-                    actionAction?.invoke()
+                IconButton(onClick = {
+                    navigationAction.invoke()
                 }) {
-                    Text(
-                        text = actionTitle,
-                        color = CCTheme.colors.primaryRed,
-                        style = CCTheme.typography.common_text_medium
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_back_navigation),
+                            contentDescription = null,
+                            tint = CCTheme.colors.black
+                        )
+                        Text(
+                            navigationTitle,
+                        )
+                    }
+                }
+
+            }
+
+            Text(
+                color = CCTheme.colors.black,
+                textAlign = TextAlign.Center,
+                text = title,
+                style = CCTheme.typography.common_text_regular,
+                fontWeight = FontWeight.W600
+            )
+
+            if (actionTitle.isNotEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 8.dp),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+
+                    TextButton(onClick = {
+                        actionAction?.invoke()
+                    }) {
+                        Text(
+                            text = actionTitle,
+                            color = CCTheme.colors.primaryRed,
+                            style = CCTheme.typography.common_text_medium
+                        )
+                    }
                 }
             }
         }
