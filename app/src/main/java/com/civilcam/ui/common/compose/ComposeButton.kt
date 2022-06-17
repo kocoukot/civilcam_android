@@ -46,7 +46,7 @@ fun ComposeButton(
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = backgroundColor.value,
-                    disabledBackgroundColor = CCTheme.colors.lightGray
+                    disabledBackgroundColor = Color.Transparent
                 ),
             )
             {

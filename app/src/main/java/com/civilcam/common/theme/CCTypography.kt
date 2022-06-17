@@ -14,7 +14,7 @@ data class CCTypography internal constructor(
         lineHeight = 34.sp,
 //        fontFamily = FontFamily(Font(R.font.roboto_regular)),
         fontWeight = FontWeight.W700,
-        letterSpacing = (-0.5).sp
+        letterSpacing = (-0.01).sp,
     ),
 
     val common_text_regular: TextStyle = TextStyle(
@@ -22,7 +22,7 @@ data class CCTypography internal constructor(
         lineHeight = 18.sp,
 //        fontFamily = FontFamily(Font(R.font.roboto_regular)),
         fontWeight = FontWeight.Normal,
-        letterSpacing = (-0.5).sp,
+        letterSpacing = (-0.01).sp,
         color = Color(0xFF111111)
     ),
 
@@ -31,7 +31,7 @@ data class CCTypography internal constructor(
         lineHeight = 18.sp,
 //        fontFamily = FontFamily(Font(R.font.roboto_regular)),
         fontWeight = FontWeight.Medium,
-        letterSpacing = (-0.5).sp,
+        letterSpacing = (-0.01).sp,
         color = Color(0xFF111111)
     ),
 
@@ -40,36 +40,22 @@ data class CCTypography internal constructor(
         lineHeight = 20.sp,
 //        fontFamily = FontFamily(Font(R.font.roboto_regular)),
         fontWeight = FontWeight.W600,
-        letterSpacing = (-0.5).sp,
+        letterSpacing = (-0.01).sp,
     ),
 
-
-    val roboto_regular: TextStyle = TextStyle(
-        fontSize = 14.sp,
-        lineHeight = 20.sp,
+    val common_text_small_regular: TextStyle = TextStyle(
+        fontSize = 13.sp,
+        lineHeight = 15.sp,
 //        fontFamily = FontFamily(Font(R.font.roboto_regular)),
-        fontWeight = FontWeight.Normal
+        fontWeight = FontWeight.Normal,
+        letterSpacing = (-0.01).sp,
     ),
 
-    val roboto_medium: TextStyle = TextStyle(
-        fontSize = 14.sp,
-        lineHeight = 24.sp,
-        color = Color.White,
-//        fontFamily = FontFamily(Font(R.font.roboto_medium)),
+    val common_text_small_medium: TextStyle = TextStyle(
+        fontSize = 13.sp,
+        lineHeight = 15.sp,
+//        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight.W500,
+        letterSpacing = (-0.01).sp,
     ),
-
-    val roboto_bold: TextStyle = TextStyle(
-        color = Color.White,
-//        fontFamily = FontFamily(Font(R.font.roboto_bold)),
-        fontSize = 16.sp,
-        lineHeight = 32.sp,
-    ),
-
-    val roboto_bold_title: TextStyle = TextStyle(
-        color = Color.White,
-//        fontFamily = FontFamily(Font(R.font.roboto_bold)),
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-    )
-
 )

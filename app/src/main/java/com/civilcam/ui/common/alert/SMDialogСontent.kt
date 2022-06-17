@@ -35,7 +35,7 @@ fun AlertDialogComp(
                         Text(
                             text = dialogTitle,
                             color = CCTheme.colors.black,
-                            style = CCTheme.typography.roboto_bold_title,
+                            style = CCTheme.typography.common_text_small_medium,
                             fontSize = 16.sp
                         )
                     },
@@ -43,7 +43,7 @@ fun AlertDialogComp(
                         Text(
                             dialogText,
                             color = CCTheme.colors.grayText,
-                            style = CCTheme.typography.roboto_regular,
+                            style = CCTheme.typography.common_text_small_regular,
                             fontSize = 15.sp
                         )
                     },
@@ -58,7 +58,7 @@ fun AlertDialogComp(
                             }) {
                             Text(
                                 text = alertType.positiveText,
-                                style = CCTheme.typography.roboto_medium,
+                                style = CCTheme.typography.common_text_medium,
                                 fontSize = 14.sp,
                                 color = CCTheme.colors.primaryRed
                             )
@@ -82,7 +82,7 @@ fun AlertDialogComp(
                             ) {
                                 Text(
                                     text = alertType.negativeText,
-                                    style = CCTheme.typography.roboto_medium,
+                                    style = CCTheme.typography.common_text_medium,
                                     fontSize = 14.sp,
                                     color = CCTheme.colors.primaryRed
                                 )

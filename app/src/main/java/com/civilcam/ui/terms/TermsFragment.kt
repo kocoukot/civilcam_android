@@ -22,7 +22,7 @@ class TermsFragment : Fragment() {
         parametersOf(isSettings)
     }
 
-    private val isSettings = false // by requireArg<Boolean>(ARG_IS_SETTINGS)
+    private val isSettings = false // by requireArg<Boolean>(ARG_IS_SETTINGS) // todo fix later
 
     override fun onCreateView(
         inflater: LayoutInflater,

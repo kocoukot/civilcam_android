@@ -14,12 +14,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 
 @Composable
 fun TopAppBarContent(
     title: String,
+    titleSize: Int = 17,
     navigationTitle: String,
     actionTitle: String = "",
     navigationAction: () -> Unit,
@@ -72,7 +74,8 @@ fun TopAppBarContent(
                 textAlign = TextAlign.Center,
                 text = title,
                 style = CCTheme.typography.common_text_regular,
-                fontWeight = FontWeight.W600
+                fontWeight = FontWeight.W600,
+                fontSize = titleSize.sp
             )
 
             if (actionTitle.isNotEmpty()) {
@@ -102,7 +105,7 @@ fun TopAppBarContent(
 @Composable
 fun TopAppBarContentPreview() {
     TopAppBarContent(
-        title = "Terms & Conditions and\nPrivacy Policy",
+        title = "Terms & Conditions",
         navigationTitle = "Back",
         actionTitle = "Contacts",
         navigationAction = {},

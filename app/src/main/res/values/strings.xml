@@ -7,6 +7,7 @@
     <string name="get_start_text">Get started</string>
     <string name="back_text">Back</string>
     <string name="and_text">and</string>
+    <string name="save_text">Save</string>
 
 
     <string name="onboarding_page_one_title">Safety network</string>
@@ -28,6 +29,22 @@
     <string name="navigation_bar_network">Network</string>
     <string name="navigation_bar_emergency">Emergency</string>
     <string name="navigation_bar_alerts">Alerts</string>
+
+
+
+    <string name="profile_setup_title">Set up your account</string>
+    <string name="profile_setup_upload_photo">Upload photo</string>
+    <string name="profile_setup_change_photo">Change photo</string>
+    <string name="profile_setup_first_name_label">First name</string>
+    <string name="profile_setup_first_name_placeholder">Enter your first name</string>
+    <string name="profile_setup_last_name_label">Last name</string>
+    <string name="profile_setup_last_name_placeholder">Enter your last name</string>
+    <string name="profile_setup_date_of_birth_label">Date of birth</string>
+    <string name="profile_setup_date_of_birth_placeholder">MM.DD.YYYY</string>
+    <string name="profile_setup_address_label">Address (Street, City, State, Zip)</string>
+    <string name="profile_setup_address_placeholder">eg: 1456 Broadway, New York, NY, 10023</string>
+    <string name="profile_setup_phone_number_label">Phone number</string>
+    <string name="profile_setup_phone_number_placeholder">+1  (123) 456 7890</string>
 
 
 </resources>

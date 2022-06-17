@@ -2,6 +2,7 @@ package com.civilcam.di
 
 import com.civilcam.ui.langSelect.LanguageSelectViewModel
 import com.civilcam.ui.onboarding.OnBoardingViewModel
+import com.civilcam.ui.profile.setup.ProfileSetupViewModel
 import com.civilcam.ui.terms.TermsViewModel
 import com.google.android.libraries.places.api.Places
 import com.standartmedia.di.source.GlobalKoinInjector
@@ -25,6 +26,10 @@ val authModule = module {
     viewModel { OnBoardingViewModel() }
 
     viewModel { (isSettings: Boolean) -> TermsViewModel(isSettings) }
+
+    viewModel { ProfileSetupViewModel(get()) }
+
+
 }
 
 val presentationModules = arrayOf(
