@@ -18,4 +18,17 @@
         android:name="com.civilcam.ui.onboarding.OnBoardingFragment"
         android:label="OnBoardingFragment" />
 
+    <fragment
+        android:id="@+id/termsFragment"
+        android:name="com.civilcam.ui.terms.TermsFragment"
+        android:label="TermsFragment">
+        <action
+            android:id="@+id/action_termsFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.civilcam.ui.terms.webView.WebViewFragment"
+        android:label="WebViewFragment" />
+
 </navigation>

@@ -2,6 +2,7 @@ package com.civilcam.ui.common.compose
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -28,8 +29,8 @@ fun ComposeButton(
     buttonClick: () -> Unit
 ) {
     val backgroundColor =
-        animateColorAsState(targetValue = if (isActivated) CCTheme.colors.primaryRed else CCTheme.colors.white)
-    val borderColor = if (isActivated) CCTheme.colors.primaryRed else CCTheme.colors.grayThree
+        animateColorAsState(targetValue = if (isActivated) CCTheme.colors.primaryRed else CCTheme.colors.lightGray)
+    val borderColor = if (isActivated) CCTheme.colors.primaryRed else CCTheme.colors.grayText
     val textColor = if (isActivated) CCTheme.colors.white else CCTheme.colors.grayText
 
     MaterialTheme {
@@ -37,13 +38,15 @@ fun ComposeButton(
             LocalRippleTheme provides SecondaryRippleTheme
         ) {
             Button(
+                enabled = isActivated,
                 border = BorderStroke(1.dp, borderColor),
                 onClick = { buttonClick.invoke() },
-                modifier = modifier,
+                modifier = modifier.fillMaxWidth(),
                 elevation = ButtonDefaults.elevation(0.dp),
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = backgroundColor.value
+                    backgroundColor = backgroundColor.value,
+                    disabledBackgroundColor = CCTheme.colors.lightGray
                 ),
             )
             {
@@ -59,7 +62,7 @@ fun ComposeButton(
 
 }
 
-@Preview
+@Preview()
 @Composable
 fun ComposeButtonPreview() {
     ComposeButton(

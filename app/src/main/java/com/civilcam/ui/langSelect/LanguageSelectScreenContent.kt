@@ -94,7 +94,7 @@ fun BottomCard(
 
             Text(
                 stringResource(id = R.string.language_select_settings),
-                style = CCTheme.typography.common_text,
+                style = CCTheme.typography.common_text_regular,
                 color = CCTheme.colors.grayText,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(bottom = 90.dp, top = 16.dp)

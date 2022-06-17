@@ -1,4 +1,4 @@
-package com.civilcam.ui.onboarding.content
+package com.civilcam.ui.terms.content
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
