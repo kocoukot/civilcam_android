@@ -17,11 +17,20 @@ data class CCTypography internal constructor(
         letterSpacing = (-0.5).sp
     ),
 
-    val common_text: TextStyle = TextStyle(
+    val common_text_regular: TextStyle = TextStyle(
         fontSize = 15.sp,
         lineHeight = 18.sp,
 //        fontFamily = FontFamily(Font(R.font.roboto_regular)),
-        fontWeight = FontWeight.W400,
+        fontWeight = FontWeight.Normal,
+        letterSpacing = (-0.5).sp,
+        color = Color(0xFF111111)
+    ),
+
+    val common_text_medium: TextStyle = TextStyle(
+        fontSize = 15.sp,
+        lineHeight = 18.sp,
+//        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight.Medium,
         letterSpacing = (-0.5).sp,
         color = Color(0xFF111111)
     ),

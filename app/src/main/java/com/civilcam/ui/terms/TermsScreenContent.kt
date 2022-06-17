@@ -3,7 +3,6 @@
 package com.civilcam.ui.terms
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,13 +17,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.TermsType
 import com.civilcam.ui.common.compose.ComposeButton
+import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.terms.model.TermsActions
 import com.google.accompanist.pager.ExperimentalPagerApi
 
@@ -38,35 +37,12 @@ fun TermsScreenContent(viewModel: TermsViewModel) {
         modifier = Modifier.fillMaxSize(),
         topBar = {
             Column {
-                TopAppBar(
-                    elevation = 0.dp,
-                    backgroundColor = CCTheme.colors.white,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(CCTheme.colors.white),
-                    title = {
-                        Text(
-                            color = CCTheme.colors.black,
-                            textAlign = TextAlign.Center,
-                            text = "Terms & Conditions and\nPrivacy Policy",
-                            style = CCTheme.typography.common_text,
-                            fontWeight = FontWeight.W600
-                        )
+                TopAppBarContent(
+                    title = stringResource(id = R.string.terms_conditions_title),
+                    navigationTitle = stringResource(R.string.back_text),
+                    navigationAction = {
+                        viewModel.setInputActions(TermsActions.CLickBack)
                     },
-                    navigationIcon = {
-                        Row {
-                            IconButton(onClick = {
-                                viewModel.setInputActions(TermsActions.CLickBack)
-                            }) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_back_navigation),
-                                    contentDescription = null,
-                                    tint = CCTheme.colors.black
-                                )
-                            }
-                            // Text("Back")
-                        }
-                    }
                 )
 
                 Divider(
@@ -102,7 +78,7 @@ fun TermsScreenContent(viewModel: TermsViewModel) {
 
                 Text(
                     text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem sit sit lacus nisl donec egestas amet id consequat. Ut velit accumsan in lorem lectus et quis.",
-                    style = CCTheme.typography.common_text,
+                    style = CCTheme.typography.common_text_regular,
                     color = CCTheme.colors.black
 
                 )
@@ -233,7 +209,7 @@ fun WebButton(
             Text(
                 text = stringResource(id = buttonType.title),
                 modifier = Modifier.padding(vertical = 8.dp),
-                style = CCTheme.typography.common_text,
+                style = CCTheme.typography.common_text_regular,
             )
             Icon(
                 painter = painterResource(id = R.drawable.ic_web_redirect),

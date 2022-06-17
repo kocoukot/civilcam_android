@@ -41,7 +41,7 @@ fun PageCardUI(page: OnboardingPage) {
         Spacer(modifier = Modifier.height(28.dp))
         Text(
             text = stringResource(id = page.text),
-            style = CCTheme.typography.common_text,
+            style = CCTheme.typography.common_text_regular,
             textAlign = TextAlign.Center,
             color = CCTheme.colors.black,
         )

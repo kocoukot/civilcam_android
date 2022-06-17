@@ -5,18 +5,14 @@
     <string name="language_select_settings">You can always change it in settings</string>
     <string name="continue_text">Continue</string>
     <string name="get_start_text">Get started</string>
-
+    <string name="back_text">Back</string>
     <string name="and_text">and</string>
 
 
     <string name="onboarding_page_one_title">Safety network</string>
     <string name="onboarding_page_one_text">If you are worried about someone, become his guardian and be sure that if something happens - you can always help</string>
-
-
     <string name="onboarding_page_two_title">Emergency situations</string>
     <string name="onboarding_page_two_text">Wherever and whenever your loved ones need help, you’ll be able to know their location and how to help them.</string>
-
-
     <string name="onboarding_page_three_title">Stay safe</string>
     <string name="onboarding_page_three_text">It\'s never too safe, take care of yourself and your loved ones with CivilCam\n</string>
 
@@ -24,10 +20,8 @@
     <string name="terms_conditions_title"><![CDATA[Terms & Conditions]]>and\nPrivacy Policy</string>
     <string name="terms_conditions_subtitle">It\'s never too safe, take care of yourself and your loved ones with CivilCam\n</string>
     <string name="terms_conditions_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem sit lacus nisl donec egestas amet id consequat. Ut velit accumsan in lorem lectus et quis.</string>
-
     <string name="terms_conditions_terms_button"><![CDATA[Terms & Conditions]]></string>
     <string name="terms_conditions_privacy_button">Privacy Policy</string>
-
     <string name="terms_conditions_i_agree">I agree to the</string>
 
 </resources>
