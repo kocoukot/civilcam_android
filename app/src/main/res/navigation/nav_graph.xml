@@ -31,4 +31,17 @@
         android:name="com.civilcam.ui.terms.webView.WebViewFragment"
         android:label="WebViewFragment" />
 
+    <fragment
+        android:id="@+id/network_root"
+        android:name="com.civilcam.ui.network.NetworkFragment"
+        android:label="NetworkFragment" />
+    <fragment
+        android:id="@+id/emergency_root"
+        android:name="com.civilcam.ui.emergency.EmergencyFragment"
+        android:label="EmergencyFragment" />
+    <fragment
+        android:id="@+id/alerts_root"
+        android:name="com.civilcam.ui.alerts.AlertsFragment"
+        android:label="AlertsFragment" />
+
 </navigation>

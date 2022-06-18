@@ -24,4 +24,10 @@
     <string name="terms_conditions_privacy_button">Privacy Policy</string>
     <string name="terms_conditions_i_agree">I agree to the</string>
 
+
+    <string name="navigation_bar_network">Network</string>
+    <string name="navigation_bar_emergency">Emergency</string>
+    <string name="navigation_bar_alerts">Alerts</string>
+
+
 </resources>
