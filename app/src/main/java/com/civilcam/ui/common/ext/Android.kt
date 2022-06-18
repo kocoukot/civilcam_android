@@ -5,6 +5,7 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
@@ -193,9 +194,11 @@ inline fun <reified T : ViewGroup.LayoutParams> View.layoutParams() = layoutPara
 
 fun BottomNavigationView.setupWithNavController(
     navController: NavController,
-) {
+    onNavigationItemSelected: (MenuItem) -> Unit,
+
+    ) {
     setOnNavigationItemSelectedListener {
-//        onNavigationItemSelected(it)
+        onNavigationItemSelected(it)
         onNavDestinationSelected(it, navController)
         true
     }

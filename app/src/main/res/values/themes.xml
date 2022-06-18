@@ -31,4 +31,12 @@
     <style name="Theme.CivilCam.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.CivilCam.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="NavBarTextActive">
+        <item name="android:textSize">10sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontWeight">500</item>
+
+    </style>
 </resources>

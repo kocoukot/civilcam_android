@@ -12,29 +12,37 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:defaultNavHost="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_graph" />
 
-    <!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-    <!--        android:id="@+id/bottom_navigation_view"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:paddingBottom="@dimen/dim_4"-->
-    <!--        app:backgroundTint="@color/white"-->
-    <!--        app:elevation="@dimen/dim_0"-->
-    <!--        app:itemIconSize="@dimen/dim_24"-->
-    <!--        app:labelVisibilityMode="labeled"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        tools:visibility="visible" />-->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grayThree"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation_view" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/dim_4"
+        app:backgroundTint="@color/white"
+        app:elevation="@dimen/dim_0"
+        app:itemIconSize="@dimen/dim_24"
+        app:itemIconTint="@color/color_navbar_item"
+        app:itemTextAppearanceActive="@style/NavBarTextActive"
+        app:itemTextAppearanceInactive="@style/NavBarTextActive"
+        app:itemTextColor="@color/color_navbar_item"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/menu_bottom_navigation"
+        tools:visibility="visible" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!--        app:itemTextAppearanceActive="@style/NavBarTextActive"-->
-    <!--        app:itemTextAppearanceInactive="@style/NavBarTextActive"-->
-    <!--    app:itemIconTint="@color/color_navbar_item"-->
-    <!--    app:itemTextColor="@color/color_navbar_item_text"-->
-    <!--    app:menu="@menu/menu_bottom_navigation"-->
+
