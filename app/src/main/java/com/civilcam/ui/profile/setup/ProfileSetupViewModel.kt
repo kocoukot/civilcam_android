@@ -72,7 +72,7 @@ class ProfileSetupViewModel(
         val data = getSetupUser()
         data.dateBirth = birthDate
         _state.value = _state.value.copy(data = data)
-        _state.value = _state.value.copy(date = birthDate)
+        _state.value = _state.value.copy(birthDate = birthDate)
     }
 
     private fun firstNameEntered(firstName: String) {

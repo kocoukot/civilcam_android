@@ -6,5 +6,5 @@ data class ProfileSetupState(
     val isLoading: Boolean = false,
     val errorText: String = "",
     val data: UserSetupModel? = null,
-    val date: Long? = null
+    val birthDate: Long? = null
 )

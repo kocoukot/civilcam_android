@@ -20,7 +20,13 @@ import com.standartmedia.ui.common.loading.DialogLoadingFragment
 fun Fragment.showDatePicker(
     updatedDate: (Long) -> Unit
 ) {
-    val picker = MaterialDatePicker.Builder.datePicker().build()
+
+    val picker = MaterialDatePicker.Builder.datePicker()
+        .setTitleText("Select date")
+//        .setCalendarConstraints(DateUtils.getRestrictsForPast())
+        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+        .build()
+
     picker.show(parentFragmentManager, picker.toString())
     picker.addOnPositiveButtonClickListener {
         updatedDate(it)

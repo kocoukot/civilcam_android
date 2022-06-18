@@ -13,10 +13,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.civilcam.common.ext.letters
 import com.civilcam.common.theme.CCTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -30,6 +33,7 @@ fun InputField(
     placeHolder: String,
     text: String = "",
     isEnable: Boolean = true,
+    inputType: KeyboardType = KeyboardType.Text,
     trailingIcon: @Composable (() -> Unit)? = null,
     isReversed: Boolean = false,
     onTextClicked: (() -> Unit)? = null,
@@ -40,6 +44,7 @@ fun InputField(
 
     Timber.d("getDateFromCalendar $text")
     var inputText by remember { mutableStateOf(text) }
+    if (text.isNotEmpty()) inputText = text
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -66,19 +71,29 @@ fun InputField(
 
         BasicTextField(
             enabled = isEnable,
+            textStyle = CCTheme.typography.common_text_regular,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 0.dp)
+                .padding(bottom = 5.dp)
+                .clip(RoundedCornerShape(4.dp))
                 .clickable {
                     if (!isEnable) onTextClicked?.invoke()
                 },
             singleLine = true,
             value = if (isEnable) inputText else text,
             onValueChange = {
-                inputText = it
-                onValueChanged.invoke(it.trim())
+                inputText = if (isEnable && inputType == KeyboardType.Text) {
+                    it.letters()
+                } else {
+                    it
+                }
+                onValueChanged.invoke(inputText.trim())
+
             },
-            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+                keyboardType = inputType
+            ),
             decorationBox = { innerTextField ->
                 Row(
                     modifier = Modifier
@@ -96,6 +111,7 @@ fun InputField(
                     ) {
                         if (inputText.isEmpty()) Text(
                             placeHolder,
+                            modifier = Modifier.padding(bottom = 1.dp),
                             style = CCTheme.typography.common_text_regular,
                             color = CCTheme.colors.grayText
                         )

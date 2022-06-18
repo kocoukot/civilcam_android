@@ -84,6 +84,7 @@ fun AvatarContent(avatar: PictureModel? = null, onChangeAvatar: () -> Unit) {
 
 @Composable
 fun CalendarIcon(tintColor: Color) =
+
     Icon(
         painter = painterResource(id = R.drawable.ic_calendar),
         contentDescription = null,
