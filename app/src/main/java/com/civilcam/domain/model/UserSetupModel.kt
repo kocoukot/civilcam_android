@@ -2,7 +2,6 @@ package com.civilcam.domain.model
 
 import com.civilcam.domain.PictureModel
 import com.google.android.gms.maps.model.LatLng
-import java.io.Serializable
 
 data class UserSetupModel(
     var firstName: String = "",
@@ -12,16 +11,17 @@ data class UserSetupModel(
     var coords: LatLng? = LatLng(0.0, 0.0), //todo fix remove later
     var location: String = "",
     var phoneNumber: String = "",
-
-    ) : Serializable {
+) {
 
     val isFilled: Boolean
-        get() = firstName.isNotEmpty()
+        get() = firstName.isNotEmpty() &&
+                lastName.isNotEmpty() &&
+                dateBirth != 0L &&
+                profileImage != null
 //                &&
-//                lastName.isNotEmpty() &&
+
 //                phoneNumber.isNotEmpty() &&
 //                location.isNotEmpty() &&
-//                profileImage != null &&
 //                coords != null
 
     val isPhotoSelected: Boolean
