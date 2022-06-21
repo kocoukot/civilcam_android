@@ -64,8 +64,7 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
             HorizontalPager(
                 count = onboardPages.size,
                 state = firstPagerState,
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) { page ->
                 PageUI(page = onboardPages[page])
             }
