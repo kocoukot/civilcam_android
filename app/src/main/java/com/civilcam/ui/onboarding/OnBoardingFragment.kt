@@ -9,6 +9,8 @@ import android.view.WindowManager
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import com.civilcam.R
+import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.onboarding.model.OnboardingRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -23,7 +25,15 @@ class OnBoardingFragment : Fragment() {
     ): View {
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
-                OnboardingRoute.ToCreateAccount -> {}
+                OnboardingRoute.GoBack -> navController.popBackStack()
+                OnboardingRoute.ToCreateAccount -> {
+                    activity?.window?.apply {
+                        addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                        decorView.systemUiVisibility = 8192
+                        statusBarColor = Color.WHITE
+                    }
+                    navController.navigate(R.id.testFragment)
+                }
             }
         }
 

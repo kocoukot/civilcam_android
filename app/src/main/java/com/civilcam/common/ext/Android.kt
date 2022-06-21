@@ -7,6 +7,7 @@ import androidx.annotation.IdRes
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import com.civilcam.R
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
@@ -37,6 +38,7 @@ fun NavController.navigateToRoot(
     )
 }
 
+@OptIn(ExperimentalCoroutinesApi::class)
 fun EditText.textChangedFlow(): Flow<String> {
     return callbackFlow {
         val textChangedListener = object : TextWatcher {
