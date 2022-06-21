@@ -15,6 +15,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CivilCam"
@@ -45,6 +46,20 @@
             android:theme="@style/Theme.CivilCam.NoActionBar"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="LockedOrientationActivity" />
+
+        <service
+            android:name="com.civilcam.ui.service.AuthenticatorService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
+
     </application>
 
 </manifest>

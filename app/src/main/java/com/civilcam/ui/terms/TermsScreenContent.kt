@@ -2,7 +2,6 @@
 
 package com.civilcam.ui.terms
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -25,6 +23,7 @@ import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.TermsType
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.TopAppBarContent
+import com.civilcam.ui.terms.content.WebButton
 import com.civilcam.ui.terms.model.TermsActions
 import com.google.accompanist.pager.ExperimentalPagerApi
 
@@ -192,34 +191,4 @@ fun AcceptTermsContent(isAccepted: Boolean, acceptTerms: () -> Unit) {
                 }
             })
     }
-}
-
-@Composable
-fun WebButton(
-    buttonType: TermsType,
-    onButtonClicked: (TermsType) -> Unit
-) {
-
-    OutlinedButton(
-        shape = RoundedCornerShape(8.dp),
-        border = BorderStroke(2.dp, CCTheme.colors.grayTwo),
-        onClick = { onButtonClicked.invoke(buttonType) }) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = stringResource(id = buttonType.title),
-                modifier = Modifier.padding(vertical = 8.dp),
-                style = CCTheme.typography.common_text_regular,
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.ic_web_redirect),
-                contentDescription = null,
-                tint = CCTheme.colors.black
-            )
-        }
-    }
-
 }
