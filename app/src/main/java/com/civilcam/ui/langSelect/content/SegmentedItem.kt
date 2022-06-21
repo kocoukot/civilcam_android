@@ -133,7 +133,7 @@ fun <T : Any> SegmentedControl(
 fun SegmentText(text: LanguageType, isSelected: Boolean) {
     Text(
         text.langTitle, maxLines = 1,
-        color = if (isSelected) CCTheme.colors.black else CCTheme.colors.grayText,
+        color = if (isSelected) CCTheme.colors.black else CCTheme.colors.grayOne,
         overflow = Ellipsis,
         modifier = Modifier.padding(vertical = 18.dp)
     )

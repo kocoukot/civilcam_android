@@ -10,6 +10,8 @@
     <string name="and_text">and</string>
     <string name="save_text">Save</string>
     <string name="get_start_text">Get started</string>
+    <string name="decline_text">Decline</string>
+    <string name="accept_text">Accept</string>
 
     <string name="onboarding_page_one_title">Safety network</string>
     <string name="onboarding_page_one_text">If you are worried about someone, become his guardian and be sure that if something happens - you can always help</string>
@@ -45,4 +47,9 @@
     <string name="navigation_bar_emergency">Emergency</string>
     <string name="navigation_bar_alerts">Alerts</string>
 
+
+    <string name="user_details_ask_to_guard">Ask to guard</string>
+    <string name="user_details_stop_guarding">Stop guarding</string>
+    <string name="user_details_remove_gaurdian">Remove guardian</string>
+    <string name="user_details_request_text"> needs you as a guardian</string>
 </resources>

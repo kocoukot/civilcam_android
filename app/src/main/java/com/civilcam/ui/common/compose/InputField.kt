@@ -65,7 +65,7 @@ fun InputField(
 
         Text(
             title,
-            color = CCTheme.colors.grayText,
+            color = CCTheme.colors.grayOne,
             style = CCTheme.typography.common_text_small_regular,
             modifier = Modifier
                 .padding(bottom = 8.dp)
@@ -116,7 +116,7 @@ fun InputField(
                             placeHolder,
                             modifier = Modifier,
                             style = CCTheme.typography.common_text_regular,
-                            color = CCTheme.colors.grayText
+                            color = CCTheme.colors.grayOne
                         )
                         innerTextField()
                     }
@@ -157,7 +157,7 @@ fun PhoneInputField(
 
         Text(
             stringResource(id = R.string.profile_setup_phone_number_label),
-            color = CCTheme.colors.grayText,
+            color = CCTheme.colors.grayOne,
             style = CCTheme.typography.common_text_small_regular,
             modifier = Modifier
                 .padding(bottom = 8.dp)
@@ -195,7 +195,7 @@ fun PhoneInputField(
                         "+1 ",
                         modifier = Modifier,
                         style = CCTheme.typography.common_text_regular,
-                        color = CCTheme.colors.grayText
+                        color = CCTheme.colors.grayOne
                     )
                     Box(
                         Modifier
@@ -205,7 +205,7 @@ fun PhoneInputField(
                             stringResource(id = R.string.profile_setup_phone_number_placeholder),
                             modifier = Modifier,
                             style = CCTheme.typography.common_text_regular,
-                            color = CCTheme.colors.grayText
+                            color = CCTheme.colors.grayOne
                         )
                         innerTextField()
                     }

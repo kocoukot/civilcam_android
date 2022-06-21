@@ -40,7 +40,7 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
                     title = stringResource(id = R.string.profile_setup_title),
                     navigationTitle = stringResource(R.string.back_text),
                     navigationAction = {
-                        viewModel.setInputActions(ProfileSetupActions.CLickGoBack)
+                        viewModel.setInputActions(ProfileSetupActions.ClickGoBack)
                     },
                 )
             }
@@ -101,7 +101,7 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
                         Timber.d("getDateFromCalendar dateOfBirth $dateOfBirth ")
 
                         val calendarColor =
-                            animateColorAsState(targetValue = if (dateOfBirth.isEmpty()) CCTheme.colors.grayText else CCTheme.colors.primaryRed)
+                            animateColorAsState(targetValue = if (dateOfBirth.isEmpty()) CCTheme.colors.grayOne else CCTheme.colors.primaryRed)
                         InputField(
                             isEnable = false,
                             text = dateOfBirth,

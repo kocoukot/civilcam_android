@@ -51,5 +51,9 @@
         android:id="@+id/testFragment"
         android:name="com.civilcam.ui.testScreen.TestFragment"
         android:label="TestFragment" />
+    <fragment
+        android:id="@+id/userDetailsFragment"
+        android:name="com.civilcam.ui.profile.userDetails.UserDetailsFragment"
+        android:label="UserDetailsFragment" />
 
 </navigation>

@@ -21,7 +21,7 @@ data class CCTypography internal constructor(
         fontSize = 15.sp,
         lineHeight = 18.sp,
 //        fontFamily = FontFamily(Font(R.font.roboto_regular)),
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.W400,
         letterSpacing = (-0.01).sp,
         color = Color(0xFF111111)
     ),
@@ -30,7 +30,7 @@ data class CCTypography internal constructor(
         fontSize = 15.sp,
         lineHeight = 18.sp,
 //        fontFamily = FontFamily(Font(R.font.roboto_regular)),
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.W500,
         letterSpacing = (-0.01).sp,
         color = Color(0xFF111111)
     ),
@@ -47,7 +47,7 @@ data class CCTypography internal constructor(
         fontSize = 13.sp,
         lineHeight = 15.sp,
 //        fontFamily = FontFamily(Font(R.font.roboto_regular)),
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.W400,
         letterSpacing = (-0.01).sp,
     ),
 

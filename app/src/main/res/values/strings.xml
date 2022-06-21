@@ -9,6 +9,9 @@
     <string name="and_text">and</string>
     <string name="save_text">Save</string>
 
+    <string name="decline_text">Decline</string>
+    <string name="accept_text">Accept</string>
+
 
     <string name="onboarding_page_one_title">Safety network</string>
     <string name="onboarding_page_one_text">If you are worried about someone, become his guardian and be sure that if something happens - you can always help</string>
@@ -45,6 +48,12 @@
     <string name="profile_setup_address_placeholder">eg: 1456 Broadway, New York, NY, 10023</string>
     <string name="profile_setup_phone_number_label">Phone number</string>
     <string name="profile_setup_phone_number_placeholder">(123) 456 7890</string>
+
+
+    <string name="user_details_ask_to_guard">Ask to guard</string>
+    <string name="user_details_stop_guarding">Stop guarding</string>
+    <string name="user_details_remove_gaurdian">Remove guardian</string>
+    <string name="user_details_request_text"> needs you as a guardian</string>
 
 
 </resources>

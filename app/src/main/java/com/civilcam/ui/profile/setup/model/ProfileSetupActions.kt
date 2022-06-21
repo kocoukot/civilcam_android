@@ -1,7 +1,7 @@
 package com.civilcam.ui.profile.setup.model
 
 sealed class ProfileSetupActions {
-    object CLickGoBack : ProfileSetupActions()
+    object ClickGoBack : ProfileSetupActions()
     object ClickSave : ProfileSetupActions()
     object ClickAvatarSelect : ProfileSetupActions()
     object ClickDateSelect : ProfileSetupActions()

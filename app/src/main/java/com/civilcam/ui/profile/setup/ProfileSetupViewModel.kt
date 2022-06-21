@@ -40,7 +40,7 @@ class ProfileSetupViewModel(
 
     fun setInputActions(action: ProfileSetupActions) {
         when (action) {
-            ProfileSetupActions.CLickGoBack -> goBack()
+            ProfileSetupActions.ClickGoBack -> goBack()
             ProfileSetupActions.ClickSave -> goNext()
             ProfileSetupActions.ClickDateSelect -> openDatePicker()
             ProfileSetupActions.ClickLocationSelect -> {}

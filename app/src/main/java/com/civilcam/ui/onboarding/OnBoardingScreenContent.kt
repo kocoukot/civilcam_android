@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalPagerApi::class)
+@file:OptIn(ExperimentalPagerApi::class, ExperimentalPagerApi::class)
 
 package com.civilcam.ui.onboarding
 
@@ -75,7 +75,7 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
                     .fillMaxWidth()
                     .padding(top = 24.dp, start = 16.dp)
             ) {
-                IconButton(onClick = { viewModel.setInputActions(OnboardingActions.CLickGoBack) }) {
+                IconButton(onClick = { viewModel.setInputActions(OnboardingActions.ClickGoBack) }) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -143,7 +143,7 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
                             .fillMaxWidth(),
                         isActivated = secondPagerState.currentPage == 2,
                         buttonClick = {
-                            viewModel.setInputActions(OnboardingActions.CLickContinue)
+                            viewModel.setInputActions(OnboardingActions.ClickContinue)
                         },
                     )
                 }
