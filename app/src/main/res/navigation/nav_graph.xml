@@ -47,5 +47,9 @@
         android:id="@+id/alerts_root"
         android:name="com.civilcam.ui.alerts.AlertsFragment"
         android:label="AlertsFragment" />
+    <fragment
+        android:id="@+id/testFragment"
+        android:name="com.civilcam.ui.testScreen.TestFragment"
+        android:label="TestFragment" />
 
 </navigation>

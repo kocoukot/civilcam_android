@@ -4,11 +4,11 @@ package com.civilcam.ui.onboarding
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Surface
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
@@ -69,6 +69,30 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
             ) { page ->
                 PageUI(page = onboardPages[page])
             }
+
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp, start = 16.dp)
+            ) {
+                IconButton(onClick = { viewModel.setInputActions(OnboardingActions.CLickGoBack) }) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_back_navigation),
+                            contentDescription = null,
+                            tint = CCTheme.colors.white
+                        )
+                        Text(
+                            stringResource(id = R.string.back_text),
+                            style = CCTheme.typography.common_text_medium,
+                            color = CCTheme.colors.white
+                        )
+                    }
+                }
+            }
+
         }
 
         Column(
