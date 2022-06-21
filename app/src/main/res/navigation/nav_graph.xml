@@ -30,6 +30,10 @@
         android:id="@+id/webViewFragment"
         android:name="com.civilcam.ui.terms.webView.WebViewFragment"
         android:label="WebViewFragment" />
+    <fragment
+        android:id="@+id/profileSetupFragment"
+        android:name="com.civilcam.ui.profile.setup.ProfileSetupFragment"
+        android:label="ProfileSetupFragment" />
 
     <fragment
         android:id="@+id/network_root"

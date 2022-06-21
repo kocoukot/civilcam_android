@@ -14,7 +14,24 @@ import androidx.fragment.app.Fragment
 import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.ui.common.alert.AlertTypes
 import com.civilcam.ui.common.alert.DialogAlertFragment
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.standartmedia.ui.common.loading.DialogLoadingFragment
+
+fun Fragment.showDatePicker(
+    updatedDate: (Long) -> Unit
+) {
+
+    val picker = MaterialDatePicker.Builder.datePicker()
+        .setTitleText("Select date")
+//        .setCalendarConstraints(DateUtils.getRestrictsForPast())
+        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+        .build()
+
+    picker.show(parentFragmentManager, picker.toString())
+    picker.addOnPositiveButtonClickListener {
+        updatedDate(it)
+    }
+}
 
 
 fun Fragment.showToast(text: String = "") {

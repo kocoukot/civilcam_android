@@ -12,6 +12,9 @@ ext {
     adapter_delegates_version = "4.3.0"
     paging_version = "3.0.0"
 
+    compression = dependencyGroup {
+        implementation 'id.zelory:compressor:3.0.1'
+    }
 
     jetpackCompose = dependencyGroup {
         // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
