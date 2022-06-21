@@ -6,6 +6,7 @@ import com.civilcam.di.presentationModules
 import com.civilcam.di.repositoryModule
 import com.civilcam.di.source.sourceModule
 import com.civilcam.di.storageModule
+import io.gleap.Gleap
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -18,6 +19,7 @@ class CivilcamApplication : Application() {
         super.onCreate()
         instance = this
         startTimber()
+        gleapInit()
         startKoin {
             androidLogger()
             androidContext(this@CivilcamApplication)
@@ -26,6 +28,12 @@ class CivilcamApplication : Application() {
     }
 
     private fun startTimber() = Timber.plant(Timber.DebugTree())
+
+    private fun gleapInit() {
+        if (BuildConfig.DEBUG) {
+            Gleap.initialize(BuildConfig.GLEAP_KEY, this)
+        }
+    }
 
     companion object {
         lateinit var instance: CivilcamApplication
