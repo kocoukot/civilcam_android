@@ -25,7 +25,7 @@ fun PageUI(page: OnboardingPage) {
             painter = painterResource(page.image),
             contentDescription = null,
             modifier = Modifier.fillMaxWidth(),
-            contentScale = ContentScale.Fit
+            contentScale = ContentScale.FillWidth
         )
     }
 }

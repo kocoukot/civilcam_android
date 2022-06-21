@@ -62,6 +62,7 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
             contentAlignment = Alignment.TopCenter,
         ) {
             HorizontalPager(
+                itemSpacing = 0.dp,
                 count = onboardPages.size,
                 state = firstPagerState,
                 modifier = Modifier.fillMaxWidth()
