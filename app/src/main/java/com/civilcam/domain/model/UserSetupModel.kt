@@ -17,10 +17,8 @@ data class UserSetupModel(
         get() = firstName.isNotEmpty() &&
                 lastName.isNotEmpty() &&
                 dateBirth != 0L &&
-                profileImage != null
-//                &&
-
-//                phoneNumber.isNotEmpty() &&
+                profileImage != null &&
+                phoneNumber.isNotEmpty()
 //                location.isNotEmpty() &&
 //                coords != null
 

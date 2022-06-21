@@ -10,12 +10,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.InputField
+import com.civilcam.ui.common.compose.PhoneInputField
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.profile.setup.content.AvatarContent
 import com.civilcam.ui.profile.setup.content.CalendarIcon
@@ -123,11 +123,7 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
                         }
 
 
-                        InputField(
-                            inputType = KeyboardType.Phone,
-                            title = stringResource(id = R.string.profile_setup_phone_number_label),
-                            placeHolder = stringResource(id = R.string.profile_setup_phone_number_placeholder)
-                        ) {
+                        PhoneInputField {
                             viewModel.setInputActions(
                                 ProfileSetupActions.EnterInputData(
                                     InputDataType.PHONE_NUMBER,
