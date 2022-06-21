@@ -9,7 +9,9 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,24 +51,7 @@ fun TopAppBarContent(
                 horizontalArrangement = Arrangement.spacedBy(0.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = {
-                    navigationAction.invoke()
-                }) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back_navigation),
-                            contentDescription = null,
-                            tint = CCTheme.colors.black
-                        )
-                        Text(
-                            navigationTitle,
-                        )
-                    }
-                }
-
+                BackButton(navigationAction::invoke)
             }
 
             Text(
@@ -81,20 +66,10 @@ fun TopAppBarContent(
             if (actionTitle.isNotEmpty()) {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 8.dp),
+                        .fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-
-                    TextButton(onClick = {
-                        actionAction?.invoke()
-                    }) {
-                        Text(
-                            text = actionTitle,
-                            color = CCTheme.colors.primaryRed,
-                            style = CCTheme.typography.common_text_medium
-                        )
-                    }
+                    ActionButton(actionTitle) { actionAction?.invoke() }
                 }
             }
         }
@@ -111,4 +86,71 @@ fun TopAppBarContentPreview() {
         navigationAction = {},
         actionAction = {},
     )
+}
+
+
+@Preview
+@Composable
+fun SlicedTopAppBarContentPreview() {
+    SlicedTopAppBarContent(
+//        actionTitle = "Contacts",
+        navigationAction = {},
+        actionAction = {},
+    )
+}
+
+@Composable
+fun SlicedTopAppBarContent(
+    actionTitle: String = "",
+    actionAction: (() -> Unit)? = null,
+    navigationAction: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Transparent)
+            .padding(start = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        BackButton(navigationAction::invoke)
+        if (actionTitle.isNotEmpty())
+            ActionButton(actionTitle) { actionAction?.invoke() }
+    }
+}
+
+@Composable
+fun BackButton(navigationAction: () -> Unit) {
+    IconButton(
+        modifier = Modifier,
+        onClick = navigationAction
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Icon(
+                painter = painterResource(id = R.drawable.ic_back_navigation),
+                contentDescription = null,
+                tint = CCTheme.colors.black
+            )
+            Text(
+                stringResource(id = R.string.back_text),
+                style = CCTheme.typography.common_text_regular,
+                modifier = Modifier.padding(bottom = 2.dp)
+            )
+        }
+    }
+}
+
+
+@Composable
+fun ActionButton(actionTitle: String, actionAction: () -> Unit) {
+    TextButton(onClick = actionAction, modifier = Modifier.padding(horizontal = 8.dp)) {
+        Text(
+            text = actionTitle,
+            color = CCTheme.colors.primaryRed,
+            style = CCTheme.typography.common_text_medium
+        )
+    }
 }

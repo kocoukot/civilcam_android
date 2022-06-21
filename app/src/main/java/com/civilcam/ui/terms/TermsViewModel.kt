@@ -25,7 +25,7 @@ class TermsViewModel(
 
     fun setInputActions(action: TermsActions) {
         when (action) {
-            TermsActions.CLickGoBack -> goBack()
+            TermsActions.ClickGoBack -> goBack()
             is TermsActions.ClickAccept -> {}
             TermsActions.ClickContinue -> goNext()
             is TermsActions.ClickDocument -> goWebView(action.webLink)

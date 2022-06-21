@@ -43,7 +43,7 @@ fun TermsScreenContent(viewModel: TermsViewModel) {
                     titleSize = 15,
                     navigationTitle = stringResource(R.string.back_text),
                     navigationAction = {
-                        viewModel.setInputActions(TermsActions.CLickGoBack)
+                        viewModel.setInputActions(TermsActions.ClickGoBack)
                     },
                 )
 
@@ -75,7 +75,7 @@ fun TermsScreenContent(viewModel: TermsViewModel) {
                     text = "Terms & Conditions\nand Privacy Policy",
                     style = CCTheme.typography.big_title,
                     modifier = Modifier.padding(bottom = 20.dp),
-                    color = CCTheme.colors.grayOne
+                    color = CCTheme.colors.grayOneDark
                 )
 
                 Text(
@@ -134,7 +134,7 @@ fun AcceptTermsContent(isAccepted: Boolean, acceptTerms: () -> Unit) {
                 .size(18.dp)
                 .border(
                     2.dp,
-                    if (isAccepted) CCTheme.colors.primaryRed else CCTheme.colors.grayText,
+                    if (isAccepted) CCTheme.colors.primaryRed else CCTheme.colors.grayOne,
                     shape = RoundedCornerShape(2.dp)
                 ),
             contentAlignment = Alignment.Center,
@@ -158,7 +158,7 @@ fun AcceptTermsContent(isAccepted: Boolean, acceptTerms: () -> Unit) {
             text = buildAnnotatedString {
                 withStyle(
                     style = SpanStyle(
-                        color = CCTheme.colors.grayText,
+                        color = CCTheme.colors.grayOne,
                         fontWeight = FontWeight.W400
                     ),
                 ) {
@@ -176,7 +176,7 @@ fun AcceptTermsContent(isAccepted: Boolean, acceptTerms: () -> Unit) {
 
                 withStyle(
                     style = SpanStyle(
-                        color = CCTheme.colors.grayText,
+                        color = CCTheme.colors.grayOne,
                         fontWeight = FontWeight.W400
                     ),
                 ) {

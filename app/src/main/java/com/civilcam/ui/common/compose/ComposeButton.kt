@@ -16,6 +16,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.civilcam.common.theme.CCTheme
@@ -25,13 +26,14 @@ import com.civilcam.common.theme.CCTheme
 fun ComposeButton(
     title: String,
     modifier: Modifier = Modifier,
+    textFontWeight: FontWeight = FontWeight.W600,
     isActivated: Boolean = true,
     buttonClick: () -> Unit
 ) {
     val backgroundColor =
         animateColorAsState(targetValue = if (isActivated) CCTheme.colors.primaryRed else CCTheme.colors.lightGray)
-    val borderColor = if (isActivated) CCTheme.colors.primaryRed else CCTheme.colors.grayText
-    val textColor = if (isActivated) CCTheme.colors.white else CCTheme.colors.grayText
+    val borderColor = if (isActivated) CCTheme.colors.primaryRed else CCTheme.colors.grayOne
+    val textColor = if (isActivated) CCTheme.colors.white else CCTheme.colors.grayOne
 
     MaterialTheme {
         CompositionLocalProvider(
@@ -53,6 +55,7 @@ fun ComposeButton(
                 Text(
                     title,
                     style = CCTheme.typography.button_text,
+                    fontWeight = textFontWeight,
                     color = textColor,
                     modifier = Modifier.padding(vertical = 4.dp)
                 )

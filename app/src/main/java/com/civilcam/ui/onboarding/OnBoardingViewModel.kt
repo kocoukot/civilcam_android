@@ -14,8 +14,8 @@ class OnBoardingViewModel : ViewModel() {
 
     fun setInputActions(action: OnboardingActions) {
         when (action) {
-            OnboardingActions.CLickContinue -> onContinueClick()
-            OnboardingActions.CLickGoBack -> goBack()
+            OnboardingActions.ClickContinue -> onContinueClick()
+            OnboardingActions.ClickGoBack -> goBack()
         }
     }
 

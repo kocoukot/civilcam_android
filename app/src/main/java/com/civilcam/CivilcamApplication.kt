@@ -1,7 +1,9 @@
 package com.civilcam
 
 import android.app.Application
+import com.civilcam.di.domainModule
 import com.civilcam.di.presentationModules
+import com.civilcam.di.repositoryModule
 import com.civilcam.di.source.sourceModule
 import com.civilcam.di.storageModule
 import org.koin.android.ext.koin.androidContext
@@ -19,7 +21,7 @@ class CivilcamApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@CivilcamApplication)
-            modules(*presentationModules + sourceModule + storageModule)
+            modules(*presentationModules + sourceModule + storageModule + repositoryModule + domainModule)
         }
     }
 

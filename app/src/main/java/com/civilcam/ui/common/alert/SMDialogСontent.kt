@@ -42,7 +42,7 @@ fun AlertDialogComp(
                     text = {
                         Text(
                             dialogText,
-                            color = CCTheme.colors.grayText,
+                            color = CCTheme.colors.grayOne,
                             style = CCTheme.typography.common_text_small_regular,
                             fontSize = 15.sp
                         )
