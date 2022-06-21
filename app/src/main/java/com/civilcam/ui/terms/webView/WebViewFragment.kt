@@ -2,6 +2,7 @@ package com.civilcam.ui.terms.webView
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.R
@@ -22,6 +23,11 @@ class WebViewFragment : Fragment(R.layout.fragment_webview) {
                 navController.popBackStack()
             }
 
+            Toast.makeText(
+                requireContext(),
+                "Web page will be when api will be integrated",
+                Toast.LENGTH_SHORT
+            ).show()
             title.text = "Linkhere.com"
             webView.apply {
                 settings.useWideViewPort = true
