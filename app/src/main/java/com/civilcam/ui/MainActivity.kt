@@ -2,10 +2,12 @@ package com.civilcam.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
+import com.civilcam.R
 import com.civilcam.databinding.ActivityMainBinding
 import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.setupWithNavController
@@ -21,6 +23,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.apply {
+            navigationBarColor = ContextCompat.getColor(context, R.color.black)
+        }
         setContentView(
             ActivityMainBinding.inflate(layoutInflater)
                 .also { binding = it }

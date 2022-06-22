@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -131,11 +130,7 @@ fun BackButton(navigationAction: () -> Unit) {
                 contentDescription = null,
                 tint = CCTheme.colors.black
             )
-            Text(
-                stringResource(id = R.string.back_text),
-                style = CCTheme.typography.common_text_regular,
-                modifier = Modifier.padding(bottom = 2.dp)
-            )
+
         }
     }
 }
