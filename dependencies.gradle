@@ -11,6 +11,7 @@ ext {
     nav_version = "2.3.3"
     adapter_delegates_version = "4.3.0"
     paging_version = "3.0.0"
+    accompanist_version = "0.16.0"
 
     compression = dependencyGroup {
         implementation 'id.zelory:compressor:3.0.1'
@@ -23,7 +24,7 @@ ext {
 
     jetpackCompose = dependencyGroup {
         // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-        implementation("androidx.compose.foundation:foundation:$compose_version")
+        implementation("androidx.compose.foundation:foundation:1.2.0-rc01")
         // Material design icons
         implementation("androidx.compose.material:material-icons-core:$compose_version")
         implementation("androidx.compose.material:material-icons-extended:$compose_version")
@@ -48,8 +49,9 @@ ext {
 
         implementation "com.google.android.material:compose-theme-adapter:$compose_version"
         // When using a AppCompat theme
-        implementation "com.google.accompanist:accompanist-appcompat-theme:0.16.0"
+        implementation "com.google.accompanist:accompanist-appcompat-theme:$accompanist_version"
 
+        implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
         implementation "io.coil-kt:coil-compose:1.4.0"
         implementation "io.coil-kt:coil-gif:1.4.0"
         implementation "com.google.accompanist:accompanist-flowlayout:0.10.0"
@@ -57,6 +59,8 @@ ext {
         implementation "com.google.accompanist:accompanist-pager:0.23.1"
         implementation "com.google.accompanist:accompanist-pager-indicators:0.23.1"
 
+//        implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
+//        implementation "com.google.accompanist:accompanist-insets-ui:$accompanist_version"
     }
 
     kotlin = dependencyGroup {
