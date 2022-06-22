@@ -126,11 +126,11 @@ fun Modifier.customTabIndicatorOffset(
 ) {
     val currentTabWidth by animateDpAsState(
         targetValue = tabWidth,
-        animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
+        animationSpec = tween(durationMillis = 200, easing = FastOutSlowInEasing)
     )
     val indicatorOffset by animateDpAsState(
         targetValue = ((currentTabPosition.left + currentTabPosition.right - tabWidth) / 2),
-        animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing)
+        animationSpec = tween(durationMillis = 200, easing = FastOutSlowInEasing)
     )
     fillMaxWidth()
         .wrapContentSize(Alignment.BottomStart)
