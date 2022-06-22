@@ -52,4 +52,15 @@
     <string name="user_details_stop_guarding">Stop guarding</string>
     <string name="user_details_remove_gaurdian">Remove guardian</string>
     <string name="user_details_request_text"> needs you as a guardian</string>
+
+
+    <string name="alerts_root_list_title">Alerts</string>
+    <string name="alerts_history_title">Alerts history</string>
+    <string name="resolve_text">Resolve</string>
+
+    <string name="resolve_alert_title">Resolve alert</string>
+    <string name="resolve_alert_text">Are you sure that you want to resolve this alert?</string>
+
+    <string name="alerts_history_received">Received</string>
+    <string name="alerts_history_sent">Sent</string>
 </resources>

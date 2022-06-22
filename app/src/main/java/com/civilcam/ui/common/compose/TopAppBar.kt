@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +23,6 @@ import com.civilcam.common.theme.CCTheme
 fun TopAppBarContent(
     title: String,
     titleSize: Int = 17,
-    navigationTitle: String,
     actionTitle: String = "",
     navigationAction: () -> Unit,
     actionAction: (() -> Unit)? = null
@@ -69,7 +67,7 @@ fun TopAppBarContent(
                         .fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    ActionButton(actionTitle) { actionAction?.invoke() }
+                    TextActionButton(actionTitle) { actionAction?.invoke() }
                 }
             }
         }
@@ -81,7 +79,6 @@ fun TopAppBarContent(
 fun TopAppBarContentPreview() {
     TopAppBarContent(
         title = "Terms & Conditions",
-        navigationTitle = "Back",
         actionTitle = "Contacts",
         navigationAction = {},
         actionAction = {},
@@ -115,7 +112,7 @@ fun SlicedTopAppBarContent(
     ) {
         BackButton(navigationAction::invoke)
         if (actionTitle.isNotEmpty())
-            ActionButton(actionTitle) { actionAction?.invoke() }
+            TextActionButton(actionTitle) { actionAction?.invoke() }
     }
 }
 
@@ -144,13 +141,4 @@ fun BackButton(navigationAction: () -> Unit) {
 }
 
 
-@Composable
-fun ActionButton(actionTitle: String, actionAction: () -> Unit) {
-    TextButton(onClick = actionAction, modifier = Modifier.padding(horizontal = 8.dp)) {
-        Text(
-            text = actionTitle,
-            color = CCTheme.colors.primaryRed,
-            style = CCTheme.typography.common_text_medium
-        )
-    }
-}
+

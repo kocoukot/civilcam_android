@@ -14,7 +14,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
 
 class ProfileSetupViewModel(
@@ -22,7 +22,7 @@ class ProfileSetupViewModel(
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<ProfileSetupState> = MutableStateFlow(ProfileSetupState())
-    val state: StateFlow<ProfileSetupState> = _state
+    val state = _state.asStateFlow()
 
     private val _steps: SingleLiveEvent<ProfileSetupRoute> = SingleLiveEvent()
     val steps: SingleLiveEvent<ProfileSetupRoute> = _steps

@@ -38,7 +38,6 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
             Column {
                 TopAppBarContent(
                     title = stringResource(id = R.string.profile_setup_title),
-                    navigationTitle = stringResource(R.string.back_text),
                     navigationAction = {
                         viewModel.setInputActions(ProfileSetupActions.ClickGoBack)
                     },

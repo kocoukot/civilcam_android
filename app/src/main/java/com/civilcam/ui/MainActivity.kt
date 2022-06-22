@@ -47,5 +47,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun showBottomNavBar(isVisible: Boolean) {
+        binding.navBarGroup.isVisible = isVisible
+
+    }
+
 
 }

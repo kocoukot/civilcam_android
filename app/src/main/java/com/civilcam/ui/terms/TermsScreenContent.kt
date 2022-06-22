@@ -40,7 +40,6 @@ fun TermsScreenContent(viewModel: TermsViewModel) {
                 TopAppBarContent(
                     title = stringResource(id = R.string.terms_conditions_title),
                     titleSize = 15,
-                    navigationTitle = stringResource(R.string.back_text),
                     navigationAction = {
                         viewModel.setInputActions(TermsActions.ClickGoBack)
                     },
