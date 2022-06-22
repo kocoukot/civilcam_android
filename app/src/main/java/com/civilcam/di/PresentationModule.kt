@@ -1,5 +1,6 @@
 package com.civilcam.di
 
+import com.civilcam.ui.alerts.details.AlertsDetailViewModel
 import com.civilcam.ui.alerts.history.AlertsHistoryViewModel
 import com.civilcam.ui.alerts.list.AlertsListViewModel
 import com.civilcam.ui.langSelect.LanguageSelectViewModel
@@ -45,6 +46,9 @@ val alertsRootModule = module {
     viewModel { AlertsListViewModel(get()) }
 
     viewModel { AlertsHistoryViewModel(get()) }
+
+    viewModel { AlertsDetailViewModel(get()) }
+
 
 }
 

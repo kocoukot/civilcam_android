@@ -1,6 +1,8 @@
 package com.civilcam.ui.alerts.list.model
 
-sealed class AlertListRoute {
+import com.civilcam.common.ext.compose.ComposeFragmentRoute
+
+sealed class AlertListRoute : ComposeFragmentRoute {
     object GoMyProfile : AlertListRoute()
     object GoSettings : AlertListRoute()
     object GoAlertHistory : AlertListRoute()

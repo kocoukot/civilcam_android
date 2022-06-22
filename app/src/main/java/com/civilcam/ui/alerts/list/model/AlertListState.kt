@@ -1,5 +1,6 @@
 package com.civilcam.ui.alerts.list.model
 
+import com.civilcam.common.ext.compose.ComposeFragmentState
 import com.civilcam.domain.model.alerts.AlertModel
 
 data class AlertListState(
@@ -7,4 +8,4 @@ data class AlertListState(
     val errorText: String = "",
     val data: List<AlertModel>? = null,
     val resolveId: Int? = null,
-)
+) : ComposeFragmentState

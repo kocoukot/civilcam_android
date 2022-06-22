@@ -1,25 +1,19 @@
 package com.civilcam.ui.alerts.list
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.civilcam.arch.common.livedata.SingleLiveEvent
+import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.domain.usecase.alerts.GetAlertsListUseCase
 import com.civilcam.ui.alerts.list.model.AlertListActions
 import com.civilcam.ui.alerts.list.model.AlertListRoute
 import com.civilcam.ui.alerts.list.model.AlertListState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class AlertsListViewModel(
     getAlertsListUseCase: GetAlertsListUseCase
-) : ViewModel() {
+) : ComposeViewModel<AlertListState, AlertListRoute, AlertListActions>() {
 
-    private val _state: MutableStateFlow<AlertListState> = MutableStateFlow(AlertListState())
-    val state = _state.asStateFlow()
-
-    private val _steps: SingleLiveEvent<AlertListRoute> = SingleLiveEvent()
-    val steps: SingleLiveEvent<AlertListRoute> = _steps
+    override var _state: MutableStateFlow<AlertListState> = MutableStateFlow(AlertListState())
 
     init {
         _state.value = _state.value.copy(isLoading = true)
@@ -36,7 +30,7 @@ class AlertsListViewModel(
 
     }
 
-    fun setInputActions(action: AlertListActions) {
+    override fun setInputActions(action: AlertListActions) {
         when (action) {
             AlertListActions.ClickGoMyProfile -> goMyProfile()
             AlertListActions.ClickGoSettings -> goSettings()

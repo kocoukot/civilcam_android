@@ -1,12 +1,10 @@
-package com.civilcam.ui.alerts.history.model
+package com.civilcam.ui.alerts.details.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentState
 import com.civilcam.domain.model.alerts.AlertModel
-import com.civilcam.domain.model.alerts.AlertType
 
-data class AlertHistoryState(
+data class AlertDetailState(
     val isLoading: Boolean = false,
     val errorText: String = "",
-    val alertType: AlertType = AlertType.RECEIVED,
     val data: List<AlertModel>? = null
 ) : ComposeFragmentState

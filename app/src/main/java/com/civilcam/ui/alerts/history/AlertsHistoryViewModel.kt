@@ -1,30 +1,24 @@
 package com.civilcam.ui.alerts.history
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.civilcam.arch.common.livedata.SingleLiveEvent
+import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.domain.model.alerts.AlertType
 import com.civilcam.domain.usecase.alerts.GetHistoryAlertListUseCase
 import com.civilcam.ui.alerts.history.model.AlertHistoryActions
 import com.civilcam.ui.alerts.history.model.AlertHistoryRoute
 import com.civilcam.ui.alerts.history.model.AlertHistoryState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class AlertsHistoryViewModel(
     private val getHistoryAlertListUseCase: GetHistoryAlertListUseCase
-) : ViewModel() {
+) : ComposeViewModel<AlertHistoryState, AlertHistoryRoute, AlertHistoryActions>() {
 
-    private val _state: MutableStateFlow<AlertHistoryState> = MutableStateFlow(AlertHistoryState())
-    val state = _state.asStateFlow()
-
-    private val _steps: SingleLiveEvent<AlertHistoryRoute> = SingleLiveEvent()
-    val steps: SingleLiveEvent<AlertHistoryRoute> = _steps
+    override var _state: MutableStateFlow<AlertHistoryState> = MutableStateFlow(AlertHistoryState())
 
     init {
-        _state.value = _state.value.copy(isLoading = true)
         viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true)
             kotlin.runCatching { getHistoryAlertListUseCase.getAlerts(_state.value.alertType) }
                 .onSuccess { user ->
                     _state.value = _state.value.copy(data = user)
@@ -35,9 +29,10 @@ class AlertsHistoryViewModel(
             _state.value = _state.value.copy(isLoading = false)
         }
 
+
     }
 
-    fun setInputActions(action: AlertHistoryActions) {
+    override fun setInputActions(action: AlertHistoryActions) {
         when (action) {
             AlertHistoryActions.ClickGoBack -> goBack()
             is AlertHistoryActions.ClickGoAlertDetails -> goAlertDetails(action.alertId)
@@ -68,4 +63,6 @@ class AlertsHistoryViewModel(
             _state.value = _state.value.copy(isLoading = false)
         }
     }
+
+
 }

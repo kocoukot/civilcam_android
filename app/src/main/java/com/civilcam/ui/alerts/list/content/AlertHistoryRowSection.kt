@@ -39,6 +39,7 @@ fun AlertHistoryRowSection(rowClicked: () -> Unit) {
                 style = CCTheme.typography.common_medium_text_regular,
                 modifier = Modifier
                     .padding(start = 16.dp)
+                    .padding(vertical = 12.dp)
                     .weight(1f)
             )
             Icon(
