@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.civilcam.CivilcamApplication.Companion.instance
-import com.civilcam.ui.common.alert.AlertTypes
+import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.alert.DialogAlertFragment
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.standartmedia.ui.common.loading.DialogLoadingFragment
@@ -50,7 +50,7 @@ fun Fragment.showLoadingFragment(isShow: Boolean) {
 fun Fragment.showAlertDialogFragment(
     title: String = "Something went wrong",
     text: String = "",
-    alertType: AlertTypes = AlertTypes.OK,
+    alertType: AlertDialogTypes = AlertDialogTypes.OK,
     onOptionSelected: ((Boolean) -> Unit)? = null
 ) {
     DialogAlertFragment.create(

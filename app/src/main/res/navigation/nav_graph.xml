@@ -50,6 +50,9 @@
         <action
             android:id="@+id/action_alerts_root_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_alerts_root_to_alertsHistoryFragment"
+            app:destination="@id/alertsHistoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/testFragment"
@@ -62,6 +65,20 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.civilcam.ui.settings.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:label="SettingsFragment">
+
+    </fragment>
+    <fragment
+        android:id="@+id/alertsHistoryFragment"
+        android:name="com.civilcam.ui.alerts.history.AlertsHistoryFragment"
+        android:label="AlertsHistoryFragment">
+        <action
+            android:id="@+id/action_alertsHistoryFragment_to_alertDetailFragment"
+            app:destination="@id/alertDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/alertDetailFragment"
+        android:name="com.civilcam.ui.alerts.details.AlertDetailFragment"
+        android:label="AlertDetailFragment" />
 
 </navigation>

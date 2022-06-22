@@ -16,7 +16,7 @@ import androidx.fragment.app.FragmentManager
 class DialogAlertFragment(
     private val dialogTitle: String,
     private val dialogText: String,
-    private val alertType: AlertTypes
+    private val alertType: AlertDialogTypes
 ) :
     DialogFragment() {
     private var onItemSelected: ((Boolean) -> Unit)? = null
@@ -62,7 +62,7 @@ class DialogAlertFragment(
             fragmentManager: FragmentManager,
             title: String,
             text: String,
-            alertType: AlertTypes,
+            alertType: AlertDialogTypes,
             onOptionSelected: ((Boolean) -> Unit)? = null
         ) {
             with(fragmentManager) {

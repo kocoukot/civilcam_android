@@ -61,7 +61,8 @@
     <string name="resolve_alert_title">Resolve alert</string>
     <string name="resolve_alert_text">Are you sure that you want to resolve this alert?</string>
 
-    <string name="alerts_history_received">Received</string>
-    <string name="alerts_history_sent">Sent</string>
+    <string name="alerts_history_received_tab">Received</string>
+    <string name="alerts_history_sent_tab">Sent</string>
+    <string name="alerts_history_sent_alert">You sent an emergency alert</string>
 
 </resources>

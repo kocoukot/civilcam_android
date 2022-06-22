@@ -21,7 +21,8 @@ import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.alerts.list.content.AlertHistoryRowSection
 import com.civilcam.ui.alerts.list.model.AlertListActions
 import com.civilcam.ui.common.alert.AlertDialogComp
-import com.civilcam.ui.common.alert.AlertTypes
+import com.civilcam.ui.common.alert.AlertDialogTypes
+import com.civilcam.ui.common.compose.CircleUserAvatar
 import com.civilcam.ui.common.compose.InformationRow
 import com.civilcam.ui.common.compose.TextActionButton
 import com.civilcam.utils.DateUtils
@@ -36,7 +37,7 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
         AlertDialogComp(
             dialogTitle = stringResource(id = R.string.resolve_alert_title),
             dialogText = stringResource(id = R.string.resolve_alert_text),
-            alertType = AlertTypes.CONFIRM_CANCEL,
+            alertType = AlertDialogTypes.CONFIRM_CANCEL,
             onOptionSelected = {
                 viewModel.setInputActions(AlertListActions.ClickConfirmResolve(it))
             })
@@ -52,7 +53,7 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 16.dp, end = 8.dp),
+                        .padding(start = 16.dp, end = 8.dp, top = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -105,7 +106,7 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                         title = item.userInfo.userName,
                         text = DateUtils.getFullDateAndTimeString(item.alertDate),
                         needDivider = index < data.lastIndex,
-                        leadingIcon = { UserAvatar(item.userInfo.avatar) },
+                        leadingIcon = { CircleUserAvatar(item.userInfo.avatar, 36) },
                         trailingIcon = {
                             if (!item.isResolved) {
                                 TextActionButton(
@@ -138,15 +139,4 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
             }
         }
     }
-}
-
-
-@Composable
-fun UserAvatar(avatar: Int) {
-    Image(
-        painter = painterResource(id = avatar), contentDescription = null,
-        modifier = Modifier
-            .size(36.dp)
-            .clip(CircleShape)
-    )
 }

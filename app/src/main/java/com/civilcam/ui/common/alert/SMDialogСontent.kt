@@ -16,7 +16,7 @@ import com.civilcam.common.theme.CCTheme
 fun AlertDialogComp(
     dialogTitle: String,
     dialogText: String,
-    alertType: AlertTypes,
+    alertType: AlertDialogTypes,
     onOptionSelected: (Boolean) -> Unit
 ) {
     MaterialTheme {
@@ -68,7 +68,7 @@ fun AlertDialogComp(
 
 
                     dismissButton = {
-                        if (alertType == AlertTypes.OK || alertType == AlertTypes.GOT_IT || alertType == AlertTypes.GREAT) {
+                        if (alertType == AlertDialogTypes.OK || alertType == AlertDialogTypes.GOT_IT || alertType == AlertDialogTypes.GREAT) {
 
                         } else {
                             Button(

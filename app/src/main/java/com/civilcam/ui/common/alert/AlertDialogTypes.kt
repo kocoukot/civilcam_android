@@ -1,6 +1,6 @@
 package com.civilcam.ui.common.alert
 
-enum class AlertTypes(val negativeText: String, val positiveText: String) {
+enum class AlertDialogTypes(val negativeText: String, val positiveText: String) {
     CONFIRM_CANCEL("CANCEL", "CONFIRM"),
 
     ALLOW_DENY("DENY", "ALLOW"),
