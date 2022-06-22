@@ -5,10 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.Composable
@@ -62,10 +59,23 @@ fun ComposeButton(
             }
         }
     }
-
 }
 
-@Preview()
+@Composable
+fun TextActionButton(
+    actionTitle: String,
+    actionAction: () -> Unit
+) {
+    TextButton(onClick = actionAction, modifier = Modifier.padding(horizontal = 8.dp)) {
+        Text(
+            text = actionTitle,
+            color = CCTheme.colors.primaryRed,
+            style = CCTheme.typography.common_text_medium
+        )
+    }
+}
+
+@Preview
 @Composable
 fun ComposeButtonPreview() {
     ComposeButton(
