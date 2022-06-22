@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalPagerApi::class, ExperimentalPagerApi::class)
 
 package com.civilcam.ui.onboarding
 
@@ -22,9 +21,10 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.InternalCoroutinesApi
 import java.math.BigDecimal
 
+@OptIn(InternalCoroutinesApi::class, ExperimentalPagerApi::class, ExperimentalPagerApi::class)
 @Composable
 fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
 
@@ -62,10 +62,10 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
             contentAlignment = Alignment.TopCenter,
         ) {
             HorizontalPager(
+                itemSpacing = 0.dp,
                 count = onboardPages.size,
                 state = firstPagerState,
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) { page ->
                 PageUI(page = onboardPages[page])
             }
@@ -96,6 +96,8 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
         }
 
         Column(
+            modifier = Modifier
+                .navigationBarsPadding(),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -107,7 +109,8 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
                 ),
                 backgroundColor = CCTheme.colors.white,
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .navigationBarsPadding(),
                 elevation = 8.dp,
 
                 ) {
@@ -140,7 +143,8 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
                     ComposeButton(
                         title = stringResource(id = R.string.get_start_text),
                         modifier = Modifier
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .navigationBarsPadding(),
                         isActivated = secondPagerState.currentPage == 2,
                         buttonClick = {
                             viewModel.setInputActions(OnboardingActions.ClickContinue)

@@ -17,6 +17,7 @@ import com.civilcam.domain.model.OnboardingPage
 @Composable
 fun PageUI(page: OnboardingPage) {
     Column(
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
@@ -24,14 +25,17 @@ fun PageUI(page: OnboardingPage) {
             painter = painterResource(page.image),
             contentDescription = null,
             modifier = Modifier.fillMaxWidth(),
-            contentScale = ContentScale.Fit
+            contentScale = ContentScale.FillWidth
         )
     }
 }
 
 @Composable
 fun PageCardUI(page: OnboardingPage) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(
             text = stringResource(page.title),
             style = CCTheme.typography.big_title,

@@ -46,14 +46,20 @@ fun LanguageSelectScreenContent(viewModel: LanguageSelectViewModel) {
                     contentDescription = null
                 )
             }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                BottomCard(state.value.selectedLang, {
+                    viewModel.setInputAction(LangSelectActions.LanguageSelect(it))
+                }, {
+                    viewModel.setInputAction(LangSelectActions.ClickContinue)
+                })
+            }
         },
-        bottomBar = {
-            BottomCard(state.value.selectedLang, {
-                viewModel.setInputAction(LangSelectActions.LanguageSelect(it))
-            }, {
-                viewModel.setInputAction(LangSelectActions.ClickContinue)
-            })
-        })
+    )
 }
 
 @Composable
@@ -77,7 +83,7 @@ fun BottomCard(
                 vertical = 16.dp
             ),
             horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
+        ) {
             Text(
                 stringResource(id = R.string.language_select_hello),
                 style = CCTheme.typography.big_title,

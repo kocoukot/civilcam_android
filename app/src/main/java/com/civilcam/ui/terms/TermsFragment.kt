@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.R
@@ -29,6 +30,7 @@ class TermsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
                 TermsRoute.GoBack -> navController.popBackStack()
@@ -55,6 +57,20 @@ class TermsFragment : Fragment() {
             setContent {
                 TermsScreenContent(viewModel)
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.window?.apply {
+            navigationBarColor = ContextCompat.getColor(requireContext(), R.color.lightGray)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        activity?.window?.apply {
+            navigationBarColor = ContextCompat.getColor(requireContext(), R.color.white)
         }
     }
 
