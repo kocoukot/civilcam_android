@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -42,13 +41,12 @@ fun AlertHistoryRowSection(rowClicked: () -> Unit) {
                     .padding(start = 16.dp)
                     .weight(1f)
             )
-            IconButton(onClick = { }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_nav_forward),
-                    contentDescription = null,
-                    tint = CCTheme.colors.grayOne
-                )
-            }
+            Icon(
+                painter = painterResource(id = R.drawable.ic_nav_forward),
+                contentDescription = null,
+                tint = CCTheme.colors.grayOne
+            )
+
             Spacer(modifier = Modifier.padding(end = 8.dp))
         }
         Divider(color = CCTheme.colors.grayThree)

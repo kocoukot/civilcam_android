@@ -10,7 +10,6 @@ import com.civilcam.ui.alerts.list.model.AlertListState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class AlertsListViewModel(
     getAlertsListUseCase: GetAlertsListUseCase
@@ -75,11 +74,9 @@ class AlertsListViewModel(
                 val data = _state.value.data?.toList() ?: emptyList()
                 data.let { list ->
                     list.find {
-                        Timber.d("alertResult ${it.alertId == _state.value.resolveId}")
                         it.alertId == _state.value.resolveId
                     }?.isResolved = true
                 }
-                Timber.d("alertResult $data ${_state.value.resolveId}")
                 _state.value = _state.value.copy(data = data.toList())
                 _state.value = _state.value.copy(resolveId = null)
             }
