@@ -4,10 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -27,24 +28,31 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
         topBar = {
-            TopAppBarContent(
-                title = stringResource(id = R.string.add_from_contacts_title),
-                navigationAction = {
-                    viewModel.setInputActions(ContactsActions.ClickGoBack)
-                },
-                actionTitle = stringResource(id = R.string.add_from_contacts_invite_by),
-                actionAction = {
-                    viewModel.setInputActions(ContactsActions.ClickGoInviteByNumber)
+            Column(modifier = Modifier.fillMaxWidth()) {
+                TopAppBarContent(
+                    color = CCTheme.colors.lightGray,
+                    title = stringResource(id = R.string.add_from_contacts_title),
+                    navigationAction = {
+                        viewModel.setInputActions(ContactsActions.ClickGoBack)
+                    },
+                    actionTitle = stringResource(id = R.string.add_from_contacts_invite_by),
+                    actionAction = {
+                        viewModel.setInputActions(ContactsActions.ClickGoInviteByNumber)
+                    }
+                )
+                SearchInputField {
+                    viewModel.setInputActions(ContactsActions.ClickSearch(it))
                 }
-            )
+                Spacer(modifier = Modifier.height(8.dp))
+                Divider(color = CCTheme.colors.grayThree)
+            }
         }) {
 
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
 
-            //search field
-            DividerLightGray()
+
 
             state.value.data?.contactsList?.let { data ->
                 LazyColumn {
@@ -96,8 +104,6 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
                                                 )
                                             }
                                         }
-
-
                                     }
                                 ) {}
                             }
@@ -105,9 +111,33 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
                     }
                 }
             }
-
         }
+    }
+}
 
+
+@Composable
+fun SearchFieldContent() {
+    val value by remember { mutableStateOf("") }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(36.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        TextField(
+            colors = TextFieldDefaults.textFieldColors(
+                textColor = CCTheme.colors.black,
+                backgroundColor = CCTheme.colors.white,
+                cursorColor = CCTheme.colors.black,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+            ),
+            shape = CircleShape,
+            value = value,
+            onValueChange = {
+
+            })
     }
 }
  

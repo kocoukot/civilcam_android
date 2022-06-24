@@ -24,95 +24,96 @@ import com.civilcam.common.theme.CCTheme
 
 @Composable
 fun TopAppBarContent(
-	title: String,
-	titleSize: Int = 20,
-	actionTitle: String = "",
-	navigationAction: () -> Unit,
-	actionAction: (() -> Unit)? = null
+    title: String,
+    titleSize: Int = 20,
+    color: Color = CCTheme.colors.white,
+    actionTitle: String = "",
+    navigationAction: () -> Unit,
+    actionAction: (() -> Unit)? = null
 ) {
-	
-	TopAppBar(
-		backgroundColor = CCTheme.colors.white,
-		elevation = 0.dp,
-		title = {
-			Text(
-				color = CCTheme.colors.black,
-				textAlign = TextAlign.Start,
-				text = title,
-				style = CCTheme.typography.common_text_regular,
-				fontWeight = FontWeight.W600,
-				fontSize = titleSize.sp
-			)
-		},
-		navigationIcon = {
-			BackButton(navigationAction::invoke)
-		},
-		actions = {
-			TextActionButton(actionTitle) { actionAction?.invoke() }
-		}
-	)
+
+    TopAppBar(
+        backgroundColor = color,
+        elevation = 0.dp,
+        title = {
+            Text(
+                color = CCTheme.colors.black,
+                textAlign = TextAlign.Start,
+                text = title,
+                style = CCTheme.typography.common_text_regular,
+                fontWeight = FontWeight.W600,
+                fontSize = titleSize.sp
+            )
+        },
+        navigationIcon = {
+            BackButton(navigationAction::invoke)
+        },
+        actions = {
+            TextActionButton(actionTitle) { actionAction?.invoke() }
+        }
+    )
 }
 
 @Preview
 @Composable
 private fun TopAppBarContentPreview() {
-	TopAppBarContent(
-		title = "Terms & Conditions",
-		actionTitle = "Contacts",
-		navigationAction = {},
-		actionAction = {},
-	)
+    TopAppBarContent(
+        title = "Terms & Conditions",
+        actionTitle = "Contacts",
+        navigationAction = {},
+        actionAction = {},
+    )
 }
 
 
 @Preview
 @Composable
 fun SlicedTopAppBarContentPreview() {
-	SlicedTopAppBarContent(
+    SlicedTopAppBarContent(
 //        actionTitle = "Contacts",
-		navigationAction = {},
-		actionAction = {},
-	)
+        navigationAction = {},
+        actionAction = {},
+    )
 }
 
 @Composable
 fun SlicedTopAppBarContent(
-	actionTitle: String = "",
-	actionAction: (() -> Unit)? = null,
-	navigationAction: () -> Unit,
+    actionTitle: String = "",
+    actionAction: (() -> Unit)? = null,
+    navigationAction: () -> Unit,
 ) {
-	Row(
-		modifier = Modifier
-			.fillMaxWidth()
-			.background(Color.Transparent)
-			.padding(start = 16.dp),
-		verticalAlignment = Alignment.CenterVertically,
-		horizontalArrangement = Arrangement.SpaceBetween
-	) {
-		BackButton(navigationAction::invoke)
-		if (actionTitle.isNotEmpty())
-			TextActionButton(actionTitle) { actionAction?.invoke() }
-	}
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Transparent)
+            .padding(start = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        BackButton(navigationAction::invoke)
+        if (actionTitle.isNotEmpty())
+            TextActionButton(actionTitle) { actionAction?.invoke() }
+    }
 }
 
 @Composable
 fun BackButton(navigationAction: () -> Unit) {
-	IconButton(
-		modifier = Modifier,
-		onClick = navigationAction
-	) {
-		Row(
-			verticalAlignment = Alignment.CenterVertically
-		) {
-			
-			Icon(
-				painter = painterResource(id = R.drawable.ic_back_navigation),
-				contentDescription = null,
-				tint = CCTheme.colors.black
-			)
-			
-		}
-	}
+    IconButton(
+        modifier = Modifier,
+        onClick = navigationAction
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Icon(
+                painter = painterResource(id = R.drawable.ic_back_navigation),
+                contentDescription = null,
+                tint = CCTheme.colors.black
+            )
+
+        }
+    }
 }
 
 
