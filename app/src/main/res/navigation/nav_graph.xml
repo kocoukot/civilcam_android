@@ -83,7 +83,16 @@
     <fragment
         android:id="@+id/contactsFragment"
         android:name="com.civilcam.ui.network.contacts.ContactsFragment"
-        android:label="ContactsFragment" />
+        android:label="ContactsFragment">
+        <action
+            android:id="@+id/action_contactsFragment_to_inviteByNumberFragment"
+            app:destination="@id/inviteByNumberFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/inviteByNumberFragment"
+        android:name="com.civilcam.ui.network.inviteByNumber.InviteByNumberFragment"
+        android:label="InviteByNumberFragment" />
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.civilcam.ui.auth.login.LoginFragment"

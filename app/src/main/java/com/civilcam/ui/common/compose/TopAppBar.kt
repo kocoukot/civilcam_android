@@ -1,10 +1,6 @@
 package com.civilcam.ui.common.compose
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -28,6 +24,7 @@ fun TopAppBarContent(
     titleSize: Int = 20,
     color: Color = CCTheme.colors.white,
     actionTitle: String = "",
+    isActionEnabled: Boolean = true,
     navigationAction: () -> Unit,
     actionAction: (() -> Unit)? = null
 ) {
@@ -49,7 +46,7 @@ fun TopAppBarContent(
             BackButton(navigationAction::invoke)
         },
         actions = {
-            TextActionButton(actionTitle) { actionAction?.invoke() }
+            TextActionButton(actionTitle, isEnabled = isActionEnabled) { actionAction?.invoke() }
         }
     )
 }
@@ -63,37 +60,6 @@ private fun TopAppBarContentPreview() {
         navigationAction = {},
         actionAction = {},
     )
-}
-
-
-@Preview
-@Composable
-fun SlicedTopAppBarContentPreview() {
-    SlicedTopAppBarContent(
-//        actionTitle = "Contacts",
-        navigationAction = {},
-        actionAction = {},
-    )
-}
-
-@Composable
-fun SlicedTopAppBarContent(
-    actionTitle: String = "",
-    actionAction: (() -> Unit)? = null,
-    navigationAction: () -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.Transparent)
-            .padding(start = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        BackButton(navigationAction::invoke)
-        if (actionTitle.isNotEmpty())
-            TextActionButton(actionTitle) { actionAction?.invoke() }
-    }
 }
 
 @Composable

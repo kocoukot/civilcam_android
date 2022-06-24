@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import com.civilcam.R
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
@@ -31,7 +32,7 @@ class ContactsFragment : Fragment() {
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
                 ContactsRoute.GoBack -> navController.popBackStack()
-                ContactsRoute.GoInviteByNumber -> {}
+                ContactsRoute.GoInviteByNumber -> navController.navigate(R.id.action_contactsFragment_to_inviteByNumberFragment)
             }
         }
 

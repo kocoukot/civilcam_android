@@ -18,6 +18,10 @@
     <string name="search_text">Search</string>
     <string name="add_text">Add</string>
     <string name="pending_text">Pending</string>
+    <string name="invite_text">Invite</string>
+
+    <string name="phone_number_text">Phone number</string>
+    <string name="phone_number_placeholder">(123) 456 7890</string>
 
     <string name="onboarding_page_one_title">Safety network</string>
     <string name="onboarding_page_one_text">If you are worried about someone, become his guardian and be sure that if something happens - you can always help</string>
@@ -50,6 +54,7 @@
     <string name="profile_setup_phone_number_placeholder">(123) 456 7890</string>
     <string name="profile_setup_date_of_birth">Date of birth</string>
     <string name="profile_setup_phone_error">Please, enter a valid phone number</string>
+
 
 
     <string name="navigation_bar_network">Network</string>
@@ -112,4 +117,8 @@
 
     <string name="add_from_contacts_title">Sent</string>
     <string name="add_from_contacts_invite_by">Invite by number</string>
+
+    <string name="invite_by_number_title">Invite by number</string>
+    <string name="invite_by_number_hint">Send an invite to the number that is not on your contact list</string>
+    <string name="invite_by_number_sent">Invite has been sent to</string>
 </resources>

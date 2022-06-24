@@ -67,13 +67,18 @@ fun ComposeButton(
 @Composable
 fun TextActionButton(
     actionTitle: String,
+    isEnabled: Boolean = true,
     textColor: Color = CCTheme.colors.primaryRed,
     actionAction: () -> Unit
 ) {
-    TextButton(onClick = actionAction, modifier = Modifier.padding(horizontal = 8.dp)) {
+    TextButton(
+        enabled = isEnabled,
+        onClick = actionAction,
+        modifier = Modifier.padding(horizontal = 8.dp)
+    ) {
         Text(
             text = actionTitle,
-            color = textColor,
+            color = if (isEnabled) textColor else CCTheme.colors.grayOne,
             style = CCTheme.typography.common_text_medium
         )
     }

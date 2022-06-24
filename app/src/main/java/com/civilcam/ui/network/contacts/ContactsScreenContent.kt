@@ -73,7 +73,7 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
 
                             is PersonContactItem -> {
                                 var isInvited by remember { mutableStateOf(contact.isInvited) }
-
+                                isInvited = contact.isInvited
                                 InformationRow(
                                     needDivider = (if (index == data.lastIndex) {
                                         false

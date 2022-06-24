@@ -10,6 +10,7 @@ import com.civilcam.ui.auth.password.create.CreatePasswordViewModel
 import com.civilcam.ui.auth.password.reset.ResetPasswordViewModel
 import com.civilcam.ui.langSelect.LanguageSelectViewModel
 import com.civilcam.ui.network.contacts.ContactsViewModel
+import com.civilcam.ui.network.inviteByNumber.InviteByNumberViewModel
 import com.civilcam.ui.onboarding.OnBoardingViewModel
 import com.civilcam.ui.profile.setup.ProfileSetupViewModel
 import com.civilcam.ui.profile.userDetails.UserDetailsViewModel
@@ -62,6 +63,8 @@ val networkRootModule = module {
     viewModel { UserDetailsViewModel(get()) }
 
     viewModel { ContactsViewModel(get()) }
+
+    viewModel { InviteByNumberViewModel() }
 
 
 }
