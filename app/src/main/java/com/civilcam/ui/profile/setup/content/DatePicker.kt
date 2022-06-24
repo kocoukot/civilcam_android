@@ -2,10 +2,13 @@ package com.civilcam.ui.profile.setup.content
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.civilcam.R
@@ -34,11 +37,17 @@ fun DatePickerContent(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(CCTheme.colors.white),
+            .background(CCTheme.colors.white, RoundedCornerShape(2.dp)),
         contentAlignment = Alignment.Center
     ) {
 
         Column {
+            Text(
+                text = stringResource(id = R.string.profile_setup_date_of_birth),
+                modifier = Modifier.padding(start = 16.dp, top = 20.dp),
+                style = CCTheme.typography.button_text,
+                fontWeight = FontWeight.W700
+            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
