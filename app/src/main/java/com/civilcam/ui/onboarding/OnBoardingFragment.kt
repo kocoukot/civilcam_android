@@ -34,7 +34,7 @@ class OnBoardingFragment : Fragment() {
                     navController.popBackStack()
                 }
                 OnboardingRoute.ToCreateAccount -> {
-                    navController.navigate(R.id.testFragment)
+                    navController.navigate(R.id.createAccountFragment)
                 }
             }
         }

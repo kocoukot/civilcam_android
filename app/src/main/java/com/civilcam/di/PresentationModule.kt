@@ -3,6 +3,8 @@ package com.civilcam.di
 import com.civilcam.ui.alerts.details.AlertsDetailViewModel
 import com.civilcam.ui.alerts.history.AlertsHistoryViewModel
 import com.civilcam.ui.alerts.list.AlertsListViewModel
+import com.civilcam.ui.auth.create.CreateAccountViewModel
+import com.civilcam.ui.auth.login.LoginViewModel
 import com.civilcam.ui.langSelect.LanguageSelectViewModel
 import com.civilcam.ui.onboarding.OnBoardingViewModel
 import com.civilcam.ui.profile.setup.ProfileSetupViewModel
@@ -32,7 +34,10 @@ val authModule = module {
 
     viewModel { ProfileSetupViewModel(get()) }
 
-
+    viewModel { LoginViewModel() }
+    
+    viewModel { CreateAccountViewModel() }
+    
 }
 
 val networkRootModule = module {
