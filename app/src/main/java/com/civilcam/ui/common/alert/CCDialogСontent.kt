@@ -84,7 +84,7 @@ fun AlertDialogComp(
                                     text = alertType.negativeText,
                                     style = CCTheme.typography.common_text_medium,
                                     fontSize = 14.sp,
-                                    color = CCTheme.colors.primaryRed
+                                    color = CCTheme.colors.cianColor
                                 )
                             }
                         }
