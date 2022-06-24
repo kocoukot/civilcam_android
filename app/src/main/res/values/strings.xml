@@ -11,6 +11,8 @@
 
     <string name="decline_text">Decline</string>
     <string name="accept_text">Accept</string>
+    <string name="cancel_text_caps">CANCEL</string>
+    <string name="ok_text_caps">OK</string>
 
 
     <string name="onboarding_page_one_title">Safety network</string>
@@ -21,7 +23,7 @@
     <string name="onboarding_page_three_text">It\'s never too safe, take care of yourself and your loved ones with CivilCam\n</string>
 
 
-    <string name="terms_conditions_title"><![CDATA[Terms & Conditions]]> and\nPrivacy Policy</string>
+    <string name="terms_conditions_title"><![CDATA[Terms & Conditions]]>\nand Privacy Policy</string>
     <string name="terms_conditions_subtitle">It\'s never too safe, take care of yourself and your loved ones with CivilCam\n</string>
     <string name="terms_conditions_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem sit lacus nisl donec egestas amet id consequat. Ut velit accumsan in lorem lectus et quis.</string>
     <string name="terms_conditions_terms_button"><![CDATA[Terms & Conditions]]></string>

@@ -1,5 +1,6 @@
 package com.civilcam.ui.langSelect
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -84,28 +85,35 @@ fun BottomCard(
             ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                stringResource(id = R.string.language_select_hello),
-                style = CCTheme.typography.big_title,
-                color = CCTheme.colors.primaryRed,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .padding(bottom = 21.dp)
-                    .padding(horizontal = 30.dp)
-            )
+            Crossfade(targetState = selectedLang) {
+                Text(
+                    stringResource(id = R.string.language_select_hello),
+                    style = CCTheme.typography.big_title,
+                    color = CCTheme.colors.primaryRed,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(bottom = 21.dp)
+                        .padding(horizontal = 30.dp)
+                )
+            }
 
             SegmentedItem(selectedLang) {
                 tabSelected.invoke(it)
             }
-
-            Text(
-                stringResource(id = R.string.language_select_settings),
-                style = CCTheme.typography.common_text_regular,
-                color = CCTheme.colors.grayOne,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(bottom = 90.dp, top = 16.dp)
-            )
-
+            Crossfade(
+                targetState = selectedLang,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Text(
+                        stringResource(id = R.string.language_select_settings),
+                        style = CCTheme.typography.common_text_regular,
+                        color = CCTheme.colors.grayOne,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(bottom = 90.dp, top = 16.dp)
+                    )
+                }
+            }
             ComposeButton(
                 title = stringResource(id = R.string.continue_text),
                 modifier = Modifier

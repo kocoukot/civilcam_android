@@ -112,7 +112,7 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
                 ) {
                 Column(
                     modifier = Modifier.padding(
-                        horizontal = 24.dp,
+                        horizontal = 20.dp,
                         vertical = 16.dp
                     ),
                     horizontalAlignment = Alignment.CenterHorizontally,

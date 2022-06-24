@@ -58,6 +58,13 @@ data class CCTypography internal constructor(
         fontWeight = FontWeight.W400,
         letterSpacing = (-0.01).sp,
     ),
+    val common_text_small_regular_spacing: TextStyle = TextStyle(
+        fontSize = 13.sp,
+        lineHeight = 15.sp,
+//        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight.W400,
+        letterSpacing = (-0.5).sp,
+    ),
 
     val common_text_small_medium: TextStyle = TextStyle(
         fontSize = 13.sp,

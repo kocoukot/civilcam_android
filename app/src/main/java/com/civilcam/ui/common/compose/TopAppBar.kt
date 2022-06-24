@@ -1,10 +1,14 @@
 package com.civilcam.ui.common.compose
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,56 +25,32 @@ import com.civilcam.common.theme.CCTheme
 @Composable
 fun TopAppBarContent(
     title: String,
-    titleSize: Int = 17,
+    titleSize: Int = 20,
     actionTitle: String = "",
     navigationAction: () -> Unit,
     actionAction: (() -> Unit)? = null
 ) {
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(CCTheme.colors.white)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp)
-                .background(CCTheme.colors.white),
-            contentAlignment = Alignment.Center
-        ) {
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp)
-                    .background(CCTheme.colors.white),
-                horizontalArrangement = Arrangement.spacedBy(0.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                BackButton(navigationAction::invoke)
-            }
-
+    TopAppBar(
+        backgroundColor = CCTheme.colors.white,
+        elevation = 0.dp,
+        title = {
             Text(
                 color = CCTheme.colors.black,
-                textAlign = TextAlign.Center,
+                textAlign = TextAlign.Start,
                 text = title,
                 style = CCTheme.typography.common_text_regular,
                 fontWeight = FontWeight.W600,
                 fontSize = titleSize.sp
             )
-
-            if (actionTitle.isNotEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.CenterEnd
-                ) {
-                    TextActionButton(actionTitle) { actionAction?.invoke() }
-                }
-            }
+        },
+        navigationIcon = {
+            BackButton(navigationAction::invoke)
+        },
+        actions = {
+            TextActionButton(actionTitle) { actionAction?.invoke() }
         }
-    }
+    )
 }
 
 @Preview

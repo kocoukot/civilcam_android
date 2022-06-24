@@ -1,9 +1,10 @@
 package com.civilcam.ui.profile.setup.model
 
-sealed class ProfileSetupRoute {
+import com.civilcam.common.ext.compose.ComposeFragmentRoute
+
+sealed class ProfileSetupRoute : ComposeFragmentRoute {
     object GoSubscription : ProfileSetupRoute()
     object GoBack : ProfileSetupRoute()
-    object OpenDatePicker : ProfileSetupRoute()
     object GoLocationSelect : ProfileSetupRoute()
     object GoGalleryOpen : ProfileSetupRoute()
 
