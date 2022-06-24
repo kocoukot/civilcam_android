@@ -1,5 +1,6 @@
 package com.civilcam.ui.common.compose
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,17 +46,19 @@ fun ComposeButton(
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = backgroundColor.value,
-                    disabledBackgroundColor = Color.Transparent
+                    disabledBackgroundColor = Color.White
                 ),
             )
             {
-                Text(
-                    title,
-                    style = CCTheme.typography.button_text,
-                    fontWeight = textFontWeight,
-                    color = textColor,
-                    modifier = Modifier.padding(vertical = 4.dp)
-                )
+                Crossfade(targetState = title) {
+                    Text(
+                        title,
+                        style = CCTheme.typography.button_text,
+                        fontWeight = textFontWeight,
+                        color = textColor,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+                }
             }
         }
     }
@@ -64,12 +67,13 @@ fun ComposeButton(
 @Composable
 fun TextActionButton(
     actionTitle: String,
+    textColor: Color = CCTheme.colors.primaryRed,
     actionAction: () -> Unit
 ) {
     TextButton(onClick = actionAction, modifier = Modifier.padding(horizontal = 8.dp)) {
         Text(
             text = actionTitle,
-            color = CCTheme.colors.primaryRed,
+            color = textColor,
             style = CCTheme.typography.common_text_medium
         )
     }

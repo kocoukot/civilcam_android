@@ -17,4 +17,8 @@ data class CCColors internal constructor(
     val grayTwo: Color = Color(0xFFB4BAC3),
     val grayThree: Color = Color(0xFFE4E4E4),
     val lightGray: Color = Color(0xFFF5F6F6),
-)
+
+    val cianColor: Color = Color(0xFF4B9595),
+
+
+    )

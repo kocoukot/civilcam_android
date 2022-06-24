@@ -132,6 +132,7 @@ fun InputField(
 @Composable
 fun PhoneInputField(
     text: String = "",
+    isInFocus: () -> Unit,
     isReversed: Boolean = false,
     onValueChanged: (String) -> Unit,
 ) {
@@ -144,12 +145,19 @@ fun PhoneInputField(
         modifier = Modifier
             .fillMaxWidth()
             .background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
-            .bringIntoViewRequester(viewRequester)
+//            .bringIntoViewRequester(viewRequester)
             .onFocusEvent {
+
                 if (it.isFocused) {
+
+
                     coroutineScope.launch {
                         delay(400)
-                        viewRequester.bringIntoView()
+                        isInFocus.invoke()
+
+////                        focusRequester.requestFocus()
+////                        viewRequester.bringIntoView()
+//                        isInFocus.invoke()
                     }
                 }
             }
@@ -222,7 +230,7 @@ fun PhoneInputField(
 @Preview
 @Composable
 fun PhoneInputFieldPreview() {
-    PhoneInputField(onValueChanged = {})
+    PhoneInputField(onValueChanged = {}, isInFocus = {})
 }
 
 @Preview

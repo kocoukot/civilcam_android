@@ -1,9 +1,11 @@
-
 package com.civilcam.ui.onboarding
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +24,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collectLatest
 import java.math.BigDecimal
 
 @OptIn(InternalCoroutinesApi::class, ExperimentalPagerApi::class, ExperimentalPagerApi::class)
@@ -45,7 +48,7 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
         val (scrollingState, followingState) = scrollingFollowingPair ?: return@LaunchedEffect
 
         snapshotFlow { scrollingState.currentPage + scrollingState.currentPageOffset }
-            .collect { pagePart ->
+            .collectLatest { pagePart ->
                 val divideAndRemainder = BigDecimal.valueOf(pagePart.toDouble())
                     .divideAndRemainder(BigDecimal.ONE)
                 followingState.scrollToPage(
@@ -76,20 +79,13 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
                     .padding(top = 24.dp, start = 16.dp)
             ) {
                 IconButton(onClick = { viewModel.setInputActions(OnboardingActions.ClickGoBack) }) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back_navigation),
-                            contentDescription = null,
-                            tint = CCTheme.colors.white
-                        )
-                        Text(
-                            stringResource(id = R.string.back_text),
-                            style = CCTheme.typography.common_text_medium,
-                            color = CCTheme.colors.white
-                        )
-                    }
+
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_back_navigation),
+                        contentDescription = null,
+                        tint = CCTheme.colors.white
+                    )
+
                 }
             }
 
@@ -116,7 +112,7 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
                 ) {
                 Column(
                     modifier = Modifier.padding(
-                        horizontal = 24.dp,
+                        horizontal = 20.dp,
                         vertical = 16.dp
                     ),
                     horizontalAlignment = Alignment.CenterHorizontally,

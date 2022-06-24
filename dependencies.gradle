@@ -18,6 +18,10 @@ ext {
     }
 
 
+    datePicker = dependencyGroup {
+        implementation "com.chargemap.compose:numberpicker:1.0.3"
+    }
+
     gleap = dependencyGroup {
         implementation group: 'io.gleap', name: 'gleap-android-sdk', version: '7.0.12'
     }

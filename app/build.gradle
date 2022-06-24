@@ -116,6 +116,7 @@ dependencies {
     rxJava()
     compression()
     gleap()
+    datePicker()
     //Timber
     implementation 'com.jakewharton.timber:timber:5.0.1'
 

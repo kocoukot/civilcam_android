@@ -9,7 +9,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.civilcam.common.ext.showAlertDialogFragment
-import com.civilcam.common.ext.showDatePicker
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
@@ -40,6 +39,7 @@ class ProfileSetupFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
                 ProfileSetupRoute.GoBack -> navController.popBackStack()
@@ -47,9 +47,6 @@ class ProfileSetupFragment : Fragment() {
                 ProfileSetupRoute.GoSubscription -> {}
                 ProfileSetupRoute.GoLocationSelect -> {}
                 ProfileSetupRoute.GoGalleryOpen -> onChooseFromGalleryCaseClicked()
-                ProfileSetupRoute.OpenDatePicker -> showDatePicker {
-                    viewModel.getDateFromCalendar(it)
-                }
             }
         }
 

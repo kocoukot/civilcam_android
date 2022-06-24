@@ -11,6 +11,8 @@
 
     <string name="decline_text">Decline</string>
     <string name="accept_text">Accept</string>
+    <string name="cancel_text_caps">CANCEL</string>
+    <string name="ok_text_caps">OK</string>
 
 
     <string name="onboarding_page_one_title">Safety network</string>
@@ -21,7 +23,7 @@
     <string name="onboarding_page_three_text">It\'s never too safe, take care of yourself and your loved ones with CivilCam\n</string>
 
 
-    <string name="terms_conditions_title"><![CDATA[Terms & Conditions]]> and\nPrivacy Policy</string>
+    <string name="terms_conditions_title"><![CDATA[Terms & Conditions]]>\nand Privacy Policy</string>
     <string name="terms_conditions_subtitle">It\'s never too safe, take care of yourself and your loved ones with CivilCam\n</string>
     <string name="terms_conditions_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem sit lacus nisl donec egestas amet id consequat. Ut velit accumsan in lorem lectus et quis.</string>
     <string name="terms_conditions_terms_button"><![CDATA[Terms & Conditions]]></string>
@@ -49,6 +51,8 @@
     <string name="profile_setup_phone_number_placeholder">(123) 456 7890</string>
 
 
+    <string name="user_details_title">Add guardians</string>
+
     <string name="user_details_ask_to_guard">Ask to guard</string>
     <string name="user_details_stop_guarding">Stop guarding</string>
     <string name="user_details_remove_gaurdian">Remove guardian</string>
@@ -64,5 +68,6 @@
     <string name="alerts_history_received_tab">Received</string>
     <string name="alerts_history_sent_tab">Sent</string>
     <string name="alerts_history_sent_alert">You sent an emergency alert</string>
+
 
 </resources>

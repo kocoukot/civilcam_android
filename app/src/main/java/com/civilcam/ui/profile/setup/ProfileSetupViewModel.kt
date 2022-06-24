@@ -1,8 +1,7 @@
 package com.civilcam.ui.profile.setup
 
 import android.net.Uri
-import androidx.lifecycle.ViewModel
-import com.civilcam.arch.common.livedata.SingleLiveEvent
+import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.local.MediaStorage
 import com.civilcam.domain.PictureModel
 import com.civilcam.domain.model.UserSetupModel
@@ -14,18 +13,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import timber.log.Timber
 
 class ProfileSetupViewModel(
     private val mediaStorage: MediaStorage,
-) : ViewModel() {
+) : ComposeViewModel<ProfileSetupState, ProfileSetupRoute, ProfileSetupActions>() {
 
-    private val _state: MutableStateFlow<ProfileSetupState> = MutableStateFlow(ProfileSetupState())
-    val state = _state.asStateFlow()
-
-    private val _steps: SingleLiveEvent<ProfileSetupRoute> = SingleLiveEvent()
-    val steps: SingleLiveEvent<ProfileSetupRoute> = _steps
+    override var _state: MutableStateFlow<ProfileSetupState> = MutableStateFlow(ProfileSetupState())
 
     private val disposables = CompositeDisposable()
 
@@ -38,14 +31,13 @@ class ProfileSetupViewModel(
 
     }
 
-    fun setInputActions(action: ProfileSetupActions) {
+    override fun setInputActions(action: ProfileSetupActions) {
         when (action) {
             ProfileSetupActions.ClickGoBack -> goBack()
             ProfileSetupActions.ClickSave -> goNext()
             ProfileSetupActions.ClickDateSelect -> openDatePicker()
             ProfileSetupActions.ClickLocationSelect -> {}
             is ProfileSetupActions.EnterInputData -> {
-                Timber.d("actionData ${_state.value.data}")
                 when (action.dataType) {
                     InputDataType.FIRST_NAME -> firstNameEntered(action.data)
                     InputDataType.LAST_NAME -> lastNameEntered(action.data)
@@ -53,6 +45,8 @@ class ProfileSetupViewModel(
                 }
             }
             ProfileSetupActions.ClickAvatarSelect -> goAvatarSelect()
+            is ProfileSetupActions.ClickCloseDatePicker -> closeDatePicker()
+            is ProfileSetupActions.ClickSelectDate -> getDateFromCalendar(action.date)
         }
     }
 
@@ -65,14 +59,19 @@ class ProfileSetupViewModel(
     }
 
     private fun openDatePicker() {
-        _steps.value = ProfileSetupRoute.OpenDatePicker
+        _state.value = _state.value.copy(showDatePicker = true)
     }
 
-    fun getDateFromCalendar(birthDate: Long) {
+    private fun closeDatePicker() {
+        _state.value = _state.value.copy(showDatePicker = false)
+    }
+
+    private fun getDateFromCalendar(birthDate: Long) {
         val data = getSetupUser()
         data.dateBirth = birthDate
         _state.value = _state.value.copy(data = data)
         _state.value = _state.value.copy(birthDate = birthDate)
+        closeDatePicker()
     }
 
     private fun firstNameEntered(firstName: String) {
