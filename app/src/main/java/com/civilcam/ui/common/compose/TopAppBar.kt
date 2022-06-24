@@ -55,7 +55,7 @@ fun TopAppBarContent(
 
 @Preview
 @Composable
-fun TopAppBarContentPreview() {
+private fun TopAppBarContentPreview() {
     TopAppBarContent(
         title = "Terms & Conditions",
         actionTitle = "Contacts",

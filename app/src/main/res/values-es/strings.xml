@@ -49,7 +49,7 @@
     <string name="navigation_bar_emergency">Emergency</string>
     <string name="navigation_bar_alerts">Alerts</string>
 
-
+    <string name="user_details_title">Add guardians</string>
     <string name="user_details_ask_to_guard">Ask to guard</string>
     <string name="user_details_stop_guarding">Stop guarding</string>
     <string name="user_details_remove_gaurdian">Remove guardian</string>
