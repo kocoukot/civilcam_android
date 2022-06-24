@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/languageSelectFragment">
+    app:startDestination="@id/createAccountFragment">
 
 
     <fragment
@@ -80,5 +80,14 @@
         android:id="@+id/alertDetailFragment"
         android:name="com.civilcam.ui.alerts.details.AlertDetailFragment"
         android:label="AlertDetailFragment" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.civilcam.ui.auth.login.LoginFragment"
+        android:label="LoginFragment" />
+
+    <fragment
+        android:id="@+id/createAccountFragment"
+        android:name="com.civilcam.ui.auth.create.CreateAccountFragment"
+        android:label="CreateAccountFragment" />
 
 </navigation>

@@ -26,6 +26,15 @@ data class CCTypography internal constructor(
         color = Color(0xFF111111)
     ),
 
+    val common_text_regular_error: TextStyle = TextStyle(
+        fontSize = 15.sp,
+        lineHeight = 18.sp,
+//        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight.W400,
+        letterSpacing = (-0.01).sp,
+        color = Color(0xFFCF3919)
+    ),
+
     val common_text_medium: TextStyle = TextStyle(
         fontSize = 15.sp,
         lineHeight = 18.sp,
