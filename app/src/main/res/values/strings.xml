@@ -130,4 +130,18 @@
     <string name="network_main_help_me">Help me!</string>
     <string name="network_main_safe">Safe</string>
 
+
+
+    <string name="settings_title">Settings</string>
+
+    <string name="settings_alerts">Alerts</string>
+    <string name="settings_subscription">Subscription</string>
+    <string name="settings_change_password">Change password</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_contact_support">Contact support</string>
+    <string name="settings_terms"><![CDATA[Terms & Conditions]]> and Privacy Policy</string>
+    <string name="settings_log_out">Log out</string>
+    <string name="settings_delete_account">Delete account</string>
+
+
 </resources>

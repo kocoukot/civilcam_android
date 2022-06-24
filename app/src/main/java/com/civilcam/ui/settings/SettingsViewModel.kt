@@ -1,43 +1,53 @@
 package com.civilcam.ui.settings
 
-import androidx.lifecycle.ViewModel
-import com.civilcam.arch.common.livedata.SingleLiveEvent
+import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.ui.settings.model.SettingsActions
 import com.civilcam.ui.settings.model.SettingsRoute
 import com.civilcam.ui.settings.model.SettingsState
+import com.civilcam.ui.settings.model.SettingsType
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
-class SettingsViewModel : ViewModel() {
+class SettingsViewModel : ComposeViewModel<SettingsState, SettingsRoute, SettingsActions>() {
 
-    private val _state: MutableStateFlow<SettingsState> = MutableStateFlow(SettingsState())
-    val state = _state.asStateFlow()
-
-    private val _steps: SingleLiveEvent<SettingsRoute> = SingleLiveEvent()
-    val steps: SingleLiveEvent<SettingsRoute> = _steps
+    override var _state = MutableStateFlow(SettingsState())
 
 
-    fun setInputActions(action: SettingsActions) {
+    override fun setInputActions(action: SettingsActions) {
         when (action) {
             SettingsActions.ClickGoBack -> goBack()
+            is SettingsActions.ClickSection -> changeSection(action.section)
+            SettingsActions.ClickChangePassword -> TODO()
+            SettingsActions.ClickContactSupport -> TODO()
+            SettingsActions.ClickDeleteAccount -> TODO()
+            SettingsActions.ClickLanguage -> TODO()
+            SettingsActions.ClickLogOut -> TODO()
+            SettingsActions.ClickSubscription -> TODO()
+            SettingsActions.ClickTermsAndPolicy -> TODO()
         }
     }
 
 
     private fun goBack() {
-        _steps.value = SettingsRoute.GoBack
+        when (_state.value.settingsType) {
+            SettingsType.MAIN -> _steps.value = SettingsRoute.GoBack
+            else -> _state.value = _state.value.copy(settingsType = SettingsType.MAIN)
+        }
     }
 
-//    private fun goSettings() {
-//        _steps.value = AlertListRoute.GoSettings
-//    }
-//
-//    private fun goAlertHistory() {
-//        _steps.value = AlertListRoute.GoAlertHistory
-//    }
-//
-//    private fun goUserProfile(userId: String) {
-//        _steps.value = AlertListRoute.GoUserProfile(userId)
-//    }
+    private fun changeSection(section: SettingsType) {
+        when (section) {
+//            SettingsType.MAIN -> TODO()
+//            SettingsType.ALERTS -> TODO()
+//            SettingsType.SUBSCRIPTION -> TODO()
+//            SettingsType.CHANGE_PASSWORD -> TODO()
+//            SettingsType.LANGUAGE -> TODO()
+//            SettingsType.CONTACT_SUPPORT -> TODO()
+            SettingsType.TERMS_AND_POLICY -> _steps.value = SettingsRoute.GoTerms
+//            SettingsType.LOG_OUT -> TODO()
+//            SettingsType.DELETE_ACCOUNT -> TODO()
+            else -> _state.value = _state.value.copy(settingsType = section)
 
+        }
+
+    }
 }

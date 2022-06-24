@@ -24,6 +24,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 @Composable
 fun TermsScreenContent(viewModel: TermsViewModel) {
 
+    val state = viewModel.state.collectAsState()
     var isAccepted by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -84,20 +85,23 @@ fun TermsScreenContent(viewModel: TermsViewModel) {
                 }
                 Spacer(modifier = Modifier.height(40.dp))
 
-                AcceptTermsContent(isAccepted) {
-                    isAccepted = !isAccepted
+                if (!state.value.isSettings) {
+                    AcceptTermsContent(isAccepted) {
+                        isAccepted = !isAccepted
+                    }
                 }
-
             }
 
-            ComposeButton(
-                title = stringResource(id = R.string.continue_text),
-                Modifier.padding(horizontal = 8.dp),
-                isActivated = isAccepted,
-                buttonClick = {
-                    viewModel.setInputActions(TermsActions.ClickContinue)
-                }
-            )
+            if (!state.value.isSettings) {
+                ComposeButton(
+                    title = stringResource(id = R.string.continue_text),
+                    Modifier.padding(horizontal = 8.dp),
+                    isActivated = isAccepted,
+                    buttonClick = {
+                        viewModel.setInputActions(TermsActions.ClickContinue)
+                    }
+                )
+            }
         }
     }
 }
