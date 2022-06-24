@@ -13,7 +13,7 @@ class MockRepository {
             userName = "Sylvanas Windrunner",
             dateOfBirth = 937821684000,
             address = "1456 Broadway, New York, NY 10023",
-            phoneNumber = "+1 123 456 7890",
+            phoneNumber = "+1 (123) 456 7890",
             avatar = R.drawable.img_avatar,
         ),
     )
