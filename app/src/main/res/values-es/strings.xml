@@ -15,6 +15,9 @@
     <string name="ok_text_caps">OK</string>
 
     <!--    translate-->
+    <string name="search_text">Search</string>
+    <string name="add_text">Add</string>
+    <string name="pending_text">Pending</string>
 
     <string name="onboarding_page_one_title">Safety network</string>
     <string name="onboarding_page_one_text">If you are worried about someone, become his guardian and be sure that if something happens - you can always help</string>
@@ -106,4 +109,7 @@
     <string name="digit_verification_code">We’ll send a 6 digit verification code</string>
     <string name="save_password">Save password</string>
     <string name="create_new_password">Create new password</string>
+
+    <string name="add_from_contacts_title">Sent</string>
+    <string name="add_from_contacts_invite_by">Invite by number</string>
 </resources>

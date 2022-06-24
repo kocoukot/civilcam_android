@@ -9,6 +9,7 @@ import com.civilcam.ui.auth.login.LoginViewModel
 import com.civilcam.ui.auth.password.create.CreatePasswordViewModel
 import com.civilcam.ui.auth.password.reset.ResetPasswordViewModel
 import com.civilcam.ui.langSelect.LanguageSelectViewModel
+import com.civilcam.ui.network.contacts.ContactsViewModel
 import com.civilcam.ui.onboarding.OnBoardingViewModel
 import com.civilcam.ui.profile.setup.ProfileSetupViewModel
 import com.civilcam.ui.profile.userDetails.UserDetailsViewModel
@@ -22,60 +23,64 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val baseModule = module {
-	
+
 	single<KoinInjector> { GlobalKoinInjector(getKoin()) }
-	
+
 	single { Places.createClient(get()) }
-	
+
 }
 
 val authModule = module {
 	viewModel { LanguageSelectViewModel() }
-	
+
 	viewModel { OnBoardingViewModel() }
-	
+
 	viewModel { (isSettings: Boolean) -> TermsViewModel(isSettings) }
-	
+
 	viewModel { ProfileSetupViewModel(get()) }
-	
+
 	viewModel { LoginViewModel() }
-	
+
 	viewModel { CreateAccountViewModel() }
-	
+
 	viewModel { (verificationFlow: VerificationFlow, verificationSubject: String) ->
 		VerificationViewModel(
 			verificationFlow,
 			verificationSubject
 		)
 	}
-	
+
 	viewModel { ResetPasswordViewModel() }
-	
+
 	viewModel { CreatePasswordViewModel() }
-	
+
+
 }
 
 val networkRootModule = module {
-	
-	viewModel { UserDetailsViewModel(get()) }
-	
+
+    viewModel { UserDetailsViewModel(get()) }
+
+    viewModel { ContactsViewModel(get()) }
+
+
 }
 
 val alertsRootModule = module {
-	
+
 	viewModel { AlertsListViewModel(get()) }
-	
+
 	viewModel { AlertsHistoryViewModel(get()) }
-	
+
 	viewModel { AlertsDetailViewModel(get()) }
-	
-	
+
+
 }
 
 val profileModule = module {
-	
+
 	viewModel { SettingsViewModel() }
-	
+
 }
 
 
