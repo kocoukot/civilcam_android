@@ -88,13 +88,12 @@ fun InformationRow(
                     Spacer(modifier = Modifier.weight(1f))
                     if (trailingIcon != null) trailingIcon()
                 }
-                if (needDivider) RowDivider()
+                if (needDivider) RowDividerGrayThree(0)
             }
-
-
         }
     }
 }
+
 
 @Preview
 @Composable

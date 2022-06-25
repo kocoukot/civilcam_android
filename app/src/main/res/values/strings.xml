@@ -13,6 +13,7 @@
     <string name="accept_text">Accept</string>
     <string name="cancel_text_caps">CANCEL</string>
     <string name="ok_text_caps">OK</string>
+    <string name="send_text">Send</string>
 
     <string name="search_text">Search</string>
     <string name="add_text">Add</string>
@@ -142,6 +143,9 @@
     <string name="settings_terms"><![CDATA[Terms & Conditions]]> and Privacy Policy</string>
     <string name="settings_log_out">Log out</string>
     <string name="settings_delete_account">Delete account</string>
+
+    <string name="settings_alerts_sms">SMS notifications</string>
+    <string name="settings_alerts_email">Email notifications</string>
 
 
 </resources>

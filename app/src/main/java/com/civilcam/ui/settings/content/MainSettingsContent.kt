@@ -26,7 +26,7 @@ fun MainSettingsContent(
         items(SettingsType.values()) { type ->
             when (type) {
                 SettingsType.MAIN -> {
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(30.dp))
                     Divider(color = CCTheme.colors.grayThree)
                 }
                 SettingsType.CONTACT_SUPPORT, SettingsType.TERMS_AND_POLICY -> {

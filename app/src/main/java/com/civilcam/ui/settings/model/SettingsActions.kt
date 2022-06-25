@@ -1,11 +1,15 @@
 package com.civilcam.ui.settings.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentActions
+import com.civilcam.domain.model.settings.NotificationsType
 
 sealed class SettingsActions : ComposeFragmentActions {
     object ClickGoBack : SettingsActions()
-
     data class ClickSection(val section: SettingsType) : SettingsActions()
+    data class ClickAlertSwitch(val status: Boolean, val switchType: NotificationsType) :
+        SettingsActions()
+
+
     object ClickAlerts : SettingsActions()
     object ClickSubscription : SettingsActions()
     object ClickChangePassword : SettingsActions()
