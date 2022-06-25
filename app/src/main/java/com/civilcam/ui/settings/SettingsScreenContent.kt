@@ -9,12 +9,9 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.LanguageType
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.settings.content.AlertsSettingsContent
 import com.civilcam.ui.settings.content.LanguageSettingsContent
@@ -22,18 +19,20 @@ import com.civilcam.ui.settings.content.MainSettingsContent
 import com.civilcam.ui.settings.model.SettingsActions
 import com.civilcam.ui.settings.model.SettingsType
 import com.civilcam.utils.LocaleHelper
-import java.util.*
+import com.civilcam.utils.LocaleHelper.SetLanguageCompose
+import timber.log.Timber
 
 @Composable
 fun SettingsScreenContent(viewModel: SettingsViewModel) {
 
     val state = viewModel.state.collectAsState()
+
     var currentLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
+    var selectedLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
+    var isLangChanged by remember { mutableStateOf(false) }
+    SetLanguageCompose(selectedLanguage)
 
-    SetLanguage(currentLanguage)
 
-    var topBarTitle by remember { mutableStateOf(state.value.settingsType.title) }
-    topBarTitle = state.value.settingsType.title
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
         topBar = {
@@ -45,20 +44,34 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
                         SettingsType.MAIN, SettingsType.LOG_OUT, SettingsType.TERMS_AND_POLICY, SettingsType.DELETE_ACCOUNT -> R.string.settings_title
                         else -> settingsType.title
                     }
-                    val actionTitle = when (settingsType) {
-                        SettingsType.CONTACT_SUPPORT -> stringResource(id = R.string.send_text)
-                        SettingsType.LANGUAGE -> stringResource(id = R.string.save_text)
-                        SettingsType.CHANGE_PASSWORD -> stringResource(id = R.string.continue_text)
-                        else -> ""
-                    }
-                    val actionAction = ""
+
+                    val isActionEnabled = if (settingsType == SettingsType.LANGUAGE) {
+                        isLangChanged
+                    } else true
                     TopAppBarContent(
                         title = stringResource(id = title),
                         navigationAction = {
-                            viewModel.setInputActions(SettingsActions.ClickGoBack)
+                            when (settingsType) {
+                                SettingsType.LANGUAGE -> {
+                                    viewModel.setInputActions(SettingsActions.ClickGoBack)
+                                    selectedLanguage = currentLanguage
+                                }
+                                else -> {
+                                    viewModel.setInputActions(SettingsActions.ClickGoBack)
+                                }
+                            }
+
                         },
-                        actionTitle = actionTitle,
-                        actionAction = {}
+                        isActionEnabled = isActionEnabled,
+                        actionTitle = getActionTitle(settingsType),
+                        actionAction = {
+                            when (settingsType) {
+                                SettingsType.LANGUAGE -> viewModel.setInputActions(SettingsActions.ClickSaveLanguage)
+                                else -> {
+
+                                }
+                            }
+                        }
                     )
                 }
                 Divider(color = CCTheme.colors.grayThree)
@@ -70,12 +83,13 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
             .background(CCTheme.colors.lightGray)
     ) {
         Crossfade(targetState = state.value.settingsType) { settingsState ->
-
-
             when (settingsState) {
                 SettingsType.MAIN ->
                     MainSettingsContent {
                         viewModel.setInputActions(SettingsActions.ClickSection(it))
+                        currentLanguage = LocaleHelper.getSelectedLanguage()
+                        selectedLanguage = LocaleHelper.getSelectedLanguage()
+                        isLangChanged = false
                     }
 
                 SettingsType.ALERTS -> {
@@ -94,8 +108,16 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 
 //                SettingsType.SUBSCRIPTION -> TODO()
 //                SettingsType.CHANGE_PASSWORD -> TODO()
-                SettingsType.LANGUAGE -> LanguageSettingsContent {
-                    currentLanguage = it
+                SettingsType.LANGUAGE -> {
+                    LanguageSettingsContent(
+                        selectedLanguage
+                    ) {
+                        selectedLanguage = it
+                        isLangChanged = currentLanguage != it
+
+                        Timber.d("languages current $currentLanguage it $it selectedLanguage $selectedLanguage")
+
+                    }
                 }
 //                SettingsType.CONTACT_SUPPORT -> TODO()
 //                SettingsType.LOG_OUT -> TODO()
@@ -106,12 +128,11 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
     }
 }
 
+
 @Composable
-private fun SetLanguage(lang: LanguageType) {
-    LocaleHelper.setLocale(LocalContext.current, lang.langValue)
-    val locale = Locale(lang.langValue)
-    val configuration = LocalConfiguration.current
-    configuration.setLocale(locale)
-    val resources = LocalContext.current.resources
-    resources.updateConfiguration(configuration, resources.displayMetrics)
+private fun getActionTitle(settingsType: SettingsType) = when (settingsType) {
+    SettingsType.CONTACT_SUPPORT -> stringResource(id = R.string.send_text)
+    SettingsType.LANGUAGE -> stringResource(id = R.string.save_text)
+    SettingsType.CHANGE_PASSWORD -> stringResource(id = R.string.continue_text)
+    else -> ""
 }

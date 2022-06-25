@@ -8,20 +8,21 @@ import androidx.compose.material.Divider
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.LanguageType
-import com.civilcam.utils.LocaleHelper
 
 @Composable
 fun LanguageSettingsContent(
+    currentLanguage: LanguageType,
     onLanguageSelect: (LanguageType) -> Unit
 ) {
 
-    var currentLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
+//    var currentLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
 
     Column(
         modifier = Modifier
@@ -34,7 +35,7 @@ fun LanguageSettingsContent(
             LanguageType.ENGLISH,
             currentLanguage = currentLanguage,
             onLanguageSelect = {
-                currentLanguage = LanguageType.ENGLISH
+//                currentLanguage = LanguageType.ENGLISH
                 onLanguageSelect.invoke(LanguageType.ENGLISH)
             }
         )
@@ -44,7 +45,7 @@ fun LanguageSettingsContent(
             LanguageType.SPAIN,
             currentLanguage = currentLanguage,
             onLanguageSelect = {
-                currentLanguage = LanguageType.SPAIN
+//                currentLanguage = LanguageType.SPAIN
                 onLanguageSelect.invoke(LanguageType.SPAIN)
             }
         )
@@ -62,7 +63,7 @@ fun LanguageSelectSection(
         modifier = Modifier
             .fillMaxWidth()
             .background(CCTheme.colors.white, RoundedCornerShape(4.dp))
-            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(4.dp))
             .clickable {
                 onLanguageSelect.invoke()
             },
@@ -70,7 +71,9 @@ fun LanguageSelectSection(
     ) {
         Text(
             text = languageType.langTitle,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 16.dp),
             color = if (currentLanguage == languageType) CCTheme.colors.black else CCTheme.colors.grayOne
         )
         RadioButton(

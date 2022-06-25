@@ -1,9 +1,12 @@
 package com.civilcam.ui.settings
 
 import androidx.lifecycle.viewModelScope
+import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.common.ext.compose.ComposeViewModel
+import com.civilcam.domain.model.LanguageType
 import com.civilcam.domain.model.settings.NotificationsType
 import com.civilcam.ui.settings.model.*
+import com.civilcam.utils.LocaleHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -24,6 +27,9 @@ class SettingsViewModel : ComposeViewModel<SettingsState, SettingsRoute, Setting
                 action.status,
                 action.switchType
             )
+            SettingsActions.ClickSaveLanguage -> goBack()
+            is SettingsActions.ClickDontSaveLanguage -> dontSaveLanguage(action.currentLanguage)
+
 
             SettingsActions.ClickChangePassword -> TODO()
             SettingsActions.ClickContactSupport -> TODO()
@@ -94,6 +100,11 @@ class SettingsViewModel : ComposeViewModel<SettingsState, SettingsRoute, Setting
                 alertsSectionData = model.alertsSectionData,
             )
         )
+    }
 
+
+    private fun dontSaveLanguage(currentLanguage: LanguageType) {
+        LocaleHelper.setLocale(instance, currentLanguage.langValue)
+        goBack()
     }
 }
