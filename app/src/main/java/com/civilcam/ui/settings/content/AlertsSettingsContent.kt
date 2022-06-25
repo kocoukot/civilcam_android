@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.Switch
+import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -69,6 +70,15 @@ fun SwitcherRowContent(
         )
 
         Switch(
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = CCTheme.colors.primaryRed,
+                checkedTrackColor = CCTheme.colors.primaryRed,
+                checkedTrackAlpha = 0.5f,
+                uncheckedThumbColor = CCTheme.colors.white,
+                uncheckedTrackColor = CCTheme.colors.grayThree,
+                uncheckedTrackAlpha = 1f,
+            ),
+
             checked = isSwitched,
             onCheckedChange = {
                 Timber.d("updateSettingsModel switcher $it")

@@ -67,11 +67,8 @@ class SettingsViewModel : ComposeViewModel<SettingsState, SettingsRoute, Setting
             }
 //            SettingsType.SUBSCRIPTION -> TODO()
 //            SettingsType.CHANGE_PASSWORD -> TODO()
-//            SettingsType.LANGUAGE -> TODO()
 //            SettingsType.CONTACT_SUPPORT -> TODO()
             SettingsType.TERMS_AND_POLICY -> _steps.value = SettingsRoute.GoTerms
-//            SettingsType.LOG_OUT -> TODO()
-//            SettingsType.DELETE_ACCOUNT -> TODO()
             else -> _state.value = _state.value.copy(settingsType = section)
         }
     }

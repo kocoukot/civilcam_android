@@ -33,7 +33,6 @@ class SettingsFragment : Fragment(), SupportBottomBar {
                     TermsFragment.createArgs(true)
                 )
                 SettingsRoute.GoLanguageSelect -> {
-
                     navController.navigate(R.id.action_settingsFragment_to_languageSelectFragment)
                 }
             }

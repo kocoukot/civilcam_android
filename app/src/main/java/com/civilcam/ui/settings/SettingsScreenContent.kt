@@ -1,5 +1,6 @@
 package com.civilcam.ui.settings
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,9 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
     var isLangChanged by remember { mutableStateOf(false) }
     SetLanguageCompose(selectedLanguage)
 
+    BackHandler {
+        viewModel.setInputActions(SettingsActions.ClickGoBack)
+    }
 
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
