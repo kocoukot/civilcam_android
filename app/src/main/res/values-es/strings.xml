@@ -146,4 +146,8 @@
 
     <string name="settings_alerts_sms">SMS notifications</string>
     <string name="settings_alerts_email">Email notifications</string>
+
+    <string name="settings_delete_account_alert_title">Delete account</string>
+    <string name="settings_delete_account_alert_text">Are you sure you want to delete your account?</string>
+
 </resources>

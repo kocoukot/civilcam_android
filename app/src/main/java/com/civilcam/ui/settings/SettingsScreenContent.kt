@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.common.alert.AlertDialogComp
+import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.settings.content.AlertsSettingsContent
 import com.civilcam.ui.settings.content.LanguageSettingsContent
@@ -121,7 +123,17 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
                 }
 //                SettingsType.CONTACT_SUPPORT -> TODO()
 //                SettingsType.LOG_OUT -> TODO()
-//                SettingsType.DELETE_ACCOUNT -> TODO()
+                SettingsType.DELETE_ACCOUNT -> {
+                    MainSettingsContent {}
+                    AlertDialogComp(
+                        dialogTitle = stringResource(id = R.string.settings_delete_account_alert_title),
+                        dialogText = stringResource(id = R.string.settings_delete_account_alert_text),
+                        alertType = AlertDialogTypes.YES_CANCEL,
+                        onOptionSelected = {
+                            viewModel.setInputActions(SettingsActions.ClickCloseAlertDialog(it))
+                        },
+                    )
+                }
                 else -> {}
             }
         }

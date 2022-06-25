@@ -32,6 +32,10 @@ class SettingsFragment : Fragment(), SupportBottomBar {
                     R.id.termsFragment,
                     TermsFragment.createArgs(true)
                 )
+                SettingsRoute.GoLanguageSelect -> {
+
+                    navController.navigate(R.id.action_settingsFragment_to_languageSelectFragment)
+                }
             }
         }
         return ComposeView(requireContext()).apply {

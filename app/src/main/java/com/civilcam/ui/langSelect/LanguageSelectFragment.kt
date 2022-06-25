@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import com.civilcam.R
+import com.civilcam.ui.MainActivity
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.langSelect.model.LangSelectRoute
@@ -22,6 +23,7 @@ class LanguageSelectFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        (activity as MainActivity).showBottomNavBar(false)
         WindowCompat.setDecorFitsSystemWindows(activity!!.window!!, true)
 
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->

@@ -1,7 +1,6 @@
 package com.civilcam.ui.settings.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentActions
-import com.civilcam.domain.model.LanguageType
 import com.civilcam.domain.model.settings.NotificationsType
 
 sealed class SettingsActions : ComposeFragmentActions {
@@ -12,7 +11,8 @@ sealed class SettingsActions : ComposeFragmentActions {
 
 
     object ClickSaveLanguage : SettingsActions()
-    data class ClickDontSaveLanguage(val currentLanguage: LanguageType) : SettingsActions()
+
+    data class ClickCloseAlertDialog(val isConfirm: Boolean) : SettingsActions()
 
 
     object ClickAlerts : SettingsActions()
