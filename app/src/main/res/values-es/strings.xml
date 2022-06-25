@@ -14,6 +14,8 @@
     <string name="cancel_text_caps">CANCELAR</string>
     <string name="ok_text_caps">OK</string>
     <string name="send_text">Send</string>
+    <string name="yes_text_caps">YES</string>
+    <string name="confirm_text_caps">CONFIRM</string>
 
     <string name="search_text">Buscar</string>
     <string name="add_text">Añadir</string>

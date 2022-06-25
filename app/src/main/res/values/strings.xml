@@ -15,6 +15,9 @@
     <string name="ok_text_caps">OK</string>
     <string name="send_text">Send</string>
 
+    <string name="yes_text_caps">YES</string>
+    <string name="confirm_text_caps">CONFIRM</string>
+
     <string name="search_text">Search</string>
     <string name="add_text">Add</string>
     <string name="pending_text">Pending</string>

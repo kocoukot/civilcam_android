@@ -1,5 +1,7 @@
 package com.civilcam.ui.settings.content
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,6 +11,7 @@ import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,6 +62,7 @@ fun LanguageSelectSection(
     onLanguageSelect: () -> Unit
 ) {
 
+    val textColor by animateColorAsState(targetValue = if (currentLanguage == languageType) CCTheme.colors.black else CCTheme.colors.grayOne)
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -74,17 +78,19 @@ fun LanguageSelectSection(
             modifier = Modifier
                 .weight(1f)
                 .padding(start = 16.dp),
-            color = if (currentLanguage == languageType) CCTheme.colors.black else CCTheme.colors.grayOne
+            color = textColor
         )
-        RadioButton(
-            selected = currentLanguage == languageType,
-            colors = RadioButtonDefaults.colors(
-                selectedColor = CCTheme.colors.primaryRed,
-                unselectedColor = CCTheme.colors.grayThree,
-            ),
-            onClick = {
-                onLanguageSelect.invoke()
-            })
+        Crossfade(targetState = currentLanguage == languageType) {
+            RadioButton(
+                selected = currentLanguage == languageType,
+                colors = RadioButtonDefaults.colors(
+                    selectedColor = CCTheme.colors.primaryRed,
+                    unselectedColor = CCTheme.colors.grayThree,
+                ),
+                onClick = {
+                    onLanguageSelect.invoke()
+                })
+        }
     }
 }
 
