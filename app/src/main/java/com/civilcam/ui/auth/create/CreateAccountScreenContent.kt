@@ -2,7 +2,6 @@ package com.civilcam.ui.auth.create
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -45,108 +44,92 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 		
 		Column(
 			modifier = Modifier
-				.fillMaxSize(),
-			horizontalAlignment = Alignment.CenterHorizontally
+				.fillMaxSize()
+				.padding(horizontal = 16.dp),
+			horizontalAlignment = Alignment.CenterHorizontally,
 		) {
-			LazyColumn(
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(horizontal = 16.dp)
-					.weight(1f)
-			) {
-				item {
-					
-					Column {
-						
-						Spacer(modifier = Modifier.height(12.dp))
-						
-						InputField(
-							title = stringResource(id = R.string.create_account_email_label),
-							placeHolder = stringResource(id = R.string.create_account_email_placeholder)
-						) {
-						
-						}
-						
-						PasswordField(
-							name = stringResource(id = R.string.password),
-							placeholder = stringResource(id = R.string.create_password),
-							hasStrategy = true,
-							onValueChanged = {
-							
-							}
-						)
-						
-						Spacer(modifier = Modifier.height(16.dp))
-						
-						PasswordField(
-							name = stringResource(id = R.string.confirm_password),
-							placeholder = stringResource(id = R.string.re_enter_password),
-							onValueChanged = {
-							
-							}
-						)
-					}
-					
+			
+			Column(Modifier.weight(1f)) {
+				
+				Spacer(modifier = Modifier.height(12.dp))
+				
+				InputField(
+					title = stringResource(id = R.string.create_account_email_label),
+					placeHolder = stringResource(id = R.string.create_account_email_placeholder)
+				) {
+				
 				}
 				
-				item {
-					Spacer(Modifier.weight(1f))
+				PasswordField(
+					name = stringResource(id = R.string.password),
+					placeholder = stringResource(id = R.string.create_password),
+					hasStrategy = true,
+					onValueChanged = {
+					
+					}
+				)
+				
+				Spacer(modifier = Modifier.height(16.dp))
+				
+				PasswordField(
+					name = stringResource(id = R.string.confirm_password),
+					placeholder = stringResource(id = R.string.re_enter_password),
+					onValueChanged = {
+					
+					}
+				)
+			}
+			
+			Column {
+				
+				ComposeButton(
+					title = stringResource(id = R.string.continue_text),
+					Modifier.padding(horizontal = 8.dp),
+					isActivated = false,
+					buttonClick = {
+					
+					}
+				)
+				
+				Spacer(modifier = Modifier.height(24.dp))
+				
+				Row(
+					horizontalArrangement = Arrangement.Center,
+					modifier = Modifier.fillMaxWidth()
+				) {
+					SocialImage(
+						painterResource(
+							id = R.drawable.ic_facebook
+						)
+					)
+					Spacer(modifier = Modifier.width(16.dp))
+					SocialImage(
+						painterResource(
+							id = R.drawable.ic_google
+						)
+					)
 				}
 				
-				item {
-					
-					Column {
-						
-						ComposeButton(
-							title = stringResource(id = R.string.continue_text),
-							Modifier.padding(horizontal = 8.dp),
-							isActivated = false,
-							buttonClick = {
-							
-							}
-						)
-						
-						Spacer(modifier = Modifier.height(24.dp))
-						
-						Row(
-							horizontalArrangement = Arrangement.Center,
-							modifier = Modifier.fillMaxWidth()
-						) {
-							SocialImage(
-								painterResource(
-									id = R.drawable.ic_facebook
-								),
-								null
-							)
-							Spacer(modifier = Modifier.width(16.dp))
-							SocialImage(
-								painterResource(
-									id = R.drawable.ic_google
-								),
-								null
-							)
-						}
-						
-						Row(
-							horizontalArrangement = Arrangement.Center,
-							modifier = Modifier.fillMaxWidth(),
-							verticalAlignment = Alignment.Bottom
-						) {
-							Text(
-								stringResource(id = R.string.already_have_account),
-								color = CCTheme.colors.grayOne
-							)
-							Spacer(modifier = Modifier.width(4.dp))
-							Text(
-								stringResource(id = R.string.log_in),
-								color = CCTheme.colors.primaryRed,
-								fontWeight = FontWeight.Bold
-							)
-						}
-						
-						Spacer(modifier = Modifier.height(16.dp))
-					}
+				Spacer(modifier = Modifier.height(16.dp))
+				
+				Row(
+					horizontalArrangement = Arrangement.Center,
+					modifier = Modifier.fillMaxWidth(),
+					verticalAlignment = Alignment.Bottom
+				) {
+					Text(
+						stringResource(id = R.string.already_have_account),
+						color = CCTheme.colors.grayOne
+					)
+					Spacer(modifier = Modifier.width(4.dp))
+					Text(
+						stringResource(id = R.string.log_in),
+						color = CCTheme.colors.primaryRed,
+						fontWeight = FontWeight.Bold
+					)
 				}
+				
+				Spacer(modifier = Modifier.height(16.dp))
 			}
 		}
 	}
@@ -154,12 +137,11 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 
 @Composable
 private fun SocialImage(
-	painter: Painter,
-	contentDescription: String?
+	painter: Painter
 ) {
 	Image(
 		painter = painter,
-		contentDescription = contentDescription,
+		contentDescription = null,
 		modifier = Modifier
 			.height(44.dp)
 			.width(44.dp)

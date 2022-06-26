@@ -251,6 +251,88 @@ fun PhoneInputField(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun OtpCodeInputField(
+	text: String = "",
+	isReversed: Boolean = false,
+	onValueChanged: (String) -> Unit,
+) {
+	val coroutineScope = rememberCoroutineScope()
+	val viewRequester = BringIntoViewRequester()
+	
+	var inputText by remember { mutableStateOf(text) }
+	if (text.isNotEmpty()) inputText = text
+	Column(
+		modifier = Modifier
+			.fillMaxWidth()
+			.background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
+			.bringIntoViewRequester(viewRequester)
+			.onFocusEvent {
+				if (it.isFocused) {
+					coroutineScope.launch {
+						delay(400)
+						viewRequester.bringIntoView()
+					}
+				}
+			}
+	) {
+		
+		Text(
+			stringResource(id = R.string.verification_code),
+			color = CCTheme.colors.grayOne,
+			style = CCTheme.typography.common_text_small_regular,
+			modifier = Modifier
+				.padding(bottom = 8.dp)
+				.fillMaxWidth()
+		)
+		
+		BasicTextField(
+			visualTransformation = OTPCodeTransformation(),
+			textStyle = CCTheme.typography.common_text_regular,
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(bottom = 5.dp)
+				.clip(RoundedCornerShape(4.dp)),
+			singleLine = true,
+			value = inputText,
+			onValueChange = { value ->
+				if (value.length < 7) inputText = value.digits()
+				onValueChanged.invoke(inputText.trim())
+			},
+			keyboardOptions = KeyboardOptions(
+				keyboardType = KeyboardType.Number
+			),
+			decorationBox = { innerTextField ->
+				Row(
+					modifier = Modifier
+						.background(
+							if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
+							RoundedCornerShape(4.dp)
+						)
+						.padding(vertical = 14.dp)
+						.padding(start = 12.dp, end = 12.dp),
+					verticalAlignment = Alignment.CenterVertically
+				) {
+					Box(
+						Modifier
+							.weight(1f)
+					) {
+						if (inputText.isEmpty()) Text(
+							stringResource(id = R.string.verification_code_placeholder),
+							modifier = Modifier,
+							style = CCTheme.typography.common_text_regular,
+							color = CCTheme.colors.grayOne
+						)
+						innerTextField()
+					}
+				}
+			}
+		)
+		Spacer(modifier = Modifier.height(16.dp))
+	}
+}
+
 @OptIn(ExperimentalFoundationApi::class, ExperimentalUnitApi::class)
 @Composable
 fun PasswordField(
@@ -421,6 +503,12 @@ fun PhoneInputFieldPreview() {
 
 @Preview
 @Composable
+fun OtpCodeFieldPreview() {
+	OtpCodeInputField(onValueChanged = {})
+}
+
+@Preview
+@Composable
 fun PasswordInputFieldPreview() {
 	PasswordField(
 		onValueChanged = {},
@@ -437,6 +525,41 @@ fun InputFieldPreview() {
 		"First name", "Enter First Name",
 		onValueChanged = {}, hasError = true, errorMessage = "Some error"
 	)
+}
+
+private class OTPCodeTransformation : VisualTransformation {
+	override fun filter(text: AnnotatedString): TransformedText {
+		return otpCodeFilter(text)
+	}
+}
+
+fun otpCodeFilter(text: AnnotatedString): TransformedText {
+	
+	val trimmed = if (text.text.length >= 6) text.text.substring(0..5) else text.text
+	var out = ""
+	for (i in trimmed.indices) {
+		if (i == 3) out += " "
+		out += trimmed[i]
+	}
+	
+	val phoneNumberOffsetTranslator = object : OffsetMapping {
+		override fun originalToTransformed(offset: Int): Int {
+			if (offset == 4) return offset + 1
+			if (offset == 5) return offset + 1
+			if (offset == 6) return offset + 1
+			return offset
+			
+		}
+		
+		override fun transformedToOriginal(offset: Int): Int {
+			if (offset == 4) return offset + 1
+			if (offset == 5) return offset + 1
+			if (offset == 6) return offset + 1
+			return offset
+		}
+	}
+	
+	return TransformedText(AnnotatedString(out), phoneNumberOffsetTranslator)
 }
 
 private class PhoneNumberTransformation : VisualTransformation {
