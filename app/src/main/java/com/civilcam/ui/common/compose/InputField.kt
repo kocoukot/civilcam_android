@@ -1,5 +1,7 @@
 package com.civilcam.ui.common.compose
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,6 +17,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -249,11 +253,14 @@ fun OtpCodeInputField(
 	text: String = "",
 	isReversed: Boolean = false,
 	onValueChanged: (String) -> Unit,
+	hasError: Boolean
 ) {
 	val coroutineScope = rememberCoroutineScope()
 	val viewRequester = BringIntoViewRequester()
-	
 	var inputText by remember { mutableStateOf(text) }
+	val otpColorState by
+	animateColorAsState(targetValue = if (hasError) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
+	
 	if (text.isNotEmpty()) inputText = text
 	Column(
 		modifier = Modifier
@@ -272,20 +279,26 @@ fun OtpCodeInputField(
 		
 		Text(
 			stringResource(id = R.string.verification_code),
-			color = CCTheme.colors.grayOne,
+			color = otpColorState,
 			style = CCTheme.typography.common_text_small_regular,
 			modifier = Modifier
 				.padding(bottom = 8.dp)
 				.fillMaxWidth()
 		)
 		
+		val focusRequester = remember { FocusRequester() }
 		BasicTextField(
 			visualTransformation = OTPCodeTransformation(),
-			textStyle = CCTheme.typography.common_text_regular,
+			textStyle = if (hasError) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
 			modifier = Modifier
 				.fillMaxWidth()
-				.padding(bottom = 5.dp)
-				.clip(RoundedCornerShape(4.dp)),
+				.border(
+					1.dp,
+					if (hasError) CCTheme.colors.primaryRed else CCTheme.colors.lightGray,
+					RoundedCornerShape(4.dp)
+				)
+				.clip(RoundedCornerShape(4.dp))
+				.focusRequester(focusRequester),
 			singleLine = true,
 			value = inputText,
 			onValueChange = { value ->
@@ -314,14 +327,27 @@ fun OtpCodeInputField(
 							stringResource(id = R.string.verification_code_placeholder),
 							modifier = Modifier,
 							style = CCTheme.typography.common_text_regular,
-							color = CCTheme.colors.grayOne
+							color = otpColorState
 						)
 						innerTextField()
 					}
 				}
 			}
 		)
-		Spacer(modifier = Modifier.height(16.dp))
+		LaunchedEffect(Unit) {
+			focusRequester.requestFocus()
+		}
+		
+		AnimatedVisibility(visible = hasError) {
+			Text(
+				stringResource(id = R.string.otp_error_code),
+				color = CCTheme.colors.primaryRed,
+				style = CCTheme.typography.common_text_small_regular,
+				modifier = Modifier
+					.padding(top = 8.dp)
+					.fillMaxWidth()
+			)
+		}
 	}
 }
 
@@ -496,7 +522,7 @@ fun PhoneInputFieldPreview() {
 @Preview
 @Composable
 fun OtpCodeFieldPreview() {
-	OtpCodeInputField(onValueChanged = {})
+	OtpCodeInputField(onValueChanged = {}, hasError = true)
 }
 
 @Preview
