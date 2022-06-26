@@ -13,6 +13,7 @@ import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.login.model.LoginActions
 import com.civilcam.ui.common.compose.ComposeButton
+import com.civilcam.ui.common.compose.OtpCodeInputField
 import com.civilcam.ui.common.compose.TopAppBarContent
 
 
@@ -42,32 +43,14 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 				.fillMaxSize(),
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
-			LazyColumn(
+			Column(
 				modifier = Modifier
 					.fillMaxWidth()
 					.padding(horizontal = 16.dp)
 					.weight(1f)
 			) {
 				
-				item {
-					Column {
-					
-					}
-				}
-				
-				item {
-					Column {
-						ComposeButton(
-							title = stringResource(id = R.string.create_account),
-							Modifier.padding(horizontal = 8.dp),
-							isActivated = false,
-							buttonClick = {
-							
-							}
-						)
-						Spacer(modifier = Modifier.height(16.dp))
-					}
-				}
+				OtpCodeInputField(onValueChanged = {})
 				
 			}
 			

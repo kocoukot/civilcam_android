@@ -81,5 +81,13 @@
     <string name="password_should_contain_letter">• 1 capital letter</string>
     <string name="password_should_contain_lowercase">• 1 lowercase letter</string>
     <string name="password_should_contain_char">• 8 characters</string>
+    <string name="verification_code">Verification code</string>
+    <string name="verification_code_placeholder">000 000</string>
+    <string name="email_verification">Email verification</string>
+    <string name="phone_verification">Phone verification</string>
+    <string name="reset_password">Reset password</string>
+    <string name="code_sent_title">The code was sent to</string>
+    <string name="code_arrive"> It should arrive within one minute</string>
+    <string name="resend_code">Resend code</string>
 
 </resources>
