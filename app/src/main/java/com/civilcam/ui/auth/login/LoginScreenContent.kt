@@ -50,7 +50,7 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 					.weight(1f)
 			) {
 				
-				OtpCodeInputField(onValueChanged = {})
+				OtpCodeInputField(onValueChanged = {}, hasError = false)
 				
 			}
 			

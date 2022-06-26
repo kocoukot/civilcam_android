@@ -94,6 +94,6 @@
     <string name="code_sent_title">The code was sent to</string>
     <string name="code_arrive"> It should arrive within one minute</string>
     <string name="resend_code">Resend code</string>
-
-
+    <string name="otp_error_code">OTP code is incorrect or has expired. Please try to retype or resend the code</string>
+    <string name="otp_code_timer">Resend code in %s seconds</string>
 </resources>

@@ -1,5 +1,8 @@
 package com.civilcam.ui.verification
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -7,7 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
@@ -62,10 +68,17 @@ fun VerificationScreenContent(
 					.padding(horizontal = 16.dp)
 					.weight(1f)
 			) {
+				Spacer(modifier = Modifier.height(32.dp))
+				OtpCodeInputField(
+					onValueChanged = {
+						viewModel.setInputActions(VerificationActions.EnterCodeData(it))
+					},
+					hasError = state.value.hasError
+				)
 				
-				OtpCodeInputField(onValueChanged = {})
-				
-				Row {
+				Row(
+					modifier = Modifier.padding(top = 8.dp)
+				) {
 					Text(
 						text = stringResource(id = R.string.code_sent_title),
 						color = CCTheme.colors.grayOne,
@@ -94,18 +107,32 @@ fun VerificationScreenContent(
 					.padding(horizontal = 16.dp),
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
-			
-//				Text(
-//					text = stringResource(id = R.string.code_arrive),
-//					color = CCTheme.colors.grayOne,
-//					fontSize = 17.sp
-//				)
 				
-				Text(
-					text = stringResource(id = R.string.resend_code),
-					color = CCTheme.colors.primaryRed,
-					fontSize = 17.sp
-				)
+				AnimatedVisibility(visible = state.value.timeOut != "") {
+					Text(
+						text = stringResource(
+							id = R.string.otp_code_timer,
+							state.value.timeOut
+						),
+						color = CCTheme.colors.grayOne,
+						fontSize = 17.sp,
+						fontWeight = FontWeight.SemiBold
+					)
+				}
+				
+				AnimatedVisibility(visible = state.value.timeOut == "") {
+					Text(
+						text = stringResource(id = R.string.resend_code),
+						color = CCTheme.colors.primaryRed,
+						fontSize = 17.sp,
+						modifier = Modifier
+							.clickable {
+								viewModel.setInputActions(VerificationActions.ResendClick)
+							}
+							.background(Color.Transparent, RectangleShape),
+						fontWeight = FontWeight.SemiBold
+					)
+				}
 				
 				Spacer(modifier = Modifier.height(20.dp))
 			}
