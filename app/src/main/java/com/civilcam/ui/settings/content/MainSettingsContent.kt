@@ -3,8 +3,6 @@ package com.civilcam.ui.settings.content
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,10 +18,10 @@ import com.civilcam.ui.settings.model.SettingsType
 fun MainSettingsContent(
     onRowClicked: (SettingsType) -> Unit
 ) {
-    LazyColumn(
+    Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        items(SettingsType.values()) { type ->
+        for (type in SettingsType.values()) {
             when (type) {
                 SettingsType.MAIN -> {
                     Spacer(modifier = Modifier.height(30.dp))
@@ -69,14 +67,14 @@ fun SettingsRow(
         modifier = Modifier
             .fillMaxWidth()
             .height(45.dp)
-            .background(CCTheme.colors.white),
+            .background(CCTheme.colors.white)
+            .clickable { rowClick.invoke() },
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp)
-                .weight(1f)
-                .clickable { rowClick.invoke() },
+                .weight(1f),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {

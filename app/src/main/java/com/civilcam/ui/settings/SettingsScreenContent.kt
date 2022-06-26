@@ -12,27 +12,32 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.civilcam.R
+import com.civilcam.common.ext.Keyboard
+import com.civilcam.common.ext.keyboardAsState
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.settings.content.AlertsSettingsContent
+import com.civilcam.ui.settings.content.ContactSupportContent
 import com.civilcam.ui.settings.content.LanguageSettingsContent
 import com.civilcam.ui.settings.content.MainSettingsContent
 import com.civilcam.ui.settings.model.SettingsActions
 import com.civilcam.ui.settings.model.SettingsType
 import com.civilcam.utils.LocaleHelper
 import com.civilcam.utils.LocaleHelper.SetLanguageCompose
-import timber.log.Timber
 
 @Composable
 fun SettingsScreenContent(viewModel: SettingsViewModel) {
 
     val state = viewModel.state.collectAsState()
+    val isKeyboardOpen by keyboardAsState()
+    viewModel.setInputActions(SettingsActions.IsNavBarVisible(isKeyboardOpen == Keyboard.Opened))
+
 
     var currentLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
     var selectedLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
-    var isLangChanged by remember { mutableStateOf(false) }
+    var isActionActive by remember { mutableStateOf(false) }
     SetLanguageCompose(selectedLanguage)
 
     BackHandler {
@@ -40,6 +45,9 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
     }
 
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(CCTheme.colors.lightGray),
         backgroundColor = CCTheme.colors.lightGray,
         topBar = {
             Column(
@@ -51,9 +59,10 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
                         else -> settingsType.title
                     }
 
-                    val isActionEnabled = if (settingsType == SettingsType.LANGUAGE) {
-                        isLangChanged
-                    } else true
+                    val isActionEnabled =
+                        if (settingsType == SettingsType.LANGUAGE || settingsType == SettingsType.CONTACT_SUPPORT) {
+                            isActionActive
+                        } else true
                     TopAppBarContent(
                         title = stringResource(id = title),
                         navigationAction = {
@@ -66,36 +75,26 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
                                     viewModel.setInputActions(SettingsActions.ClickGoBack)
                                 }
                             }
-
                         },
                         isActionEnabled = isActionEnabled,
                         actionTitle = getActionTitle(settingsType),
-                        actionAction = {
-                            when (settingsType) {
-                                SettingsType.LANGUAGE -> viewModel.setInputActions(SettingsActions.ClickSaveLanguage)
-                                else -> {
-
-                                }
-                            }
-                        }
+                        actionAction = { setAction(viewModel, settingsType) }
                     )
                 }
                 Divider(color = CCTheme.colors.grayThree)
             }
-
         },
-        modifier = Modifier
-            .fillMaxSize()
-            .background(CCTheme.colors.lightGray)
     ) {
-        Crossfade(targetState = state.value.settingsType) { settingsState ->
+        Crossfade(
+            targetState = state.value.settingsType,
+        ) { settingsState ->
             when (settingsState) {
                 SettingsType.MAIN ->
                     MainSettingsContent {
                         viewModel.setInputActions(SettingsActions.ClickSection(it))
                         currentLanguage = LocaleHelper.getSelectedLanguage()
                         selectedLanguage = LocaleHelper.getSelectedLanguage()
-                        isLangChanged = false
+                        isActionActive = false
                     }
 
                 SettingsType.ALERTS -> {
@@ -119,14 +118,39 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
                         selectedLanguage
                     ) {
                         selectedLanguage = it
-                        isLangChanged = currentLanguage != it
-
-                        Timber.d("languages current $currentLanguage it $it selectedLanguage $selectedLanguage")
-
+                        isActionActive = currentLanguage != it
                     }
                 }
-//                SettingsType.CONTACT_SUPPORT -> TODO()
-//                SettingsType.LOG_OUT -> TODO()
+                SettingsType.CONTACT_SUPPORT -> {
+                    ContactSupportContent(
+                        supportInformation = { issue, description, email ->
+                            isActionActive = couldBeSend(issue, description, email)
+                            viewModel.setInputActions(
+                                SettingsActions.EnterContactSupportInfo(
+                                    issue,
+                                    description,
+                                    email
+                                )
+                            )
+                        }
+                    )
+                }
+                SettingsType.LOG_OUT -> {
+                    MainSettingsContent {}
+                    AlertDialogComp(
+                        dialogTitle = stringResource(id = R.string.settings_log_out_alert_title),
+                        dialogText = stringResource(id = R.string.settings_log_out_alert_text),
+                        alertType = AlertDialogTypes.YES_CANCEL,
+                        onOptionSelected = {
+                            viewModel.setInputActions(
+                                SettingsActions.ClickCloseAlertDialog(
+                                    it,
+                                    true
+                                )
+                            )
+                        },
+                    )
+                }
                 SettingsType.DELETE_ACCOUNT -> {
                     MainSettingsContent {}
                     AlertDialogComp(
@@ -134,7 +158,12 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
                         dialogText = stringResource(id = R.string.settings_delete_account_alert_text),
                         alertType = AlertDialogTypes.YES_CANCEL,
                         onOptionSelected = {
-                            viewModel.setInputActions(SettingsActions.ClickCloseAlertDialog(it))
+                            viewModel.setInputActions(
+                                SettingsActions.ClickCloseAlertDialog(
+                                    it,
+                                    false
+                                )
+                            )
                         },
                     )
                 }
@@ -152,3 +181,19 @@ private fun getActionTitle(settingsType: SettingsType) = when (settingsType) {
     SettingsType.CHANGE_PASSWORD -> stringResource(id = R.string.continue_text)
     else -> ""
 }
+
+private fun setAction(viewModel: SettingsViewModel, settingsType: SettingsType) {
+    when (settingsType) {
+        SettingsType.LANGUAGE -> viewModel.setInputActions(SettingsActions.ClickSaveLanguage)
+        SettingsType.CONTACT_SUPPORT -> viewModel.setInputActions(SettingsActions.ClickSendToSupport)
+        else -> {
+
+        }
+    }
+}
+
+private fun couldBeSend(
+    issue: String,
+    issueDescription: String,
+    email: String
+) = issue.isNotEmpty() && issueDescription.isNotEmpty() && email.isNotEmpty()

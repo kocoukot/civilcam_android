@@ -12,9 +12,6 @@ class SettingsViewModel : ComposeViewModel<SettingsState, SettingsRoute, Setting
 
     override var _state = MutableStateFlow(SettingsState())
 
-    init {
-
-    }
 
     override fun setInputActions(action: SettingsActions) {
         when (action) {
@@ -27,21 +24,20 @@ class SettingsViewModel : ComposeViewModel<SettingsState, SettingsRoute, Setting
             SettingsActions.ClickSaveLanguage -> goBack()
             is SettingsActions.ClickCloseAlertDialog -> {
                 if (action.isConfirm) {
-                    _steps.value = SettingsRoute.GoLanguageSelect
-
+                    if (action.isLogOut) {
+                        _steps.value = SettingsRoute.GoLanguageSelect // todo add api
+                    } else {
+                        _steps.value = SettingsRoute.GoLanguageSelect// todo add api
+                    }
                 } else goBack()
             }
-
-
-            SettingsActions.ClickChangePassword -> TODO()
-            SettingsActions.ClickContactSupport -> TODO()
-            SettingsActions.ClickDeleteAccount -> TODO()
-            SettingsActions.ClickLanguage -> TODO()
-            SettingsActions.ClickLogOut -> TODO()
-            SettingsActions.ClickSubscription -> TODO()
-            SettingsActions.ClickTermsAndPolicy -> TODO()
-
-            SettingsActions.ClickAlerts -> TODO()
+            is SettingsActions.IsNavBarVisible -> navBarStatus(action.isVisible)
+            SettingsActions.ClickSendToSupport -> contactSupport()
+            is SettingsActions.EnterContactSupportInfo -> setContactSupportInfo(
+                action.issue,
+                action.description,
+                action.email
+            )
         }
     }
 
@@ -51,9 +47,12 @@ class SettingsViewModel : ComposeViewModel<SettingsState, SettingsRoute, Setting
             SettingsType.MAIN -> _steps.value = SettingsRoute.GoBack
             else -> {
                 _state.value = SettingsState()
-//                _state.value = _state.value.copy(settingsType = SettingsType.MAIN)
             }
         }
+    }
+
+    private fun navBarStatus(isVisible: Boolean) {
+        _steps.value = SettingsRoute.IsNavBarVisible(isVisible)
     }
 
     private fun changeSection(section: SettingsType) {
@@ -99,6 +98,31 @@ class SettingsViewModel : ComposeViewModel<SettingsState, SettingsRoute, Setting
                 alertsSectionData = model.alertsSectionData,
             )
         )
+    }
+
+    private fun setContactSupportInfo(
+        issueTheme: String,
+        issueDescription: String,
+        replyEmail: String,
+    ) {
+        var data = _state.value.data
+        data?.let {
+            data = data?.copy(
+                contactSupportSectionData = ContactSupportSectionData(
+                    issueTheme = issueTheme,
+                    issueDescription = issueDescription,
+                    replyEmail = replyEmail,
+                )
+            )
+
+            _state.value = _state.value.copy(data = it)
+        }
+    }
+
+
+    private fun contactSupport() {
+        //todo api add
+        goBack()
     }
 
 }

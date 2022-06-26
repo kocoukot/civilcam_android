@@ -94,4 +94,13 @@ data class CCTypography internal constructor(
         color = Color(0xFFFFFFFF),
         letterSpacing = (-0.5).sp,
     ),
+
+    val common_error_text_regular: TextStyle = TextStyle(
+        fontSize = 12.sp,
+        lineHeight = 14.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight.W400,
+        color = Color(0xFFCF3919),
+        letterSpacing = (-0.01).sp,
+    ),
 )

@@ -9,20 +9,17 @@ sealed class SettingsActions : ComposeFragmentActions {
     data class ClickAlertSwitch(val status: Boolean, val switchType: NotificationsType) :
         SettingsActions()
 
-
     object ClickSaveLanguage : SettingsActions()
+    data class ClickCloseAlertDialog(val isConfirm: Boolean, val isLogOut: Boolean) :
+        SettingsActions()
 
-    data class ClickCloseAlertDialog(val isConfirm: Boolean) : SettingsActions()
+    object ClickSendToSupport : SettingsActions()
+    data class IsNavBarVisible(val isVisible: Boolean) : SettingsActions()
 
-
-    object ClickAlerts : SettingsActions()
-    object ClickSubscription : SettingsActions()
-    object ClickChangePassword : SettingsActions()
-    object ClickLanguage : SettingsActions()
-    object ClickContactSupport : SettingsActions()
-    object ClickTermsAndPolicy : SettingsActions()
-    object ClickLogOut : SettingsActions()
-    object ClickDeleteAccount : SettingsActions()
-
-
+    data class EnterContactSupportInfo(
+        val issue: String,
+        val description: String,
+        val email: String
+    ) :
+        SettingsActions()
 }

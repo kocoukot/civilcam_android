@@ -152,4 +152,14 @@
     <string name="settings_delete_account_alert_title">Delete account</string>
     <string name="settings_delete_account_alert_text">Are you sure you want to delete your account?</string>
 
+    <string name="settings_log_out_alert_title">Log out</string>
+    <string name="settings_log_out_alert_text">Are you sure you want to log out?</string>
+
+    <string name="settings_contact_issue_title">Issue</string>
+    <string name="settings_contact_issue_enter">Enter issue</string>
+    <string name="settings_contact_issue_description">Enter an issue description</string>
+    <string name="settings_contact_reply_title">The reply will be sent to:</string>
+    <string name="settings_contact_reply_placeholder">example@mail.net</string>
+    <string name="settings_contact_error_text">Invalid email. Please try again. (eg:email@gmail.com)</string>
+
 </resources>
