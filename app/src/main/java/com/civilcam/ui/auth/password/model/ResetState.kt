@@ -1,14 +1,12 @@
-package com.civilcam.ui.auth.login.model
+package com.civilcam.ui.auth.password.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentState
 import com.civilcam.common.ext.isEmail
 
-data class LoginState(
-	val isLoading: Boolean = false,
+data class ResetState(
 	val errorText: String = "Invalid email. Please try again. (eg:email@gmail.com)",
 	val email: String = "",
-	val password: String = "",
 	val isEmail: Boolean = false
 ) : ComposeFragmentState {
-	val isFilled: Boolean = email.isEmail() && email.isNotEmpty() && password.isNotEmpty()
+	val isFilled: Boolean = email.isNotEmpty() && email.isEmail()
 }

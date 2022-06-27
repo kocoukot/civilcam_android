@@ -48,7 +48,7 @@ fun VerificationScreenContent(
 							stringResource(id = R.string.email_verification)
 						}
 						VerificationFlow.RESET_PASSWORD -> {
-							stringResource(id = R.string.reset_password)
+							stringResource(id = R.string.email_verification)
 						}
 					},
 					navigationAction = {

@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
@@ -75,7 +76,8 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 				placeHolder = stringResource(id = R.string.create_account_email_placeholder),
 				hasError = !state.value.isEmail,
 				errorMessage = state.value.errorText,
-				inputType = KeyboardType.Email
+				inputType = KeyboardType.Email,
+				inputCapitalization = KeyboardCapitalization.None
 			) {
 				viewModel.setInputActions(
 					CreateAccountActions.EnterInputData(
@@ -133,7 +135,7 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 			Spacer(modifier = Modifier.weight(1f))
 			
 			ComposeButton(
-				title = stringResource(id = R.string.continue_text),
+				title = stringResource(id = R.string.create_account),
 				Modifier
 					.padding(horizontal = 8.dp)
 					.padding(top = 40.dp),
@@ -194,7 +196,7 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 }
 
 @Composable
-private fun SocialImage(
+fun SocialImage(
 	painter: Painter
 ) {
 	Image(

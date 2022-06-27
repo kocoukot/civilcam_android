@@ -95,4 +95,9 @@
         android:name="com.civilcam.ui.verification.VerificationFragment"
         android:label="VerificationFragment" />
 
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="com.civilcam.ui.auth.password.ResetPasswordFragment"
+        android:label="ResetPasswordFragment" />
+
 </navigation>
