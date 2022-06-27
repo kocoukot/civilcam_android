@@ -105,7 +105,7 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 					}
 				)
 				
-				Spacer(modifier = Modifier.height(16.dp))
+				Spacer(modifier = Modifier.height(8.dp))
 				
 				PasswordField(
 					name = stringResource(id = R.string.confirm_password),
@@ -271,6 +271,8 @@ private fun PasswordStrategyBlocks(
 					text = stringResource(id = R.string.password_should_contain_char),
 					color = lengthStateColor
 				)
+				
+				Spacer(modifier = Modifier.padding(bottom = 8.dp))
 			}
 		}
 	}
