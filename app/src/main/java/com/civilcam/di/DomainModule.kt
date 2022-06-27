@@ -6,6 +6,7 @@ import com.civilcam.domain.usecase.alerts.GetHistoryAlertListUseCase
 import com.civilcam.domain.usecase.alerts.GetHistoryDetailUseCase
 import com.civilcam.domain.usecase.guardians.GetGuardsListUseCase
 import com.civilcam.domain.usecase.guardians.GetGuardsRequestsUseCase
+import com.civilcam.domain.usecase.settings.CheckCurrentPasswordUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
@@ -17,6 +18,8 @@ val domainModule = module {
     factory { GetHistoryAlertListUseCase(get()) }
 
     factory { GetHistoryDetailUseCase(get()) }
+
+    factory { CheckCurrentPasswordUseCase(get()) }
 
     factory { GetGuardsListUseCase(get()) }
 

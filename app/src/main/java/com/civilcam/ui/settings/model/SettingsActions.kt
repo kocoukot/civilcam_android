@@ -22,4 +22,9 @@ sealed class SettingsActions : ComposeFragmentActions {
         val email: String
     ) :
         SettingsActions()
+
+    data class EnterCurrentPassword(val password: String) : SettingsActions()
+
+    object CheckCurrentPassword : SettingsActions()
+
 }

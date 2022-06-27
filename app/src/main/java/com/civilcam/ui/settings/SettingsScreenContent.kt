@@ -18,10 +18,7 @@ import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.TopAppBarContent
-import com.civilcam.ui.settings.content.AlertsSettingsContent
-import com.civilcam.ui.settings.content.ContactSupportContent
-import com.civilcam.ui.settings.content.LanguageSettingsContent
-import com.civilcam.ui.settings.content.MainSettingsContent
+import com.civilcam.ui.settings.content.*
 import com.civilcam.ui.settings.model.SettingsActions
 import com.civilcam.ui.settings.model.SettingsType
 import com.civilcam.utils.LocaleHelper
@@ -54,17 +51,17 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Crossfade(state.value.settingsType) { settingsType ->
-                    val title = when (settingsType) {
-                        SettingsType.MAIN, SettingsType.LOG_OUT, SettingsType.TERMS_AND_POLICY, SettingsType.DELETE_ACCOUNT -> R.string.settings_title
-                        else -> settingsType.title
-                    }
 
                     val isActionEnabled =
-                        if (settingsType == SettingsType.LANGUAGE || settingsType == SettingsType.CONTACT_SUPPORT) {
+                        if (settingsType == SettingsType.LANGUAGE ||
+                            settingsType == SettingsType.CONTACT_SUPPORT ||
+                            settingsType == SettingsType.CHANGE_PASSWORD ||
+                            settingsType == SettingsType.CREATE_PASSWORD
+                        ) {
                             isActionActive
                         } else true
                     TopAppBarContent(
-                        title = stringResource(id = title),
+                        title = stringResource(id = screenTitle(settingsType)),
                         navigationAction = {
                             when (settingsType) {
                                 SettingsType.LANGUAGE -> {
@@ -112,7 +109,17 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
                 }
 
 //                SettingsType.SUBSCRIPTION -> TODO()
-//                SettingsType.CHANGE_PASSWORD -> TODO()
+                SettingsType.CHANGE_PASSWORD -> {
+                    ChangePasswordSettingsContent(
+                        ""
+                    ) {
+                        isActionActive = it.isNotEmpty()
+                    }
+                }
+
+                SettingsType.CREATE_PASSWORD -> {
+
+                }
                 SettingsType.LANGUAGE -> {
                     LanguageSettingsContent(
                         selectedLanguage
@@ -190,6 +197,12 @@ private fun setAction(viewModel: SettingsViewModel, settingsType: SettingsType) 
 
         }
     }
+}
+
+private fun screenTitle(settingsType: SettingsType) = when (settingsType) {
+    SettingsType.MAIN, SettingsType.LOG_OUT, SettingsType.TERMS_AND_POLICY, SettingsType.DELETE_ACCOUNT -> R.string.settings_title
+    SettingsType.CHANGE_PASSWORD -> R.string.settings_password_title
+    else -> settingsType.title
 }
 
 private fun couldBeSend(

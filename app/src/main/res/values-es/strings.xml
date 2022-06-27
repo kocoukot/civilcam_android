@@ -162,4 +162,8 @@
     <string name="settings_contact_reply_placeholder">example@mail.net</string>
     <string name="settings_contact_error_text">Invalid email. Please try again. (eg:email@gmail.com)</string>
 
+    <string name="settings_password_title">Password</string>
+    <string name="settings_password_label">Current password</string>
+    <string name="settings_password_placeholder">Enter your current password</string>
+
 </resources>

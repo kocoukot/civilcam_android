@@ -3,15 +3,17 @@ package com.civilcam.ui.settings
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.domain.model.settings.NotificationsType
+import com.civilcam.domain.usecase.settings.CheckCurrentPasswordUseCase
 import com.civilcam.ui.settings.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class SettingsViewModel : ComposeViewModel<SettingsState, SettingsRoute, SettingsActions>() {
+class SettingsViewModel(
+    private val checkCurrentPasswordUseCase: CheckCurrentPasswordUseCase
+) : ComposeViewModel<SettingsState, SettingsRoute, SettingsActions>() {
 
     override var _state = MutableStateFlow(SettingsState())
-
 
 
     override fun setInputActions(action: SettingsActions) {
@@ -39,6 +41,8 @@ class SettingsViewModel : ComposeViewModel<SettingsState, SettingsRoute, Setting
                 action.description,
                 action.email
             )
+            SettingsActions.CheckCurrentPassword -> TODO()
+            is SettingsActions.EnterCurrentPassword -> TODO()
         }
     }
 
@@ -128,4 +132,18 @@ class SettingsViewModel : ComposeViewModel<SettingsState, SettingsRoute, Setting
         goBack()
     }
 
+    private fun checkCurrentPassword() {
+        _state.value.data?.changePasswordSectionData?.let { data ->
+
+            viewModelScope.launch {
+                kotlin.runCatching {
+                    checkCurrentPasswordUseCase.checkPassword(data.currentPassword)
+                }
+                    .onSuccess { }
+                    .onFailure { }
+            }
+        }
+
+    }
 }
+

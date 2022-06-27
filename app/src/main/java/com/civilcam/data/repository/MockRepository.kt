@@ -160,6 +160,7 @@ class MockRepository {
             guardianStatus = GuardianStatus.DECLINED,
         ),
     )
+    fun checkPassword(currentPassword: String) = currentPassword == "Password1@"
 }
 
 

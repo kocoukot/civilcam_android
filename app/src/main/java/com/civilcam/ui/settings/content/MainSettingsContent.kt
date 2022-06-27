@@ -45,9 +45,11 @@ fun MainSettingsContent(
                     Divider(color = CCTheme.colors.grayThree)
                 }
                 else -> {
-                    SettingsRow(
-                        title = stringResource(id = type.title),
-                        rowClick = { onRowClicked.invoke(type) })
+                    if (type != SettingsType.CREATE_PASSWORD) {
+                        SettingsRow(
+                            title = stringResource(id = type.title),
+                            rowClick = { onRowClicked.invoke(type) })
+                    }
                 }
             }
         }
