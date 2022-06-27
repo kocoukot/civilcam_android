@@ -271,7 +271,14 @@ fun OtpCodeInputField(
 	val viewRequester = BringIntoViewRequester()
 	var inputText by remember { mutableStateOf(text) }
 	val otpColorState by
-	animateColorAsState(targetValue = if (hasError) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
+	animateColorAsState(targetValue =
+	if (hasError) {
+		CCTheme.colors.primaryRed
+	} else if(inputText.isNotEmpty() && !hasError) {
+		CCTheme.colors.black
+	} else {
+		CCTheme.colors.grayOne
+	})
 	
 	if (text.isNotEmpty()) inputText = text
 	Column(

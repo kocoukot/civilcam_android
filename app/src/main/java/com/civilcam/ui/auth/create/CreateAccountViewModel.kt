@@ -48,7 +48,7 @@ class CreateAccountViewModel :
 	}
 	
 	private fun goContinue() {
-		_steps.value = CreateAccountRoute.GoContinue
+		_steps.value = CreateAccountRoute.GoContinue(_state.value.email)
 	}
 	
 	private fun goLogin() {

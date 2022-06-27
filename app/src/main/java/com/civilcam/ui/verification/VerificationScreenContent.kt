@@ -82,7 +82,8 @@ fun VerificationScreenContent(
 					Text(
 						text = stringResource(id = R.string.code_sent_title),
 						color = CCTheme.colors.grayOne,
-						fontSize = 13.sp
+						fontSize = 13.sp,
+						fontWeight = FontWeight.Medium
 					)
 					
 					Spacer(Modifier.width(4.dp))
@@ -90,7 +91,8 @@ fun VerificationScreenContent(
 					Text(
 						text = verificationSubject,
 						color = CCTheme.colors.primaryRed,
-						fontSize = 13.sp
+						fontSize = 13.sp,
+						fontWeight = FontWeight.Medium
 					)
 				}
 				
