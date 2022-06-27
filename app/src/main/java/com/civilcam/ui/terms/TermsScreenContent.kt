@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalPagerApi::class)
-
 package com.civilcam.ui.terms
 
 import androidx.compose.foundation.layout.*
@@ -15,11 +13,11 @@ import com.civilcam.domain.model.TermsType
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.DividerLightGray
+import com.civilcam.ui.common.compose.RowDividerGrayThree
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.terms.content.AcceptTermsContent
 import com.civilcam.ui.terms.content.WebButton
 import com.civilcam.ui.terms.model.TermsActions
-import com.google.accompanist.pager.ExperimentalPagerApi
 
 @Composable
 fun TermsScreenContent(viewModel: TermsViewModel) {
@@ -28,7 +26,7 @@ fun TermsScreenContent(viewModel: TermsViewModel) {
     var isAccepted by remember { mutableStateOf(false) }
 
     Scaffold(
-        backgroundColor = CCTheme.colors.white,
+        backgroundColor = if (state.value.isSettings) CCTheme.colors.lightGray else CCTheme.colors.white,
         modifier = Modifier.fillMaxSize(),
         topBar = {
             Column {
@@ -41,7 +39,7 @@ fun TermsScreenContent(viewModel: TermsViewModel) {
                         }
                     },
                 )
-                DividerLightGray()
+                if (state.value.isSettings) RowDividerGrayThree(0) else DividerLightGray()
             }
         }
 

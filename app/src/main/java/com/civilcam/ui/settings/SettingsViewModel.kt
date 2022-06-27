@@ -13,6 +13,7 @@ class SettingsViewModel : ComposeViewModel<SettingsState, SettingsRoute, Setting
     override var _state = MutableStateFlow(SettingsState())
 
 
+
     override fun setInputActions(action: SettingsActions) {
         when (action) {
             SettingsActions.ClickGoBack -> goBack()
@@ -75,16 +76,18 @@ class SettingsViewModel : ComposeViewModel<SettingsState, SettingsRoute, Setting
 
     private fun notificationChanged(status: Boolean, notifyType: NotificationsType) {
         Timber.d("updateSettingsModel ${_state.value}")
-
         viewModelScope.launch {
-//            _state.value.alertsSectionModel?.let { model ->
-//                model.notificationList.find { it.type == notifyType }?.isOn = status
-////                _state.value = _state.value.copy(alertsSectionModel = model.copy())
-//                var data =_state.value
-//                data = data.copy(alertsSectionModel = model)
-//                _state.emit(data)
-//                Timber.d("updateSettingsModel ${_state.value}")
-//            }
+            _state.value.data?.let { model ->
+                model.alertsSectionData?.let { alert ->
+                    when (notifyType) {
+                        NotificationsType.SMS -> alert.isSMS = status
+                        NotificationsType.EMAIL -> alert.isEmail = status
+                    }
+                }
+                updateSettingsModel(model = model)
+                _state.value = _state.value.copy(data = model.copy())
+
+            }
         }
     }
 

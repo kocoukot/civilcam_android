@@ -26,6 +26,7 @@ import com.civilcam.common.ext.isEmail
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.Constant.ISSUE_DESCRIPTION_LIMIT
 import com.civilcam.ui.common.Constant.ISSUE_LIMIT
+import com.civilcam.ui.common.compose.InputField
 import com.civilcam.ui.common.compose.PlaceHolderText
 
 @Composable
@@ -48,10 +49,9 @@ fun ContactSupportContent(
         Divider(color = CCTheme.colors.lightGray, modifier = Modifier.height(30.dp))
 
 
-        InputField(
+        EmailInputField(
             title = stringResource(id = R.string.settings_contact_issue_title),
             placeHolder = stringResource(id = R.string.settings_contact_issue_enter),
-            needLimits = true,
         ) {
             issue = it
             supportInformation.invoke(
@@ -76,9 +76,9 @@ fun ContactSupportContent(
         InputField(
             title = stringResource(id = R.string.settings_contact_reply_title),
             placeHolder = stringResource(id = R.string.settings_contact_reply_placeholder),
-            isError = isEmailError,
-            errorText = stringResource(id = R.string.settings_contact_error_text),
-            needLimits = false,
+            hasError = isEmailError && email.isNotEmpty(),
+            isReversed = true,
+            errorMessage = stringResource(id = R.string.settings_contact_error_text),
         ) {
             isEmailError = if (it.isEmpty()) false else !it.isEmail()
             email = it
@@ -88,19 +88,20 @@ fun ContactSupportContent(
                 email,
             )
         }
+
+
         Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun InputField(
+private fun EmailInputField(
     title: String,
     placeHolder: String,
     text: String = "",
     isError: Boolean = false,
     errorText: String = "",
-    needLimits: Boolean,
     onValueChanged: (String) -> Unit,
 ) {
     var inputText by remember { mutableStateOf(text) }
@@ -131,11 +132,7 @@ private fun InputField(
             singleLine = true,
             value = inputText,
             onValueChange = {
-                if (needLimits) {
-                    if (it.length <= ISSUE_LIMIT) {
-                        inputText = it
-                    }
-                } else {
+                if (it.length <= ISSUE_LIMIT) {
                     inputText = it
                 }
                 onValueChanged.invoke(inputText.trim())
@@ -160,7 +157,7 @@ private fun InputField(
                         if (inputText.isEmpty()) PlaceHolderText(placeHolder)
                         innerTextField()
                     }
-                    if (needLimits && inputText.isNotEmpty()) LimitLabelContent(
+                    if (inputText.isNotEmpty()) LimitLabelContent(
                         inputText.length,
                         ISSUE_LIMIT
                     )

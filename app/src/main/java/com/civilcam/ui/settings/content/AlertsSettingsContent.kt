@@ -6,7 +6,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -34,7 +34,7 @@ fun AlertsSettingsContent(
 
         SwitcherRowContent(
             title = stringResource(id = R.string.settings_alerts_sms),
-            isSwitched = data.isSMS,
+            _isSwitched = data.isSMS,
             onCheckedChange = { onSwitchChanged.invoke(it, NotificationsType.SMS) },
         )
         RowDividerGrayThree()
@@ -42,7 +42,7 @@ fun AlertsSettingsContent(
 
         SwitcherRowContent(
             title = stringResource(id = R.string.settings_alerts_email),
-            isSwitched = data.isEmail,
+            _isSwitched = data.isEmail,
             onCheckedChange = { onSwitchChanged.invoke(it, NotificationsType.EMAIL) },
         )
         RowDividerGrayThree(0)
@@ -53,10 +53,11 @@ fun AlertsSettingsContent(
 @Composable
 fun SwitcherRowContent(
     title: String,
-    isSwitched: Boolean,
+    _isSwitched: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
-
+    var isSwitched by remember { mutableStateOf(_isSwitched) }
+    // isSwitched = _isSwitched
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -81,6 +82,7 @@ fun SwitcherRowContent(
 
             checked = isSwitched,
             onCheckedChange = {
+                isSwitched = it
                 Timber.d("updateSettingsModel switcher $it")
                 onCheckedChange.invoke(it)
             })
