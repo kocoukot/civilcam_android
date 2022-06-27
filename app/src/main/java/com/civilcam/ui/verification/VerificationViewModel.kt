@@ -17,6 +17,7 @@ class VerificationViewModel :
 		when (action) {
 			is VerificationActions.EnterCodeData -> otpCodeEntered(action.data)
 			VerificationActions.ResendClick -> resendClick()
+			VerificationActions.ClickGoBack -> goBack()
 		}
 	}
 	
@@ -47,6 +48,10 @@ class VerificationViewModel :
 	
 	private fun goToNextPage() {
 		_steps.value = VerificationRoute.ToNextScreen
+	}
+	
+	private fun goBack() {
+		_steps.value = VerificationRoute.GoBack
 	}
 	
 	companion object {

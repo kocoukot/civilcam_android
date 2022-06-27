@@ -23,8 +23,8 @@ import org.koin.core.parameter.parametersOf
 class VerificationFragment : Fragment() {
 	private val viewModel: VerificationViewModel by viewModel()
 	
-//	private val verificationFlow: VerificationFlow by requireArg(ARG_FLOW)
-//	private val subject: String by requireArg(ARG_SUBJECT)
+	private val verificationFlow: VerificationFlow by requireArg(ARG_FLOW)
+	private val subject: String by requireArg(ARG_SUBJECT)
 	
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -36,11 +36,11 @@ class VerificationFragment : Fragment() {
 			when (route) {
 				VerificationRoute.GoBack -> { navController.popBackStack() }
 				VerificationRoute.ToNextScreen -> {
-//					when(verificationFlow) {
-//						VerificationFlow.NEW_EMAIL -> navController.navigate(R.id.termsFragment)
-//						VerificationFlow.PHONE -> {}
-//						VerificationFlow.RESET_PASSWORD -> {}
-//					}
+					when(verificationFlow) {
+						VerificationFlow.NEW_EMAIL -> navController.navigate(R.id.termsFragment)
+						VerificationFlow.PHONE -> {}
+						VerificationFlow.RESET_PASSWORD -> {}
+					}
 				}
 			}
 		}
@@ -52,7 +52,7 @@ class VerificationFragment : Fragment() {
 				)
 			)
 			setContent {
-				VerificationScreenContent(viewModel, VerificationFlow.NEW_EMAIL, "subject@messapps.com")
+				VerificationScreenContent(viewModel, VerificationFlow.NEW_EMAIL, subject)
 			}
 		}
 	}
