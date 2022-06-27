@@ -2,29 +2,23 @@ package com.civilcam.ui.auth.create
 
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail
+import com.civilcam.domain.model.VerificationFlow
 import com.civilcam.ui.auth.create.model.CreateAccountActions
 import com.civilcam.ui.auth.create.model.CreateAccountRoute
 import com.civilcam.ui.auth.create.model.CreateAccountState
 import com.civilcam.ui.auth.create.model.InputDataType
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class CreateAccountViewModel :
-	ComposeViewModel<CreateAccountState, CreateAccountRoute, CreateAccountActions>() {
+class CreateAccountViewModel : ComposeViewModel<CreateAccountState, CreateAccountRoute, CreateAccountActions>() {
 	
 	override var _state: MutableStateFlow<CreateAccountState> =
 		MutableStateFlow(CreateAccountState())
 	
 	override fun setInputActions(action: CreateAccountActions) {
 		when (action) {
-			CreateAccountActions.ClickGoBack -> {
-				goBack()
-			}
-			CreateAccountActions.ClickLogin -> {
-				goLogin()
-			}
-			CreateAccountActions.ClickContinue -> {
-				goContinue()
-			}
+			CreateAccountActions.ClickGoBack -> goBack()
+			CreateAccountActions.ClickLogin -> goLogin()
+			CreateAccountActions.ClickContinue -> goContinue()
 			is CreateAccountActions.EnterInputData -> {
 				when(action.dataType) {
 					InputDataType.EMAIL -> { emailEntered(action.data) }

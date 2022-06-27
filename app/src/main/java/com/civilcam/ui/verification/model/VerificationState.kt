@@ -1,10 +1,13 @@
 package com.civilcam.ui.verification.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentState
+import com.civilcam.domain.model.VerificationFlow
 
 data class VerificationState(
 	val isLoading: Boolean = false,
 	val errorText: String = "",
 	val hasError: Boolean = false,
-	val timeOut: String = ""
+	val timeOut: String = "",
+	val verificationFlow: VerificationFlow = VerificationFlow.NEW_EMAIL,
+	val verificationSubject: String = ""
 ) : ComposeFragmentState
