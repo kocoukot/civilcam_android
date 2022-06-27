@@ -1,4 +1,4 @@
-package com.civilcam.ui.auth.password.model
+package com.civilcam.ui.auth.password.reset.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentRoute
 

@@ -6,7 +6,8 @@ import com.civilcam.ui.alerts.history.AlertsHistoryViewModel
 import com.civilcam.ui.alerts.list.AlertsListViewModel
 import com.civilcam.ui.auth.create.CreateAccountViewModel
 import com.civilcam.ui.auth.login.LoginViewModel
-import com.civilcam.ui.auth.password.ResetPasswordViewModel
+import com.civilcam.ui.auth.password.create.CreatePasswordViewModel
+import com.civilcam.ui.auth.password.reset.ResetPasswordViewModel
 import com.civilcam.ui.langSelect.LanguageSelectViewModel
 import com.civilcam.ui.onboarding.OnBoardingViewModel
 import com.civilcam.ui.profile.setup.ProfileSetupViewModel
@@ -49,6 +50,8 @@ val authModule = module {
 	}
 	
 	viewModel { ResetPasswordViewModel() }
+	
+	viewModel { CreatePasswordViewModel() }
 	
 }
 

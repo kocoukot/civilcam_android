@@ -1,11 +1,11 @@
-package com.civilcam.ui.auth.password
+package com.civilcam.ui.auth.password.reset
 
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail
 import com.civilcam.ui.auth.create.model.InputDataType
-import com.civilcam.ui.auth.password.model.ResetActions
-import com.civilcam.ui.auth.password.model.ResetRoute
-import com.civilcam.ui.auth.password.model.ResetState
+import com.civilcam.ui.auth.password.reset.model.ResetActions
+import com.civilcam.ui.auth.password.reset.model.ResetRoute
+import com.civilcam.ui.auth.password.reset.model.ResetState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class ResetPasswordViewModel : ComposeViewModel<ResetState, ResetRoute, ResetActions>() {

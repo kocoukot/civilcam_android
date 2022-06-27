@@ -1,4 +1,4 @@
-package com.civilcam.ui.auth.password
+package com.civilcam.ui.auth.password.create
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,16 +7,11 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
-import com.civilcam.R
-import com.civilcam.domain.model.VerificationFlow
-import com.civilcam.ui.auth.password.model.ResetRoute
-import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
-import com.civilcam.ui.verification.VerificationFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ResetPasswordFragment : Fragment() {
-	private val viewModel: ResetPasswordViewModel by viewModel()
+class CreatePasswordFragment : Fragment() {
+	private val viewModel: CreatePasswordViewModel by viewModel()
 	
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -25,11 +20,7 @@ class ResetPasswordFragment : Fragment() {
 	): View {
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
-				ResetRoute.GoBack -> navController.popBackStack()
-				is ResetRoute.GoContinue -> navController.navigate(
-					R.id.verificationFragment,
-					VerificationFragment.createArgs(VerificationFlow.RESET_PASSWORD, route.email)
-				)
+			
 			}
 		}
 		
@@ -40,8 +31,9 @@ class ResetPasswordFragment : Fragment() {
 				)
 			)
 			setContent {
-				ResetPasswordScreenContent(viewModel)
+				CreatePasswordScreenContent(viewModel)
 			}
 		}
 	}
+	
 }

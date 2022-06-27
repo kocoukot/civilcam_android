@@ -225,7 +225,7 @@ private fun PasswordChip(
 
 @OptIn(ExperimentalUnitApi::class)
 @Composable
-private fun PasswordStrategyBlocks(
+fun PasswordStrategyBlocks(
 	input: String,
 	strategyUpdate: (Int) -> Unit
 ) {

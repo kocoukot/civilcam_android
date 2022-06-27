@@ -1,4 +1,4 @@
-package com.civilcam.ui.auth.password
+package com.civilcam.ui.auth.password.reset
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
@@ -11,7 +11,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -19,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.create.model.InputDataType
-import com.civilcam.ui.auth.password.model.ResetActions
+import com.civilcam.ui.auth.password.reset.model.ResetActions
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.InputField
 import com.civilcam.ui.common.compose.TopAppBarContent

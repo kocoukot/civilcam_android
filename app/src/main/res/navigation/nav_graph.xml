@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/languageSelectFragment">
+    app:startDestination="@id/createPasswordFragment">
 
 
     <fragment
@@ -97,7 +97,12 @@
 
     <fragment
         android:id="@+id/resetPasswordFragment"
-        android:name="com.civilcam.ui.auth.password.ResetPasswordFragment"
+        android:name="com.civilcam.ui.auth.password.reset.ResetPasswordFragment"
         android:label="ResetPasswordFragment" />
+
+    <fragment
+        android:id="@+id/createPasswordFragment"
+        android:name="com.civilcam.ui.auth.password.create.CreatePasswordFragment"
+        android:label="CreatePasswordFragment" />
 
 </navigation>
