@@ -3,6 +3,7 @@ package com.civilcam.ui.auth.login
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -28,7 +29,7 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 		topBar = {
 			Column {
 				TopAppBarContent(
-					title = stringResource(id = R.string.create_account),
+					title = stringResource(id = R.string.log_in),
 					navigationAction = {
 						viewModel.setInputActions(LoginActions.ClickGoBack)
 					},
@@ -50,7 +51,7 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 					.weight(1f)
 			) {
 				
-				OtpCodeInputField(onValueChanged = {}, hasError = false)
+				Text(text = "Login")
 				
 			}
 			

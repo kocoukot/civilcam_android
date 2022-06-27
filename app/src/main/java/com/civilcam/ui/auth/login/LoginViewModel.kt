@@ -12,7 +12,9 @@ class LoginViewModel : ComposeViewModel<LoginState, LoginRoute, LoginActions>() 
 	
 	
 	override fun setInputActions(action: LoginActions) {
-		TODO("Not yet implemented")
+		when(action) {
+			LoginActions.ClickGoBack -> { goBack() }
+		}
 	}
 	
 	private fun goBack() {
