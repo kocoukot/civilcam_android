@@ -8,6 +8,9 @@ import android.view.WindowManager
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import com.civilcam.R
+import com.civilcam.ui.auth.create.model.CreateAccountRoute
+import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -22,7 +25,9 @@ class CreateAccountFragment : Fragment() {
 		activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
-			
+				CreateAccountRoute.GoBack -> { navController.popBackStack() }
+				CreateAccountRoute.GoLogin -> { navController.navigate(R.id.loginFragment) }
+				CreateAccountRoute.GoContinue -> { navController.navigate(R.id.verificationFragment) }
 			}
 		}
 		

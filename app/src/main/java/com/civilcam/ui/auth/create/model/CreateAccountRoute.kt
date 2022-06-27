@@ -4,4 +4,6 @@ import com.civilcam.common.ext.compose.ComposeFragmentRoute
 
 sealed class CreateAccountRoute : ComposeFragmentRoute {
 	object GoBack : CreateAccountRoute()
+	object GoLogin : CreateAccountRoute()
+	object GoContinue : CreateAccountRoute()
 }

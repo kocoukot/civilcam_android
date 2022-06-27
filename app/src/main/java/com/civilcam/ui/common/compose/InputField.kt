@@ -1,5 +1,7 @@
 package com.civilcam.ui.common.compose
 
+import android.text.method.PasswordTransformationMethod
+import android.widget.ImageView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -58,9 +60,13 @@ fun InputField(
 ) {
 	val coroutineScope = rememberCoroutineScope()
 	val viewRequester = BringIntoViewRequester()
-	
 	Timber.d("getDateFromCalendar $text")
 	var inputText by remember { mutableStateOf(text) }
+	val errorColorState by
+	animateColorAsState(targetValue = if (hasError && inputText.isNotEmpty()) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
+	val errorBorderState by
+	animateColorAsState(targetValue = if (hasError && inputText.isNotEmpty()) CCTheme.colors.primaryRed else CCTheme.colors.lightGray)
+	
 	if (text.isNotEmpty()) inputText = text
 	Column(
 		modifier = Modifier
@@ -79,7 +85,7 @@ fun InputField(
 		
 		Text(
 			title,
-			color = if (hasError) CCTheme.colors.primaryRed else CCTheme.colors.grayOne,
+			color = errorColorState,
 			style = CCTheme.typography.common_text_small_regular,
 			modifier = Modifier
 				.padding(bottom = 8.dp)
@@ -88,13 +94,13 @@ fun InputField(
 		
 		BasicTextField(
 			enabled = isEnable,
-			textStyle = if (hasError) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
+			textStyle = if (hasError && inputText.isNotEmpty()) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
 			modifier = Modifier
 				.fillMaxWidth()
 				.clip(RoundedCornerShape(4.dp))
 				.border(
 					1.dp,
-					if (hasError) CCTheme.colors.primaryRed else CCTheme.colors.lightGray,
+					errorBorderState,
 					RoundedCornerShape(4.dp)
 				)
 				.clickable {
@@ -142,7 +148,7 @@ fun InputField(
 				}
 			}
 		)
-		if (hasError) {
+		AnimatedVisibility(visible = hasError && inputText.isNotEmpty()) {
 			Text(
 				errorMessage,
 				color = CCTheme.colors.primaryRed,
@@ -151,8 +157,6 @@ fun InputField(
 					.padding(top = 8.dp)
 					.fillMaxWidth()
 			)
-		} else {
-			Spacer(modifier = Modifier.height(16.dp))
 		}
 	}
 }
@@ -365,7 +369,8 @@ fun PasswordField(
 	name: String,
 	placeholder: String,
 	hasError: Boolean = false,
-	hasStrategy: Boolean = false,
+	noMatch: Boolean = false,
+	isReEnter: Boolean = false,
 	text: String = "",
 	isReversed: Boolean = false,
 	onValueChanged: (String) -> Unit,
@@ -375,6 +380,11 @@ fun PasswordField(
 	val viewRequester = BringIntoViewRequester()
 	
 	var inputText by remember { mutableStateOf(text) }
+	val errorColorState by
+	animateColorAsState(targetValue = if ((hasError && inputText.isNotEmpty()) || noMatch && inputText.isNotEmpty()) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
+	val errorBorderState by
+	animateColorAsState(targetValue = if ((hasError && inputText.isNotEmpty()) || noMatch && inputText.isNotEmpty()) CCTheme.colors.primaryRed else CCTheme.colors.lightGray)
+	
 	if (text.isNotEmpty()) inputText = text
 	Column(
 		modifier = Modifier
@@ -392,7 +402,7 @@ fun PasswordField(
 	) {
 		Text(
 			name,
-			color = if (hasError) CCTheme.colors.primaryRed else CCTheme.colors.grayOne,
+			color = errorColorState,
 			style = CCTheme.typography.common_text_small_regular,
 			modifier = Modifier
 				.padding(bottom = 8.dp)
@@ -401,13 +411,13 @@ fun PasswordField(
 		
 		BasicTextField(
 			visualTransformation = if (visibility.value) VisualTransformation.None else PasswordVisualTransformation(),
-			textStyle = if (hasError) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
+			textStyle = if ((hasError && inputText.isNotEmpty()) || noMatch && inputText.isNotEmpty()) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
 			modifier = Modifier
 				.fillMaxWidth()
 				.clip(RoundedCornerShape(4.dp))
 				.border(
 					1.dp,
-					if (hasError) CCTheme.colors.primaryRed else CCTheme.colors.lightGray,
+					errorBorderState,
 					RoundedCornerShape(4.dp)
 				),
 			singleLine = true,
@@ -446,7 +456,9 @@ fun PasswordField(
 					if (inputText.isNotEmpty()) {
 						Text(
 							stringResource(id = if (visibility.value) R.string.hide else R.string.show_title),
-							modifier = Modifier,
+							modifier = Modifier.clickable {
+							    visibility.value = !visibility.value
+							},
 							style = CCTheme.typography.common_text_regular,
 							color = if (visibility.value) CCTheme.colors.primaryRed else CCTheme.colors.grayOne
 						)
@@ -454,9 +466,9 @@ fun PasswordField(
 				}
 			}
 		)
-		if (hasError) {
+		if (isReEnter && inputText.isNotEmpty()) {
 			Text(
-				stringResource(id = R.string.invalid_email),
+				stringResource(id = R.string.password_no_match),
 				color = CCTheme.colors.primaryRed,
 				style = CCTheme.typography.common_text_small_regular,
 				modifier = Modifier
@@ -464,62 +476,8 @@ fun PasswordField(
 					.fillMaxWidth()
 			)
 		}
-		if (hasStrategy) {
-			Box {
-				Column {
-					Text(
-						text = stringResource(id = R.string.password_should_contain),
-						color = CCTheme.colors.grayOne,
-						modifier = Modifier
-							.padding(top = 12.dp),
-						fontSize = TextUnit(13f, TextUnitType.Sp)
-					)
-					
-					Text(
-						text = stringResource(id = R.string.password_should_contain_number),
-						color = if (OneDigitCheckStrategy(inputText)) CCTheme.colors.primaryRed else CCTheme.colors.grayOne,
-						modifier = Modifier
-							.padding(top = 8.dp),
-						fontSize = TextUnit(13f, TextUnitType.Sp)
-					)
-					
-					Text(
-						text = stringResource(id = R.string.password_should_contain_letter),
-						color = if (UpperCaseCheckStrategy(inputText)) CCTheme.colors.primaryRed else CCTheme.colors.grayOne,
-						modifier = Modifier
-							.padding(top = 4.dp),
-						fontSize = TextUnit(13f, TextUnitType.Sp)
-					)
-					
-					Text(
-						text = stringResource(id = R.string.password_should_contain_lowercase),
-						color = if (LowerCaseCheckStrategy(inputText)) CCTheme.colors.primaryRed else CCTheme.colors.grayOne,
-						modifier = Modifier
-							.padding(top = 4.dp),
-						fontSize = TextUnit(13f, TextUnitType.Sp)
-					)
-					
-					Text(
-						text = stringResource(id = R.string.password_should_contain_char),
-						color = if (LengthCheckStrategy(inputText)) CCTheme.colors.primaryRed else CCTheme.colors.grayOne,
-						modifier = Modifier
-							.padding(top = 4.dp),
-						fontSize = TextUnit(13f, TextUnitType.Sp)
-					)
-				}
-			}
-		}
 	}
 }
-
-private fun composeChipsWithStrategiesList() =
-	listOf(
-		UpperCaseCheckStrategy,
-		OneDigitCheckStrategy,
-		LengthCheckStrategy,
-		LowerCaseCheckStrategy,
-	)
-
 
 @Preview
 @Composable
@@ -549,7 +507,7 @@ fun PasswordInputFieldPreview() {
 fun InputFieldPreview() {
 	InputField(
 		"First name", "Enter First Name",
-		onValueChanged = {}, hasError = true, errorMessage = "Some error"
+		onValueChanged = {}, hasError = true, errorMessage = stringResource(id = R.string.invalid_email)
 	)
 }
 

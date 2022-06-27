@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import com.civilcam.ui.auth.login.model.LoginRoute
+import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -20,7 +22,7 @@ class LoginFragment : Fragment() {
 	): View {
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
-			
+				LoginRoute.GoBack -> { navController.popBackStack() }
 			}
 		}
 		

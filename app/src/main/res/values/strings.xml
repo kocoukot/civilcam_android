@@ -96,4 +96,5 @@
     <string name="resend_code">Resend code</string>
     <string name="otp_error_code">OTP code is incorrect or has expired. Please try to retype or resend the code</string>
     <string name="otp_code_timer">Resend code in %s seconds</string>
+    <string name="password_no_match">Passwords don’t match, please check and try again</string>
 </resources>
