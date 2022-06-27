@@ -1,5 +1,6 @@
 package com.civilcam.di
 
+import com.civilcam.domain.model.VerificationFlow
 import com.civilcam.ui.alerts.details.AlertsDetailViewModel
 import com.civilcam.ui.alerts.history.AlertsHistoryViewModel
 import com.civilcam.ui.alerts.list.AlertsListViewModel
@@ -39,7 +40,12 @@ val authModule = module {
 	
 	viewModel { CreateAccountViewModel() }
 	
-	viewModel { VerificationViewModel() }
+	viewModel { (verificationFlow: VerificationFlow, verificationSubject: String) ->
+		VerificationViewModel(
+			verificationFlow,
+			verificationSubject
+		)
+	}
 	
 }
 

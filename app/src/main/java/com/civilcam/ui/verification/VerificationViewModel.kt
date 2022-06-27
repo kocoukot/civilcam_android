@@ -3,15 +3,25 @@ package com.civilcam.ui.verification
 import android.os.CountDownTimer
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.formatTime
+import com.civilcam.domain.model.VerificationFlow
 import com.civilcam.ui.verification.model.VerificationActions
 import com.civilcam.ui.verification.model.VerificationRoute
 import com.civilcam.ui.verification.model.VerificationState
 import kotlinx.coroutines.flow.MutableStateFlow
+import javax.security.auth.Subject
 
 
-class VerificationViewModel :
+class VerificationViewModel(
+	verificationFlow: VerificationFlow,
+	verificationSubject: String
+) :
 	ComposeViewModel<VerificationState, VerificationRoute, VerificationActions>() {
 	override var _state: MutableStateFlow<VerificationState> = MutableStateFlow(VerificationState())
+	
+	init {
+		getVerificationFlow(verificationFlow)
+		getVerificationSubject(verificationSubject)
+	}
 	
 	override fun setInputActions(action: VerificationActions) {
 		when (action) {
@@ -44,6 +54,14 @@ class VerificationViewModel :
 				_state.value = _state.value.copy(timeOut = "")
 			}
 		}.start()
+	}
+	
+	private fun getVerificationFlow(flow: VerificationFlow) {
+		_state.value = _state.value.copy(verificationFlow = flow)
+	}
+	
+	private fun getVerificationSubject(subject: String) {
+		_state.value = _state.value.copy(verificationSubject = subject)
 	}
 	
 	private fun goToNextPage() {

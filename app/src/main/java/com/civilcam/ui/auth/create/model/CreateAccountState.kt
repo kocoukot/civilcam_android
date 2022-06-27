@@ -14,7 +14,8 @@ data class CreateAccountState(
 	
 	val isFilled: Boolean
 		get() = email.isEmail() &&
-				password == confirmPassword
+				password == confirmPassword &&
+				password.isNotEmpty() && confirmPassword.isNotEmpty()
 	
 	val noMatch: Boolean
 		get() = (password.isNotEmpty() && confirmPassword.isNotEmpty()) && (password != confirmPassword)

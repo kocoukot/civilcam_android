@@ -15,6 +15,7 @@ import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.verification.VerificationFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class CreateAccountFragment : Fragment() {
 	private val viewModel: CreateAccountViewModel by viewModel()
@@ -24,7 +25,7 @@ class CreateAccountFragment : Fragment() {
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
-		activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+		activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
 				CreateAccountRoute.GoBack -> {

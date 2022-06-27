@@ -5,6 +5,8 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -22,7 +24,10 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.auth.*
+import com.civilcam.ui.auth.LengthCheckStrategy
+import com.civilcam.ui.auth.LowerCaseCheckStrategy
+import com.civilcam.ui.auth.OneDigitCheckStrategy
+import com.civilcam.ui.auth.UpperCaseCheckStrategy
 import com.civilcam.ui.auth.create.model.CreateAccountActions
 import com.civilcam.ui.auth.create.model.InputDataType
 import com.civilcam.ui.common.compose.ComposeButton
@@ -30,10 +35,13 @@ import com.civilcam.ui.common.compose.InputField
 import com.civilcam.ui.common.compose.PasswordField
 import com.civilcam.ui.common.compose.TopAppBarContent
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 	
 	val state = viewModel.state.collectAsState()
+	
+	val checkedStrategies = remember { mutableStateOf(0) }
 	
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
@@ -54,133 +62,133 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 		Column(
 			modifier = Modifier
 				.fillMaxSize()
-				.padding(horizontal = 16.dp),
-			horizontalAlignment = Alignment.CenterHorizontally,
+				.imePadding()
+				.padding(horizontal = 16.dp)
+				.verticalScroll(rememberScrollState())
 		) {
 			
-			Column(Modifier.weight(1f)) {
-				
-				Spacer(modifier = Modifier.height(12.dp))
-				
-				InputField(
-					title = stringResource(id = R.string.create_account_email_label),
-					placeHolder = stringResource(id = R.string.create_account_email_placeholder),
-					hasError = !state.value.isEmail,
-					errorMessage = state.value.errorText,
-					inputType = KeyboardType.Email
-				) {
+			Spacer(modifier = Modifier.height(12.dp))
+			
+			InputField(
+				title = stringResource(id = R.string.create_account_email_label),
+				text = state.value.email,
+				placeHolder = stringResource(id = R.string.create_account_email_placeholder),
+				hasError = !state.value.isEmail,
+				errorMessage = state.value.errorText,
+				inputType = KeyboardType.Email
+			) {
+				viewModel.setInputActions(
+					CreateAccountActions.EnterInputData(
+						InputDataType.EMAIL,
+						it
+					)
+				)
+			}
+			
+			Spacer(modifier = Modifier.height(16.dp))
+			
+			PasswordField(
+				name = stringResource(id = R.string.password),
+				text = state.value.password,
+				placeholder = stringResource(id = R.string.create_password),
+				onValueChanged = {
 					viewModel.setInputActions(
 						CreateAccountActions.EnterInputData(
-							InputDataType.EMAIL,
+							InputDataType.PASSWORD,
 							it
 						)
 					)
+				},
+				hasError = checkedStrategies.value != 4,
+				noMatch = state.value.noMatch
+			)
+			
+			Spacer(modifier = Modifier.height(12.dp))
+			
+			PasswordStrategyBlocks(
+				input = state.value.password,
+				strategyUpdate = {
+					checkedStrategies.value = it
 				}
-				
-				Spacer(modifier = Modifier.height(16.dp))
-				
-				val checkedStrategies = remember { mutableStateOf(0) }
-				
-				PasswordField(
-					name = stringResource(id = R.string.password),
-					placeholder = stringResource(id = R.string.create_password),
-					onValueChanged = {
-						viewModel.setInputActions(
-							CreateAccountActions.EnterInputData(
-								InputDataType.PASSWORD,
-								it
-							)
+			)
+			
+			Spacer(modifier = Modifier.height(8.dp))
+			
+			PasswordField(
+				name = stringResource(id = R.string.confirm_password),
+				text = state.value.confirmPassword,
+				placeholder = stringResource(id = R.string.re_enter_password),
+				onValueChanged = {
+					viewModel.setInputActions(
+						CreateAccountActions.EnterInputData(
+							InputDataType.PASSWORD_REPEAT,
+							it
 						)
-					},
-					hasError = checkedStrategies.value != 4,
-					noMatch = state.value.noMatch
+					)
+				},
+				noMatch = state.value.noMatch,
+				isReEnter = state.value.noMatch
+			)
+			
+			Spacer(modifier = Modifier.weight(1f))
+			
+			ComposeButton(
+				title = stringResource(id = R.string.continue_text),
+				Modifier
+					.padding(horizontal = 8.dp)
+					.padding(top = 40.dp),
+				isActivated = state.value.isFilled,
+				buttonClick = {
+					viewModel.setInputActions(
+						CreateAccountActions.ClickContinue
+					)
+				}
+			)
+			
+			Spacer(modifier = Modifier.height(24.dp))
+			
+			Row(
+				horizontalArrangement = Arrangement.Center,
+				modifier = Modifier.fillMaxWidth()
+			) {
+				SocialImage(
+					painterResource(
+						id = R.drawable.ic_facebook
+					)
 				)
-				
-				Spacer(modifier = Modifier.height(12.dp))
-				
-				PasswordStrategyBlocks(
-					input = state.value.password,
-					strategyUpdate = {
-						checkedStrategies.value = it
-					}
-				)
-				
-				Spacer(modifier = Modifier.height(8.dp))
-				
-				PasswordField(
-					name = stringResource(id = R.string.confirm_password),
-					placeholder = stringResource(id = R.string.re_enter_password),
-					onValueChanged = {
-						viewModel.setInputActions(
-							CreateAccountActions.EnterInputData(
-								InputDataType.PASSWORD_REPEAT,
-								it
-							)
-						)
-					},
-					noMatch = state.value.noMatch,
-					isReEnter = state.value.noMatch
+				Spacer(modifier = Modifier.width(16.dp))
+				SocialImage(
+					painterResource(
+						id = R.drawable.ic_google
+					)
 				)
 			}
 			
-			Column {
-				
-				ComposeButton(
-					title = stringResource(id = R.string.continue_text),
-					Modifier.padding(horizontal = 8.dp),
-					isActivated = state.value.isFilled,
-					buttonClick = {
+			Spacer(modifier = Modifier.height(16.dp))
+			
+			Row(
+				horizontalArrangement = Arrangement.Center,
+				modifier = Modifier.fillMaxWidth(),
+				verticalAlignment = Alignment.Bottom
+			) {
+				Text(
+					stringResource(id = R.string.already_have_account),
+					color = CCTheme.colors.grayOne
+				)
+				Spacer(modifier = Modifier.width(4.dp))
+				Text(
+					stringResource(id = R.string.log_in),
+					color = CCTheme.colors.primaryRed,
+					fontWeight = FontWeight.Bold,
+					modifier = Modifier.clickable {
 						viewModel.setInputActions(
-							CreateAccountActions.ClickContinue
+							CreateAccountActions.ClickLogin
 						)
 					}
 				)
-				
-				Spacer(modifier = Modifier.height(24.dp))
-				
-				Row(
-					horizontalArrangement = Arrangement.Center,
-					modifier = Modifier.fillMaxWidth()
-				) {
-					SocialImage(
-						painterResource(
-							id = R.drawable.ic_facebook
-						)
-					)
-					Spacer(modifier = Modifier.width(16.dp))
-					SocialImage(
-						painterResource(
-							id = R.drawable.ic_google
-						)
-					)
-				}
-				
-				Spacer(modifier = Modifier.height(16.dp))
-				
-				Row(
-					horizontalArrangement = Arrangement.Center,
-					modifier = Modifier.fillMaxWidth(),
-					verticalAlignment = Alignment.Bottom
-				) {
-					Text(
-						stringResource(id = R.string.already_have_account),
-						color = CCTheme.colors.grayOne
-					)
-					Spacer(modifier = Modifier.width(4.dp))
-					Text(
-						stringResource(id = R.string.log_in),
-						color = CCTheme.colors.primaryRed,
-						fontWeight = FontWeight.Bold,
-						modifier = Modifier.clickable {
-							viewModel.setInputActions(
-								CreateAccountActions.ClickLogin
-							)
-						}
-					)
-				}
-				
-				Spacer(modifier = Modifier.height(16.dp))
 			}
+			
+			Spacer(modifier = Modifier.height(16.dp))
 		}
 	}
 }

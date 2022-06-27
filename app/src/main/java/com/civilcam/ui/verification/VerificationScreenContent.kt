@@ -12,8 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
@@ -25,11 +29,10 @@ import com.civilcam.ui.verification.model.VerificationActions
 
 @Composable
 fun VerificationScreenContent(
-	viewModel: VerificationViewModel,
-	verificationFlow: VerificationFlow,
-	verificationSubject: String
+	viewModel: VerificationViewModel
 ) {
 	val state = viewModel.state.collectAsState()
+	val context = LocalContext.current
 	
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
@@ -37,7 +40,7 @@ fun VerificationScreenContent(
 		topBar = {
 			Column {
 				TopAppBarContent(
-					title = when (verificationFlow) {
+					title = when (state.value.verificationFlow) {
 						VerificationFlow.PHONE -> {
 							stringResource(id = R.string.phone_verification)
 						}
@@ -76,31 +79,34 @@ fun VerificationScreenContent(
 					hasError = state.value.hasError
 				)
 				
-				Row(
-					modifier = Modifier.padding(top = 8.dp)
-				) {
-					Text(
-						text = stringResource(id = R.string.code_sent_title),
-						color = CCTheme.colors.grayOne,
-						fontSize = 13.sp,
-						fontWeight = FontWeight.Medium
-					)
-					
-					Spacer(Modifier.width(4.dp))
-					
-					Text(
-						text = verificationSubject,
-						color = CCTheme.colors.primaryRed,
-						fontSize = 13.sp,
-						fontWeight = FontWeight.Medium
-					)
-				}
-				
-				Text(
-					text = stringResource(id = R.string.code_arrive),
-					color = CCTheme.colors.grayOne,
-					fontSize = 13.sp
-				)
+				Text(modifier = Modifier
+					.padding(end = 12.dp, top = 8.dp),
+					text = buildAnnotatedString {
+						withStyle(
+							style = SpanStyle(
+								color = CCTheme.colors.grayOne,
+								fontSize = 13.sp
+							),
+						) {
+							append("${context.resources.getString(R.string.code_sent_title)} ")
+						}
+						withStyle(
+							style = SpanStyle(
+								color = CCTheme.colors.primaryRed,
+								fontSize = 13.sp
+							),
+						) {
+							append("${state.value.verificationSubject}\n")
+						}
+						withStyle(
+							style = SpanStyle(
+								color = CCTheme.colors.grayOne,
+								fontSize = 13.sp
+							),
+						) {
+							append(context.resources.getString(R.string.code_arrive))
+						}
+					})
 			}
 			
 			Column(

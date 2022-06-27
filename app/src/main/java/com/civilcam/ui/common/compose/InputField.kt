@@ -1,8 +1,8 @@
 package com.civilcam.ui.common.compose
 
-import android.text.method.PasswordTransformationMethod
-import android.widget.ImageView
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -27,17 +27,11 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.ext.digits
 import com.civilcam.common.ext.letters
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.auth.LengthCheckStrategy
-import com.civilcam.ui.auth.LowerCaseCheckStrategy
-import com.civilcam.ui.auth.OneDigitCheckStrategy
-import com.civilcam.ui.auth.UpperCaseCheckStrategy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -164,99 +158,99 @@ fun InputField(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PhoneInputField(
-    text: String = "",
-    isInFocus: () -> Unit,
-    isReversed: Boolean = false,
-    onValueChanged: (String) -> Unit,
+	text: String = "",
+	isInFocus: () -> Unit,
+	isReversed: Boolean = false,
+	onValueChanged: (String) -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    val viewRequester = BringIntoViewRequester()
-
-    var inputText by remember { mutableStateOf(text) }
-    if (text.isNotEmpty()) inputText = text
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
+	val coroutineScope = rememberCoroutineScope()
+	val viewRequester = BringIntoViewRequester()
+	
+	var inputText by remember { mutableStateOf(text) }
+	if (text.isNotEmpty()) inputText = text
+	Column(
+		modifier = Modifier
+			.fillMaxWidth()
+			.background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
 //            .bringIntoViewRequester(viewRequester)
-            .onFocusEvent {
-
-                if (it.isFocused) {
-
-
-                    coroutineScope.launch {
-                        delay(400)
-                        isInFocus.invoke()
+			.onFocusEvent {
+				
+				if (it.isFocused) {
+					
+					
+					coroutineScope.launch {
+						delay(400)
+						isInFocus.invoke()
 
 ////                        focusRequester.requestFocus()
 ////                        viewRequester.bringIntoView()
 //                        isInFocus.invoke()
-                    }
-                }
-            }
-    ) {
-
-        Text(
-            stringResource(id = R.string.profile_setup_phone_number_label),
-            color = CCTheme.colors.grayOne,
-            style = CCTheme.typography.common_text_small_regular,
-            modifier = Modifier
-                .padding(bottom = 8.dp)
-                .fillMaxWidth()
-        )
-
-        BasicTextField(
-            visualTransformation = PhoneNumberTransformation(),
-            textStyle = CCTheme.typography.common_text_regular,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 5.dp)
-                .clip(RoundedCornerShape(4.dp)),
-            singleLine = true,
-            value = inputText,
-            onValueChange = { value ->
-                if (value.length < 11) inputText = value.digits()
-                onValueChanged.invoke(inputText.trim())
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Phone
-            ),
-            decorationBox = { innerTextField ->
-                Row(
-                    modifier = Modifier
-                        .background(
-                            if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
-                            RoundedCornerShape(4.dp)
-                        )
-                        .padding(vertical = 14.dp)
-                        .padding(start = 12.dp, end = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        "+1 ",
-                        modifier = Modifier,
-                        style = CCTheme.typography.common_text_regular,
-                        color = CCTheme.colors.grayOne
-                    )
-                    Box(
-                        Modifier
-                            .weight(1f)
-                    ) {
-                        if (inputText.isEmpty()) Text(
-                            stringResource(id = R.string.profile_setup_phone_number_placeholder),
-                            modifier = Modifier,
-                            style = CCTheme.typography.common_text_regular,
-                            color = CCTheme.colors.grayOne
-                        )
-                        innerTextField()
-                    }
-
-
-                }
-            }
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-    }
+					}
+				}
+			}
+	) {
+		
+		Text(
+			stringResource(id = R.string.profile_setup_phone_number_label),
+			color = CCTheme.colors.grayOne,
+			style = CCTheme.typography.common_text_small_regular,
+			modifier = Modifier
+				.padding(bottom = 8.dp)
+				.fillMaxWidth()
+		)
+		
+		BasicTextField(
+			visualTransformation = PhoneNumberTransformation(),
+			textStyle = CCTheme.typography.common_text_regular,
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(bottom = 5.dp)
+				.clip(RoundedCornerShape(4.dp)),
+			singleLine = true,
+			value = inputText,
+			onValueChange = { value ->
+				if (value.length < 11) inputText = value.digits()
+				onValueChanged.invoke(inputText.trim())
+			},
+			keyboardOptions = KeyboardOptions(
+				keyboardType = KeyboardType.Phone
+			),
+			decorationBox = { innerTextField ->
+				Row(
+					modifier = Modifier
+						.background(
+							if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
+							RoundedCornerShape(4.dp)
+						)
+						.padding(vertical = 14.dp)
+						.padding(start = 12.dp, end = 12.dp),
+					verticalAlignment = Alignment.CenterVertically
+				) {
+					Text(
+						"+1 ",
+						modifier = Modifier,
+						style = CCTheme.typography.common_text_regular,
+						color = CCTheme.colors.grayOne
+					)
+					Box(
+						Modifier
+							.weight(1f)
+					) {
+						if (inputText.isEmpty()) Text(
+							stringResource(id = R.string.profile_setup_phone_number_placeholder),
+							modifier = Modifier,
+							style = CCTheme.typography.common_text_regular,
+							color = CCTheme.colors.grayOne
+						)
+						innerTextField()
+					}
+					
+					
+				}
+			}
+		)
+		Spacer(modifier = Modifier.height(16.dp))
+	}
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -271,14 +265,16 @@ fun OtpCodeInputField(
 	val viewRequester = BringIntoViewRequester()
 	var inputText by remember { mutableStateOf(text) }
 	val otpColorState by
-	animateColorAsState(targetValue =
-	if (hasError) {
-		CCTheme.colors.primaryRed
-	} else if(inputText.isNotEmpty() && !hasError) {
-		CCTheme.colors.black
-	} else {
-		CCTheme.colors.grayOne
-	})
+	animateColorAsState(
+		targetValue =
+		if (hasError) {
+			CCTheme.colors.primaryRed
+		} else if (inputText.isNotEmpty() && !hasError) {
+			CCTheme.colors.black
+		} else {
+			CCTheme.colors.grayOne
+		}
+	)
 	
 	if (text.isNotEmpty()) inputText = text
 	Column(
@@ -370,7 +366,10 @@ fun OtpCodeInputField(
 	}
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalUnitApi::class)
+@OptIn(
+	ExperimentalFoundationApi::class, ExperimentalUnitApi::class,
+	ExperimentalAnimationApi::class
+)
 @Composable
 fun PasswordField(
 	name: String,
@@ -380,12 +379,11 @@ fun PasswordField(
 	isReEnter: Boolean = false,
 	text: String = "",
 	isReversed: Boolean = false,
-	onValueChanged: (String) -> Unit,
-	visibility: MutableState<Boolean> = remember { mutableStateOf(false) }
+	onValueChanged: (String) -> Unit
 ) {
 	val coroutineScope = rememberCoroutineScope()
 	val viewRequester = BringIntoViewRequester()
-	
+	val visibility: MutableState<Boolean> = remember { mutableStateOf(false) }
 	var inputText by remember { mutableStateOf(text) }
 	val errorColorState by
 	animateColorAsState(targetValue = if ((hasError && inputText.isNotEmpty()) || noMatch && inputText.isNotEmpty()) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
@@ -461,14 +459,16 @@ fun PasswordField(
 						innerTextField()
 					}
 					if (inputText.isNotEmpty()) {
-						Text(
-							stringResource(id = if (visibility.value) R.string.hide else R.string.show_title),
-							modifier = Modifier.clickable {
-							    visibility.value = !visibility.value
-							},
-							style = CCTheme.typography.common_text_regular,
-							color = if (visibility.value) CCTheme.colors.primaryRed else CCTheme.colors.grayOne
-						)
+						AnimatedContent(targetState = visibility.value) { state ->
+							Text(
+								stringResource(id = if (state) R.string.hide else R.string.show_title),
+								modifier = Modifier.clickable {
+									visibility.value = !visibility.value
+								},
+								style = CCTheme.typography.common_text_regular,
+								color = if (state) CCTheme.colors.primaryRed else CCTheme.colors.grayOne
+							)
+						}
 					}
 				}
 			}
@@ -489,7 +489,7 @@ fun PasswordField(
 @Preview
 @Composable
 fun PhoneInputFieldPreview() {
-    PhoneInputField(onValueChanged = {}, isInFocus = {})
+	PhoneInputField(onValueChanged = {}, isInFocus = {})
 }
 
 @Preview
@@ -513,8 +513,11 @@ fun PasswordInputFieldPreview() {
 @Composable
 fun InputFieldPreview() {
 	InputField(
-		"First name", "Enter First Name",
-		onValueChanged = {}, hasError = true, errorMessage = stringResource(id = R.string.invalid_email)
+		"First name",
+		"Enter First Name",
+		onValueChanged = {},
+		hasError = true,
+		errorMessage = stringResource(id = R.string.invalid_email)
 	)
 }
 
