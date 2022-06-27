@@ -41,8 +41,8 @@ class SettingsViewModel(
                 action.description,
                 action.email
             )
-            SettingsActions.CheckCurrentPassword -> TODO()
-            is SettingsActions.EnterCurrentPassword -> TODO()
+            SettingsActions.CheckCurrentPassword -> checkCurrentPassword()
+            is SettingsActions.EnterCurrentPassword -> enteredCurrentPassword(action.password)
         }
     }
 
@@ -81,7 +81,7 @@ class SettingsViewModel(
     private fun notificationChanged(status: Boolean, notifyType: NotificationsType) {
         Timber.d("updateSettingsModel ${_state.value}")
         viewModelScope.launch {
-            _state.value.data?.let { model ->
+            _state.value.data.let { model ->
                 model.alertsSectionData?.let { alert ->
                     when (notifyType) {
                         NotificationsType.SMS -> alert.isSMS = status
@@ -113,8 +113,8 @@ class SettingsViewModel(
         replyEmail: String,
     ) {
         var data = _state.value.data
-        data?.let {
-            data = data?.copy(
+        data.let {
+            data = data.copy(
                 contactSupportSectionData = ContactSupportSectionData(
                     issueTheme = issueTheme,
                     issueDescription = issueDescription,
@@ -132,18 +132,42 @@ class SettingsViewModel(
         goBack()
     }
 
-    private fun checkCurrentPassword() {
-        _state.value.data?.changePasswordSectionData?.let { data ->
+    private fun enteredCurrentPassword(password: String) {
+        var data = _state.value.data
+        data = data.copy(
+            changePasswordSectionData = ChangePasswordSectionData(
+                currentPassword = password,
+                error = ""
+            )
+        )
+        _state.value = _state.value.copy(data = data)
+    }
 
+    private fun checkCurrentPassword() {
+        _state.value.data.changePasswordSectionData?.let { data ->
             viewModelScope.launch {
                 kotlin.runCatching {
                     checkCurrentPasswordUseCase.checkPassword(data.currentPassword)
                 }
-                    .onSuccess { }
-                    .onFailure { }
+                    .onSuccess {
+                        if (it)
+                            _state.value =
+                                _state.value.copy(settingsType = SettingsType.CREATE_PASSWORD)
+                        else {
+                            var setModel = _state.value.data
+                            var section = setModel.changePasswordSectionData
+                            section =
+                                section?.copy(error = "The password is incorrect. Please try one more time or Restore your current password.")
+
+                            setModel = setModel.copy(changePasswordSectionData = section)
+                            _state.value = _state.value.copy(data = setModel)
+                        }
+                    }
+                    .onFailure {
+
+                    }
             }
         }
-
     }
 }
 

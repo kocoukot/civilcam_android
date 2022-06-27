@@ -6,5 +6,5 @@ data class SettingsState(
     val isLoading: Boolean = false,
     val errorText: String = "",
     val settingsType: SettingsType = SettingsType.MAIN,
-    val data: SettingsModel? = null,
+    val data: SettingsModel = SettingsModel(),
 ) : ComposeFragmentState

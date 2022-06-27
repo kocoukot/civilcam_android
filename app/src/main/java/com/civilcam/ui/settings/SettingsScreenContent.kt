@@ -96,7 +96,7 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 
                 SettingsType.ALERTS -> {
 
-                    state.value.data?.alertsSectionData?.let { settingsAlertsSectionData ->
+                    state.value.data.alertsSectionData?.let { settingsAlertsSectionData ->
                         AlertsSettingsContent(settingsAlertsSectionData) { isSwitched, type ->
                             viewModel.setInputActions(
                                 SettingsActions.ClickAlertSwitch(
@@ -114,6 +114,7 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
                         ""
                     ) {
                         isActionActive = it.isNotEmpty()
+                        viewModel.setInputActions(SettingsActions.EnterCurrentPassword(it))
                     }
                 }
 
@@ -193,6 +194,7 @@ private fun setAction(viewModel: SettingsViewModel, settingsType: SettingsType) 
     when (settingsType) {
         SettingsType.LANGUAGE -> viewModel.setInputActions(SettingsActions.ClickSaveLanguage)
         SettingsType.CONTACT_SUPPORT -> viewModel.setInputActions(SettingsActions.ClickSendToSupport)
+        SettingsType.CHANGE_PASSWORD -> viewModel.setInputActions(SettingsActions.CheckCurrentPassword)
         else -> {
 
         }

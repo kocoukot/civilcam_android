@@ -29,6 +29,7 @@ fun ChangePasswordSettingsContent(
         Divider(color = CCTheme.colors.lightGray, modifier = Modifier.height(30.dp))
 
         PasswordField(
+            text = text,
             name = stringResource(id = R.string.settings_password_label),
             placeholder = stringResource(id = R.string.settings_password_placeholder),
             isReversed = true,

@@ -85,7 +85,7 @@ val alertsRootModule = module {
 
 val profileModule = module {
 
-	viewModel { SettingsViewModel() }
+	viewModel { SettingsViewModel(get()) }
 
 }
 

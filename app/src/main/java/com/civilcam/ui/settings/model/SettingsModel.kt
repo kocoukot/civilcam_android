@@ -3,7 +3,7 @@ package com.civilcam.ui.settings.model
 data class SettingsModel(
     val alertsSectionData: SettingsAlertsSectionData? = null,
     val contactSupportSectionData: ContactSupportSectionData? = null,
-    val changePasswordSectionData: ChangePasswordSectionData? = null
+    var changePasswordSectionData: ChangePasswordSectionData? = null
 
 )
 
@@ -22,4 +22,5 @@ data class ContactSupportSectionData(
 data class ChangePasswordSectionData(
     val currentPassword: String = "",
     val newPassword: String = "",
+    val error: String? = ""
 )
