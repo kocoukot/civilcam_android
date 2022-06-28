@@ -26,6 +26,7 @@ class LoginFragment : Fragment() {
 				LoginRoute.GoLogin -> {}
 				LoginRoute.GoRegister -> navController.navigate(R.id.createAccountFragment)
 				LoginRoute.GoReset -> navController.navigate(R.id.resetPasswordFragment)
+				LoginRoute.GoBack -> navController.popBackStack()
 			}
 		}
 		

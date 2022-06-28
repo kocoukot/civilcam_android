@@ -17,6 +17,7 @@ class LoginViewModel : ComposeViewModel<LoginState, LoginRoute, LoginActions>() 
 			LoginActions.ClickLogin -> goLogin()
 			LoginActions.ClickRegister -> goRegister()
 			LoginActions.ClickReset -> goReset()
+			LoginActions.ClickBack -> goBack()
 			is LoginActions.EnterInputData -> {
 				when (action.dataType) {
 					InputDataType.EMAIL -> emailEntered(action.data)
@@ -32,6 +33,10 @@ class LoginViewModel : ComposeViewModel<LoginState, LoginRoute, LoginActions>() 
 	
 	private fun passwordEntered(password: String) {
 		_state.value = _state.value.copy(password = password)
+	}
+	
+	private fun goBack() {
+		_steps.value = LoginRoute.GoBack
 	}
 	
 	private fun goLogin() {

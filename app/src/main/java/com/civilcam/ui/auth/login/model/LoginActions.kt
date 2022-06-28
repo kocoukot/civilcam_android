@@ -7,5 +7,6 @@ sealed class LoginActions : ComposeFragmentActions {
 	object ClickReset : LoginActions()
 	object ClickLogin : LoginActions()
 	object ClickRegister : LoginActions()
+	object ClickBack : LoginActions()
 	data class EnterInputData(val dataType: InputDataType, val data: String) : LoginActions()
 }

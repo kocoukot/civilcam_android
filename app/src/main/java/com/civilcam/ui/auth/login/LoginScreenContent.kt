@@ -22,6 +22,8 @@ import com.civilcam.ui.auth.create.SocialImage
 import com.civilcam.ui.auth.create.model.InputDataType
 import com.civilcam.ui.auth.login.model.LoginActions
 import com.civilcam.ui.common.compose.*
+import com.civilcam.ui.common.compose.inputs.InputField
+import com.civilcam.ui.common.compose.inputs.PasswordField
 
 
 @Composable
@@ -36,7 +38,11 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 			Column {
 				TopAppBarContent(
 					title = stringResource(id = R.string.log_in),
-					navigationAction = {},
+					navigationAction = {
+						viewModel.setInputActions(
+							LoginActions.ClickBack
+						)
+					}
 				)
 			}
 		}

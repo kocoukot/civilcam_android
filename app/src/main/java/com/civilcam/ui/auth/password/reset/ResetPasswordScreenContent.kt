@@ -20,8 +20,8 @@ import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.create.model.InputDataType
 import com.civilcam.ui.auth.password.reset.model.ResetActions
 import com.civilcam.ui.common.compose.ComposeButton
-import com.civilcam.ui.common.compose.InputField
 import com.civilcam.ui.common.compose.TopAppBarContent
+import com.civilcam.ui.common.compose.inputs.InputField
 
 @Composable
 fun ResetPasswordScreenContent(viewModel: ResetPasswordViewModel) {

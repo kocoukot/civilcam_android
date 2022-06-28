@@ -6,4 +6,5 @@ sealed class LoginRoute : ComposeFragmentRoute {
 	object GoLogin : LoginRoute()
 	object GoReset : LoginRoute()
 	object GoRegister : LoginRoute()
+	object GoBack : LoginRoute()
 }
