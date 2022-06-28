@@ -21,6 +21,8 @@ import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.create.SocialImage
 import com.civilcam.ui.auth.create.model.InputDataType
 import com.civilcam.ui.auth.login.model.LoginActions
+import com.civilcam.ui.common.compose.BackButton
+import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.common.compose.inputs.InputField
 import com.civilcam.ui.common.compose.inputs.PasswordField
@@ -37,13 +39,13 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 		topBar = {
 			Column {
 				TopAppBarContent(
-					title = stringResource(id = R.string.log_in),
-					navigationAction = {
-						viewModel.setInputActions(
-							LoginActions.ClickBack
-						)
-					}
-				)
+                    title = stringResource(id = R.string.log_in),
+                    navigationItem = {
+                        BackButton {
+                            viewModel.setInputActions(LoginActions.ClickGoBack)
+                        }
+                    },
+                )
 			}
 		}
 	
@@ -57,9 +59,9 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 				.verticalScroll(rememberScrollState()),
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
-			
+
 			Spacer(modifier = Modifier.height(12.dp))
-			
+
 			InputField(
 				title = stringResource(id = R.string.create_account_email_label),
 				text = state.value.email,
@@ -76,9 +78,9 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 					)
 				)
 			}
-			
+
 			Spacer(modifier = Modifier.height(16.dp))
-			
+
 			PasswordField(
 				name = stringResource(id = R.string.password),
 				text = state.value.password,
@@ -92,9 +94,9 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 					)
 				}
 			)
-			
+
 			Spacer(modifier = Modifier.height(8.dp))
-			
+
 			Row(
 				modifier = Modifier
 					.fillMaxWidth(),
@@ -111,9 +113,9 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 					}
 				)
 			}
-			
+
 			Spacer(modifier = Modifier.weight(1f))
-			
+
 			ComposeButton(
 				title = stringResource(id = R.string.log_in),
 				Modifier
@@ -126,9 +128,9 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 					)
 				}
 			)
-			
+
 			Spacer(modifier = Modifier.height(24.dp))
-			
+
 			Row(
 				horizontalArrangement = Arrangement.Center,
 				modifier = Modifier.fillMaxWidth()
@@ -145,9 +147,9 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 					)
 				)
 			}
-			
+
 			Spacer(modifier = Modifier.height(16.dp))
-			
+
 			Row(
 				horizontalArrangement = Arrangement.Center,
 				modifier = Modifier.fillMaxWidth(),
@@ -169,9 +171,9 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 					}
 				)
 			}
-			
+
 			Spacer(modifier = Modifier.height(16.dp))
-			
+
 		}
 	}
 }

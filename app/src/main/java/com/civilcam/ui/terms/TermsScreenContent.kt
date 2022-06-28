@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.TermsType
+import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.DividerLightGray
 import com.civilcam.ui.common.compose.TopAppBarContent
@@ -33,8 +34,10 @@ fun TermsScreenContent(viewModel: TermsViewModel) {
                 TopAppBarContent(
                     title = stringResource(id = R.string.terms_conditions_title),
                     titleSize = 16,
-                    navigationAction = {
-                        viewModel.setInputActions(TermsActions.ClickGoBack)
+                    navigationItem = {
+                        BackButton {
+                            viewModel.setInputActions(TermsActions.ClickGoBack)
+                        }
                     },
                 )
                 DividerLightGray()

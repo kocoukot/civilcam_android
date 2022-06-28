@@ -121,4 +121,15 @@
     <string name="invite_by_number_title">Invite by number</string>
     <string name="invite_by_number_hint">Send an invite to the number that is not on your contact list</string>
     <string name="invite_by_number_sent">Invite has been sent to</string>
+
+    <string name="network_main_on_guard">On guard</string>
+    <string name="network_main_guardians">Guardians</string>
+    <string name="network_main_on_guard_list_is_empty">Your “On guard” list is empty</string>
+    <string name="network_main_guardians_list_is_empty">Your “Guardians” list is empty</string>
+    <string name="network_main_requests">Requests</string>
+    <string name="network_main_new_requests">You have new requests</string>
+    <string name="network_main_pending">Pending</string>
+    <string name="network_main_declined">Declined</string>
+    <string name="network_main_help_me">Help me!</string>
+    <string name="network_main_safe">Safe</string>
 </resources>

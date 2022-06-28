@@ -14,6 +14,7 @@ import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.alerts.AlertType
 import com.civilcam.ui.alerts.history.content.AlertHistoryTabRow
 import com.civilcam.ui.alerts.history.model.AlertHistoryActions
+import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.CircleUserAvatar
 import com.civilcam.ui.common.compose.InformationRow
 import com.civilcam.ui.common.compose.TopAppBarContent
@@ -30,7 +31,12 @@ fun AlertsListScreenContent(viewModel: AlertsHistoryViewModel) {
         backgroundColor = CCTheme.colors.lightGray,
         topBar = {
             TopAppBarContent(title = stringResource(id = R.string.alerts_history_title),
-                navigationAction = { viewModel.setInputActions(AlertHistoryActions.ClickGoBack) })
+                navigationItem = {
+                    BackButton {
+                        viewModel.setInputActions(AlertHistoryActions.ClickGoBack)
+                    }
+                }
+            )
         },
 
         modifier = Modifier.fillMaxSize()

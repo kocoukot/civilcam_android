@@ -30,19 +30,22 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
         topBar = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 TopAppBarContent(
-                    color = CCTheme.colors.lightGray,
+                    backgroundColor = CCTheme.colors.lightGray,
                     title = stringResource(id = R.string.add_from_contacts_title),
-                    navigationAction = {
-                        viewModel.setInputActions(ContactsActions.ClickGoBack)
+                    navigationItem = {
+                        BackButton {
+                            viewModel.setInputActions(ContactsActions.ClickGoBack)
+                        }
                     },
-                    actionTitle = stringResource(id = R.string.add_from_contacts_invite_by),
-                    actionAction = {
-                        viewModel.setInputActions(ContactsActions.ClickGoInviteByNumber)
+                    actionItem = {
+                        TextActionButton(actionTitle = stringResource(id = R.string.add_from_contacts_invite_by)) {
+                            viewModel.setInputActions(ContactsActions.ClickGoInviteByNumber)
+                        }
                     }
                 )
-                SearchInputField {
-                    viewModel.setInputActions(ContactsActions.ClickSearch(it))
-                }
+//                SearchInputField {
+//                    viewModel.setInputActions(ContactsActions.ClickSearch(it))
+//                }
                 Spacer(modifier = Modifier.height(8.dp))
                 Divider(color = CCTheme.colors.grayThree)
             }

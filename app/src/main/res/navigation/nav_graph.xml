@@ -36,10 +36,6 @@
         android:label="ProfileSetupFragment" />
 
     <fragment
-        android:id="@+id/network_root"
-        android:name="com.civilcam.ui.network.NetworkFragment"
-        android:label="NetworkFragment" />
-    <fragment
         android:id="@+id/emergency_root"
         android:name="com.civilcam.ui.emergency.EmergencyFragment"
         android:label="EmergencyFragment" />
@@ -88,6 +84,7 @@
             android:id="@+id/action_contactsFragment_to_inviteByNumberFragment"
             app:destination="@id/inviteByNumberFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/inviteByNumberFragment"
         android:name="com.civilcam.ui.network.inviteByNumber.InviteByNumberFragment"
@@ -107,6 +104,14 @@
         android:id="@+id/verificationFragment"
         android:name="com.civilcam.ui.verification.VerificationFragment"
         android:label="VerificationFragment" />
+    <fragment
+        android:id="@+id/network_root"
+        android:name="com.civilcam.ui.network.main.NetworkMainFragment"
+        android:label="NetworkMainFragment">
+        <action
+            android:id="@+id/action_network_root_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/resetPasswordFragment"

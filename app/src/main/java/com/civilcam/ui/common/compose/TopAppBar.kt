@@ -1,36 +1,31 @@
 package com.civilcam.ui.common.compose
 
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 
 @Composable
 fun TopAppBarContent(
     title: String,
     titleSize: Int = 20,
-    color: Color = CCTheme.colors.white,
-    actionTitle: String = "",
-    isActionEnabled: Boolean = true,
-    navigationAction: () -> Unit,
-    actionAction: (() -> Unit)? = null
+    backgroundColor: Color = CCTheme.colors.white,
+    actionItem: @Composable (() -> Unit)? = null,
+    navigationItem: @Composable (() -> Unit)
 ) {
 
     TopAppBar(
-        backgroundColor = color,
+        backgroundColor = backgroundColor,
         elevation = 0.dp,
         title = {
             Text(
@@ -43,10 +38,18 @@ fun TopAppBarContent(
             )
         },
         navigationIcon = {
-            BackButton(navigationAction::invoke)
+            Row {
+                Spacer(modifier = Modifier.width(8.dp))
+                navigationItem()
+            }
         },
         actions = {
-            TextActionButton(actionTitle, isEnabled = isActionEnabled) { actionAction?.invoke() }
+            if (actionItem != null) {
+                Row {
+                    actionItem()
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+            }
         }
     )
 }
@@ -56,31 +59,15 @@ fun TopAppBarContent(
 private fun TopAppBarContentPreview() {
     TopAppBarContent(
         title = "Terms & Conditions",
-        actionTitle = "Contacts",
-        navigationAction = {},
-        actionAction = {},
+        navigationItem = {
+            AvatarButton {
+
+            }
+        },
+        actionItem = {
+            TextActionButton(actionTitle = "Contacts") {
+
+            }
+        },
     )
 }
-
-@Composable
-fun BackButton(navigationAction: () -> Unit) {
-    IconButton(
-        modifier = Modifier,
-        onClick = navigationAction
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Icon(
-                painter = painterResource(id = R.drawable.ic_back_navigation),
-                contentDescription = null,
-                tint = CCTheme.colors.black
-            )
-
-        }
-    }
-}
-
-
-

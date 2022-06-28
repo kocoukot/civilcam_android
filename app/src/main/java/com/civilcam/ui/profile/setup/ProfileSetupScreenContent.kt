@@ -15,6 +15,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.DividerLightGray
 import com.civilcam.ui.common.compose.TopAppBarContent
@@ -68,8 +69,10 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
             Column {
                 TopAppBarContent(
                     title = stringResource(id = R.string.profile_setup_title),
-                    navigationAction = {
-                        viewModel.setInputActions(ProfileSetupActions.ClickGoBack)
+                    navigationItem = {
+                        BackButton {
+                            viewModel.setInputActions(ProfileSetupActions.ClickGoBack)
+                        }
                     },
                 )
                 DividerLightGray()

@@ -22,8 +22,10 @@ import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.ext.formatToPhoneNumber
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.common.compose.PhoneInputField
+import com.civilcam.ui.common.compose.BackButton
+import com.civilcam.ui.common.compose.TextActionButton
 import com.civilcam.ui.common.compose.TopAppBarContent
+import com.civilcam.ui.common.compose.inputs.PhoneInputField
 import com.civilcam.ui.network.inviteByNumber.model.InviteByNumberActions
 
 @Composable
@@ -44,14 +46,20 @@ fun InviteByNumberScreenContent(viewModel: InviteByNumberViewModel) {
         topBar = {
             TopAppBarContent(
                 title = stringResource(id = R.string.invite_by_number_title),
-                actionTitle = stringResource(id = R.string.invite_text),
-                isActionEnabled = isPhoneNumber,
-                navigationAction = {
-                    viewModel.setInputActions(InviteByNumberActions.ClickGoBack)
+                actionItem = {
+                    TextActionButton(
+                        actionTitle = stringResource(id = R.string.invite_text),
+                        isEnabled = isPhoneNumber
+                    ) {
+                        viewModel.setInputActions(InviteByNumberActions.SendInvite(number))
+                    }
                 },
-                actionAction = {
-                    viewModel.setInputActions(InviteByNumberActions.SendInvite(number))
-                })
+                navigationItem = {
+                    BackButton {
+                        viewModel.setInputActions(InviteByNumberActions.ClickGoBack)
+                    }
+                },
+            )
         }) {
 
         Column(
