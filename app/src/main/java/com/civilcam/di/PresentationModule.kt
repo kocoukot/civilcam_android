@@ -67,7 +67,7 @@ val networkRootModule = module {
 
     viewModel { InviteByNumberViewModel() }
 
-    viewModel { NetworkMainViewModel() }
+    viewModel { NetworkMainViewModel(get(), get()) }
 
 
 }

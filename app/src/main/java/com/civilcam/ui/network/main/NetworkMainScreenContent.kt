@@ -1,15 +1,17 @@
 package com.civilcam.ui.network.main
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.FloatingActionButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -17,13 +19,14 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.guard.NetworkType
-import com.civilcam.ui.common.compose.AvatarButton
-import com.civilcam.ui.common.compose.IconActionButton
-import com.civilcam.ui.common.compose.TopAppBarContent
-import com.civilcam.ui.common.compose.inputs.EmptyListText
+import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.common.compose.inputs.SearchInputField
+import com.civilcam.ui.network.main.content.GuardsMainSection
 import com.civilcam.ui.network.main.content.NetworkTabRow
+import com.civilcam.ui.network.main.content.RequestsScreenSection
+import com.civilcam.ui.network.main.model.GuardianItem
 import com.civilcam.ui.network.main.model.NetworkMainActions
+import com.civilcam.ui.network.main.model.NetworkScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -45,32 +48,60 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                     .fillMaxWidth()
                     .background(CCTheme.colors.white)
             ) {
-                TopAppBarContent(
-                    title = stringResource(id = R.string.navigation_bar_network),
-                    navigationItem = {
-                        AvatarButton {
-                            viewModel.setInputActions(NetworkMainActions.ClickGoMyProfile)
+                AnimatedContent(targetState = state.value.screenState) { screenState ->
+                    Column {
+                        TopAppBarContent(
+                            title = when (screenState) {
+                                NetworkScreen.MAIN -> stringResource(id = R.string.navigation_bar_network)
+                                NetworkScreen.REQUESTS -> stringResource(id = R.string.network_main_requests)
+                            },
+                            navigationItem = {
+                                when (screenState) {
+                                    NetworkScreen.MAIN -> AvatarButton {
+                                        viewModel.setInputActions(NetworkMainActions.ClickGoMyProfile)
+                                    }
+                                    NetworkScreen.REQUESTS -> BackButton {
+                                        viewModel.setInputActions(NetworkMainActions.ClickGoBack)
+                                    }
+                                }
+
+
+                            },
+                            actionItem = {
+                                if (screenState == NetworkScreen.MAIN) {
+                                    IconActionButton(R.drawable.ic_settings) {
+                                        viewModel.setInputActions(NetworkMainActions.ClickGoSettings)
+                                    }
+                                }
+                            }
+                        )
+
+                        when (screenState) {
+                            NetworkScreen.MAIN -> {
+                                SearchInputField(isEnable = false) {
+
+
+                                }
+
+                                NetworkTabRow(
+                                    tabPage
+                                ) {
+                                    tabPage = it
+                                    viewModel.setInputActions(
+                                        NetworkMainActions.ClickNetworkTypeChange(
+                                            it
+                                        )
+                                    )
+                                }
+                            }
+                            NetworkScreen.REQUESTS -> {}
                         }
-                    },
-                    actionItem = {
-                        IconActionButton(R.drawable.ic_settings) {
-                            viewModel.setInputActions(NetworkMainActions.ClickGoSettings)
-                        }
+
+                        if (!(state.value.data?.guardiansList?.isNotEmpty() == true ||
+                                    state.value.data?.requestsList?.isNotEmpty() == true)
+                        ) RowDivider()
                     }
-                )
-
-                SearchInputField(isEnable = false) {
-
                 }
-
-                NetworkTabRow(
-                    tabPage
-                ) {
-                    tabPage = it
-                    viewModel.setInputActions(NetworkMainActions.ClickNetworkTypeChange(it))
-                }
-
-                Divider(color = CCTheme.colors.grayThree)
             }
         },
         floatingActionButton = {
@@ -95,26 +126,31 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                     )
                 }
             }
-//            if (tabPage == NetworkType.GUARDIANS)
-
         }
     ) {
+        state.value.data?.let { screenData ->
+            Crossfade(targetState = state.value.screenState) { screenState ->
+                when (screenState) {
+                    NetworkScreen.MAIN -> {
+                        GuardsMainSection(
+                            screenData,
+                            tabPage = tabPage
+                        ) {
+                            viewModel.setInputActions(NetworkMainActions.ClickGoRequests)
+                        }
 
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-
-            EmptyListText(
-                stringResource(
-                    id =
-                    when (tabPage) {
-                        NetworkType.ON_GUARD -> R.string.network_main_on_guard_list_is_empty
-                        NetworkType.GUARDIANS -> R.string.network_main_guardians_list_is_empty
                     }
-                )
-            )
+
+
+                    NetworkScreen.REQUESTS -> {
+                        RequestsScreenSection(screenData.requestsList as List<GuardianItem>) { request, isAccepted ->
+
+                        }
+                    }
+
+                }
+            }
+
         }
     }
 }
- 

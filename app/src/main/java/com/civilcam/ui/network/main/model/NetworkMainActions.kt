@@ -8,12 +8,14 @@ sealed class NetworkMainActions : ComposeFragmentActions {
     object ClickGoSettings : NetworkMainActions()
 
 
-    data class ClickNetworkTypeChange(val alertType: NetworkType) : NetworkMainActions()
+    data class ClickNetworkTypeChange(val networkType: NetworkType) : NetworkMainActions()
 
     object ClickAddGuardian : NetworkMainActions()
 
-    object ClickRequests : NetworkMainActions()
+    object ClickGoRequests : NetworkMainActions()
 
     data class ClickUser(val userId: Int) : NetworkMainActions()
+
+    object ClickGoBack : NetworkMainActions()
 
 }

@@ -95,10 +95,11 @@ fun TextActionButton(
 @Composable
 fun IconActionButton(
     buttonIcon: Int,
+    modifier: Modifier = Modifier,
     tint: Color = CCTheme.colors.primaryRed,
     buttonClick: () -> Unit
 ) {
-    IconButton(onClick = buttonClick) {
+    IconButton(onClick = buttonClick, modifier = modifier) {
         Icon(
             painter = painterResource(id = buttonIcon),
             contentDescription = null,

@@ -1,6 +1,5 @@
 package com.civilcam.ui.network.contacts
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -62,15 +61,7 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
                     itemsIndexed(data) { index, contact ->
                         when (contact) {
                             is LetterContactItem -> Box {
-                                Text(
-                                    contact.letter,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .background(CCTheme.colors.lightGray)
-                                        .padding(vertical = 8.dp, horizontal = 16.dp),
-                                    style = CCTheme.typography.common_text_small_medium,
-                                    color = CCTheme.colors.black
-                                )
+                                HeaderTitleText(contact.letter)
                             }
 
 

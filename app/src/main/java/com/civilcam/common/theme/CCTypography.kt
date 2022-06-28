@@ -85,4 +85,13 @@ data class CCTypography internal constructor(
         fontWeight = FontWeight.W500,
         letterSpacing = (-0.01).sp,
     ),
+
+    val notification: TextStyle = TextStyle(
+        fontSize = 12.sp,
+        lineHeight = 14.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight.W400,
+        color = Color(0xFFFFFFFF),
+        letterSpacing = (-0.5).sp,
+    ),
 )

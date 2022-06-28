@@ -8,6 +8,8 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.civilcam.R
+import com.civilcam.common.ext.setPan
+import com.civilcam.common.ext.setResize
 import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
@@ -41,5 +43,13 @@ class NetworkMainFragment : Fragment(), SupportBottomBar {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        setPan()
+    }
 
+    override fun onStop() {
+        super.onStop()
+        setResize()
+    }
 }

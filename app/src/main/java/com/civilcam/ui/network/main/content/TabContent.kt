@@ -35,7 +35,9 @@ fun NetworkTabRow(
     }
 
 
-    TabRow(selectedTabIndex = tabPage.ordinal,
+    TabRow(
+        selectedTabIndex = tabPage.ordinal,
+        divider = {},
         modifier = Modifier,
         backgroundColor = CCTheme.colors.white,
         indicator = { tabPositions ->

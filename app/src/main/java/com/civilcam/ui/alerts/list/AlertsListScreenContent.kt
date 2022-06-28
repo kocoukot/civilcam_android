@@ -59,15 +59,6 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                     },
                 )
 
-
-//                Row(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(start = 16.dp, end = 8.dp, top = 8.dp),
-//                    verticalAlignment = Alignment.CenterVertically,
-//                    horizontalArrangement = Arrangement.SpaceBetween
-//                )
-
                 Divider(color = CCTheme.colors.grayThree)
             }
         },
