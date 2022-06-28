@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalPagerApi::class)
-
 package com.civilcam.ui.profile.setup
 
 import androidx.compose.animation.animateColorAsState
@@ -16,14 +14,17 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.common.compose.*
+import com.civilcam.ui.common.compose.ComposeButton
+import com.civilcam.ui.common.compose.DividerLightGray
+import com.civilcam.ui.common.compose.TopAppBarContent
+import com.civilcam.ui.common.compose.inputs.InputField
+import com.civilcam.ui.common.compose.inputs.PhoneInputField
 import com.civilcam.ui.profile.setup.content.AvatarContent
 import com.civilcam.ui.profile.setup.content.CalendarIcon
 import com.civilcam.ui.profile.setup.content.DatePickerContent
 import com.civilcam.ui.profile.setup.model.InputDataType
 import com.civilcam.ui.profile.setup.model.ProfileSetupActions
 import com.civilcam.utils.DateUtils
-import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -34,6 +35,7 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
     val state = viewModel.state.collectAsState()
     val listState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
+    var dateOfBirth by remember { mutableStateOf("") }
 
 
 
@@ -82,72 +84,71 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .imePadding()
                     .verticalScroll(listState)
                     .padding(horizontal = 16.dp)
             ) {
 
-                Column {
-                    Spacer(modifier = Modifier.height(12.dp))
-                    val avatar = state.value.data?.profileImage
-                    AvatarContent(avatar) {
-                        viewModel.setInputActions(ProfileSetupActions.ClickAvatarSelect)
-                    }
-
-
-                    InputField(
-                        title = stringResource(id = R.string.profile_setup_first_name_label),
-                        placeHolder = stringResource(id = R.string.profile_setup_first_name_placeholder)
-                    ) {
-                        viewModel.setInputActions(
-                            ProfileSetupActions.EnterInputData(
-                                InputDataType.FIRST_NAME,
-                                it
-                            )
-                        )
-                    }
-
-                    InputField(
-                        title = stringResource(id = R.string.profile_setup_last_name_label),
-                        placeHolder = stringResource(id = R.string.profile_setup_last_name_placeholder)
-                    ) {
-                        viewModel.setInputActions(
-                            ProfileSetupActions.EnterInputData(
-                                InputDataType.FIRST_NAME,
-                                it
-                            )
-                        )
-                    }
-
-
-                    var dateOfBirth by remember { mutableStateOf("") }
-                    dateOfBirth = state.value.birthDate?.let {
-                        DateUtils.dateOfBirthFormat(it)
-                    } ?: ""
-                    Timber.d("getDateFromCalendar dateOfBirth $dateOfBirth ")
-
-                    val calendarColor =
-                        animateColorAsState(targetValue = if (dateOfBirth.isEmpty()) CCTheme.colors.grayOne else CCTheme.colors.primaryRed)
-                    InputField(
-                        isEnable = false,
-                        text = dateOfBirth,
-                        trailingIcon = { CalendarIcon(calendarColor.value) },
-                        title = stringResource(id = R.string.profile_setup_date_of_birth_label),
-                        placeHolder = stringResource(id = R.string.profile_setup_date_of_birth_placeholder),
-                        onTextClicked = {
-                            viewModel.setInputActions(ProfileSetupActions.ClickDateSelect)
-                        },
-                        onValueChanged = {},
-                    )
-
-                    InputField(
-                        isEnable = false,
-                        title = stringResource(id = R.string.profile_setup_address_label),
-                        placeHolder = stringResource(id = R.string.profile_setup_address_placeholder)
-                    ) {
-
-                    }
+                Spacer(modifier = Modifier.height(12.dp))
+                val avatar = state.value.data?.profileImage
+                AvatarContent(avatar) {
+                    viewModel.setInputActions(ProfileSetupActions.ClickAvatarSelect)
                 }
+
+
+                InputField(
+                    title = stringResource(id = R.string.profile_setup_first_name_label),
+                    placeHolder = stringResource(id = R.string.profile_setup_first_name_placeholder)
+                ) {
+                    viewModel.setInputActions(
+                        ProfileSetupActions.EnterInputData(
+                            InputDataType.FIRST_NAME,
+                            it
+                        )
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                InputField(
+                    title = stringResource(id = R.string.profile_setup_last_name_label),
+                    placeHolder = stringResource(id = R.string.profile_setup_last_name_placeholder)
+                ) {
+                    viewModel.setInputActions(
+                        ProfileSetupActions.EnterInputData(
+                            InputDataType.FIRST_NAME,
+                            it
+                        )
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+
+
+                dateOfBirth = state.value.birthDate?.let {
+                    DateUtils.dateOfBirthFormat(it)
+                } ?: ""
+                Timber.d("getDateFromCalendar dateOfBirth $dateOfBirth ")
+
+                val calendarColor =
+                    animateColorAsState(targetValue = if (dateOfBirth.isEmpty()) CCTheme.colors.grayOne else CCTheme.colors.primaryRed)
+                InputField(
+                    isEnable = false,
+                    text = dateOfBirth,
+                    trailingIcon = { CalendarIcon(calendarColor.value) },
+                    title = stringResource(id = R.string.profile_setup_date_of_birth_label),
+                    placeHolder = stringResource(id = R.string.profile_setup_date_of_birth_placeholder),
+                    onTextClicked = {
+                        viewModel.setInputActions(ProfileSetupActions.ClickDateSelect)
+                    },
+                    onValueChanged = {},
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                InputField(
+                    isEnable = false,
+                    title = stringResource(id = R.string.profile_setup_address_label),
+                    placeHolder = stringResource(id = R.string.profile_setup_address_placeholder)
+                ) {
+
+                }
+                Spacer(modifier = Modifier.height(16.dp))
 
                 PhoneInputField(
                     onValueChanged = {
@@ -164,7 +165,7 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
                         }
                     }
                 )
-                Spacer(modifier = Modifier.height(70.dp))
+                Spacer(modifier = Modifier.height(60.dp))
             }
             Box(
                 modifier = Modifier

@@ -1,7 +1,9 @@
 package com.civilcam.ui.auth.login
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -13,8 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.login.model.LoginActions
-import com.civilcam.ui.common.compose.ComposeButton
-import com.civilcam.ui.common.compose.OtpCodeInputField
 import com.civilcam.ui.common.compose.TopAppBarContent
 
 

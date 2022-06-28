@@ -31,9 +31,9 @@ import com.civilcam.ui.auth.UpperCaseCheckStrategy
 import com.civilcam.ui.auth.create.model.CreateAccountActions
 import com.civilcam.ui.auth.create.model.InputDataType
 import com.civilcam.ui.common.compose.ComposeButton
-import com.civilcam.ui.common.compose.InputField
-import com.civilcam.ui.common.compose.PasswordField
 import com.civilcam.ui.common.compose.TopAppBarContent
+import com.civilcam.ui.common.compose.inputs.InputField
+import com.civilcam.ui.common.compose.inputs.PasswordField
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
