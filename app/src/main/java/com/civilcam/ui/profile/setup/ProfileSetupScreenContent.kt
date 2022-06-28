@@ -37,6 +37,7 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
     val listState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope()
     var dateOfBirth by remember { mutableStateOf("") }
+    val avatar = state.value.data?.profileImage
 
 
 
@@ -91,8 +92,7 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
                     .padding(horizontal = 16.dp)
             ) {
 
-                Spacer(modifier = Modifier.height(12.dp))
-                val avatar = state.value.data?.profileImage
+                Spacer(modifier = Modifier.height(32.dp))
                 AvatarContent(avatar) {
                     viewModel.setInputActions(ProfileSetupActions.ClickAvatarSelect)
                 }

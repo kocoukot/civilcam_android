@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.common.ext.setPan
 import com.civilcam.common.ext.setResize
+import com.civilcam.ui.MainActivity
 import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
@@ -45,6 +46,7 @@ class NetworkMainFragment : Fragment(), SupportBottomBar {
 
     override fun onResume() {
         super.onResume()
+        (activity as MainActivity).showBottomNavBar(true)
         setPan()
     }
 

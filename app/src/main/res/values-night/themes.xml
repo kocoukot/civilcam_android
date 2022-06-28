@@ -36,6 +36,7 @@
 
     <style name="NavBarTextActive">
         <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:fontWeight">500</item>
 

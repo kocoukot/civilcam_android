@@ -54,20 +54,23 @@ fun InputField(
 ) {
 	val coroutineScope = rememberCoroutineScope()
 	val viewRequester = BringIntoViewRequester()
-	Timber.d("getDateFromCalendar $text")
+	var hasFocus by remember { mutableStateOf(false) }
 	var inputText by remember { mutableStateOf(text) }
-	val errorColorState by
-	animateColorAsState(targetValue = if (hasError && inputText.isNotEmpty()) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
+	if (text.isNotEmpty()) inputText = text
+
+	val titleColorState by
+	animateColorAsState(targetValue = if (hasError && inputText.isNotEmpty()) CCTheme.colors.primaryRed else if (hasFocus) CCTheme.colors.black else CCTheme.colors.grayOne)
 	val errorBorderState by
 	animateColorAsState(targetValue = if (hasError && inputText.isNotEmpty()) CCTheme.colors.primaryRed else CCTheme.colors.lightGray)
 
-	if (text.isNotEmpty()) inputText = text
 	Column(
 		modifier = Modifier
 			.fillMaxWidth()
 			.background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
 			.bringIntoViewRequester(viewRequester)
 			.onFocusEvent {
+				Timber.d("hasFocus ${it.isFocused} $title")
+				hasFocus = it.isFocused
 				if (it.isFocused) {
 					coroutineScope.launch {
 						delay(400)
@@ -79,8 +82,8 @@ fun InputField(
 
 		Text(
 			title,
-			color = errorColorState,
 			style = CCTheme.typography.common_text_small_regular,
+			color = titleColorState,
 			modifier = Modifier
 				.padding(bottom = 8.dp)
 				.fillMaxWidth()
@@ -130,12 +133,7 @@ fun InputField(
 						Modifier
 							.weight(1f)
 					) {
-						if (inputText.isEmpty()) Text(
-							placeHolder,
-							modifier = Modifier,
-							style = CCTheme.typography.common_text_regular,
-							color = CCTheme.colors.grayOne
-						)
+						if (inputText.isEmpty()) PlaceholderText(placeHolder)
 						innerTextField()
 					}
 					if (trailingIcon != null) trailingIcon()
@@ -143,14 +141,7 @@ fun InputField(
 			}
 		)
 		AnimatedVisibility(visible = hasError && inputText.isNotEmpty()) {
-			Text(
-				errorMessage,
-				color = CCTheme.colors.primaryRed,
-				style = CCTheme.typography.common_text_small_regular,
-				modifier = Modifier
-					.padding(top = 8.dp)
-					.fillMaxWidth()
-			)
+			ErrorText(errorMessage)
 		}
 	}
 }
@@ -268,10 +259,7 @@ fun OtpCodeInputField(
 	}
 }
 
-@OptIn(
-	ExperimentalFoundationApi::class,
-	ExperimentalAnimationApi::class
-)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun PasswordField(
 	name: String,
@@ -287,8 +275,19 @@ fun PasswordField(
 	val viewRequester = BringIntoViewRequester()
 	val visibility: MutableState<Boolean> = remember { mutableStateOf(false) }
 	var inputText by remember { mutableStateOf(text) }
+	var hasFocus by remember { mutableStateOf(false) }
+
+
 	val errorColorState by
-	animateColorAsState(targetValue = if ((hasError && inputText.isNotEmpty()) || noMatch && inputText.isNotEmpty()) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
+	animateColorAsState(
+		targetValue =
+		if ((hasError && inputText.isNotEmpty()) || noMatch && inputText.isNotEmpty())
+			CCTheme.colors.primaryRed
+		else if (hasFocus)
+			CCTheme.colors.black
+		else CCTheme.colors.grayOne
+	)
+
 	val errorBorderState by
 	animateColorAsState(targetValue = if ((hasError && inputText.isNotEmpty()) || noMatch && inputText.isNotEmpty()) CCTheme.colors.primaryRed else CCTheme.colors.lightGray)
 
@@ -299,6 +298,7 @@ fun PasswordField(
 			.background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
 			.bringIntoViewRequester(viewRequester)
 			.onFocusEvent {
+				hasFocus = it.isFocused
 				if (it.isFocused) {
 					coroutineScope.launch {
 						delay(400)
@@ -378,27 +378,20 @@ fun PasswordField(
 		)
 
 		AnimatedVisibility(visible = isReEnter && inputText.isNotEmpty()) {
-			Text(
-				stringResource(id = R.string.password_no_match),
-				color = CCTheme.colors.primaryRed,
-				style = CCTheme.typography.common_text_small_regular,
-				modifier = Modifier
-					.padding(top = 8.dp)
-					.fillMaxWidth()
-			)
+			ErrorText(stringResource(id = R.string.password_no_match))
 		}
 	}
 }
 
 @Preview
 @Composable
-fun OtpCodeFieldPreview() {
+private fun OtpCodeFieldPreview() {
 	OtpCodeInputField(onValueChanged = {}, hasError = true)
 }
 
 @Preview
 @Composable
-fun PasswordInputFieldPreview() {
+private fun PasswordInputFieldPreview() {
 	PasswordField(
 		onValueChanged = {},
 		name = stringResource(id = R.string.password),
@@ -409,7 +402,7 @@ fun PasswordInputFieldPreview() {
 
 @Preview
 @Composable
-fun InputFieldPreview() {
+private fun InputFieldPreview() {
 	InputField(
 		"First name",
 		"Enter First Name",
