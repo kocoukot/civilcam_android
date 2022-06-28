@@ -35,9 +35,8 @@ class SettingsFragment : Fragment(), SupportBottomBar {
                 SettingsRoute.GoLanguageSelect -> {
                     navController.navigate(R.id.action_settingsFragment_to_languageSelectFragment)
                 }
-                is SettingsRoute.IsNavBarVisible -> (activity as MainActivity).showBottomNavBar(
-                    !route.isVisible
-                )
+                is SettingsRoute.IsNavBarVisible -> (activity as MainActivity)
+                    .showBottomNavBar(!route.isVisible)
 
             }
         }

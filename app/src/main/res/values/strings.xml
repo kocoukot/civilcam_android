@@ -166,6 +166,7 @@
     <string name="settings_password_title">Password</string>
     <string name="settings_password_label">Current password</string>
     <string name="settings_password_placeholder">Enter your current password</string>
+    <string name="settings_password_error_text">The password is incorrect. Please try one more time or Restore your current password.</string>
 
     <string name="settings_create_passoword_title">Create password</string>
 

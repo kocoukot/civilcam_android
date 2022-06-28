@@ -95,7 +95,6 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
                     }
 
                 SettingsType.ALERTS -> {
-
                     state.value.data.alertsSectionData?.let { settingsAlertsSectionData ->
                         AlertsSettingsContent(settingsAlertsSectionData) { isSwitched, type ->
                             viewModel.setInputActions(
@@ -108,19 +107,39 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
                     }
                 }
 
-//                SettingsType.SUBSCRIPTION -> TODO()
+                SettingsType.CREATE_PASSWORD -> {
+                    state.value.data.createPasswordSectionData.let { data ->
+                        isActionActive = data.isFilled
+                        CreatePasswordSettingsContent(
+                            data
+                        ) { type, meetCriteria, password ->
+                            isActionActive = data.isFilled
+
+                            viewModel.setInputActions(
+                                SettingsActions.NewPasswordEntered(
+                                    type,
+                                    meetCriteria,
+                                    password
+                                )
+                            )
+                        }
+                    }
+
+                }
+
                 SettingsType.CHANGE_PASSWORD -> {
-                    ChangePasswordSettingsContent(
-                        ""
-                    ) {
-                        isActionActive = it.isNotEmpty()
-                        viewModel.setInputActions(SettingsActions.EnterCurrentPassword(it))
+                    state.value.data.changePasswordSectionData?.let { data ->
+                        isActionActive =
+                            data.error.isNullOrEmpty() && data.currentPassword.isNotEmpty()
+                        ChangePasswordSettingsContent(
+                            data
+                        ) {
+                            viewModel.setInputActions(SettingsActions.EnterCurrentPassword(it))
+                        }
                     }
                 }
 
-                SettingsType.CREATE_PASSWORD -> {
 
-                }
                 SettingsType.LANGUAGE -> {
                     LanguageSettingsContent(
                         selectedLanguage
@@ -175,6 +194,9 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
                         },
                     )
                 }
+
+                //                SettingsType.SUBSCRIPTION -> TODO()
+
                 else -> {}
             }
         }
@@ -185,7 +207,7 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 @Composable
 private fun getActionTitle(settingsType: SettingsType) = when (settingsType) {
     SettingsType.CONTACT_SUPPORT -> stringResource(id = R.string.send_text)
-    SettingsType.LANGUAGE -> stringResource(id = R.string.save_text)
+    SettingsType.LANGUAGE, SettingsType.CREATE_PASSWORD -> stringResource(id = R.string.save_text)
     SettingsType.CHANGE_PASSWORD -> stringResource(id = R.string.continue_text)
     else -> ""
 }
@@ -195,9 +217,8 @@ private fun setAction(viewModel: SettingsViewModel, settingsType: SettingsType) 
         SettingsType.LANGUAGE -> viewModel.setInputActions(SettingsActions.ClickSaveLanguage)
         SettingsType.CONTACT_SUPPORT -> viewModel.setInputActions(SettingsActions.ClickSendToSupport)
         SettingsType.CHANGE_PASSWORD -> viewModel.setInputActions(SettingsActions.CheckCurrentPassword)
-        else -> {
-
-        }
+        SettingsType.CREATE_PASSWORD -> viewModel.setInputActions(SettingsActions.SaveNewPassword)
+        else -> {}
     }
 }
 

@@ -2,6 +2,7 @@ package com.civilcam.ui.settings.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentActions
 import com.civilcam.domain.model.settings.NotificationsType
+import com.civilcam.ui.auth.create.model.PasswordInputDataType
 
 sealed class SettingsActions : ComposeFragmentActions {
     object ClickGoBack : SettingsActions()
@@ -14,7 +15,7 @@ sealed class SettingsActions : ComposeFragmentActions {
         SettingsActions()
 
     object ClickSendToSupport : SettingsActions()
-    data class IsNavBarVisible(val isVisible: Boolean) : SettingsActions()
+    data class IsNavBarVisible(val hideNavBar: Boolean) : SettingsActions()
 
     data class EnterContactSupportInfo(
         val issue: String,
@@ -26,5 +27,14 @@ sealed class SettingsActions : ComposeFragmentActions {
     data class EnterCurrentPassword(val password: String) : SettingsActions()
 
     object CheckCurrentPassword : SettingsActions()
+
+    data class NewPasswordEntered(
+        val type: PasswordInputDataType,
+        val meetCriteria: Boolean,
+        val password: String
+    ) : SettingsActions()
+
+
+    object SaveNewPassword : SettingsActions()
 
 }
