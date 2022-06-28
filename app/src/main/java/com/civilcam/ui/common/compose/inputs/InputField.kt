@@ -46,6 +46,7 @@ fun InputField(
 	errorMessage: String = "",
 	isEnable: Boolean = true,
 	inputType: KeyboardType = KeyboardType.Text,
+	inputCapitalization: KeyboardCapitalization,
 	trailingIcon: @Composable (() -> Unit)? = null,
 	isReversed: Boolean = false,
 	onTextClicked: (() -> Unit)? = null,
@@ -111,7 +112,7 @@ fun InputField(
 
 			},
 			keyboardOptions = KeyboardOptions(
-				capitalization = KeyboardCapitalization.Sentences,
+				capitalization = inputCapitalization,
 				keyboardType = inputType
 			),
 			decorationBox = { innerTextField ->
@@ -333,7 +334,8 @@ fun PasswordField(
 				onValueChanged.invoke(inputText.trim())
 			},
 			keyboardOptions = KeyboardOptions(
-				keyboardType = KeyboardType.Password
+				keyboardType = KeyboardType.Password,
+				capitalization = KeyboardCapitalization.None
 			),
 			decorationBox = { innerTextField ->
 				Row(
@@ -413,7 +415,8 @@ fun InputFieldPreview() {
 		"Enter First Name",
 		onValueChanged = {},
 		hasError = true,
-		errorMessage = stringResource(id = R.string.invalid_email)
+		errorMessage = stringResource(id = R.string.invalid_email),
+		inputCapitalization = KeyboardCapitalization.Sentences
 	)
 }
 
