@@ -17,3 +17,11 @@ fun DividerLightGray() {
             .height(1.dp)
     )
 }
+
+@Composable
+fun RowDivider() {
+    Divider(
+        color = CCTheme.colors.grayThree,
+        modifier = Modifier
+    )
+}

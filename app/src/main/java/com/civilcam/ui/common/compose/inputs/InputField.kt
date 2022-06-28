@@ -46,7 +46,7 @@ fun InputField(
 	errorMessage: String = "",
 	isEnable: Boolean = true,
 	inputType: KeyboardType = KeyboardType.Text,
-	inputCapitalization: KeyboardCapitalization,
+	inputCapitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
 	trailingIcon: @Composable (() -> Unit)? = null,
 	isReversed: Boolean = false,
 	onTextClicked: (() -> Unit)? = null,
@@ -416,7 +416,6 @@ fun InputFieldPreview() {
 		onValueChanged = {},
 		hasError = true,
 		errorMessage = stringResource(id = R.string.invalid_email),
-		inputCapitalization = KeyboardCapitalization.Sentences
 	)
 }
 

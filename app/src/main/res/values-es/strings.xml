@@ -14,7 +14,15 @@
     <string name="cancel_text_caps">CANCELAR</string>
     <string name="ok_text_caps">OK</string>
 
+    <string name="search_text">Buscar</string>
+    <string name="add_text">Añadir</string>
+    <string name="pending_text">Pendiente</string>
+    <string name="invite_text">Invitar</string>
+
     <!--    translate-->
+
+    <string name="phone_number_text">Phone number</string>
+    <string name="phone_number_placeholder">(123) 456 7890</string>
 
     <string name="onboarding_page_one_title">Safety network</string>
     <string name="onboarding_page_one_text">If you are worried about someone, become his guardian and be sure that if something happens - you can always help</string>
@@ -47,6 +55,7 @@
     <string name="profile_setup_phone_number_placeholder">(123) 456 7890</string>
     <string name="profile_setup_date_of_birth">Date of birth</string>
     <string name="profile_setup_phone_error">Please, enter a valid phone number</string>
+
 
 
     <string name="navigation_bar_network">Network</string>
@@ -95,7 +104,7 @@
     <string name="phone_verification">Phone verification</string>
     <string name="reset_password">Reset password</string>
     <string name="code_sent_title">The code was sent to</string>
-    <string name="code_arrive"> It should arrive within one minute</string>
+    <string name="code_arrive">It should arrive within one minute</string>
     <string name="resend_code">Resend code</string>
     <string name="otp_error_code">OTP code is incorrect or has expired. Please try to retype or resend the code</string>
     <string name="otp_code_timer">Resend code in %s seconds</string>
@@ -106,4 +115,21 @@
     <string name="digit_verification_code">We’ll send a 6 digit verification code</string>
     <string name="save_password">Save password</string>
     <string name="create_new_password">Create new password</string>
+
+    <string name="add_from_contacts_title">Sent</string>
+    <string name="add_from_contacts_invite_by">Invite by number</string>
+
+    <string name="invite_by_number_title">Invite by number</string>
+    <string name="invite_by_number_hint">Send an invite to the number that is not on your contact list</string>
+    <string name="invite_by_number_sent">Invite has been sent to</string>
+
+    <string name="network_main_on_guard">On guard</string>
+    <string name="network_main_guardians">Guardians</string>
+    <string name="network_main_on_guard_list_is_empty">Your “On guard” list is empty</string>
+    <string name="network_main_guardians_list_is_empty">Your “Guardians” list is empty</string>
+    <string name="network_main_requests">Requests</string>
+    <string name="network_main_new_requests">You have new requests</string>
+    <string name="network_main_declined">Declined</string>
+    <string name="network_main_help_me">Help me!</string>
+    <string name="network_main_safe">Safe</string>
 </resources>

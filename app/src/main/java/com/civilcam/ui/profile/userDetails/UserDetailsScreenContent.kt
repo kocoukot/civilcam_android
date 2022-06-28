@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.profile.userDetails.content.UserDetailsSection
 import com.civilcam.ui.profile.userDetails.content.UserRequestSection
@@ -35,8 +36,10 @@ fun UserDetailsScreenContent(viewModel: UserDetailsViewModel) {
         topBar = {
             TopAppBarContent(
                 title = stringResource(id = R.string.user_details_title),
-                navigationAction = {
-                    viewModel.setInputActions(UserDetailsActions.ClickGoBack)
+                navigationItem = {
+                    BackButton {
+                        viewModel.setInputActions(UserDetailsActions.ClickGoBack)
+                    }
                 })
         }
     ) {

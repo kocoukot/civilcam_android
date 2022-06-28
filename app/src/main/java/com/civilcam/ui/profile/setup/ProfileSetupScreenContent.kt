@@ -9,12 +9,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.DividerLightGray
 import com.civilcam.ui.common.compose.TopAppBarContent
@@ -68,8 +68,10 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
             Column {
                 TopAppBarContent(
                     title = stringResource(id = R.string.profile_setup_title),
-                    navigationAction = {
-                        viewModel.setInputActions(ProfileSetupActions.ClickGoBack)
+                    navigationItem = {
+                        BackButton {
+                            viewModel.setInputActions(ProfileSetupActions.ClickGoBack)
+                        }
                     },
                 )
                 DividerLightGray()
@@ -99,7 +101,6 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
                 InputField(
                     title = stringResource(id = R.string.profile_setup_first_name_label),
                     placeHolder = stringResource(id = R.string.profile_setup_first_name_placeholder),
-                    inputCapitalization = KeyboardCapitalization.Sentences
                 ) {
                     viewModel.setInputActions(
                         ProfileSetupActions.EnterInputData(
@@ -112,7 +113,6 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
                 InputField(
                     title = stringResource(id = R.string.profile_setup_last_name_label),
                     placeHolder = stringResource(id = R.string.profile_setup_last_name_placeholder),
-                    inputCapitalization = KeyboardCapitalization.Sentences
                 ) {
                     viewModel.setInputActions(
                         ProfileSetupActions.EnterInputData(
@@ -141,7 +141,6 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
                         viewModel.setInputActions(ProfileSetupActions.ClickDateSelect)
                     },
                     onValueChanged = {},
-                    inputCapitalization = KeyboardCapitalization.Sentences
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -149,7 +148,6 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
                     isEnable = false,
                     title = stringResource(id = R.string.profile_setup_address_label),
                     placeHolder = stringResource(id = R.string.profile_setup_address_placeholder),
-                    inputCapitalization = KeyboardCapitalization.Sentences
                 ) {
 
                 }

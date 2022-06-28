@@ -31,6 +31,7 @@ import com.civilcam.ui.auth.OneDigitCheckStrategy
 import com.civilcam.ui.auth.UpperCaseCheckStrategy
 import com.civilcam.ui.auth.create.model.CreateAccountActions
 import com.civilcam.ui.auth.create.model.InputDataType
+import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.InputField
@@ -50,11 +51,13 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 		topBar = {
 			Column {
 				TopAppBarContent(
-					title = stringResource(id = R.string.create_account),
-					navigationAction = {
-						viewModel.setInputActions(CreateAccountActions.ClickGoBack)
-					},
-				)
+                    title = stringResource(id = R.string.create_account),
+                    navigationItem = {
+                        BackButton {
+                            viewModel.setInputActions(CreateAccountActions.ClickGoBack)
+                        }
+                    },
+                )
 			}
 		}
 	
@@ -62,10 +65,10 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 		
 		Column(
 			modifier = Modifier
-				.fillMaxSize()
-				.imePadding()
-				.padding(horizontal = 16.dp)
-				.verticalScroll(rememberScrollState())
+                .fillMaxSize()
+                .imePadding()
+                .padding(horizontal = 16.dp)
+                .verticalScroll(rememberScrollState())
 		) {
 			
 			Spacer(modifier = Modifier.height(12.dp))
@@ -203,8 +206,8 @@ fun SocialImage(
 		painter = painter,
 		contentDescription = null,
 		modifier = Modifier
-			.height(44.dp)
-			.width(44.dp)
+            .height(44.dp)
+            .width(44.dp)
 	)
 }
 

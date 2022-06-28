@@ -104,7 +104,7 @@ fun TabCell(
 
 @Preview
 @Composable
-fun AlertHistoryTabRowPreview() {
+private fun AlertHistoryTabRowPreview() {
     var tabPage by remember { mutableStateOf(AlertType.RECEIVED) }
 
     AlertHistoryTabRow(

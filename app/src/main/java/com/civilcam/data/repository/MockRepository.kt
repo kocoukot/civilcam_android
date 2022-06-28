@@ -4,6 +4,9 @@ import com.civilcam.R
 import com.civilcam.domain.model.UserInfo
 import com.civilcam.domain.model.alerts.AlertModel
 import com.civilcam.domain.model.alerts.AlertType
+import com.civilcam.domain.model.guard.GuardianStatus
+import com.civilcam.domain.model.guard.NetworkType
+import com.civilcam.ui.network.main.model.GuardianItem
 import com.civilcam.ui.profile.userDetails.model.UserDetailsModel
 
 class MockRepository {
@@ -80,7 +83,83 @@ class MockRepository {
         )
     }
 
+    fun getGuards(guardType: NetworkType) =
+        when (guardType) {
+            NetworkType.ON_GUARD -> listOf(
+                GuardianItem(
+                    guardianId = 1,
+                    guardianName = "Alleria Windrunner",
+                    guardianAvatar = R.drawable.img_avatar_one,
+                    guardianStatus = GuardianStatus.NEED_HELP,
+                ),
+                GuardianItem(
+                    guardianId = 3,
+                    guardianName = "Arthas Menethil",
+                    guardianAvatar = R.drawable.img_avatar_two,
+                    guardianStatus = GuardianStatus.SAFE,
+                ),
+                GuardianItem(
+                    guardianId = 43,
+                    guardianName = "Bobby Axelrod",
+                    guardianAvatar = R.drawable.img_avatar_three,
+                    guardianStatus = GuardianStatus.SAFE,
+                ),
+                GuardianItem(
+                    guardianId = 345,
+                    guardianName = "Bane Hardy",
+                    guardianAvatar = R.drawable.img_avatar_four,
+                    guardianStatus = GuardianStatus.SAFE,
+                )
+            )
+            NetworkType.GUARDIANS -> listOf(
+                GuardianItem(
+                    guardianId = 1,
+                    guardianName = "Alleria Windrunner",
+                    guardianAvatar = R.drawable.img_avatar_one,
+                    guardianStatus = GuardianStatus.PENDING,
+                ),
+                GuardianItem(
+                    guardianId = 3,
+                    guardianName = "Arthas Menethil",
+                    guardianAvatar = R.drawable.img_avatar_two,
+                    guardianStatus = GuardianStatus.DECLINED,
+                ),
+                GuardianItem(
+                    guardianId = 43,
+                    guardianName = "Bobby Axelrod",
+                    guardianAvatar = R.drawable.img_avatar_three,
+                    guardianStatus = GuardianStatus.DECLINED,
+                ),
+                GuardianItem(
+                    guardianId = 345,
+                    guardianName = "Bane Hardy",
+                    guardianAvatar = R.drawable.img_avatar_four,
+                    guardianStatus = GuardianStatus.ACCEPTED,
+                )
+            )
+        }
 
+
+    fun getGuardRequests() = listOf(
+        GuardianItem(
+            guardianId = 1,
+            guardianName = "Alleria Windrunner",
+            guardianAvatar = R.drawable.img_avatar_one,
+            guardianStatus = GuardianStatus.PENDING,
+        ),
+        GuardianItem(
+            guardianId = 3,
+            guardianName = "Arthas Menethil",
+            guardianAvatar = R.drawable.img_avatar_two,
+            guardianStatus = GuardianStatus.DECLINED,
+        ),
+        GuardianItem(
+            guardianId = 43,
+            guardianName = "Bane Hardy",
+            guardianAvatar = R.drawable.img_avatar_four,
+            guardianStatus = GuardianStatus.DECLINED,
+        ),
+    )
 }
 
 

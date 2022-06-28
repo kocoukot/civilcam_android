@@ -2,10 +2,12 @@ package com.civilcam.ui.common.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,6 +20,7 @@ fun InformationRow(
     title: String,
     text: String = "",
     needDivider: Boolean = true,
+    isClickable: Boolean = true,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     rowClick: () -> Unit,
@@ -36,7 +39,11 @@ fun InformationRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .clickable { rowClick.invoke() },
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(color = CCTheme.colors.black),
+                    enabled = isClickable
+                ) { rowClick.invoke() },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
@@ -81,22 +88,26 @@ fun InformationRow(
     }
 }
 
-@Composable
-fun RowDivider() {
-    Divider(
-        color = CCTheme.colors.grayThree,
-        modifier = Modifier
-    )
-
-}
-
 @Preview
 @Composable
-fun InformationRowPreview() {
+private fun InformationRowPreview() {
     InformationRow(
         title = "Alleria Windrunner",
         text = "hasdbjs",
         trailingIcon = { TextActionButton("Resolve") {} },
         rowClick = {},
+    )
+}
+
+@Composable
+fun HeaderTitleText(text: String) {
+    Text(
+        text,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(CCTheme.colors.lightGray)
+            .padding(vertical = 8.dp, horizontal = 16.dp),
+        style = CCTheme.typography.common_text_small_medium,
+        color = CCTheme.colors.black
     )
 }

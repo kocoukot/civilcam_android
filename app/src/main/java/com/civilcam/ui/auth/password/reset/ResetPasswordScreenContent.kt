@@ -35,7 +35,7 @@ fun ResetPasswordScreenContent(viewModel: ResetPasswordViewModel) {
 			Column {
 				TopAppBarContent(
 					title = stringResource(id = R.string.reset_password),
-					navigationAction = {
+					navigationItem = {
 						viewModel.setInputActions(ResetActions.ClickBack)
 					},
 				)

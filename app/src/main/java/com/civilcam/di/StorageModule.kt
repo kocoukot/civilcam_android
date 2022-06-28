@@ -3,6 +3,7 @@ package com.civilcam.di
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import com.civilcam.data.local.ContactsStorage
 import com.civilcam.data.local.MediaStorage
 import org.koin.dsl.module
 
@@ -39,6 +40,8 @@ val storageModule = module {
 //	single { ObjectsSharedPreferencesStorage(get(), get()) }
 //
 //	single { AssetsStorage(get()) }
+
+    single { ContactsStorage(get()) }
 
     single { MediaStorage(get()) }
 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.VerificationFlow
+import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.OtpCodeInputField
 import com.civilcam.ui.verification.model.VerificationActions
@@ -41,20 +42,22 @@ fun VerificationScreenContent(
 			Column {
 				TopAppBarContent(
 					title = when (state.value.verificationFlow) {
-						VerificationFlow.PHONE -> {
-							stringResource(id = R.string.phone_verification)
-						}
-						VerificationFlow.NEW_EMAIL -> {
-							stringResource(id = R.string.email_verification)
-						}
-						VerificationFlow.RESET_PASSWORD -> {
-							stringResource(id = R.string.email_verification)
-						}
-					},
-					navigationAction = {
-						viewModel.setInputActions(VerificationActions.ClickGoBack)
-					},
-				)
+                        VerificationFlow.PHONE -> {
+                            stringResource(id = R.string.phone_verification)
+                        }
+                        VerificationFlow.NEW_EMAIL -> {
+                            stringResource(id = R.string.email_verification)
+                        }
+                        VerificationFlow.RESET_PASSWORD -> {
+                            stringResource(id = R.string.reset_password)
+                        }
+                    },
+                    navigationItem = {
+                        BackButton {
+                            viewModel.setInputActions(VerificationActions.ClickGoBack)
+                        }
+                    },
+                )
 			}
 		}
 	
@@ -67,9 +70,9 @@ fun VerificationScreenContent(
 		) {
 			Column(
 				modifier = Modifier
-					.fillMaxWidth()
-					.padding(horizontal = 16.dp)
-					.weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .weight(1f)
 			) {
 				Spacer(modifier = Modifier.height(32.dp))
 				OtpCodeInputField(
@@ -111,8 +114,8 @@ fun VerificationScreenContent(
 			
 			Column(
 				modifier = Modifier
-					.fillMaxWidth()
-					.padding(horizontal = 16.dp),
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
 				
@@ -134,10 +137,10 @@ fun VerificationScreenContent(
 						color = CCTheme.colors.primaryRed,
 						fontSize = 17.sp,
 						modifier = Modifier
-							.clickable {
-								viewModel.setInputActions(VerificationActions.ResendClick)
-							}
-							.background(Color.Transparent, RectangleShape),
+                            .clickable {
+                                viewModel.setInputActions(VerificationActions.ResendClick)
+                            }
+                            .background(Color.Transparent, RectangleShape),
 						fontWeight = FontWeight.SemiBold
 					)
 				}

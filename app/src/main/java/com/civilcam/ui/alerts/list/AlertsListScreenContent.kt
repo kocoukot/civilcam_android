@@ -1,19 +1,14 @@
 package com.civilcam.ui.alerts.list
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
@@ -22,9 +17,7 @@ import com.civilcam.ui.alerts.list.content.AlertHistoryRowSection
 import com.civilcam.ui.alerts.list.model.AlertListActions
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.alert.AlertDialogTypes
-import com.civilcam.ui.common.compose.CircleUserAvatar
-import com.civilcam.ui.common.compose.InformationRow
-import com.civilcam.ui.common.compose.TextActionButton
+import com.civilcam.ui.common.compose.*
 import com.civilcam.utils.DateUtils
 
 @Composable
@@ -50,37 +43,21 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                     .fillMaxWidth()
                     .background(CCTheme.colors.white)
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 8.dp, top = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.img_avatar),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(28.dp)
-                            .clip(CircleShape)
-                            .clickable {
-                                viewModel.setInputActions(AlertListActions.ClickGoMyProfile)
-                            }
-                    )
-                    Text(
-                        text = stringResource(id = R.string.alerts_root_list_title),
-                        style = CCTheme.typography.button_text,
-                    )
-                    IconButton(onClick = {
-                        viewModel.setInputActions(AlertListActions.ClickGoSettings)
-                    }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_settings),
-                            contentDescription = null,
-                            tint = CCTheme.colors.primaryRed
-                        )
-                    }
-                }
+
+
+                TopAppBarContent(
+                    title = stringResource(id = R.string.alerts_root_list_title),
+                    navigationItem = {
+                        AvatarButton { //todo fix image pass
+                            viewModel.setInputActions(AlertListActions.ClickGoMyProfile)
+                        }
+                    },
+                    actionItem = {
+                        IconActionButton(buttonIcon = R.drawable.ic_settings) {
+                            viewModel.setInputActions(AlertListActions.ClickGoSettings)
+                        }
+                    },
+                )
 
                 Divider(color = CCTheme.colors.grayThree)
             }

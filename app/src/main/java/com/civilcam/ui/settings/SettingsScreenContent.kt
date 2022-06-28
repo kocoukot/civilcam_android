@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.settings.model.SettingsActions
 
@@ -22,8 +23,10 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
         topBar = {
             TopAppBarContent(
                 title = "Settings",
-                navigationAction = {
-                    viewModel.setInputActions(SettingsActions.ClickGoBack)
+                navigationItem = {
+                    BackButton {
+                        viewModel.setInputActions(SettingsActions.ClickGoBack)
+                    }
                 },
             )
 
