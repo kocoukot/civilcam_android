@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
@@ -33,11 +32,12 @@ class TermsFragment : Fragment() {
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
                 TermsRoute.GoBack -> navController.popBackStack()
-                TermsRoute.GoSubscription -> Toast.makeText(
-                    requireContext(),
-                    "To subscription",
-                    Toast.LENGTH_SHORT
-                ).show()
+                TermsRoute.GoSubscription -> navController.navigate(R.id.testFragment)
+//                    Toast.makeText(
+//                    requireContext(),
+//                    "To subscription",
+//                    Toast.LENGTH_SHORT
+//                ).show()
                 is TermsRoute.GoWebView -> navController.navigate(
                     R.id.action_termsFragment_to_webViewFragment,
                     WebViewFragment.createArgs(route.webLink)

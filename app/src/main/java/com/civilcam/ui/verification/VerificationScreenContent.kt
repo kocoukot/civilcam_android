@@ -23,8 +23,8 @@ import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.VerificationFlow
-import com.civilcam.ui.common.compose.OtpCodeInputField
 import com.civilcam.ui.common.compose.TopAppBarContent
+import com.civilcam.ui.common.compose.inputs.OtpCodeInputField
 import com.civilcam.ui.verification.model.VerificationActions
 
 @Composable
