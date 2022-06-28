@@ -18,7 +18,9 @@ import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.create.model.InputDataType
+import com.civilcam.ui.auth.password.create.model.CreatePasswordActions
 import com.civilcam.ui.auth.password.reset.model.ResetActions
+import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.InputField
@@ -36,7 +38,9 @@ fun ResetPasswordScreenContent(viewModel: ResetPasswordViewModel) {
 				TopAppBarContent(
 					title = stringResource(id = R.string.reset_password),
 					navigationItem = {
-						viewModel.setInputActions(ResetActions.ClickBack)
+						BackButton {
+							viewModel.setInputActions(ResetActions.ClickBack)
+						}
 					},
 				)
 			}
