@@ -7,7 +7,6 @@ import com.civilcam.R
 import com.civilcam.databinding.FragmentTestBinding
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.viewBinding
-import com.civilcam.ui.terms.TermsFragment
 
 class TestFragment : Fragment(R.layout.fragment_test) {
     private val binding by viewBinding(FragmentTestBinding::bind)
@@ -17,9 +16,6 @@ class TestFragment : Fragment(R.layout.fragment_test) {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
-            terms.setOnClickListener {
-                navController.navigate(R.id.termsFragment, TermsFragment.createArgs(false))
-            }
             profileSetup.setOnClickListener {
                 navController.navigate(R.id.profileSetupFragment)
             }
