@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
+import com.civilcam.ui.common.ext.requireArg
 import com.civilcam.ui.terms.model.TermsRoute
 import com.civilcam.ui.terms.webView.WebViewFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -21,7 +22,7 @@ class TermsFragment : Fragment() {
         parametersOf(isSettings)
     }
 
-    private val isSettings = false // by requireArg<Boolean>(ARG_IS_SETTINGS) // todo fix later
+    private val isSettings by requireArg<Boolean>(ARG_IS_SETTINGS) // todo fix later
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,11 +34,6 @@ class TermsFragment : Fragment() {
             when (route) {
                 TermsRoute.GoBack -> navController.popBackStack()
                 TermsRoute.GoSubscription -> navController.navigate(R.id.testFragment)
-//                    Toast.makeText(
-//                    requireContext(),
-//                    "To subscription",
-//                    Toast.LENGTH_SHORT
-//                ).show()
                 is TermsRoute.GoWebView -> navController.navigate(
                     R.id.action_termsFragment_to_webViewFragment,
                     WebViewFragment.createArgs(route.webLink)
@@ -59,19 +55,6 @@ class TermsFragment : Fragment() {
         }
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        activity?.window?.apply {
-//            navigationBarColor = ContextCompat.getColor(requireContext(), R.color.lightGray)
-//        }
-//    }
-//
-//    override fun onStop() {
-//        super.onStop()
-//        activity?.window?.apply {
-//            navigationBarColor = ContextCompat.getColor(requireContext(), R.color.white)
-//        }
-//    }
 
     companion object {
         private const val ARG_IS_SETTINGS = "is_settings"

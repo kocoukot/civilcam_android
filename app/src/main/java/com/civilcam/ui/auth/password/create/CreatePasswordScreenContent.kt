@@ -35,7 +35,7 @@ fun CreatePasswordScreenContent(viewModel: CreatePasswordViewModel) {
 			Column {
 				TopAppBarContent(
 					title = stringResource(id = R.string.create_new_password),
-					navigationAction = {
+					navigationItem = {
 						viewModel.setInputActions(CreatePasswordActions.ClickGoBack)
 					},
 				)
