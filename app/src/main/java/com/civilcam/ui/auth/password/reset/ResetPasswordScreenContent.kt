@@ -1,15 +1,19 @@
 package com.civilcam.ui.auth.password.reset
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -18,12 +22,12 @@ import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.create.model.InputDataType
-import com.civilcam.ui.auth.password.create.model.CreatePasswordActions
 import com.civilcam.ui.auth.password.reset.model.ResetActions
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.InputField
+import timber.log.Timber
 
 @Composable
 fun ResetPasswordScreenContent(viewModel: ResetPasswordViewModel) {
@@ -78,7 +82,7 @@ fun ResetPasswordScreenContent(viewModel: ResetPasswordViewModel) {
 			
 			Spacer(modifier = Modifier.height(8.dp))
 			
-			AnimatedVisibility(visible = !state.value.isEmail) {
+			AnimatedVisibility(visible = state.value.isEmail || state.value.email.isEmpty()) {
 				Text(
 					text = stringResource(id = R.string.digit_verification_code),
 					modifier = Modifier.fillMaxWidth(),
