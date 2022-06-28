@@ -1,5 +1,6 @@
 package com.civilcam.ui.common.compose.inputs
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,37 +39,42 @@ fun PhoneInputField(
     var hasFocus by remember { mutableStateOf(false) }
     var inputText by remember { mutableStateOf(text) }
     if (text.isNotEmpty()) inputText = text
+
+
+    val titleColorState by
+    animateColorAsState(targetValue = if (hasFocus) CCTheme.colors.black else CCTheme.colors.grayOne)
+
     Column(
         modifier = Modifier
-			.fillMaxWidth()
-			.background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
-			.onFocusEvent {
-				hasFocus = it.isFocused
-				if (it.isFocused) {
-					coroutineScope.launch {
-						delay(400)
-						isInFocus.invoke()
-					}
-				}
-			}
+            .fillMaxWidth()
+            .background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
+            .onFocusEvent {
+                hasFocus = it.isFocused
+                if (it.isFocused) {
+                    coroutineScope.launch {
+                        delay(400)
+                        isInFocus.invoke()
+                    }
+                }
+            }
     ) {
 
         Text(
             stringResource(id = R.string.profile_setup_phone_number_label),
-            color = CCTheme.colors.grayOne,
+            color = titleColorState,
             style = CCTheme.typography.common_text_small_regular,
             modifier = Modifier
-				.padding(bottom = 8.dp)
-				.fillMaxWidth()
+                .padding(bottom = 8.dp)
+                .fillMaxWidth()
         )
 
         BasicTextField(
             visualTransformation = PhoneNumberTransformation(),
             textStyle = CCTheme.typography.common_text_regular,
             modifier = Modifier
-				.fillMaxWidth()
-				.padding(bottom = 5.dp)
-				.clip(RoundedCornerShape(4.dp)),
+                .fillMaxWidth()
+                .padding(bottom = 5.dp)
+                .clip(RoundedCornerShape(4.dp)),
             singleLine = true,
             value = inputText,
             onValueChange = { value ->
@@ -81,12 +87,12 @@ fun PhoneInputField(
             decorationBox = { innerTextField ->
                 Row(
                     modifier = Modifier
-						.background(
-							if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
-							RoundedCornerShape(4.dp)
-						)
-						.padding(vertical = 14.dp)
-						.padding(start = 12.dp, end = 12.dp),
+                        .background(
+                            if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
+                            RoundedCornerShape(4.dp)
+                        )
+                        .padding(vertical = 14.dp)
+                        .padding(start = 12.dp, end = 12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
@@ -99,12 +105,7 @@ fun PhoneInputField(
                         Modifier
                             .weight(1f)
                     ) {
-                        if (inputText.isEmpty()) Text(
-                            stringResource(id = R.string.profile_setup_phone_number_placeholder),
-                            modifier = Modifier,
-                            style = CCTheme.typography.common_text_regular,
-                            color = CCTheme.colors.grayOne
-                        )
+                        if (inputText.isEmpty()) PlaceholderText(text = (stringResource(id = R.string.profile_setup_phone_number_placeholder)))
                         innerTextField()
                     }
 
@@ -113,13 +114,7 @@ fun PhoneInputField(
             }
         )
         if (inputText.clearPhone().length in 1..9 && !hasFocus) {
-            Text(
-                stringResource(id = R.string.profile_setup_phone_error),
-                color = CCTheme.colors.primaryRed,
-                style = CCTheme.typography.common_text_small_regular,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
+            ErrorText(stringResource(id = R.string.profile_setup_phone_error))
         }
         Spacer(modifier = Modifier.height(16.dp))
     }

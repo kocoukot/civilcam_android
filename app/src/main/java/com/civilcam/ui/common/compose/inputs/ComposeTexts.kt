@@ -1,6 +1,7 @@
 package com.civilcam.ui.common.compose.inputs
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -21,3 +22,27 @@ fun EmptyListText(text: String) {
             .padding(vertical = 8.dp, horizontal = 16.dp),
     )
 }
+
+
+@Composable
+fun ErrorText(text: String) {
+    Text(
+        text,
+        color = CCTheme.colors.primaryRed,
+        style = CCTheme.typography.common_text_small_regular,
+        modifier = Modifier
+            .padding(top = 8.dp)
+            .fillMaxWidth()
+    )
+}
+
+@Composable
+fun PlaceholderText(text: String) {
+    Text(
+        text,
+        modifier = Modifier,
+        style = CCTheme.typography.common_text_regular,
+        color = CCTheme.colors.grayOne
+    )
+}
+

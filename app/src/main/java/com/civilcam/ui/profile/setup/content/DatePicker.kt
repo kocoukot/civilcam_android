@@ -55,6 +55,20 @@ fun DatePickerContent(
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
+
+                ListItemPicker(
+                    modifier = Modifier.weight(1f),
+                    label = { it.getDisplayName(TextStyle.FULL, Locale.US) },
+                    value = monthPickerValue,
+                    onValueChange = { monthPickerValue = it },
+                    list = Month.values().toList(),
+                    dividersColor = CCTheme.colors.black,
+                    textStyle = CCTheme.typography.common_text_small_regular_spacing
+                )
+
+
+                Spacer(modifier = Modifier.width(14.dp))
+
                 NumberPicker(
                     modifier = Modifier.weight(1f),
                     dividersColor = CCTheme.colors.black,
@@ -68,24 +82,12 @@ fun DatePickerContent(
                 )
                 Spacer(modifier = Modifier.width(14.dp))
 
-                ListItemPicker(
-                    modifier = Modifier.weight(1f),
-                    label = { it.getDisplayName(TextStyle.FULL, Locale.US) },
-                    value = monthPickerValue,
-                    onValueChange = { monthPickerValue = it },
-                    list = Month.values().toList(),
-                    dividersColor = CCTheme.colors.black,
-                    textStyle = CCTheme.typography.common_text_small_regular_spacing
-                )
-
-                Spacer(modifier = Modifier.width(14.dp))
-
 
                 NumberPicker(
                     modifier = Modifier.weight(1f),
                     dividersColor = CCTheme.colors.black,
                     value = yearPickerValue,
-                    range = 1960..2022,
+                    range = 1960..calendar.year,
                     onValueChange = { yearPickerValue = it },
                     textStyle = CCTheme.typography.common_text_small_regular
 
