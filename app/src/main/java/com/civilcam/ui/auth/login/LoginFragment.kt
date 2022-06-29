@@ -23,7 +23,7 @@ class LoginFragment : Fragment() {
 	): View {
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
-				LoginRoute.GoLogin -> {}
+				LoginRoute.GoLogin -> navController.navigate(R.id.emergency_root)
 				LoginRoute.GoRegister -> navController.navigate(R.id.createAccountFragment)
 				LoginRoute.GoReset -> navController.navigate(R.id.resetPasswordFragment)
 				LoginRoute.GoBack -> navController.popBackStack()
