@@ -7,6 +7,7 @@ import androidx.annotation.IdRes
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import com.civilcam.R
+import com.civilcam.ui.common.NavigationDirection
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
@@ -36,6 +37,18 @@ fun NavController.navigateToRoot(
             .setPopUpTo(backStack.lastOrNull() ?: R.id.nav_graph, false)
             .build()
     )
+}
+
+fun NavController.navigateByDirection(
+    direction: NavigationDirection
+) {
+    when (direction) {
+        is NavigationDirection.SignInSuccess -> {
+            navigate(R.id.emergency_root)
+        }
+        is NavigationDirection.EmailVerification -> {}
+        is NavigationDirection.ProfileSetup -> {}
+    }
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
