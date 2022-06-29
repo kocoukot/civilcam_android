@@ -5,10 +5,10 @@ import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.local.MediaStorage
 import com.civilcam.domain.PictureModel
 import com.civilcam.domain.model.UserSetupModel
-import com.civilcam.ui.profile.setup.model.InputDataType
 import com.civilcam.ui.profile.setup.model.ProfileSetupActions
 import com.civilcam.ui.profile.setup.model.ProfileSetupRoute
 import com.civilcam.ui.profile.setup.model.ProfileSetupState
+import com.civilcam.ui.profile.setup.model.UserInfoDataType
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -39,9 +39,9 @@ class ProfileSetupViewModel(
             ProfileSetupActions.ClickLocationSelect -> {}
             is ProfileSetupActions.EnterInputData -> {
                 when (action.dataType) {
-                    InputDataType.FIRST_NAME -> firstNameEntered(action.data)
-                    InputDataType.LAST_NAME -> lastNameEntered(action.data)
-                    InputDataType.PHONE_NUMBER -> phoneEntered(action.data)
+                    UserInfoDataType.FIRST_NAME -> firstNameEntered(action.data)
+                    UserInfoDataType.LAST_NAME -> lastNameEntered(action.data)
+                    UserInfoDataType.PHONE_NUMBER -> phoneEntered(action.data)
                 }
             }
             ProfileSetupActions.ClickAvatarSelect -> goAvatarSelect()

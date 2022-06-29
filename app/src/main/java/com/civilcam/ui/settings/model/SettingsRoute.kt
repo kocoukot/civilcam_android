@@ -1,5 +1,11 @@
 package com.civilcam.ui.settings.model
 
-sealed class SettingsRoute {
+import com.civilcam.common.ext.compose.ComposeFragmentRoute
+
+sealed class SettingsRoute : ComposeFragmentRoute {
     object GoBack : SettingsRoute()
+    object GoTerms : SettingsRoute()
+    object GoLanguageSelect : SettingsRoute()
+    data class IsNavBarVisible(val isVisible: Boolean) : SettingsRoute()
+
 }

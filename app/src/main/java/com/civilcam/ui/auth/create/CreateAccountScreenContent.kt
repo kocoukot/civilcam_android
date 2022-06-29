@@ -41,7 +41,7 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 	val checkedStrategies = remember { mutableStateOf(0) }
 	
 	val focusState = remember { mutableStateOf(false) }
-	
+
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
 		modifier = Modifier.fillMaxSize(),

@@ -2,6 +2,7 @@ package com.civilcam.ui.common.compose
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,5 +24,13 @@ fun RowDivider() {
     Divider(
         color = CCTheme.colors.grayThree,
         modifier = Modifier
+    )
+}
+
+@Composable
+fun RowDividerGrayThree(padding: Int = 16) {
+    Divider(
+        color = CCTheme.colors.grayThree,
+        modifier = Modifier.padding(start = padding.dp)
     )
 }

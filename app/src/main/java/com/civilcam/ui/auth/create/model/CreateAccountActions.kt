@@ -6,5 +6,9 @@ sealed class CreateAccountActions : ComposeFragmentActions {
 	object ClickGoBack : CreateAccountActions()
 	object ClickLogin : CreateAccountActions()
 	object ClickContinue : CreateAccountActions()
-	data class EnterInputData(val dataType: InputDataType, val data: String) : CreateAccountActions()
+	data class EnterInputData(
+		val dataType: PasswordInputDataType,
+		val data: String,
+		val meetCriteria: Boolean = true
+	) : CreateAccountActions()
 }

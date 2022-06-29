@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
@@ -23,6 +24,7 @@ fun InformationRow(
     title: String,
     titleFont: FontFamily = FontFamily(Font(R.font.roboto_medium)),
     text: String = "",
+    titleColor: Color = CCTheme.colors.black,
     needDivider: Boolean = true,
     isClickable: Boolean = true,
     leadingIcon: @Composable (() -> Unit)? = null,
@@ -71,7 +73,8 @@ fun InformationRow(
                         Text(
                             text = title,
                             style = CCTheme.typography.common_text_medium,
-                            fontFamily = titleFont
+                            fontFamily = titleFont,
+                            color = titleColor,
                         )
 
                         if (text.isNotEmpty())
@@ -85,13 +88,12 @@ fun InformationRow(
                     Spacer(modifier = Modifier.weight(1f))
                     if (trailingIcon != null) trailingIcon()
                 }
-                if (needDivider) RowDivider()
+                if (needDivider) RowDividerGrayThree(0)
             }
-
-
         }
     }
 }
+
 
 @Preview
 @Composable

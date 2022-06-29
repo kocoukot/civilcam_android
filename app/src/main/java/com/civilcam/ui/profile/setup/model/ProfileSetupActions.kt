@@ -11,5 +11,6 @@ sealed class ProfileSetupActions : ComposeFragmentActions {
     object ClickCloseDatePicker : ProfileSetupActions()
     data class ClickSelectDate(val date: Long) : ProfileSetupActions()
 
-    data class EnterInputData(val dataType: InputDataType, val data: String) : ProfileSetupActions()
+    data class EnterInputData(val dataType: UserInfoDataType, val data: String) :
+        ProfileSetupActions()
 }

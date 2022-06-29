@@ -7,16 +7,11 @@ data class CreateAccountState(
 	val isLoading: Boolean = false,
 	val errorText: String = "Invalid email. Please try again. (eg:email@gmail.com)",
 	val email: String = "",
-	val password: String = "",
-	val confirmPassword: String = "",
-	val isEmail: Boolean = false
+	val passwordModel: PasswordModel = PasswordModel(),
+	val isEmail: Boolean = true
 ) : ComposeFragmentState {
 	
 	val isFilled: Boolean
 		get() = email.isEmail() &&
-				password == confirmPassword &&
-				password.isNotEmpty() && confirmPassword.isNotEmpty()
-	
-	val noMatch: Boolean
-		get() = (password.isNotEmpty() && confirmPassword.isNotEmpty()) && (password != confirmPassword)
+				passwordModel.isFilled
 }

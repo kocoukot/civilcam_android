@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -57,18 +58,20 @@ fun AlertDialogComp(
                                 openDialog.value = false
                             }) {
                             Text(
-                                text = alertType.positiveText,
+                                text = stringResource(id = alertType.positiveText),
                                 style = CCTheme.typography.common_text_medium,
                                 fontSize = 14.sp,
-                                color = CCTheme.colors.primaryRed
+                                color = CCTheme.colors.cianColor
                             )
 
                         }
                     },
 
-
                     dismissButton = {
-                        if (alertType == AlertDialogTypes.OK || alertType == AlertDialogTypes.GOT_IT || alertType == AlertDialogTypes.GREAT) {
+                        if (alertType == AlertDialogTypes.OK //||
+//                            alertType == AlertDialogTypes.GOT_IT ||
+//                            alertType == AlertDialogTypes.GREAT
+                        ) {
 
                         } else {
                             Button(
@@ -81,7 +84,8 @@ fun AlertDialogComp(
                                 }
                             ) {
                                 Text(
-                                    text = alertType.negativeText,
+
+                                    text = stringResource(id = alertType.negativeText),
                                     style = CCTheme.typography.common_text_medium,
                                     fontSize = 14.sp,
                                     color = CCTheme.colors.cianColor

@@ -11,8 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -24,13 +22,12 @@ import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.langSelect.content.SegmentedItem
 import com.civilcam.ui.langSelect.model.LangSelectActions
 import com.civilcam.utils.LocaleHelper
-import java.util.*
 
 @Composable
 fun LanguageSelectScreenContent(viewModel: LanguageSelectViewModel) {
 
     val state = viewModel.state.collectAsState()
-    SetLanguage(state.value.selectedLang)
+    LocaleHelper.SetLanguageCompose(state.value.selectedLang)
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -123,16 +120,6 @@ fun BottomCard(
             )
         }
     }
-}
-
-@Composable
-private fun SetLanguage(lang: LanguageType) {
-    LocaleHelper.setLocale(LocalContext.current, lang.langValue)
-    val locale = Locale(lang.langValue)
-    val configuration = LocalConfiguration.current
-    configuration.setLocale(locale)
-    val resources = LocalContext.current.resources
-    resources.updateConfiguration(configuration, resources.displayMetrics)
 }
 
 

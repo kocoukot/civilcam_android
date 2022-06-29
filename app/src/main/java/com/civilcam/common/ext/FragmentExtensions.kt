@@ -4,12 +4,16 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.Rect
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalView
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
@@ -121,6 +125,35 @@ fun isMobileOnline(): Boolean {
         }
     }
     return false
+}
+
+enum class Keyboard {
+    Opened, Closed
+}
+
+@Composable
+fun keyboardAsState(): State<Keyboard> {
+    val keyboardState = remember { mutableStateOf(Keyboard.Closed) }
+    val view = LocalView.current
+    DisposableEffect(view) {
+        val onGlobalListener = ViewTreeObserver.OnGlobalLayoutListener {
+            val rect = Rect()
+            view.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = view.rootView.height
+            val keypadHeight = screenHeight - rect.bottom
+            keyboardState.value = if (keypadHeight > screenHeight * 0.15) {
+                Keyboard.Opened
+            } else {
+                Keyboard.Closed
+            }
+        }
+        view.viewTreeObserver.addOnGlobalLayoutListener(onGlobalListener)
+
+        onDispose {
+            view.viewTreeObserver.removeOnGlobalLayoutListener(onGlobalListener)
+        }
+    }
+    return keyboardState
 }
 
 
