@@ -31,7 +31,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.ext.digits
-import com.civilcam.common.ext.isEmail
 import com.civilcam.common.ext.letters
 import com.civilcam.common.theme.CCTheme
 import kotlinx.coroutines.delay
@@ -173,7 +172,7 @@ fun EmailInputField(
     if (text.isNotEmpty()) inputText = text
     
     val titleColorState by
-    animateColorAsState(targetValue = if (hasError && inputText.isNotEmpty() && inputText.isEmail()) CCTheme.colors.primaryRed else if (hasFocus) CCTheme.colors.black else CCTheme.colors.grayOne)
+    animateColorAsState(targetValue = if (hasError && inputText.isNotEmpty()) CCTheme.colors.primaryRed else if (hasFocus) CCTheme.colors.black else CCTheme.colors.grayOne)
     val errorBorderState by
     animateColorAsState(targetValue = if (hasError && inputText.isNotEmpty()) CCTheme.colors.primaryRed else CCTheme.colors.lightGray)
     
