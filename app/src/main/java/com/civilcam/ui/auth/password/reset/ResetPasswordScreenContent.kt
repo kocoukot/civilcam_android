@@ -1,19 +1,18 @@
 package com.civilcam.ui.auth.password.reset
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.focus.onFocusEvent
-import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -26,7 +25,7 @@ import com.civilcam.ui.auth.password.reset.model.ResetActions
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.TopAppBarContent
-import com.civilcam.ui.common.compose.inputs.InputField
+import com.civilcam.ui.common.compose.inputs.EmailInputField
 import timber.log.Timber
 
 @Composable
@@ -63,22 +62,26 @@ fun ResetPasswordScreenContent(viewModel: ResetPasswordViewModel) {
 			
 			Spacer(modifier = Modifier.height(12.dp))
 			
-			InputField(
+			EmailInputField(
 				title = stringResource(id = R.string.create_account_email_label),
 				text = state.value.email,
 				placeHolder = stringResource(id = R.string.create_account_email_placeholder),
 				errorMessage = state.value.errorText,
 				inputType = KeyboardType.Email,
 				hasError = !state.value.isEmail,
-				inputCapitalization = KeyboardCapitalization.None
-			) {
-				viewModel.setInputActions(
-					ResetActions.EnterInputData(
-						InputDataType.EMAIL,
-						it
+				inputCapitalization = KeyboardCapitalization.None,
+				onValueChanged = {
+					viewModel.setInputActions(
+						ResetActions.EnterInputData(
+							InputDataType.EMAIL,
+							it
+						)
 					)
-				)
-			}
+				},
+				onFocusChanged = {
+					Timber.i("Focus state: $it")
+				}
+			)
 			
 			Spacer(modifier = Modifier.height(8.dp))
 			

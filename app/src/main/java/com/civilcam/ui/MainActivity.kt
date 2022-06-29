@@ -1,6 +1,12 @@
 package com.civilcam.ui
 
+import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -12,6 +18,7 @@ import com.civilcam.databinding.ActivityMainBinding
 import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.setupWithNavController
 import com.standartmedia.common.ext.castSafe
+
 
 class MainActivity : AppCompatActivity() {
 

@@ -27,6 +27,7 @@ import com.civilcam.ui.auth.create.model.InputDataType
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.TopAppBarContent
+import com.civilcam.ui.common.compose.inputs.EmailInputField
 import com.civilcam.ui.common.compose.inputs.InputField
 import com.civilcam.ui.common.compose.inputs.PasswordField
 import com.civilcam.ui.common.compose.inputs.PasswordStrategyBlocks
@@ -38,6 +39,8 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 	val state = viewModel.state.collectAsState()
 	
 	val checkedStrategies = remember { mutableStateOf(0) }
+	
+	val focusState = remember { mutableStateOf(false) }
 	
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
@@ -67,22 +70,26 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 			
 			Spacer(modifier = Modifier.height(12.dp))
 			
-			InputField(
+			EmailInputField(
 				title = stringResource(id = R.string.create_account_email_label),
 				text = state.value.email,
 				placeHolder = stringResource(id = R.string.create_account_email_placeholder),
-				hasError = !state.value.isEmail,
+				hasError = !state.value.isEmail && !focusState.value,
 				errorMessage = state.value.errorText,
 				inputType = KeyboardType.Email,
-				inputCapitalization = KeyboardCapitalization.None
-			) {
-				viewModel.setInputActions(
-					CreateAccountActions.EnterInputData(
-						InputDataType.EMAIL,
-						it
+				inputCapitalization = KeyboardCapitalization.None,
+				onValueChanged = {
+					viewModel.setInputActions(
+						CreateAccountActions.EnterInputData(
+							InputDataType.EMAIL,
+							it
+						)
 					)
-				)
-			}
+				},
+				onFocusChanged = {
+					focusState.value = it
+				}
+			)
 			
 			Spacer(modifier = Modifier.height(16.dp))
 			
