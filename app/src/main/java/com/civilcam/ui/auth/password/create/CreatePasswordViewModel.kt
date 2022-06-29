@@ -1,7 +1,7 @@
 package com.civilcam.ui.auth.password.create
 
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.ui.auth.create.model.InputDataType
+import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.password.create.model.CreatePasswordActions
 import com.civilcam.ui.auth.password.create.model.CreatePasswordRoute
 import com.civilcam.ui.auth.password.create.model.CreatePasswordState
@@ -18,8 +18,8 @@ class CreatePasswordViewModel :
 			CreatePasswordActions.ClickGoBack -> goBack()
 			is CreatePasswordActions.EnterInputData -> {
 				when (action.dataType) {
-					InputDataType.PASSWORD -> passwordEntered(action.data)
-					InputDataType.PASSWORD_REPEAT -> confirmPasswordEntered(action.data)
+					PasswordInputDataType.PASSWORD -> passwordEntered(action.data)
+					PasswordInputDataType.PASSWORD_REPEAT -> confirmPasswordEntered(action.data)
 				}
 			}
 		}

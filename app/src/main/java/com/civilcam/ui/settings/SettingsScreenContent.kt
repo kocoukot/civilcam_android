@@ -17,6 +17,8 @@ import com.civilcam.common.ext.keyboardAsState
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.alert.AlertDialogTypes
+import com.civilcam.ui.common.compose.BackButton
+import com.civilcam.ui.common.compose.TextActionButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.settings.content.*
 import com.civilcam.ui.settings.model.SettingsActions
@@ -62,20 +64,48 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
                         } else true
                     TopAppBarContent(
                         title = stringResource(id = screenTitle(settingsType)),
-                        navigationAction = {
-                            when (settingsType) {
-                                SettingsType.LANGUAGE -> {
-                                    viewModel.setInputActions(SettingsActions.ClickGoBack)
-                                    selectedLanguage = currentLanguage
-                                }
-                                else -> {
-                                    viewModel.setInputActions(SettingsActions.ClickGoBack)
+                        navigationItem = {
+                            BackButton {
+                                when (settingsType) {
+                                    SettingsType.LANGUAGE -> {
+                                        viewModel.setInputActions(SettingsActions.ClickGoBack)
+                                        selectedLanguage = currentLanguage
+                                    }
+                                    else -> {
+                                        viewModel.setInputActions(SettingsActions.ClickGoBack)
+                                    }
                                 }
                             }
                         },
-                        isActionEnabled = isActionEnabled,
-                        actionTitle = getActionTitle(settingsType),
-                        actionAction = { setAction(viewModel, settingsType) }
+                        actionItem = {
+                            when (settingsType) {
+                                SettingsType.CONTACT_SUPPORT -> {
+                                    TextActionButton(
+                                        isEnabled = isActionEnabled,
+                                        actionTitle = stringResource(id = R.string.send_text)
+                                    ) {
+                                        setAction(viewModel, settingsType)
+                                    }
+                                }
+                                SettingsType.LANGUAGE, SettingsType.CREATE_PASSWORD -> {
+                                    TextActionButton(
+                                        isEnabled = isActionEnabled,
+                                        actionTitle = stringResource(id = R.string.save_text)
+                                    ) {
+                                        setAction(viewModel, settingsType)
+                                    }
+                                }
+                                SettingsType.CHANGE_PASSWORD -> {
+                                    TextActionButton(
+                                        isEnabled = isActionEnabled,
+                                        actionTitle = stringResource(id = R.string.continue_text)
+                                    ) {
+                                        setAction(viewModel, settingsType)
+                                    }
+                                }
+                                else -> {}
+                            }
+                        }
                     )
                 }
                 Divider(color = CCTheme.colors.grayThree)
@@ -194,22 +224,12 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
                         },
                     )
                 }
-
                 //                SettingsType.SUBSCRIPTION -> TODO()
 
                 else -> {}
             }
         }
     }
-}
-
-
-@Composable
-private fun getActionTitle(settingsType: SettingsType) = when (settingsType) {
-    SettingsType.CONTACT_SUPPORT -> stringResource(id = R.string.send_text)
-    SettingsType.LANGUAGE, SettingsType.CREATE_PASSWORD -> stringResource(id = R.string.save_text)
-    SettingsType.CHANGE_PASSWORD -> stringResource(id = R.string.continue_text)
-    else -> ""
 }
 
 private fun setAction(viewModel: SettingsViewModel, settingsType: SettingsType) {

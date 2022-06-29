@@ -15,17 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.create.SocialImage
-import com.civilcam.ui.auth.create.model.InputDataType
+import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.login.model.LoginActions
-import com.civilcam.ui.common.compose.*
+import com.civilcam.ui.common.compose.BackButton
+import com.civilcam.ui.common.compose.ComposeButton
+import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.EmailInputField
-import com.civilcam.ui.common.compose.inputs.InputField
 import com.civilcam.ui.common.compose.inputs.PasswordField
 
 
@@ -74,7 +73,7 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 				onValueChanged = {
 					viewModel.setInputActions(
 						LoginActions.EnterInputData(
-							InputDataType.EMAIL,
+							PasswordInputDataType.EMAIL,
 							it
 						)
 					)
@@ -93,7 +92,7 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 				onValueChanged = {
 					viewModel.setInputActions(
 						LoginActions.EnterInputData(
-							InputDataType.PASSWORD,
+							PasswordInputDataType.PASSWORD,
 							it
 						)
 					)

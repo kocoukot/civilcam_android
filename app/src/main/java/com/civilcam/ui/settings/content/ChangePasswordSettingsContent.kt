@@ -27,7 +27,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.common.compose.PlaceHolderText
+import com.civilcam.ui.common.compose.inputs.PlaceholderText
 import com.civilcam.ui.settings.model.ChangePasswordSectionData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -129,7 +129,7 @@ private fun PasswordField(
                     Box(
                         Modifier.weight(1f)
                     ) {
-                        if (inputText.isEmpty()) PlaceHolderText(text = stringResource(id = R.string.settings_password_placeholder))
+                        if (inputText.isEmpty()) PlaceholderText(text = stringResource(id = R.string.settings_password_placeholder))
                         innerTextField()
                     }
                     if (inputText.isNotEmpty()) {

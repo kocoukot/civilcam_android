@@ -23,8 +23,8 @@ import com.civilcam.ui.common.compose.inputs.PhoneInputField
 import com.civilcam.ui.profile.setup.content.AvatarContent
 import com.civilcam.ui.profile.setup.content.CalendarIcon
 import com.civilcam.ui.profile.setup.content.DatePickerContent
-import com.civilcam.ui.profile.setup.model.InputDataType
 import com.civilcam.ui.profile.setup.model.ProfileSetupActions
+import com.civilcam.ui.profile.setup.model.UserInfoDataType
 import com.civilcam.utils.DateUtils
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -104,7 +104,7 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
                 ) {
                     viewModel.setInputActions(
                         ProfileSetupActions.EnterInputData(
-                            InputDataType.FIRST_NAME,
+                            UserInfoDataType.FIRST_NAME,
                             it
                         )
                     )
@@ -116,7 +116,7 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
                 ) {
                     viewModel.setInputActions(
                         ProfileSetupActions.EnterInputData(
-                            InputDataType.FIRST_NAME,
+                            UserInfoDataType.LAST_NAME,
                             it
                         )
                     )
@@ -157,7 +157,7 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
                     onValueChanged = {
                         viewModel.setInputActions(
                             ProfileSetupActions.EnterInputData(
-                                InputDataType.PHONE_NUMBER,
+                                UserInfoDataType.PHONE_NUMBER,
                                 it
                             )
                         )

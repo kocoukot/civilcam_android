@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.auth.create.model.InputDataType
+import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.password.create.model.CreatePasswordActions
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
@@ -64,7 +64,7 @@ fun CreatePasswordScreenContent(viewModel: CreatePasswordViewModel) {
 				onValueChanged = {
 					viewModel.setInputActions(
 						CreatePasswordActions.EnterInputData(
-							InputDataType.PASSWORD,
+							PasswordInputDataType.PASSWORD,
 							it
 						)
 					)
@@ -91,7 +91,7 @@ fun CreatePasswordScreenContent(viewModel: CreatePasswordViewModel) {
 				onValueChanged = {
 					viewModel.setInputActions(
 						CreatePasswordActions.EnterInputData(
-							InputDataType.PASSWORD_REPEAT,
+							PasswordInputDataType.PASSWORD_REPEAT,
 							it
 						)
 					)

@@ -2,7 +2,6 @@ package com.civilcam.ui.auth.password.reset
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -14,15 +13,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.auth.create.model.InputDataType
+import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.password.reset.model.ResetActions
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
@@ -37,13 +33,15 @@ fun ResetPasswordScreenContent(viewModel: ResetPasswordViewModel) {
 	
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
-		modifier = Modifier.fillMaxSize().clickable(
-			interactionSource = remember { MutableInteractionSource()},
-			indication = null,
-			onClick = {
-				viewModel.setInputActions(ResetActions.CheckIfEmail)
-			},
-		),
+		modifier = Modifier
+			.fillMaxSize()
+			.clickable(
+				interactionSource = remember { MutableInteractionSource() },
+				indication = null,
+				onClick = {
+					viewModel.setInputActions(ResetActions.CheckIfEmail)
+				},
+			),
 		topBar = {
 			Column {
 				TopAppBarContent(
@@ -79,7 +77,7 @@ fun ResetPasswordScreenContent(viewModel: ResetPasswordViewModel) {
 				onValueChanged = {
 					viewModel.setInputActions(
 						ResetActions.EnterInputData(
-							InputDataType.EMAIL,
+							PasswordInputDataType.EMAIL,
 							it
 						)
 					)
