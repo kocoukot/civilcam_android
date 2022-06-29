@@ -8,6 +8,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -22,6 +24,7 @@ import com.civilcam.ui.auth.create.SocialImage
 import com.civilcam.ui.auth.create.model.InputDataType
 import com.civilcam.ui.auth.login.model.LoginActions
 import com.civilcam.ui.common.compose.*
+import com.civilcam.ui.common.compose.inputs.EmailInputField
 import com.civilcam.ui.common.compose.inputs.InputField
 import com.civilcam.ui.common.compose.inputs.PasswordField
 
@@ -30,6 +33,8 @@ import com.civilcam.ui.common.compose.inputs.PasswordField
 fun LoginScreenContent(viewModel: LoginViewModel) {
 	
 	val state = viewModel.state.collectAsState()
+	
+	val focusState = remember { mutableStateOf(false) }
 	
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
@@ -59,23 +64,25 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 		) {
 
 			Spacer(modifier = Modifier.height(12.dp))
-
-			InputField(
+			
+			EmailInputField(
 				title = stringResource(id = R.string.create_account_email_label),
 				text = state.value.email,
 				placeHolder = stringResource(id = R.string.create_account_email_placeholder),
 				errorMessage = state.value.errorText,
-				inputType = KeyboardType.Email,
-				hasError = !state.value.isEmail,
-				inputCapitalization = KeyboardCapitalization.None
-			) {
-				viewModel.setInputActions(
-					LoginActions.EnterInputData(
-						InputDataType.EMAIL,
-						it
+				hasError = !state.value.isEmail && !focusState.value,
+				onValueChanged = {
+					viewModel.setInputActions(
+						LoginActions.EnterInputData(
+							InputDataType.EMAIL,
+							it
+						)
 					)
-				)
-			}
+				},
+				onFocusChanged = {
+					focusState.value = it
+				}
+			)
 
 			Spacer(modifier = Modifier.height(16.dp))
 

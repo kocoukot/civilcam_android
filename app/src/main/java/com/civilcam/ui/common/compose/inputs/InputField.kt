@@ -23,6 +23,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.*
@@ -62,7 +63,7 @@ fun InputField(
     animateColorAsState(targetValue = if (hasError && inputText.isNotEmpty()) CCTheme.colors.primaryRed else if (hasFocus) CCTheme.colors.black else CCTheme.colors.grayOne)
     val errorBorderState by
     animateColorAsState(targetValue = if (hasError && inputText.isNotEmpty()) CCTheme.colors.primaryRed else CCTheme.colors.lightGray)
-
+    
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -141,6 +142,114 @@ fun InputField(
                         innerTextField()
                     }
                     if (trailingIcon != null) trailingIcon()
+                }
+            }
+        )
+        AnimatedVisibility(visible = hasError && inputText.isNotEmpty()) {
+            ErrorText(errorMessage)
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun EmailInputField(
+    title: String,
+    placeHolder: String,
+    text: String = "",
+    hasError: Boolean = false,
+    errorMessage: String = "",
+    isEnable: Boolean = true,
+    isReversed: Boolean = false,
+    onTextClicked: (() -> Unit)? = null,
+    onValueChanged: (String) -> Unit,
+    onFocusChanged: (Boolean) -> Unit
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val viewRequester = BringIntoViewRequester()
+    var hasFocus by remember { mutableStateOf(false) }
+    var inputText by remember { mutableStateOf(text) }
+    if (text.isNotEmpty()) inputText = text
+    
+    val titleColorState by
+    animateColorAsState(targetValue = if (hasError && inputText.isNotEmpty()) CCTheme.colors.primaryRed else if (hasFocus) CCTheme.colors.black else CCTheme.colors.grayOne)
+    val errorBorderState by
+    animateColorAsState(targetValue = if (hasError && inputText.isNotEmpty()) CCTheme.colors.primaryRed else CCTheme.colors.lightGray)
+    
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .onFocusChanged { focusState ->
+                when {
+                    focusState.hasFocus -> hasFocus = true
+                    !focusState.isFocused -> hasFocus = false
+                }
+                onFocusChanged.invoke(focusState.hasFocus)
+            }
+            .background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
+            .bringIntoViewRequester(viewRequester)
+            .onFocusEvent {
+                if (it.isFocused) {
+                    coroutineScope.launch {
+                        delay(400)
+                        viewRequester.bringIntoView()
+                    }
+                }
+            }
+    ) {
+        
+        Text(
+            title,
+            style = CCTheme.typography.common_text_small_regular,
+            color = titleColorState,
+            modifier = Modifier
+                .padding(bottom = 8.dp)
+                .fillMaxWidth()
+        )
+        
+        BasicTextField(
+            enabled = isEnable,
+            textStyle = if (hasError && inputText.isNotEmpty()) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(4.dp))
+                .border(
+                    1.dp,
+                    errorBorderState,
+                    RoundedCornerShape(4.dp)
+                )
+                .clickable {
+                    if (!isEnable) onTextClicked?.invoke()
+                },
+            singleLine = true,
+            value = if (isEnable) inputText else text,
+            onValueChange = {
+                inputText = it
+                onValueChanged.invoke(inputText.trim())
+                
+            },
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.None,
+                keyboardType = KeyboardType.Email
+            ),
+            decorationBox = { innerTextField ->
+                Row(
+                    modifier = Modifier
+                        .background(
+                            if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
+                            RoundedCornerShape(4.dp)
+                        )
+                        .padding(vertical = 14.dp)
+                        .padding(start = 12.dp, end = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        Modifier
+                            .weight(1f)
+                    ) {
+                        if (inputText.isEmpty()) PlaceholderText(placeHolder)
+                        innerTextField()
+                    }
                 }
             }
         )

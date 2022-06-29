@@ -74,7 +74,7 @@ fun VerificationScreenContent(
                     .padding(horizontal = 16.dp)
                     .weight(1f)
 			) {
-				Spacer(modifier = Modifier.height(32.dp))
+				Spacer(modifier = Modifier.height(12.dp))
 				OtpCodeInputField(
 					onValueChanged = {
 						viewModel.setInputActions(VerificationActions.EnterCodeData(it))

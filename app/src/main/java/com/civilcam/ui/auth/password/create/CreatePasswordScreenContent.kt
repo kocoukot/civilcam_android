@@ -13,12 +13,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.auth.create.PasswordStrategyBlocks
 import com.civilcam.ui.auth.create.model.InputDataType
 import com.civilcam.ui.auth.password.create.model.CreatePasswordActions
+import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.PasswordField
+import com.civilcam.ui.common.compose.inputs.PasswordStrategyBlocks
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -36,7 +37,9 @@ fun CreatePasswordScreenContent(viewModel: CreatePasswordViewModel) {
 				TopAppBarContent(
 					title = stringResource(id = R.string.create_new_password),
 					navigationItem = {
-						viewModel.setInputActions(CreatePasswordActions.ClickGoBack)
+						BackButton {
+							viewModel.setInputActions(CreatePasswordActions.ClickGoBack)
+						}
 					},
 				)
 			}
