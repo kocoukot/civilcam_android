@@ -20,11 +20,14 @@ class ResetPasswordViewModel : ComposeViewModel<ResetState, ResetRoute, ResetAct
 					InputDataType.EMAIL -> emailEntered(action.data)
 				}
 			}
+			ResetActions.CheckIfEmail -> {
+				_state.value = _state.value.copy(isEmail = if (_state.value.email.isEmpty()) true else _state.value.email.isEmail())
+			}
 		}
 	}
 	
 	private fun emailEntered(email: String) {
-		_state.value = _state.value.copy(email = email, isEmail = email.isEmail())
+		_state.value = _state.value.copy(email = email, isEmail = true)
 	}
 	
 	private fun goContinue() {

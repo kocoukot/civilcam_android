@@ -3,6 +3,7 @@ package com.civilcam.ui.auth.password.reset
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -10,6 +11,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -35,7 +37,13 @@ fun ResetPasswordScreenContent(viewModel: ResetPasswordViewModel) {
 	
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
-		modifier = Modifier.fillMaxSize(),
+		modifier = Modifier.fillMaxSize().clickable(
+			interactionSource = remember { MutableInteractionSource()},
+			indication = null,
+			onClick = {
+				viewModel.setInputActions(ResetActions.CheckIfEmail)
+			},
+		),
 		topBar = {
 			Column {
 				TopAppBarContent(
