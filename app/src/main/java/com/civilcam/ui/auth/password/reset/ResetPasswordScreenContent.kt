@@ -67,9 +67,7 @@ fun ResetPasswordScreenContent(viewModel: ResetPasswordViewModel) {
 				text = state.value.email,
 				placeHolder = stringResource(id = R.string.create_account_email_placeholder),
 				errorMessage = state.value.errorText,
-				inputType = KeyboardType.Email,
 				hasError = !state.value.isEmail,
-				inputCapitalization = KeyboardCapitalization.None,
 				onValueChanged = {
 					viewModel.setInputActions(
 						ResetActions.EnterInputData(

@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.ext.digits
+import com.civilcam.common.ext.isEmail
 import com.civilcam.common.ext.letters
 import com.civilcam.common.theme.CCTheme
 import kotlinx.coroutines.delay
@@ -160,9 +161,6 @@ fun EmailInputField(
     hasError: Boolean = false,
     errorMessage: String = "",
     isEnable: Boolean = true,
-    inputType: KeyboardType = KeyboardType.Text,
-    inputCapitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences,
-    trailingIcon: @Composable (() -> Unit)? = null,
     isReversed: Boolean = false,
     onTextClicked: (() -> Unit)? = null,
     onValueChanged: (String) -> Unit,
@@ -175,7 +173,7 @@ fun EmailInputField(
     if (text.isNotEmpty()) inputText = text
     
     val titleColorState by
-    animateColorAsState(targetValue = if (hasError && inputText.isNotEmpty()) CCTheme.colors.primaryRed else if (hasFocus) CCTheme.colors.black else CCTheme.colors.grayOne)
+    animateColorAsState(targetValue = if (hasError && inputText.isNotEmpty() && inputText.isEmail()) CCTheme.colors.primaryRed else if (hasFocus) CCTheme.colors.black else CCTheme.colors.grayOne)
     val errorBorderState by
     animateColorAsState(targetValue = if (hasError && inputText.isNotEmpty()) CCTheme.colors.primaryRed else CCTheme.colors.lightGray)
     
@@ -227,17 +225,13 @@ fun EmailInputField(
             singleLine = true,
             value = if (isEnable) inputText else text,
             onValueChange = {
-                inputText = if (isEnable && inputType == KeyboardType.Text) {
-                    it.letters()
-                } else {
-                    it
-                }
+                inputText = it
                 onValueChanged.invoke(inputText.trim())
                 
             },
             keyboardOptions = KeyboardOptions(
-                capitalization = inputCapitalization,
-                keyboardType = inputType
+                capitalization = KeyboardCapitalization.None,
+                keyboardType = KeyboardType.Email
             ),
             decorationBox = { innerTextField ->
                 Row(
@@ -257,7 +251,6 @@ fun EmailInputField(
                         if (inputText.isEmpty()) PlaceholderText(placeHolder)
                         innerTextField()
                     }
-                    if (trailingIcon != null) trailingIcon()
                 }
             }
         )

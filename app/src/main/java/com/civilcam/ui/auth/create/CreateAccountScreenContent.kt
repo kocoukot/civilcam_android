@@ -76,8 +76,6 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 				placeHolder = stringResource(id = R.string.create_account_email_placeholder),
 				hasError = !state.value.isEmail && !focusState.value,
 				errorMessage = state.value.errorText,
-				inputType = KeyboardType.Email,
-				inputCapitalization = KeyboardCapitalization.None,
 				onValueChanged = {
 					viewModel.setInputActions(
 						CreateAccountActions.EnterInputData(
