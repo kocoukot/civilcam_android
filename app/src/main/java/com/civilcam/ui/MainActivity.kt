@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     private val onBackStackChangedListener by lazy {
         FragmentManager.OnBackStackChangedListener {
-            binding.bottomNavigationView.isVisible = currentVisibleFragment is SupportBottomBar
+            binding.navBarGroup.isVisible = currentVisibleFragment is SupportBottomBar
         }
     }
 

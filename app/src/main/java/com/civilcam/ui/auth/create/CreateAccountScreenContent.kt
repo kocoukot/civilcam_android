@@ -65,10 +65,10 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 		
 		Column(
 			modifier = Modifier
-                .fillMaxSize()
-                .imePadding()
-                .padding(horizontal = 16.dp)
-                .verticalScroll(rememberScrollState())
+				.fillMaxSize()
+//                .imePadding()
+				.padding(horizontal = 16.dp)
+				.verticalScroll(rememberScrollState())
 		) {
 			
 			Spacer(modifier = Modifier.height(12.dp))
@@ -206,8 +206,8 @@ fun SocialImage(
 		painter = painter,
 		contentDescription = null,
 		modifier = Modifier
-            .height(44.dp)
-            .width(44.dp)
+			.height(44.dp)
+			.width(44.dp)
 	)
 }
 
