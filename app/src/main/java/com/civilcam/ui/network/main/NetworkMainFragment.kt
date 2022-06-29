@@ -7,14 +7,11 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
-import com.civilcam.R
 import com.civilcam.common.ext.setPan
 import com.civilcam.common.ext.setResize
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.common.SupportBottomBar
-import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
-import com.civilcam.ui.network.main.model.NetworkMainRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -28,7 +25,7 @@ class NetworkMainFragment : Fragment(), SupportBottomBar {
     ): View {
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
-                NetworkMainRoute.GoSettings -> navController.navigate(R.id.action_network_root_to_settingsFragment)
+              //  NetworkMainRoute.GoSettings -> navController.navigate(R.id.action_network_root_to_settingsFragment)
             }
         }
         return ComposeView(requireContext()).apply {
