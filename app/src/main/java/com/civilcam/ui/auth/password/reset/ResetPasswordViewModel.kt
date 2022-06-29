@@ -2,7 +2,7 @@ package com.civilcam.ui.auth.password.reset
 
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail
-import com.civilcam.ui.auth.create.model.InputDataType
+import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.password.reset.model.ResetActions
 import com.civilcam.ui.auth.password.reset.model.ResetRoute
 import com.civilcam.ui.auth.password.reset.model.ResetState
@@ -17,7 +17,8 @@ class ResetPasswordViewModel : ComposeViewModel<ResetState, ResetRoute, ResetAct
 			ResetActions.ClickBack -> goBack()
 			is ResetActions.EnterInputData -> {
 				when (action.dataType) {
-					InputDataType.EMAIL -> emailEntered(action.data)
+					PasswordInputDataType.EMAIL -> emailEntered(action.data)
+					else -> {}
 				}
 			}
 			ResetActions.CheckIfEmail -> {

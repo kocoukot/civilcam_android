@@ -17,18 +17,15 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.create.model.CreateAccountActions
-import com.civilcam.ui.auth.create.model.InputDataType
+import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.EmailInputField
-import com.civilcam.ui.common.compose.inputs.InputField
 import com.civilcam.ui.common.compose.inputs.PasswordField
 import com.civilcam.ui.common.compose.inputs.PasswordStrategyBlocks
 
@@ -79,7 +76,7 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 				onValueChanged = {
 					viewModel.setInputActions(
 						CreateAccountActions.EnterInputData(
-							InputDataType.EMAIL,
+							PasswordInputDataType.EMAIL,
 							it
 						)
 					)
@@ -93,24 +90,24 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 			
 			PasswordField(
 				name = stringResource(id = R.string.password),
-				text = state.value.password,
+				text = state.value.passwordModel.password,
 				placeholder = stringResource(id = R.string.create_password),
 				onValueChanged = {
 					viewModel.setInputActions(
 						CreateAccountActions.EnterInputData(
-							InputDataType.PASSWORD,
+							PasswordInputDataType.PASSWORD,
 							it
 						)
 					)
 				},
 				hasError = checkedStrategies.value != 4,
-				noMatch = state.value.noMatch
+				noMatch = state.value.passwordModel.noMatch
 			)
 			
 			Spacer(modifier = Modifier.height(12.dp))
 			
 			PasswordStrategyBlocks(
-				input = state.value.password,
+				input = state.value.passwordModel.password,
 				strategyUpdate = {
 					checkedStrategies.value = it
 				}
@@ -120,18 +117,18 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 			
 			PasswordField(
 				name = stringResource(id = R.string.confirm_password),
-				text = state.value.confirmPassword,
+				text = state.value.passwordModel.confirmPassword,
 				placeholder = stringResource(id = R.string.re_enter_password),
 				onValueChanged = {
 					viewModel.setInputActions(
 						CreateAccountActions.EnterInputData(
-							InputDataType.PASSWORD_REPEAT,
+							PasswordInputDataType.PASSWORD_REPEAT,
 							it
 						)
 					)
 				},
-				noMatch = state.value.noMatch,
-				isReEnter = state.value.noMatch
+				noMatch = state.value.passwordModel.noMatch,
+				isReEnter = state.value.passwordModel.noMatch
 			)
 			
 			Spacer(modifier = Modifier.weight(1f))
@@ -205,7 +202,7 @@ fun SocialImage(
 		painter = painter,
 		contentDescription = null,
 		modifier = Modifier
-            .height(44.dp)
-            .width(44.dp)
+			.height(44.dp)
+			.width(44.dp)
 	)
 }

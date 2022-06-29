@@ -28,7 +28,7 @@ class LanguageSelectFragment : Fragment() {
 
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
-                LangSelectRoute.ToOnBoarding -> navController.navigate(R.id.settingsFragment)
+                LangSelectRoute.ToOnBoarding -> navController.navigate(R.id.action_languageSelectFragment_to_onBoardingFragment)
             }
         }
         return ComposeView(requireContext()).apply {

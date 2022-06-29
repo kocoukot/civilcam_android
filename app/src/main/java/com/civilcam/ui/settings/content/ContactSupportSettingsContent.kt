@@ -26,8 +26,8 @@ import com.civilcam.common.ext.isEmail
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.Constant.ISSUE_DESCRIPTION_LIMIT
 import com.civilcam.ui.common.Constant.ISSUE_LIMIT
-import com.civilcam.ui.common.compose.InputField
-import com.civilcam.ui.common.compose.PlaceHolderText
+import com.civilcam.ui.common.compose.inputs.InputField
+import com.civilcam.ui.common.compose.inputs.PlaceholderText
 
 @Composable
 fun ContactSupportContent(
@@ -154,7 +154,7 @@ private fun EmailInputField(
                     Box(
                         Modifier.weight(1f)
                     ) {
-                        if (inputText.isEmpty()) PlaceHolderText(placeHolder)
+                        if (inputText.isEmpty()) PlaceholderText(placeHolder)
                         innerTextField()
                     }
                     if (inputText.isNotEmpty()) LimitLabelContent(
@@ -222,7 +222,7 @@ private fun DescriptionInputField(
                             .padding(bottom = 20.dp),
                         contentAlignment = Alignment.TopStart
                     ) {
-                        if (inputText.isEmpty()) PlaceHolderText(stringResource(id = R.string.settings_contact_issue_description))
+                        if (inputText.isEmpty()) PlaceholderText(stringResource(id = R.string.settings_contact_issue_description))
                         innerTextField()
                     }
 

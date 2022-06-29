@@ -2,7 +2,7 @@ package com.civilcam.ui.auth.login
 
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail
-import com.civilcam.ui.auth.create.model.InputDataType
+import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.login.model.LoginActions
 import com.civilcam.ui.auth.login.model.LoginRoute
 import com.civilcam.ui.auth.login.model.LoginState
@@ -20,8 +20,8 @@ class LoginViewModel : ComposeViewModel<LoginState, LoginRoute, LoginActions>() 
 			LoginActions.ClickBack -> goBack()
 			is LoginActions.EnterInputData -> {
 				when (action.dataType) {
-					InputDataType.EMAIL -> emailEntered(action.data)
-					InputDataType.PASSWORD -> passwordEntered(action.data)
+					PasswordInputDataType.EMAIL -> emailEntered(action.data)
+					PasswordInputDataType.PASSWORD -> passwordEntered(action.data)
 				}
 			}
 		}

@@ -24,7 +24,7 @@ import com.civilcam.ui.auth.OneDigitCheckStrategy
 import com.civilcam.ui.auth.UpperCaseCheckStrategy
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.create.model.PasswordModel
-import com.civilcam.ui.common.compose.PasswordField
+import com.civilcam.ui.common.compose.inputs.PasswordField
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
