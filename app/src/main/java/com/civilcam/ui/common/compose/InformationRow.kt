@@ -10,14 +10,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 
 
 @Composable
 fun InformationRow(
     title: String,
+    titleFont: FontFamily = FontFamily(Font(R.font.roboto_medium)),
     text: String = "",
     needDivider: Boolean = true,
     isClickable: Boolean = true,
@@ -66,7 +70,8 @@ fun InformationRow(
 
                         Text(
                             text = title,
-                            style = CCTheme.typography.common_text_medium
+                            style = CCTheme.typography.common_text_medium,
+                            fontFamily = titleFont
                         )
 
                         if (text.isNotEmpty())

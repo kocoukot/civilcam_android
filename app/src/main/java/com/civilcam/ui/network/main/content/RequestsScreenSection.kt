@@ -7,6 +7,8 @@ import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
@@ -22,6 +24,7 @@ fun RequestsScreenSection(
 ) {
 
     Column {
+        Divider(color = CCTheme.colors.grayThree)
         Spacer(modifier = Modifier.height(32.dp))
         Divider(color = CCTheme.colors.grayThree)
 
@@ -29,6 +32,7 @@ fun RequestsScreenSection(
         for ((index, guard) in guardRequestsList.withIndex()) {
             InformationRow(
                 title = guard.guardianName,
+                titleFont = FontFamily(Font(R.font.roboto_regular)),
                 needDivider = index < guardRequestsList.lastIndex,
                 isClickable = false,
                 leadingIcon = {
@@ -44,6 +48,8 @@ fun RequestsScreenSection(
                 },
             ) {}
         }
+        Divider(color = CCTheme.colors.grayThree)
+
     }
 }
 

@@ -106,10 +106,11 @@ fun SearchInputField(
                                     painter = painterResource(id = R.drawable.ic_search),
                                     contentDescription = null,
                                 )
+                                Spacer(modifier = Modifier.width(7.dp))
                                 Text(
                                     stringResource(id = R.string.search_text),
                                     modifier = Modifier,
-                                    style = CCTheme.typography.common_text_regular,
+                                    style = CCTheme.typography.common_text_medium,
                                     color = CCTheme.colors.grayOne
                                 )
                             }

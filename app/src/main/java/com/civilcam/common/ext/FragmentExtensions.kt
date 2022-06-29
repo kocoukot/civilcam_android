@@ -11,8 +11,10 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import com.civilcam.CivilcamApplication.Companion.instance
+import com.civilcam.R
 import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.alert.DialogAlertFragment
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -128,4 +130,28 @@ fun Fragment.setPan() {
 
 fun Fragment.setResize() {
     activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+}
+
+
+fun Fragment.hideSystemUI() {
+    activity?.window?.apply {
+        statusBarColor = Color.TRANSPARENT
+//            if (Build.VERSION.SDK_INT in 21..29) {
+        clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                WindowCompat.setDecorFitsSystemWindows(this, false)
+    }
+}
+
+fun Fragment.showSystemUI() {
+
+    activity?.window?.apply {
+//            if (Build.VERSION.SDK_INT in 21..29) {
+        statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+        decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+//            } else if (Build.VERSION.SDK_INT >= 30) {
+        WindowCompat.setDecorFitsSystemWindows(this, true)
+//            }
+    }
 }
