@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/languageSelectFragment">
+    app:startDestination="@id/network_root">
 
 
     <fragment
@@ -116,6 +116,12 @@
         <action
             android:id="@+id/action_network_root_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_network_root_to_contactsFragment"
+            app:destination="@id/contactsFragment" />
+        <action
+            android:id="@+id/action_network_root_to_userDetailsFragment"
+            app:destination="@id/userDetailsFragment" />
     </fragment>
 
     <fragment

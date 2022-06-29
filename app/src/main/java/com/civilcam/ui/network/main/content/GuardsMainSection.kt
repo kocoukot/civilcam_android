@@ -29,7 +29,8 @@ import com.civilcam.ui.network.main.model.NetworkMainModel
 fun GuardsMainSection(
     screenData: NetworkMainModel,
     tabPage: NetworkType,
-    clickGoRequests: () -> Unit
+    clickGoRequests: () -> Unit,
+    clickGoUser: (GuardianItem) -> Unit
 ) {
 
     if (screenData.guardiansList.isEmpty() && screenData.requestsList.isEmpty()) {
@@ -89,7 +90,9 @@ fun GuardsMainSection(
                                 trailingIcon = {
                                     getUserStatus(contact.guardianStatus)
                                 }
-                            ) {}
+                            ) {
+                                clickGoUser.invoke(contact)
+                            }
                         }
                     }
                 }

@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class UserDetailsViewModel(
+    private val userId: Int,
     private val getUserInformationUseCase: GetUserInformationUseCase
 ) : ViewModel() {
 

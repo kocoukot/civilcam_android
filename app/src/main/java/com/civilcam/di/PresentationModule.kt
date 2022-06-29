@@ -61,7 +61,7 @@ val authModule = module {
 
 val networkRootModule = module {
 
-    viewModel { UserDetailsViewModel(get()) }
+    viewModel { (userId: Int) -> UserDetailsViewModel(userId, get()) }
 
     viewModel { ContactsViewModel(get()) }
 

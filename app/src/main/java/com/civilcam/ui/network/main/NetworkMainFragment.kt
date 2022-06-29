@@ -12,6 +12,8 @@ import com.civilcam.common.ext.setResize
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.observeNonNull
+import com.civilcam.ui.network.main.model.NetworkMainRoute
+import com.civilcam.ui.profile.userDetails.UserDetailsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -25,7 +27,12 @@ class NetworkMainFragment : Fragment(), SupportBottomBar {
     ): View {
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
-              //  NetworkMainRoute.GoSettings -> navController.navigate(R.id.action_network_root_to_settingsFragment)
+                NetworkMainRoute.GoSettings -> navController.navigate(R.id.action_network_root_to_settingsFragment)
+                NetworkMainRoute.GoContacts -> navController.navigate(R.id.action_network_root_to_contactsFragment)
+                is NetworkMainRoute.GoUserDetail -> navController.navigate(
+                    R.id.action_network_root_to_userDetailsFragment,
+                    UserDetailsFragment.createArgs(route.userId)
+                )
             }
         }
         return ComposeView(requireContext()).apply {

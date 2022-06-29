@@ -6,6 +6,7 @@ import com.civilcam.domain.model.guard.NetworkType
 sealed class NetworkMainActions : ComposeFragmentActions {
     object ClickGoMyProfile : NetworkMainActions()
     object ClickGoSettings : NetworkMainActions()
+    object ClickGoContacts : NetworkMainActions()
 
 
     data class ClickNetworkTypeChange(val networkType: NetworkType) : NetworkMainActions()
@@ -14,8 +15,10 @@ sealed class NetworkMainActions : ComposeFragmentActions {
 
     object ClickGoRequests : NetworkMainActions()
 
-    data class ClickUser(val userId: Int) : NetworkMainActions()
+    data class ClickUser(val user: GuardianItem) : NetworkMainActions()
 
     object ClickGoBack : NetworkMainActions()
+
+    object ClickGoSearch : NetworkMainActions()
 
 }

@@ -1,5 +1,6 @@
 package com.civilcam.ui.common.compose.inputs
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,6 +11,7 @@ import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,10 +29,9 @@ import com.civilcam.common.ext.letters
 import com.civilcam.common.theme.CCTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun SearchInputField(
     text: String = "",
@@ -41,9 +42,8 @@ fun SearchInputField(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val viewRequester = BringIntoViewRequester()
-    Timber.d("getDateFromCalendar $text")
     var inputText by remember { mutableStateOf(text) }
-
+    var hasFocus by remember { mutableStateOf(false) }
     if (text.isNotEmpty()) inputText = text
     Column(
         modifier = Modifier
@@ -51,6 +51,7 @@ fun SearchInputField(
             .background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
             .bringIntoViewRequester(viewRequester)
             .onFocusEvent {
+                hasFocus = it.hasFocus
                 if (it.isFocused) {
                     coroutineScope.launch {
                         delay(400)
@@ -60,17 +61,17 @@ fun SearchInputField(
             }
     ) {
         BasicTextField(
-            enabled = isEnable,
+//            enabled = isEnable,
             textStyle = CCTheme.typography.common_text_regular,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .clip(RoundedCornerShape(50))
                 .clickable {
-                    if (!isEnable) onTextClicked?.invoke()
+
                 },
             singleLine = true,
-            value = if (isEnable) inputText else text,
+            value = inputText,
             onValueChange = {
                 inputText = it.letters()
                 onValueChanged.invoke(inputText.trim())
@@ -81,7 +82,7 @@ fun SearchInputField(
                 keyboardType = KeyboardType.Text
             ),
             decorationBox = { innerTextField ->
-                Row(
+                Box(
                     modifier = Modifier
                         .height(40.dp)
                         .background(
@@ -90,15 +91,19 @@ fun SearchInputField(
                         )
                         .padding(vertical = 8.dp)
                         .padding(start = 12.dp, end = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    contentAlignment = Alignment.CenterStart
                 ) {
                     Box(
-                        Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.CenterStart
                     ) {
                         if (inputText.isEmpty())
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth()
+//                                    .clickable(enabled = isEnable) {
+//                                    onTextClicked?.invoke()
+//                                }
+                                ,
                                 horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
@@ -114,14 +119,63 @@ fun SearchInputField(
                                     color = CCTheme.colors.grayOne
                                 )
                             }
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        AnimatedVisibility(
+                            visible = hasFocus && inputText.isNotEmpty(),
+                            enter = slideInHorizontally(),
+                            exit = slideOutHorizontally()
+                        ) {
+                            Row(
+                                horizontalArrangement = Arrangement.Start,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_search),
+                                    contentDescription = null,
+                                )
+                                Spacer(modifier = Modifier.padding(end = 8.dp))
+                            }
+                        }
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(end = 16.dp)
+                        ) {
+                            innerTextField()
+                        }
+                        AnimatedVisibility(
+                            visible = inputText.isNotEmpty(),
+                            enter = scaleIn(),
+                            exit = scaleOut()
+                        ) {
+                            ClearButton {
+                                inputText = ""
 
-                        innerTextField()
+                            }
+                        }
                     }
 
                 }
             }
         )
     }
+}
+
+@Composable
+private fun ClearButton(onClearText: () -> Unit) {
+    Icon(
+        modifier = Modifier
+            .clip(RoundedCornerShape(50))
+            .clickable { onClearText.invoke() },
+        painter = painterResource(id = R.drawable.ic_clear),
+        contentDescription = null,
+        tint = CCTheme.colors.grayOne
+    )
 }
 
 

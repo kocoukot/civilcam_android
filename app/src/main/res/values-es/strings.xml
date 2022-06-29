@@ -168,4 +168,10 @@
     <string name="settings_password_error_text">The password is incorrect. Please try one more time or Restore your current password.</string>
 
 
+
+
+    <string name="add_guardian_title">Add guardians</string>
+    <string name="add_guardian_search_title">Find your friends</string>
+    <string name="add_guardian_search_text">See which of your contacts are on CivilCam</string>
+    <string name="add_guardian_header_title">Global search</string>
 </resources>

@@ -31,16 +31,36 @@ class NetworkMainViewModel(
         when (action) {
             NetworkMainActions.ClickGoMyProfile -> changeLoadState()
             NetworkMainActions.ClickGoSettings -> goSettings()
-            NetworkMainActions.ClickAddGuardian -> TODO()
             is NetworkMainActions.ClickNetworkTypeChange -> changeAlertType(action.networkType)
             NetworkMainActions.ClickGoRequests -> goRequests()
-            is NetworkMainActions.ClickUser -> TODO()
+            is NetworkMainActions.ClickUser -> goUser(action.user)
             NetworkMainActions.ClickGoBack -> goBack()
+            NetworkMainActions.ClickAddGuardian -> addGuardian()
+            NetworkMainActions.ClickGoSearch -> searchGuard()
+            NetworkMainActions.ClickGoContacts -> goContacts()
         }
     }
 
     private fun goBack() {
         _state.value = _state.value.copy(screenState = NetworkScreen.MAIN)
+    }
+
+    private fun addGuardian() {
+        _state.value = _state.value.copy(screenState = NetworkScreen.ADD_GUARD)
+    }
+
+    private fun goContacts() {
+        _steps.value = NetworkMainRoute.GoContacts
+    }
+
+    private fun goUser(user: GuardianItem) {
+        _steps.value = NetworkMainRoute.GoUserDetail(user.guardianId)
+    }
+
+    private fun searchGuard() {
+        if (_state.value.screenState == NetworkScreen.MAIN)
+            _state.value = _state.value.copy(screenState = NetworkScreen.SEARCH_GUARD)
+
     }
 
     private fun goSettings() {
@@ -119,6 +139,19 @@ class NetworkMainViewModel(
     }
 
 }
+
+//private val _textSearch = MutableStateFlow("")
+//private val textSearch: StateFlow<String> = _textSearch.asStateFlow()
+//private fun searchContact(searchString: String) {
+//    _textSearch.value = searchString
+//}
+//textSearch.debounce(400).collect { query ->
+//    val contactList =
+//        contactsStorage.getContacts(PersonContactFilter()).sortedBy { it.name }.filter {
+//            it.name.contains(query, ignoreCase = true) || it.phoneNumber.contains(query)
+//        }
+//    mapToItems(contactList)
+//}
 
 
     
