@@ -16,54 +16,72 @@ import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PinCodeInputField() {
+fun PinCodeInputField(
+	pinCodeValue: (String) -> Unit,
+	clear: Boolean = false
+) {
 	
 	val inputPin = remember { mutableStateListOf<Int>() }
-	val error = remember { mutableStateOf("") }
-	val success = remember { mutableStateOf(false) }
-	val password = "1234"
+	val pinValue = remember { mutableStateOf("") }
 	val pinSize = 4
-
+	
 	if (inputPin.size == 4) {
-		LaunchedEffect(key1 = true) {
+		LaunchedEffect(true) {
 			delay(300)
-
-			if (inputPin.joinToString("") == password) {
-				success.value = true
-				error.value = ""
-			} else {
-				success.value = false
-				error.value = "Wrong PIN"
-			}
+			pinCodeValue.invoke(inputPin.joinToString(""))
 		}
 	}
-
+	
+	if (clear) inputPin.clear()
+	
 	Column(
 		modifier = Modifier
-			.fillMaxSize()
+			.fillMaxWidth()
 			.background(CCTheme.colors.white),
-		horizontalAlignment = Alignment.CenterHorizontally
+		horizontalAlignment = Alignment.CenterHorizontally,
+		verticalArrangement = Arrangement.Center
 	) {
-
-		Box(modifier = Modifier.fillMaxSize()) {
+		
+		Box(
+			modifier = Modifier.fillMaxWidth()
+		) {
 			Column(
-				modifier = Modifier.fillMaxSize(),
+				modifier = Modifier.fillMaxWidth(),
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
-				Spacer(modifier = Modifier.height(50.dp))
-
-				Row {
+				
+				PinInputField(
+					onValueChanged = {
+						if (it.length > pinValue.value.length) {
+							inputPin.add(it.toInt())
+						}
+						pinValue.value = it
+					},
+					onBackSpace = {
+						if ((pinValue.value.isNotEmpty() || pinValue.value == "")
+							&& inputPin.size > 0
+						) {
+							inputPin.removeLast()
+						}
+					},
+					clear = clear
+				)
+				
+				Row(
+					modifier = Modifier.offset(y = (-52).dp)
+				) {
 					(0 until pinSize).forEach {
 						Icon(
 							imageVector = if (inputPin.size > it) Icons.Default.Circle else Icons.Outlined.Circle,
 							contentDescription = null,
-							modifier = Modifier.padding(24.dp)
-								.size(8.dp)
+							modifier = Modifier
+								.padding(12.dp)
+								.size(8.dp),
+							tint = CCTheme.colors.black
 						)
 					}
 				}
 			}
 		}
-
 	}
 }

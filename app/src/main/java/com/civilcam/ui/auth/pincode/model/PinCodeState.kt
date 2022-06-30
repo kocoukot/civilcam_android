@@ -6,5 +6,12 @@ data class PinCodeState(
 	val isLoading: Boolean = false,
 	val errorText: String = "Invalid email. Please try again. (eg:email@gmail.com)",
 	val pinCode: String = "",
+	val confirmPinCode: String = "",
 	val isConfirm: Boolean = false
-) : ComposeFragmentState
+) : ComposeFragmentState {
+	
+	val isMatch = pinCode == confirmPinCode
+	
+	val isClear = pinCode != confirmPinCode && pinCode.length == 4 && confirmPinCode.length == 4
+	
+}

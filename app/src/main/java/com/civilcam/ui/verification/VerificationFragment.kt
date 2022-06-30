@@ -11,6 +11,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.domain.model.VerificationFlow
+import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.requireArg
@@ -44,7 +45,10 @@ class VerificationFragment : Fragment() {
 							R.id.termsFragment,
 							TermsFragment.createArgs(false)
 						)
-						VerificationFlow.PHONE -> {}
+						VerificationFlow.PHONE -> navController.navigate(
+							R.id.pinCodeFragment,
+							PinCodeFragment.createArgs(false)
+						)
 						VerificationFlow.RESET_PASSWORD -> navController.navigate(
 							R.id.createPasswordFragment
 						)
