@@ -21,4 +21,6 @@ sealed class NetworkMainActions : ComposeFragmentActions {
 
     object ClickGoSearch : NetworkMainActions()
 
+    data class EnteredSearchString(val searchQuery: String) : NetworkMainActions()
+
 }

@@ -47,7 +47,7 @@ fun TopAppBarContent(
             if (actionItem != null) {
                 Row {
                     actionItem()
-                    Spacer(modifier = Modifier.width(8.dp))
+                 //   Spacer(modifier = Modifier.width(8.dp))
                 }
             }
         }

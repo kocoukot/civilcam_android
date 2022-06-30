@@ -118,7 +118,7 @@
     <string name="save_password">Save password</string>
     <string name="create_new_password">Create new password</string>
 
-    <string name="add_from_contacts_title">Sent</string>
+    <string name="add_from_contacts_title">Contactos</string>
     <string name="add_from_contacts_invite_by">Invite by number</string>
 
     <string name="invite_by_number_title">Invite by number</string>

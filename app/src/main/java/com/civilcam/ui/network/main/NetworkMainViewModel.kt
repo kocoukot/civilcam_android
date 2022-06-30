@@ -2,28 +2,57 @@ package com.civilcam.ui.network.main
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
+import com.civilcam.domain.model.guard.GuardianModel
 import com.civilcam.domain.model.guard.NetworkType
 import com.civilcam.domain.usecase.guardians.GetGuardsListUseCase
 import com.civilcam.domain.usecase.guardians.GetGuardsRequestsUseCase
+import com.civilcam.domain.usecase.guardians.SearchGuardsResultUseCase
 import com.civilcam.ui.network.main.model.*
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import java.util.*
 
 
+@OptIn(FlowPreview::class)
 class NetworkMainViewModel(
     private val getGuardsListUseCase: GetGuardsListUseCase,
-    private val getGuardsRequestsUseCase: GetGuardsRequestsUseCase
+    private val getGuardsRequestsUseCase: GetGuardsRequestsUseCase,
+    private val searchGuardsResultUseCase: SearchGuardsResultUseCase
 
 ) :
     ComposeViewModel<NetworkMainState, NetworkMainRoute, NetworkMainActions>() {
     override var _state: MutableStateFlow<NetworkMainState> = MutableStateFlow(NetworkMainState())
 
+    private val _textSearch = MutableStateFlow("")
+    private val textSearch: StateFlow<String> = _textSearch.asStateFlow()
+
     init {
         viewModelScope.launch {
-            _state.value =
-                _state.value.copy(data = NetworkMainModel())
+            _state.value = _state.value.copy(data = NetworkMainModel())
+
+            textSearch.debounce(400).collect { query ->
+                query
+                    .takeIf { it.isNotEmpty() }
+                    ?.let {
+//                        Timber.d("guardianSearchQuery $it")
+                        try {
+                            val result = searchGuardsResultUseCase.searchGuards(it)
+//                            Timber.d("guardianSearchQuery result $result")
+                            setSearchResult(result)
+                        } catch (e: Exception) {
+//                            Timber.d("guardianSearchQuery error ${e.localizedMessage}")
+                            _state.value =
+                                _state.value.copy(errorText = e.localizedMessage)
+                        }
+                    } ?: run {
+                    setSearchResult(emptyList())
+                }
+            }
         }
     }
 
@@ -38,11 +67,24 @@ class NetworkMainViewModel(
             NetworkMainActions.ClickAddGuardian -> addGuardian()
             NetworkMainActions.ClickGoSearch -> searchGuard()
             NetworkMainActions.ClickGoContacts -> goContacts()
+            is NetworkMainActions.EnteredSearchString -> searchContact(action.searchQuery)
         }
     }
 
     private fun goBack() {
-        _state.value = _state.value.copy(screenState = NetworkScreen.MAIN)
+        when (_state.value.screenState) {
+            NetworkScreen.MAIN -> {}
+            NetworkScreen.REQUESTS -> _state.value =
+                _state.value.copy(screenState = NetworkScreen.MAIN)
+            NetworkScreen.SEARCH_GUARD, NetworkScreen.ADD_GUARD -> {
+                _state.value = _state.value.copy(
+                    screenState = NetworkScreen.MAIN,
+//                    data = _state.value.data?.copy(searchScreenSectionModel = SearchScreenSectionModel())
+                )
+            }
+
+        }
+
     }
 
     private fun addGuardian() {
@@ -138,20 +180,27 @@ class NetworkMainViewModel(
         return items
     }
 
+    private fun searchContact(searchString: String) {
+        var searchData = _state.value.data
+        searchData?.let {
+            searchData = searchData!!.copy(searchText = searchString)
+            _state.value = _state.value.copy(data = searchData!!.copy())
+            _textSearch.value = searchString
+
+        }
+    }
+
+    private fun setSearchResult(result: List<GuardianModel>) {
+        var data = _state.value.data
+        data?.let {
+            data = data!!.copy(searchResult = result)
+            _state.value = _state.value.copy(data = data!!.copy())
+        }
+    }
 }
 
-//private val _textSearch = MutableStateFlow("")
-//private val textSearch: StateFlow<String> = _textSearch.asStateFlow()
-//private fun searchContact(searchString: String) {
-//    _textSearch.value = searchString
-//}
-//textSearch.debounce(400).collect { query ->
-//    val contactList =
-//        contactsStorage.getContacts(PersonContactFilter()).sortedBy { it.name }.filter {
-//            it.name.contains(query, ignoreCase = true) || it.phoneNumber.contains(query)
-//        }
-//    mapToItems(contactList)
-//}
+
+
 
 
     

@@ -17,7 +17,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -35,24 +38,36 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchInputField(
     text: String = "",
-    isEnable: Boolean = true,
+    looseFocus: Boolean = false,
     isReversed: Boolean = false,
-    onTextClicked: (() -> Unit)? = null,
     onValueChanged: (String) -> Unit,
+    isFocused: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val viewRequester = BringIntoViewRequester()
     var inputText by remember { mutableStateOf(text) }
     var hasFocus by remember { mutableStateOf(false) }
-    if (text.isNotEmpty()) inputText = text
+
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+
+//    if (text.isNotEmpty()) inputText = text
+
+    if (looseFocus) {
+        focusManager.clearFocus()
+        inputText = ""
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
             .bringIntoViewRequester(viewRequester)
+            .focusRequester(focusRequester)
             .onFocusEvent {
                 hasFocus = it.hasFocus
                 if (it.isFocused) {
+                    isFocused.invoke()
                     coroutineScope.launch {
                         delay(400)
                         viewRequester.bringIntoView()
@@ -75,7 +90,6 @@ fun SearchInputField(
             onValueChange = {
                 inputText = it.letters()
                 onValueChanged.invoke(inputText.trim())
-
             },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
@@ -99,11 +113,7 @@ fun SearchInputField(
                     ) {
                         if (inputText.isEmpty())
                             Row(
-                                modifier = Modifier.fillMaxWidth()
-//                                    .clickable(enabled = isEnable) {
-//                                    onTextClicked?.invoke()
-//                                }
-                                ,
+                                modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
@@ -155,7 +165,7 @@ fun SearchInputField(
                         ) {
                             ClearButton {
                                 inputText = ""
-
+                                onValueChanged.invoke(inputText.trim())
                             }
                         }
                     }
@@ -182,7 +192,5 @@ private fun ClearButton(onClearText: () -> Unit) {
 @Preview
 @Composable
 private fun SearchInputFieldPreview() {
-    SearchInputField {
 
-    }
 }

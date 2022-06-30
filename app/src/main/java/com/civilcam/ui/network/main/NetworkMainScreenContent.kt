@@ -94,12 +94,16 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                 ) {
                     Column {
                         SearchInputField(
-                            isEnable = state.value.screenState == NetworkScreen.MAIN,
-                            onTextClicked = {
-                                viewModel.setInputActions(NetworkMainActions.ClickGoSearch)
+                            looseFocus = state.value.screenState == NetworkScreen.MAIN,
+                            text = state.value.data?.searchText ?: "",
+                            onValueChanged = {
+                                viewModel.setInputActions(NetworkMainActions.EnteredSearchString(it))
 
                             },
-                            onValueChanged = {
+                            isFocused = {
+                                if (state.value.screenState == NetworkScreen.MAIN) viewModel.setInputActions(
+                                    NetworkMainActions.ClickGoSearch
+                                )
 
                             })
                         Spacer(modifier = Modifier.height(6.dp))
@@ -178,8 +182,8 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                         }
                     }
                     NetworkScreen.SEARCH_GUARD, NetworkScreen.ADD_GUARD -> {
-                        state.value.data?.searchScreenSectionModel?.let { data ->
-                            GuardianSearchContent(data.searchResult)
+                        state.value.data?.let { data ->
+                            GuardianSearchContent(data.searchResult, data.searchText)
                         }
                     }
                 }

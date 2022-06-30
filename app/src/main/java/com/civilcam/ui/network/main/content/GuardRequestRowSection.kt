@@ -19,7 +19,6 @@ import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.compose.CircleUserAvatar
 import com.civilcam.ui.common.compose.HeaderTitleText
-import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.network.main.model.GuardianItem
 
 
@@ -30,9 +29,9 @@ fun GuardRequestRowSection(
 ) {
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        RowDivider()
+
         HeaderTitleText(stringResource(id = R.string.network_main_requests))
-        RowDivider()
+
 
         Row(
             modifier = Modifier

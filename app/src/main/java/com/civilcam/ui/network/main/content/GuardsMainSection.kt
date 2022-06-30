@@ -66,9 +66,7 @@ fun GuardsMainSection(
                     when (contact) {
                         is LetterGuardItem -> Box {
                             Column {
-                                RowDivider()
                                 HeaderTitleText(contact.letter)
-                                RowDivider()
                             }
                         }
 

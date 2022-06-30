@@ -1,5 +1,6 @@
 package com.civilcam.ui.network.contacts
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -14,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.compose.*
+import com.civilcam.ui.common.compose.inputs.SearchInputField
 import com.civilcam.ui.network.contacts.model.ContactsActions
 import com.civilcam.ui.network.contacts.model.LetterContactItem
 import com.civilcam.ui.network.contacts.model.PersonContactItem
@@ -27,9 +29,13 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
         topBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(CCTheme.colors.white)
+            ) {
                 TopAppBarContent(
-                    backgroundColor = CCTheme.colors.lightGray,
+                    backgroundColor = CCTheme.colors.white,
                     title = stringResource(id = R.string.add_from_contacts_title),
                     navigationItem = {
                         BackButton {
@@ -42,9 +48,10 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
                         }
                     }
                 )
-//                SearchInputField {
-//                    viewModel.setInputActions(ContactsActions.ClickSearch(it))
-//                }
+                SearchInputField(
+                    onValueChanged = { viewModel.setInputActions(ContactsActions.ClickSearch(it)) },
+                    isFocused = {},
+                )
                 Spacer(modifier = Modifier.height(8.dp))
                 Divider(color = CCTheme.colors.grayThree)
             }
@@ -55,13 +62,14 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
         ) {
 
 
-
             state.value.data?.contactsList?.let { data ->
                 LazyColumn {
                     itemsIndexed(data) { index, contact ->
                         when (contact) {
-                            is LetterContactItem -> Box {
+                            is LetterContactItem -> Column {
+                                RowDivider()
                                 HeaderTitleText(contact.letter)
+                                RowDivider()
                             }
 
 
