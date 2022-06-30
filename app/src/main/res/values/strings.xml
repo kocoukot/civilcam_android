@@ -134,6 +134,8 @@
     <string name="network_main_declined">Declined</string>
     <string name="network_main_help_me">Help me!</string>
     <string name="network_main_safe">Safe</string>
+    <string name="pin_code_confirm_title">Confirm your pin-code</string>
+    <string name="pin_code_create_title">Create your pin-code</string>
     <string name="password_should_contain_special_char">• 1 special character</string>
 
 

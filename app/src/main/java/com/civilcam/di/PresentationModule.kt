@@ -8,6 +8,7 @@ import com.civilcam.ui.auth.create.CreateAccountViewModel
 import com.civilcam.ui.auth.login.LoginViewModel
 import com.civilcam.ui.auth.password.create.CreatePasswordViewModel
 import com.civilcam.ui.auth.password.reset.ResetPasswordViewModel
+import com.civilcam.ui.auth.pincode.PinCodeViewModel
 import com.civilcam.ui.langSelect.LanguageSelectViewModel
 import com.civilcam.ui.network.contacts.ContactsViewModel
 import com.civilcam.ui.network.inviteByNumber.InviteByNumberViewModel
@@ -56,7 +57,8 @@ val authModule = module {
 
 	viewModel { CreatePasswordViewModel() }
 
-
+	viewModel { (isConfirm: Boolean) -> PinCodeViewModel(isConfirm) }
+	
 }
 
 val networkRootModule = module {
