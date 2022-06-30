@@ -8,5 +8,5 @@ data class GuardianModel(
     val guardianId: Int,
     val guardianName: String,
     val guardianAvatar: Int,
-    val guardianStatus: GuardianStatus,
+    var guardianStatus: GuardianStatus,
 ) : Parcelable

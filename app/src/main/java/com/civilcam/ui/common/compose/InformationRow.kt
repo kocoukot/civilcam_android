@@ -107,9 +107,9 @@ private fun InformationRowPreview() {
 }
 
 @Composable
-fun HeaderTitleText(text: String) {
+fun HeaderTitleText(text: String, needTop: Boolean = true) {
     Column {
-        RowDivider()
+        if (needTop) RowDivider()
         Text(
             text,
             modifier = Modifier

@@ -3,6 +3,7 @@ package com.civilcam.ui.network.main
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.domain.model.guard.GuardianModel
+import com.civilcam.domain.model.guard.GuardianStatus
 import com.civilcam.domain.model.guard.NetworkType
 import com.civilcam.domain.usecase.guardians.GetGuardsListUseCase
 import com.civilcam.domain.usecase.guardians.GetGuardsRequestsUseCase
@@ -68,6 +69,7 @@ class NetworkMainViewModel(
             NetworkMainActions.ClickGoSearch -> searchGuard()
             NetworkMainActions.ClickGoContacts -> goContacts()
             is NetworkMainActions.EnteredSearchString -> searchContact(action.searchQuery)
+            is NetworkMainActions.ClickAddUser -> addUser(action.user)
         }
     }
 
@@ -190,10 +192,34 @@ class NetworkMainViewModel(
         }
     }
 
+    private fun addUser(user: GuardianModel) {
+        viewModelScope.launch {
+            val contactsModel =
+                _state.value.data?.searchScreenSectionModel ?: SearchScreenSectionModel()
+            contactsModel.searchResult.let { contacts ->
+                contacts.find { it.guardianId == user.guardianId }?.guardianStatus =
+                    GuardianStatus.PENDING
+
+            }
+            _state.value =
+                _state.value.copy(
+                    data = _state.value.data!!.copy(searchScreenSectionModel = contactsModel).copy()
+                )
+
+//            _state.value.data?.let { model ->
+//
+//                model.searchResult.find { it.guardianId == user.guardianId }?.guardianStatus =
+//                    GuardianStatus.PENDING
+//                _state.value = _state.value.copy(data = model.copy())
+////                Timber.d("addUser ${_state.value.data}")
+//            }
+        }
+    }
+
     private fun setSearchResult(result: List<GuardianModel>) {
         var data = _state.value.data
         data?.let {
-            data = data!!.copy(searchResult = result)
+            data = data!!.copy(searchScreenSectionModel = SearchScreenSectionModel(result))
             _state.value = _state.value.copy(data = data!!.copy())
         }
     }

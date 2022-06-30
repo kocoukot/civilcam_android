@@ -183,7 +183,11 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                     }
                     NetworkScreen.SEARCH_GUARD, NetworkScreen.ADD_GUARD -> {
                         state.value.data?.let { data ->
-                            GuardianSearchContent(data.searchResult, data.searchText)
+                            GuardianSearchContent(data.searchScreenSectionModel.searchResult,
+                                data.searchText,
+                                clickAddNew = {
+                                    viewModel.setInputActions(NetworkMainActions.ClickAddUser(it))
+                                })
                         }
                     }
                 }

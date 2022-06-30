@@ -7,10 +7,12 @@ data class NetworkMainModel(
     val requestsList: List<GuardItem> = emptyList(),
     val guardiansList: List<GuardItem> = emptyList(),
     var searchText: String = "",
-    var searchResult: List<GuardianModel> = emptyList()
+//    var searchResult: List<GuardianModel> = emptyList()
 
-//    val searchScreenSectionModel: SearchScreenSectionModel = SearchScreenSectionModel()
+    val searchScreenSectionModel: SearchScreenSectionModel = SearchScreenSectionModel()
 )
+
 //
-//data class SearchScreenSectionModel(
-//)
+data class SearchScreenSectionModel(
+    var searchResult: List<GuardianModel> = emptyList()
+)

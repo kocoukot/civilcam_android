@@ -67,9 +67,7 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
                     itemsIndexed(data) { index, contact ->
                         when (contact) {
                             is LetterContactItem -> Column {
-                                RowDivider()
                                 HeaderTitleText(contact.letter)
-                                RowDivider()
                             }
 
 

@@ -1,6 +1,7 @@
 package com.civilcam.ui.network.main.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentActions
+import com.civilcam.domain.model.guard.GuardianModel
 import com.civilcam.domain.model.guard.NetworkType
 
 sealed class NetworkMainActions : ComposeFragmentActions {
@@ -22,5 +23,6 @@ sealed class NetworkMainActions : ComposeFragmentActions {
     object ClickGoSearch : NetworkMainActions()
 
     data class EnteredSearchString(val searchQuery: String) : NetworkMainActions()
+    data class ClickAddUser(val user: GuardianModel) : NetworkMainActions()
 
 }

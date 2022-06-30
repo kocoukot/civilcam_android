@@ -8,8 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -19,19 +18,29 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.guard.GuardianModel
+import com.civilcam.domain.model.guard.GuardianStatus
 import com.civilcam.ui.common.compose.*
+import timber.log.Timber
 
 @Composable
 fun GuardianSearchContent(
     data: List<GuardianModel>,
-    searchPart: String
+    searchPart: String,
+    clickAddNew: (GuardianModel) -> Unit
+
 ) {
+    Timber.d("addUser ${data}")
+
     if (data.isEmpty()) {
         EmptySearchScreenState()
     } else {
-        SearchResults(data, searchPart)
+        SearchResults(data, searchPart,
+            clickAddNew = {
+                clickAddNew.invoke(it)
+            })
     }
 }
+
 
 @Composable
 private fun EmptySearchScreenState() {
@@ -57,15 +66,21 @@ private fun EmptySearchScreenState() {
 @Composable
 private fun SearchResults(
     results: List<GuardianModel>,
-    searchPart: String
+    searchPart: String,
+    clickAddNew: (GuardianModel) -> Unit
 ) {
     LazyColumn {
         item {
-            HeaderTitleText(stringResource(id = R.string.add_guardian_header_title))
+            HeaderTitleText(
+                stringResource(id = R.string.add_guardian_header_title),
+                needTop = results.isEmpty()
+            )
 
         }
 
         itemsIndexed(results) { index, item ->
+            var userStatus by remember { mutableStateOf(item.guardianStatus) }
+            userStatus = item.guardianStatus
             SearchRow(
                 title = item.guardianName,
                 searchPart = searchPart,
@@ -77,9 +92,24 @@ private fun SearchResults(
                     )
                 },
                 trailingIcon = {
-                    TextActionButton(actionTitle = stringResource(id = R.string.add_text)) {
-
+                    when (userStatus) {
+                        GuardianStatus.PENDING -> {
+                            Text(
+                                text = stringResource(id = R.string.pending_text),
+                                style = CCTheme.typography.common_text_medium,
+                                modifier = Modifier.padding(end = 16.dp),
+                                color = CCTheme.colors.grayOne,
+                            )
+                        }
+                        GuardianStatus.NEW -> {
+                            TextActionButton(actionTitle = stringResource(id = R.string.add_text)) {
+                                userStatus = GuardianStatus.PENDING
+                                clickAddNew.invoke(item)
+                            }
+                        }
+                        else -> {}
                     }
+
                 },
             ) {
 
@@ -87,6 +117,7 @@ private fun SearchResults(
         }
         item {
             RowDivider()
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
