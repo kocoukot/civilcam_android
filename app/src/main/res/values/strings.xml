@@ -133,6 +133,7 @@
     <string name="network_main_declined">Declined</string>
     <string name="network_main_help_me">Help me!</string>
     <string name="network_main_safe">Safe</string>
+    <string name="password_should_contain_special_char">• 1 special character</string>
 
 
 
