@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.LengthCheckStrategy
-import com.civilcam.ui.auth.LowerCaseCheckStrategy
 import com.civilcam.ui.auth.OneDigitCheckStrategy
+import com.civilcam.ui.auth.SpecialSymbolCheckStrategy
 import com.civilcam.ui.auth.UpperCaseCheckStrategy
 
 @OptIn(ExperimentalUnitApi::class)
@@ -33,21 +33,21 @@ fun PasswordStrategyBlocks(
 	animateColorAsState(targetValue = if (OneDigitCheckStrategy(input)) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
 	val capitalLetterStateColor by
 	animateColorAsState(targetValue = if (UpperCaseCheckStrategy(input)) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
-	val lowerLetterStateColor by
-	animateColorAsState(targetValue = if (LowerCaseCheckStrategy(input)) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
+	val specialCharacterStateColor by
+	animateColorAsState(targetValue = if (SpecialSymbolCheckStrategy(input)) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
 	val lengthStateColor by
 	animateColorAsState(targetValue = if (LengthCheckStrategy(input)) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
 	
 	val checkChips = mutableMapOf(
 		OneDigitCheckStrategy to false,
 		UpperCaseCheckStrategy to false,
-		LowerCaseCheckStrategy to false,
+		SpecialSymbolCheckStrategy to false,
 		LengthCheckStrategy to false
 	)
 	
 	checkChips[OneDigitCheckStrategy] = OneDigitCheckStrategy(input)
 	checkChips[UpperCaseCheckStrategy] = UpperCaseCheckStrategy(input)
-	checkChips[LowerCaseCheckStrategy] = LowerCaseCheckStrategy(input)
+	checkChips[SpecialSymbolCheckStrategy] = SpecialSymbolCheckStrategy(input)
 	checkChips[LengthCheckStrategy] = LengthCheckStrategy(input)
 	
 	val checkedCount = checkChips.count { it.value }
@@ -73,8 +73,8 @@ fun PasswordStrategyBlocks(
 				)
 				
 				PasswordChip(
-					text = stringResource(id = R.string.password_should_contain_lowercase),
-					color = lowerLetterStateColor
+					text = stringResource(id = R.string.password_should_contain_special_char),
+					color = specialCharacterStateColor
 				)
 				
 				PasswordChip(
@@ -108,5 +108,5 @@ private fun composeChipsWithStrategiesList() =
 		UpperCaseCheckStrategy,
 		OneDigitCheckStrategy,
 		LengthCheckStrategy,
-		LowerCaseCheckStrategy,
+		SpecialSymbolCheckStrategy,
 	)

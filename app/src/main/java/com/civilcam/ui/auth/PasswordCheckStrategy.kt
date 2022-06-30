@@ -24,3 +24,8 @@ object OneDigitCheckStrategy : PasswordCheckStrategy {
 
     override fun invoke(text: String): Boolean = text.contains("[0-9]+".toRegex())
 }
+
+object SpecialSymbolCheckStrategy : PasswordCheckStrategy {
+    
+    override fun invoke(text: String): Boolean = text.contains("[^a-zA-Z0-9]+".toRegex())
+}
