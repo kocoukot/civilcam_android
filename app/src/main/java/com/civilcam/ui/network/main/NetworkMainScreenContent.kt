@@ -2,10 +2,7 @@ package com.civilcam.ui.network.main
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.FloatingActionButtonDefaults
@@ -21,6 +18,7 @@ import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.guard.NetworkType
 import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.common.compose.inputs.SearchInputField
+import com.civilcam.ui.network.main.content.GuardianSearchContent
 import com.civilcam.ui.network.main.content.GuardsMainSection
 import com.civilcam.ui.network.main.content.NetworkTabRow
 import com.civilcam.ui.network.main.content.RequestsScreenSection
@@ -34,7 +32,7 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
 
     val state = viewModel.state.collectAsState()
     var tabPage by remember { mutableStateOf(NetworkType.ON_GUARD) }
-
+    tabPage = state.value.networkType
 
 
     Scaffold(
@@ -54,13 +52,17 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                             title = when (screenState) {
                                 NetworkScreen.MAIN -> stringResource(id = R.string.navigation_bar_network)
                                 NetworkScreen.REQUESTS -> stringResource(id = R.string.network_main_requests)
+                                NetworkScreen.SEARCH_GUARD, NetworkScreen.ADD_GUARD -> stringResource(
+                                    id = R.string.add_guardian_title
+                                )
                             },
                             navigationItem = {
                                 when (screenState) {
                                     NetworkScreen.MAIN -> AvatarButton {
                                         viewModel.setInputActions(NetworkMainActions.ClickGoMyProfile)
                                     }
-                                    NetworkScreen.REQUESTS -> BackButton {
+                                    NetworkScreen.REQUESTS,
+                                    NetworkScreen.SEARCH_GUARD, NetworkScreen.ADD_GUARD -> BackButton {
                                         viewModel.setInputActions(NetworkMainActions.ClickGoBack)
                                     }
                                 }
@@ -68,45 +70,75 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
 
                             },
                             actionItem = {
-                                if (screenState == NetworkScreen.MAIN) {
-                                    IconActionButton(R.drawable.ic_settings) {
-                                        viewModel.setInputActions(NetworkMainActions.ClickGoSettings)
+                                when (screenState) {
+                                    NetworkScreen.MAIN -> {
+                                        IconActionButton(R.drawable.ic_settings) {
+                                            viewModel.setInputActions(NetworkMainActions.ClickGoSettings)
+                                        }
                                     }
+                                    NetworkScreen.ADD_GUARD -> {
+                                        TextActionButton(actionTitle = stringResource(id = R.string.add_from_contacts_title)) {
+                                            viewModel.setInputActions(NetworkMainActions.ClickGoContacts)
+                                        }
+                                    }
+                                    else -> {}
                                 }
                             }
                         )
-
-                        when (screenState) {
-                            NetworkScreen.MAIN -> {
-                                SearchInputField(isEnable = false) {
-
-
-                                }
-
-                                NetworkTabRow(
-                                    tabPage
-                                ) {
-                                    tabPage = it
-                                    viewModel.setInputActions(
-                                        NetworkMainActions.ClickNetworkTypeChange(
-                                            it
-                                        )
-                                    )
-                                }
-                            }
-                            NetworkScreen.REQUESTS -> {}
-                        }
-
-                        if (!(state.value.data?.guardiansList?.isNotEmpty() == true ||
-                                    state.value.data?.requestsList?.isNotEmpty() == true)
-                        ) RowDivider()
                     }
                 }
+                AnimatedVisibility(
+                    visible = state.value.screenState == NetworkScreen.MAIN ||
+                            state.value.screenState == NetworkScreen.SEARCH_GUARD ||
+                            state.value.screenState == NetworkScreen.ADD_GUARD
+                ) {
+                    Column {
+                        SearchInputField(
+                            looseFocus = state.value.screenState == NetworkScreen.MAIN,
+                            text = state.value.data?.searchText ?: "",
+                            onValueChanged = {
+                                viewModel.setInputActions(NetworkMainActions.EnteredSearchString(it))
+
+                            },
+                            isFocused = {
+                                if (state.value.screenState == NetworkScreen.MAIN) viewModel.setInputActions(
+                                    NetworkMainActions.ClickGoSearch
+                                )
+
+                            })
+                        Spacer(modifier = Modifier.height(6.dp))
+                    }
+                }
+
+
+
+                AnimatedVisibility(visible = state.value.screenState == NetworkScreen.MAIN) {
+
+
+                    NetworkTabRow(
+                        tabPage
+                    ) {
+                        tabPage = it
+                        viewModel.setInputActions(
+                            NetworkMainActions.ClickNetworkTypeChange(
+                                it
+                            )
+                        )
+                    }
+                }
+
+                if (!(state.value.data?.guardiansList?.isNotEmpty() == true ||
+                            state.value.data?.requestsList?.isNotEmpty() == true) ||
+                    state.value.screenState == NetworkScreen.SEARCH_GUARD ||
+                    state.value.screenState == NetworkScreen.ADD_GUARD
+
+                ) RowDivider()
+
             }
         },
         floatingActionButton = {
             AnimatedVisibility(
-                visible = tabPage == NetworkType.GUARDIANS,
+                visible = tabPage == NetworkType.GUARDIANS && state.value.screenState == NetworkScreen.MAIN,
                 enter = scaleIn(),
                 exit = scaleOut(),
             ) {
@@ -134,11 +166,13 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                     NetworkScreen.MAIN -> {
                         GuardsMainSection(
                             screenData,
-                            tabPage = tabPage
-                        ) {
-                            viewModel.setInputActions(NetworkMainActions.ClickGoRequests)
-                        }
-
+                            tabPage = tabPage,
+                            clickGoRequests = {
+                                viewModel.setInputActions(NetworkMainActions.ClickGoRequests)
+                            },
+                            clickGoUser = {
+                                viewModel.setInputActions(NetworkMainActions.ClickUser(it))
+                            })
                     }
 
 
@@ -147,7 +181,15 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
 
                         }
                     }
-
+                    NetworkScreen.SEARCH_GUARD, NetworkScreen.ADD_GUARD -> {
+                        state.value.data?.let { data ->
+                            GuardianSearchContent(data.searchScreenSectionModel.searchResult,
+                                data.searchText,
+                                clickAddNew = {
+                                    viewModel.setInputActions(NetworkMainActions.ClickAddUser(it))
+                                })
+                        }
+                    }
                 }
             }
 

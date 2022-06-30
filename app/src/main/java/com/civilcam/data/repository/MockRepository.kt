@@ -4,6 +4,7 @@ import com.civilcam.R
 import com.civilcam.domain.model.UserInfo
 import com.civilcam.domain.model.alerts.AlertModel
 import com.civilcam.domain.model.alerts.AlertType
+import com.civilcam.domain.model.guard.GuardianModel
 import com.civilcam.domain.model.guard.GuardianStatus
 import com.civilcam.domain.model.guard.NetworkType
 import com.civilcam.ui.network.main.model.GuardianItem
@@ -160,7 +161,133 @@ class MockRepository {
             guardianStatus = GuardianStatus.DECLINED,
         ),
     )
+
     fun checkPassword(currentPassword: String) = currentPassword == "Password1@"
+
+
+    fun searchGuards(query: String) =
+        listOf(
+            GuardianModel(
+                guardianId = 16434,
+                guardianName = "Alleria Windrunner",
+                guardianAvatar = R.drawable.img_avatar_one,
+                guardianStatus = GuardianStatus.NEW,
+            ),
+            GuardianModel(
+                guardianId = 335,
+                guardianName = "Arthas Menethil",
+                guardianAvatar = R.drawable.img_avatar_two,
+                guardianStatus = GuardianStatus.NEW,
+            ),
+            GuardianModel(
+                guardianId = 5243,
+                guardianName = "Bobby Axelrod",
+                guardianAvatar = R.drawable.img_avatar_three,
+                guardianStatus = GuardianStatus.NEW,
+            ),
+            GuardianModel(
+                guardianId = 4324,
+                guardianName = "Bane Hardy",
+                guardianAvatar = R.drawable.img_avatar_four,
+                guardianStatus = GuardianStatus.NEW,
+            ),
+            GuardianModel(
+                guardianId = 35432,
+                guardianName = "Sylvanas Windrunner",
+                guardianAvatar = R.drawable.img_avatar,
+                guardianStatus = GuardianStatus.ACCEPTED,
+            ),
+            GuardianModel(
+                guardianId = 16434,
+                guardianName = "Alleria Windrunner",
+                guardianAvatar = R.drawable.img_avatar_one,
+                guardianStatus = GuardianStatus.PENDING,
+            ),
+            GuardianModel(
+                guardianId = 335,
+                guardianName = "Arthas Menethil",
+                guardianAvatar = R.drawable.img_avatar_two,
+                guardianStatus = GuardianStatus.NEW,
+            ),
+            GuardianModel(
+                guardianId = 5243,
+                guardianName = "Bobby Axelrod",
+                guardianAvatar = R.drawable.img_avatar_three,
+                guardianStatus = GuardianStatus.PENDING,
+            ),
+            GuardianModel(
+                guardianId = 4324,
+                guardianName = "Bane Hardy",
+                guardianAvatar = R.drawable.img_avatar_four,
+                guardianStatus = GuardianStatus.ACCEPTED,
+            ),
+            GuardianModel(
+                guardianId = 35432,
+                guardianName = "Sylvanas Windrunner",
+                guardianAvatar = R.drawable.img_avatar,
+                guardianStatus = GuardianStatus.PENDING,
+            ),
+            GuardianModel(
+                guardianId = 16434,
+                guardianName = "Alleria Windrunner",
+                guardianAvatar = R.drawable.img_avatar_one,
+                guardianStatus = GuardianStatus.NEW,
+            ),
+            GuardianModel(
+                guardianId = 335,
+                guardianName = "Arthas Menethil",
+                guardianAvatar = R.drawable.img_avatar_two,
+                guardianStatus = GuardianStatus.ACCEPTED,
+            ),
+            GuardianModel(
+                guardianId = 5243,
+                guardianName = "Bobby Axelrod",
+                guardianAvatar = R.drawable.img_avatar_three,
+                guardianStatus = GuardianStatus.DECLINED,
+            ),
+            GuardianModel(
+                guardianId = 4324,
+                guardianName = "Bane Hardy",
+                guardianAvatar = R.drawable.img_avatar_four,
+                guardianStatus = GuardianStatus.ACCEPTED,
+            ),
+            GuardianModel(
+                guardianId = 35432,
+                guardianName = "Sylvanas Windrunner",
+                guardianAvatar = R.drawable.img_avatar,
+                guardianStatus = GuardianStatus.ACCEPTED,
+            ),
+            GuardianModel(
+                guardianId = 16434,
+                guardianName = "Alleria Windrunner",
+                guardianAvatar = R.drawable.img_avatar_one,
+                guardianStatus = GuardianStatus.PENDING,
+            ),
+            GuardianModel(
+                guardianId = 335,
+                guardianName = "Arthas Menethil",
+                guardianAvatar = R.drawable.img_avatar_two,
+                guardianStatus = GuardianStatus.DECLINED,
+            ),
+            GuardianModel(
+                guardianId = 5243,
+                guardianName = "Bobby Axelrod",
+                guardianAvatar = R.drawable.img_avatar_three,
+                guardianStatus = GuardianStatus.DECLINED,
+            ),
+            GuardianModel(
+                guardianId = 4324,
+                guardianName = "Bane Hardy",
+                guardianAvatar = R.drawable.img_avatar_four,
+                guardianStatus = GuardianStatus.ACCEPTED,
+            ),
+            GuardianModel(
+                guardianId = 35432,
+                guardianName = "Sylvanas Windrunner",
+                guardianAvatar = R.drawable.img_avatar,
+                guardianStatus = GuardianStatus.ACCEPTED,
+            ),
+        ).filter { it.guardianName.contains(query, true) }
 }
 
 

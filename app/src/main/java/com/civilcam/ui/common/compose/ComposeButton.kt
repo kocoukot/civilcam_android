@@ -82,7 +82,7 @@ fun TextActionButton(
     TextButton(
         enabled = isEnabled,
         onClick = actionAction,
-        modifier = Modifier.padding(horizontal = 8.dp)
+//        modifier = Modifier.padding(horizontal = 8.dp)
     ) {
         Text(
             text = actionTitle,

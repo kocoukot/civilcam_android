@@ -7,7 +7,6 @@ data class NetworkMainState(
     val isLoading: Boolean = false,
     val errorText: String = "",
     val screenState: NetworkScreen = NetworkScreen.MAIN,
-
     val networkType: NetworkType = NetworkType.ON_GUARD,
     val needToLoadMock: Boolean = false,
     val data: NetworkMainModel? = null
