@@ -87,6 +87,8 @@ fun GuardRequestRowSection(
                     }
                 }
             }
+            Spacer(modifier = Modifier.width(12.dp))
+
             Text(
                 stringResource(id = R.string.network_main_new_requests),
                 modifier = Modifier
