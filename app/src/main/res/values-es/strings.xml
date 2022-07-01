@@ -181,4 +181,5 @@
     <string name="add_guardian_header_title">Global search</string>
     <string name="pin_code_re_enter_title">Re-enter your pin-code</string>
     <string name="pin_code_description">This code will be used to disable emergency state. Please memorize this pin.</string>
+    <string name="verification_title">Verification</string>
 </resources>

@@ -18,7 +18,6 @@ class PinCodeViewModel(isConfirm: Boolean) :
 	override fun setInputActions(action: PinCodeActions) {
 		when (action) {
 			PinCodeActions.GoBack -> goBack()
-			PinCodeActions.GoConfirm -> goConfirm()
 			is PinCodeActions.EnterPinCode -> {
 				when (action.inputType) {
 					PinCodeInputDataType.PIN -> pinEntered(action.pinCode)
@@ -37,6 +36,9 @@ class PinCodeViewModel(isConfirm: Boolean) :
 	
 	private fun pinEntered(pinCode: String) {
 		_state.value = _state.value.copy(pinCode = pinCode)
+		if (_state.value.pinCode.length == 4) {
+			goConfirm()
+		}
 	}
 	
 	private fun goBack() {

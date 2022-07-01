@@ -49,7 +49,7 @@ fun VerificationScreenContent(
                             stringResource(id = R.string.email_verification)
                         }
                         VerificationFlow.RESET_PASSWORD -> {
-                            stringResource(id = R.string.reset_password)
+                            stringResource(id = R.string.verification_title)
                         }
                     },
                     navigationItem = {
@@ -74,7 +74,8 @@ fun VerificationScreenContent(
                     .padding(horizontal = 16.dp)
                     .weight(1f)
 			) {
-				Spacer(modifier = Modifier.height(12.dp))
+				Spacer(modifier = Modifier.height(32.dp))
+				
 				OtpCodeInputField(
 					onValueChanged = {
 						viewModel.setInputActions(VerificationActions.EnterCodeData(it))
@@ -88,7 +89,8 @@ fun VerificationScreenContent(
 						withStyle(
 							style = SpanStyle(
 								color = CCTheme.colors.grayOne,
-								fontSize = 13.sp
+								fontSize = 13.sp,
+								fontWeight = FontWeight.W400
 							),
 						) {
 							append("${context.resources.getString(R.string.code_sent_title)} ")
@@ -96,7 +98,8 @@ fun VerificationScreenContent(
 						withStyle(
 							style = SpanStyle(
 								color = CCTheme.colors.primaryRed,
-								fontSize = 13.sp
+								fontSize = 13.sp,
+								fontWeight = FontWeight.W500
 							),
 						) {
 							append("${state.value.verificationSubject}\n")
@@ -104,7 +107,8 @@ fun VerificationScreenContent(
 						withStyle(
 							style = SpanStyle(
 								color = CCTheme.colors.grayOne,
-								fontSize = 13.sp
+								fontSize = 13.sp,
+								fontWeight = FontWeight.W400
 							),
 						) {
 							append(context.resources.getString(R.string.code_arrive))
