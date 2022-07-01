@@ -1,5 +1,6 @@
 package com.civilcam.ui.verification
 
+import android.telephony.PhoneNumberUtils
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,12 +22,14 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
+import com.civilcam.common.ext.formatToPhoneNumber
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.VerificationFlow
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.OtpCodeInputField
 import com.civilcam.ui.verification.model.VerificationActions
+import java.util.*
 
 @Composable
 fun VerificationScreenContent(
@@ -102,7 +105,11 @@ fun VerificationScreenContent(
 								fontWeight = FontWeight.W500
 							),
 						) {
-							append("${state.value.verificationSubject}\n")
+							if (state.value.verificationFlow == VerificationFlow.PHONE) {
+								append("${("+1${state.value.verificationSubject}").formatToPhoneNumber()}\n")
+							} else {
+								append("${state.value.verificationSubject}\n")
+							}
 						}
 						withStyle(
 							style = SpanStyle(
