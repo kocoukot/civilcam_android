@@ -36,9 +36,7 @@ class PinCodeViewModel(isConfirm: Boolean) :
 	
 	private fun pinEntered(pinCode: String) {
 		_state.value = _state.value.copy(pinCode = pinCode)
-		if (_state.value.pinCode.length == 4) {
-			goConfirm()
-		}
+		goConfirm()
 	}
 	
 	private fun goBack() {

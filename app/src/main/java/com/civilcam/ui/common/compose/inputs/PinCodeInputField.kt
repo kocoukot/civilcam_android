@@ -28,7 +28,8 @@ fun PinCodeInputField(
 	if (inputPin.size == 4) {
 		LaunchedEffect(true) {
 			delay(300)
-			pinCodeValue.invoke(inputPin.joinToString(""))
+			pinCodeValue.invoke(pinValue.value)
+			inputPin.clear()
 		}
 	}
 	

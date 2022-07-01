@@ -4,10 +4,8 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
@@ -15,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -25,6 +24,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.key
@@ -414,7 +416,7 @@ fun PinInputField(
 			textStyle = CCTheme.typography.common_text_regular,
 			modifier = Modifier
                 .fillMaxWidth()
-                .alpha(0f)
+                .alpha(1f)
                 .clip(RoundedCornerShape(4.dp))
                 .focusRequester(focusRequester)
                 .onKeyEvent { keyEvent: KeyEvent ->
@@ -424,7 +426,7 @@ fun PinInputField(
                     false
                 },
 			singleLine = true,
-			value = inputText,
+			value = if (clear) "" else inputText,
 			onValueChange = { value ->
 				if (value.length < 5) inputText = value.digits()
 				onValueChanged.invoke(inputText.trim())
@@ -457,7 +459,15 @@ fun PinInputField(
 						innerTextField()
 					}
 				}
-			}
+			},
+			cursorBrush = Brush.verticalGradient(
+				0.00f to Color.Transparent,
+				0.00f to Color.Transparent,
+				0.00f to Color.Transparent,
+				0.00f to Color.Transparent,
+				0.00f to Color.Transparent,
+				0.00f to Color.Transparent
+			)
 		)
 		LaunchedEffect(Unit) {
 			focusRequester.requestFocus()

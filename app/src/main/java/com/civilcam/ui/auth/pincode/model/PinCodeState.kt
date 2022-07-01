@@ -12,6 +12,6 @@ data class PinCodeState(
 	
 	val isMatch = pinCode == confirmPinCode
 	
-	val isClear = pinCode != confirmPinCode && pinCode.length == 4 && confirmPinCode.length == 4
+	val isClear = pinCode != confirmPinCode
 	
 }
