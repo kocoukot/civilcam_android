@@ -23,7 +23,7 @@ import timber.log.Timber
 
 class PinCodeFragment : Fragment() {
 	private val viewModel: PinCodeViewModel by viewModel() {
-		parametersOf(isConfirm)
+		parametersOf(false)
 	}
 	
 	private val permissionsDelegate = registerForPermissionsResult(
@@ -35,7 +35,7 @@ class PinCodeFragment : Fragment() {
 	
 	private var pendingAction: (() -> Unit)? = null
 	
-	private val isConfirm: Boolean by requireArg(ARG_CONFIRM)
+	//private val isConfirm: Boolean by requireArg(ARG_CONFIRM)
 	
 	override fun onCreateView(
 		inflater: LayoutInflater,

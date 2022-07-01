@@ -55,7 +55,7 @@ class ProfileSetupViewModel(
     }
 
     private fun goNext() {
-        _steps.value = ProfileSetupRoute.GoSubscription
+        _steps.value = _state.value.data?.phoneNumber?.let { ProfileSetupRoute.GoVerification(it) }
     }
 
     private fun openDatePicker() {
