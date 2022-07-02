@@ -6,5 +6,7 @@ sealed class NetworkMainRoute : ComposeFragmentRoute {
     object GoSettings : NetworkMainRoute()
     object GoContacts : NetworkMainRoute()
     data class GoUserDetail(val userId: Int) : NetworkMainRoute()
+    data class IsNavBarVisible(val isVisible: Boolean) : NetworkMainRoute()
+
 
 }

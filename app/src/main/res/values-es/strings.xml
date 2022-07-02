@@ -23,6 +23,7 @@
     <string name="invite_text">Invitar</string>
 
     <!--    translate-->
+    <string name="invite_sent_text">Invite sent</string>
 
     <string name="phone_number_text">Phone number</string>
     <string name="phone_number_placeholder">(123) 456 7890</string>
@@ -154,7 +155,7 @@
     <string name="settings_delete_account_alert_text">Are you sure you want to delete your account?</string>
 
     <string name="settings_log_out_alert_title">Log out</string>
-    <string name="settings_log_out_alert_text">Are you sure you want to log out?</string>
+    <string name="settings_log_out_alert_text">Are you sure that you want to log out from your account?</string>
 
     <string name="settings_contact_issue_title">Issue</string>
     <string name="settings_contact_issue_enter">Enter issue</string>
@@ -168,6 +169,7 @@
     <string name="settings_password_placeholder">Enter your current password</string>
     <string name="settings_password_error_text">The password is incorrect. Please try one more time or Restore your current password.</string>
 
+    <string name="settings_create_passoword_title">Create password</string>
 
 
 
