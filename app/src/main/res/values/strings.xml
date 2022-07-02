@@ -22,6 +22,7 @@
     <string name="add_text">Add</string>
     <string name="pending_text">Pending</string>
     <string name="invite_text">Invite</string>
+    <string name="invite_sent_text">Invite sent</string>
 
     <string name="phone_number_text">Phone number</string>
     <string name="phone_number_placeholder">(123) 456 7890</string>

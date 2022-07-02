@@ -90,14 +90,14 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
                                     trailingIcon = {
                                         if (isInvited) {
                                             Text(
-                                                stringResource(id = R.string.pending_text),
+                                                stringResource(id = R.string.invite_sent_text),
                                                 textAlign = TextAlign.End,
                                                 style = CCTheme.typography.common_text_medium,
                                                 modifier = Modifier.padding(end = 16.dp),
                                                 color = CCTheme.colors.grayOne
                                             )
                                         } else {
-                                            TextActionButton(actionTitle = stringResource(id = R.string.add_text)) {
+                                            TextActionButton(actionTitle = stringResource(id = R.string.invite_text)) {
                                                 isInvited = true
                                                 viewModel.setInputActions(
                                                     ContactsActions.ClickInvite(contact)

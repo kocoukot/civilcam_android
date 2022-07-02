@@ -33,6 +33,7 @@ class NetworkMainViewModel(
     private val textSearch: StateFlow<String> = _textSearch.asStateFlow()
 
     init {
+        navBarStatus()
         viewModelScope.launch {
             _state.value = _state.value.copy(data = NetworkMainModel())
 
@@ -54,6 +55,7 @@ class NetworkMainViewModel(
                     setSearchResult(emptyList())
                 }
             }
+
         }
     }
 
@@ -76,21 +78,23 @@ class NetworkMainViewModel(
     private fun goBack() {
         when (_state.value.screenState) {
             NetworkScreen.MAIN -> {}
-            NetworkScreen.REQUESTS -> _state.value =
-                _state.value.copy(screenState = NetworkScreen.MAIN)
+            NetworkScreen.REQUESTS -> {
+                _state.value =
+                    _state.value.copy(screenState = NetworkScreen.MAIN)
+            }
             NetworkScreen.SEARCH_GUARD, NetworkScreen.ADD_GUARD -> {
                 _state.value = _state.value.copy(
                     screenState = NetworkScreen.MAIN,
-//                    data = _state.value.data?.copy(searchScreenSectionModel = SearchScreenSectionModel())
                 )
             }
 
         }
-
+        navBarStatus()
     }
 
     private fun addGuardian() {
         _state.value = _state.value.copy(screenState = NetworkScreen.ADD_GUARD)
+        navBarStatus()
     }
 
     private fun goContacts() {
@@ -102,9 +106,10 @@ class NetworkMainViewModel(
     }
 
     private fun searchGuard() {
-        if (_state.value.screenState == NetworkScreen.MAIN)
+        if (_state.value.screenState == NetworkScreen.MAIN) {
             _state.value = _state.value.copy(screenState = NetworkScreen.SEARCH_GUARD)
-
+            navBarStatus()
+        }
     }
 
     private fun goSettings() {
@@ -113,6 +118,7 @@ class NetworkMainViewModel(
 
     private fun goRequests() {
         _state.value = _state.value.copy(screenState = NetworkScreen.REQUESTS)
+        navBarStatus()
     }
 
 
@@ -222,6 +228,12 @@ class NetworkMainViewModel(
             data = data!!.copy(searchScreenSectionModel = SearchScreenSectionModel(result))
             _state.value = _state.value.copy(data = data!!.copy())
         }
+    }
+
+    fun navBarStatus() {
+        _steps.value =
+            NetworkMainRoute.IsNavBarVisible(_state.value.screenState != NetworkScreen.MAIN)
+
     }
 }
 
