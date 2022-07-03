@@ -414,7 +414,7 @@ fun PinInputField(
 			textStyle = CCTheme.typography.common_text_regular,
 			modifier = Modifier
                 .fillMaxWidth()
-                .alpha(1f)
+                .alpha(0f)
                 .clip(RoundedCornerShape(4.dp))
                 .focusRequester(focusRequester)
                 .onKeyEvent { keyEvent: KeyEvent ->

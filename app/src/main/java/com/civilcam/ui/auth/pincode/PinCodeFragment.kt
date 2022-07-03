@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.R
@@ -86,10 +85,8 @@ class PinCodeFragment : Fragment() {
 	}
 	
 	private fun onPermissionsGranted(isGranted: Boolean) {
-		if (isGranted) {
-			pendingAction?.invoke()
-			pendingAction = null
-		}
+		pendingAction?.invoke()
+		pendingAction = null
 	}
 	
 	companion object {
