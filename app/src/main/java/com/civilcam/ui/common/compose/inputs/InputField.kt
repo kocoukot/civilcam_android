@@ -385,15 +385,13 @@ fun PinInputField(
 	text: String = "",
 	isReversed: Boolean = false,
 	onValueChanged: (String) -> Unit,
-	onBackSpace: () -> Unit,
-	clear: Boolean = false
+	onBackSpace: () -> Unit
 ) {
 	val coroutineScope = rememberCoroutineScope()
 	val viewRequester = BringIntoViewRequester()
 	var inputText by remember { mutableStateOf(text) }
 	
 	if (text.isNotEmpty()) inputText = text
-	if (clear) inputText = ""
 	Column(
 		modifier = Modifier
             .fillMaxWidth()
@@ -426,10 +424,11 @@ fun PinInputField(
                     false
                 },
 			singleLine = true,
-			value = if (clear) "" else inputText,
+			value = inputText,
 			onValueChange = { value ->
 				if (value.length < 5) inputText = value.digits()
 				onValueChanged.invoke(inputText.trim())
+				if (value.length == 4) inputText = ""
 			},
 			keyboardOptions = KeyboardOptions(
 				keyboardType = KeyboardType.Number,

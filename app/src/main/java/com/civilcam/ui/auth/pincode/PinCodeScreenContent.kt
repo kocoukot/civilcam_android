@@ -85,7 +85,6 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 						)
 					}
 				},
-				clear = state.value.isClear
 			)
 			
 			Text(

@@ -17,8 +17,7 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PinCodeInputField(
-	pinCodeValue: (String) -> Unit,
-	clear: Boolean = false
+	pinCodeValue: (String) -> Unit
 ) {
 	
 	val inputPin = remember { mutableStateListOf<Int>() }
@@ -30,10 +29,9 @@ fun PinCodeInputField(
 			delay(300)
 			pinCodeValue.invoke(pinValue.value)
 			inputPin.clear()
+			pinValue.value = ""
 		}
 	}
-	
-	if (clear) inputPin.clear()
 	
 	Column(
 		modifier = Modifier
@@ -64,8 +62,7 @@ fun PinCodeInputField(
 						) {
 							inputPin.removeLast()
 						}
-					},
-					clear = clear
+					}
 				)
 				
 				Row(

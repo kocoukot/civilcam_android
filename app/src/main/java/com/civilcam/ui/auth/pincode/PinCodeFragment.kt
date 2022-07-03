@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.R
@@ -16,14 +17,12 @@ import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.common.ext.requireArg
-import com.civilcam.utils.contract.GalleryActivityResultContract
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 class PinCodeFragment : Fragment() {
 	private val viewModel: PinCodeViewModel by viewModel() {
-		parametersOf(isConfirm)
+		parametersOf(isConfirm, pinCode)
 	}
 	
 	private val permissionsDelegate = registerForPermissionsResult(
@@ -36,6 +35,7 @@ class PinCodeFragment : Fragment() {
 	private var pendingAction: (() -> Unit)? = null
 	
 	private val isConfirm: Boolean by requireArg(ARG_CONFIRM)
+	private val pinCode: String by requireArg(ARG_PIN_CODE)
 	
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -45,8 +45,12 @@ class PinCodeFragment : Fragment() {
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
 				PinCodeRoute.GoBack -> navController.popBackStack()
-				PinCodeRoute.GoConfirm -> navController.navigate(R.id.pinCodeFragment, createArgs(true))
-				PinCodeRoute.GoGuardians -> permissionsDelegate.requestPermissions()
+				is PinCodeRoute.GoConfirm -> navController.navigate(
+					R.id.pinCodeFragment,
+					createArgs(true, route.pinCode)
+				)
+				PinCodeRoute.GoGuardians -> checkPermissions()
+				PinCodeRoute.NoMatch -> showAlertDialog()
 			}
 		}
 		
@@ -62,20 +66,39 @@ class PinCodeFragment : Fragment() {
 		}
 	}
 	
+	private fun showAlertDialog() {
+		showAlertDialogFragment(
+			title = "",
+			text = resources.getString(R.string.pin_code_no_match_title)
+		) {
+			if (it) viewModel.clearStates()
+		}
+		
+	}
+	
+	private fun checkPermissions() {
+		if (permissionsDelegate.checkSelfPermissions()) {
+			navController.navigate(R.id.network_root)
+		} else {
+			pendingAction = { navController.navigate(R.id.network_root) }
+			permissionsDelegate.requestPermissions()
+		}
+	}
+	
 	private fun onPermissionsGranted(isGranted: Boolean) {
 		if (isGranted) {
 			pendingAction?.invoke()
 			pendingAction = null
-		} else {
-			showAlertDialogFragment(title = "Sorry, we need permission!")
 		}
 	}
 	
 	companion object {
 		private const val ARG_CONFIRM = "confirm"
+		private const val ARG_PIN_CODE = "pin_code"
 		
-		fun createArgs(isConfirm: Boolean) = bundleOf(
-			ARG_CONFIRM to isConfirm
+		fun createArgs(isConfirm: Boolean, pinCode: String) = bundleOf(
+			ARG_CONFIRM to isConfirm,
+			ARG_PIN_CODE to pinCode
 		)
 	}
 }

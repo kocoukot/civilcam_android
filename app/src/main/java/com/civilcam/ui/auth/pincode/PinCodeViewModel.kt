@@ -7,12 +7,16 @@ import com.civilcam.ui.auth.pincode.model.PinCodeRoute
 import com.civilcam.ui.auth.pincode.model.PinCodeState
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class PinCodeViewModel(isConfirm: Boolean) :
+class PinCodeViewModel(
+	isConfirm: Boolean,
+	pinCode: String
+) :
 	ComposeViewModel<PinCodeState, PinCodeRoute, PinCodeActions>() {
 	override var _state: MutableStateFlow<PinCodeState> = MutableStateFlow(PinCodeState())
 	
 	init {
 		_state.value = _state.value.copy(isConfirm = isConfirm)
+		_state.value = _state.value.copy(pinCode = pinCode)
 	}
 	
 	override fun setInputActions(action: PinCodeActions) {
@@ -31,12 +35,18 @@ class PinCodeViewModel(isConfirm: Boolean) :
 		_state.value = _state.value.copy(confirmPinCode = pinCode)
 		if (_state.value.isMatch) {
 			goGuardians()
+		} else {
+			noMatch()
 		}
 	}
 	
 	private fun pinEntered(pinCode: String) {
 		_state.value = _state.value.copy(pinCode = pinCode)
 		goConfirm()
+	}
+	
+	private fun noMatch() {
+		_steps.value = PinCodeRoute.NoMatch
 	}
 	
 	private fun goBack() {
@@ -48,6 +58,10 @@ class PinCodeViewModel(isConfirm: Boolean) :
 	}
 	
 	private fun goConfirm() {
-		_steps.value = PinCodeRoute.GoConfirm
+		_steps.value = PinCodeRoute.GoConfirm(_state.value.pinCode)
+	}
+	
+	fun clearStates() {
+		_state.value = _state.value.copy(confirmPinCode = "")
 	}
 }
