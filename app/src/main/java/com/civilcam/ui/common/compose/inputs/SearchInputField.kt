@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.ext.letters
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.common.theme.MaterialSelectionColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -75,104 +77,111 @@ fun SearchInputField(
                 }
             }
     ) {
-        BasicTextField(
-//            enabled = isEnable,
-            textStyle = CCTheme.typography.common_text_regular,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(50))
-                .clickable {
 
+        MaterialTheme(
+            colors = MaterialSelectionColor
+        ) {
+
+
+            BasicTextField(
+//            enabled = isEnable,
+                textStyle = CCTheme.typography.common_text_regular,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(50))
+                    .clickable {
+
+                    },
+                singleLine = true,
+                value = inputText,
+                onValueChange = {
+                    inputText = it.letters()
+                    onValueChanged.invoke(inputText.trim())
                 },
-            singleLine = true,
-            value = inputText,
-            onValueChange = {
-                inputText = it.letters()
-                onValueChanged.invoke(inputText.trim())
-            },
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Sentences,
-                keyboardType = KeyboardType.Text
-            ),
-            decorationBox = { innerTextField ->
-                Box(
-                    modifier = Modifier
-                        .height(40.dp)
-                        .background(
-                            if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
-                            RoundedCornerShape(4.dp)
-                        )
-                        .padding(vertical = 8.dp)
-                        .padding(start = 12.dp, end = 12.dp),
-                    contentAlignment = Alignment.CenterStart
-                ) {
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    keyboardType = KeyboardType.Text
+                ),
+                decorationBox = { innerTextField ->
                     Box(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .height(40.dp)
+                            .background(
+                                if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
+                                RoundedCornerShape(4.dp)
+                            )
+                            .padding(vertical = 8.dp)
+                            .padding(start = 12.dp, end = 12.dp),
                         contentAlignment = Alignment.CenterStart
                     ) {
-                        if (inputText.isEmpty())
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_search),
-                                    contentDescription = null,
-                                )
-                                Spacer(modifier = Modifier.width(7.dp))
-                                Text(
-                                    stringResource(id = R.string.search_text),
-                                    modifier = Modifier,
-                                    style = CCTheme.typography.common_text_medium,
-                                    color = CCTheme.colors.grayOne
-                                )
-                            }
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Start,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        AnimatedVisibility(
-                            visible = hasFocus && inputText.isNotEmpty(),
-                            enter = slideInHorizontally(),
-                            exit = slideOutHorizontally()
-                        ) {
-                            Row(
-                                horizontalArrangement = Arrangement.Start,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_search),
-                                    contentDescription = null,
-                                )
-                                Spacer(modifier = Modifier.padding(end = 8.dp))
-                            }
-                        }
                         Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(end = 16.dp)
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.CenterStart
                         ) {
-                            innerTextField()
+                            if (inputText.isEmpty())
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_search),
+                                        contentDescription = null,
+                                    )
+                                    Spacer(modifier = Modifier.width(7.dp))
+                                    Text(
+                                        stringResource(id = R.string.search_text),
+                                        modifier = Modifier,
+                                        style = CCTheme.typography.common_text_medium,
+                                        color = CCTheme.colors.grayOne
+                                    )
+                                }
                         }
-                        AnimatedVisibility(
-                            visible = inputText.isNotEmpty(),
-                            enter = scaleIn(),
-                            exit = scaleOut()
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            ClearButton {
-                                inputText = ""
-                                onValueChanged.invoke(inputText.trim())
+                            AnimatedVisibility(
+                                visible = hasFocus && inputText.isNotEmpty(),
+                                enter = slideInHorizontally(),
+                                exit = slideOutHorizontally()
+                            ) {
+                                Row(
+                                    horizontalArrangement = Arrangement.Start,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_search),
+                                        contentDescription = null,
+                                    )
+                                    Spacer(modifier = Modifier.padding(end = 8.dp))
+                                }
+                            }
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(end = 16.dp)
+                            ) {
+                                innerTextField()
+                            }
+                            AnimatedVisibility(
+                                visible = inputText.isNotEmpty(),
+                                enter = scaleIn(),
+                                exit = scaleOut()
+                            ) {
+                                ClearButton {
+                                    inputText = ""
+                                    onValueChanged.invoke(inputText.trim())
+                                }
                             }
                         }
-                    }
 
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 }
 

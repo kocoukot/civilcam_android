@@ -1,5 +1,6 @@
 package com.civilcam.common.theme
 
+import androidx.compose.material.lightColors
 import androidx.compose.ui.graphics.Color
 
 
@@ -19,6 +20,8 @@ data class CCColors internal constructor(
     val lightGray: Color = Color(0xFFF5F6F6),
 
     val cianColor: Color = Color(0xFF4B9595),
+)
 
-
-    )
+val MaterialSelectionColor = lightColors(
+    primary = Color(0xFF000000),
+)
