@@ -5,7 +5,7 @@ import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.password.reset.model.ResetActions
 
 sealed class ChangeCredentialsActions : ComposeFragmentActions {
-	object ClickSave : ChangeCredentialsActions()
+	data class ClickSave(val dataType: CredentialType) : ChangeCredentialsActions()
 	object ClickBack : ChangeCredentialsActions()
 	object CheckCredential : ChangeCredentialsActions()
 	data class EnterInputData(val dataType: CredentialType, val data: String) :

@@ -16,6 +16,7 @@ import com.civilcam.ui.network.main.NetworkMainViewModel
 import com.civilcam.ui.network.main.model.NetworkScreen
 import com.civilcam.ui.onboarding.OnBoardingViewModel
 import com.civilcam.ui.profile.credentials.ChangeCredentialsViewModel
+import com.civilcam.ui.profile.credentials.model.CredentialType
 import com.civilcam.ui.profile.setup.ProfileSetupViewModel
 import com.civilcam.ui.profile.userDetails.UserDetailsViewModel
 import com.civilcam.ui.settings.SettingsViewModel
@@ -90,7 +91,7 @@ val profileModule = module {
 	
 	viewModel { SettingsViewModel(get()) }
 	
-	viewModel { ChangeCredentialsViewModel() }
+	viewModel { (credentialType: CredentialType) -> ChangeCredentialsViewModel(credentialType) }
 }
 
 

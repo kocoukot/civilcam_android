@@ -160,7 +160,15 @@ fun ChangeCredentialsScreenContent(viewModel: ChangeCredentialsViewModel) {
 
 private fun setAction(viewModel: ChangeCredentialsViewModel, credentialType: CredentialType) {
 	when (credentialType) {
-		CredentialType.EMAIL -> viewModel.setInputActions(ChangeCredentialsActions.ClickSave)
-		CredentialType.PHONE -> viewModel.setInputActions(ChangeCredentialsActions.ClickSave)
+		CredentialType.EMAIL -> viewModel.setInputActions(
+			ChangeCredentialsActions.ClickSave(
+				credentialType
+			)
+		)
+		CredentialType.PHONE -> viewModel.setInputActions(
+			ChangeCredentialsActions.ClickSave(
+				credentialType
+			)
+		)
 	}
 }
