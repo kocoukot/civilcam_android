@@ -8,7 +8,7 @@ data class PinCodeState(
 	val pinCode: String = "",
 	val confirmPinCode: String = "",
 	val isConfirm: Boolean = false,
-	
+	val noMatch: Boolean = false
 ) : ComposeFragmentState {
 	
 	val isMatch = pinCode == confirmPinCode

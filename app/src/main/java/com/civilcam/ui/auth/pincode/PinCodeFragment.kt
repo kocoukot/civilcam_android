@@ -49,7 +49,6 @@ class PinCodeFragment : Fragment() {
 					createArgs(true, route.pinCode)
 				)
 				PinCodeRoute.GoGuardians -> checkPermissions()
-				PinCodeRoute.NoMatch -> showAlertDialog()
 			}
 		}
 		
@@ -63,16 +62,6 @@ class PinCodeFragment : Fragment() {
 				PinCodeScreenContent(viewModel)
 			}
 		}
-	}
-	
-	private fun showAlertDialog() {
-		showAlertDialogFragment(
-			title = "",
-			text = resources.getString(R.string.pin_code_no_match_title)
-		) {
-			if (it) viewModel.clearStates()
-		}
-		
 	}
 	
 	private fun checkPermissions() {

@@ -36,17 +36,13 @@ class PinCodeViewModel(
 		if (_state.value.isMatch) {
 			goGuardians()
 		} else {
-			noMatch()
+			_state.value = _state.value.copy(noMatch = true)
 		}
 	}
 	
 	private fun pinEntered(pinCode: String) {
 		_state.value = _state.value.copy(pinCode = pinCode)
 		goConfirm()
-	}
-	
-	private fun noMatch() {
-		_steps.value = PinCodeRoute.NoMatch
 	}
 	
 	private fun goBack() {

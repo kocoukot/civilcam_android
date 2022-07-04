@@ -1,6 +1,8 @@
 package com.civilcam.ui.auth.pincode
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -17,6 +19,8 @@ import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.pincode.model.PinCodeActions
 import com.civilcam.ui.auth.pincode.model.PinCodeInputDataType
+import com.civilcam.ui.common.alert.AlertDialogComp
+import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.PinCodeInputField
@@ -27,6 +31,10 @@ import com.civilcam.ui.common.compose.inputs.PinCodeInputField
 fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 	
 	val state = viewModel.state.collectAsState()
+	
+	BackHandler {
+		viewModel.setInputActions(PinCodeActions.GoBack)
+	}
 	
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
@@ -94,6 +102,17 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 				textAlign = TextAlign.Center,
 				modifier = Modifier.offset(y = (-35).dp)
 			)
+			
+			Crossfade(targetState = state.value.noMatch) {
+				if (it) {
+					AlertDialogComp(
+						dialogTitle = "",
+						dialogText = stringResource(id = R.string.pin_code_no_match_title),
+						AlertDialogTypes.OK,
+					)
+					{ if (it) viewModel.clearStates() }
+				}
+			}
 		}
 	}
 }
