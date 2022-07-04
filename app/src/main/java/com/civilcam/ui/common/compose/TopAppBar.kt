@@ -54,7 +54,7 @@ fun TopAppBarContent(
         }
     )
     
-    Divider(color = CCTheme.colors.grayThree, thickness = 1.dp)
+    RowDivider()
 }
 
 @Preview
