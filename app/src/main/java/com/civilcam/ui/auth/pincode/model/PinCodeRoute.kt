@@ -5,6 +5,5 @@ import com.civilcam.common.ext.compose.ComposeFragmentRoute
 sealed class PinCodeRoute : ComposeFragmentRoute {
 	object GoBack : PinCodeRoute()
 	object GoGuardians : PinCodeRoute()
-	object NoMatch : PinCodeRoute()
 	data class GoConfirm(val pinCode: String) : PinCodeRoute()
 }
