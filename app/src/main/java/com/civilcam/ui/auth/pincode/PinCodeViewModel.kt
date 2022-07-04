@@ -11,6 +11,7 @@ class PinCodeViewModel :
 	override fun setInputActions(action: PinCodeActions) {
 		when (action) {
 			PinCodeActions.GoBack -> goBack()
+			PinCodeActions.GoBackConfirm -> backStackScreenState()
 			is PinCodeActions.EnterPinCode -> {
 				when (action.inputType) {
 					PinCodeInputDataType.PIN -> pinEntered(action.pinCode)

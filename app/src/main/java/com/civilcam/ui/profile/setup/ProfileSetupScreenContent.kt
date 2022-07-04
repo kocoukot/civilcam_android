@@ -14,10 +14,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.common.compose.BackButton
-import com.civilcam.ui.common.compose.ComposeButton
-import com.civilcam.ui.common.compose.DividerLightGray
-import com.civilcam.ui.common.compose.TopAppBarContent
+import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.common.compose.inputs.InputField
 import com.civilcam.ui.common.compose.inputs.PhoneInputField
 import com.civilcam.ui.profile.setup.content.AvatarContent
@@ -75,7 +72,7 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
                         }
                     },
                 )
-                DividerLightGray()
+                RowDivider()
             }
         }
 

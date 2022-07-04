@@ -15,9 +15,7 @@ import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.password.create.model.CreatePasswordActions
-import com.civilcam.ui.common.compose.BackButton
-import com.civilcam.ui.common.compose.ComposeButton
-import com.civilcam.ui.common.compose.TopAppBarContent
+import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.common.compose.inputs.PasswordField
 import com.civilcam.ui.common.compose.inputs.PasswordStrategyBlocks
 
@@ -42,6 +40,7 @@ fun CreatePasswordScreenContent(viewModel: CreatePasswordViewModel) {
 						}
 					},
 				)
+				RowDivider()
 			}
 		}
 	
