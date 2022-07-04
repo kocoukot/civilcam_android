@@ -118,6 +118,7 @@
     <string name="digit_verification_code">We’ll send a 6 digit verification code</string>
     <string name="save_password">Save password</string>
     <string name="create_new_password">Create new password</string>
+    <string name="verification_phone_mask">+1%s</string>
 
     <string name="add_from_contacts_title">Contactos</string>
     <string name="add_from_contacts_invite_by">Invite by number</string>

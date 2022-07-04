@@ -106,7 +106,7 @@ fun VerificationScreenContent(
 							),
 						) {
 							if (state.value.verificationFlow == VerificationFlow.PHONE) {
-								append("${("+1${state.value.verificationSubject}").formatToPhoneNumber()}\n")
+								append("${state.value.verificationSubject.formatToPhoneNumber()}\n")
 							} else {
 								append("${state.value.verificationSubject}\n")
 							}
