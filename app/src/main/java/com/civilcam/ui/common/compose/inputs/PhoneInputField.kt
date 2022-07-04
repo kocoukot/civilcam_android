@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,6 +25,7 @@ import com.civilcam.R
 import com.civilcam.common.ext.clearPhone
 import com.civilcam.common.ext.digits
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.common.theme.MaterialSelectionColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -68,17 +70,21 @@ fun PhoneInputField(
                 .fillMaxWidth()
         )
 
-        BasicTextField(
-            visualTransformation = PhoneNumberTransformation(),
-            textStyle = CCTheme.typography.common_text_regular,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 5.dp)
-                .clip(RoundedCornerShape(4.dp)),
-            singleLine = true,
-            value = inputText,
-            onValueChange = { value ->
-                if (value.length < 11) inputText = value.digits()
+        MaterialTheme(
+            colors = MaterialSelectionColor
+        ) {
+
+            BasicTextField(
+                visualTransformation = PhoneNumberTransformation(),
+                textStyle = CCTheme.typography.common_text_regular,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 5.dp)
+                    .clip(RoundedCornerShape(4.dp)),
+                singleLine = true,
+                value = inputText,
+                onValueChange = { value ->
+                    if (value.length < 11) inputText = value.digits()
                 onValueChanged.invoke(inputText.trim())
             },
             keyboardOptions = KeyboardOptions(
@@ -113,6 +119,7 @@ fun PhoneInputField(
                 }
             }
         )
+        }
         if (inputText.clearPhone().length in 1..9 && !hasFocus) {
             ErrorText(stringResource(id = R.string.profile_setup_phone_error))
         }
