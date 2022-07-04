@@ -7,8 +7,8 @@ data class PinCodeState(
 	val errorText: String = "Invalid email. Please try again. (eg:email@gmail.com)",
 	val pinCode: String = "",
 	val confirmPinCode: String = "",
-	val isConfirm: Boolean = false,
-	val noMatch: Boolean = false
+	val noMatch: Boolean = false,
+	val screenState: PinCodeScreen = PinCodeScreen.PIN_CODE,
 ) : ComposeFragmentState {
 	
 	val isMatch = pinCode == confirmPinCode

@@ -1,23 +1,12 @@
 package com.civilcam.ui.auth.pincode
 
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.ui.auth.pincode.model.PinCodeActions
-import com.civilcam.ui.auth.pincode.model.PinCodeInputDataType
-import com.civilcam.ui.auth.pincode.model.PinCodeRoute
-import com.civilcam.ui.auth.pincode.model.PinCodeState
+import com.civilcam.ui.auth.pincode.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class PinCodeViewModel(
-	isConfirm: Boolean,
-	pinCode: String
-) :
+class PinCodeViewModel :
 	ComposeViewModel<PinCodeState, PinCodeRoute, PinCodeActions>() {
 	override var _state: MutableStateFlow<PinCodeState> = MutableStateFlow(PinCodeState())
-	
-	init {
-		_state.value = _state.value.copy(isConfirm = isConfirm)
-		_state.value = _state.value.copy(pinCode = pinCode)
-	}
 	
 	override fun setInputActions(action: PinCodeActions) {
 		when (action) {
@@ -54,7 +43,11 @@ class PinCodeViewModel(
 	}
 	
 	private fun goConfirm() {
-		_steps.value = PinCodeRoute.GoConfirm(_state.value.pinCode)
+		_state.value = _state.value.copy(screenState = PinCodeScreen.PIN_CODE_CONFIRM)
+	}
+	
+	fun backStackScreenState() {
+		_state.value = _state.value.copy(screenState = PinCodeScreen.PIN_CODE)
 	}
 	
 	fun clearStates() {

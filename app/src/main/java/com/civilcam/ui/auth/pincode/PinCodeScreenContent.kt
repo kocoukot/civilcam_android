@@ -1,9 +1,12 @@
 package com.civilcam.ui.auth.pincode
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +22,7 @@ import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.pincode.model.PinCodeActions
 import com.civilcam.ui.auth.pincode.model.PinCodeInputDataType
+import com.civilcam.ui.auth.pincode.model.PinCodeScreen
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
@@ -26,14 +30,23 @@ import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.PinCodeInputField
 
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 	
 	val state = viewModel.state.collectAsState()
 	
 	BackHandler {
-		viewModel.setInputActions(PinCodeActions.GoBack)
+		when(state.value.screenState) {
+			PinCodeScreen.PIN_CODE -> {
+				viewModel.setInputActions(
+					PinCodeActions.GoBack
+				)
+			}
+			PinCodeScreen.PIN_CODE_CONFIRM -> {
+				viewModel.backStackScreenState()
+			}
+		}
 	}
 	
 	Scaffold(
@@ -41,16 +54,28 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 		modifier = Modifier.fillMaxSize(),
 		topBar = {
 			Column {
-				TopAppBarContent(
-					title = stringResource(id = if (state.value.isConfirm) R.string.pin_code_confirm_title else R.string.pin_code_create_title),
-					navigationItem = {
-						BackButton {
-							viewModel.setInputActions(
-								PinCodeActions.GoBack
-							)
-						}
-					},
-				)
+				Crossfade(targetState = state.value.screenState) { screenState ->
+					TopAppBarContent(
+						title = when (screenState) {
+							PinCodeScreen.PIN_CODE -> stringResource(id = R.string.pin_code_create_title)
+							PinCodeScreen.PIN_CODE_CONFIRM -> stringResource(id = R.string.pin_code_confirm_title)
+						},
+						navigationItem = {
+							BackButton {
+								when(screenState) {
+									PinCodeScreen.PIN_CODE -> {
+										viewModel.setInputActions(
+											PinCodeActions.GoBack
+										)
+									}
+									PinCodeScreen.PIN_CODE_CONFIRM -> {
+										viewModel.backStackScreenState()
+									}
+								}
+							}
+						},
+					)
+				}
 			}
 		}
 	
@@ -64,7 +89,7 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 			verticalArrangement = Arrangement.Center
 		) {
 			
-			AnimatedVisibility(visible = state.value.isConfirm) {
+			AnimatedVisibility(visible = state.value.screenState == PinCodeScreen.PIN_CODE_CONFIRM) {
 				Text(
 					stringResource(id = R.string.pin_code_re_enter_title),
 					color = CCTheme.colors.black,
@@ -77,7 +102,7 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 			
 			PinCodeInputField(
 				pinCodeValue = {
-					if (state.value.isConfirm) {
+					if (state.value.screenState == PinCodeScreen.PIN_CODE_CONFIRM) {
 						viewModel.setInputActions(
 							PinCodeActions.EnterPinCode(
 								it,
@@ -103,8 +128,8 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 				modifier = Modifier.offset(y = (-35).dp)
 			)
 			
-			Crossfade(targetState = state.value.noMatch) {
-				if (it) {
+			Crossfade(targetState = state.value.noMatch) { noMatch ->
+				if (noMatch) {
 					AlertDialogComp(
 						dialogTitle = "",
 						dialogText = stringResource(id = R.string.pin_code_no_match_title),

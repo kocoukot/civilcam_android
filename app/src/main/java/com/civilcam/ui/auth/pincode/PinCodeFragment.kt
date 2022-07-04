@@ -20,9 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class PinCodeFragment : Fragment() {
-	private val viewModel: PinCodeViewModel by viewModel() {
-		parametersOf(isConfirm, pinCode)
-	}
+	private val viewModel: PinCodeViewModel by viewModel()
 	
 	private val permissionsDelegate = registerForPermissionsResult(
 		Manifest.permission.ACCESS_FINE_LOCATION,
@@ -33,9 +31,6 @@ class PinCodeFragment : Fragment() {
 	
 	private var pendingAction: (() -> Unit)? = null
 	
-	private val isConfirm: Boolean by requireArg(ARG_CONFIRM)
-	private val pinCode: String by requireArg(ARG_PIN_CODE)
-	
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
@@ -44,10 +39,7 @@ class PinCodeFragment : Fragment() {
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
 				PinCodeRoute.GoBack -> navController.popBackStack()
-				is PinCodeRoute.GoConfirm -> navController.navigate(
-					R.id.pinCodeFragment,
-					createArgs(true, route.pinCode)
-				)
+				is PinCodeRoute.GoConfirm -> {}
 				PinCodeRoute.GoGuardians -> checkPermissions()
 			}
 		}
@@ -76,15 +68,5 @@ class PinCodeFragment : Fragment() {
 	private fun onPermissionsGranted(isGranted: Boolean) {
 		pendingAction?.invoke()
 		pendingAction = null
-	}
-	
-	companion object {
-		private const val ARG_CONFIRM = "confirm"
-		private const val ARG_PIN_CODE = "pin_code"
-		
-		fun createArgs(isConfirm: Boolean, pinCode: String) = bundleOf(
-			ARG_CONFIRM to isConfirm,
-			ARG_PIN_CODE to pinCode
-		)
 	}
 }

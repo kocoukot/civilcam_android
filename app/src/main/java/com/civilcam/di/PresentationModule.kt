@@ -57,7 +57,7 @@ val authModule = module {
 
 	viewModel { CreatePasswordViewModel() }
 
-	viewModel { (isConfirm: Boolean, pinCode: String) -> PinCodeViewModel(isConfirm, pinCode) }
+	viewModel { PinCodeViewModel() }
 	
 }
 

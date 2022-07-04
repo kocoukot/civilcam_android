@@ -49,10 +49,7 @@ class VerificationFragment : Fragment() {
 								R.id.termsFragment,
 								TermsFragment.createArgs(false)
 							)
-							VerificationFlow.PHONE -> navController.navigate(
-								R.id.pinCodeFragment,
-								PinCodeFragment.createArgs(false, "")
-							)
+							VerificationFlow.PHONE -> navController.navigate(R.id.pinCodeFragment)
 							VerificationFlow.RESET_PASSWORD -> navController.navigate(
 								R.id.createPasswordFragment
 							)
