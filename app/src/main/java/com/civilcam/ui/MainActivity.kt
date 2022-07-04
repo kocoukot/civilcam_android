@@ -1,12 +1,6 @@
 package com.civilcam.ui
 
-import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
-import android.view.MotionEvent
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -21,48 +15,48 @@ import com.standartmedia.common.ext.castSafe
 
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityMainBinding
-    private var navHost: NavHostFragment? = null
-
-    private val currentVisibleFragment: Fragment?
-        get() = navHost?.childFragmentManager?.fragments?.first()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        window.apply {
-            navigationBarColor = ContextCompat.getColor(context, R.color.black)
-        }
-        setContentView(
-            ActivityMainBinding.inflate(layoutInflater)
-                .also { binding = it }
-                .root
-        )
-
-        navHost = supportFragmentManager.findFragmentById(binding.navHostView.id)
-            .castSafe<NavHostFragment>()
-
-        navHost?.apply {
-            childFragmentManager.addOnBackStackChangedListener(onBackStackChangedListener)
-        }
-
-        navHost?.let { nav ->
-            binding.bottomNavigationView.setupWithNavController(
-                navController = nav.navController
-            ) {}
-        }
-    }
-
-    private val onBackStackChangedListener by lazy {
-        FragmentManager.OnBackStackChangedListener {
-            binding.navBarGroup.isVisible = currentVisibleFragment is SupportBottomBar
-        }
-    }
-
-    fun showBottomNavBar(isVisible: Boolean) {
-        binding.navBarGroup.isVisible = isVisible
-
-    }
-
-
+	
+	private lateinit var binding: ActivityMainBinding
+	private var navHost: NavHostFragment? = null
+	
+	private val currentVisibleFragment: Fragment?
+		get() = navHost?.childFragmentManager?.fragments?.first()
+	
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		window.apply {
+			navigationBarColor = ContextCompat.getColor(context, R.color.black)
+		}
+		setContentView(
+			ActivityMainBinding.inflate(layoutInflater)
+				.also { binding = it }
+				.root
+		)
+		
+		navHost = supportFragmentManager.findFragmentById(binding.navHostView.id)
+			.castSafe<NavHostFragment>()
+		
+		navHost?.apply {
+			childFragmentManager.addOnBackStackChangedListener(onBackStackChangedListener)
+		}
+		
+		navHost?.let { nav ->
+			binding.bottomNavigationView.setupWithNavController(
+				navController = nav.navController
+			) {}
+		}
+	}
+	
+	private val onBackStackChangedListener by lazy {
+		FragmentManager.OnBackStackChangedListener {
+			binding.navBarGroup.isVisible = currentVisibleFragment is SupportBottomBar
+		}
+	}
+	
+	fun showBottomNavBar(isVisible: Boolean) {
+		binding.navBarGroup.isVisible = isVisible
+		
+	}
+	
+	
 }

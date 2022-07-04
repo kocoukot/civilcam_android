@@ -13,6 +13,7 @@ import com.civilcam.ui.langSelect.LanguageSelectViewModel
 import com.civilcam.ui.network.contacts.ContactsViewModel
 import com.civilcam.ui.network.inviteByNumber.InviteByNumberViewModel
 import com.civilcam.ui.network.main.NetworkMainViewModel
+import com.civilcam.ui.network.main.model.NetworkScreen
 import com.civilcam.ui.onboarding.OnBoardingViewModel
 import com.civilcam.ui.profile.setup.ProfileSetupViewModel
 import com.civilcam.ui.profile.userDetails.UserDetailsViewModel
@@ -26,69 +27,68 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val baseModule = module {
-
+	
 	single<KoinInjector> { GlobalKoinInjector(getKoin()) }
-
+	
 	single { Places.createClient(get()) }
-
+	
 }
 
 val authModule = module {
 	viewModel { LanguageSelectViewModel() }
-
+	
 	viewModel { OnBoardingViewModel() }
-
+	
 	viewModel { (isSettings: Boolean) -> TermsViewModel(isSettings) }
-
+	
 	viewModel { ProfileSetupViewModel(get()) }
-
+	
 	viewModel { LoginViewModel() }
-
+	
 	viewModel { CreateAccountViewModel() }
-
+	
 	viewModel { (verificationFlow: VerificationFlow, verificationSubject: String) ->
 		VerificationViewModel(
 			verificationFlow,
 			verificationSubject
 		)
 	}
-
+	
 	viewModel { ResetPasswordViewModel() }
-
+	
 	viewModel { CreatePasswordViewModel() }
-
+	
 	viewModel { PinCodeViewModel() }
 	
 }
 
 val networkRootModule = module {
-
-    viewModel { (userId: Int) -> UserDetailsViewModel(userId, get()) }
-
-    viewModel { ContactsViewModel(get()) }
-
-    viewModel { InviteByNumberViewModel() }
-
-    viewModel { NetworkMainViewModel(get(), get(), get()) }
-
-
+	
+	viewModel { (userId: Int) -> UserDetailsViewModel(userId, get()) }
+	
+	viewModel { ContactsViewModel(get()) }
+	
+	viewModel { InviteByNumberViewModel() }
+	
+	viewModel { (screen: NetworkScreen) -> NetworkMainViewModel(screen, get(), get(), get()) }
+	
 }
 
 val alertsRootModule = module {
-
+	
 	viewModel { AlertsListViewModel(get()) }
-
+	
 	viewModel { AlertsHistoryViewModel(get()) }
-
+	
 	viewModel { AlertsDetailViewModel(get()) }
-
-
+	
+	
 }
 
 val profileModule = module {
-
+	
 	viewModel { SettingsViewModel(get()) }
-
+	
 }
 
 

@@ -13,6 +13,8 @@ import com.civilcam.ui.auth.pincode.model.PinCodeRoute
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
+import com.civilcam.ui.network.main.NetworkMainFragment
+import com.civilcam.ui.network.main.model.NetworkScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PinCodeFragment : Fragment() {
@@ -54,9 +56,17 @@ class PinCodeFragment : Fragment() {
 	
 	private fun checkPermissions() {
 		if (permissionsDelegate.checkSelfPermissions()) {
-			navController.navigate(R.id.network_root)
+			navController.navigate(
+				R.id.network_root,
+				NetworkMainFragment.createArgs(NetworkScreen.ADD_GUARD)
+			)
 		} else {
-			pendingAction = { navController.navigate(R.id.network_root) }
+			pendingAction = {
+				navController.navigate(
+					R.id.network_root,
+					NetworkMainFragment.createArgs(NetworkScreen.ADD_GUARD)
+				)
+			}
 			permissionsDelegate.requestPermissions()
 		}
 	}

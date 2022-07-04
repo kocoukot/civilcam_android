@@ -7,6 +7,7 @@ import com.civilcam.R
 import com.civilcam.databinding.FragmentTestBinding
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.viewBinding
+import com.civilcam.ui.network.main.NetworkMainFragment
 
 class TestFragment : Fragment(R.layout.fragment_test) {
     private val binding by viewBinding(FragmentTestBinding::bind)

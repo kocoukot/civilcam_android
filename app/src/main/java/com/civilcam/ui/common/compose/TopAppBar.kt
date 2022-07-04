@@ -53,8 +53,6 @@ fun TopAppBarContent(
             }
         }
     )
-    
-    RowDivider()
 }
 
 @Preview

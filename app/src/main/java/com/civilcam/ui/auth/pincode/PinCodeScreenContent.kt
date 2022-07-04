@@ -1,12 +1,10 @@
 package com.civilcam.ui.auth.pincode
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +24,7 @@ import com.civilcam.ui.auth.pincode.model.PinCodeScreen
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
+import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.PinCodeInputField
 
@@ -37,14 +36,16 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 	val state = viewModel.state.collectAsState()
 	
 	BackHandler {
-		when(state.value.screenState) {
+		when (state.value.screenState) {
 			PinCodeScreen.PIN_CODE -> {
 				viewModel.setInputActions(
 					PinCodeActions.GoBack
 				)
 			}
 			PinCodeScreen.PIN_CODE_CONFIRM -> {
-				viewModel.backStackScreenState()
+				viewModel.setInputActions(
+					PinCodeActions.GoBackConfirm
+				)
 			}
 		}
 	}
@@ -54,28 +55,29 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 		modifier = Modifier.fillMaxSize(),
 		topBar = {
 			Column {
-				Crossfade(targetState = state.value.screenState) { screenState ->
-					TopAppBarContent(
-						title = when (screenState) {
-							PinCodeScreen.PIN_CODE -> stringResource(id = R.string.pin_code_create_title)
-							PinCodeScreen.PIN_CODE_CONFIRM -> stringResource(id = R.string.pin_code_confirm_title)
-						},
-						navigationItem = {
-							BackButton {
-								when(screenState) {
-									PinCodeScreen.PIN_CODE -> {
-										viewModel.setInputActions(
-											PinCodeActions.GoBack
-										)
-									}
-									PinCodeScreen.PIN_CODE_CONFIRM -> {
-										viewModel.backStackScreenState()
-									}
+				TopAppBarContent(
+					title = when (state.value.screenState) {
+						PinCodeScreen.PIN_CODE -> stringResource(id = R.string.pin_code_create_title)
+						PinCodeScreen.PIN_CODE_CONFIRM -> stringResource(id = R.string.pin_code_confirm_title)
+					},
+					navigationItem = {
+						BackButton {
+							when (state.value.screenState) {
+								PinCodeScreen.PIN_CODE -> {
+									viewModel.setInputActions(
+										PinCodeActions.GoBack
+									)
+								}
+								PinCodeScreen.PIN_CODE_CONFIRM -> {
+									viewModel.setInputActions(
+										PinCodeActions.GoBackConfirm
+									)
 								}
 							}
-						},
-					)
-				}
+						}
+					},
+				)
+				RowDivider()
 			}
 		}
 	
