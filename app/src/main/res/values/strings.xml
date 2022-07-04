@@ -117,6 +117,7 @@
     <string name="digit_verification_code">We’ll send a 6 digit verification code</string>
     <string name="save_password">Save password</string>
     <string name="create_new_password">Create new password</string>
+    <string name="verification_phone_mask">+1%s</string>
 
     <string name="add_from_contacts_title">Contacts</string>
     <string name="add_from_contacts_invite_by">Invite by number</string>
@@ -134,6 +135,8 @@
     <string name="network_main_declined">Declined</string>
     <string name="network_main_help_me">Help me!</string>
     <string name="network_main_safe">Safe</string>
+    <string name="pin_code_confirm_title">Confirm your pin-code</string>
+    <string name="pin_code_create_title">Create your pin-code</string>
     <string name="password_should_contain_special_char">• 1 special character</string>
 
 
@@ -177,5 +180,9 @@
     <string name="add_guardian_search_title">Find your friends</string>
     <string name="add_guardian_search_text">See which of your contacts are on CivilCam</string>
     <string name="add_guardian_header_title">Global search</string>
+    <string name="pin_code_re_enter_title">Re-enter your pin-code</string>
+    <string name="pin_code_description">This code will be used to disable emergency state. Please memorize this pin.</string>
+    <string name="verification_title">Verification</string>
+    <string name="pin_code_no_match_title">Pin-codes do not match. Try again or go back and enter a different pin</string>
 
 </resources>

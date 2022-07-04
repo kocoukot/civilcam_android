@@ -65,7 +65,7 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 				.verticalScroll(rememberScrollState())
 		) {
 			
-			Spacer(modifier = Modifier.height(12.dp))
+			Spacer(modifier = Modifier.height(32.dp))
 			
 			EmailInputField(
 				title = stringResource(id = R.string.create_account_email_label),

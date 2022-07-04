@@ -4,7 +4,6 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/languageSelectFragment">
 
-
     <fragment
         android:id="@+id/languageSelectFragment"
         android:name="com.civilcam.ui.langSelect.LanguageSelectFragment"
@@ -133,5 +132,10 @@
         android:id="@+id/createPasswordFragment"
         android:name="com.civilcam.ui.auth.password.create.CreatePasswordFragment"
         android:label="CreatePasswordFragment" />
+
+    <fragment
+        android:id="@+id/pinCodeFragment"
+        android:name="com.civilcam.ui.auth.pincode.PinCodeFragment"
+        android:label="PinCodeFragment" />
 
 </navigation>

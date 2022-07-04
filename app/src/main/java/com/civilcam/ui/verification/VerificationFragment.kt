@@ -1,6 +1,8 @@
 package com.civilcam.ui.verification
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,9 +10,11 @@ import android.view.WindowManager
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
+import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.domain.model.VerificationFlow
+import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.requireArg
@@ -39,15 +43,17 @@ class VerificationFragment : Fragment() {
 					navController.popBackStack()
 				}
 				VerificationRoute.ToNextScreen -> {
-					when (verificationFlow) {
-						VerificationFlow.NEW_EMAIL -> navController.navigate(
-							R.id.termsFragment,
-							TermsFragment.createArgs(false)
-						)
-						VerificationFlow.PHONE -> {}
-						VerificationFlow.RESET_PASSWORD -> navController.navigate(
-							R.id.createPasswordFragment
-						)
+					Handler(Looper.getMainLooper()).postDelayed(300) {
+						when (verificationFlow) {
+							VerificationFlow.NEW_EMAIL -> navController.navigate(
+								R.id.termsFragment,
+								TermsFragment.createArgs(false)
+							)
+							VerificationFlow.PHONE -> navController.navigate(R.id.pinCodeFragment)
+							VerificationFlow.RESET_PASSWORD -> navController.navigate(
+								R.id.createPasswordFragment
+							)
+						}
 					}
 				}
 			}

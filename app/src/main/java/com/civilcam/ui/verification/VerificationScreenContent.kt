@@ -1,5 +1,6 @@
 package com.civilcam.ui.verification
 
+import android.telephony.PhoneNumberUtils
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,12 +22,14 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
+import com.civilcam.common.ext.formatToPhoneNumber
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.VerificationFlow
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.OtpCodeInputField
 import com.civilcam.ui.verification.model.VerificationActions
+import java.util.*
 
 @Composable
 fun VerificationScreenContent(
@@ -49,7 +52,7 @@ fun VerificationScreenContent(
                             stringResource(id = R.string.email_verification)
                         }
                         VerificationFlow.RESET_PASSWORD -> {
-                            stringResource(id = R.string.reset_password)
+                            stringResource(id = R.string.verification_title)
                         }
                     },
                     navigationItem = {
@@ -74,7 +77,8 @@ fun VerificationScreenContent(
                     .padding(horizontal = 16.dp)
                     .weight(1f)
 			) {
-				Spacer(modifier = Modifier.height(12.dp))
+				Spacer(modifier = Modifier.height(32.dp))
+				
 				OtpCodeInputField(
 					onValueChanged = {
 						viewModel.setInputActions(VerificationActions.EnterCodeData(it))
@@ -88,7 +92,8 @@ fun VerificationScreenContent(
 						withStyle(
 							style = SpanStyle(
 								color = CCTheme.colors.grayOne,
-								fontSize = 13.sp
+								fontSize = 13.sp,
+								fontWeight = FontWeight.W400
 							),
 						) {
 							append("${context.resources.getString(R.string.code_sent_title)} ")
@@ -96,15 +101,21 @@ fun VerificationScreenContent(
 						withStyle(
 							style = SpanStyle(
 								color = CCTheme.colors.primaryRed,
-								fontSize = 13.sp
+								fontSize = 13.sp,
+								fontWeight = FontWeight.W500
 							),
 						) {
-							append("${state.value.verificationSubject}\n")
+							if (state.value.verificationFlow == VerificationFlow.PHONE) {
+								append("${state.value.verificationSubject.formatToPhoneNumber()}\n")
+							} else {
+								append("${state.value.verificationSubject}\n")
+							}
 						}
 						withStyle(
 							style = SpanStyle(
 								color = CCTheme.colors.grayOne,
-								fontSize = 13.sp
+								fontSize = 13.sp,
+								fontWeight = FontWeight.W400
 							),
 						) {
 							append(context.resources.getString(R.string.code_arrive))
