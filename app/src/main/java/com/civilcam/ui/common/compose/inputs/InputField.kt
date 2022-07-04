@@ -379,101 +379,6 @@ fun OtpCodeInputField(
 	}
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
-@Composable
-fun PinInputField(
-	text: String = "",
-	isReversed: Boolean = false,
-	onValueChanged: (String) -> Unit,
-	onBackSpace: () -> Unit
-) {
-	val coroutineScope = rememberCoroutineScope()
-	val viewRequester = BringIntoViewRequester()
-	var inputText by remember { mutableStateOf(text) }
-	
-	if (text.isNotEmpty()) inputText = text
-	Column(
-		modifier = Modifier
-            .fillMaxWidth()
-			.offset(y = (-12).dp)
-            .background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
-            .bringIntoViewRequester(viewRequester)
-            .onFocusEvent {
-                if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(400)
-                        viewRequester.bringIntoView()
-                    }
-                }
-            }
-	) {
-		
-		val focusRequester = remember { FocusRequester() }
-		BasicTextField(
-			visualTransformation = PinCodeTransformation(),
-			textStyle = CCTheme.typography.common_text_regular,
-			modifier = Modifier
-                .fillMaxWidth()
-                .alpha(0f)
-                .clip(RoundedCornerShape(4.dp))
-                .focusRequester(focusRequester)
-                .onKeyEvent { keyEvent: KeyEvent ->
-                    if (keyEvent.key == Key.Backspace) {
-                        onBackSpace.invoke()
-                    }
-                    false
-                },
-			singleLine = true,
-			value = inputText,
-			onValueChange = { value ->
-				if (value.length < 5) inputText = value.digits()
-				onValueChanged.invoke(inputText.trim())
-				if (value.length == 4) inputText = ""
-			},
-			keyboardOptions = KeyboardOptions(
-				keyboardType = KeyboardType.Number,
-				imeAction = ImeAction.Done
-			),
-			decorationBox = { innerTextField ->
-				Row(
-					modifier = Modifier
-                        .background(
-                            if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
-                            RoundedCornerShape(4.dp)
-                        )
-                        .padding(vertical = 14.dp)
-                        .padding(start = 12.dp, end = 12.dp),
-					verticalAlignment = Alignment.CenterVertically
-				) {
-					Box(
-						Modifier
-							.weight(1f)
-					) {
-						if (inputText.isEmpty()) Text(
-							"",
-							modifier = Modifier,
-							style = CCTheme.typography.common_text_regular,
-							color = CCTheme.colors.black
-						)
-						innerTextField()
-					}
-				}
-			},
-			cursorBrush = Brush.verticalGradient(
-				0.00f to Color.Transparent,
-				0.00f to Color.Transparent,
-				0.00f to Color.Transparent,
-				0.00f to Color.Transparent,
-				0.00f to Color.Transparent,
-				0.00f to Color.Transparent
-			)
-		)
-		LaunchedEffect(Unit) {
-			focusRequester.requestFocus()
-		}
-    }
-}
-
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun PasswordField(
@@ -655,34 +560,6 @@ fun otpCodeFilter(text: AnnotatedString): TransformedText {
 			if (offset == 4) return offset + 1
 			if (offset == 5) return offset + 1
 			if (offset == 6) return offset + 1
-			return offset
-		}
-	}
-	
-	return TransformedText(AnnotatedString(out), phoneNumberOffsetTranslator)
-}
-
-private class PinCodeTransformation : VisualTransformation {
-	override fun filter(text: AnnotatedString): TransformedText {
-		return pinCodeFilter(text)
-	}
-}
-
-fun pinCodeFilter(text: AnnotatedString): TransformedText {
-	
-	val trimmed = if (text.text.length >= 4) text.text.substring(0..3) else text.text
-	var out = ""
-	for (i in trimmed.indices) {
-		out += trimmed[i]
-	}
-	
-	val phoneNumberOffsetTranslator = object : OffsetMapping {
-		override fun originalToTransformed(offset: Int): Int {
-			return offset
-			
-		}
-		
-		override fun transformedToOriginal(offset: Int): Int {
 			return offset
 		}
 	}
