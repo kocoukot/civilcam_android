@@ -14,6 +14,7 @@ import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,12 +25,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEvent
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.*
@@ -39,6 +34,7 @@ import com.civilcam.R
 import com.civilcam.common.ext.digits
 import com.civilcam.common.ext.letters
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.common.theme.MaterialSelectionColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -72,23 +68,23 @@ fun InputField(
 	
 	Column(
 		modifier = Modifier
-            .fillMaxWidth()
-            .onFocusChanged { focusState ->
-                when {
-                    focusState.hasFocus -> hasFocus = true
-                    !focusState.isFocused -> hasFocus = false
-                }
-            }
-            .background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
-            .bringIntoViewRequester(viewRequester)
-            .onFocusEvent {
-                if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(400)
-                        viewRequester.bringIntoView()
-                    }
-                }
-            }
+			.fillMaxWidth()
+			.onFocusChanged { focusState ->
+				when {
+					focusState.hasFocus -> hasFocus = true
+					!focusState.isFocused -> hasFocus = false
+				}
+			}
+			.background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
+			.bringIntoViewRequester(viewRequester)
+			.onFocusEvent {
+				if (it.isFocused) {
+					coroutineScope.launch {
+						delay(400)
+						viewRequester.bringIntoView()
+					}
+				}
+			}
 	) {
 		
 		Text(
@@ -96,61 +92,66 @@ fun InputField(
 			style = CCTheme.typography.common_text_small_regular,
 			color = titleColorState,
 			modifier = Modifier
-                .padding(bottom = 8.dp)
-                .fillMaxWidth()
+				.padding(bottom = 8.dp)
+				.fillMaxWidth()
 		)
 		
-		BasicTextField(
-			enabled = isEnable,
-			textStyle = if (hasError && inputText.isNotEmpty()) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
-			modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(4.dp))
-                .border(
-                    1.dp,
-                    errorBorderState,
-                    RoundedCornerShape(4.dp)
-                )
-                .clickable {
-                    if (!isEnable) onTextClicked?.invoke()
-                },
-			singleLine = true,
-			value = if (isEnable) inputText else text,
-			onValueChange = {
-				inputText = if (isEnable && inputType == KeyboardType.Text) {
-					it.letters()
-				} else {
-					it
-				}
-				onValueChanged.invoke(inputText.trim())
-				
-			},
-			keyboardOptions = KeyboardOptions(
-				capitalization = inputCapitalization,
-				keyboardType = inputType
-			),
-			decorationBox = { innerTextField ->
-				Row(
-					modifier = Modifier
-                        .background(
-                            if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
-                            RoundedCornerShape(4.dp)
-                        )
-                        .padding(vertical = 14.dp)
-                        .padding(start = 12.dp, end = 12.dp),
-					verticalAlignment = Alignment.CenterVertically
-				) {
-					Box(
-						Modifier
-							.weight(1f)
-					) {
-						if (inputText.isEmpty()) PlaceholderText(placeHolder)
-						innerTextField()
+		MaterialTheme(
+			colors = MaterialSelectionColor
+		) {
+			BasicTextField(
+				enabled = isEnable,
+				textStyle = if (hasError && inputText.isNotEmpty()) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
+				modifier = Modifier
+					.fillMaxWidth()
+					.clip(RoundedCornerShape(4.dp))
+					.border(
+						1.dp,
+						errorBorderState,
+						RoundedCornerShape(4.dp)
+					)
+					.clickable {
+						if (!isEnable) onTextClicked?.invoke()
+					},
+				singleLine = true,
+				value = if (isEnable) inputText else text,
+				onValueChange = {
+					inputText = if (isEnable && inputType == KeyboardType.Text) {
+						it.letters()
+					} else {
+						it
 					}
-					if (trailingIcon != null) trailingIcon()
+					onValueChanged.invoke(inputText.trim())
+					
+				},
+				keyboardOptions = KeyboardOptions(
+					capitalization = inputCapitalization,
+					keyboardType = inputType
+				),
+				decorationBox = { innerTextField ->
+					Row(
+						modifier = Modifier
+							.background(
+								if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
+								RoundedCornerShape(4.dp)
+							)
+							.padding(vertical = 14.dp)
+							.padding(start = 12.dp, end = 12.dp),
+						verticalAlignment = Alignment.CenterVertically
+					) {
+						Box(
+							Modifier
+								.weight(1f)
+						) {
+							if (inputText.isEmpty()) PlaceholderText(placeHolder)
+							innerTextField()
+						}
+						if (trailingIcon != null) trailingIcon()
+					}
 				}
-			}
-		)
+			)
+		}
+		
 		AnimatedVisibility(visible = hasError && inputText.isNotEmpty()) {
 			ErrorText(errorMessage)
 		}
@@ -184,24 +185,24 @@ fun EmailInputField(
 	
 	Column(
 		modifier = Modifier
-            .fillMaxWidth()
-            .onFocusChanged { focusState ->
-                when {
-                    focusState.hasFocus -> hasFocus = true
-                    !focusState.isFocused -> hasFocus = false
-                }
-                onFocusChanged.invoke(focusState.hasFocus)
-            }
-            .background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
-            .bringIntoViewRequester(viewRequester)
-            .onFocusEvent {
-                if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(400)
-                        viewRequester.bringIntoView()
-                    }
-                }
-            }
+			.fillMaxWidth()
+			.onFocusChanged { focusState ->
+				when {
+					focusState.hasFocus -> hasFocus = true
+					!focusState.isFocused -> hasFocus = false
+				}
+				onFocusChanged.invoke(focusState.hasFocus)
+			}
+			.background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
+			.bringIntoViewRequester(viewRequester)
+			.onFocusEvent {
+				if (it.isFocused) {
+					coroutineScope.launch {
+						delay(400)
+						viewRequester.bringIntoView()
+					}
+				}
+			}
 	) {
 		
 		Text(
@@ -209,56 +210,61 @@ fun EmailInputField(
 			style = CCTheme.typography.common_text_small_regular,
 			color = titleColorState,
 			modifier = Modifier
-                .padding(bottom = 8.dp)
-                .fillMaxWidth()
+				.padding(bottom = 8.dp)
+				.fillMaxWidth()
 		)
 		
-		BasicTextField(
-			enabled = isEnable,
-			textStyle = if (hasError && inputText.isNotEmpty()) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
-			modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(4.dp))
-                .border(
-                    1.dp,
-                    errorBorderState,
-                    RoundedCornerShape(4.dp)
-                )
-                .clickable {
-                    if (!isEnable) onTextClicked?.invoke()
-                },
-			singleLine = true,
-			value = if (isEnable) inputText else text,
-			onValueChange = {
-				inputText = it
-				onValueChanged.invoke(inputText.trim())
-				
-			},
-			keyboardOptions = KeyboardOptions(
-				capitalization = KeyboardCapitalization.None,
-				keyboardType = KeyboardType.Email
-			),
-			decorationBox = { innerTextField ->
-				Row(
-					modifier = Modifier
-                        .background(
-                            if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
-                            RoundedCornerShape(4.dp)
-                        )
-                        .padding(vertical = 14.dp)
-                        .padding(start = 12.dp, end = 12.dp),
-					verticalAlignment = Alignment.CenterVertically
-				) {
-					Box(
-						Modifier
-							.weight(1f)
+		MaterialTheme(
+			colors = MaterialSelectionColor
+		) {
+			BasicTextField(
+				enabled = isEnable,
+				textStyle = if (hasError && inputText.isNotEmpty()) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
+				modifier = Modifier
+					.fillMaxWidth()
+					.clip(RoundedCornerShape(4.dp))
+					.border(
+						1.dp,
+						errorBorderState,
+						RoundedCornerShape(4.dp)
+					)
+					.clickable {
+						if (!isEnable) onTextClicked?.invoke()
+					},
+				singleLine = true,
+				value = if (isEnable) inputText else text,
+				onValueChange = {
+					inputText = it
+					onValueChanged.invoke(inputText.trim())
+					
+				},
+				keyboardOptions = KeyboardOptions(
+					capitalization = KeyboardCapitalization.None,
+					keyboardType = KeyboardType.Email
+				),
+				decorationBox = { innerTextField ->
+					Row(
+						modifier = Modifier
+							.background(
+								if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
+								RoundedCornerShape(4.dp)
+							)
+							.padding(vertical = 14.dp)
+							.padding(start = 12.dp, end = 12.dp),
+						verticalAlignment = Alignment.CenterVertically
 					) {
-						if (inputText.isEmpty()) PlaceholderText(placeHolder)
-						innerTextField()
+						Box(
+							Modifier
+								.weight(1f)
+						) {
+							if (inputText.isEmpty()) PlaceholderText(placeHolder)
+							innerTextField()
+						}
 					}
 				}
-			}
-		)
+			)
+		}
+		
 		AnimatedVisibility(visible = hasError && inputText.isNotEmpty()) {
 			ErrorText(errorMessage)
 		}
@@ -291,17 +297,17 @@ fun OtpCodeInputField(
 	if (text.isNotEmpty()) inputText = text
 	Column(
 		modifier = Modifier
-            .fillMaxWidth()
-            .background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
-            .bringIntoViewRequester(viewRequester)
-            .onFocusEvent {
-                if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(400)
-                        viewRequester.bringIntoView()
-                    }
-                }
-            }
+			.fillMaxWidth()
+			.background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
+			.bringIntoViewRequester(viewRequester)
+			.onFocusEvent {
+				if (it.isFocused) {
+					coroutineScope.launch {
+						delay(400)
+						viewRequester.bringIntoView()
+					}
+				}
+			}
 	) {
 		
 		Text(
@@ -309,58 +315,62 @@ fun OtpCodeInputField(
 			color = otpColorState,
 			style = CCTheme.typography.common_text_small_regular,
 			modifier = Modifier
-                .padding(bottom = 8.dp)
-                .fillMaxWidth()
+				.padding(bottom = 8.dp)
+				.fillMaxWidth()
 		)
 		
 		val focusRequester = remember { FocusRequester() }
-		BasicTextField(
-			visualTransformation = OTPCodeTransformation(),
-			textStyle = if (hasError) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
-			modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    1.dp,
-                    if (hasError) CCTheme.colors.primaryRed else CCTheme.colors.lightGray,
-                    RoundedCornerShape(4.dp)
-                )
-                .clip(RoundedCornerShape(4.dp))
-                .focusRequester(focusRequester),
-			singleLine = true,
-			value = inputText,
-			onValueChange = { value ->
-				if (value.length < 7) inputText = value.digits()
-				onValueChanged.invoke(inputText.trim())
-			},
-			keyboardOptions = KeyboardOptions(
-				keyboardType = KeyboardType.Number
-			),
-			decorationBox = { innerTextField ->
-				Row(
-					modifier = Modifier
-                        .background(
-                            if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
-                            RoundedCornerShape(4.dp)
-                        )
-                        .padding(vertical = 14.dp)
-                        .padding(start = 12.dp, end = 12.dp),
-					verticalAlignment = Alignment.CenterVertically
-				) {
-					Box(
-						Modifier
-							.weight(1f)
+		MaterialTheme(
+			colors = MaterialSelectionColor
+		) {
+			BasicTextField(
+				visualTransformation = OTPCodeTransformation(),
+				textStyle = if (hasError) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
+				modifier = Modifier
+					.fillMaxWidth()
+					.border(
+						1.dp,
+						if (hasError) CCTheme.colors.primaryRed else CCTheme.colors.lightGray,
+						RoundedCornerShape(4.dp)
+					)
+					.clip(RoundedCornerShape(4.dp))
+					.focusRequester(focusRequester),
+				singleLine = true,
+				value = inputText,
+				onValueChange = { value ->
+					if (value.length < 7) inputText = value.digits()
+					onValueChanged.invoke(inputText.trim())
+				},
+				keyboardOptions = KeyboardOptions(
+					keyboardType = KeyboardType.Number
+				),
+				decorationBox = { innerTextField ->
+					Row(
+						modifier = Modifier
+							.background(
+								if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
+								RoundedCornerShape(4.dp)
+							)
+							.padding(vertical = 14.dp)
+							.padding(start = 12.dp, end = 12.dp),
+						verticalAlignment = Alignment.CenterVertically
 					) {
-						if (inputText.isEmpty()) Text(
-							stringResource(id = R.string.verification_code_placeholder),
-							modifier = Modifier,
-							style = CCTheme.typography.common_text_regular,
-							color = otpColorState
-						)
-						innerTextField()
+						Box(
+							Modifier
+								.weight(1f)
+						) {
+							if (inputText.isEmpty()) Text(
+								stringResource(id = R.string.verification_code_placeholder),
+								modifier = Modifier,
+								style = CCTheme.typography.common_text_regular,
+								color = otpColorState
+							)
+							innerTextField()
+						}
 					}
 				}
-			}
-		)
+			)
+		}
 		LaunchedEffect(Unit) {
 			focusRequester.requestFocus()
 		}
@@ -371,8 +381,8 @@ fun OtpCodeInputField(
 				color = CCTheme.colors.primaryRed,
 				style = CCTheme.typography.common_text_small_regular,
 				modifier = Modifier
-                    .padding(top = 8.dp)
-                    .fillMaxWidth()
+					.padding(top = 8.dp)
+					.fillMaxWidth()
 			)
 		}
 	}
@@ -431,71 +441,73 @@ fun PasswordField(
 			color = errorColorState,
 			style = CCTheme.typography.common_text_small_regular,
 			modifier = Modifier
-                .padding(bottom = 8.dp)
-                .fillMaxWidth()
+				.padding(bottom = 8.dp)
+				.fillMaxWidth()
 		)
-		
-		BasicTextField(
-			visualTransformation = if (visibility.value) VisualTransformation.None else PasswordVisualTransformation(),
-			textStyle = if ((hasError && inputText.isNotEmpty()) || noMatch && inputText.isNotEmpty()) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
-			modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(4.dp))
-                .border(
-                    1.dp,
-                    errorBorderState,
-                    RoundedCornerShape(4.dp)
-                ),
-			singleLine = true,
-			value = inputText,
-			onValueChange = {
-				inputText = it
-				onValueChanged.invoke(inputText.trim())
-			},
-			keyboardOptions = KeyboardOptions(
-				keyboardType = KeyboardType.Password,
-				capitalization = KeyboardCapitalization.None
-			),
-			decorationBox = { innerTextField ->
-				Row(
-					modifier = Modifier
-                        .background(
-                            if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
-                            RoundedCornerShape(4.dp)
-                        )
-                        .padding(vertical = 14.dp)
-                        .padding(start = 12.dp, end = 12.dp),
-					verticalAlignment = Alignment.CenterVertically
-				) {
-					Box(
-						Modifier.weight(1f)
+		MaterialTheme(
+			colors = MaterialSelectionColor
+		) {
+			BasicTextField(
+				visualTransformation = if (visibility.value) VisualTransformation.None else PasswordVisualTransformation(),
+				textStyle = if ((hasError && inputText.isNotEmpty()) || noMatch && inputText.isNotEmpty()) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
+				modifier = Modifier
+					.fillMaxWidth()
+					.clip(RoundedCornerShape(4.dp))
+					.border(
+						1.dp,
+						errorBorderState,
+						RoundedCornerShape(4.dp)
+					),
+				singleLine = true,
+				value = inputText,
+				onValueChange = {
+					inputText = it
+					onValueChanged.invoke(inputText.trim())
+				},
+				keyboardOptions = KeyboardOptions(
+					keyboardType = KeyboardType.Password,
+					capitalization = KeyboardCapitalization.None
+				),
+				decorationBox = { innerTextField ->
+					Row(
+						modifier = Modifier
+							.background(
+								if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
+								RoundedCornerShape(4.dp)
+							)
+							.padding(vertical = 14.dp)
+							.padding(start = 12.dp, end = 12.dp),
+						verticalAlignment = Alignment.CenterVertically
 					) {
-						if (inputText.isEmpty())
-							Text(
-								placeholder,
-								modifier = Modifier,
-								style = CCTheme.typography.common_text_regular,
-								color = CCTheme.colors.grayOne
-							)
-						
-						innerTextField()
-					}
-					if (inputText.isNotEmpty()) {
-						AnimatedContent(targetState = visibility.value) { state ->
-							Text(
-								stringResource(id = if (state) R.string.hide else R.string.show_title),
-								modifier = Modifier.clickable {
-									visibility.value = !visibility.value
-								},
-								style = CCTheme.typography.common_text_regular,
-								color = if (state) CCTheme.colors.primaryRed else CCTheme.colors.grayOne
-							)
+						Box(
+							Modifier.weight(1f)
+						) {
+							if (inputText.isEmpty())
+								Text(
+									placeholder,
+									modifier = Modifier,
+									style = CCTheme.typography.common_text_regular,
+									color = CCTheme.colors.grayOne
+								)
+							
+							innerTextField()
+						}
+						if (inputText.isNotEmpty()) {
+							AnimatedContent(targetState = visibility.value) { state ->
+								Text(
+									stringResource(id = if (state) R.string.hide else R.string.show_title),
+									modifier = Modifier.clickable {
+										visibility.value = !visibility.value
+									},
+									style = CCTheme.typography.common_text_regular,
+									color = if (state) CCTheme.colors.primaryRed else CCTheme.colors.grayOne
+								)
+							}
 						}
 					}
 				}
-			}
-		)
-		
+			)
+		}
 		AnimatedVisibility(visible = isReEnter && inputText.isNotEmpty()) {
 			ErrorText(stringResource(id = R.string.password_no_match))
 		}
@@ -564,21 +576,4 @@ fun otpCodeFilter(text: AnnotatedString): TransformedText {
 	}
 	
 	return TransformedText(AnnotatedString(out), phoneNumberOffsetTranslator)
-}
-
-@Preview
-@Composable
-private fun OtpCodeFieldPreview() {
-	OtpCodeInputField(onValueChanged = {}, hasError = true)
-}
-
-@Preview
-@Composable
-private fun PasswordInputFieldPreview() {
-	PasswordField(
-		onValueChanged = {},
-		name = stringResource(id = R.string.password),
-		placeholder = stringResource(id = R.string.create_password),
-		hasError = true
-	)
 }
