@@ -4,8 +4,10 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
@@ -13,12 +15,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -414,18 +413,18 @@ fun PasswordField(
 	if (text.isNotEmpty()) inputText = text
 	Column(
 		modifier = Modifier
-            .fillMaxWidth()
-            .background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
-            .bringIntoViewRequester(viewRequester)
-            .onFocusEvent {
-                hasFocus = it.isFocused
-                if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(400)
-                        viewRequester.bringIntoView()
-                    }
-                }
-            }
+			.fillMaxWidth()
+			.background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
+			.bringIntoViewRequester(viewRequester)
+			.onFocusEvent {
+				hasFocus = it.isFocused
+				if (it.isFocused) {
+					coroutineScope.launch {
+						delay(400)
+						viewRequester.bringIntoView()
+					}
+				}
+			}
 	) {
 		Text(
 			name,
@@ -565,4 +564,21 @@ fun otpCodeFilter(text: AnnotatedString): TransformedText {
 	}
 	
 	return TransformedText(AnnotatedString(out), phoneNumberOffsetTranslator)
+}
+
+@Preview
+@Composable
+private fun OtpCodeFieldPreview() {
+	OtpCodeInputField(onValueChanged = {}, hasError = true)
+}
+
+@Preview
+@Composable
+private fun PasswordInputFieldPreview() {
+	PasswordField(
+		onValueChanged = {},
+		name = stringResource(id = R.string.password),
+		placeholder = stringResource(id = R.string.create_password),
+		hasError = true
+	)
 }
