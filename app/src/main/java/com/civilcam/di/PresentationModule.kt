@@ -19,9 +19,6 @@ import com.civilcam.ui.profile.credentials.ChangeCredentialsViewModel
 import com.civilcam.ui.profile.credentials.model.CredentialType
 import com.civilcam.ui.profile.setup.ProfileSetupViewModel
 import com.civilcam.ui.profile.userDetails.UserDetailsViewModel
-import com.civilcam.ui.profile.userProfile.UserProfileViewModel
-import com.civilcam.ui.profile.userProfile.model.UserProfileScreen
-import com.civilcam.ui.profile.userProfile.model.UserProfileType
 import com.civilcam.ui.settings.SettingsViewModel
 import com.civilcam.ui.terms.TermsViewModel
 import com.civilcam.ui.verification.VerificationViewModel
@@ -96,12 +93,6 @@ val profileModule = module {
 	
 	viewModel { (credentialType: CredentialType) -> ChangeCredentialsViewModel(credentialType) }
 	
-	viewModel { (userId: Int, profileType: UserProfileScreen) ->
-		UserProfileViewModel(
-			userId,
-			profileType
-		)
-	}
 }
 
 

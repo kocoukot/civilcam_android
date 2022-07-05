@@ -1,38 +1,31 @@
-package com.civilcam.ui.profile.userProfile.content
+package com.civilcam.ui.profile.userDetails.content
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.profile.userDetails.model.UserDetailsModel
-import com.civilcam.ui.profile.userProfile.model.UserProfileType
+import com.civilcam.ui.profile.userDetails.model.UserDetailsScreen
 import com.civilcam.utils.DateUtils
 
 @Composable
 fun UserProfileSection(
 	userData: UserDetailsModel,
-	userProfileType: UserProfileType,
+	userProfileType: UserDetailsScreen,
 	mockAction: () -> Unit
 ) {
 	
@@ -56,7 +49,7 @@ fun UserProfileSection(
 		)
 		
 		Crossfade(targetState = userProfileType) {
-			AnimatedVisibility(visible = it == UserProfileType.PROFILE) {
+			AnimatedVisibility(visible = it == UserDetailsScreen.PROFILE) {
 				Text(
 					text = userData.userInfoSection.userName,
 					style = CCTheme.typography.button_text,
@@ -65,7 +58,7 @@ fun UserProfileSection(
 				)
 			}
 			
-			AnimatedVisibility(visible = it == UserProfileType.EDIT) {
+			AnimatedVisibility(visible = it == UserDetailsScreen.EDIT) {
 				Text(
 					text = stringResource(id = R.string.user_profile_change_image),
 					style = CCTheme.typography.button_text,

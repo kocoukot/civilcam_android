@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/network_root">
+    app:startDestination="@id/changeCredentialsFragment">
 
     <fragment
         android:id="@+id/languageSelectFragment"
@@ -142,10 +142,5 @@
         android:id="@+id/changeCredentialsFragment"
         android:name="com.civilcam.ui.profile.credentials.ChangeCredentialsFragment"
         android:label="ChangeCredentialsFragment" />
-
-    <fragment
-        android:id="@+id/userProfileFragment"
-        android:name="com.civilcam.ui.profile.userProfile.UserProfileFragment"
-        android:label="UserProfileFragment" />
 
 </navigation>

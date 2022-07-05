@@ -190,6 +190,7 @@
     <string name="pin_code_no_match_title">Pin-codes do not match. Try again or go back and enter a different pin</string>
     <string name="user_profile_change_image">Change profile image</string>
     <string name="user_profile_pin_code_title">Pin-code</string>
+    <string name="user_profile_edit_title">Edit</string>
 
 
 </resources>

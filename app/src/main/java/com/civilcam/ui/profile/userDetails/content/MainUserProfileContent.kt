@@ -1,4 +1,4 @@
-package com.civilcam.ui.profile.userProfile.content
+package com.civilcam.ui.profile.userDetails.content
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,11 +15,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.profile.userProfile.model.UserProfileType
+import com.civilcam.ui.profile.userDetails.model.UserDetailsType
 
 @Composable
 fun MainProfileContent(
-	onRowClicked: (UserProfileType) -> Unit
+	onRowClicked: (UserDetailsType) -> Unit
 ) {
 	Column(
 		modifier = Modifier.fillMaxWidth()
@@ -27,7 +27,7 @@ fun MainProfileContent(
 		
 		Spacer(modifier = Modifier.height(30.dp))
 		Divider(color = CCTheme.colors.grayThree)
-		for (type in UserProfileType.values()) {
+		for (type in UserDetailsType.values()) {
 			ProfileRow(
 				title = stringResource(id = type.title),
 				value = "",
