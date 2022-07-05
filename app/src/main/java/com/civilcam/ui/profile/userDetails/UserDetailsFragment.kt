@@ -17,10 +17,10 @@ import org.koin.core.parameter.parametersOf
 
 class UserDetailsFragment : Fragment() {
     private val viewModel: UserDetailsViewModel by viewModel {
-        parametersOf(0)
+        parametersOf(userId)
     }
 
-    //private val userId by requireArg<Int>(ARG_USER_ID)
+    private val userId by requireArg<Int>(ARG_USER_ID)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
