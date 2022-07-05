@@ -1,4 +1,4 @@
-package com.civilcam.ui.profile.userDetails.content
+package com.civilcam.ui.profile.userProfile.model
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -19,13 +19,12 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.profile.userDetails.model.UserDetailsModel
-import com.civilcam.ui.profile.userDetails.model.UserDetailsScreen
 import com.civilcam.utils.DateUtils
 
 @Composable
 fun UserProfileSection(
 	userData: UserDetailsModel,
-	userProfileType: UserDetailsScreen,
+	userProfileType: UserProfileScreen,
 	mockAction: () -> Unit
 ) {
 	
@@ -49,7 +48,7 @@ fun UserProfileSection(
 		)
 		
 		Crossfade(targetState = userProfileType) {
-			AnimatedVisibility(visible = it == UserDetailsScreen.PROFILE) {
+			AnimatedVisibility(visible = it == UserProfileScreen.PROFILE) {
 				Text(
 					text = userData.userInfoSection.userName,
 					style = CCTheme.typography.button_text,
@@ -58,7 +57,7 @@ fun UserProfileSection(
 				)
 			}
 			
-			AnimatedVisibility(visible = it == UserDetailsScreen.EDIT) {
+			AnimatedVisibility(visible = it == UserProfileScreen.EDIT) {
 				Text(
 					text = stringResource(id = R.string.user_profile_change_image),
 					style = CCTheme.typography.button_text,

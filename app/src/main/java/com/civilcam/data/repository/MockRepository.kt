@@ -19,6 +19,8 @@ class MockRepository {
             address = "1456 Broadway, New York, NY 10023",
             phoneNumber = "+1 (123) 456 7890",
             avatar = R.drawable.img_avatar,
+            email = "sylvanas.w@mail.com",
+            pinCode = "••••"
         ),
     )
 

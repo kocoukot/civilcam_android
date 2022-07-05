@@ -1,4 +1,4 @@
-package com.civilcam.ui.profile.credentials
+package com.civilcam.ui.profile.userProfile
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,53 +9,49 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.R
-import com.civilcam.domain.model.VerificationFlow
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.requireArg
-import com.civilcam.ui.profile.credentials.model.ChangeCredentialsRoute
+import com.civilcam.ui.profile.credentials.ChangeCredentialsFragment
 import com.civilcam.ui.profile.credentials.model.CredentialType
-import com.civilcam.ui.verification.VerificationFragment
+import com.civilcam.ui.profile.userProfile.model.UserProfileRoute
+import com.civilcam.ui.profile.userProfile.model.UserProfileType
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class ChangeCredentialsFragment : Fragment() {
-	private val viewModel: ChangeCredentialsViewModel by viewModel() {
-		parametersOf(credentialType)
+class UserProfileFragment : Fragment() {
+	private val viewModel: UserProfileViewModel by viewModel {
+		parametersOf(0)
 	}
 	
-	private val credentialType: CredentialType by requireArg(ARG_CRED_TYPE)
-	
+	//private val userId by requireArg<Int>(ARG_USER_ID)
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
-		
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
-				ChangeCredentialsRoute.GoBack -> navController.popBackStack()
-				is ChangeCredentialsRoute.GoSave -> {
-					when (route.dataType) {
-						CredentialType.PHONE ->
+				UserProfileRoute.GoBack -> navController.popBackStack()
+				is UserProfileRoute.GoCredentials -> {
+					when(route.userProfileType) {
+						UserProfileType.PHONE_NUMBER -> {
 							navController.navigate(
-								R.id.verificationFragment,
-								VerificationFragment.createArgs(
-									VerificationFlow.PHONE,
-									resources.getString(
-										R.string.verification_phone_mask,
-										route.data
-									)
+								R.id.changeCredentialsFragment,
+								ChangeCredentialsFragment.createArgs(
+									CredentialType.PHONE
 								)
 							)
-						CredentialType.EMAIL ->
+						}
+						UserProfileType.EMAIL -> {
 							navController.navigate(
-								R.id.verificationFragment,
-								VerificationFragment.createArgs(
-									VerificationFlow.NEW_EMAIL,
-									route.data
+								R.id.changeCredentialsFragment,
+								ChangeCredentialsFragment.createArgs(
+									CredentialType.EMAIL
 								)
 							)
+						}
+						UserProfileType.PIN_CODE -> {}
 					}
 				}
 			}
@@ -69,16 +65,16 @@ class ChangeCredentialsFragment : Fragment() {
 			)
 			
 			setContent {
-				ChangeCredentialsScreenContent(viewModel)
+				UserProfileScreenContent(viewModel)
 			}
 		}
 	}
 	
 	companion object {
-		private const val ARG_CRED_TYPE = "credential_type"
+		private const val ARG_USER_ID = "user_id"
 		
-		fun createArgs(credentialType: CredentialType) = bundleOf(
-			ARG_CRED_TYPE to credentialType
+		fun createArgs(userId: Int) = bundleOf(
+			ARG_USER_ID to userId
 		)
 	}
 }

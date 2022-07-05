@@ -1,4 +1,4 @@
-package com.civilcam.ui.profile.userDetails.content
+package com.civilcam.ui.profile.userProfile.model
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,28 +12,48 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.profile.userDetails.model.UserDetailsType
+import com.civilcam.ui.profile.userDetails.model.UserDetailsModel
 
 @Composable
 fun MainProfileContent(
-	onRowClicked: (UserDetailsType) -> Unit
+	data: UserDetailsModel,
+	onRowClicked: (UserProfileType) -> Unit,
 ) {
 	Column(
 		modifier = Modifier.fillMaxWidth()
 	) {
-		
-		Spacer(modifier = Modifier.height(30.dp))
 		Divider(color = CCTheme.colors.grayThree)
-		for (type in UserDetailsType.values()) {
-			ProfileRow(
-				title = stringResource(id = type.title),
-				value = "",
-				needDivider = false,
-				rowClick = { onRowClicked.invoke(type) }
-			)
+		for (type in UserProfileType.values()) {
+			when(type) {
+				UserProfileType.PHONE_NUMBER -> {
+					ProfileRow(
+						title = stringResource(id = type.title),
+						value = data.userInfoSection.phoneNumber,
+						needDivider = type != UserProfileType.PIN_CODE,
+						rowClick = { onRowClicked.invoke(type) }
+					)
+				}
+				UserProfileType.EMAIL -> {
+					ProfileRow(
+						title = stringResource(id = type.title),
+						value = data.userInfoSection.email,
+						needDivider = type != UserProfileType.PIN_CODE,
+						rowClick = { onRowClicked.invoke(type) }
+					)
+				}
+				UserProfileType.PIN_CODE -> {
+					ProfileRow(
+						title = stringResource(id = type.title),
+						value = data.userInfoSection.pinCode,
+						needDivider = type != UserProfileType.PIN_CODE,
+						rowClick = { onRowClicked.invoke(type) }
+					)
+				}
+			}
 		}
 		Divider(color = CCTheme.colors.grayThree)
 	}
@@ -44,6 +64,7 @@ fun ProfileRow(
 	title: String,
 	value: String,
 	titleColor: Color = CCTheme.colors.black,
+	valueColor: Color = CCTheme.colors.grayOne,
 	needDivider: Boolean = true,
 	rowClick: () -> Unit,
 ) {
@@ -71,13 +92,17 @@ fun ProfileRow(
 			Spacer(modifier = Modifier.weight(1f))
 			Text(
 				text = value,
-				color = CCTheme.colors.grayOne,
-				style = CCTheme.typography.common_medium_text_regular
+				color = valueColor,
+				style = CCTheme.typography.common_medium_text_regular,
+				fontWeight = FontWeight.W400
 			)
+			Spacer(modifier = Modifier.width(4.dp))
 			Icon(
 				painter = painterResource(id = R.drawable.ic_row_arrow),
-				contentDescription = null
+				contentDescription = null,
+				tint = CCTheme.colors.grayOne
 			)
+			Spacer(modifier = Modifier.width(16.dp))
 		}
 		if (needDivider) Divider(
 			color = CCTheme.colors.grayThree,

@@ -27,6 +27,7 @@ class ChangeCredentialsViewModel(credentialType: CredentialType) :
 					CredentialType.PHONE -> phoneEntered(action.data)
 				}
 			}
+			ChangeCredentialsActions.ClickBack -> goBack()
 			ChangeCredentialsActions.CheckCredential -> {
 				_state.value =
 					_state.value.copy(isEmail = if (_state.value.email.isEmpty()) true else _state.value.email.isEmail())
@@ -49,5 +50,9 @@ class ChangeCredentialsViewModel(credentialType: CredentialType) :
 	
 	private fun phoneEntered(phone: String) {
 		_state.value = _state.value.copy(phone = phone)
+	}
+	
+	private fun goBack() {
+		_steps.value = ChangeCredentialsRoute.GoBack
 	}
 }

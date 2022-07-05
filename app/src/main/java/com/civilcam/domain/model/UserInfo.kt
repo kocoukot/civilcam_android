@@ -7,4 +7,6 @@ data class UserInfo(
     val address: String = "",
     val phoneNumber: String = "",
     val avatar: Int = 0,
+    val email: String = "",
+    val pinCode: String = ""
 )
