@@ -44,10 +44,10 @@ fun VerificationScreenContent(
 			Column {
 				TopAppBarContent(
 					title = when (state.value.verificationFlow) {
-						VerificationFlow.PHONE -> {
+						VerificationFlow.NEW_PHONE, VerificationFlow.CHANGE_PHONE -> {
 							stringResource(id = R.string.phone_verification)
 						}
-						VerificationFlow.NEW_EMAIL -> {
+						VerificationFlow.NEW_EMAIL, VerificationFlow.CHANGE_EMAIL -> {
 							stringResource(id = R.string.email_verification)
 						}
 						VerificationFlow.RESET_PASSWORD -> {
@@ -105,7 +105,9 @@ fun VerificationScreenContent(
 								fontWeight = FontWeight.W500
 							),
 						) {
-							if (state.value.verificationFlow == VerificationFlow.PHONE) {
+							if (state.value.verificationFlow == VerificationFlow.NEW_PHONE ||
+								state.value.verificationFlow == VerificationFlow.CHANGE_PHONE
+							) {
 								append("${state.value.verificationSubject.formatToPhoneNumber()}\n")
 							} else {
 								append("${state.value.verificationSubject}\n")

@@ -41,7 +41,7 @@ class ChangeCredentialsFragment : Fragment() {
 							navController.navigate(
 								R.id.verificationFragment,
 								VerificationFragment.createArgs(
-									VerificationFlow.PHONE,
+									VerificationFlow.CHANGE_PHONE,
 									resources.getString(
 										R.string.verification_phone_mask,
 										route.data
@@ -52,7 +52,7 @@ class ChangeCredentialsFragment : Fragment() {
 							navController.navigate(
 								R.id.verificationFragment,
 								VerificationFragment.createArgs(
-									VerificationFlow.NEW_EMAIL,
+									VerificationFlow.CHANGE_EMAIL,
 									route.data
 								)
 							)

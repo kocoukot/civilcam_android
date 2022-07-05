@@ -48,7 +48,7 @@ class ProfileSetupFragment : Fragment() {
 				ProfileSetupRoute.GoBack -> navController.popBackStack()
 				is ProfileSetupRoute.GoVerification -> navController.navigate(
 					R.id.verificationFragment,
-					VerificationFragment.createArgs(VerificationFlow.PHONE, resources.getString(R.string.verification_phone_mask, route.phoneNumber))
+					VerificationFragment.createArgs(VerificationFlow.NEW_PHONE, resources.getString(R.string.verification_phone_mask, route.phoneNumber))
 				)
 				ProfileSetupRoute.GoLocationSelect -> {}
 				ProfileSetupRoute.GoGalleryOpen -> onChooseFromGalleryCaseClicked()
