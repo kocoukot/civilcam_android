@@ -2,9 +2,7 @@ package com.civilcam.ui.network.inviteByNumber
 
 import android.content.Context
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
@@ -23,6 +21,7 @@ import com.civilcam.R
 import com.civilcam.common.ext.formatToPhoneNumber
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.compose.BackButton
+import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TextActionButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.PhoneInputField
@@ -44,22 +43,27 @@ fun InviteByNumberScreenContent(viewModel: InviteByNumberViewModel) {
     Scaffold(
         backgroundColor = CCTheme.colors.white,
         topBar = {
-            TopAppBarContent(
-                title = stringResource(id = R.string.invite_by_number_title),
-                actionItem = {
-                    TextActionButton(
-                        actionTitle = stringResource(id = R.string.invite_text),
-                        isEnabled = isPhoneNumber
-                    ) {
-                        viewModel.setInputActions(InviteByNumberActions.SendInvite(number))
-                    }
-                },
-                navigationItem = {
-                    BackButton {
-                        viewModel.setInputActions(InviteByNumberActions.ClickGoBack)
-                    }
-                },
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                TopAppBarContent(
+                    title = stringResource(id = R.string.invite_by_number_title),
+                    actionItem = {
+                        TextActionButton(
+                            actionTitle = stringResource(id = R.string.invite_text),
+                            isEnabled = isPhoneNumber
+                        ) {
+                            viewModel.setInputActions(InviteByNumberActions.SendInvite(number))
+                        }
+                    },
+                    navigationItem = {
+                        BackButton {
+                            viewModel.setInputActions(InviteByNumberActions.ClickGoBack)
+                        }
+                    },
+                )
+                RowDivider()
+            }
         }) {
 
         Column(
@@ -68,6 +72,7 @@ fun InviteByNumberScreenContent(viewModel: InviteByNumberViewModel) {
                 .padding(horizontal = 16.dp)
                 .background(CCTheme.colors.white)
         ) {
+            Spacer(modifier = Modifier.height(32.dp))
             PhoneInputField(
                 text = number,
                 isInFocus = { },
@@ -79,6 +84,7 @@ fun InviteByNumberScreenContent(viewModel: InviteByNumberViewModel) {
                 text = stringResource(id = R.string.invite_by_number_hint),
                 style = CCTheme.typography.common_text_small_regular,
                 color = CCTheme.colors.grayOne,
+                modifier = Modifier.padding(end = 8.dp)
             )
 
             state.value.data?.invitationList?.let { list ->

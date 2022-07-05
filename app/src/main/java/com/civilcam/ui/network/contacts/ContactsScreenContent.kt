@@ -53,7 +53,7 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
                     isFocused = {},
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Divider(color = CCTheme.colors.grayThree)
+               if (state.value.data?.contactsList.isNullOrEmpty()) Divider(color = CCTheme.colors.grayThree)
             }
         }) {
 

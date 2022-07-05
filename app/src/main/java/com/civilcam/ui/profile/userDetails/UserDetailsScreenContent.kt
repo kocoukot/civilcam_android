@@ -16,10 +16,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.common.alert.AlertDialogComp
+import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.profile.userDetails.content.UserDetailsSection
 import com.civilcam.ui.profile.userDetails.content.UserRequestSection
+import com.civilcam.ui.profile.userDetails.model.StopGuardAlertType
 import com.civilcam.ui.profile.userDetails.model.UserDetailsActions
 import com.google.accompanist.pager.ExperimentalPagerApi
 
@@ -30,6 +33,27 @@ fun UserDetailsScreenContent(viewModel: UserDetailsViewModel) {
     val state = viewModel.state.collectAsState()
 
 
+    if (state.value.alertType != null) {
+        AlertDialogComp(
+            dialogTitle = "",
+            dialogText = if (state.value.alertType == StopGuardAlertType.STOP_GUARDING)
+                stringResource(id = R.string.user_details_alert_remove_guard)
+            else
+                stringResource(id = R.string.user_details_alert_stop_guarding),
+            alertType = AlertDialogTypes.CONFIRM_CANCEL,
+            onOptionSelected = {
+                if (it) {
+                    viewModel.setInputActions(
+                        if (state.value.alertType == StopGuardAlertType.STOP_GUARDING) {
+                            UserDetailsActions.ClickStopGuarding
+                        } else {
+                            UserDetailsActions.ClickGuardenceChange
+                        }
+                    )
+                } else viewModel.setInputActions(UserDetailsActions.ClickCloseAlert)
+            }
+        )
+    }
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
         modifier = Modifier.fillMaxSize(),
@@ -51,8 +75,20 @@ fun UserDetailsScreenContent(viewModel: UserDetailsViewModel) {
             ) {
                 UserDetailsSection(
                     userData = data,
-                    myGuardenceChange = { viewModel.setInputActions(UserDetailsActions.ClickGuardenceChange) },
-                    onStopGuarding = { viewModel.setInputActions(UserDetailsActions.ClickStopGuarding) },
+                    myGuardenceChange = {
+                        viewModel.setInputActions(
+                            UserDetailsActions.ClickShowAlert(
+                                StopGuardAlertType.REMOVE_GUARDIAN
+                            )
+                        )
+                    },
+                    onStopGuarding = {
+                        viewModel.setInputActions(
+                            UserDetailsActions.ClickShowAlert(
+                                StopGuardAlertType.STOP_GUARDING
+                            )
+                        )
+                    },
                     mockAction = { viewModel.setInputActions(UserDetailsActions.Mock) },
                 )
 

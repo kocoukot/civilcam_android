@@ -43,7 +43,10 @@ fun AvatarContent(avatar: PictureModel? = null, onChangeAvatar: () -> Unit) {
         Box(
             modifier = Modifier
                 .size(120.dp)
-                .clip(CircleShape),
+                .clip(CircleShape)
+                .clickable {
+                    onChangeAvatar.invoke()
+                },
             contentAlignment = Alignment.Center,
         ) {
 
@@ -54,7 +57,7 @@ fun AvatarContent(avatar: PictureModel? = null, onChangeAvatar: () -> Unit) {
             }
 
             Image(
-                contentScale = if (avatar == null) ContentScale.Fit else ContentScale.FillWidth,
+                contentScale = if (avatar == null) ContentScale.Fit else ContentScale.Crop,
                 painter =
                 if (avatar == null) {
                     painterResource(id = R.drawable.ic_avatar_placeholder)
