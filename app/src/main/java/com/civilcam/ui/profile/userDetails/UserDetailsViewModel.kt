@@ -4,10 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.civilcam.arch.common.livedata.SingleLiveEvent
 import com.civilcam.domain.usecase.GetUserInformationUseCase
-import com.civilcam.ui.profile.userDetails.model.GuardRequest
-import com.civilcam.ui.profile.userDetails.model.UserDetailsActions
-import com.civilcam.ui.profile.userDetails.model.UserDetailsRoute
-import com.civilcam.ui.profile.userDetails.model.UserDetailsState
+import com.civilcam.ui.profile.userDetails.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -46,6 +43,8 @@ class UserDetailsViewModel(
             UserDetailsActions.ClickStopGuarding -> stopGuarding()
             UserDetailsActions.Mock -> mockAddRequest()
             is UserDetailsActions.ClickRequestAnswer -> requestAnswer(action.isAccepted)
+            is UserDetailsActions.ClickShowAlert -> showAlert(action.alertType)
+            UserDetailsActions.ClickCloseAlert -> closeAlert()
         }
     }
 
@@ -58,7 +57,7 @@ class UserDetailsViewModel(
         val data = _state.value.data?.copy()
         data?.let {
             it.isMyGuard = !it.isMyGuard
-            _state.value = _state.value.copy(data = data)
+            _state.value = _state.value.copy(data = data, alertType = null)
         }
     }
 
@@ -66,7 +65,7 @@ class UserDetailsViewModel(
         val data = _state.value.data?.copy()
         data?.let {
             it.guardRequest = null
-            _state.value = _state.value.copy(data = data)
+            _state.value = _state.value.copy(data = data, alertType = null)
         }
     }
 
@@ -90,5 +89,25 @@ class UserDetailsViewModel(
             it.guardRequest = GuardRequest()
             _state.value = _state.value.copy(data = data)
         }
+    }
+
+    private fun showAlert(alertType: StopGuardAlertType) {
+        when (alertType) {
+            StopGuardAlertType.STOP_GUARDING -> {
+                _state.value =
+                    _state.value.copy(alertType = alertType)
+            }
+            StopGuardAlertType.REMOVE_GUARDIAN ->
+                if (_state.value.data?.isMyGuard == true) {
+                    _state.value = _state.value.copy(alertType = alertType)
+                } else {
+                    changeGuardence()
+                }
+        }
+    }
+
+    private fun closeAlert() {
+        _state.value = _state.value.copy(alertType = null)
+
     }
 }

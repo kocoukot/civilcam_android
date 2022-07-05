@@ -24,76 +24,140 @@ fun AlertDialogComp(
         Column {
             val openDialog = remember { mutableStateOf(true) }
             if (openDialog.value) {
-                AlertDialog(
-                    properties = DialogProperties(
-                        dismissOnBackPress = false,
-                        dismissOnClickOutside = false
-                    ),
-                    onDismissRequest = {
-                        openDialog.value = false
-                    },
-                    title = {
-                        Text(
-                            text = dialogTitle,
-                            color = CCTheme.colors.black,
-                            style = CCTheme.typography.common_text_small_medium,
-                            fontSize = 16.sp
-                        )
-                    },
-                    text = {
-                        Text(
-                            dialogText,
-                            color = CCTheme.colors.grayOne,
-                            style = CCTheme.typography.common_text_small_regular,
-                            fontSize = 15.sp
-                        )
-                    },
-                    confirmButton = {
-                        Button(
-                            border = BorderStroke(0.dp, CCTheme.colors.white),
-                            elevation = ButtonDefaults.elevation(0.dp),
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-                            onClick = {
-                                onOptionSelected(true)
-                                openDialog.value = false
-                            }) {
+                if (dialogTitle.isNotEmpty())
+                    AlertDialog(
+                        properties = DialogProperties(
+                            dismissOnBackPress = false,
+                            dismissOnClickOutside = false
+                        ),
+                        onDismissRequest = {
+                            openDialog.value = false
+                        },
+                        title = {
                             Text(
-                                text = stringResource(id = alertType.positiveText),
-                                style = CCTheme.typography.common_text_medium,
-                                fontSize = 14.sp,
-                                color = CCTheme.colors.cianColor
+                                text = dialogTitle,
+                                color = CCTheme.colors.black,
+                                style = CCTheme.typography.common_text_small_medium,
+                                fontSize = 16.sp
                             )
-
-                        }
-                    },
-
-                    dismissButton = {
-                        if (alertType == AlertDialogTypes.OK //||
-//                            alertType == AlertDialogTypes.GOT_IT ||
-//                            alertType == AlertDialogTypes.GREAT
-                        ) {
-
-                        } else {
+                        },
+                        text = {
+                            Text(
+                                dialogText,
+                                color = CCTheme.colors.grayOne,
+                                style = CCTheme.typography.common_text_small_regular,
+                                fontSize = 15.sp
+                            )
+                        },
+                        confirmButton = {
                             Button(
                                 border = BorderStroke(0.dp, CCTheme.colors.white),
                                 elevation = ButtonDefaults.elevation(0.dp),
                                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
                                 onClick = {
-                                    onOptionSelected(false)
+                                    onOptionSelected(true)
                                     openDialog.value = false
-                                }
-                            ) {
+                                }) {
                                 Text(
-
-                                    text = stringResource(id = alertType.negativeText),
+                                    text = stringResource(id = alertType.positiveText),
                                     style = CCTheme.typography.common_text_medium,
                                     fontSize = 14.sp,
                                     color = CCTheme.colors.cianColor
                                 )
+
+                            }
+                        },
+
+                        dismissButton = {
+                            if (alertType == AlertDialogTypes.OK //||
+//                            alertType == AlertDialogTypes.GOT_IT ||
+//                            alertType == AlertDialogTypes.GREAT
+                            ) {
+
+                            } else {
+                                Button(
+                                    border = BorderStroke(0.dp, CCTheme.colors.white),
+                                    elevation = ButtonDefaults.elevation(0.dp),
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                                    onClick = {
+                                        onOptionSelected(false)
+                                        openDialog.value = false
+                                    }
+                                ) {
+                                    Text(
+
+                                        text = stringResource(id = alertType.negativeText),
+                                        style = CCTheme.typography.common_text_medium,
+                                        fontSize = 14.sp,
+                                        color = CCTheme.colors.cianColor
+                                    )
+                                }
                             }
                         }
-                    }
-                )
+                    )
+                else
+                    AlertDialog(
+                        properties = DialogProperties(
+                            dismissOnBackPress = false,
+                            dismissOnClickOutside = false
+                        ),
+                        onDismissRequest = {
+                            openDialog.value = false
+                        },
+                        text = {
+                            Text(
+                                dialogText,
+                                color = CCTheme.colors.grayOne,
+                                style = CCTheme.typography.common_text_small_regular,
+                                fontSize = 15.sp
+                            )
+                        },
+                        confirmButton = {
+                            Button(
+                                border = BorderStroke(0.dp, CCTheme.colors.white),
+                                elevation = ButtonDefaults.elevation(0.dp),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                                onClick = {
+                                    onOptionSelected(true)
+                                    openDialog.value = false
+                                }) {
+                                Text(
+                                    text = stringResource(id = alertType.positiveText),
+                                    style = CCTheme.typography.common_text_medium,
+                                    fontSize = 14.sp,
+                                    color = CCTheme.colors.cianColor
+                                )
+
+                            }
+                        },
+
+                        dismissButton = {
+                            if (alertType == AlertDialogTypes.OK //||
+//                            alertType == AlertDialogTypes.GOT_IT ||
+//                            alertType == AlertDialogTypes.GREAT
+                            ) {
+
+                            } else {
+                                Button(
+                                    border = BorderStroke(0.dp, CCTheme.colors.white),
+                                    elevation = ButtonDefaults.elevation(0.dp),
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                                    onClick = {
+                                        onOptionSelected(false)
+                                        openDialog.value = false
+                                    }
+                                ) {
+                                    Text(
+
+                                        text = stringResource(id = alertType.negativeText),
+                                        style = CCTheme.typography.common_text_medium,
+                                        fontSize = 14.sp,
+                                        color = CCTheme.colors.cianColor
+                                    )
+                                }
+                            }
+                        }
+                    )
             }
         }
     }

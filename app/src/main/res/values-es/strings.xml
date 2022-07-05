@@ -61,7 +61,6 @@
     <string name="profile_setup_phone_error">Please, enter a valid phone number</string>
 
 
-
     <string name="navigation_bar_network">Network</string>
     <string name="navigation_bar_emergency">Emergency</string>
     <string name="navigation_bar_alerts">Alerts</string>
@@ -72,6 +71,8 @@
     <string name="user_details_remove_gaurdian">Remove guardian</string>
     <string name="user_details_request_text"> needs you as a guardian</string>
 
+    <string name="user_details_alert_remove_guard">This person will no longer receive your alerts.</string>
+    <string name="user_details_alert_stop_guarding">You will no longer receive alerts from this user</string>
 
     <string name="alerts_root_list_title">Alerts</string>
     <string name="alerts_history_title">Alerts history</string>
