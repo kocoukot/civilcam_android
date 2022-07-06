@@ -65,7 +65,7 @@ class NetworkMainViewModel(
 	
 	override fun setInputActions(action: NetworkMainActions) {
 		when (action) {
-			NetworkMainActions.ClickGoMyProfile -> changeLoadState()
+			NetworkMainActions.ClickGoMyProfile -> goMyProfile()
 			NetworkMainActions.ClickGoSettings -> goSettings()
 			is NetworkMainActions.ClickNetworkTypeChange -> changeAlertType(action.networkType)
 			NetworkMainActions.ClickGoRequests -> goRequests()
@@ -103,6 +103,10 @@ class NetworkMainViewModel(
 	
 	private fun goContacts() {
 		_steps.value = NetworkMainRoute.GoContacts
+	}
+	
+	private fun goMyProfile() {
+		_steps.value = NetworkMainRoute.GoProfile
 	}
 	
 	private fun goUser(user: GuardianItem) {
