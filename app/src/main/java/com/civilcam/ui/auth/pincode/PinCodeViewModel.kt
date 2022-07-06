@@ -1,23 +1,58 @@
 package com.civilcam.ui.auth.pincode
 
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.ui.auth.pincode.model.*
+import com.civilcam.ui.auth.pincode.model.PinCodeActions
+import com.civilcam.ui.auth.pincode.model.PinCodeFlow
+import com.civilcam.ui.auth.pincode.model.PinCodeRoute
+import com.civilcam.ui.auth.pincode.model.PinCodeState
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class PinCodeViewModel :
+class PinCodeViewModel(
+	pinCodeFlow: PinCodeFlow
+) :
 	ComposeViewModel<PinCodeState, PinCodeRoute, PinCodeActions>() {
 	override var _state: MutableStateFlow<PinCodeState> = MutableStateFlow(PinCodeState())
+	
+	init {
+		_state.value = _state.value.copy(screenState = pinCodeFlow)
+	}
 	
 	override fun setInputActions(action: PinCodeActions) {
 		when (action) {
 			PinCodeActions.GoBack -> goBack()
 			PinCodeActions.GoBackConfirm -> backStackScreenState()
 			is PinCodeActions.EnterPinCode -> {
-				when (action.inputType) {
-					PinCodeInputDataType.PIN -> pinEntered(action.pinCode)
-					PinCodeInputDataType.PIN_CONFIRM -> pinConfirmEntered(action.pinCode)
+				when (action.pinCodeFlow) {
+					PinCodeFlow.CREATE_PIN_CODE -> pinEntered(action.pinCode)
+					PinCodeFlow.CONFIRM_PIN_CODE -> pinConfirmEntered(action.pinCode)
+					PinCodeFlow.CURRENT_PIN_CODE -> currentPinEntered(action.pinCode)
+					PinCodeFlow.NEW_PIN_CODE -> newPinCodeEntered(action.pinCode)
+					PinCodeFlow.CONFIRM_NEW_PIN_CODE -> newPinCodeConfirmEntered(action.pinCode)
 				}
 			}
+		}
+	}
+	
+	private fun currentPinEntered(pinCode: String) {
+		_state.value = _state.value.copy(currentPinCode = pinCode)
+		if (_state.value.isCurrentPin) {
+			goNewPinCode()
+		} else {
+			_state.value = _state.value.copy(currentNoMatch = true)
+		}
+	}
+	
+	private fun newPinCodeEntered(pinCode: String) {
+		_state.value = _state.value.copy(newPinCode = pinCode)
+		goNewPinCodeConfirm()
+	}
+	
+	private fun newPinCodeConfirmEntered(pinCode: String) {
+		_state.value = _state.value.copy(newPinCodeConfirm = pinCode)
+		if (_state.value.isMatchNewPin) {
+			goUserProfile()
+		} else {
+			_state.value = _state.value.copy(newPinNoMatch = true)
 		}
 	}
 	
@@ -35,20 +70,41 @@ class PinCodeViewModel :
 		goConfirm()
 	}
 	
+	private fun goUserProfile() {
+		_steps.value = PinCodeRoute.GoUserProfile
+	}
+	
 	private fun goBack() {
-		_steps.value = PinCodeRoute.GoBack
+		when (_state.value.screenState) {
+			PinCodeFlow.CREATE_PIN_CODE -> _steps.value = PinCodeRoute.GoBack
+			PinCodeFlow.CONFIRM_PIN_CODE -> _state.value =
+				_state.value.copy(screenState = PinCodeFlow.CREATE_PIN_CODE)
+			PinCodeFlow.CURRENT_PIN_CODE -> goUserProfile()
+			PinCodeFlow.NEW_PIN_CODE -> _state.value =
+				_state.value.copy(screenState = PinCodeFlow.CURRENT_PIN_CODE)
+			PinCodeFlow.CONFIRM_NEW_PIN_CODE -> _state.value =
+				_state.value.copy(screenState = PinCodeFlow.NEW_PIN_CODE)
+		}
 	}
 	
 	private fun goGuardians() {
 		_steps.value = PinCodeRoute.GoGuardians
 	}
 	
-	private fun goConfirm() {
-		_state.value = _state.value.copy(screenState = PinCodeScreen.PIN_CODE_CONFIRM)
+	private fun goNewPinCodeConfirm() {
+		_state.value = _state.value.copy(screenState = PinCodeFlow.CONFIRM_NEW_PIN_CODE)
 	}
 	
-	fun backStackScreenState() {
-		_state.value = _state.value.copy(screenState = PinCodeScreen.PIN_CODE)
+	private fun goNewPinCode() {
+		_state.value = _state.value.copy(screenState = PinCodeFlow.NEW_PIN_CODE)
+	}
+	
+	private fun goConfirm() {
+		_state.value = _state.value.copy(screenState = PinCodeFlow.CONFIRM_PIN_CODE)
+	}
+	
+	private fun backStackScreenState() {
+		_state.value = _state.value.copy(screenState = PinCodeFlow.CREATE_PIN_CODE)
 	}
 	
 	fun clearStates() {

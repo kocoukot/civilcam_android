@@ -46,7 +46,7 @@ class UserProfileViewModel(
 			is UserProfileActions.GoCredentials -> {
 				when (action.userProfileType) {
 					UserProfileType.EMAIL -> goCredentials(action.userProfileType)
-					UserProfileType.PIN_CODE -> {}
+					UserProfileType.PIN_CODE -> goPinCode()
 					UserProfileType.PHONE_NUMBER -> goCredentials(action.userProfileType)
 				}
 			}
@@ -100,6 +100,10 @@ class UserProfileViewModel(
 		} else {
 			_steps.value = UserProfileRoute.GoBack
 		}
+	}
+	
+	private fun goPinCode() {
+		_steps.value = UserProfileRoute.GoPinCode
 	}
 	
 	private fun goEdit() {
