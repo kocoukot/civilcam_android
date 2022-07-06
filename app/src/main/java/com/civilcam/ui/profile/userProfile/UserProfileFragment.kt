@@ -25,9 +25,7 @@ import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 class UserProfileFragment : Fragment() {
-	private val viewModel: UserProfileViewModel by viewModel {
-		parametersOf(0)
-	}
+	private val viewModel: UserProfileViewModel by viewModel()
 	
 	private val cameraPermissionsDelegate = registerForPermissionsResult(
 		Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -42,7 +40,6 @@ class UserProfileFragment : Fragment() {
 	
 	private var pendingAction: (() -> Unit)? = null
 	
-	//private val userId by requireArg<Int>(ARG_USER_ID)
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
@@ -105,13 +102,5 @@ class UserProfileFragment : Fragment() {
 		} else {
 			showAlertDialogFragment(title = "Sorry, we need permission!")
 		}
-	}
-	
-	companion object {
-		private const val ARG_USER_ID = "user_id"
-		
-		fun createArgs(userId: Int) = bundleOf(
-			ARG_USER_ID to userId
-		)
 	}
 }

@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class UserProfileViewModel(
-	private val userId: Int,
 	private val getUserInformationUseCase: GetUserInformationUseCase,
 	private val mediaStorage: MediaStorage
 ) :

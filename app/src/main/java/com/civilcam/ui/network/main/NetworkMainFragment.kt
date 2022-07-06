@@ -48,10 +48,7 @@ class NetworkMainFragment : Fragment() {
 			when (route) {
 				NetworkMainRoute.GoSettings -> navController.navigate(R.id.action_network_root_to_settingsFragment)
 				NetworkMainRoute.GoContacts -> checkContactsPermission()
-				NetworkMainRoute.GoProfile -> navController.navigate(
-					R.id.userProfileFragment,
-					UserProfileFragment.createArgs(0)
-				)
+				NetworkMainRoute.GoProfile -> navController.navigate(R.id.userProfileFragment)
 				is NetworkMainRoute.GoUserDetail -> navController.navigate(
 					R.id.action_network_root_to_userDetailsFragment,
 					UserDetailsFragment.createArgs(route.userId)
