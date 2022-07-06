@@ -81,64 +81,73 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 		
 		Column(
 			modifier = Modifier
-				.fillMaxSize(),
-			horizontalAlignment = Alignment.CenterHorizontally,
-			verticalArrangement = Arrangement.Center
+				.fillMaxSize()
 		) {
 			
-			AnimatedVisibility(visible = state.value.screenState != PinCodeFlow.CREATE_PIN_CODE) {
-				Text(
-					text = when (state.value.screenState) {
-						PinCodeFlow.CONFIRM_PIN_CODE -> stringResource(id = R.string.pin_code_re_enter_title)
-						PinCodeFlow.CURRENT_PIN_CODE -> stringResource(id = R.string.pin_code_current_title)
-						PinCodeFlow.NEW_PIN_CODE -> stringResource(id = R.string.pin_code_enter_new_title)
-						else -> stringResource(id = R.string.pin_code_re_enter_new_title)
-					},
-					color = CCTheme.colors.black,
-					fontSize = 17.sp,
-					fontWeight = FontWeight.SemiBold,
-					modifier = Modifier.padding(horizontal = 16.dp)
-				)
-			}
+			Spacer(modifier = Modifier.weight(1f))
 			
-			Spacer(modifier = Modifier.height(23.dp))
-			
-			PinCodeInputField(
-				pinCodeValue = {
-					viewModel.setInputActions(
-						PinCodeActions.EnterPinCode(
-							it,
-							state.value.screenState
-						)
-					)
-				},
-			)
-			
-			AnimatedVisibility(visible = state.value.screenState == PinCodeFlow.CREATE_PIN_CODE || state.value.screenState == PinCodeFlow.CONFIRM_PIN_CODE) {
-				Column {
+			Column(
+				horizontalAlignment = Alignment.CenterHorizontally,
+				verticalArrangement = Arrangement.Center
+			) {
+				AnimatedVisibility(visible = state.value.screenState != PinCodeFlow.CREATE_PIN_CODE) {
 					Text(
-						stringResource(id = R.string.pin_code_description),
-						color = CCTheme.colors.grayOne,
-						fontSize = 13.sp,
-						textAlign = TextAlign.Center,
-						modifier = Modifier
-							.offset(y = (-35).dp)
-							.padding(horizontal = 16.dp)
+						text = when (state.value.screenState) {
+							PinCodeFlow.CONFIRM_PIN_CODE -> stringResource(id = R.string.pin_code_re_enter_title)
+							PinCodeFlow.CURRENT_PIN_CODE -> stringResource(id = R.string.pin_code_current_title)
+							PinCodeFlow.NEW_PIN_CODE -> stringResource(id = R.string.pin_code_enter_new_title)
+							else -> stringResource(id = R.string.pin_code_re_enter_new_title)
+						},
+						color = CCTheme.colors.black,
+						fontSize = 17.sp,
+						fontWeight = FontWeight.SemiBold,
+						modifier = Modifier.padding(horizontal = 16.dp)
 					)
+				}
+				
+				Spacer(modifier = Modifier.height(23.dp))
+				
+				PinCodeInputField(
+					pinCodeValue = {
+						viewModel.setInputActions(
+							PinCodeActions.EnterPinCode(
+								it,
+								state.value.screenState
+							)
+						)
+					},
+				)
+				
+				AnimatedVisibility(visible = state.value.screenState == PinCodeFlow.CREATE_PIN_CODE || state.value.screenState == PinCodeFlow.CONFIRM_PIN_CODE) {
+					Column {
+						Text(
+							stringResource(id = R.string.pin_code_description),
+							color = CCTheme.colors.grayOne,
+							fontSize = 13.sp,
+							textAlign = TextAlign.Center,
+							modifier = Modifier
+								.offset(y = (-35).dp)
+								.padding(horizontal = 16.dp)
+						)
+					}
 				}
 			}
 			
+			Spacer(modifier = Modifier.weight(1f))
+			
 			AnimatedVisibility(visible = state.value.currentNoMatch || state.value.newPinNoMatch) {
-				Column(
-					modifier = Modifier.fillMaxSize(),
-					horizontalAlignment = Alignment.CenterHorizontally,
-					verticalArrangement = Arrangement.Bottom
+				Box(
+					modifier = Modifier
+						.fillMaxWidth()
+						.wrapContentHeight(),
+					Alignment.BottomCenter
 				) {
 					PinCodeErrorBlock(
 						screenState = state.value.screenState
 					)
 				}
 			}
+			
 		}
 	}
 }

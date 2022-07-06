@@ -35,6 +35,7 @@ class PinCodeViewModel(
 	private fun currentPinEntered(pinCode: String) {
 		_state.value = _state.value.copy(currentPinCode = pinCode)
 		if (_state.value.isCurrentPin) {
+			_state.value = _state.value.copy(currentNoMatch = false)
 			goNewPinCode()
 		} else {
 			_state.value = _state.value.copy(currentNoMatch = true)
@@ -49,6 +50,7 @@ class PinCodeViewModel(
 	private fun newPinCodeConfirmEntered(pinCode: String) {
 		_state.value = _state.value.copy(newPinCodeConfirm = pinCode)
 		if (_state.value.isMatchNewPin) {
+			_state.value = _state.value.copy(newPinNoMatch = false)
 			goUserProfile()
 		} else {
 			_state.value = _state.value.copy(newPinNoMatch = true)
@@ -74,6 +76,8 @@ class PinCodeViewModel(
 	}
 	
 	private fun goBack() {
+		_state.value = _state.value.copy(currentNoMatch = false)
+		_state.value = _state.value.copy(newPinNoMatch = false)
 		when (_state.value.screenState) {
 			PinCodeFlow.CREATE_PIN_CODE -> _steps.value = PinCodeRoute.GoBack
 			PinCodeFlow.CONFIRM_PIN_CODE -> _state.value =

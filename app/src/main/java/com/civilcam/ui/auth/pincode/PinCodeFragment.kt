@@ -23,7 +23,7 @@ import org.koin.core.parameter.parametersOf
 
 class PinCodeFragment : Fragment() {
 	private val viewModel: PinCodeViewModel by viewModel{
-		parametersOf(pinCodeFlow)
+		parametersOf(PinCodeFlow.CURRENT_PIN_CODE)
 	}
 	
 	private val pinCodeFlow: PinCodeFlow by requireArg(ARG_FLOW)
