@@ -20,7 +20,6 @@ class PinCodeViewModel(
 	override fun setInputActions(action: PinCodeActions) {
 		when (action) {
 			PinCodeActions.GoBack -> goBack()
-			PinCodeActions.GoBackConfirm -> backStackScreenState()
 			is PinCodeActions.EnterPinCode -> {
 				when (action.pinCodeFlow) {
 					PinCodeFlow.CREATE_PIN_CODE -> pinEntered(action.pinCode)
@@ -101,10 +100,6 @@ class PinCodeViewModel(
 	
 	private fun goConfirm() {
 		_state.value = _state.value.copy(screenState = PinCodeFlow.CONFIRM_PIN_CODE)
-	}
-	
-	private fun backStackScreenState() {
-		_state.value = _state.value.copy(screenState = PinCodeFlow.CREATE_PIN_CODE)
 	}
 	
 	fun clearStates() {
