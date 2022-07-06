@@ -107,7 +107,6 @@ fun UserProfileSection(
 		AnimatedVisibility(visible = screenType == UserProfileScreen.EDIT) {
 			Text(
 				text = stringResource(id = R.string.user_profile_change_profile_image_title),
-				style = CCTheme.typography.button_text,
 				color = CCTheme.colors.primaryRed,
 				modifier = Modifier
 					.padding(top = 16.dp)
@@ -128,7 +127,7 @@ private fun AdditionalInfo(text: String, modifier: Modifier = Modifier) {
 	Text(
 		modifier = modifier,
 		text = text,
-		style = CCTheme.typography.common_text_medium,
+		style = CCTheme.typography.common_text_regular,
 		color = CCTheme.colors.grayOne,
 	)
 }
