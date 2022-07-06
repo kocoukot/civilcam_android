@@ -194,6 +194,13 @@
     <string name="change_credentials_pin_code_title">Pin-code</string>
     <string name="change_credentials_pin_code_confirm_title">Confirm Pin-code</string>
     <string name="user_profile_change_profile_image_title">Change profile image</string>
+    <string name="pin_code_new_title">New Pin-code</string>
+    <string name="pin_code_confirm_new_title">Confirm Pin-code</string>
+    <string name="pin_code_current_title">Enter your current Pin-code</string>
+    <string name="pin_code_enter_new_title">Enter your new Pin-code</string>
+    <string name="pin_code_re_enter_new_title">Re-enter your new Pin-code</string>
+    <string name="pin_code_is_incorrect_title">Pin-code is incorrect</string>
+    <string name="pin_code_new_no_match_title">Pin-codes don’t match</string>
 
 
 </resources>

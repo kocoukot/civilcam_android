@@ -7,18 +7,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.R
+import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.auth.pincode.model.PinCodeRoute
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
+import com.civilcam.ui.common.ext.requireArg
 import com.civilcam.ui.network.main.NetworkMainFragment
 import com.civilcam.ui.network.main.model.NetworkScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class PinCodeFragment : Fragment() {
-	private val viewModel: PinCodeViewModel by viewModel()
+	private val viewModel: PinCodeViewModel by viewModel{
+		parametersOf(pinCodeFlow)
+	}
+	
+	private val pinCodeFlow: PinCodeFlow by requireArg(ARG_FLOW)
 	
 	private val permissionsDelegate = registerForPermissionsResult(
 		Manifest.permission.ACCESS_FINE_LOCATION,
@@ -37,7 +45,7 @@ class PinCodeFragment : Fragment() {
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
 				PinCodeRoute.GoBack -> navController.popBackStack()
-				is PinCodeRoute.GoConfirm -> {}
+				PinCodeRoute.GoUserProfile -> navController.popBackStack(R.id.userProfileFragment, false)
 				PinCodeRoute.GoGuardians -> checkPermissions()
 			}
 		}
@@ -74,5 +82,13 @@ class PinCodeFragment : Fragment() {
 	private fun onPermissionsGranted(isGranted: Boolean) {
 		pendingAction?.invoke()
 		pendingAction = null
+	}
+	
+	companion object {
+		private const val ARG_FLOW = "pin_code_flow"
+		
+		fun createArgs(flow: PinCodeFlow) = bundleOf(
+			ARG_FLOW to flow
+		)
 	}
 }

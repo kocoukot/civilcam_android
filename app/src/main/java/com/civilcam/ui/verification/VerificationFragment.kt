@@ -14,6 +14,8 @@ import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.domain.model.VerificationFlow
+import com.civilcam.ui.auth.pincode.PinCodeFragment
+import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.requireArg
@@ -48,12 +50,21 @@ class VerificationFragment : Fragment() {
 								R.id.termsFragment,
 								TermsFragment.createArgs(false)
 							)
-							VerificationFlow.NEW_PHONE -> navController.navigate(R.id.pinCodeFragment)
+							VerificationFlow.NEW_PHONE -> navController.navigate(
+								R.id.pinCodeFragment,
+								PinCodeFragment.createArgs(PinCodeFlow.CREATE_PIN_CODE)
+							)
 							VerificationFlow.RESET_PASSWORD -> navController.navigate(
 								R.id.createPasswordFragment
 							)
-							VerificationFlow.CHANGE_PHONE -> navController.popBackStack(R.id.userProfileFragment, false)
-							VerificationFlow.CHANGE_EMAIL -> navController.popBackStack(R.id.userProfileFragment, false)
+							VerificationFlow.CHANGE_PHONE -> navController.popBackStack(
+								R.id.userProfileFragment,
+								false
+							)
+							VerificationFlow.CHANGE_EMAIL -> navController.popBackStack(
+								R.id.userProfileFragment,
+								false
+							)
 						}
 					}
 				}

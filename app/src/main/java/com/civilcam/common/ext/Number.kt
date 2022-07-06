@@ -7,9 +7,7 @@ fun Int.toDp(): Int = (this * Resources.getSystem().displayMetrics.density).toIn
 fun Float.toDp(): Float = (this * Resources.getSystem().displayMetrics.density)
 
 fun Long.formatTime(): String = String.format(
-	"%02d:%02d",
-	TimeUnit.MILLISECONDS.toMinutes(this) -
-			TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(this)),
+	"%02d",
 	TimeUnit.MILLISECONDS.toSeconds(this) -
 			TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(this))
 )

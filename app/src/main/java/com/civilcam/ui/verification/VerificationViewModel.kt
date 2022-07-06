@@ -8,7 +8,6 @@ import com.civilcam.ui.verification.model.VerificationActions
 import com.civilcam.ui.verification.model.VerificationRoute
 import com.civilcam.ui.verification.model.VerificationState
 import kotlinx.coroutines.flow.MutableStateFlow
-import javax.security.auth.Subject
 
 
 class VerificationViewModel(
@@ -17,6 +16,8 @@ class VerificationViewModel(
 ) :
 	ComposeViewModel<VerificationState, VerificationRoute, VerificationActions>() {
 	override var _state: MutableStateFlow<VerificationState> = MutableStateFlow(VerificationState())
+	
+	var timer: CountDownTimer? = null
 	
 	init {
 		getVerificationFlow(verificationFlow)
@@ -45,7 +46,7 @@ class VerificationViewModel(
 	}
 	
 	private fun startTimer() {
-		object : CountDownTimer(60000, 1000) {
+		timer = object : CountDownTimer(60000, 1000) {
 			override fun onTick(millisUntilFinished: Long) {
 				_state.value = _state.value.copy(timeOut = millisUntilFinished.formatTime())
 			}
@@ -65,6 +66,7 @@ class VerificationViewModel(
 	}
 	
 	private fun goToNextPage() {
+		timer?.cancel()
 		_steps.value = VerificationRoute.ToNextScreen
 	}
 	
