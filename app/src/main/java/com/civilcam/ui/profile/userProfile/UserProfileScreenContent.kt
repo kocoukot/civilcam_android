@@ -12,7 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.profile.setup.content.DatePickerContent
+import com.civilcam.ui.profile.setup.model.UserInfoDataType
+import com.civilcam.ui.profile.userProfile.content.UserProfileEditContent
 import com.civilcam.ui.profile.userProfile.content.UserProfileSection
 import com.civilcam.ui.profile.userProfile.model.MainProfileContent
 import com.civilcam.ui.profile.userProfile.model.UserProfileActions
@@ -22,12 +27,31 @@ import com.civilcam.ui.profile.userProfile.model.UserProfileScreen
 fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 	val state = viewModel.state.collectAsState()
 	
+	if (state.value.showDatePicker) {
+		Dialog(
+			properties = DialogProperties(
+				dismissOnBackPress = true,
+				dismissOnClickOutside = false
+			), onDismissRequest = {
+				viewModel.setInputActions(UserProfileActions.ClickCloseDatePicker)
+			}) {
+			DatePickerContent(
+				onClosePicker = {
+					viewModel.setInputActions(UserProfileActions.ClickCloseDatePicker)
+				},
+				onSelectDate = {
+					viewModel.setInputActions(UserProfileActions.ClickSelectDate(it))
+				},
+			)
+		}
+	}
+	
 	Scaffold(
 		backgroundColor = CCTheme.colors.lightGray,
 		modifier = Modifier.fillMaxSize()
 	
 	) {
-		state.value.data?.let { data ->
+		state.value.data?.userInfoSection?.let { data ->
 			Column(
 				modifier = Modifier
 					.fillMaxWidth()
@@ -35,16 +59,18 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 			) {
 				UserProfileSection(
 					userData = data,
+					avatar = state.value.profileImage,
 					screenType = state.value.screenState,
 					mockAction = {
-					
+						viewModel.setInputActions(UserProfileActions.ClickAvatarSelect)
 					},
 					onBackButtonClick = {
 						viewModel.setInputActions(UserProfileActions.GoBack)
 					},
 					onActionClick = { screenType ->
 						setAction(viewModel, screenType)
-					}
+					},
+					isSaveEnabled = state.value.isFilled
 				)
 				
 				Divider(
@@ -64,7 +90,28 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 							}
 						}
 						UserProfileScreen.EDIT -> {
-						
+							UserProfileEditContent(
+								userData = data,
+								onValueChanged = { userInfoDataType, data ->
+									when (userInfoDataType) {
+										UserInfoDataType.FIRST_NAME -> viewModel.setInputActions(
+											UserProfileActions.EnterInputData(
+												UserInfoDataType.FIRST_NAME,
+												data
+											)
+										)
+										UserInfoDataType.LAST_NAME -> viewModel.setInputActions(
+											UserProfileActions.EnterInputData(
+												UserInfoDataType.LAST_NAME,
+												data
+											)
+										)
+									}
+								},
+								onDateBirthClick = {
+									viewModel.setInputActions(UserProfileActions.ClickDateSelect)
+								}
+							)
 						}
 					}
 				}
@@ -76,12 +123,12 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 private fun setAction(viewModel: UserProfileViewModel, screenType: UserProfileScreen) {
 	when (screenType) {
 		UserProfileScreen.PROFILE -> viewModel.setInputActions(
-			UserProfileActions.GoSave(
+			UserProfileActions.GoEdit(
 				screenType
 			)
 		)
 		UserProfileScreen.EDIT -> viewModel.setInputActions(
-			UserProfileActions.GoEdit(
+			UserProfileActions.GoSave(
 				screenType
 			)
 		)

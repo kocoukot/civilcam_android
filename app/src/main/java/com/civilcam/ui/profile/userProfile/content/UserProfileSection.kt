@@ -16,13 +16,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.compose.rememberImagePainter
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domain.PictureModel
+import com.civilcam.domain.model.UserInfo
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.TextActionButton
 import com.civilcam.ui.profile.userDetails.model.UserDetailsModel
@@ -31,8 +36,10 @@ import com.civilcam.utils.DateUtils
 
 @Composable
 fun UserProfileSection(
-	userData: UserDetailsModel,
+	userData: UserInfo,
+	avatar: PictureModel? = null,
 	screenType: UserProfileScreen,
+	isSaveEnabled: Boolean,
 	onBackButtonClick: () -> Unit,
 	onActionClick: (UserProfileScreen) -> Unit,
 	mockAction: () -> Unit
@@ -50,19 +57,25 @@ fun UserProfileSection(
 			BackButton { onBackButtonClick.invoke() }
 			Spacer(modifier = Modifier.weight(1f))
 			Image(
-				painter = painterResource(id = R.drawable.img_avatar),
+				contentScale = if (avatar == null) ContentScale.Fit else ContentScale.Crop,
+				painter =
+				if (avatar == null)
+					painterResource(id = R.drawable.img_avatar)
+				else
+					rememberImagePainter(data = avatar.uri),
 				contentDescription = null,
 				modifier = Modifier
 					.size(120.dp)
 					.clip(RoundedCornerShape(50))
-					.padding(top = 16.dp)
 					.clickable {
-						mockAction.invoke()
+						if (screenType == UserProfileScreen.EDIT) {
+							mockAction.invoke()
+						}
 					},
 			)
 			Spacer(modifier = Modifier.weight(1f))
 			TextActionButton(
-				isEnabled = true,
+				isEnabled = if (screenType == UserProfileScreen.EDIT) true else isSaveEnabled,
 				actionTitle = when (screenType) {
 					UserProfileScreen.PROFILE -> stringResource(id = R.string.user_profile_edit_title)
 					UserProfileScreen.EDIT -> stringResource(id = R.string.save_text)
@@ -77,19 +90,17 @@ fun UserProfileSection(
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
 				Text(
-					text = userData.userInfoSection.userName,
+					text = userData.userName,
 					style = CCTheme.typography.button_text,
 					color = CCTheme.colors.black,
 					modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
 				)
 				
-				AdditionalInfo(DateUtils.dateOfBirthFormat(userData.userInfoSection.dateOfBirth))
+				AdditionalInfo(DateUtils.dateOfBirthFormat(userData.dateOfBirth))
 				
 				Spacer(modifier = Modifier.height(4.dp))
 				
-				AdditionalInfo(userData.userInfoSection.address)
-				
-				Spacer(modifier = Modifier.height(12.dp))
+				AdditionalInfo(userData.address)
 			}
 		}
 		
@@ -98,10 +109,15 @@ fun UserProfileSection(
 				text = stringResource(id = R.string.user_profile_change_profile_image_title),
 				style = CCTheme.typography.button_text,
 				color = CCTheme.colors.primaryRed,
-				modifier = Modifier.padding(top = 16.dp),
-				fontWeight = FontWeight.W500
+				modifier = Modifier
+					.padding(top = 16.dp)
+					.clickable { mockAction.invoke() },
+				fontWeight = FontWeight.W500,
+				fontSize = 15.sp
 			)
 		}
+		
+		Spacer(modifier = Modifier.height(12.dp))
 		
 		Divider(color = CCTheme.colors.grayThree)
 	}

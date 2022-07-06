@@ -4,5 +4,6 @@ import com.civilcam.common.ext.compose.ComposeFragmentRoute
 
 sealed class UserProfileRoute : ComposeFragmentRoute {
 	object GoBack : UserProfileRoute()
+	object GoGalleryOpen : UserProfileRoute()
 	data class GoCredentials(val userProfileType: UserProfileType) : UserProfileRoute()
 }

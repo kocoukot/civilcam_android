@@ -94,7 +94,7 @@ val profileModule = module {
 	
 	viewModel { (credentialType: CredentialType) -> ChangeCredentialsViewModel(credentialType) }
 	
-	viewModel { (userId: Int) -> UserProfileViewModel(userId, get()) }
+	viewModel { (userId: Int) -> UserProfileViewModel(userId, get(), get()) }
 }
 
 

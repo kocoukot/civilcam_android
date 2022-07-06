@@ -1,5 +1,6 @@
 package com.civilcam.ui.profile.userProfile
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,20 +10,37 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.R
+import com.civilcam.common.ext.showAlertDialogFragment
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
+import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.common.ext.requireArg
 import com.civilcam.ui.profile.credentials.ChangeCredentialsFragment
 import com.civilcam.ui.profile.credentials.model.CredentialType
 import com.civilcam.ui.profile.userProfile.model.UserProfileRoute
 import com.civilcam.ui.profile.userProfile.model.UserProfileType
+import com.civilcam.utils.contract.GalleryActivityResultContract
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 class UserProfileFragment : Fragment() {
 	private val viewModel: UserProfileViewModel by viewModel {
 		parametersOf(0)
 	}
+	
+	private val cameraPermissionsDelegate = registerForPermissionsResult(
+		Manifest.permission.READ_EXTERNAL_STORAGE,
+		Manifest.permission.WRITE_EXTERNAL_STORAGE,
+	) { onPermissionsGranted(it) }
+	
+	private val chooseFromGalleryActivityLauncher =
+		registerForActivityResult(GalleryActivityResultContract()) { uri ->
+			Timber.d("onPictureUriReceived $uri")
+			uri?.let(viewModel::onPictureUriReceived)
+		}
+	
+	private var pendingAction: (() -> Unit)? = null
 	
 	//private val userId by requireArg<Int>(ARG_USER_ID)
 	override fun onCreateView(
@@ -54,6 +72,7 @@ class UserProfileFragment : Fragment() {
 						UserProfileType.PIN_CODE -> {}
 					}
 				}
+				UserProfileRoute.GoGalleryOpen -> onChooseFromGalleryCaseClicked()
 			}
 		}
 		
@@ -67,6 +86,24 @@ class UserProfileFragment : Fragment() {
 			setContent {
 				UserProfileScreenContent(viewModel)
 			}
+		}
+	}
+	
+	private fun onChooseFromGalleryCaseClicked() {
+		if (cameraPermissionsDelegate.checkSelfPermissions()) {
+			chooseFromGalleryActivityLauncher.launch(Unit)
+		} else {
+			pendingAction = { onChooseFromGalleryCaseClicked() }
+			cameraPermissionsDelegate.requestPermissions()
+		}
+	}
+	
+	private fun onPermissionsGranted(isGranted: Boolean) {
+		if (isGranted) {
+			pendingAction?.invoke()
+			pendingAction = null
+		} else {
+			showAlertDialogFragment(title = "Sorry, we need permission!")
 		}
 	}
 	
