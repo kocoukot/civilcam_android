@@ -138,4 +138,14 @@
         android:name="com.civilcam.ui.auth.pincode.PinCodeFragment"
         android:label="PinCodeFragment" />
 
+    <fragment
+        android:id="@+id/changeCredentialsFragment"
+        android:name="com.civilcam.ui.profile.credentials.ChangeCredentialsFragment"
+        android:label="ChangeCredentialsFragment" />
+
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.civilcam.ui.profile.userProfile.UserProfileFragment"
+        android:label="UserProfileFragment" />
+
 </navigation>

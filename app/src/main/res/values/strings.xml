@@ -188,6 +188,12 @@
     <string name="pin_code_description">This code will be used to disable emergency state. Please memorize this pin.</string>
     <string name="verification_title">Verification</string>
     <string name="pin_code_no_match_title">Pin-codes do not match. Try again or go back and enter a different pin</string>
+    <string name="user_profile_change_image">Change profile image</string>
+    <string name="user_profile_pin_code_title">Pin-code</string>
+    <string name="user_profile_edit_title">Edit</string>
+    <string name="change_credentials_pin_code_title">Pin-code</string>
+    <string name="change_credentials_pin_code_confirm_title">Confirm Pin-code</string>
+    <string name="user_profile_change_profile_image_title">Change profile image</string>
 
 
 </resources>

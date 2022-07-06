@@ -98,6 +98,7 @@ android {
 apply from: '../dependencies.gradle'
 
 dependencies {
+    testImplementation 'junit:junit:4.12'
     androidX()
 
 //    testImplementation 'junit:junit:4.13.2'

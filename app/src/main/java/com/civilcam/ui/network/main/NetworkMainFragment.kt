@@ -20,6 +20,7 @@ import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.network.main.model.NetworkMainRoute
 import com.civilcam.ui.network.main.model.NetworkScreen
 import com.civilcam.ui.profile.userDetails.UserDetailsFragment
+import com.civilcam.ui.profile.userProfile.UserProfileFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -47,6 +48,7 @@ class NetworkMainFragment : Fragment() {
 			when (route) {
 				NetworkMainRoute.GoSettings -> navController.navigate(R.id.action_network_root_to_settingsFragment)
 				NetworkMainRoute.GoContacts -> checkContactsPermission()
+				NetworkMainRoute.GoProfile -> navController.navigate(R.id.userProfileFragment)
 				is NetworkMainRoute.GoUserDetail -> navController.navigate(
 					R.id.action_network_root_to_userDetailsFragment,
 					UserDetailsFragment.createArgs(route.userId)

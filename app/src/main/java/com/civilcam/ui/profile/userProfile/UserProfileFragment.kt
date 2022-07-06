@@ -1,4 +1,4 @@
-package com.civilcam.ui.profile.setup
+package com.civilcam.ui.profile.userProfile
 
 import android.Manifest
 import android.os.Bundle
@@ -7,21 +7,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.common.ext.showAlertDialogFragment
-import com.civilcam.domain.model.VerificationFlow
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
-import com.civilcam.ui.profile.setup.model.ProfileSetupRoute
-import com.civilcam.ui.verification.VerificationFragment
+import com.civilcam.ui.common.ext.requireArg
+import com.civilcam.ui.profile.credentials.ChangeCredentialsFragment
+import com.civilcam.ui.profile.credentials.model.CredentialType
+import com.civilcam.ui.profile.userProfile.model.UserProfileRoute
+import com.civilcam.ui.profile.userProfile.model.UserProfileType
 import com.civilcam.utils.contract.GalleryActivityResultContract
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class ProfileSetupFragment : Fragment() {
-	private val viewModel: ProfileSetupViewModel by viewModel()
+class UserProfileFragment : Fragment() {
+	private val viewModel: UserProfileViewModel by viewModel()
 	
 	private val cameraPermissionsDelegate = registerForPermissionsResult(
 		Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -34,7 +38,6 @@ class ProfileSetupFragment : Fragment() {
 			uri?.let(viewModel::onPictureUriReceived)
 		}
 	
-	
 	private var pendingAction: (() -> Unit)? = null
 	
 	override fun onCreateView(
@@ -42,19 +45,33 @@ class ProfileSetupFragment : Fragment() {
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
-		
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
-				ProfileSetupRoute.GoBack -> navController.popBackStack()
-				is ProfileSetupRoute.GoVerification -> navController.navigate(
-					R.id.verificationFragment,
-					VerificationFragment.createArgs(VerificationFlow.NEW_PHONE, resources.getString(R.string.verification_phone_mask, route.phoneNumber))
-				)
-				ProfileSetupRoute.GoLocationSelect -> {}
-				ProfileSetupRoute.GoGalleryOpen -> onChooseFromGalleryCaseClicked()
+				UserProfileRoute.GoBack -> navController.popBackStack()
+				is UserProfileRoute.GoCredentials -> {
+					when(route.userProfileType) {
+						UserProfileType.PHONE_NUMBER -> {
+							navController.navigate(
+								R.id.changeCredentialsFragment,
+								ChangeCredentialsFragment.createArgs(
+									CredentialType.PHONE
+								)
+							)
+						}
+						UserProfileType.EMAIL -> {
+							navController.navigate(
+								R.id.changeCredentialsFragment,
+								ChangeCredentialsFragment.createArgs(
+									CredentialType.EMAIL
+								)
+							)
+						}
+						UserProfileType.PIN_CODE -> {}
+					}
+				}
+				UserProfileRoute.GoGalleryOpen -> onChooseFromGalleryCaseClicked()
 			}
 		}
-		
 		
 		return ComposeView(requireContext()).apply {
 			setViewCompositionStrategy(
@@ -64,7 +81,7 @@ class ProfileSetupFragment : Fragment() {
 			)
 			
 			setContent {
-				ProfileSetupScreenContent(viewModel)
+				UserProfileScreenContent(viewModel)
 			}
 		}
 	}

@@ -2,6 +2,7 @@ package com.civilcam.data.repository
 
 import com.civilcam.R
 import com.civilcam.domain.model.UserInfo
+import com.civilcam.domain.model.UserSetupModel
 import com.civilcam.domain.model.alerts.AlertModel
 import com.civilcam.domain.model.alerts.AlertType
 import com.civilcam.domain.model.guard.GuardianModel
@@ -19,6 +20,10 @@ class MockRepository {
             address = "1456 Broadway, New York, NY 10023",
             phoneNumber = "+1 (123) 456 7890",
             avatar = R.drawable.img_avatar,
+            email = "sylvanas.w@mail.com",
+            pinCode = "••••",
+            firstName = "Sylvanas",
+            lastName = "Windrunner"
         ),
     )
 
