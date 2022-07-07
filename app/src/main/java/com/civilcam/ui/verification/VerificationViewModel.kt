@@ -1,6 +1,9 @@
 package com.civilcam.ui.verification
 
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
+import androidx.core.os.postDelayed
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.formatTime
 import com.civilcam.domain.model.VerificationFlow
@@ -46,15 +49,17 @@ class VerificationViewModel(
 	}
 	
 	private fun startTimer() {
-		timer = object : CountDownTimer(60000, 1000) {
-			override fun onTick(millisUntilFinished: Long) {
-				_state.value = _state.value.copy(timeOut = millisUntilFinished.formatTime())
-			}
-			
-			override fun onFinish() {
-				_state.value = _state.value.copy(timeOut = "")
-			}
-		}.start()
+		Handler(Looper.getMainLooper()).postDelayed({
+			timer = object : CountDownTimer(60000, 1000) {
+				override fun onTick(millisUntilFinished: Long) {
+					_state.value = _state.value.copy(timeOut = millisUntilFinished.formatTime())
+				}
+				
+				override fun onFinish() {
+					_state.value = _state.value.copy(timeOut = "")
+				}
+			}.start()
+		}, 0)
 	}
 	
 	private fun getVerificationFlow(flow: VerificationFlow) {
