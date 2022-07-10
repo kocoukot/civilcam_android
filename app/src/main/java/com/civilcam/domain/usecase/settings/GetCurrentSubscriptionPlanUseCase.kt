@@ -2,7 +2,7 @@ package com.civilcam.domain.usecase.settings
 
 import com.civilcam.data.repository.MockRepository
 
-class GetCurrentSubscriptionPlan(
+class GetCurrentSubscriptionPlanUseCase(
 	private val mockRepository: MockRepository
 ) {
 	suspend fun getCurrentSubscriptionPlan() =

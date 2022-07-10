@@ -200,4 +200,12 @@
     <string name="pin_code_new_no_match_title">Pin-codes don’t match</string>
     <string name="manage_subscription_plan">Manage subscription plan</string>
     <string name="restore_purchase">Restore purchase</string>
+    <string name="start_text">Start!</string>
+    <string name="subscription_options_title">Subscription options</string>
+    <string name="subscription_no_commitment_title">No commitment. Cancel anytime.</string>
+    <string name="subscription_safety_network">"Safety network "</string>
+    <string name="subscription_emergency_alert">Emergency alert</string>
+    <string name="subscription_live_stream">Emergency live stream</string>
+    <string name="subscription_safety_map">Safety map</string>
+    <string name="subscription_detailed_alert">Alert detailed data</string>
 </resources>

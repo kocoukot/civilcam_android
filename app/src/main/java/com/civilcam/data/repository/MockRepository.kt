@@ -175,6 +175,21 @@ class MockRepository {
         subscriptionPlan = "$4.99/monthly",
         autoRenewDate = "02.02.2022"
     )
+    
+    fun getAvailableSubscriptionPlans() = listOf(
+        SubscriptionPlan(
+            subscriptionPlan = "Trial",
+            purchasePrice = "for 1 month"
+        ),
+        SubscriptionPlan(
+            subscriptionPlan = "Monthly",
+            purchasePrice = "for \$4.99/month"
+        ),
+        SubscriptionPlan(
+            subscriptionPlan = "Annual",
+            purchasePrice = "for \$49.99/year"
+        )
+    )
 
     fun searchGuards(query: String) =
         listOf(

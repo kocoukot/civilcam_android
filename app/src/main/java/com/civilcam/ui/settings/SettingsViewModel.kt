@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.domain.model.settings.NotificationsType
 import com.civilcam.domain.usecase.settings.CheckCurrentPasswordUseCase
-import com.civilcam.domain.usecase.settings.GetCurrentSubscriptionPlan
+import com.civilcam.domain.usecase.settings.GetCurrentSubscriptionPlanUseCase
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.settings.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,7 @@ import timber.log.Timber
 
 class SettingsViewModel(
 	private val checkCurrentPasswordUseCase: CheckCurrentPasswordUseCase,
-	private val getCurrentSubscriptionPlan: GetCurrentSubscriptionPlan
+	private val getCurrentSubscriptionPlan: GetCurrentSubscriptionPlanUseCase
 ) : ComposeViewModel<SettingsState, SettingsRoute, SettingsActions>() {
 	
 	override var _state = MutableStateFlow(SettingsState())
