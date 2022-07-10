@@ -198,4 +198,6 @@
     <string name="pin_code_re_enter_new_title">Re-enter your new Pin-code</string>
     <string name="pin_code_is_incorrect_title">Pin-code is incorrect</string>
     <string name="pin_code_new_no_match_title">Pin-codes don’t match</string>
+    <string name="manage_subscription_plan">Manage subscription plan</string>
+    <string name="restore_purchase">Restore purchase</string>
 </resources>
