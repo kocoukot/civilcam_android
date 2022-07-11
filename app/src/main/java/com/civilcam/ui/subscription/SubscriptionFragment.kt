@@ -7,9 +7,13 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import com.civilcam.R
 import com.civilcam.common.ext.hideSystemUI
 import com.civilcam.common.ext.showSystemUI
+import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
+import com.civilcam.ui.profile.setup.ProfileSetupFragment
+import com.civilcam.ui.subscription.model.SubscriptionRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SubscriptionFragment : Fragment() {
@@ -22,7 +26,8 @@ class SubscriptionFragment : Fragment() {
 	): View {
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
-			
+				SubscriptionRoute.GoBack -> navController.popBackStack()
+				SubscriptionRoute.GoProfileSetup -> navController.navigate(R.id.profileSetupFragment)
 			}
 		}
 		return ComposeView(requireContext()).apply {

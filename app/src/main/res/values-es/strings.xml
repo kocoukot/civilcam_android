@@ -214,4 +214,8 @@
     <string name="subscription_monthly_plan">for $4.99/month</string>
     <string name="subscription_annual_title">Annual</string>
     <string name="subscription_annual_plan">for $49.99/year</string>
+    <string name="subscription_purchase_fail_title">Purchase failed</string>
+    <string name="subscription_purchase_fail_description">There was an error while making this purchase. Please try again.</string>
+    <string name="subscription_purchase_success_title">Welcome to CivilCam family!</string>
+    <string name="subscription_purchase_success_description">Your purchase was successful.</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.civilcam.ui.subscription
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -27,6 +28,8 @@ import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.SubscriptionType
+import com.civilcam.ui.common.alert.AlertDialogComp
+import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.subscription.model.SubscriptionActions
 
@@ -34,6 +37,26 @@ import com.civilcam.ui.subscription.model.SubscriptionActions
 fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 	
 	val state = viewModel.state.collectAsState()
+	
+	Crossfade(targetState = state.value.purchaseFail) { purchaseFail ->
+		if (purchaseFail) {
+			AlertDialogComp(
+				dialogTitle = stringResource(id = R.string.subscription_purchase_fail_title),
+				dialogText = stringResource(id = R.string.subscription_purchase_fail_description),
+				AlertDialogTypes.OK,
+			){}
+		}
+	}
+	
+	Crossfade(targetState = state.value.purchaseSuccess) { purchaseSuccess ->
+		if (purchaseSuccess) {
+			AlertDialogComp(
+				dialogTitle = stringResource(id = R.string.subscription_purchase_success_title),
+				dialogText = stringResource(id = R.string.subscription_purchase_success_description),
+				AlertDialogTypes.OK,
+			){ viewModel.setInputActions(SubscriptionActions.GoProfileSetup) }
+		}
+	}
 	
 	Surface(modifier = Modifier.fillMaxSize()) {
 		
@@ -145,19 +168,21 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 					
 					Spacer(modifier = Modifier.height(18.dp))
 					
-					LazyColumn(
-						modifier = Modifier.fillMaxWidth()
-					) {
-						items(SubscriptionType.values()) { plan ->
-							SubscriptionPlanRow(
-								subscriptionType = plan,
-								onButtonClicked = { type ->
-									viewModel.setInputActions(
-										SubscriptionActions.OnSubSelect(type)
-									)
-								},
-								isActivated = true
-							)
+					state.value.selectedSubscriptionType.let { subscriptionType ->
+						LazyColumn(
+							modifier = Modifier.fillMaxWidth()
+						) {
+							items(SubscriptionType.values()) { subscription ->
+								SubscriptionPlanRow(
+									subscriptionType = subscription,
+									onButtonClicked = { type ->
+										viewModel.setInputActions(
+											SubscriptionActions.OnSubSelect(type)
+										)
+									},
+									isActivated = subscriptionType == subscription
+								)
+							}
 						}
 					}
 					
@@ -170,7 +195,7 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 							.navigationBarsPadding(),
 						isActivated = true,
 						buttonClick = {
-						
+							viewModel.setInputActions(SubscriptionActions.GoStart)
 						},
 					)
 				}
