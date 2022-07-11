@@ -10,6 +10,7 @@ import com.civilcam.ui.auth.password.create.CreatePasswordViewModel
 import com.civilcam.ui.auth.password.reset.ResetPasswordViewModel
 import com.civilcam.ui.auth.pincode.PinCodeViewModel
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
+import com.civilcam.ui.emergency.EmergencyViewModel
 import com.civilcam.ui.langSelect.LanguageSelectViewModel
 import com.civilcam.ui.network.contacts.ContactsViewModel
 import com.civilcam.ui.network.inviteByNumber.InviteByNumberViewModel
@@ -66,7 +67,7 @@ val authModule = module {
 	viewModel { (pinCodeFlow: PinCodeFlow) -> PinCodeViewModel(pinCodeFlow) }
 	
 	viewModel { (isReselect: Boolean) -> SubscriptionViewModel(isReselect) }
-	
+
 }
 
 val networkRootModule = module {
@@ -101,11 +102,17 @@ val profileModule = module {
 	viewModel { UserProfileViewModel(get(), get()) }
 }
 
+val emergencyModule = module {
+
+    viewModel { EmergencyViewModel() }
+}
+
 
 val presentationModules = arrayOf(
-	baseModule,
-	authModule,
-	networkRootModule,
-	alertsRootModule,
-	profileModule
+    baseModule,
+    authModule,
+    networkRootModule,
+    alertsRootModule,
+    profileModule,
+    emergencyModule
 )

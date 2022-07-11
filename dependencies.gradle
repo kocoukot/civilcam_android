@@ -65,6 +65,11 @@ ext {
 
         implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
 //        implementation "com.google.accompanist:accompanist-insets-ui:$accompanist_version"
+
+
+        //map
+        implementation "com.google.maps.android:maps-compose:1.0.0"
+        implementation "com.google.android.gms:play-services-maps:18.0.2"
     }
 
     kotlin = dependencyGroup {
