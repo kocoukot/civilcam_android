@@ -221,6 +221,7 @@
     <string name="subscription_purchase_fail_description">There was an error while making this purchase. Please try again.</string>
     <string name="subscription_purchase_success_title">Welcome to CivilCam family!</string>
     <string name="subscription_purchase_success_description">Your purchase was successful.</string>
+    <string name="subscriptions_change_plan">Change plan</string>
 
 
 </resources>

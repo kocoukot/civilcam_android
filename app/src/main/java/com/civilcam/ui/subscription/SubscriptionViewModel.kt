@@ -7,9 +7,15 @@ import com.civilcam.ui.subscription.model.SubscriptionRoute
 import com.civilcam.ui.subscription.model.SubscriptionState
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class SubscriptionViewModel :
+class SubscriptionViewModel(
+	private val isReselect: Boolean
+) :
 	ComposeViewModel<SubscriptionState, SubscriptionRoute, SubscriptionActions>() {
 	override var _state: MutableStateFlow<SubscriptionState> = MutableStateFlow(SubscriptionState())
+	
+	init {
+		_state.value = _state.value.copy(isReselect = isReselect)
+	}
 	
 	override fun setInputActions(action: SubscriptionActions) {
 		when (action) {
@@ -21,7 +27,11 @@ class SubscriptionViewModel :
 	}
 	
 	private fun goProfileSetup() {
-		_steps.value = SubscriptionRoute.GoProfileSetup
+		if (_state.value.isReselect) {
+			_steps.value = SubscriptionRoute.GoBack
+		} else {
+			_steps.value = SubscriptionRoute.GoProfileSetup
+		}
 		_state.value = _state.value.copy(purchaseFail = false)
 		_state.value = _state.value.copy(purchaseSuccess = false)
 	}

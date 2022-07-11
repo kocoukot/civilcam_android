@@ -7,6 +7,7 @@ import com.civilcam.domain.usecase.settings.CheckCurrentPasswordUseCase
 import com.civilcam.domain.usecase.settings.GetCurrentSubscriptionPlanUseCase
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.settings.model.*
+import com.civilcam.ui.subscription.model.SubscriptionRoute
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -53,7 +54,12 @@ class SettingsViewModel(
 			)
 			SettingsActions.SaveNewPassword -> savePassword()
 			SettingsActions.ClickGoSubscription -> fetchSubscriptionPlan()
+			SettingsActions.GoSubscriptionManage -> goSubManage()
 		}
+	}
+	
+	private fun goSubManage() {
+		_steps.value = SettingsRoute.GoSubManage
 	}
 	
 	private fun fetchSubscriptionPlan() {

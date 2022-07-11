@@ -44,7 +44,7 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 				dialogTitle = stringResource(id = R.string.subscription_purchase_fail_title),
 				dialogText = stringResource(id = R.string.subscription_purchase_fail_description),
 				AlertDialogTypes.OK,
-			){}
+			) {}
 		}
 	}
 	
@@ -54,7 +54,7 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 				dialogTitle = stringResource(id = R.string.subscription_purchase_success_title),
 				dialogText = stringResource(id = R.string.subscription_purchase_success_description),
 				AlertDialogTypes.OK,
-			){ viewModel.setInputActions(SubscriptionActions.GoProfileSetup) }
+			) { viewModel.setInputActions(SubscriptionActions.GoProfileSetup) }
 		}
 	}
 	
@@ -189,7 +189,11 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 					Spacer(modifier = Modifier.height(40.dp))
 					
 					ComposeButton(
-						title = stringResource(id = R.string.start_text),
+						title = if (state.value.isReselect) stringResource(id = R.string.subscriptions_change_plan)
+						else
+							stringResource(
+								id = R.string.start_text
+							),
 						modifier = Modifier
 							.fillMaxWidth()
 							.navigationBarsPadding(),

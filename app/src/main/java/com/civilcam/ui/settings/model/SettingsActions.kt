@@ -38,5 +38,7 @@ sealed class SettingsActions : ComposeFragmentActions {
 
 
     object SaveNewPassword : SettingsActions()
+    
+    object GoSubscriptionManage : SettingsActions()
 
 }

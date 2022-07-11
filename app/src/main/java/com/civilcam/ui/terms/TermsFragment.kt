@@ -12,55 +12,59 @@ import com.civilcam.R
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.requireArg
+import com.civilcam.ui.subscription.SubscriptionFragment
 import com.civilcam.ui.terms.model.TermsRoute
 import com.civilcam.ui.terms.webView.WebViewFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class TermsFragment : Fragment() {
-    private val viewModel: TermsViewModel by viewModel {
-        parametersOf(isSettings)
-    }
-
-    private val isSettings by requireArg<Boolean>(ARG_IS_SETTINGS) // todo fix later
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
-            when (route) {
-                TermsRoute.GoBack -> navController.popBackStack()
-                TermsRoute.GoSubscription -> navController.navigate(R.id.subscriptionFragment)
-                is TermsRoute.GoWebView -> navController.navigate(
-                    R.id.action_termsFragment_to_webViewFragment,
-                    WebViewFragment.createArgs(route.webLink)
-                )
-            }
-        }
-
-
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(
-                    viewLifecycleOwner
-                )
-            )
-
-            setContent {
-                TermsScreenContent(viewModel)
-            }
-        }
-    }
-
-
-    companion object {
-        private const val ARG_IS_SETTINGS = "is_settings"
-
-        fun createArgs(isSettings: Boolean) = bundleOf(
-            ARG_IS_SETTINGS to isSettings
-        )
-    }
+	private val viewModel: TermsViewModel by viewModel {
+		parametersOf(isSettings)
+	}
+	
+	private val isSettings by requireArg<Boolean>(ARG_IS_SETTINGS) // todo fix later
+	
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View {
+		
+		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
+			when (route) {
+				TermsRoute.GoBack -> navController.popBackStack()
+				TermsRoute.GoSubscription -> navController.navigate(
+					R.id.subscriptionFragment,
+					SubscriptionFragment.createArgs(false)
+				)
+				is TermsRoute.GoWebView -> navController.navigate(
+					R.id.action_termsFragment_to_webViewFragment,
+					WebViewFragment.createArgs(route.webLink)
+				)
+			}
+		}
+		
+		
+		return ComposeView(requireContext()).apply {
+			setViewCompositionStrategy(
+				ViewCompositionStrategy.DisposeOnLifecycleDestroyed(
+					viewLifecycleOwner
+				)
+			)
+			
+			setContent {
+				TermsScreenContent(viewModel)
+			}
+		}
+	}
+	
+	
+	companion object {
+		private const val ARG_IS_SETTINGS = "is_settings"
+		
+		fun createArgs(isSettings: Boolean) = bundleOf(
+			ARG_IS_SETTINGS to isSettings
+		)
+	}
 }
