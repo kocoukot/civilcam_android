@@ -201,6 +201,27 @@
     <string name="pin_code_re_enter_new_title">Re-enter your new Pin-code</string>
     <string name="pin_code_is_incorrect_title">Pin-code is incorrect</string>
     <string name="pin_code_new_no_match_title">Pin-codes don’t match</string>
+    <string name="manage_subscription_plan">Manage subscription plan</string>
+    <string name="restore_purchase">Restore purchase</string>
+    <string name="start_text">Start!</string>
+    <string name="subscription_options_title">Subscription options</string>
+    <string name="subscription_no_commitment_title">No commitment. Cancel anytime.</string>
+    <string name="subscription_safety_network">"Safety network "</string>
+    <string name="subscription_emergency_alert">Emergency alert</string>
+    <string name="subscription_live_stream">Emergency live stream</string>
+    <string name="subscription_safety_map">Safety map</string>
+    <string name="subscription_detailed_alert">Alert detailed data</string>
+    <string name="subscription_trial_title">Trial</string>
+    <string name="subscription_trial_plan">for 1 month</string>
+    <string name="subscription_monthly_title">Monthly</string>
+    <string name="subscription_monthly_plan">for $4.99/month</string>
+    <string name="subscription_annual_title">Annual</string>
+    <string name="subscription_annual_plan">for $49.99/year</string>
+    <string name="subscription_purchase_fail_title">Purchase failed</string>
+    <string name="subscription_purchase_fail_description">There was an error while making this purchase. Please try again.</string>
+    <string name="subscription_purchase_success_title">Welcome to CivilCam family!</string>
+    <string name="subscription_purchase_success_description">Your purchase was successful.</string>
+    <string name="subscriptions_change_plan">Change plan</string>
 
 
 </resources>

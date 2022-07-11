@@ -148,4 +148,9 @@
         android:name="com.civilcam.ui.profile.userProfile.UserProfileFragment"
         android:label="UserProfileFragment" />
 
+    <fragment
+        android:id="@+id/subscriptionFragment"
+        android:name="com.civilcam.ui.subscription.SubscriptionFragment"
+        android:label="SubscriptionFragment" />
+
 </navigation>

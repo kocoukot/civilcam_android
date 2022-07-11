@@ -1,8 +1,8 @@
 package com.civilcam.data.repository
 
 import com.civilcam.R
+import com.civilcam.domain.model.SubscriptionPlan
 import com.civilcam.domain.model.UserInfo
-import com.civilcam.domain.model.UserSetupModel
 import com.civilcam.domain.model.alerts.AlertModel
 import com.civilcam.domain.model.alerts.AlertType
 import com.civilcam.domain.model.guard.GuardianModel
@@ -169,6 +169,11 @@ class MockRepository {
 
     fun checkPassword(currentPassword: String) = currentPassword == "Password1@"
 
+    fun getCurrentSubscriptionPlan() = SubscriptionPlan(
+        subscriptionPeriod = "Monthly",
+        subscriptionPlan = "$4.99/monthly",
+        autoRenewDate = "02.02.2022"
+    )
 
     fun searchGuards(query: String) =
         listOf(

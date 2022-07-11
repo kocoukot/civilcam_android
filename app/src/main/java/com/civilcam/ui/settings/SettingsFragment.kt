@@ -12,6 +12,7 @@ import com.civilcam.ui.MainActivity
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.settings.model.SettingsRoute
+import com.civilcam.ui.subscription.SubscriptionFragment
 import com.civilcam.ui.terms.TermsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -36,7 +37,7 @@ class SettingsFragment : Fragment() {
                 }
                 is SettingsRoute.IsNavBarVisible -> (activity as MainActivity)
                     .showBottomNavBar(!route.isVisible)
-
+                SettingsRoute.GoSubManage -> navController.navigate(R.id.subscriptionFragment, SubscriptionFragment.createArgs(true))
             }
         }
         return ComposeView(requireContext()).apply {

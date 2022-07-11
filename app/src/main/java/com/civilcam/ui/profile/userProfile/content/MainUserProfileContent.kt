@@ -1,4 +1,4 @@
-package com.civilcam.ui.profile.userProfile.model
+package com.civilcam.ui.profile.userProfile.content
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.UserInfo
-import com.civilcam.ui.profile.userDetails.model.UserDetailsModel
+import com.civilcam.ui.profile.userProfile.model.UserProfileType
 
 @Composable
 fun MainProfileContent(
@@ -63,10 +63,11 @@ fun MainProfileContent(
 @Composable
 fun ProfileRow(
 	title: String,
-	value: String,
+	value: String = "",
 	titleColor: Color = CCTheme.colors.black,
 	valueColor: Color = CCTheme.colors.grayOne,
 	needDivider: Boolean = true,
+	needRow: Boolean = true,
 	rowClick: () -> Unit,
 ) {
 	
@@ -98,11 +99,13 @@ fun ProfileRow(
 				fontWeight = FontWeight.W400
 			)
 			Spacer(modifier = Modifier.width(4.dp))
-			Icon(
-				painter = painterResource(id = R.drawable.ic_row_arrow),
-				contentDescription = null,
-				tint = CCTheme.colors.grayOne
-			)
+			if (needRow) {
+				Icon(
+					painter = painterResource(id = R.drawable.ic_row_arrow),
+					contentDescription = null,
+					tint = CCTheme.colors.grayOne
+				)
+			}
 			Spacer(modifier = Modifier.width(16.dp))
 		}
 		if (needDivider) Divider(

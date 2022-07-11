@@ -11,6 +11,8 @@ sealed class SettingsActions : ComposeFragmentActions {
         SettingsActions()
 
     object ClickSaveLanguage : SettingsActions()
+    
+    object ClickGoSubscription : SettingsActions()
     data class ClickCloseAlertDialog(val isConfirm: Boolean, val isLogOut: Boolean) :
         SettingsActions()
 
@@ -36,5 +38,7 @@ sealed class SettingsActions : ComposeFragmentActions {
 
 
     object SaveNewPassword : SettingsActions()
+    
+    object GoSubscriptionManage : SettingsActions()
 
 }

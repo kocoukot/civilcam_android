@@ -19,7 +19,7 @@ import com.civilcam.ui.profile.setup.content.DatePickerContent
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
 import com.civilcam.ui.profile.userProfile.content.UserProfileEditContent
 import com.civilcam.ui.profile.userProfile.content.UserProfileSection
-import com.civilcam.ui.profile.userProfile.model.MainProfileContent
+import com.civilcam.ui.profile.userProfile.content.MainProfileContent
 import com.civilcam.ui.profile.userProfile.model.UserProfileActions
 import com.civilcam.ui.profile.userProfile.model.UserProfileScreen
 

@@ -22,6 +22,7 @@ import com.civilcam.ui.profile.setup.ProfileSetupViewModel
 import com.civilcam.ui.profile.userDetails.UserDetailsViewModel
 import com.civilcam.ui.profile.userProfile.UserProfileViewModel
 import com.civilcam.ui.settings.SettingsViewModel
+import com.civilcam.ui.subscription.SubscriptionViewModel
 import com.civilcam.ui.terms.TermsViewModel
 import com.civilcam.ui.verification.VerificationViewModel
 import com.google.android.libraries.places.api.Places
@@ -64,6 +65,8 @@ val authModule = module {
 	
 	viewModel { (pinCodeFlow: PinCodeFlow) -> PinCodeViewModel(pinCodeFlow) }
 	
+	viewModel { (isReselect: Boolean) -> SubscriptionViewModel(isReselect) }
+	
 }
 
 val networkRootModule = module {
@@ -91,7 +94,7 @@ val alertsRootModule = module {
 
 val profileModule = module {
 	
-	viewModel { SettingsViewModel(get()) }
+	viewModel { SettingsViewModel(get(), get()) }
 	
 	viewModel { (credentialType: CredentialType) -> ChangeCredentialsViewModel(credentialType) }
 	

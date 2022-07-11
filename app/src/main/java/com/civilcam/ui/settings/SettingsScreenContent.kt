@@ -28,228 +28,238 @@ import com.civilcam.utils.LocaleHelper.SetLanguageCompose
 
 @Composable
 fun SettingsScreenContent(viewModel: SettingsViewModel) {
-
-    val state = viewModel.state.collectAsState()
-    val isKeyboardOpen by keyboardAsState()
-    viewModel.setInputActions(SettingsActions.IsNavBarVisible(isKeyboardOpen == Keyboard.Opened))
-
-
-    var currentLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
-    var selectedLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
-    var isActionActive by remember { mutableStateOf(false) }
-    SetLanguageCompose(selectedLanguage)
-
-    BackHandler {
-        viewModel.setInputActions(SettingsActions.ClickGoBack)
-    }
-
-    Scaffold(
-        modifier = Modifier
+	
+	val state = viewModel.state.collectAsState()
+	val isKeyboardOpen by keyboardAsState()
+	viewModel.setInputActions(SettingsActions.IsNavBarVisible(isKeyboardOpen == Keyboard.Opened))
+	
+	
+	var currentLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
+	var selectedLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
+	var isActionActive by remember { mutableStateOf(false) }
+	SetLanguageCompose(selectedLanguage)
+	
+	BackHandler {
+		viewModel.setInputActions(SettingsActions.ClickGoBack)
+	}
+	
+	Scaffold(
+		modifier = Modifier
             .fillMaxSize()
             .background(CCTheme.colors.lightGray),
-        backgroundColor = CCTheme.colors.lightGray,
-        topBar = {
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Crossfade(state.value.settingsType) { settingsType ->
-
-                    val isActionEnabled =
-                        if (settingsType == SettingsType.LANGUAGE ||
-                            settingsType == SettingsType.CONTACT_SUPPORT ||
-                            settingsType == SettingsType.CHANGE_PASSWORD ||
-                            settingsType == SettingsType.CREATE_PASSWORD
-                        ) {
-                            isActionActive
-                        } else true
-                    TopAppBarContent(
-                        title = stringResource(id = screenTitle(settingsType)),
-                        navigationItem = {
-                            BackButton {
-                                when (settingsType) {
-                                    SettingsType.LANGUAGE -> {
-                                        viewModel.setInputActions(SettingsActions.ClickGoBack)
-                                        selectedLanguage = currentLanguage
-                                    }
-                                    else -> {
-                                        viewModel.setInputActions(SettingsActions.ClickGoBack)
-                                    }
-                                }
-                            }
-                        },
-                        actionItem = {
-                            when (settingsType) {
-                                SettingsType.CONTACT_SUPPORT -> {
-                                    TextActionButton(
-                                        isEnabled = isActionEnabled,
-                                        actionTitle = stringResource(id = R.string.send_text)
-                                    ) {
-                                        setAction(viewModel, settingsType)
-                                    }
-                                }
-                                SettingsType.LANGUAGE, SettingsType.CREATE_PASSWORD -> {
-                                    TextActionButton(
-                                        isEnabled = isActionEnabled,
-                                        actionTitle = stringResource(id = R.string.save_text)
-                                    ) {
-                                        setAction(viewModel, settingsType)
-                                    }
-                                }
-                                SettingsType.CHANGE_PASSWORD -> {
-                                    TextActionButton(
-                                        isEnabled = isActionEnabled,
-                                        actionTitle = stringResource(id = R.string.continue_text)
-                                    ) {
-                                        setAction(viewModel, settingsType)
-                                    }
-                                }
-                                else -> {}
-                            }
-                        }
-                    )
-                }
-                Divider(color = CCTheme.colors.grayThree)
-            }
-        },
-    ) {
-        Crossfade(
-            targetState = state.value.settingsType,
-        ) { settingsState ->
-            when (settingsState) {
-                SettingsType.MAIN ->
-                    MainSettingsContent {
-                        viewModel.setInputActions(SettingsActions.ClickSection(it))
-                        currentLanguage = LocaleHelper.getSelectedLanguage()
-                        selectedLanguage = LocaleHelper.getSelectedLanguage()
-                        isActionActive = false
-                    }
-
-                SettingsType.ALERTS -> {
-                    state.value.data.alertsSectionData?.let { settingsAlertsSectionData ->
-                        AlertsSettingsContent(settingsAlertsSectionData) { isSwitched, type ->
-                            viewModel.setInputActions(
-                                SettingsActions.ClickAlertSwitch(
-                                    isSwitched,
-                                    type
-                                )
-                            )
-                        }
-                    }
-                }
-
-                SettingsType.CREATE_PASSWORD -> {
-                    state.value.data.createPasswordSectionData.let { data ->
-                        isActionActive = data.isFilled
-                        CreatePasswordSettingsContent(
-                            data
-                        ) { type, meetCriteria, password ->
-                            isActionActive = data.isFilled
-
-                            viewModel.setInputActions(
-                                SettingsActions.NewPasswordEntered(
-                                    type,
-                                    meetCriteria,
-                                    password
-                                )
-                            )
-                        }
-                    }
-
-                }
-
-                SettingsType.CHANGE_PASSWORD -> {
-                    state.value.data.changePasswordSectionData?.let { data ->
-                        isActionActive =
-                            data.error.isNullOrEmpty() && data.currentPassword.isNotEmpty()
-                        ChangePasswordSettingsContent(
-                            data
-                        ) {
-                            viewModel.setInputActions(SettingsActions.EnterCurrentPassword(it))
-                        }
-                    }
-                }
-
-
-                SettingsType.LANGUAGE -> {
-                    LanguageSettingsContent(
-                        selectedLanguage
-                    ) {
-                        selectedLanguage = it
-                        isActionActive = currentLanguage != it
-                    }
-                }
-                SettingsType.CONTACT_SUPPORT -> {
-                    ContactSupportContent(
-                        supportInformation = { issue, description, email ->
-                            isActionActive = couldBeSend(issue, description, email)
-                            viewModel.setInputActions(
-                                SettingsActions.EnterContactSupportInfo(
-                                    issue,
-                                    description,
-                                    email
-                                )
-                            )
-                        }
-                    )
-                }
-                SettingsType.LOG_OUT -> {
-                    MainSettingsContent {}
-                    AlertDialogComp(
-                        dialogTitle = stringResource(id = R.string.settings_log_out_alert_title),
-                        dialogText = stringResource(id = R.string.settings_log_out_alert_text),
-                        alertType = AlertDialogTypes.YES_CANCEL,
-                        onOptionSelected = {
-                            viewModel.setInputActions(
-                                SettingsActions.ClickCloseAlertDialog(
-                                    it,
-                                    true
-                                )
-                            )
-                        },
-                    )
-                }
-                SettingsType.DELETE_ACCOUNT -> {
-                    MainSettingsContent {}
-                    AlertDialogComp(
-                        dialogTitle = stringResource(id = R.string.settings_delete_account_alert_title),
-                        dialogText = stringResource(id = R.string.settings_delete_account_alert_text),
-                        alertType = AlertDialogTypes.YES_CANCEL,
-                        onOptionSelected = {
-                            viewModel.setInputActions(
-                                SettingsActions.ClickCloseAlertDialog(
-                                    it,
-                                    false
-                                )
-                            )
-                        },
-                    )
-                }
-                //                SettingsType.SUBSCRIPTION -> TODO()
-
-                else -> {}
-            }
-        }
-    }
+		backgroundColor = CCTheme.colors.lightGray,
+		topBar = {
+			Column(
+				modifier = Modifier.fillMaxWidth()
+			) {
+				Crossfade(state.value.settingsType) { settingsType ->
+					
+					val isActionEnabled =
+						if (settingsType == SettingsType.LANGUAGE ||
+							settingsType == SettingsType.CONTACT_SUPPORT ||
+							settingsType == SettingsType.CHANGE_PASSWORD ||
+							settingsType == SettingsType.CREATE_PASSWORD
+						) {
+							isActionActive
+						} else true
+					TopAppBarContent(
+						title = stringResource(id = screenTitle(settingsType)),
+						navigationItem = {
+							BackButton {
+								when (settingsType) {
+									SettingsType.LANGUAGE -> {
+										viewModel.setInputActions(SettingsActions.ClickGoBack)
+										selectedLanguage = currentLanguage
+									}
+									else -> {
+										viewModel.setInputActions(SettingsActions.ClickGoBack)
+									}
+								}
+							}
+						},
+						actionItem = {
+							when (settingsType) {
+								SettingsType.CONTACT_SUPPORT -> {
+									TextActionButton(
+										isEnabled = isActionEnabled,
+										actionTitle = stringResource(id = R.string.send_text)
+									) {
+										setAction(viewModel, settingsType)
+									}
+								}
+								SettingsType.LANGUAGE, SettingsType.CREATE_PASSWORD -> {
+									TextActionButton(
+										isEnabled = isActionEnabled,
+										actionTitle = stringResource(id = R.string.save_text)
+									) {
+										setAction(viewModel, settingsType)
+									}
+								}
+								SettingsType.CHANGE_PASSWORD -> {
+									TextActionButton(
+										isEnabled = isActionEnabled,
+										actionTitle = stringResource(id = R.string.continue_text)
+									) {
+										setAction(viewModel, settingsType)
+									}
+								}
+								else -> {}
+							}
+						}
+					)
+				}
+				Divider(color = CCTheme.colors.grayThree)
+			}
+		},
+	) {
+		Crossfade(
+			targetState = state.value.settingsType,
+		) { settingsState ->
+			when (settingsState) {
+				SettingsType.MAIN ->
+					MainSettingsContent {
+						viewModel.setInputActions(SettingsActions.ClickSection(it))
+						currentLanguage = LocaleHelper.getSelectedLanguage()
+						selectedLanguage = LocaleHelper.getSelectedLanguage()
+						isActionActive = false
+					}
+				
+				SettingsType.ALERTS -> {
+					state.value.data.alertsSectionData?.let { settingsAlertsSectionData ->
+						AlertsSettingsContent(settingsAlertsSectionData) { isSwitched, type ->
+							viewModel.setInputActions(
+								SettingsActions.ClickAlertSwitch(
+									isSwitched,
+									type
+								)
+							)
+						}
+					}
+				}
+				
+				SettingsType.CREATE_PASSWORD -> {
+					state.value.data.createPasswordSectionData.let { data ->
+						isActionActive = data.isFilled
+						CreatePasswordSettingsContent(
+							data
+						) { type, meetCriteria, password ->
+							isActionActive = data.isFilled
+							
+							viewModel.setInputActions(
+								SettingsActions.NewPasswordEntered(
+									type,
+									meetCriteria,
+									password
+								)
+							)
+						}
+					}
+					
+				}
+				
+				SettingsType.CHANGE_PASSWORD -> {
+					state.value.data.changePasswordSectionData?.let { data ->
+						isActionActive =
+							data.error.isNullOrEmpty() && data.currentPassword.isNotEmpty()
+						ChangePasswordSettingsContent(
+							data
+						) {
+							viewModel.setInputActions(SettingsActions.EnterCurrentPassword(it))
+						}
+					}
+				}
+				
+				
+				SettingsType.LANGUAGE -> {
+					LanguageSettingsContent(
+						selectedLanguage
+					) {
+						selectedLanguage = it
+						isActionActive = currentLanguage != it
+					}
+				}
+				SettingsType.CONTACT_SUPPORT -> {
+					ContactSupportContent(
+						supportInformation = { issue, description, email ->
+							isActionActive = couldBeSend(issue, description, email)
+							viewModel.setInputActions(
+								SettingsActions.EnterContactSupportInfo(
+									issue,
+									description,
+									email
+								)
+							)
+						}
+					)
+				}
+				SettingsType.LOG_OUT -> {
+					MainSettingsContent {}
+					AlertDialogComp(
+						dialogTitle = stringResource(id = R.string.settings_log_out_alert_title),
+						dialogText = stringResource(id = R.string.settings_log_out_alert_text),
+						alertType = AlertDialogTypes.YES_CANCEL,
+						onOptionSelected = {
+							viewModel.setInputActions(
+								SettingsActions.ClickCloseAlertDialog(
+									it,
+									true
+								)
+							)
+						},
+					)
+				}
+				SettingsType.DELETE_ACCOUNT -> {
+					MainSettingsContent {}
+					AlertDialogComp(
+						dialogTitle = stringResource(id = R.string.settings_delete_account_alert_title),
+						dialogText = stringResource(id = R.string.settings_delete_account_alert_text),
+						alertType = AlertDialogTypes.YES_CANCEL,
+						onOptionSelected = {
+							viewModel.setInputActions(
+								SettingsActions.ClickCloseAlertDialog(
+									it,
+									false
+								)
+							)
+						},
+					)
+				}
+				SettingsType.SUBSCRIPTION -> {
+					viewModel.setInputActions(SettingsActions.ClickGoSubscription)
+					SubscriptionSettingsContent(
+						manageValue = stringResource(id = R.string.manage_subscription_plan),
+						restoreValue = stringResource(id = R.string.restore_purchase),
+						onManageClicked = { viewModel.setInputActions(SettingsActions.GoSubscriptionManage) },
+						onRestoreClicked = {},
+						subscriptionPlan = state.value.data.subscriptionData,
+						onSubscriptionPlanClick = {}
+					)
+				}
+				
+				else -> {}
+			}
+		}
+	}
 }
 
 private fun setAction(viewModel: SettingsViewModel, settingsType: SettingsType) {
-    when (settingsType) {
-        SettingsType.LANGUAGE -> viewModel.setInputActions(SettingsActions.ClickSaveLanguage)
-        SettingsType.CONTACT_SUPPORT -> viewModel.setInputActions(SettingsActions.ClickSendToSupport)
-        SettingsType.CHANGE_PASSWORD -> viewModel.setInputActions(SettingsActions.CheckCurrentPassword)
-        SettingsType.CREATE_PASSWORD -> viewModel.setInputActions(SettingsActions.SaveNewPassword)
-        else -> {}
-    }
+	when (settingsType) {
+		SettingsType.LANGUAGE -> viewModel.setInputActions(SettingsActions.ClickSaveLanguage)
+		SettingsType.CONTACT_SUPPORT -> viewModel.setInputActions(SettingsActions.ClickSendToSupport)
+		SettingsType.CHANGE_PASSWORD -> viewModel.setInputActions(SettingsActions.CheckCurrentPassword)
+		SettingsType.CREATE_PASSWORD -> viewModel.setInputActions(SettingsActions.SaveNewPassword)
+		else -> {}
+	}
 }
 
 private fun screenTitle(settingsType: SettingsType) = when (settingsType) {
-    SettingsType.MAIN, SettingsType.LOG_OUT, SettingsType.TERMS_AND_POLICY, SettingsType.DELETE_ACCOUNT -> R.string.settings_title
-    SettingsType.CHANGE_PASSWORD -> R.string.settings_password_title
-    else -> settingsType.title
+	SettingsType.MAIN, SettingsType.LOG_OUT, SettingsType.TERMS_AND_POLICY, SettingsType.DELETE_ACCOUNT -> R.string.settings_title
+	SettingsType.CHANGE_PASSWORD -> R.string.settings_password_title
+	else -> settingsType.title
 }
 
 private fun couldBeSend(
-    issue: String,
-    issueDescription: String,
-    email: String
+	issue: String,
+	issueDescription: String,
+	email: String
 ) = issue.isNotEmpty() && issueDescription.isNotEmpty() && email.isNotEmpty()
