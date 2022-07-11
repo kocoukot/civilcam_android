@@ -33,7 +33,7 @@ class TermsFragment : Fragment() {
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
                 TermsRoute.GoBack -> navController.popBackStack()
-                TermsRoute.GoSubscription -> navController.navigate(R.id.testFragment)
+                TermsRoute.GoSubscription -> navController.navigate(R.id.subscriptionFragment)
                 is TermsRoute.GoWebView -> navController.navigate(
                     R.id.action_termsFragment_to_webViewFragment,
                     WebViewFragment.createArgs(route.webLink)
