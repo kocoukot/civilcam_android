@@ -9,14 +9,13 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.ui.MainActivity
-import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.settings.model.SettingsRoute
 import com.civilcam.ui.terms.TermsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsFragment : Fragment(), SupportBottomBar {
+class SettingsFragment : Fragment() {
     private val viewModel: SettingsViewModel by viewModel()
 
     override fun onCreateView(
@@ -24,7 +23,7 @@ class SettingsFragment : Fragment(), SupportBottomBar {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        (activity as MainActivity).showBottomNavBar(true)
+
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
                 SettingsRoute.GoBack -> navController.popBackStack()
@@ -50,5 +49,10 @@ class SettingsFragment : Fragment(), SupportBottomBar {
                 SettingsScreenContent(viewModel)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).showBottomNavBar(false)
     }
 }

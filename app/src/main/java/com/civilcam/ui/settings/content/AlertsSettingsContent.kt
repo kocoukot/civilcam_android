@@ -67,7 +67,8 @@ fun SwitcherRowContent(
     ) {
         Text(
             text = title,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            style = CCTheme.typography.common_medium_text_regular
         )
 
         Switch(

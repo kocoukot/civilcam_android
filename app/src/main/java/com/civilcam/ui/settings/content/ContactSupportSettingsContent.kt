@@ -26,7 +26,7 @@ import com.civilcam.common.ext.isEmail
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.Constant.ISSUE_DESCRIPTION_LIMIT
 import com.civilcam.ui.common.Constant.ISSUE_LIMIT
-import com.civilcam.ui.common.compose.inputs.InputField
+import com.civilcam.ui.common.compose.inputs.EmailInputField
 import com.civilcam.ui.common.compose.inputs.PlaceholderText
 
 @Composable
@@ -49,7 +49,7 @@ fun ContactSupportContent(
         Divider(color = CCTheme.colors.lightGray, modifier = Modifier.height(30.dp))
 
 
-        EmailInputField(
+        IssueInputField(
             title = stringResource(id = R.string.settings_contact_issue_title),
             placeHolder = stringResource(id = R.string.settings_contact_issue_enter),
         ) {
@@ -73,22 +73,25 @@ fun ContactSupportContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        InputField(
+        EmailInputField(
+            isReversed = true,
             title = stringResource(id = R.string.settings_contact_reply_title),
             placeHolder = stringResource(id = R.string.settings_contact_reply_placeholder),
-            hasError = isEmailError && email.isNotEmpty(),
-            isReversed = true,
             errorMessage = stringResource(id = R.string.settings_contact_error_text),
-        ) {
-            isEmailError = if (it.isEmpty()) false else !it.isEmail()
-            email = it
-            supportInformation.invoke(
-                issue,
-                issueDescription,
-                email,
-            )
-        }
+            hasError = isEmailError,
+            onValueChanged = {
+                isEmailError = if (it.isEmpty()) false else !it.isEmail()
+                email = it
+                supportInformation.invoke(
+                    issue,
+                    issueDescription,
+                    email,
+                )
+            },
+            onFocusChanged = {
 
+            }
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
     }
@@ -96,7 +99,7 @@ fun ContactSupportContent(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun EmailInputField(
+private fun IssueInputField(
     title: String,
     placeHolder: String,
     text: String = "",
@@ -248,7 +251,7 @@ private fun LimitLabelContent(
     limit: Int
 ) {
     Text(
-        text = "$value / $limit",
+        text = "$value/$limit",
         style = CCTheme.typography.common_text_regular,
         color = CCTheme.colors.grayOne,
         modifier = Modifier.padding(start = 8.dp)
