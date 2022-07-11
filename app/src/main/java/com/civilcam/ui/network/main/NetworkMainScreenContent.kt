@@ -18,6 +18,7 @@ import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.guard.NetworkType
 import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.common.compose.inputs.SearchInputField
+import com.civilcam.ui.common.loading.DialogLoadingContent
 import com.civilcam.ui.network.main.content.GuardianSearchContent
 import com.civilcam.ui.network.main.content.GuardsMainSection
 import com.civilcam.ui.network.main.content.NetworkTabRow
@@ -35,6 +36,9 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
     tabPage = state.value.networkType
 
 
+    if (state.value.isLoading) {
+        DialogLoadingContent()
+    }
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
         modifier = Modifier
