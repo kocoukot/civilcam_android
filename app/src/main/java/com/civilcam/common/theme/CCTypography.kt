@@ -111,4 +111,12 @@ data class CCTypography internal constructor(
         color = Color(0xFFCF3919),
         letterSpacing = (-0.01).sp,
     ),
+
+    val emergency_button: TextStyle = TextStyle(
+        fontSize = 24.sp,
+        lineHeight = 28.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_bold)),
+        fontWeight = FontWeight.W700,
+        letterSpacing = (-0.01).sp,
+    ),
 )

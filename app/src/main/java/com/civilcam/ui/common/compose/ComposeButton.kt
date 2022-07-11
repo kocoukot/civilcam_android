@@ -149,6 +149,34 @@ private fun ComposeButtonPreview() {
     )
 }
 
+@Preview
+@Composable
+private fun TextActionButtonPreview() {
+    TextActionButton(
+        actionTitle = "Title",
+    ) {}
+}
+
+@Preview
+@Composable
+private fun IconActionButtonPreview() {
+    IconActionButton(
+        buttonIcon = R.drawable.img_avatar,
+    ) {}
+}
+
+@Preview
+@Composable
+private fun BackButtonPreview() {
+    BackButton {}
+}
+
+@Preview
+@Composable
+private fun AvatarButtonPreview() {
+    AvatarButton {}
+}
+
 @Immutable
 private object SecondaryRippleTheme : RippleTheme {
     @Composable

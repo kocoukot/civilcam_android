@@ -224,4 +224,8 @@
     <string name="subscriptions_change_plan">Change plan</string>
 
 
+    <string name="emergency_screen_sos">SOS</string>
+    <string name="emergency_screen_safe">I’m safe</string>
+
+
 </resources>
