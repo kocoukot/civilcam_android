@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import com.civilcam.R
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.auth.pincode.model.PinCodeRoute
@@ -47,6 +48,13 @@ class PinCodeFragment : Fragment() {
 				PinCodeRoute.GoBack -> navController.popBackStack()
 				PinCodeRoute.GoUserProfile -> navController.popBackStack(R.id.userProfileFragment, false)
 				PinCodeRoute.GoGuardians -> checkPermissions()
+				PinCodeRoute.GoEmergency -> {
+					setFragmentResult(
+						RESULT_BACK_STACK,
+						bundleOf(RESULT_BACK_STACK to true)
+					)
+					navController.popBackStack()
+				}
 			}
 		}
 		
@@ -86,6 +94,7 @@ class PinCodeFragment : Fragment() {
 	
 	companion object {
 		private const val ARG_FLOW = "pin_code_flow"
+		const val RESULT_BACK_STACK = "back_stack"
 		
 		fun createArgs(flow: PinCodeFlow) = bundleOf(
 			ARG_FLOW to flow

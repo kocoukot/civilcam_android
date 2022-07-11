@@ -27,8 +27,19 @@ class PinCodeViewModel(
 					PinCodeFlow.CURRENT_PIN_CODE -> currentPinEntered(action.pinCode)
 					PinCodeFlow.NEW_PIN_CODE -> newPinCodeEntered(action.pinCode)
 					PinCodeFlow.CONFIRM_NEW_PIN_CODE -> newPinCodeConfirmEntered(action.pinCode)
+					PinCodeFlow.SOS_PIN_CODE -> sosPinCodeEntered(action.pinCode)
 				}
 			}
+		}
+	}
+	
+	private fun sosPinCodeEntered(pinCode: String) {
+		_state.value = _state.value.copy(sosPinCode = pinCode)
+		if (_state.value.sosMatch) {
+			_state.value = _state.value.copy(currentNoMatch = false)
+			goEmergency()
+		} else {
+			_state.value = _state.value.copy(currentNoMatch = true)
 		}
 	}
 	
@@ -79,6 +90,7 @@ class PinCodeViewModel(
 		_state.value = _state.value.copy(currentNoMatch = false)
 		_state.value = _state.value.copy(newPinNoMatch = false)
 		when (_state.value.screenState) {
+			PinCodeFlow.SOS_PIN_CODE -> _steps.value = PinCodeRoute.GoBack
 			PinCodeFlow.CREATE_PIN_CODE -> _steps.value = PinCodeRoute.GoBack
 			PinCodeFlow.CONFIRM_PIN_CODE -> _state.value =
 				_state.value.copy(screenState = PinCodeFlow.CREATE_PIN_CODE)
@@ -88,6 +100,11 @@ class PinCodeViewModel(
 			PinCodeFlow.CONFIRM_NEW_PIN_CODE -> _state.value =
 				_state.value.copy(screenState = PinCodeFlow.NEW_PIN_CODE)
 		}
+	}
+	
+	private fun goEmergency() {
+		_state.value = _state.value.copy(currentNoMatch = false)
+		_steps.value = PinCodeRoute.GoEmergency
 	}
 	
 	private fun goGuardians() {

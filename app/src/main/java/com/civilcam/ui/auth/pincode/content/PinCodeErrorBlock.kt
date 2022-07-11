@@ -28,7 +28,7 @@ fun PinCodeErrorBlock(
 	) {
 		Text(
 			text = when (screenState) {
-				PinCodeFlow.CURRENT_PIN_CODE -> {
+				PinCodeFlow.CURRENT_PIN_CODE, PinCodeFlow.SOS_PIN_CODE -> {
 					stringResource(id = R.string.pin_code_is_incorrect_title)
 				}
 				else -> stringResource(id = R.string.pin_code_new_no_match_title)

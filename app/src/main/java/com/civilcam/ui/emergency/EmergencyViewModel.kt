@@ -27,13 +27,21 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
         _steps.value = EmergencyRoute.GoUserProfile
     }
     
+    private fun goPinCode() {
+        _steps.value = EmergencyRoute.GoPinCode
+    }
+    
     private fun doubleClickSos() {
         if (state.value.emergencyButton == EmergencyButton.InSafeButton) {
             _state.value = _state.value.copy(emergencyButton = EmergencyButton.InDangerButton)
         } else {
-            _state.value = _state.value.copy(emergencyButton = EmergencyButton.InSafeButton)
+            goPinCode()
         }
     }
+    
+    fun disableSosStatus() {
+        _state.value = _state.value.copy(emergencyButton = EmergencyButton.InSafeButton)
+	}
 }
 
 

@@ -6,4 +6,5 @@ sealed class PinCodeRoute : ComposeFragmentRoute {
 	object GoBack : PinCodeRoute()
 	object GoGuardians : PinCodeRoute()
 	object GoUserProfile : PinCodeRoute()
+	object GoEmergency : PinCodeRoute()
 }

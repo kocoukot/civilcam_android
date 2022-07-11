@@ -5,4 +5,5 @@ import com.civilcam.common.ext.compose.ComposeFragmentRoute
 sealed class EmergencyRoute : ComposeFragmentRoute {
 	object GoUserProfile : EmergencyRoute()
 	object GoSettings : EmergencyRoute()
+	object GoPinCode : EmergencyRoute()
 }

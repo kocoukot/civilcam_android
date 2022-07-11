@@ -228,6 +228,7 @@
 
     <string name="emergency_screen_sos">SOS</string>
     <string name="emergency_screen_safe">I’m safe</string>
+    <string name="pin_code_enter_title">Enter pin-code</string>
 
     <string name="notification_request_title">You received a request</string>
     <string name="notification_request_text">needs you as a guardian</string>
