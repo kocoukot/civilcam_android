@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.common.Constant.MINIMUM_AGE
 import com.civilcam.ui.common.compose.ListItemPicker
 import com.civilcam.ui.common.compose.TextActionButton
 import timber.log.Timber
@@ -20,6 +21,7 @@ import java.time.LocalDate
 import java.time.Month
 import java.time.YearMonth
 import java.time.format.TextStyle
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 @Composable
@@ -29,10 +31,18 @@ fun DatePickerContent(
 ) {
     val calendar = LocalDate.now()
 
-
-    var yearPickerValue by remember { mutableStateOf(calendar.year) }
+    val maxYear = calendar.year - 18
+    var yearPickerValue by remember { mutableStateOf(maxYear) }
     var monthPickerValue by remember { mutableStateOf(calendar.month) }
     var daysPickerValue by remember { mutableStateOf(calendar.dayOfMonth) }
+
+    val isAllowed = ChronoUnit.YEARS.between(
+        LocalDate.of(
+            yearPickerValue,
+            monthPickerValue.value,
+            daysPickerValue
+        ), calendar
+    ) >= MINIMUM_AGE
 
     Box(
         modifier = Modifier
@@ -87,7 +97,7 @@ fun DatePickerContent(
                     modifier = Modifier.weight(1f),
                     dividersColor = CCTheme.colors.black,
                     value = yearPickerValue,
-                    range = 1960..calendar.year,
+                    range = 1900..maxYear,
                     onValueChange = { yearPickerValue = it },
                     textStyle = CCTheme.typography.common_text_small_regular
 
@@ -107,6 +117,7 @@ fun DatePickerContent(
                 )
 
                 TextActionButton(
+                    isEnabled = isAllowed,
                     actionTitle = stringResource(id = R.string.ok_text_caps),
                     textColor = CCTheme.colors.cianColor,
                     actionAction = {
