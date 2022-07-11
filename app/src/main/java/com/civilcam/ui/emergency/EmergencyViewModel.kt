@@ -16,6 +16,7 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
             EmergencyActions.DoubleClickSos -> doubleClickSos()
             EmergencyActions.GoUserProfile -> goUserProfile()
             EmergencyActions.GoSettings -> goSettings()
+            EmergencyActions.OneClickSafe -> oneClickSafe()
         }
     }
     
@@ -31,11 +32,15 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
         _steps.value = EmergencyRoute.GoPinCode
     }
     
+    private fun oneClickSafe() {
+        if (state.value.emergencyButton == EmergencyButton.InDangerButton) {
+            goPinCode()
+        }
+    }
+    
     private fun doubleClickSos() {
         if (state.value.emergencyButton == EmergencyButton.InSafeButton) {
             _state.value = _state.value.copy(emergencyButton = EmergencyButton.InDangerButton)
-        } else {
-            goPinCode()
         }
     }
     

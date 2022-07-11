@@ -61,6 +61,7 @@ fun EmergencyButtonContent(
                         },
                         onClick = {
                             Timber.i("detectTapGestures onTap")
+                            oneClick.invoke()
                         }),
                 contentAlignment = Alignment.Center
             ) {

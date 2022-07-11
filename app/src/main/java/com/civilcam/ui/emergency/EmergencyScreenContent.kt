@@ -6,9 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.emergency.content.EmergencyButtonContent
 import com.civilcam.ui.emergency.content.EmergencyTopBarContent
@@ -37,7 +35,7 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 	) {
 		Box(
 			modifier = Modifier
-                .fillMaxSize()
+				.fillMaxSize()
 		) {
 			Column {
 //            GoogleMap(
@@ -58,7 +56,9 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 					.align(Alignment.BottomCenter)
 					.size(150.dp)
 					.offset(y = (-32).dp),
-				oneClick = {},
+				oneClick = {
+					viewModel.setInputActions(EmergencyActions.OneClickSafe)
+				},
 				doubleClick = {
 					viewModel.setInputActions(EmergencyActions.DoubleClickSos)
 				},
