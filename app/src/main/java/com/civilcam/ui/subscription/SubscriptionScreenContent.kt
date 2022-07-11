@@ -1,6 +1,5 @@
 package com.civilcam.ui.subscription
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -27,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.SubscriptionPlan
+import com.civilcam.domain.model.SubscriptionType
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.subscription.model.SubscriptionActions
 
@@ -149,11 +148,15 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 					LazyColumn(
 						modifier = Modifier.fillMaxWidth()
 					) {
-						items(state.value.subscriptionPlans) { plan ->
+						items(SubscriptionType.values()) { plan ->
 							SubscriptionPlanRow(
-								subscriptionPlan = plan,
-								onButtonClicked = { },
-								isActivated = false
+								subscriptionType = plan,
+								onButtonClicked = { type ->
+									viewModel.setInputActions(
+										SubscriptionActions.OnSubSelect(type)
+									)
+								},
+								isActivated = true
 							)
 						}
 					}
@@ -206,8 +209,8 @@ fun SubscriptionOption(
 
 @Composable
 fun SubscriptionPlanRow(
-	subscriptionPlan: SubscriptionPlan,
-	onButtonClicked: () -> Unit,
+	subscriptionType: SubscriptionType,
+	onButtonClicked: (SubscriptionType) -> Unit,
 	isActivated: Boolean = false
 ) {
 	
@@ -227,19 +230,19 @@ fun SubscriptionPlanRow(
 				RoundedCornerShape(8.dp)
 			)
 			.background(color = backgroundColor)
-			.clickable { onButtonClicked.invoke() },
+			.clickable { onButtonClicked.invoke(subscriptionType) },
 		horizontalAlignment = Alignment.Start
 	) {
 		
 		Text(
-			text = subscriptionPlan.subscriptionPlan,
+			text = stringResource(id = subscriptionType.type),
 			style = CCTheme.typography.common_text_medium,
 			color = titleColor,
 			modifier = Modifier.padding(start = 12.dp, top = 12.dp)
 		)
 		
 		Text(
-			text = subscriptionPlan.purchasePrice,
+			text = stringResource(id = subscriptionType.plan),
 			style = CCTheme.typography.common_text_small_regular,
 			color = textColor,
 			modifier = Modifier.padding(start = 12.dp, top = 2.dp, bottom = 12.dp)

@@ -1,6 +1,5 @@
 package com.civilcam.di
 
-import com.civilcam.domain.usecase.GetSubscriptionPlansUseCase
 import com.civilcam.domain.usecase.GetUserInformationUseCase
 import com.civilcam.domain.usecase.alerts.GetAlertsListUseCase
 import com.civilcam.domain.usecase.alerts.GetHistoryAlertListUseCase
@@ -32,6 +31,4 @@ val domainModule = module {
     
     factory { GetCurrentSubscriptionPlanUseCase(get()) }
     
-    factory { GetSubscriptionPlansUseCase(get()) }
-
 }

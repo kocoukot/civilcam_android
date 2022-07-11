@@ -65,7 +65,7 @@ val authModule = module {
 	
 	viewModel { (pinCodeFlow: PinCodeFlow) -> PinCodeViewModel(pinCodeFlow) }
 	
-	viewModel { SubscriptionViewModel(get()) }
+	viewModel { SubscriptionViewModel() }
 	
 }
 

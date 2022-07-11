@@ -3,7 +3,6 @@ package com.civilcam.data.repository
 import com.civilcam.R
 import com.civilcam.domain.model.SubscriptionPlan
 import com.civilcam.domain.model.UserInfo
-import com.civilcam.domain.model.UserSetupModel
 import com.civilcam.domain.model.alerts.AlertModel
 import com.civilcam.domain.model.alerts.AlertType
 import com.civilcam.domain.model.guard.GuardianModel
@@ -174,21 +173,6 @@ class MockRepository {
         subscriptionPeriod = "Monthly",
         subscriptionPlan = "$4.99/monthly",
         autoRenewDate = "02.02.2022"
-    )
-    
-    fun getAvailableSubscriptionPlans() = listOf(
-        SubscriptionPlan(
-            subscriptionPlan = "Trial",
-            purchasePrice = "for 1 month"
-        ),
-        SubscriptionPlan(
-            subscriptionPlan = "Monthly",
-            purchasePrice = "for \$4.99/month"
-        ),
-        SubscriptionPlan(
-            subscriptionPlan = "Annual",
-            purchasePrice = "for \$49.99/year"
-        )
     )
 
     fun searchGuards(query: String) =

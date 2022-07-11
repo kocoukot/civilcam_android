@@ -211,6 +211,12 @@
     <string name="subscription_live_stream">Emergency live stream</string>
     <string name="subscription_safety_map">Safety map</string>
     <string name="subscription_detailed_alert">Alert detailed data</string>
+    <string name="subscription_trial_title">Trial</string>
+    <string name="subscription_trial_plan">for 1 month</string>
+    <string name="subscription_monthly_title">Monthly</string>
+    <string name="subscription_monthly_plan">for $4.99/month</string>
+    <string name="subscription_annual_title">Annual</string>
+    <string name="subscription_annual_plan">for $49.99/year</string>
 
 
 </resources>
