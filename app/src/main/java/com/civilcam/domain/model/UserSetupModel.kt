@@ -18,7 +18,7 @@ data class UserSetupModel(
                 lastName.isNotEmpty() &&
                 dateBirth != 0L &&
                 profileImage != null &&
-                phoneNumber.isNotEmpty()
+                phoneNumber.length == 10
 //                location.isNotEmpty() &&
 //                coords != null
 

@@ -227,8 +227,6 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 				SettingsType.SUBSCRIPTION -> {
 					viewModel.setInputActions(SettingsActions.ClickGoSubscription)
 					SubscriptionSettingsContent(
-						manageValue = stringResource(id = R.string.manage_subscription_plan),
-						restoreValue = stringResource(id = R.string.restore_purchase),
 						onManageClicked = { viewModel.setInputActions(SettingsActions.GoSubscriptionManage) },
 						onRestoreClicked = {},
 						subscriptionPlan = state.value.data.subscriptionData,
