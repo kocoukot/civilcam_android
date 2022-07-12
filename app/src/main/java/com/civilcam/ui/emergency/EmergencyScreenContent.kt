@@ -29,7 +29,8 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 			EmergencyTopBarContent(
 				onAvatarClicked = { viewModel.setInputActions(EmergencyActions.GoUserProfile) },
 				onSettingsClicked = { viewModel.setInputActions(EmergencyActions.GoSettings) },
-				locationData = state.value.location
+				locationData = state.value.location,
+				screen = state.value.emergencyScreen
 			)
 		}
 	) {
