@@ -80,6 +80,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             setOnLongClickListener {
+                lifecycleScope.launch {
+                    withContext(Dispatchers.IO) {
+//                        NotificationHelper().showRequestNotification(this@MainActivity)
+                    }
+                }
                 true
             }
         }

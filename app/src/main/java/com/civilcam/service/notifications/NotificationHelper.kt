@@ -8,9 +8,13 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.media.RingtoneManager
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.civilcam.R
 import com.civilcam.domain.model.settings.NotificationType
 import com.civilcam.service.NotificationAcceptButtonListener
@@ -23,13 +27,18 @@ import timber.log.Timber
 class NotificationHelper : KoinComponent {
 
     fun showRequestNotification(context: Context) {
+        val name = "Alleria Windrunner"
         val maxProgress = 5
         var mProgressStatus = 0
         showProgress = true
         val channelId = "${context.packageName}-${NotificationType.REQUESTS.notifyName}"
-        val notificationTitle = "You received a request"
+        val notificationTitle = context.getString(R.string.notification_request_title)
+        val notificationText = openHoursText(
+            name = name,
+            text = context.getString(R.string.notification_request_text),
+            context = context,
+        )
 
-        val notificationText = "Alleria Windrunner needs you as a guardian"
 
         val notificationLayout = RemoteViews(context.packageName, R.layout.view_notification_small)
         notificationLayout.setTextViewText(R.id.notification_title, notificationTitle)
@@ -130,6 +139,37 @@ class NotificationHelper : KoinComponent {
         }
     }
 
+    private fun openHoursText(
+        name: String,
+        text: String,
+        context: Context
+    ): SpannableStringBuilder {
+        val wholeText = "$name $text"
+        return SpannableStringBuilder(wholeText).apply {
+            setSpan(
+                ForegroundColorSpan(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.primaryRed
+                    )
+                ),
+                0,
+                name.length,
+                Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+            setSpan(
+                ForegroundColorSpan(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.grayText
+                    )
+                ),
+                name.length + 1,
+                wholeText.length,
+                Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+        }
+    }
 
     companion object {
         const val NOTIFICATION_REQUESTS_ID = 1002
