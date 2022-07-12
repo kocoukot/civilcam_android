@@ -64,6 +64,8 @@
                 android:resource="@xml/authenticator" />
         </service>
 
+        <receiver android:name=".service.NotificationButtonListener" />
+
 
     </application>
 
