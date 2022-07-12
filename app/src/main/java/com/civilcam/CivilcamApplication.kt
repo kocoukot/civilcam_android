@@ -6,7 +6,8 @@ import com.civilcam.di.presentationModules
 import com.civilcam.di.repositoryModule
 import com.civilcam.di.source.sourceModule
 import com.civilcam.di.storageModule
-import io.gleap.Gleap
+import com.civilcam.domain.model.settings.NotificationType
+import com.civilcam.service.notifications.NotificationHelper
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -20,6 +21,8 @@ class CivilcamApplication : Application() {
         instance = this
         startTimber()
         gleapInit()
+        createNotificationChannels()
+
         startKoin {
             androidLogger()
             androidContext(this@CivilcamApplication)
@@ -31,9 +34,23 @@ class CivilcamApplication : Application() {
 
     private fun gleapInit() {
         if (BuildConfig.DEBUG) {
-            Gleap.initialize(BuildConfig.GLEAP_KEY, this)
+            //   Gleap.initialize(BuildConfig.GLEAP_KEY, this)
         }
     }
+
+    private fun createNotificationChannels() {
+        NotificationHelper.createNotificationChannel(
+            this,
+            NotificationType.REQUESTS.notifyName,
+            "Notification channel for requests."
+        )
+        NotificationHelper.createNotificationChannel(
+            this,
+            NotificationType.ALERTS.notifyName,
+            "Notification channel for alerts"
+        )
+    }
+
 
     companion object {
         lateinit var instance: CivilcamApplication
