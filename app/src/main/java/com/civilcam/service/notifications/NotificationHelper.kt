@@ -21,9 +21,10 @@ import timber.log.Timber
 
 
 class NotificationHelper : KoinComponent {
-    private val maxProgress = 5
-    private var mProgressStatus = 0
+
     fun showRequestNotification(context: Context) {
+        val maxProgress = 5
+        var mProgressStatus = 0
         showProgress = true
         val channelId = "${context.packageName}-${NotificationType.REQUESTS.notifyName}"
         val notificationTitle = "You received a request"
@@ -61,7 +62,7 @@ class NotificationHelper : KoinComponent {
             setCustomBigContentView(notificationLayoutExpanded)
             contentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
             bigContentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
-
+            setProgress(maxProgress, 0, false)
             setSmallIcon(R.mipmap.ic_launcher)
             setLargeIcon(
                 BitmapFactory.decodeResource(
@@ -102,8 +103,7 @@ class NotificationHelper : KoinComponent {
         NotificationManagerCompat.from(context).apply {
             while (mProgressStatus <= maxProgress && showProgress) {
                 Timber.i("mProgressStatus $mProgressStatus")
-                notificationBuilder.contentView.setProgressBar(
-                    R.id.progressBar,
+                notificationBuilder.setProgress(
                     maxProgress,
                     mProgressStatus,
                     false
@@ -114,6 +114,14 @@ class NotificationHelper : KoinComponent {
                     mProgressStatus,
                     false
                 )
+
+                notificationBuilder.contentView.setProgressBar(
+                    R.id.progressBar,
+                    maxProgress,
+                    mProgressStatus,
+                    false
+                )
+
                 notify(NOTIFICATION_REQUESTS_ID, notificationBuilder.build())
                 Thread.sleep(1000)
                 mProgressStatus++
