@@ -7,9 +7,11 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.SubscriptionPlan
 import com.civilcam.ui.profile.userProfile.content.ProfileRow
@@ -17,8 +19,6 @@ import com.civilcam.ui.profile.userProfile.content.ProfileRow
 @Composable
 fun SubscriptionSettingsContent(
 	subscriptionPlan: SubscriptionPlan,
-	manageValue: String,
-	restoreValue: String,
 	onManageClicked: () -> Unit,
 	onRestoreClicked: () -> Unit,
 	onSubscriptionPlanClick: () -> Unit
@@ -42,17 +42,17 @@ fun SubscriptionSettingsContent(
 		Divider(color = CCTheme.colors.grayThree)
 		
 		ProfileRow(
-			title = manageValue,
+			title = stringResource(id = R.string.manage_subscription_plan),
 			needDivider = true,
-			rowClick = { onManageClicked.invoke() }
+			rowClick = onManageClicked
 		)
 		
 		ProfileRow(
-			title = restoreValue,
+			title = stringResource(id = R.string.restore_purchase),
 			titleColor = CCTheme.colors.primaryRed,
 			needDivider = false,
 			needRow = false,
-			rowClick = { onRestoreClicked.invoke() }
+			rowClick = onRestoreClicked
 		)
 		Divider(color = CCTheme.colors.grayThree)
 		
