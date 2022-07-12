@@ -64,8 +64,20 @@
                 android:resource="@xml/authenticator" />
         </service>
 
-        <receiver android:name=".service.NotificationButtonListener" />
+        <receiver
+            android:name=".service.NotificationCloseButtonListener"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" />
 
+        <receiver
+            android:name=".service.NotificationDenyButtonListener"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" />
+
+        <receiver
+            android:name=".service.NotificationAcceptButtonListener"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" />
 
     </application>
 

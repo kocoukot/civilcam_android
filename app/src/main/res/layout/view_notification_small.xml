@@ -8,8 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_rounded"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -66,14 +66,14 @@
                 tools:text="dfsdf dfsdf dfsdf asdf dfsdf dfsdf dfsdf asdf dfsdf dfsdf dfsdf asdf" />
 
             <ImageView
-                android:id="@+id/button_deny"
+                android:id="@+id/button_notification_deny"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dim_8"
                 android:src="@drawable/ic_notification_deny" />
 
             <ImageView
-                android:id="@+id/button_accept"
+                android:id="@+id/button_notification_accept"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dim_10"

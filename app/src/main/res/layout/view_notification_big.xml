@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_rounded"
+        android:backgroundTint="@color/quantum_bluegrey50"
         android:orientation="vertical">
 
         <LinearLayout
@@ -66,14 +67,14 @@
                 tools:text="dfsdf dfsdf dfsdf asdf dfsdf dfsdf dfsdf asdf dfsdf dfsdf dfsdf asdf" />
 
             <ImageView
-                android:id="@+id/button_deny"
+                android:id="@+id/button_notification_deny"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dim_8"
                 android:src="@drawable/ic_notification_deny" />
 
             <ImageView
-                android:id="@+id/button_accept"
+                android:id="@+id/button_notification_accept"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dim_10"

@@ -13,7 +13,9 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.civilcam.R
 import com.civilcam.domain.model.settings.NotificationType
-import com.civilcam.service.NotificationButtonListener
+import com.civilcam.service.NotificationAcceptButtonListener
+import com.civilcam.service.NotificationCloseButtonListener
+import com.civilcam.service.NotificationDenyButtonListener
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
@@ -21,33 +23,37 @@ import timber.log.Timber
 class NotificationHelper : KoinComponent {
     private val maxProgress = 5
     private var mProgressStatus = 0
-
     fun showRequestNotification(context: Context) {
-
+        showProgress = true
         val channelId = "${context.packageName}-${NotificationType.REQUESTS.notifyName}"
         val notificationTitle = "You received a request"
 
         val notificationText = "Alleria Windrunner needs you as a guardian"
 
         val notificationLayout = RemoteViews(context.packageName, R.layout.view_notification_small)
-
         notificationLayout.setTextViewText(R.id.notification_title, notificationTitle)
         notificationLayout.setTextViewText(R.id.notification_content, notificationText)
 
-
         val notificationLayoutExpanded =
             RemoteViews(context.packageName, R.layout.view_notification_big)
+
         notificationLayoutExpanded.setTextViewText(R.id.notification_title, notificationTitle)
         notificationLayoutExpanded.setTextViewText(R.id.notification_content, notificationText)
 
-
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
 
-        val broadcastIntent = Intent(context, NotificationButtonListener::class.java).apply {
-            putExtra("action_msg", "some message for toast")
-        }
-        val broadcastPendingIntent =
-            PendingIntent.getBroadcast(context, 0, broadcastIntent, 0)
+        val broadcastIntentClose = Intent(context, NotificationCloseButtonListener::class.java)
+        val broadcastIntentAccept = Intent(context, NotificationAcceptButtonListener::class.java)
+        val broadcastIntentDeny = Intent(context, NotificationDenyButtonListener::class.java)
+
+        val broadcastPendingIntentClose =
+            PendingIntent.getBroadcast(context, 0, broadcastIntentClose, 0)
+        val broadcastPendingIntentDeny =
+            PendingIntent.getBroadcast(context, 0, broadcastIntentDeny, 0)
+        val broadcastPendingIntentAccept =
+            PendingIntent.getBroadcast(context, 0, broadcastIntentAccept, 0)
+
+
 
         notificationBuilder.apply {
             setOnlyAlertOnce(true)
@@ -63,26 +69,38 @@ class NotificationHelper : KoinComponent {
                     R.mipmap.ic_launcher
                 )
             )
-//            addAction(
-//                R.drawable.ic_notification_close,
-//                "Broadcast Action",
-//                broadcastPendingIntent
-//            )
-
-
             setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            setOngoing(false)
+
             setAutoCancel(true)
             setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
             priority = NotificationCompat.PRIORITY_HIGH
 
-//            notificationLayout.setOnClickPendingIntent(
-//                R.id.button_close_notification,
-//                broadcastPendingIntent
-//            )
+
+            notificationBuilder.contentView.apply {
+                setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
+
+                setOnClickPendingIntent(R.id.button_notification_deny, broadcastPendingIntentDeny)
+
+                setOnClickPendingIntent(
+                    R.id.button_notification_accept,
+                    broadcastPendingIntentAccept
+                )
+            }
+
+
+            notificationBuilder.bigContentView.apply {
+                setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
+                setOnClickPendingIntent(R.id.button_notification_deny, broadcastPendingIntentDeny)
+                setOnClickPendingIntent(
+                    R.id.button_notification_accept,
+                    broadcastPendingIntentAccept
+                )
+            }
         }
 
         NotificationManagerCompat.from(context).apply {
-            while (mProgressStatus <= maxProgress) {
+            while (mProgressStatus <= maxProgress && showProgress) {
                 Timber.i("mProgressStatus $mProgressStatus")
                 notificationBuilder.contentView.setProgressBar(
                     R.id.progressBar,
@@ -100,8 +118,7 @@ class NotificationHelper : KoinComponent {
                 Thread.sleep(1000)
                 mProgressStatus++
             }
-//            (context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancelAll()
-//        notificationManager.notify(NOTIFICATION_REQUESTS_ID, notificationBuilder.build())
+
         }
     }
 
@@ -109,6 +126,11 @@ class NotificationHelper : KoinComponent {
     companion object {
         const val NOTIFICATION_REQUESTS_ID = 1002
         const val NOTIFICATION_ALARM_ID = 1003
+        private var showProgress = true
+
+        fun cancelProgress() {
+            showProgress = false
+        }
 
         fun createNotificationChannel(
             context: Context,
