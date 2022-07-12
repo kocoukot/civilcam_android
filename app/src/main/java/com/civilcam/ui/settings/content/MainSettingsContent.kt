@@ -4,13 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.settings.model.SettingsType
 
@@ -75,18 +78,23 @@ fun SettingsRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp)
+                .padding(horizontal = 16.dp)
                 .weight(1f),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
             Text(
+                modifier = Modifier.weight(1f),
                 text = title,
                 color = titleColor,
                 style = CCTheme.typography.common_medium_text_regular
             )
-            Spacer(modifier = Modifier.weight(1f))
-//                    Icon(painter = painterResource(id = R), contentDescription = )
+
+            Icon(
+                painter = painterResource(id = R.drawable.ic_row_arrow),
+                contentDescription = null,
+                tint = CCTheme.colors.grayOne
+            )
         }
         if (needDivider) Divider(
             color = CCTheme.colors.grayThree,
