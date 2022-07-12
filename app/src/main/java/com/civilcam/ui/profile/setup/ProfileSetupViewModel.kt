@@ -55,7 +55,9 @@ class ProfileSetupViewModel(
     }
 
     private fun goNext() {
-        _steps.value = _state.value.data?.phoneNumber?.let { ProfileSetupRoute.GoVerification(it) }
+        _state.value.data?.let {
+            _steps.value = ProfileSetupRoute.GoVerification(it.phoneNumber)
+        }
     }
 
     private fun openDatePicker() {
@@ -69,8 +71,7 @@ class ProfileSetupViewModel(
     private fun getDateFromCalendar(birthDate: Long) {
         val data = getSetupUser()
         data.dateBirth = birthDate
-        _state.value = _state.value.copy(data = data)
-        _state.value = _state.value.copy(birthDate = birthDate)
+        _state.value = _state.value.copy(data = data, birthDate = birthDate)
         closeDatePicker()
     }
 
