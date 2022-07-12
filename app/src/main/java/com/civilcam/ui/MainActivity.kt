@@ -68,6 +68,11 @@ class MainActivity : AppCompatActivity() {
         super.onNewIntent(intent)
     }
 
+
+    fun hideNotificationBtn() {
+        binding.showNotification.isVisible = false
+    }
+
     override fun onResume() {
         super.onResume()
         binding.showNotification.apply {
@@ -82,7 +87,7 @@ class MainActivity : AppCompatActivity() {
             setOnLongClickListener {
                 lifecycleScope.launch {
                     withContext(Dispatchers.IO) {
-//                        NotificationHelper().showRequestNotification(this@MainActivity)
+                        NotificationHelper().showAlertNotification(this@MainActivity)
                     }
                 }
                 true

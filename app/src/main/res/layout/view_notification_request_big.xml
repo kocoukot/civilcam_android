@@ -2,14 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/transparent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/dim_0">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:ignore="UselessParent">
+        android:background="@drawable/bg_rounded"
+        android:backgroundTint="@color/quantum_bluegrey50"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,7 +21,7 @@
             <TextView
                 android:id="@+id/notification_title"
                 style="@style/TextAppearance.Compat.Notification.Title"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ellipsize="end"
@@ -48,11 +49,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/dim_16">
 
             <TextView
                 android:id="@+id/notification_content"
+
                 style="@style/TextAppearance.Compat.Notification.Info"
+
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dim_8"
@@ -60,13 +64,13 @@
                 android:ellipsize="end"
                 android:fadingEdge="horizontal"
                 android:letterSpacing="-0.02"
+                android:lineSpacingExtra="@dimen/dim_6"
                 android:maxLines="2"
                 android:paddingHorizontal="@dimen/dim_12"
-                android:paddingBottom="@dimen/dim_8"
                 android:singleLine="false"
                 android:textColor="@color/grayText"
                 android:textSize="@dimen/text_dim15"
-                tools:text="Alleria Windrunner needs Alleria Windrunner needs  you as a guardian" />
+                tools:text="Alleria Windrunner needs you as a guardian" />
 
             <ImageView
                 android:id="@+id/button_notification_deny"
@@ -89,7 +93,6 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="4dp"
-            android:layout_marginTop="@dimen/dim_16"
             android:background="@drawable/bg_progress_rounded"
             android:max="10"
             android:progress="4"

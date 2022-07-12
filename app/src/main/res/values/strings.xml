@@ -232,5 +232,6 @@
 
     <string name="notification_alert_title">Emergency alert</string>
     <string name="notification_alert_text">is in emergency and needs your help!</string>
+    <string name="notification_alert_details">Details</string>
 
 </resources>

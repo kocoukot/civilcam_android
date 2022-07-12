@@ -17,9 +17,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.civilcam.R
 import com.civilcam.domain.model.settings.NotificationType
-import com.civilcam.service.NotificationAcceptButtonListener
-import com.civilcam.service.NotificationCloseButtonListener
-import com.civilcam.service.NotificationDenyButtonListener
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
@@ -30,29 +27,32 @@ class NotificationHelper : KoinComponent {
         val name = "Alleria Windrunner"
         val maxProgress = 5
         var mProgressStatus = 0
-        showProgress = true
+        showRequestProgress = true
         val channelId = "${context.packageName}-${NotificationType.REQUESTS.notifyName}"
         val notificationTitle = context.getString(R.string.notification_request_title)
         val notificationText = openHoursText(
-            name = name,
-            text = context.getString(R.string.notification_request_text),
+            userName = name,
+            msgText = context.getString(R.string.notification_request_text),
             context = context,
         )
 
-
-        val notificationLayout = RemoteViews(context.packageName, R.layout.view_notification_small)
+        val notificationLayout =
+            RemoteViews(context.packageName, R.layout.view_notification_request_small)
         notificationLayout.setTextViewText(R.id.notification_title, notificationTitle)
         notificationLayout.setTextViewText(R.id.notification_content, notificationText)
 
         val notificationLayoutExpanded =
-            RemoteViews(context.packageName, R.layout.view_notification_big)
+            RemoteViews(context.packageName, R.layout.view_notification_request_small)
 
         notificationLayoutExpanded.setTextViewText(R.id.notification_title, notificationTitle)
         notificationLayoutExpanded.setTextViewText(R.id.notification_content, notificationText)
 
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
 
-        val broadcastIntentClose = Intent(context, NotificationCloseButtonListener::class.java)
+        val broadcastIntentClose =
+            Intent(context, NotificationRequestCloseButtonListener::class.java).apply {
+                putExtra("alert_type", "request")
+            }
         val broadcastIntentAccept = Intent(context, NotificationAcceptButtonListener::class.java)
         val broadcastIntentDeny = Intent(context, NotificationDenyButtonListener::class.java)
 
@@ -110,7 +110,7 @@ class NotificationHelper : KoinComponent {
         }
 
         NotificationManagerCompat.from(context).apply {
-            while (mProgressStatus <= maxProgress && showProgress) {
+            while (mProgressStatus <= maxProgress && showRequestProgress) {
                 Timber.i("mProgressStatus $mProgressStatus")
                 notificationBuilder.setProgress(
                     maxProgress,
@@ -135,16 +135,127 @@ class NotificationHelper : KoinComponent {
                 Thread.sleep(1000)
                 mProgressStatus++
             }
-
         }
     }
 
+
+    fun showAlertNotification(context: Context) {
+        val name = "Alleria Windrunner"
+        val maxProgress = 5
+        var mProgressStatus = 0
+        showAlertProgress = true
+        val channelId = "${context.packageName}-${NotificationType.ALERTS.notifyName}"
+        val notificationTitle = context.getString(R.string.notification_alert_title)
+        val notificationText = openHoursText(
+            userName = name,
+            msgText = context.getString(R.string.notification_alert_text),
+            context = context,
+        )
+
+        val notificationLayout =
+            RemoteViews(context.packageName, R.layout.view_notification_alert_small)
+        notificationLayout.setTextViewText(R.id.notification_title, notificationTitle)
+        notificationLayout.setTextViewText(R.id.notification_content, notificationText)
+
+        val notificationLayoutExpanded =
+            RemoteViews(context.packageName, R.layout.view_notification_alert_small)
+
+        notificationLayoutExpanded.setTextViewText(R.id.notification_title, notificationTitle)
+        notificationLayoutExpanded.setTextViewText(R.id.notification_content, notificationText)
+
+        val notificationBuilder = NotificationCompat.Builder(context, channelId)
+
+        val broadcastIntentClose =
+            Intent(context, NotificationAlertCloseButtonListener::class.java).apply {
+                putExtra("alert_type", "alert")
+            }
+        val broadcastIntentDetail = Intent(context, NotificationDetailButtonListener::class.java)
+
+        val broadcastPendingIntentClose =
+            PendingIntent.getBroadcast(context, 0, broadcastIntentClose, 0)
+        val broadcastPendingIntentDetail =
+            PendingIntent.getBroadcast(context, 0, broadcastIntentDetail, 0)
+
+
+
+
+        notificationBuilder.apply {
+            setOnlyAlertOnce(true)
+            setCustomContentView(notificationLayout)
+            setCustomBigContentView(notificationLayoutExpanded)
+            contentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
+            bigContentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
+            setProgress(maxProgress, 0, false)
+            setSmallIcon(R.mipmap.ic_launcher)
+            setLargeIcon(
+                BitmapFactory.decodeResource(
+                    context.resources,
+                    R.mipmap.ic_launcher
+                )
+            )
+            setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            setOngoing(false)
+
+            setAutoCancel(true)
+            setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
+            priority = NotificationCompat.PRIORITY_HIGH
+
+
+            notificationBuilder.contentView.apply {
+                setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
+
+                setOnClickPendingIntent(
+                    R.id.button_notification_detail,
+                    broadcastPendingIntentDetail
+                )
+            }
+
+
+            notificationBuilder.bigContentView.apply {
+                setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
+                setOnClickPendingIntent(
+                    R.id.button_notification_detail,
+                    broadcastPendingIntentDetail
+                )
+            }
+        }
+
+        NotificationManagerCompat.from(context).apply {
+            while (mProgressStatus <= maxProgress && showAlertProgress) {
+                Timber.i("mProgressStatus $mProgressStatus")
+                notificationBuilder.setProgress(
+                    maxProgress,
+                    mProgressStatus,
+                    false
+                )
+                notificationBuilder.bigContentView.setProgressBar(
+                    R.id.progressBar,
+                    maxProgress,
+                    mProgressStatus,
+                    false
+                )
+
+                notificationBuilder.contentView.setProgressBar(
+                    R.id.progressBar,
+                    maxProgress,
+                    mProgressStatus,
+                    false
+                )
+
+                notify(NOTIFICATION_ALERT_ID, notificationBuilder.build())
+                Thread.sleep(1000)
+                mProgressStatus++
+            }
+        }
+    }
+
+
     private fun openHoursText(
-        name: String,
-        text: String,
+        userName: String,
+        msgText: String,
         context: Context
     ): SpannableStringBuilder {
-        val wholeText = "$name $text"
+        val wholeText = "$userName $msgText"
         return SpannableStringBuilder(wholeText).apply {
             setSpan(
                 ForegroundColorSpan(
@@ -154,7 +265,7 @@ class NotificationHelper : KoinComponent {
                     )
                 ),
                 0,
-                name.length,
+                userName.length,
                 Spannable.SPAN_INCLUSIVE_EXCLUSIVE
             )
             setSpan(
@@ -164,7 +275,7 @@ class NotificationHelper : KoinComponent {
                         R.color.grayText
                     )
                 ),
-                name.length + 1,
+                userName.length + 1,
                 wholeText.length,
                 Spannable.SPAN_INCLUSIVE_EXCLUSIVE
             )
@@ -173,11 +284,16 @@ class NotificationHelper : KoinComponent {
 
     companion object {
         const val NOTIFICATION_REQUESTS_ID = 1002
-        const val NOTIFICATION_ALARM_ID = 1003
-        private var showProgress = true
+        const val NOTIFICATION_ALERT_ID = 1003
+        private var showRequestProgress = true
+        private var showAlertProgress = true
 
-        fun cancelProgress() {
-            showProgress = false
+        fun cancelRequestProgress() {
+            showRequestProgress = false
+        }
+
+        fun cancelAlertProgress() {
+            showAlertProgress = false
         }
 
         fun createNotificationChannel(

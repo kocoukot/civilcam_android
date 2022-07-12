@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.common.ext.hideSystemUI
 import com.civilcam.common.ext.showSystemUI
+import com.civilcam.ui.MainActivity
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.onboarding.model.OnboardingRoute
@@ -49,6 +50,7 @@ class OnBoardingFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        (activity as MainActivity).hideNotificationBtn()
         hideSystemUI()
     }
 

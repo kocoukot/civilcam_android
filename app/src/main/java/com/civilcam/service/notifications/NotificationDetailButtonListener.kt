@@ -1,20 +1,19 @@
-package com.civilcam.service
+package com.civilcam.service.notifications
 
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import com.civilcam.service.notifications.NotificationHelper
-import com.civilcam.service.notifications.NotificationHelper.Companion.NOTIFICATION_REQUESTS_ID
+import com.civilcam.service.notifications.NotificationHelper.Companion.NOTIFICATION_ALERT_ID
 import timber.log.Timber
 
-class NotificationCloseButtonListener : BroadcastReceiver() {
+class NotificationDetailButtonListener : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         Timber.i("onNewIntent notify close")
-        NotificationHelper.cancelProgress()
+        NotificationHelper.cancelAlertProgress()
         (context?.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
-            NOTIFICATION_REQUESTS_ID
+            NOTIFICATION_ALERT_ID
         )
     }
 }

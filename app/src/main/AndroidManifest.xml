@@ -8,10 +8,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".CivilcamApplication"
@@ -65,17 +65,27 @@
         </service>
 
         <receiver
-            android:name=".service.NotificationCloseButtonListener"
+            android:name=".service.notifications.NotificationRequestCloseButtonListener"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" />
 
         <receiver
-            android:name=".service.NotificationDenyButtonListener"
+            android:name=".service.notifications.NotificationDenyButtonListener"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" />
 
         <receiver
-            android:name=".service.NotificationAcceptButtonListener"
+            android:name=".service.notifications.NotificationAcceptButtonListener"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" />
+
+        <receiver
+            android:name=".service.notifications.NotificationDetailButtonListener"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" />
+
+        <receiver
+            android:name=".service.notifications.NotificationAlertCloseButtonListener"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" />
 
