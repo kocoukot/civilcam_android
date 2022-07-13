@@ -87,7 +87,7 @@ fun EmergencyTopBarContent(
 			CardButton(
 				painter = painterResource(id = R.drawable.ic_settings),
 				onCardClicked = {
-					
+					onSettingsClicked.invoke()
 				}
 			)
 		}
@@ -95,6 +95,15 @@ fun EmergencyTopBarContent(
 		AnimatedVisibility(visible = screen == EmergencyScreen.COUPLED) {
 			CardButton(
 				painter = painterResource(id = R.drawable.ic_map_extend),
+				onCardClicked = {
+				
+				}
+			)
+		}
+		
+		AnimatedVisibility(visible = screen == EmergencyScreen.MAP_EXTENDED) {
+			CardButton(
+				painter = painterResource(id = R.drawable.ic_map_minimize),
 				onCardClicked = {
 				
 				}

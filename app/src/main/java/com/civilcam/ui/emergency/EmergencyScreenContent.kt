@@ -1,18 +1,26 @@
 package com.civilcam.ui.emergency
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.emergency.content.EmergencyButtonContent
+import com.civilcam.ui.emergency.content.EmergencyLiveContent
 import com.civilcam.ui.emergency.content.EmergencyTopBarContent
+import com.civilcam.ui.emergency.content.LiveBottomBar
 import com.civilcam.ui.emergency.model.EmergencyActions
+import com.civilcam.ui.emergency.model.EmergencyScreen
 import com.google.android.gms.maps.model.LatLng
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 	
@@ -25,45 +33,67 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 	Scaffold(
 		backgroundColor = CCTheme.colors.grayThree,
 		modifier = Modifier.fillMaxSize(),
-		topBar = {
-			EmergencyTopBarContent(
-				onAvatarClicked = { viewModel.setInputActions(EmergencyActions.GoUserProfile) },
-				onSettingsClicked = { viewModel.setInputActions(EmergencyActions.GoSettings) },
-				locationData = state.value.location,
-				screen = state.value.emergencyScreen
-			)
-		}
+		topBar = {}
 	) {
 		Box(
 			modifier = Modifier
 				.fillMaxSize()
 		) {
 			Column {
-//            GoogleMap(
-//                modifier = Modifier.fillMaxSize(),
-//                cameraPositionState = cameraPositionState
-//            ) {
-////            Marker(
-////                state = MarkerState(position = singapore),
-////                title = "Singapore",
-////                snippet = "Marker in Singapore"
-////            )
-//            }
+				Column(
+					Modifier
+						.fillMaxSize()
+						.weight(1f)
+						.background(color = Color.Green)
+				) {
+					EmergencyLiveContent(
+						modifier = Modifier,
+						screen = state.value.emergencyScreen
+					)
+				}
+				Column(
+					Modifier
+						.fillMaxSize()
+						.weight(1f)
+				) {
+					EmergencyTopBarContent(
+						onAvatarClicked = { viewModel.setInputActions(EmergencyActions.GoUserProfile) },
+						onSettingsClicked = { viewModel.setInputActions(EmergencyActions.GoSettings) },
+						locationData = state.value.location,
+						screen = state.value.emergencyScreen
+					)
+					/*GoogleMap(
+						modifier = Modifier.fillMaxSize(),
+						cameraPositionState = cameraPositionState
+					) {
+						Marker(
+							state = MarkerState(position = singapore),
+							title = "Singapore",
+							snippet = "Marker in Singapore"
+						)
+					}*/
+				}
 			}
 			
-			EmergencyButtonContent(
-				emergencyButton = state.value.emergencyButton,
-				modifier = Modifier
-					.align(Alignment.BottomCenter)
-					.size(150.dp)
-					.offset(y = (-32).dp),
-				oneClick = {
-					viewModel.setInputActions(EmergencyActions.OneClickSafe)
-				},
-				doubleClick = {
-					viewModel.setInputActions(EmergencyActions.DoubleClickSos)
-				},
-			)
+			AnimatedContent(
+				targetState = state.value.emergencyScreen == EmergencyScreen.NORMAL ||
+						state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED
+			) {
+				EmergencyButtonContent(
+					emergencyButton = state.value.emergencyButton,
+					modifier = Modifier
+						.align(Alignment.BottomCenter)
+						.size(150.dp)
+						.offset(y = (-32).dp),
+					oneClick = {
+						viewModel.setInputActions(EmergencyActions.OneClickSafe)
+					},
+					doubleClick = {
+						viewModel.setInputActions(EmergencyActions.DoubleClickSos)
+					},
+				)
+			}
+			
 		}
 	}
 	
