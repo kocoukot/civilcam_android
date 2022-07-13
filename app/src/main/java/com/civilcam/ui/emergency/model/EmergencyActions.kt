@@ -7,4 +7,5 @@ sealed class EmergencyActions : ComposeFragmentActions {
     object OneClickSafe : EmergencyActions()
     object GoUserProfile : EmergencyActions()
     object GoSettings : EmergencyActions()
+    object GoBack : EmergencyActions()
 }

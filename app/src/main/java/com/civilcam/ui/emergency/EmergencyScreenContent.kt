@@ -1,6 +1,7 @@
 package com.civilcam.ui.emergency
 
-import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -10,12 +11,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.common.compose.BackButton
+import com.civilcam.ui.common.compose.DividerLightGray
+import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.emergency.content.EmergencyButtonContent
 import com.civilcam.ui.emergency.content.EmergencyLiveContent
 import com.civilcam.ui.emergency.content.EmergencyTopBarContent
-import com.civilcam.ui.emergency.content.LiveBottomBar
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyScreen
 import com.google.android.gms.maps.model.LatLng
@@ -33,50 +38,90 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 	Scaffold(
 		backgroundColor = CCTheme.colors.grayThree,
 		modifier = Modifier.fillMaxSize(),
-		topBar = {}
+		topBar = {
+			Crossfade(targetState = state.value.emergencyScreen) { state ->
+				AnimatedVisibility(
+					visible = state == EmergencyScreen.MAP_EXTENDED ||
+							state == EmergencyScreen.LIVE_EXTENDED
+				) {
+					Column(
+						Modifier.padding(top = 24.dp)
+					) {
+						TopAppBarContent(
+							title = if (state == EmergencyScreen.MAP_EXTENDED) stringResource(id = R.string.emergency_map_title)
+							else stringResource(id = R.string.emergency_live_stream_title),
+							navigationItem = {
+								BackButton {
+									viewModel.setInputActions(EmergencyActions.GoBack)
+								}
+							},
+						)
+						DividerLightGray()
+					}
+				}
+			}
+		}
 	) {
 		Box(
 			modifier = Modifier
 				.fillMaxSize()
 		) {
 			Column {
-				Column(
-					Modifier
-						.fillMaxSize()
-						.weight(1f)
-						.background(color = Color.Green)
+				AnimatedVisibility(
+					visible = state.value.emergencyScreen == EmergencyScreen.COUPLED ||
+							state.value.emergencyScreen == EmergencyScreen.LIVE_EXTENDED
 				) {
-					EmergencyLiveContent(
-						modifier = Modifier,
-						screen = state.value.emergencyScreen
-					)
-				}
-				Column(
-					Modifier
-						.fillMaxSize()
-						.weight(1f)
-				) {
-					EmergencyTopBarContent(
-						onAvatarClicked = { viewModel.setInputActions(EmergencyActions.GoUserProfile) },
-						onSettingsClicked = { viewModel.setInputActions(EmergencyActions.GoSettings) },
-						locationData = state.value.location,
-						screen = state.value.emergencyScreen
-					)
-					/*GoogleMap(
-						modifier = Modifier.fillMaxSize(),
-						cameraPositionState = cameraPositionState
+					Column(
+						Modifier
+							.fillMaxSize()
+							.weight(1f)
+							.background(color = Color.Black)
 					) {
-						Marker(
-							state = MarkerState(position = singapore),
-							title = "Singapore",
-							snippet = "Marker in Singapore"
+						EmergencyLiveContent(
+							modifier = Modifier,
+							screen = state.value.emergencyScreen
 						)
-					}*/
+					}
+				}
+				
+				AnimatedVisibility(
+					visible = state.value.emergencyScreen == EmergencyScreen.NORMAL ||
+							state.value.emergencyScreen == EmergencyScreen.COUPLED ||
+							state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED
+				) {
+					Column(
+						Modifier
+							.fillMaxSize()
+							.weight(1f)
+							.background(color = Color.Green)
+					) {
+						
+						AnimatedVisibility(visible = state.value.emergencyScreen == EmergencyScreen.NORMAL) {
+							Spacer(modifier = Modifier.height(40.dp))
+						}
+						
+						EmergencyTopBarContent(
+							onAvatarClicked = { viewModel.setInputActions(EmergencyActions.GoUserProfile) },
+							onSettingsClicked = { viewModel.setInputActions(EmergencyActions.GoSettings) },
+							locationData = state.value.location,
+							screen = state.value.emergencyScreen
+						)
+						/*GoogleMap(
+							modifier = Modifier.fillMaxSize(),
+							cameraPositionState = cameraPositionState
+						) {
+							Marker(
+								state = MarkerState(position = singapore),
+								title = "Singapore",
+								snippet = "Marker in Singapore"
+							)
+						}*/
+					}
 				}
 			}
 			
-			AnimatedContent(
-				targetState = state.value.emergencyScreen == EmergencyScreen.NORMAL ||
+			AnimatedVisibility(
+				visible = state.value.emergencyScreen == EmergencyScreen.NORMAL ||
 						state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED
 			) {
 				EmergencyButtonContent(
@@ -96,6 +141,5 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 			
 		}
 	}
-	
 }
  

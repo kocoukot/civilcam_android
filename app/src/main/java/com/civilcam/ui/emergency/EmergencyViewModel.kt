@@ -1,10 +1,7 @@
 package com.civilcam.ui.emergency
 
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.ui.emergency.model.EmergencyActions
-import com.civilcam.ui.emergency.model.EmergencyButton
-import com.civilcam.ui.emergency.model.EmergencyRoute
-import com.civilcam.ui.emergency.model.EmergencyState
+import com.civilcam.ui.emergency.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
@@ -17,7 +14,12 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
             EmergencyActions.GoUserProfile -> goUserProfile()
             EmergencyActions.GoSettings -> goSettings()
             EmergencyActions.OneClickSafe -> oneClickSafe()
+            EmergencyActions.GoBack -> goBack()
         }
+    }
+    
+    private fun goBack() {
+        _state.value = _state.value.copy(emergencyScreen = EmergencyScreen.COUPLED)
     }
     
     private fun goSettings() {

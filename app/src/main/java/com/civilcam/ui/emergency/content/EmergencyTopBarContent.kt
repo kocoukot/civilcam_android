@@ -2,6 +2,7 @@ package com.civilcam.ui.emergency.content
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -31,7 +33,7 @@ fun EmergencyTopBarContent(
 	Row(
 		modifier = Modifier
 			.fillMaxWidth()
-			.padding(top = 40.dp, start = 16.dp, end = 16.dp),
+			.padding(horizontal = 16.dp),
 		horizontalArrangement = Arrangement.SpaceBetween,
 		verticalAlignment = Alignment.CenterVertically
 	) {
@@ -55,6 +57,8 @@ fun EmergencyTopBarContent(
 			)
 		}
 		
+		Spacer(modifier = Modifier.weight(1f))
+		
 		Card(
 			onClick = {},
 			shape = RoundedCornerShape(
@@ -62,8 +66,8 @@ fun EmergencyTopBarContent(
 			),
 			backgroundColor = CCTheme.colors.white,
 			modifier = Modifier
-				.wrapContentWidth()
-				.navigationBarsPadding()
+				.wrapContentSize()
+				.padding(all = 0.dp)
 		) {
 			Row(
 				verticalAlignment = Alignment.CenterVertically
@@ -82,6 +86,8 @@ fun EmergencyTopBarContent(
 				)
 			}
 		}
+		
+		Spacer(modifier = Modifier.weight(1f))
 		
 		AnimatedVisibility(visible = screen == EmergencyScreen.NORMAL) {
 			CardButton(
@@ -127,8 +133,7 @@ fun CardButton(
 		),
 		backgroundColor = CCTheme.colors.white,
 		modifier = Modifier
-			.wrapContentWidth()
-			.navigationBarsPadding()
+			.wrapContentSize()
 	) {
 		Image(
 			painter = painter,
