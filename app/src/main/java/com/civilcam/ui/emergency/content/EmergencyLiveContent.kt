@@ -7,13 +7,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -21,6 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.emergency.model.EmergencyScreen
@@ -31,25 +31,23 @@ fun EmergencyLiveContent(
 	onExtendClicked: () -> Unit,
 	onMinimizeClicked: () -> Unit
 ) {
-	Column(
-		Modifier.fillMaxSize()
-	) {
-		//need to add camera screen
+	
+	BoxWithConstraints() {
+		Box {
+			EmergencyCameraPreview()
+		}
 		
-//		EmergencyCameraPreview(
-//			screen = screen,
-//			onExtendClicked = onExtendClicked,
-//			onMinimizeClicked = onMinimizeClicked
-//		)
-		
-		Spacer(modifier = Modifier.weight(1f))
-		
-		LiveBottomBar(
-			data = "02.02.2022 3:29:56 AM",
-			screen = screen,
-			onExtendClicked = { onExtendClicked.invoke() },
-			onMinimizeClicked = { onMinimizeClicked.invoke() }
-		)
+		Box {
+			Column {
+				Spacer(modifier = Modifier.weight(1f))
+				LiveBottomBar(
+					data = "02.02.2022 3:29:56 AM",
+					screen = screen,
+					onExtendClicked = { onExtendClicked.invoke() },
+					onMinimizeClicked = { onMinimizeClicked.invoke() }
+				)
+			}
+		}
 	}
 }
 

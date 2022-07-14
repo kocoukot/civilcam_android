@@ -12,14 +12,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.civilcam.ui.emergency.model.EmergencyScreen
 
 @Composable
-fun EmergencyCameraPreview(
-	screen: EmergencyScreen,
-	onExtendClicked: () -> Unit,
-	onMinimizeClicked: () -> Unit
-) {
+fun EmergencyCameraPreview() {
 	val lifecycleOwner = LocalLifecycleOwner.current
 	val context = LocalContext.current
 	val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
@@ -48,12 +43,5 @@ fun EmergencyCameraPreview(
 			previewView
 		},
 		modifier = Modifier.fillMaxSize(),
-	)
-	
-	LiveBottomBar(
-		data = "02.02.2022 3:29:56 AM",
-		screen = screen,
-		onExtendClicked = { onExtendClicked.invoke() },
-		onMinimizeClicked = { onMinimizeClicked.invoke() }
 	)
 }
