@@ -9,5 +9,7 @@ sealed class EmergencyActions : ComposeFragmentActions {
     object GoSettings : EmergencyActions()
     object GoBack : EmergencyActions()
     object DetectLocation : EmergencyActions()
+    object ControlFlash : EmergencyActions()
+    object ChangeCamera : EmergencyActions()
     data class ChangeMode(val mode: EmergencyScreen) : EmergencyActions()
 }

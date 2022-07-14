@@ -4,6 +4,7 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -14,7 +15,26 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 
 @Composable
-fun EmergencyCameraPreview() {
+fun EmergencyCameraPreview(
+	cameraState: Int
+) {
+	Crossfade(targetState = cameraState) { state ->
+		if (state == CameraSelector.LENS_FACING_BACK) {
+			CreateCameraPreview(
+				cameraState = cameraState
+			)
+		} else {
+			CreateCameraPreview(
+				cameraState = cameraState
+			)
+		}
+	}
+}
+
+@Composable
+fun CreateCameraPreview(
+	cameraState: Int
+) {
 	val lifecycleOwner = LocalLifecycleOwner.current
 	val context = LocalContext.current
 	val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
@@ -30,7 +50,7 @@ fun EmergencyCameraPreview() {
 				}
 				
 				val cameraSelector = CameraSelector.Builder()
-					.requireLensFacing(CameraSelector.LENS_FACING_BACK)
+					.requireLensFacing(cameraState)
 					.build()
 				
 				cameraProvider.unbindAll()

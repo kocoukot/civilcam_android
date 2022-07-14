@@ -84,6 +84,7 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 						
 						EmergencyLiveContent(
 							screen = state.value.emergencyScreen,
+							cameraState = state.value.cameraState,
 							onExtendClicked = {
 								viewModel.setInputActions(
 									EmergencyActions.ChangeMode(
@@ -97,6 +98,12 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 										EmergencyScreen.COUPLED
 									)
 								)
+							},
+							onCameraChangeClicked = {
+								viewModel.setInputActions(EmergencyActions.ChangeCamera)
+							},
+							onFlashClicked = {
+								viewModel.setInputActions(EmergencyActions.ControlFlash)
 							}
 						)
 					}

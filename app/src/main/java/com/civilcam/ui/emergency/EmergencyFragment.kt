@@ -1,6 +1,10 @@
 package com.civilcam.ui.emergency
 
 import android.Manifest
+import android.content.Context.CAMERA_SERVICE
+import android.content.pm.PackageManager
+import android.hardware.Camera
+import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,8 +23,6 @@ import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.emergency.model.EmergencyRoute
-import com.civilcam.ui.network.main.NetworkMainFragment
-import com.civilcam.ui.network.main.model.NetworkScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -36,6 +38,8 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 	
 	private var pendingAction: (() -> Unit)? = null
 	
+	private var cameraManager: CameraManager? = null
+	
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
@@ -44,6 +48,9 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 		setFragmentResultListener(PinCodeFragment.RESULT_BACK_STACK) { _, _ ->
 			viewModel.disableSosStatus()
 		}
+		
+		cameraManager = activity?.getSystemService(CAMERA_SERVICE) as CameraManager
+		
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
 				EmergencyRoute.GoUserProfile -> navController.navigate(R.id.userProfileFragment)
@@ -53,6 +60,7 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 					PinCodeFragment.createArgs(PinCodeFlow.SOS_PIN_CODE)
 				)
 				EmergencyRoute.CheckPermission -> checkPermissions()
+				is EmergencyRoute.ControlFlash -> controlFlashLight(route.enabled)
 			}
 		}
 		return ComposeView(requireContext()).apply {
@@ -64,6 +72,17 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 			
 			setContent {
 				EmergencyScreenContent(viewModel)
+			}
+		}
+	}
+	
+	private fun controlFlashLight(enabled: Boolean) {
+		if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) == true) {
+			if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH) == true) {
+				val cameraID = cameraManager?.cameraIdList?.get(0)
+				if (cameraID != null) {
+					cameraManager?.setTorchMode(cameraID, enabled)
+				}
 			}
 		}
 	}

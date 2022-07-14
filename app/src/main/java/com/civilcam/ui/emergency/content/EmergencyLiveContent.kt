@@ -4,7 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
@@ -31,13 +30,18 @@ import com.civilcam.ui.emergency.model.EmergencyScreen
 @Composable
 fun EmergencyLiveContent(
 	screen: EmergencyScreen,
+	cameraState: Int,
 	onExtendClicked: () -> Unit,
 	onMinimizeClicked: () -> Unit,
+	onCameraChangeClicked: () -> Unit,
+	onFlashClicked: () -> Unit,
 ) {
 	
 	BoxWithConstraints() {
 		Box {
-			EmergencyCameraPreview()
+			EmergencyCameraPreview(
+				cameraState = cameraState
+			)
 		}
 		
 		Box {
@@ -48,6 +52,8 @@ fun EmergencyLiveContent(
 					screen = screen,
 					onExtendClicked = { onExtendClicked.invoke() },
 					onMinimizeClicked = { onMinimizeClicked.invoke() },
+					onCameraChangeClicked = { onCameraChangeClicked.invoke() },
+					onFlashClicked = { onFlashClicked.invoke() }
 				)
 			}
 		}
@@ -60,7 +66,9 @@ fun LiveBottomBar(
 	data: String,
 	screen: EmergencyScreen,
 	onExtendClicked: () -> Unit,
-	onMinimizeClicked: () -> Unit
+	onMinimizeClicked: () -> Unit,
+	onCameraChangeClicked: () -> Unit,
+	onFlashClicked: () -> Unit
 ) {
 	Column(
 		Modifier
@@ -150,13 +158,17 @@ fun LiveBottomBar(
 					Image(
 						painter = painterResource(id = R.drawable.ic_live_camera_change),
 						contentDescription = null,
-						modifier = Modifier.layoutId("change_button")
+						modifier = Modifier
+							.layoutId("change_button")
+							.clickable { onCameraChangeClicked.invoke() }
 					)
 					
 					Image(
 						painter = painterResource(id = R.drawable.ic_flash_light_off),
 						contentDescription = null,
-						modifier = Modifier.layoutId("flash_button")
+						modifier = Modifier
+							.layoutId("flash_button")
+							.clickable { onFlashClicked.invoke() }
 					)
 				}
 			}
