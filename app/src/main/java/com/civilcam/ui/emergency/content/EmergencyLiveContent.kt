@@ -7,13 +7,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -25,8 +27,9 @@ import com.civilcam.ui.emergency.model.EmergencyScreen
 
 @Composable
 fun EmergencyLiveContent(
-	modifier: Modifier,
-	screen: EmergencyScreen
+	screen: EmergencyScreen,
+	onExtendClicked: () -> Unit,
+	onMinimizeClicked: () -> Unit
 ) {
 	Column(
 		Modifier.fillMaxSize()
@@ -37,7 +40,9 @@ fun EmergencyLiveContent(
 		
 		LiveBottomBar(
 			data = "02.02.2022 3:29:56 AM",
-			screen = screen
+			screen = screen,
+			onExtendClicked = { onExtendClicked.invoke() },
+			onMinimizeClicked = { onMinimizeClicked.invoke() }
 		)
 	}
 }
@@ -46,7 +51,9 @@ fun EmergencyLiveContent(
 @Composable
 fun LiveBottomBar(
 	data: String,
-	screen: EmergencyScreen
+	screen: EmergencyScreen,
+	onExtendClicked: () -> Unit,
+	onMinimizeClicked: () -> Unit
 ) {
 	Column(
 		Modifier
@@ -86,13 +93,20 @@ fun LiveBottomBar(
 			
 			Spacer(modifier = Modifier.weight(1f))
 			
-			Image(
-				painter = if (screen == EmergencyScreen.COUPLED) painterResource(id = R.drawable.ic_live_extend)
-				else painterResource(
-					id = R.drawable.ic_live_minimize
-				),
-				contentDescription = null
-			)
+			AnimatedVisibility(visible = screen == EmergencyScreen.COUPLED) {
+				LiveButton(
+					painter = painterResource(id = R.drawable.ic_live_extend),
+					onCardClicked = { onExtendClicked.invoke() }
+				)
+			}
+			
+			AnimatedVisibility(visible = screen == EmergencyScreen.LIVE_EXTENDED) {
+				LiveButton(
+					painter = painterResource(id = R.drawable.ic_live_minimize),
+					onCardClicked = { onMinimizeClicked.invoke() }
+				)
+			}
+			
 		}
 		
 		AnimatedVisibility(visible = screen == EmergencyScreen.LIVE_EXTENDED) {
@@ -137,6 +151,25 @@ fun LiveAnimation() {
 			shape = CircleShape,
 			modifier = Modifier.size(6.dp),
 			content = {}
+		)
+	}
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun LiveButton(
+	onCardClicked: () -> Unit,
+	painter: Painter
+) {
+	IconButton(
+		onClick = { onCardClicked.invoke() },
+		modifier = Modifier
+			.size(24.dp)
+	) {
+		Icon(
+			painter = painter,
+			contentDescription = null,
+			tint = CCTheme.colors.white
 		)
 	}
 }

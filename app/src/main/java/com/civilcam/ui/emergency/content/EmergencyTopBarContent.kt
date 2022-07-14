@@ -4,15 +4,14 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -27,13 +26,16 @@ import com.civilcam.ui.emergency.model.EmergencyScreen
 fun EmergencyTopBarContent(
 	onAvatarClicked: () -> Unit,
 	onSettingsClicked: () -> Unit,
+	onLocationClicked: () -> Unit,
+	onMapExtendClicked: () -> Unit,
+	onMapMinimizeClicked: () -> Unit,
 	locationData: String,
 	screen: EmergencyScreen
 ) {
 	Row(
 		modifier = Modifier
 			.fillMaxWidth()
-			.padding(horizontal = 16.dp),
+			.padding(horizontal = 16.dp, vertical = 8.dp),
 		horizontalArrangement = Arrangement.SpaceBetween,
 		verticalAlignment = Alignment.CenterVertically
 	) {
@@ -48,12 +50,9 @@ fun EmergencyTopBarContent(
 			visible = screen == EmergencyScreen.COUPLED ||
 					screen == EmergencyScreen.MAP_EXTENDED
 		) {
-			
-			CardButton(
-				painter = painterResource(id = R.drawable.ic_location_track_pin),
-				onCardClicked = {
-				
-				}
+			BoxButton(
+				painter = painterResource(id = R.drawable.ic_location_pin),
+				onCardClicked = { onLocationClicked.invoke() }
 			)
 		}
 		
@@ -90,54 +89,46 @@ fun EmergencyTopBarContent(
 		Spacer(modifier = Modifier.weight(1f))
 		
 		AnimatedVisibility(visible = screen == EmergencyScreen.NORMAL) {
-			CardButton(
+			BoxButton(
 				painter = painterResource(id = R.drawable.ic_settings),
-				onCardClicked = {
-					onSettingsClicked.invoke()
-				}
+				onCardClicked = { onSettingsClicked.invoke() }
 			)
 		}
 		
 		AnimatedVisibility(visible = screen == EmergencyScreen.COUPLED) {
-			CardButton(
-				painter = painterResource(id = R.drawable.ic_map_extend),
-				onCardClicked = {
-				
-				}
+			BoxButton(
+				painter = painterResource(id = R.drawable.ic_map_extended),
+				onCardClicked = { onMapExtendClicked.invoke() }
 			)
 		}
 		
 		AnimatedVisibility(visible = screen == EmergencyScreen.MAP_EXTENDED) {
-			CardButton(
+			BoxButton(
 				painter = painterResource(id = R.drawable.ic_map_minimize),
-				onCardClicked = {
-				
-				}
+				onCardClicked = { onMapMinimizeClicked.invoke() }
 			)
 		}
 		
 	}
 }
 
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CardButton(
+fun BoxButton(
 	onCardClicked: () -> Unit,
 	painter: Painter
 ) {
-	Card(
+	IconButton(
 		onClick = { onCardClicked.invoke() },
-		shape = RoundedCornerShape(
-			corner = CornerSize(4.dp)
-		),
-		backgroundColor = CCTheme.colors.white,
 		modifier = Modifier
-			.wrapContentSize()
+			.clip(RoundedCornerShape(4.dp))
+			.background(color = CCTheme.colors.white)
+			.size(24.dp)
 	) {
-		Image(
+		Icon(
 			painter = painter,
 			contentDescription = null,
+			tint = CCTheme.colors.primaryRed,
 			modifier = Modifier.padding(all = 4.dp)
 		)
 	}

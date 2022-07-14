@@ -1,8 +1,7 @@
 package com.civilcam.ui.emergency
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
@@ -13,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.animation.BounceInterpolator
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.compose.BackButton
@@ -69,17 +69,32 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 			Column {
 				AnimatedVisibility(
 					visible = state.value.emergencyScreen == EmergencyScreen.COUPLED ||
-							state.value.emergencyScreen == EmergencyScreen.LIVE_EXTENDED
+							state.value.emergencyScreen == EmergencyScreen.LIVE_EXTENDED,
+					modifier = Modifier.weight(1f),
+					enter = fadeIn(animationSpec = tween(1000)),
+					exit = fadeOut(animationSpec = tween(1000))
 				) {
 					Column(
 						Modifier
 							.fillMaxSize()
-							.weight(1f)
 							.background(color = Color.Black)
 					) {
 						EmergencyLiveContent(
-							modifier = Modifier,
-							screen = state.value.emergencyScreen
+							screen = state.value.emergencyScreen,
+							onExtendClicked = {
+								viewModel.setInputActions(
+									EmergencyActions.ChangeMode(
+										EmergencyScreen.LIVE_EXTENDED
+									)
+								)
+							},
+							onMinimizeClicked = {
+								viewModel.setInputActions(
+									EmergencyActions.ChangeMode(
+										EmergencyScreen.COUPLED
+									)
+								)
+							}
 						)
 					}
 				}
@@ -87,13 +102,12 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 				AnimatedVisibility(
 					visible = state.value.emergencyScreen == EmergencyScreen.NORMAL ||
 							state.value.emergencyScreen == EmergencyScreen.COUPLED ||
-							state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED
+							state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED,
+					modifier = Modifier.weight(1f)
 				) {
 					Column(
 						Modifier
 							.fillMaxSize()
-							.weight(1f)
-							.background(color = Color.Green)
 					) {
 						
 						AnimatedVisibility(visible = state.value.emergencyScreen == EmergencyScreen.NORMAL) {
@@ -101,10 +115,25 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 						}
 						
 						EmergencyTopBarContent(
+							locationData = state.value.location,
+							screen = state.value.emergencyScreen,
 							onAvatarClicked = { viewModel.setInputActions(EmergencyActions.GoUserProfile) },
 							onSettingsClicked = { viewModel.setInputActions(EmergencyActions.GoSettings) },
-							locationData = state.value.location,
-							screen = state.value.emergencyScreen
+							onLocationClicked = { viewModel.setInputActions(EmergencyActions.DetectLocation) },
+							onMapExtendClicked = {
+								viewModel.setInputActions(
+									EmergencyActions.ChangeMode(
+										EmergencyScreen.MAP_EXTENDED
+									)
+								)
+							},
+							onMapMinimizeClicked = {
+								viewModel.setInputActions(
+									EmergencyActions.ChangeMode(
+										EmergencyScreen.COUPLED
+									)
+								)
+							}
 						)
 						/*GoogleMap(
 							modifier = Modifier.fillMaxSize(),
@@ -138,7 +167,6 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 					},
 				)
 			}
-			
 		}
 	}
 }

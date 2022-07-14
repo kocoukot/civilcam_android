@@ -8,4 +8,6 @@ sealed class EmergencyActions : ComposeFragmentActions {
     object GoUserProfile : EmergencyActions()
     object GoSettings : EmergencyActions()
     object GoBack : EmergencyActions()
+    object DetectLocation : EmergencyActions()
+    data class ChangeMode(val mode: EmergencyScreen) : EmergencyActions()
 }

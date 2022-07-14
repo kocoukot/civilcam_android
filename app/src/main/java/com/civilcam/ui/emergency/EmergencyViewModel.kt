@@ -15,7 +15,12 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
             EmergencyActions.GoSettings -> goSettings()
             EmergencyActions.OneClickSafe -> oneClickSafe()
             EmergencyActions.GoBack -> goBack()
+            is EmergencyActions.ChangeMode -> changeMode(action.mode)
         }
+    }
+    
+    private fun changeMode(screen: EmergencyScreen) {
+        _state.value = _state.value.copy(emergencyScreen = screen)
     }
     
     private fun goBack() {
@@ -41,12 +46,14 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
     }
     
     private fun doubleClickSos() {
+        _state.value = _state.value.copy(emergencyScreen = EmergencyScreen.COUPLED)
         if (state.value.emergencyButton == EmergencyButton.InSafeButton) {
             _state.value = _state.value.copy(emergencyButton = EmergencyButton.InDangerButton)
         }
     }
     
     fun disableSosStatus() {
+        _state.value = _state.value.copy(emergencyScreen = EmergencyScreen.NORMAL)
         _state.value = _state.value.copy(emergencyButton = EmergencyButton.InSafeButton)
 	}
 }

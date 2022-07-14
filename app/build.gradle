@@ -98,6 +98,7 @@ android {
 apply from: '../dependencies.gradle'
 
 dependencies {
+    implementation 'androidx.core:core-animation:1.0.0-alpha02'
     testImplementation 'junit:junit:4.12'
     androidX()
 

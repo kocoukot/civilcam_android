@@ -1,5 +1,6 @@
 package com.civilcam.ui.emergency
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,12 +17,24 @@ import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
+import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.emergency.model.EmergencyRoute
+import com.civilcam.ui.network.main.NetworkMainFragment
+import com.civilcam.ui.network.main.model.NetworkScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class EmergencyFragment : Fragment(), SupportBottomBar {
 	private val viewModel: EmergencyViewModel by viewModel()
+	
+	private val permissionsDelegate = registerForPermissionsResult(
+		Manifest.permission.ACCESS_FINE_LOCATION,
+		Manifest.permission.ACCESS_COARSE_LOCATION,
+		Manifest.permission.CAMERA,
+		Manifest.permission.RECORD_AUDIO
+	) { onPermissionsGranted(it) }
+	
+	private var pendingAction: (() -> Unit)? = null
 	
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -52,6 +65,22 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 				EmergencyScreenContent(viewModel)
 			}
 		}
+	}
+	
+	private fun checkPermissions() {
+		if (permissionsDelegate.checkSelfPermissions()) {
+		
+		} else {
+			pendingAction = {
+			
+			}
+			permissionsDelegate.requestPermissions()
+		}
+	}
+	
+	private fun onPermissionsGranted(isGranted: Boolean) {
+		pendingAction?.invoke()
+		pendingAction = null
 	}
 	
 	override fun onResume() {
