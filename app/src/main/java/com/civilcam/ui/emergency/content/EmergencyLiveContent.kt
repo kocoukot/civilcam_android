@@ -11,16 +11,19 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
+import androidx.constraintlayout.compose.ConstraintSet
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.emergency.model.EmergencyScreen
@@ -29,7 +32,7 @@ import com.civilcam.ui.emergency.model.EmergencyScreen
 fun EmergencyLiveContent(
 	screen: EmergencyScreen,
 	onExtendClicked: () -> Unit,
-	onMinimizeClicked: () -> Unit
+	onMinimizeClicked: () -> Unit,
 ) {
 	
 	BoxWithConstraints() {
@@ -44,14 +47,14 @@ fun EmergencyLiveContent(
 					data = "02.02.2022 3:29:56 AM",
 					screen = screen,
 					onExtendClicked = { onExtendClicked.invoke() },
-					onMinimizeClicked = { onMinimizeClicked.invoke() }
+					onMinimizeClicked = { onMinimizeClicked.invoke() },
 				)
 			}
 		}
 	}
 }
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun LiveBottomBar(
 	data: String,
@@ -113,26 +116,51 @@ fun LiveBottomBar(
 			
 		}
 		
-		AnimatedVisibility(visible = screen == EmergencyScreen.LIVE_EXTENDED) {
+		AnimatedVisibility(
+			visible = screen == EmergencyScreen.LIVE_EXTENDED,
+			modifier = Modifier
+				.padding(top = 13.dp)
+		) {
 			Row(
 				verticalAlignment = Alignment.CenterVertically,
 				horizontalArrangement = Arrangement.Center,
 				modifier = Modifier
 					.fillMaxWidth()
 			) {
-				
-				Image(
-					painter = painterResource(id = R.drawable.ic_live_camera_change),
-					contentDescription = null,
-				)
-
-//			Image(
-//				painter = painterResource(id = R.drawable.ic_flash_light_off),
-//				contentDescription = null
-//			)
+				val constraints = ConstraintSet {
+					val changeButton = createRefFor("change_button")
+					val flashButton = createRefFor("flash_button")
+					
+					constrain(changeButton) {
+						top.linkTo(parent.top)
+						start.linkTo(parent.start)
+						centerVerticallyTo(parent)
+						centerHorizontallyTo(parent)
+					}
+					constrain(flashButton) {
+						top.linkTo(parent.top)
+						end.linkTo(parent.end)
+						centerVerticallyTo(parent)
+					}
+				}
+				ConstraintLayout(
+					constraints,
+					modifier = Modifier.fillMaxWidth(),
+				) {
+					Image(
+						painter = painterResource(id = R.drawable.ic_live_camera_change),
+						contentDescription = null,
+						modifier = Modifier.layoutId("change_button")
+					)
+					
+					Image(
+						painter = painterResource(id = R.drawable.ic_flash_light_off),
+						contentDescription = null,
+						modifier = Modifier.layoutId("flash_button")
+					)
+				}
 			}
 		}
-		
 	}
 }
 
