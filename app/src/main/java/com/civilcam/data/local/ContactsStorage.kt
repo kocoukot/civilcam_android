@@ -15,7 +15,7 @@ class ContactsStorage(private val context: Context) {
             while (cursor.moveToNext()) {
                 val name =
                     cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                        ?: ""
+                        .orEmpty()
                 val phoneNumber =
                     cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))
                         .takeIf { it > 0 }

@@ -124,7 +124,7 @@ private fun SearchResults(
 
 
 @Composable
-private fun SearchRow(
+fun SearchRow(
     title: String,
     searchPart: String,
     needDivider: Boolean = true,

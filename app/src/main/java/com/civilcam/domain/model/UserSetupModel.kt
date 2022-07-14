@@ -18,8 +18,8 @@ data class UserSetupModel(
                 lastName.isNotEmpty() &&
                 dateBirth != 0L &&
                 profileImage != null &&
-                phoneNumber.length == 10
-//                location.isNotEmpty() &&
+                phoneNumber.length == 10 &&
+                location.isNotEmpty()
 //                coords != null
 
     val isPhotoSelected: Boolean
@@ -28,3 +28,8 @@ data class UserSetupModel(
     val isPhoneEntered: Boolean
         get() = phoneNumber.isNotEmpty()
 }
+
+data class SearchModel(
+    val searchResult: List<AutocompletePlace> = emptyList(),
+    val searchQuery: String = ""
+)
