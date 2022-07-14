@@ -1,43 +1,32 @@
 package com.civilcam.ui.profile.setup
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.common.compose.*
-import com.civilcam.ui.common.compose.inputs.InputField
-import com.civilcam.ui.common.compose.inputs.PhoneInputField
-import com.civilcam.ui.profile.setup.content.AvatarContent
-import com.civilcam.ui.profile.setup.content.CalendarIcon
+import com.civilcam.ui.common.compose.BackButton
+import com.civilcam.ui.common.compose.RowDivider
+import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.profile.setup.content.DatePickerContent
+import com.civilcam.ui.profile.setup.content.LocationSelectContent
+import com.civilcam.ui.profile.setup.content.ProfileSetupContent
 import com.civilcam.ui.profile.setup.model.ProfileSetupActions
-import com.civilcam.ui.profile.setup.model.UserInfoDataType
-import com.civilcam.utils.DateUtils
-import kotlinx.coroutines.launch
-import timber.log.Timber
+import com.civilcam.ui.profile.setup.model.ProfileSetupScreen
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
 
-
     val state = viewModel.state.collectAsState()
-    val listState = rememberScrollState()
-    val coroutineScope = rememberCoroutineScope()
-    var dateOfBirth by remember { mutableStateOf("") }
-    val avatar = state.value.data?.profileImage
-
-
-
 
     if (state.value.showDatePicker) {
         Dialog(
@@ -65,7 +54,10 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
         topBar = {
             Column {
                 TopAppBarContent(
-                    title = stringResource(id = R.string.profile_setup_title),
+                    title = if (state.value.profileSetupScreen == ProfileSetupScreen.LOCATION)
+                        stringResource(id = R.string.profile_setup_address_select_title)
+                    else
+                        stringResource(id = R.string.profile_setup_title),
                     navigationItem = {
                         BackButton {
                             viewModel.setInputActions(ProfileSetupActions.ClickGoBack)
@@ -78,109 +70,26 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
 
     ) {
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize(),
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(listState)
-                    .padding(horizontal = 16.dp)
-            ) {
-
-                Spacer(modifier = Modifier.height(32.dp))
-                AvatarContent(avatar) {
-                    viewModel.setInputActions(ProfileSetupActions.ClickAvatarSelect)
-                }
-
-
-                InputField(
-                    title = stringResource(id = R.string.profile_setup_first_name_label),
-                    placeHolder = stringResource(id = R.string.profile_setup_first_name_placeholder),
-                ) {
-                    viewModel.setInputActions(
-                        ProfileSetupActions.EnterInputData(
-                            UserInfoDataType.FIRST_NAME,
-                            it
-                        )
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                InputField(
-                    title = stringResource(id = R.string.profile_setup_last_name_label),
-                    placeHolder = stringResource(id = R.string.profile_setup_last_name_placeholder),
-                ) {
-                    viewModel.setInputActions(
-                        ProfileSetupActions.EnterInputData(
-                            UserInfoDataType.LAST_NAME,
-                            it
-                        )
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-
-
-                dateOfBirth = state.value.birthDate?.let {
-                    DateUtils.dateOfBirthFormat(it)
-                } ?: ""
-                Timber.d("getDateFromCalendar dateOfBirth $dateOfBirth ")
-
-                val calendarColor =
-                    animateColorAsState(targetValue = if (dateOfBirth.isEmpty()) CCTheme.colors.grayOne else CCTheme.colors.primaryRed)
-                InputField(
-                    isEnable = false,
-                    text = dateOfBirth,
-                    trailingIcon = { CalendarIcon(calendarColor.value) },
-                    title = stringResource(id = R.string.profile_setup_date_of_birth_label),
-                    placeHolder = stringResource(id = R.string.profile_setup_date_of_birth_placeholder),
-                    onTextClicked = {
-                        viewModel.setInputActions(ProfileSetupActions.ClickDateSelect)
-                    },
-                    onValueChanged = {},
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-
-                InputField(
-                    isEnable = false,
-                    title = stringResource(id = R.string.profile_setup_address_label),
-                    placeHolder = stringResource(id = R.string.profile_setup_address_placeholder),
-                ) {
-
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-
-                PhoneInputField(
-                    onValueChanged = {
-                        viewModel.setInputActions(
-                            ProfileSetupActions.EnterInputData(
-                                UserInfoDataType.PHONE_NUMBER,
-                                it
-                            )
-                        )
-                    },
-                    isInFocus = {
-                        coroutineScope.launch {
-                            listState.scrollTo(1000)
+        AnimatedContent(targetState = state.value.profileSetupScreen) { screenState ->
+            when (screenState) {
+                ProfileSetupScreen.SETUP -> {
+                    ProfileSetupContent(
+                        avatar = state.value.data?.profileImage,
+                        data = state.value.data,
+                        birthDate = state.value.data?.dateBirth,
+                        setupAction = {
+                            viewModel.setInputActions(it)
                         }
-                    }
-                )
-                Spacer(modifier = Modifier.height(60.dp))
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 16.dp),
-                contentAlignment = Alignment.BottomCenter,
-            ) {
-                ComposeButton(
-                    title = stringResource(id = R.string.save_text),
-                    Modifier.padding(horizontal = 8.dp),
-                    isActivated = state.value.data?.isFilled ?: false,
-                    buttonClick = {
-                        viewModel.setInputActions(ProfileSetupActions.ClickSave)
-                    }
-                )
+                    )
+                }
+                ProfileSetupScreen.LOCATION -> {
+                    LocationSelectContent(
+                        searchData = state.value.searchLocationModel,
+                        locationAction = {
+                            viewModel.setInputActions(it)
+                        },
+                    )
+                }
             }
         }
     }

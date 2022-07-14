@@ -65,6 +65,8 @@
     <string name="profile_setup_date_of_birth">Date of birth</string>
     <string name="profile_setup_phone_error">Please, enter a valid phone number</string>
 
+    <string name="profile_setup_address_select_title">Address</string>
+
 
     <string name="user_details_title">Add guardians</string>
 

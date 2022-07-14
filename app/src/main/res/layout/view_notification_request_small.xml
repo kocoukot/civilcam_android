@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_rounded"
-        android:backgroundTint="@color/quantum_bluegrey50"
         android:orientation="vertical">
 
         <LinearLayout
@@ -21,9 +20,10 @@
             <TextView
                 android:id="@+id/notification_title"
                 style="@style/TextAppearance.Compat.Notification.Title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textFontWeight="600"
                 android:ellipsize="end"
                 android:fadingEdge="horizontal"
                 android:fontFamily="@font/roboto_bold"
@@ -33,6 +33,7 @@
                 android:paddingBottom="@dimen/dim_8"
                 android:singleLine="true"
                 android:textSize="17sp"
+                tools:targetApi="p"
                 tools:text="You received a request" />
 
             <ImageView
@@ -77,14 +78,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dim_8"
-                android:src="@drawable/ic_notification_deny" />
+                android:src="@drawable/ic_notification_deny"
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/button_notification_accept"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dim_10"
-                android:src="@drawable/ic_notification_accept" />
+                android:src="@drawable/ic_notification_accept"
+                tools:ignore="ContentDescription" />
 
         </LinearLayout>
 
@@ -92,10 +95,10 @@
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="4dp"
+            android:layout_height="5dp"
             android:background="@drawable/bg_progress_rounded"
             android:max="10"
-            android:progress="4"
+            android:progress="5"
             android:progressBackgroundTint="@color/primaryRed"
             android:progressTint="@color/primaryRed" />
     </LinearLayout>

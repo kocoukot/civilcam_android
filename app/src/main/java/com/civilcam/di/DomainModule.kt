@@ -7,6 +7,7 @@ import com.civilcam.domain.usecase.alerts.GetHistoryDetailUseCase
 import com.civilcam.domain.usecase.guardians.GetGuardsListUseCase
 import com.civilcam.domain.usecase.guardians.GetGuardsRequestsUseCase
 import com.civilcam.domain.usecase.guardians.SearchGuardsResultUseCase
+import com.civilcam.domain.usecase.location.GetPlacesAutocompleteUseCase
 import com.civilcam.domain.usecase.settings.CheckCurrentPasswordUseCase
 import com.civilcam.domain.usecase.settings.GetCurrentSubscriptionPlanUseCase
 import org.koin.dsl.module
@@ -28,7 +29,9 @@ val domainModule = module {
     factory { GetGuardsRequestsUseCase(get()) }
 
     factory { SearchGuardsResultUseCase(get()) }
-    
+
     factory { GetCurrentSubscriptionPlanUseCase(get()) }
+
+    factory { GetPlacesAutocompleteUseCase(get()) }
     
 }

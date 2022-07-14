@@ -99,7 +99,7 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                     Column {
                         SearchInputField(
                             looseFocus = state.value.screenState == NetworkScreen.MAIN,
-                            text = state.value.data?.searchText ?: "",
+                            text = state.value.data?.searchText.orEmpty(),
                             onValueChanged = {
                                 viewModel.setInputActions(NetworkMainActions.EnteredSearchString(it))
 

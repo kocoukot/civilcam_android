@@ -1,24 +1,38 @@
 package com.civilcam.ui.profile.setup
 
 import android.net.Uri
+import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.local.MediaStorage
 import com.civilcam.domain.PictureModel
+import com.civilcam.domain.model.AutocompletePlace
+import com.civilcam.domain.model.SearchModel
 import com.civilcam.domain.model.UserSetupModel
-import com.civilcam.ui.profile.setup.model.ProfileSetupActions
-import com.civilcam.ui.profile.setup.model.ProfileSetupRoute
-import com.civilcam.ui.profile.setup.model.ProfileSetupState
-import com.civilcam.ui.profile.setup.model.UserInfoDataType
+import com.civilcam.domain.usecase.location.GetPlacesAutocompleteUseCase
+import com.civilcam.ui.profile.setup.model.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
+@OptIn(FlowPreview::class)
 class ProfileSetupViewModel(
     private val mediaStorage: MediaStorage,
+    private val getPlacesAutocompleteUseCase: GetPlacesAutocompleteUseCase,
+//    private val getPlaceDetailsUseCase: GetPlaceDetailsUseCase
 ) : ComposeViewModel<ProfileSetupState, ProfileSetupRoute, ProfileSetupActions>() {
 
     override var _state: MutableStateFlow<ProfileSetupState> = MutableStateFlow(ProfileSetupState())
+
+    private val _textSearch = MutableStateFlow("")
+    private val textSearch: StateFlow<String> = _textSearch.asStateFlow()
+
 
     private val disposables = CompositeDisposable()
 
@@ -28,7 +42,25 @@ class ProfileSetupViewModel(
     }
 
     init {
+        viewModelScope.launch {
+            textSearch.debounce(400).collect { query ->
+                query
+                    .takeIf { it.isNotEmpty() }
+                    ?.let {
+                        try {
+                            getPlacesAutocompleteUseCase.invoke(it) { result ->
+                                setSearchResult(result)
+                            }
+                        } catch (e: Exception) {
+                            _state.value =
+                                _state.value.copy(errorText = e.localizedMessage ?: "Some error!")
+                        }
+                    } ?: run {
+                    setSearchResult(emptyList())
+                }
+            }
 
+        }
     }
 
     override fun setInputActions(action: ProfileSetupActions) {
@@ -36,7 +68,6 @@ class ProfileSetupViewModel(
             ProfileSetupActions.ClickGoBack -> goBack()
             ProfileSetupActions.ClickSave -> goNext()
             ProfileSetupActions.ClickDateSelect -> openDatePicker()
-            ProfileSetupActions.ClickLocationSelect -> {}
             is ProfileSetupActions.EnterInputData -> {
                 when (action.dataType) {
                     UserInfoDataType.FIRST_NAME -> firstNameEntered(action.data)
@@ -47,11 +78,22 @@ class ProfileSetupViewModel(
             ProfileSetupActions.ClickAvatarSelect -> goAvatarSelect()
             is ProfileSetupActions.ClickCloseDatePicker -> closeDatePicker()
             is ProfileSetupActions.ClickSelectDate -> getDateFromCalendar(action.date)
+            ProfileSetupActions.ClickGoLocationPicker -> goLocationPicker()
+
+            is ProfileSetupActions.LocationSearchQuery -> searchAddress(action.searchQuery)
+            is ProfileSetupActions.ClickAddressSelect -> addressSelected(action.address)
         }
     }
 
     private fun goBack() {
-        _steps.value = ProfileSetupRoute.GoBack
+        when (_state.value.profileSetupScreen) {
+            ProfileSetupScreen.SETUP -> _steps.value = ProfileSetupRoute.GoBack
+            ProfileSetupScreen.LOCATION -> _state.value =
+                _state.value.copy(
+                    profileSetupScreen = ProfileSetupScreen.SETUP,
+                    searchLocationModel = SearchModel(),
+                )
+        }
     }
 
     private fun goNext() {
@@ -82,9 +124,7 @@ class ProfileSetupViewModel(
     }
 
     private fun lastNameEntered(lastName: String) {
-        val data = getSetupUser()
-        data.lastName = lastName
-        _state.value = _state.value.copy(data = data)
+        _state.value = _state.value.copy(data = getSetupUser().copy(lastName = lastName))
     }
 
     private fun phoneEntered(phoneNumber: String) {
@@ -114,4 +154,37 @@ class ProfileSetupViewModel(
     }
 
     private fun getSetupUser() = _state.value.data?.copy() ?: UserSetupModel()
+
+    private fun goLocationPicker() {
+        Timber.i("location clicked")
+
+        _state.value = _state.value.copy(profileSetupScreen = ProfileSetupScreen.LOCATION)
+    }
+
+    private fun searchAddress(searchQuery: String) {
+        _textSearch.value = searchQuery
+        _state.value = _state.value.copy(
+            searchLocationModel = _state.value.searchLocationModel.copy(
+                searchQuery = searchQuery
+            )
+        )
+    }
+
+    private fun setSearchResult(result: List<AutocompletePlace>) {
+        Timber.i("location result $result")
+        _state.value = _state.value.copy(
+            searchLocationModel = _state.value.searchLocationModel.copy(
+                searchResult = result
+            ).copy()
+        )
+    }
+
+    private fun addressSelected(result: AutocompletePlace) {
+        _state.value = _state.value.copy(
+            profileSetupScreen = ProfileSetupScreen.SETUP,
+            searchLocationModel = SearchModel(),
+            data = getSetupUser().copy(location = result.address)
+        )
+        Timber.i("location selected ${_state.value.data}")
+    }
 }
