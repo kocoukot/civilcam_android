@@ -12,13 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.animation.BounceInterpolator
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.DividerLightGray
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.emergency.content.EmergencyButtonContent
+import com.civilcam.ui.emergency.content.EmergencyCameraPreview
 import com.civilcam.ui.emergency.content.EmergencyLiveContent
 import com.civilcam.ui.emergency.content.EmergencyTopBarContent
 import com.civilcam.ui.emergency.model.EmergencyActions
@@ -42,7 +42,9 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 			Crossfade(targetState = state.value.emergencyScreen) { state ->
 				AnimatedVisibility(
 					visible = state == EmergencyScreen.MAP_EXTENDED ||
-							state == EmergencyScreen.LIVE_EXTENDED
+							state == EmergencyScreen.LIVE_EXTENDED,
+					enter = fadeIn(animationSpec = tween(1000)),
+					exit = fadeOut(animationSpec = tween(1000))
 				) {
 					Column(
 						Modifier.padding(top = 24.dp)
@@ -79,6 +81,7 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 							.fillMaxSize()
 							.background(color = Color.Black)
 					) {
+						
 						EmergencyLiveContent(
 							screen = state.value.emergencyScreen,
 							onExtendClicked = {
@@ -103,6 +106,8 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 					visible = state.value.emergencyScreen == EmergencyScreen.NORMAL ||
 							state.value.emergencyScreen == EmergencyScreen.COUPLED ||
 							state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED,
+					enter = fadeIn(animationSpec = tween(1000)),
+					exit = fadeOut(animationSpec = tween(1000)),
 					modifier = Modifier.weight(1f)
 				) {
 					Column(
@@ -151,7 +156,9 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 			
 			AnimatedVisibility(
 				visible = state.value.emergencyScreen == EmergencyScreen.NORMAL ||
-						state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED
+						state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED,
+				enter = fadeIn(animationSpec = tween(1000)),
+				exit = fadeOut(animationSpec = tween(1000))
 			) {
 				EmergencyButtonContent(
 					emergencyButton = state.value.emergencyButton,

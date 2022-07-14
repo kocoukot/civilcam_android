@@ -52,6 +52,7 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 					R.id.pinCodeFragment,
 					PinCodeFragment.createArgs(PinCodeFlow.SOS_PIN_CODE)
 				)
+				EmergencyRoute.CheckPermission -> checkPermissions()
 			}
 		}
 		return ComposeView(requireContext()).apply {
@@ -79,8 +80,10 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 	}
 	
 	private fun onPermissionsGranted(isGranted: Boolean) {
-		pendingAction?.invoke()
-		pendingAction = null
+		if (isGranted) {
+			pendingAction?.invoke()
+			pendingAction = null
+		}
 	}
 	
 	override fun onResume() {

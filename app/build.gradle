@@ -99,6 +99,7 @@ apply from: '../dependencies.gradle'
 
 dependencies {
     implementation 'androidx.core:core-animation:1.0.0-alpha02'
+    implementation 'androidx.camera:camera-view:1.0.0-alpha26'
     testImplementation 'junit:junit:4.12'
     androidX()
 
@@ -119,6 +120,7 @@ dependencies {
     compression()
     gleap()
     datePicker()
+    camera()
     //Timber
     implementation 'com.jakewharton.timber:timber:5.0.1'
 

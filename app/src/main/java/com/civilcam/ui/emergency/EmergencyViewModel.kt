@@ -46,8 +46,9 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
     }
     
     private fun doubleClickSos() {
-        _state.value = _state.value.copy(emergencyScreen = EmergencyScreen.COUPLED)
+        _steps.value = EmergencyRoute.CheckPermission
         if (state.value.emergencyButton == EmergencyButton.InSafeButton) {
+            _state.value = _state.value.copy(emergencyScreen = EmergencyScreen.COUPLED)
             _state.value = _state.value.copy(emergencyButton = EmergencyButton.InDangerButton)
         }
     }

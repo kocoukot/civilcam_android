@@ -36,6 +36,12 @@ fun EmergencyLiveContent(
 	) {
 		//need to add camera screen
 		
+//		EmergencyCameraPreview(
+//			screen = screen,
+//			onExtendClicked = onExtendClicked,
+//			onMinimizeClicked = onMinimizeClicked
+//		)
+		
 		Spacer(modifier = Modifier.weight(1f))
 		
 		LiveBottomBar(

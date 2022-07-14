@@ -6,4 +6,5 @@ sealed class EmergencyRoute : ComposeFragmentRoute {
 	object GoUserProfile : EmergencyRoute()
 	object GoSettings : EmergencyRoute()
 	object GoPinCode : EmergencyRoute()
+	object CheckPermission : EmergencyRoute()
 }
