@@ -6,12 +6,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
@@ -36,7 +37,9 @@ fun EmergencyTopBarContent(
 		horizontalArrangement = Arrangement.SpaceBetween,
 		verticalAlignment = Alignment.CenterVertically
 	) {
-		AnimatedVisibility(visible = screen == EmergencyScreen.NORMAL) {
+		AnimatedVisibility(
+			visible = screen == EmergencyScreen.NORMAL
+		) {
 			AvatarButton {
 				onClick.invoke(EmergencyActions.GoUserProfile)
 			}
@@ -53,8 +56,7 @@ fun EmergencyTopBarContent(
 				modifier = Modifier
 					.clip(RoundedCornerShape(4.dp))
 					.background(color = CCTheme.colors.white)
-					.size(24.dp),
-				iconModifier = Modifier.padding(all = 4.dp)
+					.size(28.dp)
 			)
 		}
 		
@@ -83,7 +85,7 @@ fun EmergencyTopBarContent(
 					text = locationData,
 					style = CCTheme.typography.common_text_small_regular,
 					color = CCTheme.colors.black,
-					modifier = Modifier.padding(start = 4.dp, end = 15.dp)
+					modifier = Modifier.padding(start = 4.dp, end = 15.dp, top = 7.dp, bottom = 7.dp)
 				)
 			}
 		}
@@ -98,8 +100,7 @@ fun EmergencyTopBarContent(
 				modifier = Modifier
 					.clip(RoundedCornerShape(4.dp))
 					.background(color = CCTheme.colors.white)
-					.size(24.dp),
-				iconModifier = Modifier.padding(all = 4.dp)
+					.size(28.dp)
 			)
 		}
 		
@@ -111,8 +112,7 @@ fun EmergencyTopBarContent(
 				modifier = Modifier
 					.clip(RoundedCornerShape(4.dp))
 					.background(color = CCTheme.colors.white)
-					.size(24.dp),
-				iconModifier = Modifier.padding(all = 4.dp)
+					.size(28.dp)
 			)
 		}
 		
@@ -124,8 +124,7 @@ fun EmergencyTopBarContent(
 				modifier = Modifier
 					.clip(RoundedCornerShape(4.dp))
 					.background(color = CCTheme.colors.white)
-					.size(24.dp),
-				iconModifier = Modifier.padding(all = 4.dp)
+					.size(28.dp)
 			)
 		}
 		

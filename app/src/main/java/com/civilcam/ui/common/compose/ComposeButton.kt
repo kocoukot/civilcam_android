@@ -96,7 +96,6 @@ fun TextActionButton(
 fun IconActionButton(
     buttonIcon: Int,
     modifier: Modifier = Modifier,
-    iconModifier: Modifier = Modifier,
     tint: Color = CCTheme.colors.primaryRed,
     buttonClick: () -> Unit
 ) {
@@ -104,8 +103,7 @@ fun IconActionButton(
         Icon(
             painter = painterResource(id = buttonIcon),
             contentDescription = null,
-            tint = tint,
-            modifier = iconModifier
+            tint = tint
         )
     }
 }
@@ -131,7 +129,6 @@ fun AvatarButton(buttonClick: () -> Unit) {
         painter = painterResource(id = R.drawable.img_avatar),
         contentDescription = null,
         modifier = Modifier
-            .offset(x = 8.dp)
             .size(28.dp)
             .clip(CircleShape)
             .clickable {

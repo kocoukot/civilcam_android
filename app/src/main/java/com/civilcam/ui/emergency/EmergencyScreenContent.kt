@@ -4,11 +4,14 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -16,6 +19,7 @@ import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.DividerLightGray
+import com.civilcam.ui.common.compose.IconActionButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.emergency.content.EmergencyButtonContent
 import com.civilcam.ui.emergency.content.EmergencyLiveContent
@@ -148,6 +152,24 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 								
 							}
 						)
+						
+						AnimatedVisibility(
+							visible = state.value.emergencyScreen == EmergencyScreen.NORMAL,
+							modifier = Modifier.padding(start = 16.dp, top = 88.dp),
+							enter = fadeIn(animationSpec = tween(1000)),
+							exit = fadeOut(animationSpec = tween(1000))
+						) {
+							Spacer(modifier = Modifier.height(156.dp))
+							IconActionButton(
+								buttonIcon = R.drawable.ic_location_pin,
+								buttonClick = { viewModel.setInputActions(EmergencyActions.DetectLocation) },
+								tint = CCTheme.colors.primaryRed,
+								modifier = Modifier
+									.clip(RoundedCornerShape(4.dp))
+									.background(color = CCTheme.colors.white)
+									.size(28.dp)
+							)
+						}
 						/*GoogleMap(
 							modifier = Modifier.fillMaxSize(),
 							cameraPositionState = cameraPositionState
