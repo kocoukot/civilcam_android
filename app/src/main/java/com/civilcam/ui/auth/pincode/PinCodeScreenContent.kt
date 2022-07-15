@@ -64,6 +64,7 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 						PinCodeFlow.CURRENT_PIN_CODE -> stringResource(id = R.string.change_credentials_pin_code_title)
 						PinCodeFlow.NEW_PIN_CODE -> stringResource(id = R.string.pin_code_new_title)
 						PinCodeFlow.CONFIRM_NEW_PIN_CODE -> stringResource(id = R.string.pin_code_confirm_new_title)
+						PinCodeFlow.SOS_PIN_CODE -> stringResource(id = R.string.pin_code_enter_title)
 					},
 					navigationItem = {
 						BackButton {
@@ -90,7 +91,12 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 				horizontalAlignment = Alignment.CenterHorizontally,
 				verticalArrangement = Arrangement.Center
 			) {
-				AnimatedVisibility(visible = state.value.screenState != PinCodeFlow.CREATE_PIN_CODE) {
+				AnimatedVisibility(
+					visible = state.value.screenState == PinCodeFlow.CONFIRM_PIN_CODE ||
+							state.value.screenState == PinCodeFlow.CURRENT_PIN_CODE ||
+							state.value.screenState == PinCodeFlow.NEW_PIN_CODE ||
+							state.value.screenState == PinCodeFlow.CONFIRM_NEW_PIN_CODE
+				) {
 					Text(
 						text = when (state.value.screenState) {
 							PinCodeFlow.CONFIRM_PIN_CODE -> stringResource(id = R.string.pin_code_re_enter_title)
@@ -118,7 +124,10 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 					},
 				)
 				
-				AnimatedVisibility(visible = state.value.screenState == PinCodeFlow.CREATE_PIN_CODE || state.value.screenState == PinCodeFlow.CONFIRM_PIN_CODE) {
+				AnimatedVisibility(
+					visible = state.value.screenState == PinCodeFlow.CREATE_PIN_CODE ||
+							state.value.screenState == PinCodeFlow.CONFIRM_PIN_CODE
+				) {
 					Column {
 						Text(
 							stringResource(id = R.string.pin_code_description),
@@ -135,7 +144,10 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 			
 			Spacer(modifier = Modifier.weight(1f))
 			
-			AnimatedVisibility(visible = state.value.currentNoMatch || state.value.newPinNoMatch) {
+			AnimatedVisibility(
+				visible = state.value.currentNoMatch ||
+						state.value.newPinNoMatch
+			) {
 				Box(
 					modifier = Modifier
 						.fillMaxWidth()

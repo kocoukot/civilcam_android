@@ -26,6 +26,7 @@ import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.common.compose.inputs.EmailInputField
 import com.civilcam.ui.common.compose.inputs.PasswordField
 import com.civilcam.ui.common.compose.inputs.PasswordStrategyBlocks
+import kotlin.math.ceil
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -36,7 +37,7 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 	val checkedStrategies = remember { mutableStateOf(0) }
 	
 	val focusState = remember { mutableStateOf(false) }
-
+	
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
 		modifier = Modifier.fillMaxSize(),

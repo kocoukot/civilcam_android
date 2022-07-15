@@ -223,6 +223,7 @@
     <string name="subscription_purchase_success_title">Welcome to CivilCam family!</string>
     <string name="subscription_purchase_success_description">Your purchase was successful.</string>
     <string name="subscriptions_change_plan">Change plan</string>
+    <string name="pin_code_enter_title">Enter pin-code</string>
 
     <string name="notification_request_title">You received a request</string>
     <string name="notification_request_text">needs you as a guardian</string>
@@ -230,5 +231,8 @@
     <string name="notification_alert_title">Emergency alert</string>
     <string name="notification_alert_text">is in emergency and needs your help!</string>
     <string name="notification_alert_details">Details</string>
+    <string name="emergency_live_title">Live</string>
+    <string name="emergency_map_title">Map</string>
+    <string name="emergency_live_stream_title">Live stream</string>
 
 </resources>

@@ -11,6 +11,7 @@ data class PinCodeState(
 	val currentPinCode: String = "",
 	val newPinCode: String = "",
 	val newPinCodeConfirm: String = "",
+	val sosPinCode: String = "",
 	
 	val noMatch: Boolean = false,
 	val currentNoMatch: Boolean = false,
@@ -22,5 +23,6 @@ data class PinCodeState(
 	val isMatch = pinCode == confirmPinCode
 	val isCurrentPin = currentPinCode == "1111"
 	val isMatchNewPin = newPinCode == newPinCodeConfirm
+	val sosMatch = sosPinCode == "1111"
 	
 }
