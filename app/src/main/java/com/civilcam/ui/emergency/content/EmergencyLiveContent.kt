@@ -25,16 +25,14 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyScreen
 
 @Composable
 fun EmergencyLiveContent(
 	screen: EmergencyScreen,
 	cameraState: Int,
-	onExtendClicked: () -> Unit,
-	onMinimizeClicked: () -> Unit,
-	onCameraChangeClicked: () -> Unit,
-	onFlashClicked: () -> Unit,
+	onClick: (EmergencyActions) -> Unit
 ) {
 	
 	BoxWithConstraints() {
@@ -50,10 +48,7 @@ fun EmergencyLiveContent(
 				LiveBottomBar(
 					data = "02.02.2022 3:29:56 AM",
 					screen = screen,
-					onExtendClicked = { onExtendClicked.invoke() },
-					onMinimizeClicked = { onMinimizeClicked.invoke() },
-					onCameraChangeClicked = { onCameraChangeClicked.invoke() },
-					onFlashClicked = { onFlashClicked.invoke() }
+					onClick = { action -> onClick.invoke(action) }
 				)
 			}
 		}
@@ -65,10 +60,7 @@ fun EmergencyLiveContent(
 fun LiveBottomBar(
 	data: String,
 	screen: EmergencyScreen,
-	onExtendClicked: () -> Unit,
-	onMinimizeClicked: () -> Unit,
-	onCameraChangeClicked: () -> Unit,
-	onFlashClicked: () -> Unit
+	onClick: (EmergencyActions) -> Unit
 ) {
 	Column(
 		Modifier
@@ -111,14 +103,14 @@ fun LiveBottomBar(
 			AnimatedVisibility(visible = screen == EmergencyScreen.COUPLED) {
 				LiveButton(
 					painter = painterResource(id = R.drawable.ic_live_extend),
-					onCardClicked = { onExtendClicked.invoke() }
+					onCardClicked = { onClick.invoke(EmergencyActions.MaximizeLive) }
 				)
 			}
 			
 			AnimatedVisibility(visible = screen == EmergencyScreen.LIVE_EXTENDED) {
 				LiveButton(
 					painter = painterResource(id = R.drawable.ic_live_minimize),
-					onCardClicked = { onMinimizeClicked.invoke() }
+					onCardClicked = { onClick.invoke(EmergencyActions.MinimizeLive) }
 				)
 			}
 			
@@ -160,7 +152,7 @@ fun LiveBottomBar(
 						contentDescription = null,
 						modifier = Modifier
 							.layoutId("change_button")
-							.clickable { onCameraChangeClicked.invoke() }
+							.clickable { onClick.invoke(EmergencyActions.ChangeCamera) }
 					)
 					
 					Image(
@@ -168,7 +160,7 @@ fun LiveBottomBar(
 						contentDescription = null,
 						modifier = Modifier
 							.layoutId("flash_button")
-							.clickable {  }
+							.clickable { onClick.invoke(EmergencyActions.ControlFlash) }
 					)
 				}
 			}
@@ -188,15 +180,14 @@ fun LiveAnimation() {
 			repeatMode = RepeatMode.Reverse
 		)
 	)
-	
-	Box(modifier = Modifier.scale(scale)) {
-		Surface(
-			color = CCTheme.colors.primaryRed,
-			shape = CircleShape,
-			modifier = Modifier.size(6.dp),
-			content = {}
-		)
-	}
+	Surface(
+		color = CCTheme.colors.primaryRed,
+		shape = CircleShape,
+		modifier = Modifier
+			.size(6.dp)
+			.scale(scale),
+		content = {}
+	)
 }
 
 @OptIn(ExperimentalMaterialApi::class)

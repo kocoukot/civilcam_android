@@ -18,7 +18,6 @@ import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.DividerLightGray
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.emergency.content.EmergencyButtonContent
-import com.civilcam.ui.emergency.content.EmergencyCameraPreview
 import com.civilcam.ui.emergency.content.EmergencyLiveContent
 import com.civilcam.ui.emergency.content.EmergencyTopBarContent
 import com.civilcam.ui.emergency.model.EmergencyActions
@@ -85,25 +84,24 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 						EmergencyLiveContent(
 							screen = state.value.emergencyScreen,
 							cameraState = state.value.cameraState,
-							onExtendClicked = {
-								viewModel.setInputActions(
-									EmergencyActions.ChangeMode(
-										EmergencyScreen.LIVE_EXTENDED
-									)
-								)
-							},
-							onMinimizeClicked = {
-								viewModel.setInputActions(
-									EmergencyActions.ChangeMode(
-										EmergencyScreen.COUPLED
-									)
-								)
-							},
-							onCameraChangeClicked = {
-								viewModel.setInputActions(EmergencyActions.ChangeCamera)
-							},
-							onFlashClicked = {
-								viewModel.setInputActions(EmergencyActions.ControlFlash)
+							onClick = { action ->
+								when (action) {
+									EmergencyActions.MinimizeLive -> {
+										viewModel.setInputActions(
+											EmergencyActions.ChangeMode(
+												EmergencyScreen.COUPLED
+											)
+										)
+									}
+									EmergencyActions.MaximizeLive -> {
+										viewModel.setInputActions(
+											EmergencyActions.ChangeMode(
+												EmergencyScreen.LIVE_EXTENDED
+											)
+										)
+									}
+									else -> viewModel.setInputActions(action)
+								}
 							}
 						)
 					}
@@ -129,22 +127,25 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 						EmergencyTopBarContent(
 							locationData = state.value.location,
 							screen = state.value.emergencyScreen,
-							onAvatarClicked = { viewModel.setInputActions(EmergencyActions.GoUserProfile) },
-							onSettingsClicked = { viewModel.setInputActions(EmergencyActions.GoSettings) },
-							onLocationClicked = { viewModel.setInputActions(EmergencyActions.DetectLocation) },
-							onMapExtendClicked = {
-								viewModel.setInputActions(
-									EmergencyActions.ChangeMode(
-										EmergencyScreen.MAP_EXTENDED
-									)
-								)
-							},
-							onMapMinimizeClicked = {
-								viewModel.setInputActions(
-									EmergencyActions.ChangeMode(
-										EmergencyScreen.COUPLED
-									)
-								)
+							onClick = { action ->
+								when (action) {
+									EmergencyActions.MaximizeMap -> {
+										viewModel.setInputActions(
+											EmergencyActions.ChangeMode(
+												EmergencyScreen.MAP_EXTENDED
+											)
+										)
+									}
+									EmergencyActions.MinimizeMap -> {
+										viewModel.setInputActions(
+											EmergencyActions.ChangeMode(
+												EmergencyScreen.COUPLED
+											)
+										)
+									}
+									else -> viewModel.setInputActions(action)
+								}
+								
 							}
 						)
 						/*GoogleMap(

@@ -11,5 +11,9 @@ sealed class EmergencyActions : ComposeFragmentActions {
     object DetectLocation : EmergencyActions()
     object ControlFlash : EmergencyActions()
     object ChangeCamera : EmergencyActions()
+    object MinimizeMap : EmergencyActions()
+    object MaximizeMap : EmergencyActions()
+    object MinimizeLive : EmergencyActions()
+    object MaximizeLive : EmergencyActions()
     data class ChangeMode(val mode: EmergencyScreen) : EmergencyActions()
 }

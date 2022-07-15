@@ -96,6 +96,7 @@ fun TextActionButton(
 fun IconActionButton(
     buttonIcon: Int,
     modifier: Modifier = Modifier,
+    iconModifier: Modifier = Modifier,
     tint: Color = CCTheme.colors.primaryRed,
     buttonClick: () -> Unit
 ) {
@@ -103,7 +104,8 @@ fun IconActionButton(
         Icon(
             painter = painterResource(id = buttonIcon),
             contentDescription = null,
-            tint = tint
+            tint = tint,
+            modifier = iconModifier
         )
     }
 }
