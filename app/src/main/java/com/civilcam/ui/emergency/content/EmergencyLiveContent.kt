@@ -168,7 +168,7 @@ fun LiveBottomBar(
 						contentDescription = null,
 						modifier = Modifier
 							.layoutId("flash_button")
-							.clickable { onFlashClicked.invoke() }
+							.clickable {  }
 					)
 				}
 			}

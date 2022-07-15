@@ -7,5 +7,5 @@ sealed class EmergencyRoute : ComposeFragmentRoute {
 	object GoSettings : EmergencyRoute()
 	object GoPinCode : EmergencyRoute()
 	object CheckPermission : EmergencyRoute()
-	data class ControlFlash(val enabled: Boolean) : EmergencyRoute()
+	data class ControlFlash(val enabled: Boolean, val cameraState: Int) : EmergencyRoute()
 }

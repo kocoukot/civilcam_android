@@ -3,12 +3,12 @@ package com.civilcam.ui.emergency
 import android.Manifest
 import android.content.Context.CAMERA_SERVICE
 import android.content.pm.PackageManager
-import android.hardware.Camera
 import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.camera.core.CameraSelector
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
@@ -60,7 +60,7 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 					PinCodeFragment.createArgs(PinCodeFlow.SOS_PIN_CODE)
 				)
 				EmergencyRoute.CheckPermission -> checkPermissions()
-				is EmergencyRoute.ControlFlash -> controlFlashLight(route.enabled)
+				is EmergencyRoute.ControlFlash -> controlFlashLight(route.enabled, route.cameraState)
 			}
 		}
 		return ComposeView(requireContext()).apply {
@@ -76,12 +76,12 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 		}
 	}
 	
-	private fun controlFlashLight(enabled: Boolean) {
+	private fun controlFlashLight(enabled: Boolean, cameraState: Int) {
 		if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) == true) {
 			if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH) == true) {
-				val cameraID = cameraManager?.cameraIdList?.get(0)
-				if (cameraID != null) {
-					cameraManager?.setTorchMode(cameraID, enabled)
+				if (cameraState == CameraSelector.LENS_FACING_BACK) {
+					val cameraID = cameraManager?.cameraIdList?.get(0)
+					cameraID?.let { cameraManager?.setTorchMode(it, enabled) }
 				}
 			}
 		}

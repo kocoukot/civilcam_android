@@ -31,7 +31,7 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
 	}
 	
 	private fun controlFlash() {
-		_steps.value = EmergencyRoute.ControlFlash(_state.value.cameraFlash)
+		_steps.value = EmergencyRoute.ControlFlash(_state.value.cameraFlash, _state.value.cameraState)
 		_state.value = _state.value.copy(cameraFlash = !_state.value.cameraFlash)
 	}
 	
