@@ -16,6 +16,7 @@ import androidx.fragment.app.setFragmentResultListener
 import com.civilcam.R
 import com.civilcam.common.ext.hideSystemUI
 import com.civilcam.common.ext.showSystemUI
+import com.civilcam.ui.MainActivity
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.common.SupportBottomBar
@@ -23,10 +24,11 @@ import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.emergency.model.EmergencyRoute
+import com.civilcam.ui.emergency.model.EmergencyScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class EmergencyFragment : Fragment(), SupportBottomBar {
+class EmergencyFragment : Fragment() {
 	private val viewModel: EmergencyViewModel by viewModel()
 	
 	private val permissionsDelegate = registerForPermissionsResult(
@@ -60,7 +62,11 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 					PinCodeFragment.createArgs(PinCodeFlow.SOS_PIN_CODE)
 				)
 				EmergencyRoute.CheckPermission -> checkPermissions()
-				is EmergencyRoute.ControlFlash -> controlFlashLight(route.enabled, route.cameraState)
+				is EmergencyRoute.ControlFlash -> controlFlashLight(
+					route.enabled,
+					route.cameraState
+				)
+				is EmergencyRoute.ScreenState -> showBottomBar(route.screen)
 			}
 		}
 		return ComposeView(requireContext()).apply {
@@ -74,6 +80,11 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 				EmergencyScreenContent(viewModel)
 			}
 		}
+	}
+	
+	private fun showBottomBar(screen: EmergencyScreen) {
+		(activity as MainActivity)
+			.showBottomNavBar(screen == EmergencyScreen.NORMAL || screen == EmergencyScreen.COUPLED)
 	}
 	
 	private fun controlFlashLight(enabled: Boolean, cameraState: Int) {
