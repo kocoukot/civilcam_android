@@ -9,13 +9,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, EmergencyActions>() {
 	override var _state: MutableStateFlow<EmergencyState> = MutableStateFlow(EmergencyState())
 	
-	init {
-		updateNavBar()
-	}
-	
 	override fun setInputActions(action: EmergencyActions) {
 		when (action) {
 			EmergencyActions.DoubleClickSos -> doubleClickSos()
+			EmergencyActions.DisableSos -> disableSosStatus()
 			EmergencyActions.GoUserProfile -> goUserProfile()
 			EmergencyActions.GoSettings -> goSettings()
 			EmergencyActions.OneClickSafe -> oneClickSafe()
@@ -34,10 +31,6 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
 		}
 	}
 	
-	private fun updateNavBar(){
-		_steps.value = EmergencyRoute.ScreenState(_state.value.emergencyScreen)
-	}
-	
 	private fun controlFlash() {
 		_steps.value = EmergencyRoute.ControlFlash(_state.value.cameraFlash, _state.value.cameraState)
 		_state.value = _state.value.copy(cameraFlash = !_state.value.cameraFlash)
@@ -45,12 +38,10 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
 	
 	private fun changeMode(screen: EmergencyScreen) {
 		_state.value = _state.value.copy(emergencyScreen = screen)
-		updateNavBar()
 	}
 	
 	private fun goBack() {
 		_state.value = _state.value.copy(emergencyScreen = EmergencyScreen.COUPLED)
-		updateNavBar()
 	}
 	
 	private fun goSettings() {
@@ -77,13 +68,11 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
 			_state.value = _state.value.copy(emergencyScreen = EmergencyScreen.COUPLED)
 			_state.value = _state.value.copy(emergencyButton = EmergencyButton.InDangerButton)
 		}
-		updateNavBar()
 	}
 	
-	fun disableSosStatus() {
+	private fun disableSosStatus() {
 		_state.value = _state.value.copy(emergencyScreen = EmergencyScreen.NORMAL)
 		_state.value = _state.value.copy(emergencyButton = EmergencyButton.InSafeButton)
-		updateNavBar()
 	}
 }
 

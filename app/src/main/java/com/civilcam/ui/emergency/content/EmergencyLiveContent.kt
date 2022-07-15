@@ -4,15 +4,18 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.layoutId
@@ -25,6 +28,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.common.compose.IconActionButton
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyScreen
 
@@ -101,16 +105,22 @@ fun LiveBottomBar(
 			Spacer(modifier = Modifier.weight(1f))
 			
 			AnimatedVisibility(visible = screen == EmergencyScreen.COUPLED) {
-				LiveButton(
-					painter = painterResource(id = R.drawable.ic_live_extend),
-					onCardClicked = { onClick.invoke(EmergencyActions.MaximizeLive) }
+				IconActionButton(
+					buttonIcon = R.drawable.ic_live_extend,
+					buttonClick = { onClick.invoke(EmergencyActions.MaximizeLive) },
+					tint = CCTheme.colors.white,
+					modifier = Modifier
+						.size(28.dp)
 				)
 			}
 			
 			AnimatedVisibility(visible = screen == EmergencyScreen.LIVE_EXTENDED) {
-				LiveButton(
-					painter = painterResource(id = R.drawable.ic_live_minimize),
-					onCardClicked = { onClick.invoke(EmergencyActions.MinimizeLive) }
+				IconActionButton(
+					buttonIcon = R.drawable.ic_live_minimize,
+					buttonClick = { onClick.invoke(EmergencyActions.MinimizeLive) },
+					tint = CCTheme.colors.white,
+					modifier = Modifier
+						.size(28.dp)
 				)
 			}
 			
@@ -190,21 +200,3 @@ fun LiveAnimation() {
 	)
 }
 
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun LiveButton(
-	onCardClicked: () -> Unit,
-	painter: Painter
-) {
-	IconButton(
-		onClick = { onCardClicked.invoke() },
-		modifier = Modifier
-			.size(24.dp)
-	) {
-		Icon(
-			painter = painter,
-			contentDescription = null,
-			tint = CCTheme.colors.white
-		)
-	}
-}

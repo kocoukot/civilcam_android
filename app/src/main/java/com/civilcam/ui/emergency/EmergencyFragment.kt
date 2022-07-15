@@ -23,12 +23,13 @@ import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
+import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyRoute
 import com.civilcam.ui.emergency.model.EmergencyScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class EmergencyFragment : Fragment() {
+class EmergencyFragment : Fragment(), SupportBottomBar {
 	private val viewModel: EmergencyViewModel by viewModel()
 	
 	private val permissionsDelegate = registerForPermissionsResult(
@@ -48,7 +49,7 @@ class EmergencyFragment : Fragment() {
 		savedInstanceState: Bundle?
 	): View {
 		setFragmentResultListener(PinCodeFragment.RESULT_BACK_STACK) { _, _ ->
-			viewModel.disableSosStatus()
+			viewModel.setInputActions(EmergencyActions.DisableSos)
 		}
 		
 		cameraManager = activity?.getSystemService(CAMERA_SERVICE) as CameraManager
@@ -66,7 +67,6 @@ class EmergencyFragment : Fragment() {
 					route.enabled,
 					route.cameraState
 				)
-				is EmergencyRoute.ScreenState -> showBottomBar(route.screen)
 			}
 		}
 		return ComposeView(requireContext()).apply {
@@ -80,11 +80,6 @@ class EmergencyFragment : Fragment() {
 				EmergencyScreenContent(viewModel)
 			}
 		}
-	}
-	
-	private fun showBottomBar(screen: EmergencyScreen) {
-		(activity as MainActivity)
-			.showBottomNavBar(screen == EmergencyScreen.NORMAL || screen == EmergencyScreen.COUPLED)
 	}
 	
 	private fun controlFlashLight(enabled: Boolean, cameraState: Int) {
