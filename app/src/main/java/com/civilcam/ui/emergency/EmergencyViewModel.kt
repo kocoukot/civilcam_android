@@ -12,6 +12,7 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
 	override fun setInputActions(action: EmergencyActions) {
 		when (action) {
 			EmergencyActions.DoubleClickSos -> doubleClickSos()
+			EmergencyActions.DisableSos -> disableSosStatus()
 			EmergencyActions.GoUserProfile -> goUserProfile()
 			EmergencyActions.GoSettings -> goSettings()
 			EmergencyActions.OneClickSafe -> oneClickSafe()
@@ -69,7 +70,7 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
 		}
 	}
 	
-	fun disableSosStatus() {
+	private fun disableSosStatus() {
 		_state.value = _state.value.copy(emergencyScreen = EmergencyScreen.NORMAL)
 		_state.value = _state.value.copy(emergencyButton = EmergencyButton.InSafeButton)
 	}

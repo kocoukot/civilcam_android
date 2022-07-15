@@ -16,13 +16,16 @@ import androidx.fragment.app.setFragmentResultListener
 import com.civilcam.R
 import com.civilcam.common.ext.hideSystemUI
 import com.civilcam.common.ext.showSystemUI
+import com.civilcam.ui.MainActivity
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
+import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyRoute
+import com.civilcam.ui.emergency.model.EmergencyScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -46,7 +49,7 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 		savedInstanceState: Bundle?
 	): View {
 		setFragmentResultListener(PinCodeFragment.RESULT_BACK_STACK) { _, _ ->
-			viewModel.disableSosStatus()
+			viewModel.setInputActions(EmergencyActions.DisableSos)
 		}
 		
 		cameraManager = activity?.getSystemService(CAMERA_SERVICE) as CameraManager
@@ -60,7 +63,10 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 					PinCodeFragment.createArgs(PinCodeFlow.SOS_PIN_CODE)
 				)
 				EmergencyRoute.CheckPermission -> checkPermissions()
-				is EmergencyRoute.ControlFlash -> controlFlashLight(route.enabled, route.cameraState)
+				is EmergencyRoute.ControlFlash -> controlFlashLight(
+					route.enabled,
+					route.cameraState
+				)
 			}
 		}
 		return ComposeView(requireContext()).apply {

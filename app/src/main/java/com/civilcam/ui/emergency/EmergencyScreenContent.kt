@@ -4,11 +4,14 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -16,9 +19,9 @@ import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.DividerLightGray
+import com.civilcam.ui.common.compose.IconActionButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.emergency.content.EmergencyButtonContent
-import com.civilcam.ui.emergency.content.EmergencyCameraPreview
 import com.civilcam.ui.emergency.content.EmergencyLiveContent
 import com.civilcam.ui.emergency.content.EmergencyTopBarContent
 import com.civilcam.ui.emergency.model.EmergencyActions
@@ -85,25 +88,24 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 						EmergencyLiveContent(
 							screen = state.value.emergencyScreen,
 							cameraState = state.value.cameraState,
-							onExtendClicked = {
-								viewModel.setInputActions(
-									EmergencyActions.ChangeMode(
-										EmergencyScreen.LIVE_EXTENDED
-									)
-								)
-							},
-							onMinimizeClicked = {
-								viewModel.setInputActions(
-									EmergencyActions.ChangeMode(
-										EmergencyScreen.COUPLED
-									)
-								)
-							},
-							onCameraChangeClicked = {
-								viewModel.setInputActions(EmergencyActions.ChangeCamera)
-							},
-							onFlashClicked = {
-								viewModel.setInputActions(EmergencyActions.ControlFlash)
+							onClick = { action ->
+								when (action) {
+									EmergencyActions.MinimizeLive -> {
+										viewModel.setInputActions(
+											EmergencyActions.ChangeMode(
+												EmergencyScreen.COUPLED
+											)
+										)
+									}
+									EmergencyActions.MaximizeLive -> {
+										viewModel.setInputActions(
+											EmergencyActions.ChangeMode(
+												EmergencyScreen.LIVE_EXTENDED
+											)
+										)
+									}
+									else -> viewModel.setInputActions(action)
+								}
 							}
 						)
 					}
@@ -129,24 +131,45 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 						EmergencyTopBarContent(
 							locationData = state.value.location,
 							screen = state.value.emergencyScreen,
-							onAvatarClicked = { viewModel.setInputActions(EmergencyActions.GoUserProfile) },
-							onSettingsClicked = { viewModel.setInputActions(EmergencyActions.GoSettings) },
-							onLocationClicked = { viewModel.setInputActions(EmergencyActions.DetectLocation) },
-							onMapExtendClicked = {
-								viewModel.setInputActions(
-									EmergencyActions.ChangeMode(
-										EmergencyScreen.MAP_EXTENDED
-									)
-								)
-							},
-							onMapMinimizeClicked = {
-								viewModel.setInputActions(
-									EmergencyActions.ChangeMode(
-										EmergencyScreen.COUPLED
-									)
-								)
+							onClick = { action ->
+								when (action) {
+									EmergencyActions.MaximizeMap -> {
+										viewModel.setInputActions(
+											EmergencyActions.ChangeMode(
+												EmergencyScreen.MAP_EXTENDED
+											)
+										)
+									}
+									EmergencyActions.MinimizeMap -> {
+										viewModel.setInputActions(
+											EmergencyActions.ChangeMode(
+												EmergencyScreen.COUPLED
+											)
+										)
+									}
+									else -> viewModel.setInputActions(action)
+								}
+								
 							}
 						)
+						
+						AnimatedVisibility(
+							visible = state.value.emergencyScreen == EmergencyScreen.NORMAL,
+							modifier = Modifier.padding(start = 16.dp, top = 88.dp),
+							enter = fadeIn(animationSpec = tween(1000)),
+							exit = fadeOut(animationSpec = tween(1000))
+						) {
+							Spacer(modifier = Modifier.height(156.dp))
+							IconActionButton(
+								buttonIcon = R.drawable.ic_location_pin,
+								buttonClick = { viewModel.setInputActions(EmergencyActions.DetectLocation) },
+								tint = CCTheme.colors.primaryRed,
+								modifier = Modifier
+									.clip(RoundedCornerShape(4.dp))
+									.background(color = CCTheme.colors.white)
+									.size(28.dp)
+							)
+						}
 						/*GoogleMap(
 							modifier = Modifier.fillMaxSize(),
 							cameraPositionState = cameraPositionState

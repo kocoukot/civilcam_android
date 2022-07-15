@@ -70,8 +70,8 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                                         viewModel.setInputActions(NetworkMainActions.ClickGoBack)
                                     }
                                 }
-
-
+                                
+                                
                             },
                             actionItem = {
                                 when (screenState) {
