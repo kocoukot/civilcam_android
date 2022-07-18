@@ -2,7 +2,6 @@ package com.civilcam.ui.auth.pincode
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -27,8 +26,6 @@ import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.PinCodeInputField
 
-
-@OptIn(ExperimentalLayoutApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 
