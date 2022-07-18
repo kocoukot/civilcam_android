@@ -195,7 +195,7 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .size(150.dp)
-                        .offset(y = (-32).dp),
+                        .offset(y = (-36).dp),
                     onButtonClick = viewModel::setInputActions,
                 )
             }
