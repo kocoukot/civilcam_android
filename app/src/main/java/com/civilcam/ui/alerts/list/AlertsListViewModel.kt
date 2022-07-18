@@ -10,12 +10,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class AlertsListViewModel(
-    getAlertsListUseCase: GetAlertsListUseCase
+    private val getAlertsListUseCase: GetAlertsListUseCase
 ) : ComposeViewModel<AlertListState, AlertListRoute, AlertListActions>() {
 
     override var _state: MutableStateFlow<AlertListState> = MutableStateFlow(AlertListState())
 
     init {
+
+    }
+
+    private fun getAlertsList() {
         _state.value = _state.value.copy(isLoading = true)
         viewModelScope.launch {
             kotlin.runCatching { getAlertsListUseCase.getAlerts() }
@@ -27,7 +31,6 @@ class AlertsListViewModel(
                 }
             _state.value = _state.value.copy(isLoading = false)
         }
-
     }
 
     override fun setInputActions(action: AlertListActions) {
@@ -38,6 +41,7 @@ class AlertsListViewModel(
             is AlertListActions.ClickGoUserProfile -> goUserProfile(action.userId)
             AlertListActions.ClickGoAlertsHistory -> goAlertHistory()
             is AlertListActions.ClickConfirmResolve -> alertResult(action.result)
+            AlertListActions.ClickGetMockLis -> getAlertsList()
         }
     }
 
