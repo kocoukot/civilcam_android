@@ -84,7 +84,7 @@
     <string name="resolve_text">Resolve</string>
 
     <string name="alerts_list_empty_state">No alerts</string>
-    <string name="alerts_list_recieved_empty_state">Your haven’t received alerts yet</string>
+    <string name="alerts_list_received_empty_state">Your haven’t received alerts yet</string>
     <string name="alerts_list_sent_empty_state">Your haven’t sent alerts yet</string>
 
     <string name="resolve_alert_title">Resolve alert</string>

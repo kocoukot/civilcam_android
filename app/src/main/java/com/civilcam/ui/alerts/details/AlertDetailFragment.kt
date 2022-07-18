@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import com.civilcam.ui.alerts.details.model.AlertDetailRoute
+import com.civilcam.ui.common.ext.navController
+import com.civilcam.ui.common.ext.observeNonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AlertDetailFragment : Fragment() {
@@ -17,11 +20,11 @@ class AlertDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
-//            when (route) {
-//                AlertDetailRoute.GoBack -> navController.popBackStack()
-//            }
-//        }
+        viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
+            when (route) {
+                AlertDetailRoute.GoBack -> navController.popBackStack()
+            }
+        }
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(

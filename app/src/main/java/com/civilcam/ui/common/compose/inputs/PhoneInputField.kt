@@ -28,6 +28,8 @@ import com.civilcam.common.ext.clearPhone
 import com.civilcam.common.ext.digits
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.common.theme.MaterialSelectionColor
+import com.civilcam.ui.common.compose.ErrorText
+import com.civilcam.ui.common.compose.PlaceholderText
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

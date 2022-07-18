@@ -20,14 +20,14 @@ class AlertsDetailViewModel(
     override fun setInputActions(action: AlertDetailActions) {
         when (action) {
             AlertDetailActions.ClickGoBack -> goBack()
-            AlertDetailActions.ClickCallPhone -> TODO()
-            AlertDetailActions.ClickDownloadVideo -> TODO()
+//            AlertDetailActions.ClickCallPhone -> TODO()
+//            AlertDetailActions.ClickDownloadVideo -> TODO()
         }
     }
 
 
     private fun goBack() {
-//        _steps.value = AlertDetailRoute.GoBack
+        _steps.value = AlertDetailRoute.GoBack
     }
 
 

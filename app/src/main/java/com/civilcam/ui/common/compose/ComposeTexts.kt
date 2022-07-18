@@ -1,9 +1,9 @@
-package com.civilcam.ui.common.compose.inputs
+package com.civilcam.ui.common.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,7 +18,7 @@ fun EmptyListText(text: String) {
         textAlign = TextAlign.Center,
         style = CCTheme.typography.common_text_regular,
         modifier = Modifier
-            .background(CCTheme.colors.white, RoundedCornerShape(50))
+            .background(CCTheme.colors.white, CircleShape)
             .padding(vertical = 8.dp, horizontal = 16.dp),
     )
 }
