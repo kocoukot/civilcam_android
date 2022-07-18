@@ -23,7 +23,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textFontWeight="600"
                 android:ellipsize="end"
                 android:fadingEdge="horizontal"
                 android:fontFamily="@font/roboto_bold"
@@ -32,6 +31,7 @@
                 android:paddingTop="@dimen/dim_12"
                 android:paddingBottom="@dimen/dim_8"
                 android:singleLine="true"
+                android:textFontWeight="600"
                 android:textSize="17sp"
                 tools:targetApi="p"
                 tools:text="You received a request" />
@@ -49,15 +49,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="center|bottom"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/dim_16">
 
             <TextView
                 android:id="@+id/notification_content"
-
                 style="@style/TextAppearance.Compat.Notification.Info"
-
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dim_8"
@@ -65,7 +63,7 @@
                 android:ellipsize="end"
                 android:fadingEdge="horizontal"
                 android:letterSpacing="-0.02"
-                android:lineSpacingExtra="@dimen/dim_6"
+                android:lineSpacingExtra="@dimen/dim_2"
                 android:maxLines="2"
                 android:paddingHorizontal="@dimen/dim_12"
                 android:singleLine="false"
