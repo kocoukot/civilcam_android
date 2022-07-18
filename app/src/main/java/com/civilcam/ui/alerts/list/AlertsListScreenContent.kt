@@ -1,6 +1,7 @@
 package com.civilcam.ui.alerts.list
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -8,8 +9,11 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
@@ -67,51 +71,66 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
             .fillMaxSize()
             .background(CCTheme.colors.lightGray)
     ) {
-
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
+        Column(
+            modifier = Modifier.fillMaxSize()
         ) {
-            state.value.data?.let { data ->
-                item {
-                    Spacer(modifier = Modifier.height(32.dp))
-                    Divider(color = CCTheme.colors.grayThree)
-                }
-                itemsIndexed(data) { index, item ->
-                    InformationRow(
-                        title = item.userInfo.userName,
-                        text = DateUtils.getFullDateAndTimeString(item.alertDate),
-                        needDivider = index < data.lastIndex,
-                        leadingIcon = { CircleUserAvatar(item.userInfo.avatar, 36) },
-                        trailingIcon = {
-                            if (!item.isResolved) {
-                                TextActionButton(
-                                    actionTitle = stringResource(id = R.string.resolve_text)
-                                ) {
-                                    viewModel.setInputActions(
-                                        AlertListActions.ClickResolveAlert(
-                                            item.alertId
-                                        )
-                                    )
-                                }
-                            }
-                        },
-                        rowClick = {
-                            viewModel.setInputActions(AlertListActions.ClickGoUserProfile(item.userInfo.userId))
-                        },
-                    )
-                }
-                item {
-                    Divider(color = CCTheme.colors.grayThree)
-                }
+            AlertHistoryRowSection {
+                viewModel.setInputActions(AlertListActions.ClickGoAlertsHistory)
             }
 
-
-
-            item {
-                AlertHistoryRowSection {
-                    viewModel.setInputActions(AlertListActions.ClickGoAlertsHistory)
+            state.value.data?.takeIf { it.isNotEmpty() }?.let { data ->
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    item {
+                        Spacer(modifier = Modifier.height(32.dp))
+                        Divider(color = CCTheme.colors.grayThree)
+                    }
+                    itemsIndexed(data) { index, item ->
+                        InformationRow(
+                            title = item.userInfo.userName,
+                            text = DateUtils.getFullDateAndTimeString(item.alertDate),
+                            needDivider = index < data.lastIndex,
+                            leadingIcon = { CircleUserAvatar(item.userInfo.avatar, 36) },
+                            trailingIcon = {
+                                if (!item.isResolved) {
+                                    TextActionButton(
+                                        modifier = Modifier.padding(end = 8.dp),
+                                        actionTitle = stringResource(id = R.string.resolve_text),
+                                        textFont = FontFamily(Font(R.font.roboto_regular)),
+                                    ) {
+                                        viewModel.setInputActions(
+                                            AlertListActions.ClickResolveAlert(
+                                                item.alertId
+                                            )
+                                        )
+                                    }
+                                }
+                            },
+                            rowClick = {
+                                viewModel.setInputActions(
+                                    AlertListActions.ClickGoUserProfile(
+                                        item.userInfo.userId
+                                    )
+                                )
+                            },
+                        )
+                    }
+                    item {
+                        Divider(color = CCTheme.colors.grayThree)
+                    }
+                }
+            } ?: kotlin.run {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable { viewModel.setInputActions(AlertListActions.ClickGetMockLis) },
+                    contentAlignment = Alignment.Center
+                ) {
+                    EmptyListText(
+                        stringResource(id = R.string.alerts_list_empty_state)
+                    )
                 }
             }
         }

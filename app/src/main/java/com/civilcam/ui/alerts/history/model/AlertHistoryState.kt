@@ -8,5 +8,6 @@ data class AlertHistoryState(
     val isLoading: Boolean = false,
     val errorText: String = "",
     val alertType: AlertType = AlertType.RECEIVED,
-    val data: List<AlertModel>? = null
+    val data: List<AlertModel>? = null,
+    val mockNeedToLoad: Boolean = false
 ) : ComposeFragmentState

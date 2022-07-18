@@ -13,5 +13,6 @@ sealed class AlertListActions : ComposeFragmentActions {
 
     object ClickGoAlertsHistory : AlertListActions()
 
+    object ClickGetMockLis : AlertListActions()
 
 }

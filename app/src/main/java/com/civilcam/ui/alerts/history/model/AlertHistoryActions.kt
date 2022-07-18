@@ -9,5 +9,6 @@ sealed class AlertHistoryActions : ComposeFragmentActions {
 
     data class ClickGoAlertDetails(val alertId: Int) : AlertHistoryActions()
 
+    object ClickGetMockLis : AlertHistoryActions()
 
 }

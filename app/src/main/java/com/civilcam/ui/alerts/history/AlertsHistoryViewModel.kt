@@ -16,7 +16,19 @@ class AlertsHistoryViewModel(
 
     override var _state: MutableStateFlow<AlertHistoryState> = MutableStateFlow(AlertHistoryState())
 
-    init {
+    override fun setInputActions(action: AlertHistoryActions) {
+        when (action) {
+            AlertHistoryActions.ClickGoBack -> goBack()
+            is AlertHistoryActions.ClickGoAlertDetails -> goAlertDetails(action.alertId)
+            is AlertHistoryActions.ClickAlertTypeChange -> changeAlertType(action.alertType)
+            AlertHistoryActions.ClickGetMockLis -> {
+                _state.value = _state.value.copy(mockNeedToLoad = true)
+                getAlertHistoryList()
+            }
+        }
+    }
+
+    private fun getAlertHistoryList() {
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
             kotlin.runCatching { getHistoryAlertListUseCase.getAlerts(_state.value.alertType) }
@@ -28,18 +40,7 @@ class AlertsHistoryViewModel(
                 }
             _state.value = _state.value.copy(isLoading = false)
         }
-
-
     }
-
-    override fun setInputActions(action: AlertHistoryActions) {
-        when (action) {
-            AlertHistoryActions.ClickGoBack -> goBack()
-            is AlertHistoryActions.ClickGoAlertDetails -> goAlertDetails(action.alertId)
-            is AlertHistoryActions.ClickAlertTypeChange -> changeAlertType(action.alertType)
-        }
-    }
-
 
     private fun goBack() {
         _steps.value = AlertHistoryRoute.GoBack
@@ -50,18 +51,8 @@ class AlertsHistoryViewModel(
     }
 
     private fun changeAlertType(alertType: AlertType) {
-        _state.value = _state.value.copy(isLoading = true)
         _state.value = _state.value.copy(alertType = alertType)
-        viewModelScope.launch {
-            kotlin.runCatching { getHistoryAlertListUseCase.getAlerts(alertType) }
-                .onSuccess { user ->
-                    _state.value = _state.value.copy(data = user)
-                }
-                .onFailure {
-                    _state.value = _state.value.copy(errorText = it.localizedMessage)
-                }
-            _state.value = _state.value.copy(isLoading = false)
-        }
+        if (_state.value.mockNeedToLoad) getAlertHistoryList()
     }
 
 

@@ -6,7 +6,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -21,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -76,18 +77,21 @@ fun ComposeButton(
 fun TextActionButton(
     actionTitle: String,
     isEnabled: Boolean = true,
+    modifier: Modifier = Modifier,
     textColor: Color = CCTheme.colors.primaryRed,
-    actionAction: () -> Unit
+    textFont: FontFamily = FontFamily(Font(R.font.roboto_medium)),
+    actionAction: () -> Unit,
 ) {
     TextButton(
         enabled = isEnabled,
         onClick = actionAction,
-//        modifier = Modifier.padding(horizontal = 8.dp)
+        modifier = modifier
     ) {
         Text(
             text = actionTitle,
             color = if (isEnabled) textColor else CCTheme.colors.grayOne,
-            style = CCTheme.typography.common_text_medium
+            style = CCTheme.typography.common_text_medium,
+            fontFamily = textFont
         )
     }
 }

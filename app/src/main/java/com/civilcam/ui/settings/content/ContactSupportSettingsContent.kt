@@ -26,8 +26,8 @@ import com.civilcam.common.ext.isEmail
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.Constant.ISSUE_DESCRIPTION_LIMIT
 import com.civilcam.ui.common.Constant.ISSUE_LIMIT
+import com.civilcam.ui.common.compose.PlaceholderText
 import com.civilcam.ui.common.compose.inputs.EmailInputField
-import com.civilcam.ui.common.compose.inputs.PlaceholderText
 
 @Composable
 fun ContactSupportContent(
