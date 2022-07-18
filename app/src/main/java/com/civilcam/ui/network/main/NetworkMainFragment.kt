@@ -13,6 +13,7 @@ import com.civilcam.R
 import com.civilcam.common.ext.setPan
 import com.civilcam.common.ext.setResize
 import com.civilcam.ui.MainActivity
+import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.arg
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
@@ -20,23 +21,22 @@ import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.network.main.model.NetworkMainRoute
 import com.civilcam.ui.network.main.model.NetworkScreen
 import com.civilcam.ui.profile.userDetails.UserDetailsFragment
-import com.civilcam.ui.profile.userProfile.UserProfileFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 
-class NetworkMainFragment : Fragment() {
-	private val viewModel: NetworkMainViewModel by viewModel() {
-		parametersOf(screen)
-	}
-	
-	private val contactsPermissionDelegate = registerForPermissionsResult(
-		Manifest.permission.READ_CONTACTS
-	) { onContactsPermissionsGranted(it) }
-	private var pendingAction: (() -> Unit)? = null
-	
-	private val screen: NetworkScreen by arg(ARG_NETWORK_SCREEN, NetworkScreen.MAIN)
-	
+class NetworkMainFragment : Fragment(), SupportBottomBar {
+    private val viewModel: NetworkMainViewModel by viewModel {
+        parametersOf(screen)
+    }
+
+    private val contactsPermissionDelegate = registerForPermissionsResult(
+        Manifest.permission.READ_CONTACTS
+    ) { onContactsPermissionsGranted(it) }
+    private var pendingAction: (() -> Unit)? = null
+
+    private val screen: NetworkScreen by arg(ARG_NETWORK_SCREEN, NetworkScreen.MAIN)
+
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
@@ -54,7 +54,7 @@ class NetworkMainFragment : Fragment() {
 					UserDetailsFragment.createArgs(route.userId)
 				)
 				is NetworkMainRoute.IsNavBarVisible -> (activity as MainActivity)
-					.showBottomNavBar(!route.isVisible)
+                    .showBottomNavBar(route.isVisible)
 			}
 		}
 		return ComposeView(requireContext()).apply {
@@ -98,11 +98,11 @@ class NetworkMainFragment : Fragment() {
 			pendingAction = null
 		}
 	}
-	
-	companion object {
+
+    companion object {
 		private const val ARG_NETWORK_SCREEN = "network_screen"
-		
-		fun createArgs(screen: NetworkScreen = NetworkScreen.MAIN) = bundleOf(
+
+        fun createArgs(screen: NetworkScreen = NetworkScreen.MAIN) = bundleOf(
 			ARG_NETWORK_SCREEN to screen
 		)
 	}

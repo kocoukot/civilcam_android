@@ -3,13 +3,11 @@ package com.civilcam.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
-import com.civilcam.R
 import com.civilcam.databinding.ActivityMainBinding
 import com.civilcam.service.notifications.NotificationHelper
 import com.civilcam.ui.common.SupportBottomBar
@@ -30,9 +28,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.apply {
-            navigationBarColor = ContextCompat.getColor(context, R.color.black)
-        }
         setContentView(
             ActivityMainBinding.inflate(layoutInflater)
                 .also { binding = it }
@@ -61,7 +56,6 @@ class MainActivity : AppCompatActivity() {
 
     fun showBottomNavBar(isVisible: Boolean) {
         binding.navBarGroup.isVisible = isVisible
-
     }
 
     override fun onNewIntent(intent: Intent?) {

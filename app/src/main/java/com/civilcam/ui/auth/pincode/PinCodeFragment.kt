@@ -11,6 +11,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import com.civilcam.R
+import com.civilcam.common.ext.hideKeyboard
+import com.civilcam.common.ext.showKeyboard
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.auth.pincode.model.PinCodeRoute
 import com.civilcam.ui.common.ext.navController
@@ -81,23 +83,33 @@ class PinCodeFragment : Fragment() {
 				navController.navigate(
 					R.id.network_root,
 					NetworkMainFragment.createArgs(NetworkScreen.ADD_GUARD)
-				)
-			}
-			permissionsDelegate.requestPermissions()
-		}
-	}
-	
-	private fun onPermissionsGranted(isGranted: Boolean) {
-		pendingAction?.invoke()
-		pendingAction = null
-	}
-	
-	companion object {
-		private const val ARG_FLOW = "pin_code_flow"
-		const val RESULT_BACK_STACK = "back_stack"
-		
-		fun createArgs(flow: PinCodeFlow) = bundleOf(
-			ARG_FLOW to flow
-		)
-	}
+                )
+            }
+            permissionsDelegate.requestPermissions()
+        }
+    }
+
+    private fun onPermissionsGranted(isGranted: Boolean) {
+        pendingAction?.invoke()
+        pendingAction = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showKeyboard()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        hideKeyboard()
+    }
+
+    companion object {
+        private const val ARG_FLOW = "pin_code_flow"
+        const val RESULT_BACK_STACK = "back_stack"
+
+        fun createArgs(flow: PinCodeFlow) = bundleOf(
+            ARG_FLOW to flow
+        )
+    }
 }

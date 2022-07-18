@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyButton
 import kotlinx.coroutines.delay
 import timber.log.Timber
@@ -35,8 +36,7 @@ import timber.log.Timber
 fun EmergencyButtonContent(
     emergencyButton: EmergencyButton,
     modifier: Modifier,
-    oneClick: () -> Unit,
-    doubleClick: () -> Unit,
+    onButtonClick: (EmergencyActions) -> Unit,
 ) {
 
     val buttonColorAnimated by animateColorAsState(targetValue = if (emergencyButton is EmergencyButton.InDangerButton) CCTheme.colors.primaryRed else CCTheme.colors.white)
@@ -57,11 +57,11 @@ fun EmergencyButtonContent(
                         indication = rememberRipple(color = CCTheme.colors.black),
                         onDoubleClick = {
                             Timber.i("detectTapGestures onDoubleTap")
-                            doubleClick.invoke()
+                            onButtonClick.invoke(EmergencyActions.DoubleClickSos)
                         },
                         onClick = {
                             Timber.i("detectTapGestures onTap")
-                            oneClick.invoke()
+                            onButtonClick.invoke(EmergencyActions.OneClickSafe)
                         }),
                 contentAlignment = Alignment.Center
             ) {

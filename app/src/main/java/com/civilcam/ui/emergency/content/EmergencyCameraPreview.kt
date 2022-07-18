@@ -16,19 +16,20 @@ import androidx.core.content.ContextCompat
 
 @Composable
 fun EmergencyCameraPreview(
-	cameraState: Int
+    modifier: Modifier = Modifier,
+    cameraState: Int
 ) {
-	Crossfade(targetState = cameraState) { state ->
-		if (state == CameraSelector.LENS_FACING_BACK) {
-			CreateCameraPreview(
-				cameraState = cameraState
-			)
-		} else {
-			CreateCameraPreview(
-				cameraState = cameraState
-			)
-		}
-	}
+    Crossfade(targetState = cameraState, modifier = modifier) { state ->
+        if (state == CameraSelector.LENS_FACING_BACK) {
+            CreateCameraPreview(
+                cameraState = cameraState
+            )
+        } else {
+            CreateCameraPreview(
+                cameraState = cameraState
+            )
+        }
+    }
 }
 
 @Composable
