@@ -87,18 +87,17 @@ class PinCodeViewModel(
 	}
 	
 	private fun goBack() {
-		_state.value = _state.value.copy(currentNoMatch = false)
-		_state.value = _state.value.copy(newPinNoMatch = false)
+		_state.value = _state.value.copy(currentNoMatch = false, newPinNoMatch = false)
 		when (_state.value.screenState) {
 			PinCodeFlow.SOS_PIN_CODE -> _steps.value = PinCodeRoute.GoBack
 			PinCodeFlow.CREATE_PIN_CODE -> _steps.value = PinCodeRoute.GoBack
 			PinCodeFlow.CONFIRM_PIN_CODE -> _state.value =
-				_state.value.copy(screenState = PinCodeFlow.CREATE_PIN_CODE)
+				_state.value.copy(screenState = PinCodeFlow.CREATE_PIN_CODE, confirmPinCode = "")
 			PinCodeFlow.CURRENT_PIN_CODE -> goUserProfile()
 			PinCodeFlow.NEW_PIN_CODE -> _state.value =
 				_state.value.copy(screenState = PinCodeFlow.CURRENT_PIN_CODE)
 			PinCodeFlow.CONFIRM_NEW_PIN_CODE -> _state.value =
-				_state.value.copy(screenState = PinCodeFlow.NEW_PIN_CODE)
+				_state.value.copy(screenState = PinCodeFlow.NEW_PIN_CODE, confirmPinCode = "")
 		}
 	}
 	
@@ -124,6 +123,6 @@ class PinCodeViewModel(
 	}
 	
 	fun clearStates() {
-		_state.value = _state.value.copy(confirmPinCode = "")
+		_state.value = _state.value.copy(confirmPinCode = "", noMatch = false)
 	}
 }
