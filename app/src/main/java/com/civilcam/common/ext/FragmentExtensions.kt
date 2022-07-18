@@ -1,19 +1,13 @@
 package com.civilcam.common.ext
 
-import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.Rect
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.view.View
-import android.view.ViewTreeObserver
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalView
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
@@ -93,19 +87,6 @@ fun getTextHintColor(needWhite: Boolean): ColorStateList {
 fun Fragment.getColorFromRes(color: Int) =
     ContextCompat.getColor(requireContext(), color)
 
-fun Fragment.hideKeyboard() {
-    view?.let { activity?.hideKeyboard(it) }
-}
-
-private fun Activity.hideKeyboard() {
-    hideKeyboard(currentFocus ?: View(this))
-}
-
-private fun Context.hideKeyboard(view: View) {
-    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-}
-
 fun isMobileOnline(): Boolean {
     val connectivityManager =
         instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -127,36 +108,6 @@ fun isMobileOnline(): Boolean {
     return false
 }
 
-enum class Keyboard {
-    Opened, Closed
-}
-
-@Composable
-fun keyboardAsState(): State<Keyboard> {
-    val keyboardState = remember { mutableStateOf(Keyboard.Closed) }
-    val view = LocalView.current
-    DisposableEffect(view) {
-        val onGlobalListener = ViewTreeObserver.OnGlobalLayoutListener {
-            val rect = Rect()
-            view.getWindowVisibleDisplayFrame(rect)
-            val screenHeight = view.rootView.height
-            val keypadHeight = screenHeight - rect.bottom
-            keyboardState.value = if (keypadHeight > screenHeight * 0.15) {
-                Keyboard.Opened
-            } else {
-                Keyboard.Closed
-            }
-        }
-        view.viewTreeObserver.addOnGlobalLayoutListener(onGlobalListener)
-
-        onDispose {
-            view.viewTreeObserver.removeOnGlobalLayoutListener(onGlobalListener)
-        }
-    }
-    return keyboardState
-}
-
-
 fun Fragment.setPan() {
     activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 }
@@ -173,7 +124,7 @@ fun Fragment.hideSystemUI() {
         clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                WindowCompat.setDecorFitsSystemWindows(this, false)
+//        WindowCompat.setDecorFitsSystemWindows(this, false)
     }
 }
 

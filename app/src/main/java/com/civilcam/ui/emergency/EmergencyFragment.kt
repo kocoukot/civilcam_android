@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.camera.core.CameraSelector
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.civilcam.R
@@ -25,24 +26,23 @@ import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyRoute
-import com.civilcam.ui.emergency.model.EmergencyScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class EmergencyFragment : Fragment(), SupportBottomBar {
 	private val viewModel: EmergencyViewModel by viewModel()
-	
+
 	private val permissionsDelegate = registerForPermissionsResult(
 		Manifest.permission.ACCESS_FINE_LOCATION,
 		Manifest.permission.ACCESS_COARSE_LOCATION,
 		Manifest.permission.CAMERA,
 		Manifest.permission.RECORD_AUDIO
 	) { onPermissionsGranted(it) }
-	
+
 	private var pendingAction: (() -> Unit)? = null
-	
+
 	private var cameraManager: CameraManager? = null
-	
+
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
@@ -51,9 +51,9 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 		setFragmentResultListener(PinCodeFragment.RESULT_BACK_STACK) { _, _ ->
 			viewModel.setInputActions(EmergencyActions.DisableSos)
 		}
-		
+
 		cameraManager = activity?.getSystemService(CAMERA_SERVICE) as CameraManager
-		
+
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
 				EmergencyRoute.GoUserProfile -> navController.navigate(R.id.userProfileFragment)
@@ -67,6 +67,16 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 					route.enabled,
 					route.cameraState
 				)
+				EmergencyRoute.HideSystemUI -> hideSystemUI()
+				EmergencyRoute.ShowSystemUI -> {
+					activity?.window?.apply {
+						WindowCompat.setDecorFitsSystemWindows(this, true)
+					}
+					showSystemUI()
+				}
+				is EmergencyRoute.IsNavBarVisible -> (activity as MainActivity).showBottomNavBar(
+					route.isVisible
+				)
 			}
 		}
 		return ComposeView(requireContext()).apply {
@@ -75,13 +85,13 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 					viewLifecycleOwner
 				)
 			)
-			
+
 			setContent {
 				EmergencyScreenContent(viewModel)
 			}
 		}
 	}
-	
+
 	private fun controlFlashLight(enabled: Boolean, cameraState: Int) {
 		if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) == true) {
 			if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH) == true) {
@@ -92,32 +102,31 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 			}
 		}
 	}
-	
+
 	private fun checkPermissions() {
 		if (permissionsDelegate.checkSelfPermissions()) {
-		
+
 		} else {
-			pendingAction = {
-			
-			}
+			pendingAction = { }
 			permissionsDelegate.requestPermissions()
 		}
 	}
-	
+
 	private fun onPermissionsGranted(isGranted: Boolean) {
 		if (isGranted) {
 			pendingAction?.invoke()
 			pendingAction = null
 		}
 	}
-	
-	override fun onResume() {
-		super.onResume()
+
+	override fun onStart() {
+		super.onStart()
 		hideSystemUI()
 	}
-	
+
 	override fun onStop() {
 		super.onStop()
 		showSystemUI()
 	}
+
 }

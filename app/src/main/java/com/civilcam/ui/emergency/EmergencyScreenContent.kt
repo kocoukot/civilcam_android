@@ -1,14 +1,15 @@
 package com.civilcam.ui.emergency
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,180 +32,176 @@ import com.google.android.gms.maps.model.LatLng
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
-	
-	val state = viewModel.state.collectAsState()
-	val singapore = LatLng(1.35, 103.87)
+
+    val state = viewModel.state.collectAsState()
+    val singapore = LatLng(1.35, 103.87)
+
+    val liveWeight by animateFloatAsState(targetValue = if (state.value.emergencyScreen == EmergencyScreen.LIVE_EXTENDED || state.value.emergencyScreen == EmergencyScreen.COUPLED) 1f else 0.1f)
+    val userMapWeight by animateFloatAsState(targetValue = if (state.value.emergencyScreen == EmergencyScreen.NORMAL || state.value.emergencyScreen == EmergencyScreen.COUPLED || state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED) 1f else 0.1f)
+
 //    val cameraPositionState = rememberCameraPositionState {
 //        position = CameraPosition.fromLatLngZoom(singapore, 10f)
 //    }
-	
-	Scaffold(
-		backgroundColor = CCTheme.colors.grayThree,
-		modifier = Modifier.fillMaxSize(),
-		topBar = {
-			Crossfade(targetState = state.value.emergencyScreen) { state ->
-				AnimatedVisibility(
-					visible = state == EmergencyScreen.MAP_EXTENDED ||
-							state == EmergencyScreen.LIVE_EXTENDED,
-					enter = fadeIn(animationSpec = tween(1000)),
-					exit = fadeOut(animationSpec = tween(1000))
-				) {
-					Column(
-						Modifier.padding(top = 24.dp)
-					) {
-						TopAppBarContent(
-							title = if (state == EmergencyScreen.MAP_EXTENDED) stringResource(id = R.string.emergency_map_title)
-							else stringResource(id = R.string.emergency_live_stream_title),
-							navigationItem = {
-								BackButton {
-									viewModel.setInputActions(EmergencyActions.GoBack)
-								}
-							},
-						)
-						DividerLightGray()
-					}
-				}
-			}
-		}
-	) {
-		Box(
-			modifier = Modifier
-				.fillMaxSize()
-		) {
-			Column {
-				AnimatedVisibility(
-					visible = state.value.emergencyScreen == EmergencyScreen.COUPLED ||
-							state.value.emergencyScreen == EmergencyScreen.LIVE_EXTENDED,
-					modifier = Modifier.weight(1f),
-					enter = fadeIn(animationSpec = tween(1000)),
-					exit = fadeOut(animationSpec = tween(1000))
-				) {
-					Column(
-						Modifier
-							.fillMaxSize()
-							.background(color = Color.Black)
-					) {
-						
-						EmergencyLiveContent(
-							screen = state.value.emergencyScreen,
-							cameraState = state.value.cameraState,
-							onClick = { action ->
-								when (action) {
-									EmergencyActions.MinimizeLive -> {
-										viewModel.setInputActions(
-											EmergencyActions.ChangeMode(
-												EmergencyScreen.COUPLED
-											)
-										)
-									}
-									EmergencyActions.MaximizeLive -> {
-										viewModel.setInputActions(
-											EmergencyActions.ChangeMode(
-												EmergencyScreen.LIVE_EXTENDED
-											)
-										)
-									}
-									else -> viewModel.setInputActions(action)
-								}
-							}
-						)
-					}
-				}
-				
-				AnimatedVisibility(
-					visible = state.value.emergencyScreen == EmergencyScreen.NORMAL ||
-							state.value.emergencyScreen == EmergencyScreen.COUPLED ||
-							state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED,
-					enter = fadeIn(animationSpec = tween(1000)),
-					exit = fadeOut(animationSpec = tween(1000)),
-					modifier = Modifier.weight(1f)
-				) {
-					Column(
-						Modifier
-							.fillMaxSize()
-					) {
-						
-						AnimatedVisibility(visible = state.value.emergencyScreen == EmergencyScreen.NORMAL) {
-							Spacer(modifier = Modifier.height(40.dp))
-						}
-						
-						EmergencyTopBarContent(
-							locationData = state.value.location,
-							screen = state.value.emergencyScreen,
-							onClick = { action ->
-								when (action) {
-									EmergencyActions.MaximizeMap -> {
-										viewModel.setInputActions(
-											EmergencyActions.ChangeMode(
-												EmergencyScreen.MAP_EXTENDED
-											)
-										)
-									}
-									EmergencyActions.MinimizeMap -> {
-										viewModel.setInputActions(
-											EmergencyActions.ChangeMode(
-												EmergencyScreen.COUPLED
-											)
-										)
-									}
-									else -> viewModel.setInputActions(action)
-								}
-								
-							}
-						)
-						
-						AnimatedVisibility(
-							visible = state.value.emergencyScreen == EmergencyScreen.NORMAL,
-							modifier = Modifier.padding(start = 16.dp, top = 88.dp),
-							enter = fadeIn(animationSpec = tween(1000)),
-							exit = fadeOut(animationSpec = tween(1000))
-						) {
-							Spacer(modifier = Modifier.height(156.dp))
-							IconActionButton(
-								buttonIcon = R.drawable.ic_location_pin,
-								buttonClick = { viewModel.setInputActions(EmergencyActions.DetectLocation) },
-								tint = CCTheme.colors.primaryRed,
-								modifier = Modifier
-									.clip(RoundedCornerShape(4.dp))
-									.background(color = CCTheme.colors.white)
-									.size(28.dp)
-							)
-						}
-						/*GoogleMap(
-							modifier = Modifier.fillMaxSize(),
-							cameraPositionState = cameraPositionState
-						) {
-							Marker(
-								state = MarkerState(position = singapore),
-								title = "Singapore",
-								snippet = "Marker in Singapore"
-							)
-						}*/
-					}
-				}
-			}
-			
-			AnimatedVisibility(
-				visible = state.value.emergencyScreen == EmergencyScreen.NORMAL ||
-						state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED,
-				enter = fadeIn(animationSpec = tween(1000)),
-				exit = fadeOut(animationSpec = tween(1000))
-			) {
-				EmergencyButtonContent(
-					emergencyButton = state.value.emergencyButton,
-					modifier = Modifier
-						.align(Alignment.BottomCenter)
-						.size(150.dp)
-						.offset(y = (-32).dp),
-					oneClick = {
-						viewModel.setInputActions(EmergencyActions.OneClickSafe)
-					},
-					doubleClick = {
-						viewModel.setInputActions(EmergencyActions.DoubleClickSos)
-					},
-				)
-			}
-		}
-	}
+
+    Scaffold(
+        backgroundColor = CCTheme.colors.grayThree,
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            AnimatedVisibility(
+                visible = state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED ||
+                        state.value.emergencyScreen == EmergencyScreen.LIVE_EXTENDED,
+                enter = slideInVertically(animationSpec = tween(animation_duration)),
+                exit = slideOutVertically(animationSpec = tween(animation_duration))
+            ) {
+                Column {
+                    TopAppBarContent(
+                        title = stringResource(id = state.value.emergencyScreen.title),
+                        navigationItem = {
+                            BackButton {
+                                viewModel.setInputActions(EmergencyActions.GoBack)
+                            }
+                        },
+                    )
+                    DividerLightGray()
+                }
+            }
+        }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Column {
+                AnimatedVisibility(
+                    visible = state.value.emergencyScreen == EmergencyScreen.COUPLED ||
+                            state.value.emergencyScreen == EmergencyScreen.LIVE_EXTENDED,
+                    modifier = Modifier.weight(liveWeight),
+                    enter = slideInVertically(animationSpec = tween(animation_duration)) + fadeIn(),
+                    exit = slideOutVertically(animationSpec = tween(animation_duration)) + fadeOut()
+                ) {
+                    Column(
+                        Modifier
+                            .fillMaxSize()
+                            .background(color = Color.Black)
+                    ) {
+
+                        EmergencyLiveContent(
+                            screen = state.value.emergencyScreen,
+                            cameraState = state.value.cameraState,
+                            onClick = { action ->
+                                when (action) {
+                                    EmergencyActions.MinimizeLive -> {
+                                        viewModel.setInputActions(
+                                            EmergencyActions.ChangeMode(
+                                                EmergencyScreen.COUPLED
+                                            )
+                                        )
+                                    }
+                                    EmergencyActions.MaximizeLive -> {
+                                        viewModel.setInputActions(
+                                            EmergencyActions.ChangeMode(
+                                                EmergencyScreen.LIVE_EXTENDED
+                                            )
+                                        )
+                                    }
+                                    else -> viewModel.setInputActions(action)
+                                }
+                            }
+                        )
+                    }
+                }
+
+                AnimatedVisibility(
+                    visible = state.value.emergencyScreen == EmergencyScreen.NORMAL ||
+                            state.value.emergencyScreen == EmergencyScreen.COUPLED ||
+                            state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED,
+                    enter = slideInVertically(animationSpec = tween(animation_duration)) + fadeIn(),
+                    exit = slideOutVertically(animationSpec = tween(animation_duration)) + fadeOut(),
+                    modifier = Modifier.weight(userMapWeight)
+                ) {
+                    Column(
+                        Modifier
+                            .fillMaxSize()
+                    ) {
+
+                        AnimatedVisibility(visible = state.value.emergencyScreen == EmergencyScreen.NORMAL) {
+                            Spacer(modifier = Modifier.height(40.dp))
+                        }
+
+                        EmergencyTopBarContent(
+                            locationData = state.value.location,
+                            screen = state.value.emergencyScreen,
+                            onClick = { action ->
+                                when (action) {
+                                    EmergencyActions.MaximizeMap -> {
+                                        viewModel.setInputActions(
+                                            EmergencyActions.ChangeMode(
+                                                EmergencyScreen.MAP_EXTENDED
+                                            )
+                                        )
+                                    }
+                                    EmergencyActions.MinimizeMap -> {
+                                        viewModel.setInputActions(
+                                            EmergencyActions.ChangeMode(
+                                                EmergencyScreen.COUPLED
+                                            )
+                                        )
+                                    }
+                                    else -> viewModel.setInputActions(action)
+                                }
+
+                            }
+                        )
+
+                        AnimatedVisibility(
+                            visible = state.value.emergencyScreen == EmergencyScreen.NORMAL,
+                            modifier = Modifier.padding(start = 16.dp, top = 88.dp),
+                            enter = fadeIn(animationSpec = tween(animation_duration)),
+                            exit = fadeOut(animationSpec = tween(animation_duration))
+                        ) {
+                            Spacer(modifier = Modifier.height(156.dp))
+                            IconActionButton(
+                                buttonIcon = R.drawable.ic_location_pin,
+                                buttonClick = { viewModel.setInputActions(EmergencyActions.DetectLocation) },
+                                tint = CCTheme.colors.primaryRed,
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(4.dp))
+                                    .background(color = CCTheme.colors.white)
+                                    .size(28.dp)
+                            )
+                        }
+                        /*GoogleMap(
+                            modifier = Modifier.fillMaxSize(),
+                            cameraPositionState = cameraPositionState
+                        ) {
+                            Marker(
+                                state = MarkerState(position = singapore),
+                                title = "Singapore",
+                                snippet = "Marker in Singapore"
+                            )
+                        }*/
+                    }
+                }
+            }
+
+            AnimatedVisibility(
+                visible = state.value.emergencyScreen == EmergencyScreen.NORMAL ||
+                        state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED,
+                enter = fadeIn(animationSpec = tween(animation_duration)),
+                exit = fadeOut(animationSpec = tween(animation_duration))
+            ) {
+                EmergencyButtonContent(
+                    emergencyButton = state.value.emergencyButton,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .size(150.dp)
+                        .offset(y = (-32).dp),
+                    onButtonClick = viewModel::setInputActions,
+                )
+            }
+        }
+    }
 }
+
+private const val animation_duration = 400
  

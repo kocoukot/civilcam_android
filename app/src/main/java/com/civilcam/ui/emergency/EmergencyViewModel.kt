@@ -4,6 +4,7 @@ import androidx.camera.core.CameraSelector
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.ui.emergency.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
+import timber.log.Timber
 
 
 class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, EmergencyActions>() {
@@ -37,10 +38,20 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
 	}
 	
 	private fun changeMode(screen: EmergencyScreen) {
+		Timber.d("changeMode $screen")
 		_state.value = _state.value.copy(emergencyScreen = screen)
+		steps.value = EmergencyRoute.IsNavBarVisible(screen == EmergencyScreen.NORMAL)
+		when (screen) {
+			EmergencyScreen.NORMAL,
+			EmergencyScreen.COUPLED -> _steps.value =
+				EmergencyRoute.HideSystemUI
+			EmergencyScreen.MAP_EXTENDED, EmergencyScreen.LIVE_EXTENDED -> _steps.value =
+				EmergencyRoute.ShowSystemUI
+		}
 	}
 	
 	private fun goBack() {
+		_steps.value = EmergencyRoute.HideSystemUI
 		_state.value = _state.value.copy(emergencyScreen = EmergencyScreen.COUPLED)
 	}
 	
@@ -63,16 +74,22 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
 	}
 	
 	private fun doubleClickSos() {
+		steps.value = EmergencyRoute.IsNavBarVisible(false)
+
 		_steps.value = EmergencyRoute.CheckPermission
 		if (state.value.emergencyButton == EmergencyButton.InSafeButton) {
-			_state.value = _state.value.copy(emergencyScreen = EmergencyScreen.COUPLED)
-			_state.value = _state.value.copy(emergencyButton = EmergencyButton.InDangerButton)
+			_state.value = _state.value.copy(
+				emergencyScreen = EmergencyScreen.COUPLED,
+				emergencyButton = EmergencyButton.InDangerButton
+			)
 		}
 	}
 	
 	private fun disableSosStatus() {
-		_state.value = _state.value.copy(emergencyScreen = EmergencyScreen.NORMAL)
-		_state.value = _state.value.copy(emergencyButton = EmergencyButton.InSafeButton)
+		_state.value = _state.value.copy(
+			emergencyScreen = EmergencyScreen.NORMAL,
+			emergencyButton = EmergencyButton.InSafeButton
+		)
 	}
 }
 
