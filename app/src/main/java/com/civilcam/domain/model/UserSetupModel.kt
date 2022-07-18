@@ -14,12 +14,13 @@ data class UserSetupModel(
 ) {
 
     val isFilled: Boolean
-        get() = firstName.isNotEmpty() &&
-                lastName.isNotEmpty() &&
-                dateBirth != 0L &&
-                profileImage != null &&
-                phoneNumber.length == 10 &&
-                location.isNotEmpty()
+        get() =
+            firstName.isNotEmpty() &&
+                    lastName.isNotEmpty() &&
+                    dateBirth != 0L &&
+                    profileImage != null &&
+                    phoneNumber.length == 10 &&
+                    location.isNotEmpty()
 //                coords != null
 
     val isPhotoSelected: Boolean

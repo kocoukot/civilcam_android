@@ -94,8 +94,8 @@ class PinCodeFragment : Fragment() {
         pendingAction = null
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         showKeyboard()
     }
 

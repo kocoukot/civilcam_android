@@ -13,6 +13,8 @@ import androidx.core.os.bundleOf
 import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
 import com.civilcam.R
+import com.civilcam.common.ext.hideKeyboard
+import com.civilcam.common.ext.showKeyboard
 import com.civilcam.domain.model.VerificationFlow
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
@@ -82,11 +84,21 @@ class VerificationFragment : Fragment() {
 			}
 		}
 	}
-	
+
+	override fun onStart() {
+		super.onStart()
+		showKeyboard()
+	}
+
+	override fun onStop() {
+		super.onStop()
+		hideKeyboard()
+	}
+
 	companion object {
 		private const val ARG_FLOW = "verification_flow"
 		private const val ARG_SUBJECT = "verification_subject"
-		
+
 		fun createArgs(flow: VerificationFlow, subject: String) = bundleOf(
 			ARG_FLOW to flow,
 			ARG_SUBJECT to subject
