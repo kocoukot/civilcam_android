@@ -49,19 +49,22 @@ class NotificationHelper : KoinComponent {
 
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
 
-        val broadcastIntentClose =
-            Intent(context, NotificationRequestCloseButtonListener::class.java).apply {
-                putExtra("alert_type", "request")
-            }
-        val broadcastIntentAccept = Intent(context, NotificationAcceptButtonListener::class.java)
-        val broadcastIntentDeny = Intent(context, NotificationDenyButtonListener::class.java)
+        val broadcastIntentClose = Intent(context, NotificationRequestButtonListener::class.java)
 
         val broadcastPendingIntentClose =
-            PendingIntent.getBroadcast(context, 0, broadcastIntentClose, 0)
+            PendingIntent.getBroadcast(context, 0, broadcastIntentClose.apply {
+                putExtra(EXTRAS_NOTIFICATION_KEY, "close_request")
+            }, 0)
+
         val broadcastPendingIntentDeny =
-            PendingIntent.getBroadcast(context, 0, broadcastIntentDeny, 0)
+            PendingIntent.getBroadcast(context, 1, broadcastIntentClose.apply {
+                putExtra(EXTRAS_NOTIFICATION_KEY, "deny")
+            }, 0)
+
         val broadcastPendingIntentAccept =
-            PendingIntent.getBroadcast(context, 0, broadcastIntentAccept, 0)
+            PendingIntent.getBroadcast(context, 2, broadcastIntentClose.apply {
+                putExtra(EXTRAS_NOTIFICATION_KEY, "accept")
+            }, 0)
 
 
 
@@ -85,6 +88,7 @@ class NotificationHelper : KoinComponent {
             setAutoCancel(true)
             setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
             priority = NotificationCompat.PRIORITY_HIGH
+
 
 
             notificationBuilder.contentView.apply {
@@ -165,16 +169,16 @@ class NotificationHelper : KoinComponent {
 
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
 
-        val broadcastIntentClose =
-            Intent(context, NotificationAlertCloseButtonListener::class.java).apply {
-                putExtra("alert_type", "alert")
-            }
-        val broadcastIntentDetail = Intent(context, NotificationDetailButtonListener::class.java)
+        val broadcastIntent = Intent(context, NotificationRequestButtonListener::class.java)
 
         val broadcastPendingIntentClose =
-            PendingIntent.getBroadcast(context, 0, broadcastIntentClose, 0)
+            PendingIntent.getBroadcast(context, 11, broadcastIntent.apply {
+                putExtra(EXTRAS_NOTIFICATION_KEY, "close_alert")
+            }, 11)
         val broadcastPendingIntentDetail =
-            PendingIntent.getBroadcast(context, 0, broadcastIntentDetail, 0)
+            PendingIntent.getBroadcast(context, 12, broadcastIntent.apply {
+                putExtra(EXTRAS_NOTIFICATION_KEY, "detail")
+            }, 12)
 
 
 
@@ -287,6 +291,7 @@ class NotificationHelper : KoinComponent {
         const val NOTIFICATION_ALERT_ID = 1003
         private var showRequestProgress = true
         private var showAlertProgress = true
+        var EXTRAS_NOTIFICATION_KEY = "notification_type"
 
         fun cancelRequestProgress() {
             showRequestProgress = false
