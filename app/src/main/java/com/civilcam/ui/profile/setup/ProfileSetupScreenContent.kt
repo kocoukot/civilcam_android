@@ -53,7 +53,8 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
         modifier = Modifier.fillMaxSize(),
         topBar = {
             Column {
-                TopAppBarContent(
+
+            TopAppBarContent(
                     title = if (state.value.profileSetupScreen == ProfileSetupScreen.LOCATION)
                         stringResource(id = R.string.profile_setup_address_select_title)
                     else

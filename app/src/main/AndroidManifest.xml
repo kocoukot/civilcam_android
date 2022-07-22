@@ -65,27 +65,7 @@
         </service>
 
         <receiver
-            android:name=".service.notifications.NotificationRequestCloseButtonListener"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" />
-
-        <receiver
-            android:name=".service.notifications.NotificationDenyButtonListener"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" />
-
-        <receiver
-            android:name=".service.notifications.NotificationAcceptButtonListener"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" />
-
-        <receiver
-            android:name=".service.notifications.NotificationDetailButtonListener"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" />
-
-        <receiver
-            android:name=".service.notifications.NotificationAlertCloseButtonListener"
+            android:name=".service.notifications.NotificationRequestButtonListener"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" />
 
