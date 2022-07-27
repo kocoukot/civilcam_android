@@ -29,22 +29,18 @@ fun PasswordStrategyBlocks(
 	input: String,
 	strategyUpdate: (Int) -> Unit
 ) {
-	val numberStateColor by
-	animateColorAsState(targetValue = if (OneDigitCheckStrategy(input)) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
-	val capitalLetterStateColor by
-	animateColorAsState(targetValue = if (UpperCaseCheckStrategy(input)) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
-	val specialCharacterStateColor by
-	animateColorAsState(targetValue = if (SpecialSymbolCheckStrategy(input)) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
-	val lengthStateColor by
-	animateColorAsState(targetValue = if (LengthCheckStrategy(input)) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
-	
+	val numberStateColor by colorGet(OneDigitCheckStrategy(input))
+	val capitalLetterStateColor by colorGet(UpperCaseCheckStrategy(input))
+	val specialCharacterStateColor by colorGet(SpecialSymbolCheckStrategy(input))
+	val lengthStateColor by colorGet(LengthCheckStrategy(input))
+
 	val checkChips = mutableMapOf(
 		OneDigitCheckStrategy to false,
 		UpperCaseCheckStrategy to false,
 		SpecialSymbolCheckStrategy to false,
 		LengthCheckStrategy to false
 	)
-	
+
 	checkChips[OneDigitCheckStrategy] = OneDigitCheckStrategy(input)
 	checkChips[UpperCaseCheckStrategy] = UpperCaseCheckStrategy(input)
 	checkChips[SpecialSymbolCheckStrategy] = SpecialSymbolCheckStrategy(input)
@@ -58,7 +54,7 @@ fun PasswordStrategyBlocks(
 			Column {
 				Text(
 					text = stringResource(id = R.string.password_should_contain),
-					color = if (checkedCount > 0) CCTheme.colors.primaryRed else CCTheme.colors.grayOne,
+					color = CCTheme.colors.grayOne, //if (checkedCount > 0) CCTheme.colors.primaryRed else ,
 					fontSize = TextUnit(13f, TextUnitType.Sp)
 				)
 				
@@ -81,12 +77,17 @@ fun PasswordStrategyBlocks(
 					text = stringResource(id = R.string.password_should_contain_char),
 					color = lengthStateColor
 				)
-				
+
 				Spacer(modifier = Modifier.padding(bottom = 8.dp))
 			}
 		}
 	}
 }
+
+@Composable
+private fun colorGet(isError: Boolean) =
+	animateColorAsState(targetValue = if (isError) CCTheme.colors.primaryGreen else CCTheme.colors.grayOne)
+
 
 @OptIn(ExperimentalUnitApi::class)
 @Composable

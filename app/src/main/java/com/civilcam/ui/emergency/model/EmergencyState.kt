@@ -9,6 +9,7 @@ data class EmergencyState(
     val errorText: String = "",
     val location: String = "12564 Nox Street ...",
     val cameraFlash: Boolean = true,
+    val isLocationAllowed: Boolean = false,
     val cameraState: Int = CameraSelector.LENS_FACING_BACK,
     val emergencyScreen: EmergencyScreen = EmergencyScreen.NORMAL,
     val emergencyState: UserEmergencyState = UserEmergencyState.IN_SAFE,
