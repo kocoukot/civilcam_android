@@ -22,11 +22,13 @@ import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.create.model.CreateAccountActions
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
-import com.civilcam.ui.common.compose.*
+import com.civilcam.ui.common.compose.BackButton
+import com.civilcam.ui.common.compose.ComposeButton
+import com.civilcam.ui.common.compose.DividerLightGray
+import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.EmailInputField
 import com.civilcam.ui.common.compose.inputs.PasswordField
 import com.civilcam.ui.common.compose.inputs.PasswordStrategyBlocks
-import kotlin.math.ceil
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -100,7 +102,7 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 						)
 					)
 				},
-				hasError = checkedStrategies.value != 4,
+				//hasError = checkedStrategies.value != 4,
 				noMatch = state.value.passwordModel.noMatch
 			)
 			

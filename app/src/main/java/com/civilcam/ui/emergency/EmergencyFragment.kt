@@ -62,7 +62,9 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 					R.id.pinCodeFragment,
 					PinCodeFragment.createArgs(PinCodeFlow.SOS_PIN_CODE)
 				)
-				EmergencyRoute.CheckPermission -> checkPermissions()
+				EmergencyRoute.CheckPermission -> {
+					checkPermissions()
+				}
 				is EmergencyRoute.ControlFlash -> controlFlashLight(
 					route.enabled,
 					route.cameraState
@@ -105,14 +107,15 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 
 	private fun checkPermissions() {
 		if (permissionsDelegate.checkSelfPermissions()) {
-
+			viewModel.launchSos()
 		} else {
-			pendingAction = { }
+			pendingAction = { checkPermissions() }
 			permissionsDelegate.requestPermissions()
 		}
 	}
 
 	private fun onPermissionsGranted(isGranted: Boolean) {
+		//viewModel.isLocationAllowed(isGranted)
 		if (isGranted) {
 			pendingAction?.invoke()
 			pendingAction = null
