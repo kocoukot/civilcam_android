@@ -163,7 +163,7 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
                             IconActionButton(
                                 buttonIcon = R.drawable.ic_location_pin,
                                 buttonClick = { viewModel.setInputActions(EmergencyActions.DetectLocation) },
-                                tint = CCTheme.colors.primaryRed,
+                                tint = CCTheme.colors.primaryRed.copy(alpha = if (state.value.isLocationAllowed) 1f else 0.4f),
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(4.dp))
                                     .background(color = CCTheme.colors.white)
@@ -203,5 +203,5 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
     }
 }
 
-private const val animation_duration = 400
+private const val animation_duration = 700
  
