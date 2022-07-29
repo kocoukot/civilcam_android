@@ -1,8 +1,11 @@
 package com.civilcam.ui.emergency
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,8 +39,14 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
     val state = viewModel.state.collectAsState()
     val singapore = LatLng(1.35, 103.87)
 
-    val liveWeight by animateFloatAsState(targetValue = if (state.value.emergencyScreen == EmergencyScreen.LIVE_EXTENDED || state.value.emergencyScreen == EmergencyScreen.COUPLED) 1f else 0.1f)
-    val userMapWeight by animateFloatAsState(targetValue = if (state.value.emergencyScreen == EmergencyScreen.NORMAL || state.value.emergencyScreen == EmergencyScreen.COUPLED || state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED) 1f else 0.1f)
+    val liveWeight by animateFloatAsState(
+        targetValue = if (state.value.emergencyScreen == EmergencyScreen.LIVE_EXTENDED || state.value.emergencyScreen == EmergencyScreen.COUPLED) 1f else 0.1f,
+        animationSpec = tween(animation_duration)
+    )
+    val userMapWeight by animateFloatAsState(
+        targetValue = if (state.value.emergencyScreen == EmergencyScreen.NORMAL || state.value.emergencyScreen == EmergencyScreen.COUPLED || state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED) 1f else 0.1f,
+        animationSpec = tween(animation_duration)
+    )
 
 //    val cameraPositionState = rememberCameraPositionState {
 //        position = CameraPosition.fromLatLngZoom(singapore, 10f)
@@ -50,8 +59,8 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
             AnimatedVisibility(
                 visible = state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED ||
                         state.value.emergencyScreen == EmergencyScreen.LIVE_EXTENDED,
-                enter = slideInVertically(animationSpec = tween(animation_duration)),
-                exit = slideOutVertically(animationSpec = tween(animation_duration))
+//                enter = slideInVertically(animationSpec = tween(animation_duration)) + fadeIn(),
+//                exit = slideOutVertically(animationSpec = tween(animation_duration)) + fadeOut()
             ) {
                 Column {
                     TopAppBarContent(
@@ -76,8 +85,8 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
                     visible = state.value.emergencyScreen == EmergencyScreen.COUPLED ||
                             state.value.emergencyScreen == EmergencyScreen.LIVE_EXTENDED,
                     modifier = Modifier.weight(liveWeight),
-                    enter = slideInVertically(animationSpec = tween(animation_duration)) + fadeIn(),
-                    exit = slideOutVertically(animationSpec = tween(animation_duration)) + fadeOut()
+                    //   enter = slideInVertically(animationSpec = tween(animation_duration)) + fadeIn(),
+                    //  exit = slideOutVertically(animationSpec = tween(animation_duration)) + fadeOut()
                 ) {
                     Column(
                         Modifier
@@ -115,8 +124,8 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
                     visible = state.value.emergencyScreen == EmergencyScreen.NORMAL ||
                             state.value.emergencyScreen == EmergencyScreen.COUPLED ||
                             state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED,
-                    enter = slideInVertically(animationSpec = tween(animation_duration)) + fadeIn(),
-                    exit = slideOutVertically(animationSpec = tween(animation_duration)) + fadeOut(),
+//                    enter = slideInVertically(animationSpec = tween(animation_duration)) + fadeIn(),
+//                    exit = slideOutVertically(animationSpec = tween(animation_duration)) + fadeOut(),
                     modifier = Modifier.weight(userMapWeight)
                 ) {
                     Column(

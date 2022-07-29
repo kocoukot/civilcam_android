@@ -8,8 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -27,6 +26,11 @@ import com.civilcam.ui.common.compose.IconActionButton
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyScreen
 import com.civilcam.utils.DateUtils.getFullDateAndTimeString
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun EmergencyLiveContent(
@@ -34,7 +38,18 @@ fun EmergencyLiveContent(
     cameraState: Int,
     onClick: (EmergencyActions) -> Unit
 ) {
+    val scope = CoroutineScope(Dispatchers.Main)
 
+    var currentLongTime by remember { mutableStateOf(System.currentTimeMillis()) }
+
+    scope.launch {
+        currentLongTime = System.currentTimeMillis()
+        while (screen == EmergencyScreen.LIVE_EXTENDED || screen == EmergencyScreen.COUPLED) {
+            delay(1000)
+            currentLongTime = System.currentTimeMillis()
+            Timber.i("flowCurrentTime ${System.currentTimeMillis()} currentLongTime $currentLongTime")
+        }
+    }
 
     Box {
         EmergencyCameraPreview(
@@ -49,7 +64,7 @@ fun EmergencyLiveContent(
                 .fillMaxWidth(),
             dataComposable = {
                 Text(
-                    text = getFullDateAndTimeString(System.currentTimeMillis()),
+                    text = getFullDateAndTimeString(currentLongTime),
                     style = CCTheme.typography.common_medium_text_regular,
                     color = CCTheme.colors.white,
                     fontSize = 13.sp,
