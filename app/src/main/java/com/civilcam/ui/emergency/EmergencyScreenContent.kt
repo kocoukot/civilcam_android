@@ -203,5 +203,5 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
     }
 }
 
-private const val animation_duration = 400
+private const val animation_duration = 700
  
