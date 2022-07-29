@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -18,6 +17,7 @@ import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
+import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TextActionButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.settings.content.*
@@ -45,8 +45,8 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 	
 	Scaffold(
 		modifier = Modifier
-            .fillMaxSize()
-            .background(CCTheme.colors.lightGray),
+			.fillMaxSize()
+			.background(CCTheme.colors.lightGray),
 		backgroundColor = CCTheme.colors.lightGray,
 		topBar = {
 			Column(
@@ -108,7 +108,7 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 						}
 					)
 				}
-				Divider(color = CCTheme.colors.grayThree)
+				RowDivider()
 			}
 		},
 	) {

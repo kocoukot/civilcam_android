@@ -11,4 +11,7 @@ sealed class AlertHistoryActions : ComposeFragmentActions {
 
     object ClickGetMockLis : AlertHistoryActions()
 
+    object CLickCallUser : AlertHistoryActions()
+    object CLickUploadVideo : AlertHistoryActions()
+
 }

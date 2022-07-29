@@ -75,21 +75,7 @@ fun UserDetailsScreenContent(viewModel: UserDetailsViewModel) {
             ) {
                 UserDetailsSection(
                     userData = data,
-                    myGuardenceChange = {
-                        viewModel.setInputActions(
-                            UserDetailsActions.ClickShowAlert(
-                                StopGuardAlertType.REMOVE_GUARDIAN
-                            )
-                        )
-                    },
-                    onStopGuarding = {
-                        viewModel.setInputActions(
-                            UserDetailsActions.ClickShowAlert(
-                                StopGuardAlertType.STOP_GUARDING
-                            )
-                        )
-                    },
-                    mockAction = { viewModel.setInputActions(UserDetailsActions.Mock) },
+                    myGuardenceChange = viewModel::setInputActions
                 )
 
                 if (data.guardRequest != null && data.guardRequest?.isGuarding != true) {

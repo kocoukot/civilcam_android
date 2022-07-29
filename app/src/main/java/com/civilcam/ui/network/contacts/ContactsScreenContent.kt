@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -53,7 +52,7 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
                     isFocused = {},
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-               if (state.value.data?.contactsList.isNullOrEmpty()) Divider(color = CCTheme.colors.grayThree)
+               if (state.value.data?.contactsList.isNullOrEmpty()) RowDivider()
             }
         }) {
 

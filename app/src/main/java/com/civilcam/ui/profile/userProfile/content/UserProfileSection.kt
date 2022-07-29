@@ -8,7 +8,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
@@ -29,8 +28,8 @@ import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.PictureModel
 import com.civilcam.domain.model.UserInfo
 import com.civilcam.ui.common.compose.BackButton
+import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TextActionButton
-import com.civilcam.ui.profile.userDetails.model.UserDetailsModel
 import com.civilcam.ui.profile.userProfile.model.UserProfileScreen
 import com.civilcam.utils.DateUtils
 
@@ -115,10 +114,10 @@ fun UserProfileSection(
 				fontSize = 15.sp
 			)
 		}
-		
+
 		Spacer(modifier = Modifier.height(12.dp))
-		
-		Divider(color = CCTheme.colors.grayThree)
+
+		RowDivider()
 	}
 }
 

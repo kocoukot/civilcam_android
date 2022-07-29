@@ -3,7 +3,6 @@ package com.civilcam.ui.settings.content
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,6 +13,7 @@ import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.SubscriptionPlan
+import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.profile.userProfile.content.ProfileRow
 
 @Composable
@@ -26,27 +26,27 @@ fun SubscriptionSettingsContent(
 	Column(
 		Modifier.fillMaxWidth()
 	) {
-		
+
 		Spacer(modifier = Modifier.height(32.dp))
-		
-		Divider(color = CCTheme.colors.grayThree)
-		
+
+		RowDivider()
+
 		SubscriptionStatus(
 			subscriptionPlan = subscriptionPlan,
 			rowClick = { onSubscriptionPlanClick.invoke() }
 		)
-		Divider(color = CCTheme.colors.grayThree)
-		
+		RowDivider()
+
 		Spacer(modifier = Modifier.height(30.dp))
-		
-		Divider(color = CCTheme.colors.grayThree)
-		
+
+		RowDivider()
+
 		ProfileRow(
 			title = stringResource(id = R.string.manage_subscription_plan),
 			needDivider = true,
 			rowClick = onManageClicked
 		)
-		
+
 		ProfileRow(
 			title = stringResource(id = R.string.restore_purchase),
 			titleColor = CCTheme.colors.primaryRed,
@@ -54,8 +54,7 @@ fun SubscriptionSettingsContent(
 			needRow = false,
 			rowClick = onRestoreClicked
 		)
-		Divider(color = CCTheme.colors.grayThree)
-		
+		RowDivider()
 	}
 }
 

@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.settings.model.SettingsType
 
 @Composable
@@ -28,16 +29,16 @@ fun MainSettingsContent(
             when (type) {
                 SettingsType.MAIN -> {
                     Spacer(modifier = Modifier.height(30.dp))
-                    Divider(color = CCTheme.colors.grayThree)
+                    RowDivider()
                 }
                 SettingsType.CONTACT_SUPPORT, SettingsType.TERMS_AND_POLICY -> {
                     SettingsRow(
                         title = stringResource(id = type.title),
                         needDivider = false,
                         rowClick = { onRowClicked.invoke(type) })
-                    Divider(color = CCTheme.colors.grayThree)
+                    RowDivider()
                     Spacer(modifier = Modifier.height(20.dp))
-                    Divider(color = CCTheme.colors.grayThree)
+                    RowDivider()
                 }
                 SettingsType.DELETE_ACCOUNT -> {
                     SettingsRow(
@@ -45,7 +46,7 @@ fun MainSettingsContent(
                         titleColor = CCTheme.colors.primaryRed,
                         needDivider = false,
                         rowClick = { onRowClicked.invoke(type) })
-                    Divider(color = CCTheme.colors.grayThree)
+                    RowDivider()
                 }
                 else -> {
                     if (type != SettingsType.CREATE_PASSWORD) {

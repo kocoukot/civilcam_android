@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.UserInfo
+import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.profile.userProfile.model.UserProfileType
 
 @Composable
@@ -27,7 +28,7 @@ fun MainProfileContent(
 	Column(
 		modifier = Modifier.fillMaxWidth()
 	) {
-		Divider(color = CCTheme.colors.grayThree)
+        RowDivider()
 		for (type in UserProfileType.values()) {
 			when(type) {
 				UserProfileType.PHONE_NUMBER -> {
@@ -56,7 +57,7 @@ fun MainProfileContent(
 				}
 			}
 		}
-		Divider(color = CCTheme.colors.grayThree)
+        RowDivider()
 	}
 }
 
@@ -73,16 +74,16 @@ fun ProfileRow(
 	
 	Column(
 		modifier = Modifier
-			.fillMaxWidth()
-			.height(45.dp)
-			.background(CCTheme.colors.white)
-			.clickable { rowClick.invoke() },
+            .fillMaxWidth()
+            .height(45.dp)
+            .background(CCTheme.colors.white)
+            .clickable { rowClick.invoke() },
 	) {
 		Row(
 			modifier = Modifier
-				.fillMaxWidth()
-				.padding(start = 16.dp)
-				.weight(1f),
+                .fillMaxWidth()
+                .padding(start = 16.dp)
+                .weight(1f),
 			verticalAlignment = Alignment.CenterVertically,
 			horizontalArrangement = Arrangement.Start
 		) {

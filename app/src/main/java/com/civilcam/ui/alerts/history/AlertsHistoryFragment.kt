@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
-import com.civilcam.R
 import com.civilcam.ui.alerts.history.model.AlertHistoryRoute
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
@@ -23,7 +22,6 @@ class AlertsHistoryFragment : Fragment() {
     ): View {
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
-                is AlertHistoryRoute.GoAlertDetails -> navController.navigate(R.id.action_alertsHistoryFragment_to_alertDetailFragment)
                 AlertHistoryRoute.GoBack -> navController.popBackStack()
             }
         }
