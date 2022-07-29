@@ -21,7 +21,10 @@ import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.create.SocialImage
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.login.model.LoginActions
-import com.civilcam.ui.common.compose.*
+import com.civilcam.ui.common.compose.BackButton
+import com.civilcam.ui.common.compose.ComposeButton
+import com.civilcam.ui.common.compose.RowDivider
+import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.EmailInputField
 import com.civilcam.ui.common.compose.inputs.PasswordField
 
@@ -95,7 +98,8 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 							it
 						)
 					)
-				}
+				},
+				onFocusChanged = {}
 			)
 
 			Spacer(modifier = Modifier.height(8.dp))

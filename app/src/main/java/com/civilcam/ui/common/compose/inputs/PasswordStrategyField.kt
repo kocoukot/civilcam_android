@@ -22,17 +22,31 @@ import com.civilcam.ui.auth.LengthCheckStrategy
 import com.civilcam.ui.auth.OneDigitCheckStrategy
 import com.civilcam.ui.auth.SpecialSymbolCheckStrategy
 import com.civilcam.ui.auth.UpperCaseCheckStrategy
+import com.civilcam.ui.auth.create.model.PasswordStrategyState
 
 @OptIn(ExperimentalUnitApi::class)
 @Composable
 fun PasswordStrategyBlocks(
 	input: String,
+	onLooseFocus: PasswordStrategyState = PasswordStrategyState.NONE,
 	strategyUpdate: (Int) -> Unit
 ) {
-	val numberStateColor by colorGet(OneDigitCheckStrategy(input))
-	val capitalLetterStateColor by colorGet(UpperCaseCheckStrategy(input))
-	val specialCharacterStateColor by colorGet(SpecialSymbolCheckStrategy(input))
-	val lengthStateColor by colorGet(LengthCheckStrategy(input))
+	val numberStateColor by colorGet(
+		OneDigitCheckStrategy(input),
+		onLooseFocus == PasswordStrategyState.LOOSE_FOCUS
+	)
+	val capitalLetterStateColor by colorGet(
+		UpperCaseCheckStrategy(input),
+		onLooseFocus == PasswordStrategyState.LOOSE_FOCUS
+	)
+	val specialCharacterStateColor by colorGet(
+		SpecialSymbolCheckStrategy(input),
+		onLooseFocus == PasswordStrategyState.LOOSE_FOCUS
+	)
+	val lengthStateColor by colorGet(
+		LengthCheckStrategy(input),
+		onLooseFocus == PasswordStrategyState.LOOSE_FOCUS
+	)
 
 	val checkChips = mutableMapOf(
 		OneDigitCheckStrategy to false,
@@ -85,8 +99,11 @@ fun PasswordStrategyBlocks(
 }
 
 @Composable
-private fun colorGet(isError: Boolean) =
-	animateColorAsState(targetValue = if (isError) CCTheme.colors.primaryGreen else CCTheme.colors.grayOne)
+private fun colorGet(
+	isMatch: Boolean,
+	isError: Boolean = false
+) =
+	animateColorAsState(targetValue = if (isMatch) CCTheme.colors.primaryGreen else if (isError) CCTheme.colors.primaryRed else CCTheme.colors.grayOne)
 
 
 @OptIn(ExperimentalUnitApi::class)

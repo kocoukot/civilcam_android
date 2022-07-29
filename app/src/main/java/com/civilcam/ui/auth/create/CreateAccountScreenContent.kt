@@ -7,10 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -22,6 +19,7 @@ import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.create.model.CreateAccountActions
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
+import com.civilcam.ui.auth.create.model.PasswordStrategyState
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.DividerLightGray
@@ -33,22 +31,23 @@ import com.civilcam.ui.common.compose.inputs.PasswordStrategyBlocks
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
-	
+
 	val state = viewModel.state.collectAsState()
-	
 	val checkedStrategies = remember { mutableStateOf(0) }
-	
 	val focusState = remember { mutableStateOf(false) }
-	
+	var passwordFocusState by remember { mutableStateOf(PasswordStrategyState.NONE) }
+	var passwordHadFocus by remember { mutableStateOf(false) }
+
+
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
 		modifier = Modifier.fillMaxSize(),
 		topBar = {
 			Column {
 				TopAppBarContent(
-                    title = stringResource(id = R.string.create_account),
-                    navigationItem = {
-                        BackButton {
+					title = stringResource(id = R.string.create_account),
+					navigationItem = {
+						BackButton {
                             viewModel.setInputActions(CreateAccountActions.ClickGoBack)
                         }
                     },
@@ -103,7 +102,15 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 					)
 				},
 				//hasError = checkedStrategies.value != 4,
-				noMatch = state.value.passwordModel.noMatch
+				noMatch = state.value.passwordModel.noMatch,
+				onFocusChanged = {
+					if (it) passwordHadFocus = true
+					if (passwordHadFocus) {
+						passwordFocusState =
+							if (!it) PasswordStrategyState.LOOSE_FOCUS else PasswordStrategyState.NONE
+					}
+
+				}
 			)
 			
 			Spacer(modifier = Modifier.height(12.dp))
@@ -112,7 +119,8 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 				input = state.value.passwordModel.password,
 				strategyUpdate = {
 					checkedStrategies.value = it
-				}
+				},
+				onLooseFocus = passwordFocusState
 			)
 			
 			Spacer(modifier = Modifier.height(8.dp))
@@ -130,7 +138,9 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 					)
 				},
 				noMatch = state.value.passwordModel.noMatch,
-				isReEnter = state.value.passwordModel.noMatch
+				isReEnter = state.value.passwordModel.noMatch,
+				onFocusChanged = {
+				}
 			)
 			
 			Spacer(modifier = Modifier.weight(1f))

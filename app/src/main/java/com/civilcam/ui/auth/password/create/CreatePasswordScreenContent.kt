@@ -71,7 +71,8 @@ fun CreatePasswordScreenContent(viewModel: CreatePasswordViewModel) {
 					)
 				},
 				hasError = checkedStrategies.value != 4,
-				noMatch = state.value.noMatch
+				noMatch = state.value.noMatch,
+				onFocusChanged = {}
 			)
 			
 			Spacer(modifier = Modifier.height(12.dp))
@@ -80,7 +81,7 @@ fun CreatePasswordScreenContent(viewModel: CreatePasswordViewModel) {
 				input = state.value.password,
 				strategyUpdate = {
 					checkedStrategies.value = it
-				}
+				},
 			)
 			
 			Spacer(modifier = Modifier.height(8.dp))
@@ -98,7 +99,8 @@ fun CreatePasswordScreenContent(viewModel: CreatePasswordViewModel) {
 					)
 				},
 				noMatch = state.value.noMatch,
-				isReEnter = state.value.noMatch
+				isReEnter = state.value.noMatch,
+				onFocusChanged = {}
 			)
 			
 			Spacer(modifier = Modifier.weight(1f))

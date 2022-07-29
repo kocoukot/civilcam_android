@@ -68,23 +68,23 @@ fun InputField(
 	
 	Column(
 		modifier = Modifier
-            .fillMaxWidth()
-            .onFocusChanged { focusState ->
-                when {
-                    focusState.hasFocus -> hasFocus = true
-                    !focusState.isFocused -> hasFocus = false
-                }
-            }
-            .background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
-            .bringIntoViewRequester(viewRequester)
-            .onFocusEvent {
-                if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(400)
-                        viewRequester.bringIntoView()
-                    }
-                }
-            }
+			.fillMaxWidth()
+			.onFocusChanged { focusState ->
+				when {
+					focusState.hasFocus -> hasFocus = true
+					!focusState.isFocused -> hasFocus = false
+				}
+			}
+			.background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
+			.bringIntoViewRequester(viewRequester)
+			.onFocusEvent {
+				if (it.isFocused) {
+					coroutineScope.launch {
+						delay(400)
+						viewRequester.bringIntoView()
+					}
+				}
+			}
 	) {
 		
 		Text(
@@ -92,8 +92,8 @@ fun InputField(
 			style = CCTheme.typography.common_text_small_regular,
 			color = titleColorState,
 			modifier = Modifier
-                .padding(bottom = 8.dp)
-                .fillMaxWidth()
+				.padding(bottom = 8.dp)
+				.fillMaxWidth()
 		)
 		
 		MaterialTheme(
@@ -103,16 +103,16 @@ fun InputField(
 				enabled = isEnable,
 				textStyle = if (hasError && inputText.isNotEmpty()) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
 				modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(4.dp))
-                    .border(
-                        1.dp,
-                        errorBorderState,
-                        RoundedCornerShape(4.dp)
-                    )
-                    .clickable {
-                        if (!isEnable) onTextClicked?.invoke()
-                    },
+					.fillMaxWidth()
+					.clip(RoundedCornerShape(4.dp))
+					.border(
+						1.dp,
+						errorBorderState,
+						RoundedCornerShape(4.dp)
+					)
+					.clickable {
+						if (!isEnable) onTextClicked?.invoke()
+					},
 				singleLine = true,
 				value = if (isEnable) inputText else text,
 				onValueChange = {
@@ -398,6 +398,7 @@ fun PasswordField(
 	isReEnter: Boolean = false,
 	text: String = "",
 	isReversed: Boolean = false,
+	onFocusChanged: (Boolean) -> Unit,
 	onValueChanged: (String) -> Unit
 ) {
 	val coroutineScope = rememberCoroutineScope()
@@ -428,6 +429,7 @@ fun PasswordField(
             .bringIntoViewRequester(viewRequester)
             .onFocusEvent {
                 hasFocus = it.isFocused
+				onFocusChanged.invoke(it.isFocused)
                 if (it.isFocused) {
                     coroutineScope.launch {
                         delay(400)
@@ -527,7 +529,8 @@ private fun PasswordInputFieldPreview() {
 		onValueChanged = {},
 		name = stringResource(id = R.string.password),
 		placeholder = stringResource(id = R.string.create_password),
-		hasError = true
+		hasError = true,
+		onFocusChanged = {}
 	)
 }
 
