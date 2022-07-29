@@ -72,14 +72,8 @@
         android:id="@+id/alertsHistoryFragment"
         android:name="com.civilcam.ui.alerts.history.AlertsHistoryFragment"
         android:label="AlertsHistoryFragment">
-        <action
-            android:id="@+id/action_alertsHistoryFragment_to_alertDetailFragment"
-            app:destination="@id/alertDetailFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/alertDetailFragment"
-        android:name="com.civilcam.ui.alerts.details.AlertDetailFragment"
-        android:label="AlertDetailFragment" />
+
     <fragment
         android:id="@+id/contactsFragment"
         android:name="com.civilcam.ui.network.contacts.ContactsFragment"

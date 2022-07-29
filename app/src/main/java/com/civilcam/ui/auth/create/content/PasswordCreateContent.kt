@@ -12,6 +12,7 @@ import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.create.model.PasswordModel
+import com.civilcam.ui.auth.create.model.PasswordStrategyState
 import com.civilcam.ui.common.compose.inputs.PasswordField
 import com.civilcam.ui.common.compose.inputs.PasswordStrategyBlocks
 import kotlinx.coroutines.delay
@@ -26,6 +27,9 @@ fun PasswordCreateContent(
     val checkedStrategies = remember { mutableStateOf(0) }
     val coroutineScope = rememberCoroutineScope()
     var passwordInput by remember { mutableStateOf(model.password) }
+    var passwordFocusState by remember { mutableStateOf(PasswordStrategyState.NONE) }
+    var passwordHadFocus by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .background((if (isBackgroundReversed) CCTheme.colors.lightGray else CCTheme.colors.white))
@@ -35,7 +39,7 @@ fun PasswordCreateContent(
             text = passwordInput,
             isReversed = isBackgroundReversed,
             placeholder = stringResource(id = R.string.create_password),
-            hasError = checkedStrategies.value != 4,
+            //hasError = checkedStrategies.value != 4,
             noMatch = model.noMatch,
             onValueChanged = {
                 passwordInput = it
@@ -48,6 +52,13 @@ fun PasswordCreateContent(
                     )
                 }
             },
+            onFocusChanged = {
+                if (it) passwordHadFocus = true
+                if (passwordHadFocus) {
+                    passwordFocusState =
+                        if (!it) PasswordStrategyState.LOOSE_FOCUS else PasswordStrategyState.NONE
+                }
+            }
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -56,7 +67,8 @@ fun PasswordCreateContent(
             input = passwordInput,
             strategyUpdate = {
                 checkedStrategies.value = it
-            }
+            },
+            onLooseFocus = passwordFocusState
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -70,7 +82,8 @@ fun PasswordCreateContent(
                 passwordEntered.invoke(PasswordInputDataType.PASSWORD_REPEAT, true, it)
             },
             noMatch = model.noMatch,
-            isReEnter = model.noMatch
+            isReEnter = model.noMatch,
+            onFocusChanged = {}
         )
     }
 }
