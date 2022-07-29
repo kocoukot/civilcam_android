@@ -1,7 +1,6 @@
 package com.civilcam.di
 
 import com.civilcam.domain.model.VerificationFlow
-import com.civilcam.ui.alerts.details.AlertsDetailViewModel
 import com.civilcam.ui.alerts.history.AlertsHistoryViewModel
 import com.civilcam.ui.alerts.list.AlertsListViewModel
 import com.civilcam.ui.auth.create.CreateAccountViewModel
@@ -86,9 +85,6 @@ val alertsRootModule = module {
 	viewModel { AlertsListViewModel(get()) }
 	
 	viewModel { AlertsHistoryViewModel(get()) }
-	
-	viewModel { AlertsDetailViewModel(get()) }
-	
 	
 }
 
