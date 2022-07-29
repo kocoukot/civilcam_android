@@ -7,7 +7,7 @@ import java.util.*
 object DateUtils {
     private val isoDateFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
     private val dateOfBirthFormatter = SimpleDateFormat("MM.dd.yyyy", Locale.US)
-    private val fullDateWithTime = SimpleDateFormat("MM.dd.yyyy, HH:mm a", Locale.US)
+    private val fullDateWithTime = SimpleDateFormat("MM.dd.yyyy HH:mm:ss a", Locale.US)
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("MM.dd.yyyy, HH:mm a", Locale.US)
 
     fun dateOfBirthFormat(date: Long): String = dateOfBirthFormatter.format(date)
