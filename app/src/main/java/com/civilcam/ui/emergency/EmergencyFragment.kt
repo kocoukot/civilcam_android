@@ -27,6 +27,7 @@ import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 
 class EmergencyFragment : Fragment(), SupportBottomBar {
@@ -63,7 +64,7 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 					PinCodeFragment.createArgs(PinCodeFlow.SOS_PIN_CODE)
 				)
 				EmergencyRoute.CheckPermission -> {
-					checkPermissions()
+					checkPermissions(true)
 				}
 				is EmergencyRoute.ControlFlash -> controlFlashLight(
 					route.enabled,
@@ -105,9 +106,10 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 		}
 	}
 
-	private fun checkPermissions() {
+	private fun checkPermissions(launchSos: Boolean = false) {
+		viewModel.isLocationAllowed(permissionsDelegate.checkSelfPermissions())
 		if (permissionsDelegate.checkSelfPermissions()) {
-			viewModel.launchSos()
+			if (launchSos) viewModel.launchSos()
 		} else {
 			pendingAction = { checkPermissions() }
 			permissionsDelegate.requestPermissions()
@@ -115,15 +117,18 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 	}
 
 	private fun onPermissionsGranted(isGranted: Boolean) {
-		//viewModel.isLocationAllowed(isGranted)
+		Timber.i("onPermissionsGranted $isGranted")
 		if (isGranted) {
 			pendingAction?.invoke()
+			pendingAction = null
+		} else {
 			pendingAction = null
 		}
 	}
 
 	override fun onStart() {
 		super.onStart()
+		checkPermissions()
 		hideSystemUI()
 	}
 
