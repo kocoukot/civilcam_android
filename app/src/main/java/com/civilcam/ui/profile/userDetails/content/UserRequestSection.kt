@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.ButtonAnswer
+import com.civilcam.ui.common.compose.RowDivider
 
 @Composable
 fun UserRequestSection(
@@ -36,7 +36,7 @@ fun UserRequestSection(
             .background(CCTheme.colors.white),
         horizontalAlignment = Alignment.Start
     ) {
-        Divider(color = CCTheme.colors.grayThree)
+        RowDivider()
 
         Text(
             buildAnnotatedString {
@@ -87,7 +87,7 @@ fun UserRequestSection(
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
-        Divider(color = CCTheme.colors.grayThree)
+        RowDivider()
 
     }
 }

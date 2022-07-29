@@ -3,7 +3,6 @@ package com.civilcam.ui.alerts.list.content
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.common.compose.RowDivider
 
 @Composable
 fun AlertHistoryRowSection(rowClicked: () -> Unit) {
@@ -21,8 +21,7 @@ fun AlertHistoryRowSection(rowClicked: () -> Unit) {
 
 
         Spacer(modifier = Modifier.height(32.dp))
-        Divider(color = CCTheme.colors.grayThree)
-
+        RowDivider()
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -50,6 +49,6 @@ fun AlertHistoryRowSection(rowClicked: () -> Unit) {
 
             Spacer(modifier = Modifier.padding(end = 8.dp))
         }
-        Divider(color = CCTheme.colors.grayThree)
+        RowDivider()
     }
 }

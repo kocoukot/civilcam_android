@@ -1,13 +1,11 @@
 package com.civilcam.ui.profile.userDetails.content
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
@@ -15,23 +13,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.common.compose.CircleUserAvatar
 import com.civilcam.ui.common.compose.ComposeButton
+import com.civilcam.ui.common.compose.RowDivider
+import com.civilcam.ui.profile.userDetails.model.StopGuardAlertType
+import com.civilcam.ui.profile.userDetails.model.UserDetailsActions
 import com.civilcam.ui.profile.userDetails.model.UserDetailsModel
 import com.civilcam.utils.DateUtils
 
 @Composable
 fun UserDetailsSection(
     userData: UserDetailsModel,
-    myGuardenceChange: () -> Unit,
-    onStopGuarding: () -> Unit,
-    mockAction: () -> Unit
+    myGuardenceChange: (UserDetailsActions) -> Unit,
 ) {
 
     Column(
@@ -41,15 +40,9 @@ fun UserDetailsSection(
             .padding(top = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.img_avatar),
-            contentDescription = null,
-            modifier = Modifier
-                .size(120.dp)
-                .clip(RoundedCornerShape(50))
-                .clickable {
-                    mockAction.invoke()
-                }
+        CircleUserAvatar(
+            avatar = R.drawable.img_avatar,
+            avatarSize = 120,
         )
 
         Text(
@@ -82,7 +75,13 @@ fun UserDetailsSection(
                     InformationBoxContent(
                         text = stringResource(id = R.string.user_details_stop_guarding),
                         modifier = Modifier.weight(1f)
-                    ) { onStopGuarding.invoke() }
+                    ) {
+                        myGuardenceChange.invoke(
+                            UserDetailsActions.ClickShowAlert(
+                                StopGuardAlertType.STOP_GUARDING
+                            )
+                        )
+                    }
                 }
 
             }
@@ -100,10 +99,16 @@ fun UserDetailsSection(
             title = buttonTitle,
             modifier = Modifier.padding(horizontal = 16.dp),
             textFontWeight = FontWeight.W500,
-            buttonClick = myGuardenceChange
+            buttonClick = {
+                myGuardenceChange.invoke(
+                    UserDetailsActions.ClickShowAlert(
+                        StopGuardAlertType.REMOVE_GUARDIAN
+                    )
+                )
+            }
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Divider(color = CCTheme.colors.grayThree)
+        RowDivider()
     }
 }
 
@@ -118,9 +123,10 @@ private fun AdditionalInfo(text: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun InformationBoxContent(
+fun InformationBoxContent(
     text: String,
     modifier: Modifier = Modifier,
+    textModifier: Modifier = Modifier,
     onButtonClick: (() -> Unit)? = null
 ) {
     Box(
@@ -140,7 +146,7 @@ private fun InformationBoxContent(
         Text(
             text = text,
             style = CCTheme.typography.common_text_small_medium,
-            modifier = Modifier.padding(vertical = 8.dp),
+            modifier = textModifier.padding(vertical = 8.dp),
             textAlign = TextAlign.Center
         )
     }

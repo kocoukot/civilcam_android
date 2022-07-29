@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -63,7 +62,7 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                     },
                 )
 
-                Divider(color = CCTheme.colors.grayThree)
+                RowDivider()
             }
         },
 
@@ -85,7 +84,7 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                 ) {
                     item {
                         Spacer(modifier = Modifier.height(32.dp))
-                        Divider(color = CCTheme.colors.grayThree)
+                        RowDivider()
                     }
                     itemsIndexed(data) { index, item ->
                         InformationRow(
@@ -118,7 +117,7 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                         )
                     }
                     item {
-                        Divider(color = CCTheme.colors.grayThree)
+                        RowDivider()
                     }
                 }
             } ?: kotlin.run {
