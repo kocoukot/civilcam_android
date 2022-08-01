@@ -35,7 +35,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun PinCodeInputField(
-    pinCodeValue: (String) -> Unit
+    pinCodeValue: (String) -> Unit,
+    matchState: Boolean
 ) {
 
     var inputSize by remember { mutableStateOf(0) }
@@ -44,23 +45,25 @@ fun PinCodeInputField(
     
     if (inputSize == PIN_SIZE) {
         LaunchedEffect(key1 = Unit) {
-            delay(1000)
+            delay(100)
             pinCodeValue.invoke(pinValue)
             inputSize = 0
             pinValue = ""
     
-            xShake.animateTo(
-                targetValue = 0.dp.value,
-                animationSpec = keyframes {
-                    0.0F at 0
-                    20.0F at 80
-                    -20.0F at 120
-                    10.0F at 160
-                    -10.0F at 200
-                    5.0F at 240
-                    0.0F at 280
-                }
-            )
+            if (matchState) {
+                xShake.animateTo(
+                    targetValue = 0.dp.value,
+                    animationSpec = keyframes {
+                        0.0F at 0
+                        20.0F at 80
+                        -20.0F at 120
+                        10.0F at 160
+                        -10.0F at 200
+                        5.0F at 240
+                        0.0F at 280
+                    }
+                )
+            }
         }
     }
 

@@ -109,6 +109,7 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
                             )
                         )
                     },
+                    matchState = true
                 )
 
                 AnimatedVisibility(

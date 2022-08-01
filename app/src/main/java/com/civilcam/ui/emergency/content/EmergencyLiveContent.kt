@@ -6,6 +6,8 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconToggleButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,6 +31,7 @@ import kotlin.time.Duration.Companion.seconds
 fun EmergencyLiveContent(
     screen: EmergencyScreen,
     cameraState: Int,
+    flashState: Boolean,
     onClick: (EmergencyActions) -> Unit
 ) {
 
@@ -62,7 +65,8 @@ fun EmergencyLiveContent(
                 )
             },
             screen = screen,
-            onClick = onClick
+            onClick = onClick,
+            flashState = flashState
         )
     }
 }
@@ -73,7 +77,8 @@ fun LiveBottomBar(
     modifier: Modifier = Modifier,
     CurrentTimeComposable: @Composable (() -> Unit),
     screen: EmergencyScreen,
-    onClick: (EmergencyActions) -> Unit
+    onClick: (EmergencyActions) -> Unit,
+    flashState: Boolean
 ) {
     Column(
         modifier = modifier
