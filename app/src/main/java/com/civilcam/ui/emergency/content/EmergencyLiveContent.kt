@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -171,13 +172,21 @@ fun LiveBottomBar(
                             .clickable { onClick.invoke(EmergencyActions.ChangeCamera) }
                     )
 
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_flash_light_off),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .layoutId("flash_button")
-                            .clickable { onClick.invoke(EmergencyActions.ControlFlash) }
-                    )
+                    Box(
+                        modifier = Modifier.background(CCTheme.colors.black, CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_flashlight),
+                            tint = CCTheme.colors.white,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .layoutId("flash_button")
+                                .clickable { onClick.invoke(EmergencyActions.ControlFlash) }
+
+                        )
+                    }
                 }
             }
         }

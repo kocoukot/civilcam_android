@@ -4,16 +4,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
+import com.civilcam.ui.auth.create.model.PasswordStrategyState
 import com.civilcam.ui.auth.password.create.model.CreatePasswordActions
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
@@ -24,11 +22,13 @@ import com.civilcam.ui.common.compose.inputs.PasswordStrategyBlocks
 
 @Composable
 fun CreatePasswordScreenContent(viewModel: CreatePasswordViewModel) {
-	
+
 	val state = viewModel.state.collectAsState()
-	
+
 	val checkedStrategies = remember { mutableStateOf(0) }
-	
+	var passwordFocusState by remember { mutableStateOf(PasswordStrategyState.NONE) }
+	var passwordHadFocus by remember { mutableStateOf(false) }
+
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
 		modifier = Modifier.fillMaxSize(),
@@ -70,9 +70,15 @@ fun CreatePasswordScreenContent(viewModel: CreatePasswordViewModel) {
 						)
 					)
 				},
-				hasError = checkedStrategies.value != 4,
+//				hasError = checkedStrategies.value != 4,
 				noMatch = state.value.noMatch,
-				onFocusChanged = {}
+				onFocusChanged = {
+					if (it) passwordHadFocus = true
+					if (passwordHadFocus) {
+						passwordFocusState =
+							if (!it) PasswordStrategyState.LOOSE_FOCUS else PasswordStrategyState.NONE
+					}
+				}
 			)
 			
 			Spacer(modifier = Modifier.height(12.dp))
@@ -82,6 +88,7 @@ fun CreatePasswordScreenContent(viewModel: CreatePasswordViewModel) {
 				strategyUpdate = {
 					checkedStrategies.value = it
 				},
+				onLooseFocus = passwordFocusState
 			)
 			
 			Spacer(modifier = Modifier.height(8.dp))
