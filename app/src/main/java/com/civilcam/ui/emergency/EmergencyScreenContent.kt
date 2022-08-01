@@ -1,11 +1,9 @@
 package com.civilcam.ui.emergency
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -85,8 +83,18 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
                     visible = state.value.emergencyScreen == EmergencyScreen.COUPLED ||
                             state.value.emergencyScreen == EmergencyScreen.LIVE_EXTENDED,
                     modifier = Modifier.weight(liveWeight),
-                    //   enter = slideInVertically(animationSpec = tween(animation_duration)) + fadeIn(),
-                    //  exit = slideOutVertically(animationSpec = tween(animation_duration)) + fadeOut()
+                    enter = slideInVertically(
+                        animationSpec = tween(
+                            animation_duration,
+                            easing = LinearEasing
+                        )
+                    ) + fadeIn(),
+                    exit = slideOutVertically(
+                        animationSpec = tween(
+                            animation_duration,
+                            easing = LinearEasing
+                        )
+                    ) + fadeOut()
                 ) {
                     Column(
                         Modifier
@@ -212,5 +220,5 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
     }
 }
 
-private const val animation_duration = 700
+private const val animation_duration = 1000
  

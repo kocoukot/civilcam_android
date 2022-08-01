@@ -173,7 +173,9 @@ fun LiveBottomBar(
                     )
 
                     Box(
-                        modifier = Modifier.background(CCTheme.colors.black, CircleShape),
+                        modifier = Modifier
+                            .background(CCTheme.colors.black, CircleShape)
+                            .layoutId("flash_button"),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
