@@ -1,8 +1,7 @@
 package com.civilcam.ui.emergency
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
@@ -36,15 +36,19 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 
     val state = viewModel.state.collectAsState()
     val singapore = LatLng(1.35, 103.87)
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.dp
 
-    val liveWeight by animateFloatAsState(
-        targetValue = if (state.value.emergencyScreen == EmergencyScreen.LIVE_EXTENDED || state.value.emergencyScreen == EmergencyScreen.COUPLED) 1f else 0.1f,
+    val liveWeight by animateDpAsState(
+        targetValue = if (state.value.emergencyScreen == EmergencyScreen.COUPLED) screenHeight / 2 else screenHeight,
         animationSpec = tween(animation_duration)
     )
-    val userMapWeight by animateFloatAsState(
-        targetValue = if (state.value.emergencyScreen == EmergencyScreen.NORMAL || state.value.emergencyScreen == EmergencyScreen.COUPLED || state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED) 1f else 0.1f,
-        animationSpec = tween(animation_duration)
-    )
+
+//    val userMapWeight by animateFloatAsState(
+//        targetValue = if (state.value.emergencyScreen == EmergencyScreen.NORMAL || state.value.emergencyScreen == EmergencyScreen.COUPLED || state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED) 1f else 0.1f,
+//        animationSpec = tween(animation_duration)
+//    )
+
 
 //    val cameraPositionState = rememberCameraPositionState {
 //        position = CameraPosition.fromLatLngZoom(singapore, 10f)
@@ -82,17 +86,15 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
                 AnimatedVisibility(
                     visible = state.value.emergencyScreen == EmergencyScreen.COUPLED ||
                             state.value.emergencyScreen == EmergencyScreen.LIVE_EXTENDED,
-                    modifier = Modifier.weight(liveWeight),
+                    modifier = Modifier.height(liveWeight),
                     enter = slideInVertically(
                         animationSpec = tween(
                             animation_duration,
-                            easing = LinearEasing
                         )
                     ) + fadeIn(),
                     exit = slideOutVertically(
                         animationSpec = tween(
                             animation_duration,
-                            easing = LinearEasing
                         )
                     ) + fadeOut()
                 ) {
@@ -134,7 +136,7 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
                             state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED,
 //                    enter = slideInVertically(animationSpec = tween(animation_duration)) + fadeIn(),
 //                    exit = slideOutVertically(animationSpec = tween(animation_duration)) + fadeOut(),
-                    modifier = Modifier.weight(userMapWeight)
+                    modifier = Modifier.height(liveWeight),
                 ) {
                     Column(
                         Modifier
