@@ -20,66 +20,56 @@ class PinCodeViewModel(
 	override fun setInputActions(action: PinCodeActions) {
 		when (action) {
 			PinCodeActions.GoBack -> goBack()
-			is PinCodeActions.EnterPinCode -> {
-				when (action.pinCodeFlow) {
-					PinCodeFlow.CREATE_PIN_CODE -> pinEntered(action.pinCode)
-					PinCodeFlow.CONFIRM_PIN_CODE -> pinConfirmEntered(action.pinCode)
-					PinCodeFlow.CURRENT_PIN_CODE -> currentPinEntered(action.pinCode)
-					PinCodeFlow.NEW_PIN_CODE -> newPinCodeEntered(action.pinCode)
-					PinCodeFlow.CONFIRM_NEW_PIN_CODE -> newPinCodeConfirmEntered(action.pinCode)
-					PinCodeFlow.SOS_PIN_CODE -> sosPinCodeEntered(action.pinCode)
-				}
-			}
-		}
-	}
-	
-	private fun sosPinCodeEntered(pinCode: String) {
-		_state.value = _state.value.copy(sosPinCode = pinCode)
-		if (_state.value.sosMatch) {
-			_state.value = _state.value.copy(currentNoMatch = false)
-			goEmergency()
-		} else {
-			_state.value = _state.value.copy(currentNoMatch = true)
-		}
-	}
-	
-	private fun currentPinEntered(pinCode: String) {
-		_state.value = _state.value.copy(currentPinCode = pinCode)
-		if (_state.value.isCurrentPin) {
-			_state.value = _state.value.copy(currentNoMatch = false)
-			goNewPinCode()
-		} else {
-			_state.value = _state.value.copy(currentNoMatch = true)
-		}
-	}
-	
-	private fun newPinCodeEntered(pinCode: String) {
-		_state.value = _state.value.copy(newPinCode = pinCode)
-		goNewPinCodeConfirm()
-	}
-	
-	private fun newPinCodeConfirmEntered(pinCode: String) {
-		_state.value = _state.value.copy(newPinCodeConfirm = pinCode)
-		if (_state.value.isMatchNewPin) {
-			_state.value = _state.value.copy(newPinNoMatch = false)
-			goUserProfile()
-		} else {
-			_state.value = _state.value.copy(newPinNoMatch = true)
-		}
-	}
-	
-	private fun pinConfirmEntered(pinCode: String) {
-		_state.value = _state.value.copy(confirmPinCode = pinCode)
-		if (_state.value.isMatch) {
-			goGuardians()
-		} else {
-			_state.value = _state.value.copy(noMatch = true)
+			is PinCodeActions.EnterPinCode -> pinEntered(action.pinCode)
 		}
 	}
 	
 	private fun pinEntered(pinCode: String) {
-		_state.value = _state.value.copy(pinCode = pinCode)
-		goConfirm()
+		when(_state.value.screenState) {
+			PinCodeFlow.CREATE_PIN_CODE -> {
+				_state.value = _state.value.copy(pinCode = pinCode)
+				goConfirm()
+			}
+			PinCodeFlow.CONFIRM_PIN_CODE -> {
+				_state.value = _state.value.copy(confirmPinCode = pinCode)
+				if (_state.value.isMatch) {
+					goGuardians()
+				} else {
+					_state.value = _state.value.copy(noMatch = true)
+				}
+			}
+			PinCodeFlow.NEW_PIN_CODE -> {
+				_state.value = _state.value.copy(pinCode = pinCode)
+				goNewPinCodeConfirm()
+			}
+			PinCodeFlow.CONFIRM_NEW_PIN_CODE -> {
+				_state.value = _state.value.copy(confirmPinCode = pinCode)
+				if (_state.value.isMatchNewPin) {
+					_state.value = _state.value.copy(newPinNoMatch = false)
+					goUserProfile()
+				} else {
+					_state.value = _state.value.copy(newPinNoMatch = true)
+				}
+			}
+			PinCodeFlow.CURRENT_PIN_CODE -> {
+				_state.value = _state.value.copy(pinCode = pinCode)
+				if (_state.value.isCurrentPin) {
+					_state.value = _state.value.copy(currentNoMatch = false)
+					goNewPinCode()
+				} else {
+					_state.value = _state.value.copy(currentNoMatch = true)
+				}
+			}
+			PinCodeFlow.SOS_PIN_CODE -> {
+				_state.value = _state.value.copy(pinCode = pinCode)
+				if (_state.value.sosMatch) {
+					_state.value = _state.value.copy(currentNoMatch = false)
+					goEmergency()
+				} else {
+					_state.value = _state.value.copy(currentNoMatch = true)
+				}
+			}
+		}
 	}
 	
 	private fun goUserProfile() {

@@ -1,5 +1,7 @@
 package com.civilcam.ui.common.compose.inputs
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.keyframes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -38,13 +40,27 @@ fun PinCodeInputField(
 
     var inputSize by remember { mutableStateOf(0) }
     var pinValue by remember { mutableStateOf("") }
-
+    val xShake = remember { Animatable(initialValue = 0.0F) }
+    
     if (inputSize == PIN_SIZE) {
         LaunchedEffect(key1 = Unit) {
-            delay(100)
+            delay(1000)
             pinCodeValue.invoke(pinValue)
             inputSize = 0
             pinValue = ""
+    
+            xShake.animateTo(
+                targetValue = 0.dp.value,
+                animationSpec = keyframes {
+                    0.0F at 0
+                    20.0F at 80
+                    -20.0F at 120
+                    10.0F at 160
+                    -10.0F at 200
+                    5.0F at 240
+                    0.0F at 280
+                }
+            )
         }
     }
 
