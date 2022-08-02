@@ -34,6 +34,7 @@ class LiveMapFragment : Fragment() {
                 LiveMapRoute.GoBack -> navController.popBackStack()
                 is LiveMapRoute.CallUserPhone -> callPhone(route.userPhoneNumber)
                 LiveMapRoute.CallPolice -> callPhone("911")
+                LiveMapRoute.AlertResolved -> navController.popBackStack()
             }
         }
         return ComposeView(requireContext()).apply {

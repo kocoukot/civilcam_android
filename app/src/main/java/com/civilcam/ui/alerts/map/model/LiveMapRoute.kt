@@ -8,4 +8,6 @@ sealed class LiveMapRoute : ComposeFragmentRoute {
     data class CallUserPhone(val userPhoneNumber: String) : LiveMapRoute()
     object CallPolice : LiveMapRoute()
 
+    object AlertResolved : LiveMapRoute()
+
 }
