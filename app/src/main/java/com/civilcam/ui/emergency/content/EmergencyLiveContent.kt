@@ -133,8 +133,8 @@ fun LiveBottomBar(
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .size(44.dp)
-                        .background(CCTheme.colors.black_70, CircleShape),
-                    tint = CCTheme.colors.white,
+                        .background(if (flashState) CCTheme.colors.white else CCTheme.colors.black_70, CircleShape),
+                    tint = if (flashState) CCTheme.colors.black else CCTheme.colors.white,
                     buttonIcon = R.drawable.ic_flashlight,
                     buttonClick = { onClick.invoke(EmergencyActions.ControlFlash) }
                 )

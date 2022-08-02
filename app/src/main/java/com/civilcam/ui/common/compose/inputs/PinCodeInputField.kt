@@ -63,9 +63,7 @@ fun PinCodeInputField(
     if (inputSize == PIN_SIZE) {
         LaunchedEffect(key1 = Unit) {
             pinCodeValue.invoke(pinValue)
-            if (!matchState) {
-                delay(1000)
-            }
+            delay(1000)
             inputSize = 0
             pinValue = ""
     
