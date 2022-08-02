@@ -79,8 +79,13 @@ class PinCodeViewModel(
 				_state.value = _state.value.copy(pinCode = pinCode)
 				if (_state.value.sosMatch) {
 					_state.value = _state.value.copy(currentNoMatch = false)
-					goEmergency()
+					if (_state.value.pinCode.length == PIN_SIZE) {
+						goEmergency()
+					}
 				} else {
+					if (_state.value.pinCode.length == PIN_SIZE) {
+						_state.value = _state.value.copy(pinCode = "")
+					}
 					_state.value = _state.value.copy(currentNoMatch = true)
 				}
 			}
