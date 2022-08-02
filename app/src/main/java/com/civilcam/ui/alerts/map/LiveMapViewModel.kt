@@ -49,10 +49,11 @@ class LiveMapViewModel(
     }
 
     private fun resolverAlertAnswered(answer: Boolean) {
+        _state.update { it.copy(isResolveAlertVisible = false) }
         if (answer) {
+            _steps.value = LiveMapRoute.AlertResolved
             //todo API resolve add
         }
-        _state.update { it.copy(isResolveAlertVisible = false, isResolved = answer) }
     }
 
     private fun callUserPhone() {
