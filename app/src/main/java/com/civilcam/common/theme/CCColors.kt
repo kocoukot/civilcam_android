@@ -8,6 +8,8 @@ import androidx.compose.ui.graphics.Color
 data class CCColors internal constructor(
     val white: Color = Color(0xFFFFFFFF),
     val black: Color = Color(0xFF111111),
+    val black_70: Color = Color(0xB3111111),
+
     val primaryGreen: Color = Color(0xFF00C26F),
     val primaryRed: Color = Color(0xFFCF3919),
     val primaryRed40: Color = Color(0xFFECB0A3),
