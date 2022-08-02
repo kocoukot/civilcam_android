@@ -1,7 +1,6 @@
 package com.civilcam.ui.alerts.map.content
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -24,7 +23,6 @@ import com.civilcam.ui.alerts.map.model.LiveMapActions
 import com.civilcam.ui.common.compose.IconActionButton
 import com.civilcam.ui.emergency.model.EmergencyScreen
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AlertMapScreenContent(
     modifier: Modifier = Modifier,
@@ -33,7 +31,7 @@ fun AlertMapScreenContent(
 ) {
 
     val topBarPadding by animateDpAsState(
-        targetValue = if (alertScreenState == EmergencyScreen.COUPLED) 16.dp else 64.dp,
+        targetValue = if (alertScreenState == EmergencyScreen.COUPLED) 16.dp else 68.dp,
         animationSpec = tween(delayMillis = 250)
     )
     Box(modifier = modifier.background(CCTheme.colors.grayOne)) {

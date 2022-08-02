@@ -22,7 +22,13 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
             EmergencyActions.ControlFlash -> controlFlash()
             EmergencyActions.ChangeCamera -> changeCamera()
             is EmergencyActions.ChangeMode -> changeMode(action.mode)
+            is EmergencyActions.ClickChangeScreen -> screenChange(action.screenState)
+//            EmergencyActions.DetectLocation -> TODO()
         }
+    }
+
+    private fun screenChange(newScreenState: EmergencyScreen) {
+        _state.update { it.copy(emergencyScreen = newScreenState) }
     }
 
     private fun changeCamera() {
