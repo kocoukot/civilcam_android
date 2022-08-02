@@ -133,25 +133,6 @@ fun LiveBottomBar(
                     buttonIcon = R.drawable.ic_flashlight,
                     buttonClick = { onClick.invoke(EmergencyActions.ControlFlash) }
                 )
-
-//                Box(
-//                    modifier = Modifier
-//                        .background(CCTheme.colors.black, CircleShape)
-//                        .layoutId("flash_button"),
-//                    contentAlignment = Alignment.Center
-//                ) {
-//                    Icon(
-//                        painter = painterResource(id = R.drawable.ic_flashlight),
-//                        tint = CCTheme.colors.white,
-//                        contentDescription = null,
-//                        modifier = Modifier
-//                            .padding(10.dp)
-//                            .layoutId("flash_button")
-//                            .clickable { onClick.invoke(EmergencyActions.ControlFlash) }
-//
-//                    )
-//                }
-
             }
         }
     }
