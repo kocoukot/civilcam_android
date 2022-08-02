@@ -6,5 +6,5 @@ sealed class AlertListRoute : ComposeFragmentRoute {
     object GoMyProfile : AlertListRoute()
     object GoSettings : AlertListRoute()
     object GoAlertHistory : AlertListRoute()
-    data class GoUserProfile(val userId: Int) : AlertListRoute()
+    data class GoUserAlert(val userId: Int) : AlertListRoute()
 }

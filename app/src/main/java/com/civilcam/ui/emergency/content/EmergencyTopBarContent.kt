@@ -26,6 +26,7 @@ import com.civilcam.ui.emergency.model.EmergencyScreen
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun EmergencyTopBarContent(
+	modifier: Modifier = Modifier,
 	onClick: (EmergencyActions) -> Unit,
 	locationData: String,
 	screen: EmergencyScreen

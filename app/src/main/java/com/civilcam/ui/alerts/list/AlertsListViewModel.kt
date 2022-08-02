@@ -59,7 +59,7 @@ class AlertsListViewModel(
     }
 
     private fun goUserProfile(userId: Int) {
-        _steps.value = AlertListRoute.GoUserProfile(userId)
+        _steps.value = AlertListRoute.GoUserAlert(userId)
     }
 
     private fun showResolveAlert(userId: Int) {

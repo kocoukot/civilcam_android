@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.alerts.list.model.AlertListRoute
+import com.civilcam.ui.alerts.map.LiveMapFragment
 import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
@@ -29,7 +30,10 @@ class AlertsListFragment : Fragment(R.layout.fragment_alerts),
             when (route) {
                 AlertListRoute.GoMyProfile -> navController.navigate(R.id.userProfileFragment)
                 AlertListRoute.GoSettings -> navController.navigate(R.id.action_alerts_root_to_settingsFragment)
-                is AlertListRoute.GoUserProfile -> {}
+                is AlertListRoute.GoUserAlert -> navController.navigate(
+                    R.id.liveMapFragment,
+                    LiveMapFragment.createArgs(route.userId)
+                )
                 AlertListRoute.GoAlertHistory -> navController.navigate(R.id.action_alerts_root_to_alertsHistoryFragment)
             }
         }
