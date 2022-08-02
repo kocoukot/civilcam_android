@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +35,7 @@ fun ComposeButton(
     title: String,
     modifier: Modifier = Modifier,
     textFontWeight: FontWeight = FontWeight.W600,
+    textStyle: TextStyle = CCTheme.typography.button_text,
     isActivated: Boolean = true,
     buttonClick: () -> Unit
 ) {
@@ -62,7 +64,7 @@ fun ComposeButton(
                 Crossfade(targetState = title) {
                     Text(
                         title,
-                        style = CCTheme.typography.button_text,
+                        style = textStyle,
                         fontWeight = textFontWeight,
                         color = textColor,
                         modifier = Modifier.padding(vertical = 4.dp)

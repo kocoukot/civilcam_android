@@ -96,20 +96,8 @@ fun LiveBottomBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(id = R.string.emergency_live_title),
-                    style = CCTheme.typography.common_medium_text_regular,
-                    color = CCTheme.colors.white,
-                    modifier = Modifier.padding(end = 4.dp),
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.W500
-                )
 
-                LiveAnimation()
-            }
+            LiveAnimation()
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -207,11 +195,25 @@ fun LiveAnimation() {
             repeatMode = RepeatMode.Reverse
         )
     )
-    Box(
-        modifier = Modifier
-            .size(6.dp)
-            .scale(scale)
-            .background(CCTheme.colors.primaryRed, CircleShape),
-    )
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(id = R.string.emergency_live_title),
+            style = CCTheme.typography.common_medium_text_regular,
+            color = CCTheme.colors.white,
+            modifier = Modifier.padding(end = 4.dp),
+            fontSize = 13.sp,
+            fontWeight = FontWeight.W500
+        )
+
+
+        Box(
+            modifier = Modifier
+                .size(6.dp)
+                .scale(scale)
+                .background(CCTheme.colors.primaryRed, CircleShape),
+        )
+    }
 }
 

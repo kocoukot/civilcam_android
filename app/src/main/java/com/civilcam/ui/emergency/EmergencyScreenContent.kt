@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.common.Constant.ANIMATION_DURATION
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.DividerLightGray
 import com.civilcam.ui.common.compose.IconActionButton
@@ -30,7 +31,6 @@ import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyScreen
 import com.google.android.gms.maps.model.LatLng
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 
@@ -41,7 +41,7 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 
     val liveWeight by animateDpAsState(
         targetValue = if (state.value.emergencyScreen == EmergencyScreen.COUPLED) screenHeight / 2 else screenHeight,
-        animationSpec = tween(animation_duration)
+        animationSpec = tween(ANIMATION_DURATION)
     )
 
 //    val userMapWeight by animateFloatAsState(
@@ -89,12 +89,12 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
                     modifier = Modifier.height(liveWeight),
                     enter = slideInVertically(
                         animationSpec = tween(
-                            animation_duration,
+                            ANIMATION_DURATION,
                         )
                     ) + fadeIn(),
                     exit = slideOutVertically(
                         animationSpec = tween(
-                            animation_duration,
+                            ANIMATION_DURATION,
                         )
                     ) + fadeOut()
                 ) {
@@ -175,8 +175,8 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
                         AnimatedVisibility(
                             visible = state.value.emergencyScreen == EmergencyScreen.NORMAL,
                             modifier = Modifier.padding(start = 16.dp, top = 88.dp),
-                            enter = fadeIn(animationSpec = tween(animation_duration)),
-                            exit = fadeOut(animationSpec = tween(animation_duration))
+                            enter = fadeIn(animationSpec = tween(ANIMATION_DURATION)),
+                            exit = fadeOut(animationSpec = tween(ANIMATION_DURATION))
                         ) {
                             Spacer(modifier = Modifier.height(156.dp))
                             IconActionButton(
@@ -206,8 +206,8 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
             AnimatedVisibility(
                 visible = state.value.emergencyScreen == EmergencyScreen.NORMAL ||
                         state.value.emergencyScreen == EmergencyScreen.MAP_EXTENDED,
-                enter = fadeIn(animationSpec = tween(animation_duration)),
-                exit = fadeOut(animationSpec = tween(animation_duration))
+                enter = fadeIn(animationSpec = tween(ANIMATION_DURATION)),
+                exit = fadeOut(animationSpec = tween(ANIMATION_DURATION))
             ) {
                 EmergencyButtonContent(
                     emergencyButton = state.value.emergencyButton,
@@ -222,5 +222,3 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
     }
 }
 
-private const val animation_duration = 1000
- 

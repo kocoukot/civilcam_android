@@ -7,6 +7,7 @@ enum class AlertDialogTypes(@StringRes val negativeText: Int, @StringRes val pos
     CONFIRM_CANCEL(R.string.cancel_text_caps, R.string.confirm_text_caps),
     YES_CANCEL(R.string.cancel_text_caps, R.string.yes_text_caps),
     OK(0, R.string.ok_text_caps),
+    CANCEL_RESOLVE(R.string.cancel_text_caps, R.string.resolve_text_caps),
 
 
 //    ALLOW_DENY("DENY", "ALLOW"),

@@ -12,4 +12,7 @@ object Constant {
     const val MAX_PICTURE_SIZE_MB = 5f
     const val LOCATION_REQUEST_INTERVAL_IN_MILLIS = 2000L
     const val LOCATION_REQUEST_FASTEST_INTERVAL_IN_MILLIS = 500L
+
+    const val ANIMATION_DURATION = 1000
+
 }

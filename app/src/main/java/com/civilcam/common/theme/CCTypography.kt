@@ -10,13 +10,53 @@ import com.civilcam.R
 
 
 data class CCTypography internal constructor(
+    val notification: TextStyle = TextStyle(
+        fontSize = 12.sp,
+        lineHeight = 14.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight.W400,
+        color = Color(0xFFFFFFFF),
+        letterSpacing = (-0.5).sp,
+    ),
 
+    val common_text_regular_12: TextStyle = TextStyle(
+        fontSize = 12.sp,
+        lineHeight = 14.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight.W400,
+        color = Color(0xFFFFFFFF),
+        letterSpacing = (-0.2).sp,
+    ),
 
-    val big_title: TextStyle = TextStyle(
-        fontSize = 28.sp,
-        lineHeight = 34.sp,
-//        fontFamily = FontFamily(Font(R.font.roboto_regular)),
-        fontWeight = FontWeight.W700,
+    val common_error_text_regular: TextStyle = TextStyle(
+        fontSize = 12.sp,
+        lineHeight = 14.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight.W400,
+        color = Color(0xFFCF3919),
+        letterSpacing = (-0.01).sp,
+    ),
+
+    val common_text_small_regular: TextStyle = TextStyle(
+        fontSize = 13.sp,
+        lineHeight = 15.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight.W400,
+        letterSpacing = (-0.01).sp,
+    ),
+    val common_text_small_regular_spacing: TextStyle = TextStyle(
+        fontSize = 13.sp,
+        lineHeight = 15.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight.W400,
+        letterSpacing = (-0.5).sp,
+    ),
+
+    val common_text_small_medium: TextStyle = TextStyle(
+        fontSize = 13.sp,
+        lineHeight = 15.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_medium)),
+        fontWeight = FontWeight.W500,
         letterSpacing = (-0.01).sp,
     ),
 
@@ -71,51 +111,18 @@ data class CCTypography internal constructor(
         letterSpacing = (-0.01).sp,
     ),
 
-    val common_text_small_regular: TextStyle = TextStyle(
-        fontSize = 13.sp,
-        lineHeight = 15.sp,
-        fontFamily = FontFamily(Font(R.font.roboto_regular)),
-        fontWeight = FontWeight.W400,
-        letterSpacing = (-0.01).sp,
-    ),
-    val common_text_small_regular_spacing: TextStyle = TextStyle(
-        fontSize = 13.sp,
-        lineHeight = 15.sp,
-        fontFamily = FontFamily(Font(R.font.roboto_regular)),
-        fontWeight = FontWeight.W400,
-        letterSpacing = (-0.5).sp,
-    ),
-
-    val common_text_small_medium: TextStyle = TextStyle(
-        fontSize = 13.sp,
-        lineHeight = 15.sp,
-        fontFamily = FontFamily(Font(R.font.roboto_medium)),
-        fontWeight = FontWeight.W500,
-        letterSpacing = (-0.01).sp,
-    ),
-
-    val notification: TextStyle = TextStyle(
-        fontSize = 12.sp,
-        lineHeight = 14.sp,
-        fontFamily = FontFamily(Font(R.font.roboto_regular)),
-        fontWeight = FontWeight.W400,
-        color = Color(0xFFFFFFFF),
-        letterSpacing = (-0.5).sp,
-    ),
-
-    val common_error_text_regular: TextStyle = TextStyle(
-        fontSize = 12.sp,
-        lineHeight = 14.sp,
-        fontFamily = FontFamily(Font(R.font.roboto_regular)),
-        fontWeight = FontWeight.W400,
-        color = Color(0xFFCF3919),
-        letterSpacing = (-0.01).sp,
-    ),
-
     val emergency_button: TextStyle = TextStyle(
         fontSize = 24.sp,
         lineHeight = 28.sp,
         fontFamily = FontFamily(Font(R.font.roboto_bold)),
+        fontWeight = FontWeight.W700,
+        letterSpacing = (-0.01).sp,
+    ),
+
+    val big_title: TextStyle = TextStyle(
+        fontSize = 28.sp,
+        lineHeight = 34.sp,
+//        fontFamily = FontFamily(Font(R.font.roboto_regular)),
         fontWeight = FontWeight.W700,
         letterSpacing = (-0.01).sp,
     ),
