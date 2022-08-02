@@ -25,38 +25,53 @@ class PinCodeViewModel(
 	}
 	
 	private fun pinEntered(pinCode: String) {
-		when(_state.value.screenState) {
+		when (_state.value.screenState) {
 			PinCodeFlow.CREATE_PIN_CODE -> {
 				_state.value = _state.value.copy(pinCode = pinCode)
-				goConfirm()
+				if (_state.value.pinCode.length == PIN_SIZE) {
+					goConfirm()
+				}
 			}
 			PinCodeFlow.CONFIRM_PIN_CODE -> {
 				_state.value = _state.value.copy(confirmPinCode = pinCode)
 				if (_state.value.isMatch) {
+					_state.value = _state.value.copy(noMatch = false)
 					goGuardians()
 				} else {
-					_state.value = _state.value.copy(noMatch = true)
+					if (_state.value.confirmPinCode.length == PIN_SIZE) {
+						_state.value = _state.value.copy(confirmPinCode = "")
+						_state.value = _state.value.copy(noMatch = true)
+					}
 				}
 			}
 			PinCodeFlow.NEW_PIN_CODE -> {
 				_state.value = _state.value.copy(pinCode = pinCode)
-				goNewPinCodeConfirm()
+				if (_state.value.pinCode.length == PIN_SIZE) {
+					goNewPinCodeConfirm()
+				}
 			}
 			PinCodeFlow.CONFIRM_NEW_PIN_CODE -> {
 				_state.value = _state.value.copy(confirmPinCode = pinCode)
-				if (_state.value.isMatchNewPin) {
+				if (_state.value.isMatch) {
 					_state.value = _state.value.copy(newPinNoMatch = false)
 					goUserProfile()
 				} else {
-					_state.value = _state.value.copy(newPinNoMatch = true)
+					if (_state.value.confirmPinCode.length == PIN_SIZE) {
+						_state.value = _state.value.copy(confirmPinCode = "")
+						_state.value = _state.value.copy(newPinNoMatch = true)
+					}
 				}
 			}
 			PinCodeFlow.CURRENT_PIN_CODE -> {
 				_state.value = _state.value.copy(pinCode = pinCode)
 				if (_state.value.isCurrentPin) {
 					_state.value = _state.value.copy(currentNoMatch = false)
+					_state.value = _state.value.copy(pinCode = "")
 					goNewPinCode()
 				} else {
+					if (_state.value.pinCode.length == PIN_SIZE) {
+						_state.value = _state.value.copy(pinCode = "")
+					}
 					_state.value = _state.value.copy(currentNoMatch = true)
 				}
 			}
@@ -114,5 +129,9 @@ class PinCodeViewModel(
 	
 	fun clearStates() {
 		_state.value = _state.value.copy(confirmPinCode = "", noMatch = false)
+	}
+	
+	companion object {
+		const val PIN_SIZE = 4
 	}
 }
