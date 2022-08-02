@@ -59,7 +59,6 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                 viewModel.setInputActions(LiveMapActions.ClickResolveAlertAnswer(it))
             })
     }
-//    alert_user_detail_call
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
         modifier = Modifier.fillMaxSize(),
@@ -104,8 +103,7 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                 AlertMapScreenContent(
                     modifier = Modifier
                         .height(mapHeight)
-                        .fillMaxWidth()
-                        .background(CCTheme.colors.primaryRed),
+                        .fillMaxWidth(),
                     alertScreenState = state.emergencyScreen,
                     onActionClick = viewModel::setInputActions
                 )
