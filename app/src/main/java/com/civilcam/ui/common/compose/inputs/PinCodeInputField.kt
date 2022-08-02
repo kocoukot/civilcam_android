@@ -1,5 +1,7 @@
 package com.civilcam.ui.common.compose.inputs
 
+import android.os.Looper
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.keyframes
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -28,10 +30,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
+import androidx.core.os.postDelayed
 import com.civilcam.common.ext.digits
 import com.civilcam.common.theme.CCTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.logging.Handler
 
 @Composable
 fun PinCodeInputField(
@@ -42,15 +46,30 @@ fun PinCodeInputField(
     var inputSize by remember { mutableStateOf(0) }
     var pinValue by remember { mutableStateOf("") }
     val xShake = remember { Animatable(initialValue = 0.0F) }
+    val pinColorState by
+    animateColorAsState(
+        targetValue =
+        if (!matchState) {
+            if (inputSize == PIN_SIZE) {
+                CCTheme.colors.primaryRed
+            } else {
+                CCTheme.colors.black
+            }
+        } else {
+            CCTheme.colors.black
+        }
+    )
     
     if (inputSize == PIN_SIZE) {
         LaunchedEffect(key1 = Unit) {
-            delay(100)
             pinCodeValue.invoke(pinValue)
+            if (!matchState) {
+                delay(1000)
+            }
             inputSize = 0
             pinValue = ""
     
-            if (matchState) {
+            if (!matchState) {
                 xShake.animateTo(
                     targetValue = 0.dp.value,
                     animationSpec = keyframes {
@@ -95,7 +114,7 @@ fun PinCodeInputField(
                     modifier = Modifier
                         .padding(12.dp)
                         .size(8.dp),
-                    tint = CCTheme.colors.black
+                    tint = pinColorState
                 )
             }
         }

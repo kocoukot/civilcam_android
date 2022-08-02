@@ -109,7 +109,7 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
                             )
                         )
                     },
-                    matchState = true
+                    matchState = state.value.isCurrentPin
                 )
 
                 AnimatedVisibility(
@@ -133,8 +133,8 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
             Spacer(modifier = Modifier.weight(1f))
 
             AnimatedVisibility(
-                visible = state.value.currentNoMatch ||
-                        state.value.newPinNoMatch
+                visible = (state.value.currentNoMatch ||
+                        state.value.newPinNoMatch)
             ) {
                 Box(
                     modifier = Modifier
