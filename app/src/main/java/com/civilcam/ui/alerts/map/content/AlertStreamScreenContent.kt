@@ -21,10 +21,9 @@ import com.civilcam.ui.emergency.content.EmergencyCameraPreview
 import com.civilcam.ui.emergency.content.LiveAnimation
 import com.civilcam.ui.emergency.model.EmergencyScreen
 import com.civilcam.utils.DateUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import timber.log.Timber
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun AlertStreamScreenContent(
@@ -64,16 +63,16 @@ private fun LiveVideoBottomBar(
     alertScreenState: EmergencyScreen,
     onActionClick: (LiveMapActions) -> Unit
 ) {
-    var currentLongTime by remember { mutableStateOf(System.currentTimeMillis()) }
-    val scope = CoroutineScope(Dispatchers.Main)
 
-    scope.launch {
-        currentLongTime = System.currentTimeMillis()
-        while (alertScreenState == EmergencyScreen.LIVE_EXTENDED || alertScreenState == EmergencyScreen.COUPLED) {
-            delay(1000)
-            currentLongTime = System.currentTimeMillis()
+    var currentLongTime by remember { mutableStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            Timber.i("LaunchedEffect $currentLongTime")
+            delay(1.seconds)
+            currentLongTime += 1000
         }
     }
+
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
