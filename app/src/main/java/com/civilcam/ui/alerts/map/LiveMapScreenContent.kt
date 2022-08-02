@@ -96,6 +96,7 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                     modifier = Modifier
                         .height(liveHeight)
                         .fillMaxWidth(),
+                    cameraState = state.cameraState,
                     alertScreenState = state.emergencyScreen,
                     onActionClick = viewModel::setInputActions
                 )

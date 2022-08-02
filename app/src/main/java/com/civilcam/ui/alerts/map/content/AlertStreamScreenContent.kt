@@ -17,6 +17,7 @@ import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.alerts.map.model.LiveMapActions
 import com.civilcam.ui.common.compose.IconActionButton
+import com.civilcam.ui.emergency.content.EmergencyCameraPreview
 import com.civilcam.ui.emergency.content.LiveAnimation
 import com.civilcam.ui.emergency.model.EmergencyScreen
 import com.civilcam.utils.DateUtils
@@ -29,6 +30,7 @@ import kotlinx.coroutines.launch
 fun AlertStreamScreenContent(
     modifier: Modifier = Modifier,
     alertScreenState: EmergencyScreen,
+    cameraState: Int,
     onActionClick: (LiveMapActions) -> Unit
 ) {
 
@@ -39,6 +41,10 @@ fun AlertStreamScreenContent(
 
 
     Box(modifier = modifier.background(CCTheme.colors.cianColor)) {
+        EmergencyCameraPreview(
+            cameraState = cameraState,
+            modifier = Modifier.fillMaxSize()
+        )
         LiveVideoBottomBar(
             modifier = Modifier
                 .fillMaxWidth()
