@@ -27,11 +27,9 @@ import com.civilcam.ui.common.compose.IconActionButton
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyScreen
 import com.civilcam.utils.DateUtils.getFullDateAndTimeString
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun EmergencyLiveContent(
@@ -39,16 +37,14 @@ fun EmergencyLiveContent(
     cameraState: Int,
     onClick: (EmergencyActions) -> Unit
 ) {
-    val scope = CoroutineScope(Dispatchers.Main)
 
     var currentLongTime by remember { mutableStateOf(System.currentTimeMillis()) }
 
-    scope.launch {
-        currentLongTime = System.currentTimeMillis()
-        while (screen == EmergencyScreen.LIVE_EXTENDED || screen == EmergencyScreen.COUPLED) {
-            delay(1000)
-            currentLongTime = System.currentTimeMillis()
-            Timber.i("flowCurrentTime ${System.currentTimeMillis()} currentLongTime $currentLongTime")
+    LaunchedEffect(Unit) {
+        while (true) {
+            Timber.i("LaunchedEffect $currentLongTime")
+            delay(1.seconds)
+            currentLongTime += 1000
         }
     }
 
