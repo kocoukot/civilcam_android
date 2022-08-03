@@ -11,4 +11,7 @@ sealed class CreateAccountActions : ComposeFragmentActions {
 		val data: String,
 		val meetCriteria: Boolean = true
 	) : CreateAccountActions()
+
+	object ClickOkAlert : CreateAccountActions()
+
 }

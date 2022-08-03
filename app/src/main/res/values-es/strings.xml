@@ -246,4 +246,6 @@
     <string name="resolve_text_caps">RESOLVE</string>
     <string name="alert_user_detail_request_sent">Request sent %s</string>
 
+    <string name="something_went_wrong">Something went wrong!</string>
+
 </resources>

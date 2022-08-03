@@ -253,5 +253,7 @@
 
     <string name="resolve_text_caps">RESOLVE</string>
 
+    <string name="something_went_wrong">Something went wrong!</string>
+
 
 </resources>

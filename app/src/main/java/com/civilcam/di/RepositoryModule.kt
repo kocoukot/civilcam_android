@@ -11,5 +11,8 @@ val repositoryModule = module {
 
     factory<AccountRepository> { AccountRepositoryImpl(get()) }
 
+    factory<VerificationRepository> { VerificationRepositoryImpl(get()) }
+
+    factory<AuthRepository> { AuthRepositoryImpl(get(), get()) }
 
 }

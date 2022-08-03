@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 class UserResponse(
     @SerializedName("accessToken") val accessToken: String?,
     @SerializedName("sessionUser") val sessionUser: SessionUserResponse,
-    @SerializedName("profile") val profile: UseBaseInfoResponse,
+    @SerializedName("profile") val userProfile: UseBaseInfoResponse,
 )

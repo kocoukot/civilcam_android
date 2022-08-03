@@ -50,7 +50,7 @@ val authModule = module {
 
     viewModel { LoginViewModel() }
 
-    viewModel { CreateAccountViewModel() }
+    viewModel { CreateAccountViewModel(get()) }
 
     viewModel { (verificationFlow: VerificationFlow, verificationSubject: String) ->
         VerificationViewModel(

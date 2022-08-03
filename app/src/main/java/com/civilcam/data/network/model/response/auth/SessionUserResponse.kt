@@ -7,7 +7,7 @@ class SessionUserResponse(
     @SerializedName("authType") val authType: String,
     @SerializedName("email") val email: String,
     @SerializedName("language") val language: String,
-    @SerializedName("fullName") val fullName: String?,
+    @SerializedName("fullName") val fullName: String,
     @SerializedName("isEmailVerified") val isEmailVerified: Boolean = false,
     @SerializedName("isTermsAndPolicyAccepted") val isTermsAndPolicyAccepted: Boolean = false,
     @SerializedName("isUserProfileSetupRequired") val isUserProfileSetupRequired: Boolean = true,
