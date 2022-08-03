@@ -1,6 +1,10 @@
 package com.civilcam.ui.common.compose.inputs
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -26,6 +30,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.*
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.civilcam.common.ext.digits
 import com.civilcam.common.theme.CCTheme
@@ -40,6 +45,8 @@ fun PinCodeInputField(
 	
 	var inputSize by remember { mutableStateOf(0) }
 	var pinValue by remember { mutableStateOf("") }
+	val xShake = remember { Animatable(initialValue = 0.0F) }
+	
 	val pinColorState by
 	animateColorAsState(
 		targetValue =
@@ -57,6 +64,18 @@ fun PinCodeInputField(
 	if (inputSize == PIN_SIZE) {
 		LaunchedEffect(key1 = Unit) {
 			if (noMatchState) {
+				xShake.animateTo(
+					targetValue = 0.dp.value,
+					animationSpec = keyframes {
+						0.0F at 0
+						20.0F at 80
+						-20.0F at 120
+						10.0F at 160
+						-10.0F at 200
+						5.0F at 240
+						0.0F at 280
+					}
+				)
 				delay(1000)
 			}
 			inputSize = 0
@@ -83,7 +102,7 @@ fun PinCodeInputField(
 		)
 		
 		Row(
-			modifier = Modifier.offset(y = (-52).dp),
+			modifier = Modifier.offset(y = (-52).dp, x = xShake.value.dp),
 			horizontalArrangement = Arrangement.Center
 		) {
 			(0 until PIN_SIZE).forEach {
