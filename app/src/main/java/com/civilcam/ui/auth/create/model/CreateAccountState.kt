@@ -5,7 +5,8 @@ import com.civilcam.common.ext.isEmail
 
 data class CreateAccountState(
 	val isLoading: Boolean = false,
-	val errorText: String = "Invalid email. Please try again. (eg:email@gmail.com)",
+	val alertErrorText: String = "",
+	val emailErrorText: String = "",
 	val email: String = "",
 	val passwordModel: PasswordModel = PasswordModel(),
 	val isEmail: Boolean = true

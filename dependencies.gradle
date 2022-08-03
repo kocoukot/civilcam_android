@@ -12,6 +12,7 @@ ext {
     adapter_delegates_version = "4.3.0"
     paging_version = "3.0.0"
     accompanist_version = "0.16.0"
+    moshiVersion = '1.9.3'
 
     compression = dependencyGroup {
         implementation 'id.zelory:compressor:3.0.1'
@@ -102,6 +103,9 @@ ext {
         implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
         implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
         implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+        implementation "com.squareup.moshi:moshi:$moshiVersion"
+        implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
+        kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
     }
 
     okhttp = dependencyGroup {

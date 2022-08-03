@@ -1,0 +1,57 @@
+package com.civilcam.common.ext
+
+import com.civilcam.data.network.support.ServerErrors
+import com.civilcam.data.network.support.ServiceException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import retrofit2.HttpException
+
+abstract class BaseRepository {
+
+    suspend fun <T> safeApiCall(
+        apiCall: suspend () -> T
+    ): Resource<T> {
+        return withContext(Dispatchers.IO) {
+            try {
+                Resource.Success(apiCall.invoke())
+            } catch (throwable: Throwable) {
+                when (throwable) {
+                    is HttpException -> {
+                        val jsonObj = JSONObject(throwable.response()?.errorBody()?.string() ?: "")
+                        val excep = ServiceException(
+                            title = "Something went wrong",
+                            errorCode = ServerErrors.byCode(
+                                jsonObj["errorCode"].toString().toInt()
+                            ),
+                            isForceLogout = jsonObj["isForceLogout"].toString().toBoolean(),
+                            errorMessage = jsonObj["message"].toString(),
+                        )
+                        Resource.Failure(serviceException = excep)
+                    }
+                    else -> {
+                        if (isMobileOnline())
+                            Resource.Failure(
+                                serviceException = ServiceException(
+                                    errorCode = ServerErrors.SOME_ERROR,
+                                    title = "Something went wrong",
+                                    isForceLogout = false,
+                                    errorMessage = throwable.localizedMessage
+                                )
+                            )
+                        else
+                            Resource.Failure(
+                                serviceException = ServiceException(
+                                    errorCode = ServerErrors.NO_INTERNET_CONNECTION,
+                                    title = "Your internet connection is lost.",
+                                    errorMessage = "Please, restore it and go back to the app",
+                                    isForceLogout = false,
+
+                                    )
+                            )
+                    }
+                }
+            }
+        }
+    }
+}
