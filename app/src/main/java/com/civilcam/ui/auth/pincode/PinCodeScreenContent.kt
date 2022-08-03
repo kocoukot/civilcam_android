@@ -37,15 +37,6 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 		)
 	}
 	
-	if (state.value.noMatch) {
-		AlertDialogComp(
-			dialogTitle = "",
-			dialogText = stringResource(id = R.string.pin_code_no_match_title),
-			AlertDialogTypes.OK,
-		)
-		{ viewModel.clearStates() }
-	}
-	
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
 		modifier = Modifier.fillMaxSize(),
@@ -109,7 +100,7 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 							)
 						)
 					},
-					matchState = state.value.isCurrentPin
+					noMatchState = state.value.currentNoMatch || state.value.newPinNoMatch || state.value.noMatch
 				)
 				
 				AnimatedVisibility(
@@ -134,7 +125,8 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 			
 			AnimatedVisibility(
 				visible = (state.value.currentNoMatch && state.value.pinCode.isEmpty()) ||
-						(state.value.newPinNoMatch && state.value.confirmPinCode.isEmpty())
+						(state.value.newPinNoMatch && state.value.confirmPinCode.isEmpty()) ||
+						(state.value.noMatch && state.value.confirmPinCode.isEmpty())
 			) {
 				Box(
 					modifier = Modifier

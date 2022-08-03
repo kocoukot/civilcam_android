@@ -132,10 +132,6 @@ class PinCodeViewModel(
 		_state.value = _state.value.copy(screenState = PinCodeFlow.CONFIRM_PIN_CODE)
 	}
 	
-	fun clearStates() {
-		_state.value = _state.value.copy(confirmPinCode = "", noMatch = false)
-	}
-	
 	companion object {
 		const val PIN_SIZE = 4
 	}

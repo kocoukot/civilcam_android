@@ -1,8 +1,6 @@
 package com.civilcam.ui.common.compose.inputs
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.keyframes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -37,7 +35,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun PinCodeInputField(
 	pinCodeValue: (String) -> Unit,
-	matchState: Boolean
+	noMatchState: Boolean
 ) {
 	
 	var inputSize by remember { mutableStateOf(0) }
@@ -45,7 +43,7 @@ fun PinCodeInputField(
 	val pinColorState by
 	animateColorAsState(
 		targetValue =
-		if (!matchState) {
+		if (noMatchState) {
 			if (inputSize == PIN_SIZE) {
 				CCTheme.colors.primaryRed
 			} else {
@@ -58,7 +56,9 @@ fun PinCodeInputField(
 	
 	if (inputSize == PIN_SIZE) {
 		LaunchedEffect(key1 = Unit) {
-			delay(1000)
+			if (noMatchState) {
+				delay(1000)
+			}
 			inputSize = 0
 			pinValue = ""
 		}
@@ -91,8 +91,8 @@ fun PinCodeInputField(
 					imageVector = if (inputSize > it) Icons.Default.Circle else Icons.Outlined.Circle,
 					contentDescription = null,
 					modifier = Modifier
-                        .padding(12.dp)
-                        .size(8.dp),
+						.padding(12.dp)
+						.size(8.dp),
 					tint = pinColorState
 				)
 			}
@@ -114,18 +114,18 @@ fun PinInputField(
 	if (text.isNotEmpty()) inputText = text
 	Column(
 		modifier = Modifier
-            .fillMaxWidth()
-            .offset(y = (-12).dp)
-            .background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
-            .bringIntoViewRequester(viewRequester)
-            .onFocusEvent {
-                if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(400)
-                        viewRequester.bringIntoView()
-                    }
-                }
-            }
+			.fillMaxWidth()
+			.offset(y = (-12).dp)
+			.background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
+			.bringIntoViewRequester(viewRequester)
+			.onFocusEvent {
+				if (it.isFocused) {
+					coroutineScope.launch {
+						delay(400)
+						viewRequester.bringIntoView()
+					}
+				}
+			}
 	) {
 		
 		val focusRequester = remember { FocusRequester() }
@@ -133,10 +133,10 @@ fun PinInputField(
 			visualTransformation = PinCodeTransformation(),
 			textStyle = CCTheme.typography.common_text_regular,
 			modifier = Modifier
-                .fillMaxWidth()
-                .alpha(0f)
-                .clip(RoundedCornerShape(4.dp))
-                .focusRequester(focusRequester),
+				.fillMaxWidth()
+				.alpha(0f)
+				.clip(RoundedCornerShape(4.dp))
+				.focusRequester(focusRequester),
 			singleLine = true,
 			value = inputText,
 			onValueChange = { value ->
@@ -155,12 +155,12 @@ fun PinInputField(
 			decorationBox = { innerTextField ->
 				Row(
 					modifier = Modifier
-                        .background(
-                            if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
-                            RoundedCornerShape(4.dp)
-                        )
-                        .padding(vertical = 14.dp)
-                        .padding(start = 12.dp, end = 12.dp),
+						.background(
+							if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
+							RoundedCornerShape(4.dp)
+						)
+						.padding(vertical = 14.dp)
+						.padding(start = 12.dp, end = 12.dp),
 					verticalAlignment = Alignment.CenterVertically
 				) {
 					Box(
