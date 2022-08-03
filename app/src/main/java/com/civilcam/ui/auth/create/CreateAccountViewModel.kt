@@ -1,20 +1,16 @@
 package com.civilcam.ui.auth.create
 
-import androidx.lifecycle.viewModelScope
+import com.civilcam.CivilcamApplication.Companion.instance
+import com.civilcam.R
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail
-import com.civilcam.data.network.support.ServerErrors
-import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domain.usecase.auth.SingUpUseCase
 import com.civilcam.ui.auth.create.model.CreateAccountActions
 import com.civilcam.ui.auth.create.model.CreateAccountRoute
 import com.civilcam.ui.auth.create.model.CreateAccountState
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
-import com.standartmedia.common.ext.castSafe
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class CreateAccountViewModel(
     private val singUpUseCase: SingUpUseCase
@@ -67,40 +63,41 @@ class CreateAccountViewModel(
             it.copy(
                 email = email,
                 isEmail = if (email.isEmpty()) true else email.isEmail(),
-                emailErrorText = "Invalid email. Please try again. (eg:email@gmail.com)" //todo fix string
+                emailErrorText = instance.getString(R.string.invalid_email)
             )
         }
     }
 
     private fun goContinue() {
-        _state.update { it.copy(isLoading = true) }
-        viewModelScope.launch {
-            kotlin.runCatching {
-                singUpUseCase.invoke(_state.value.email, _state.value.passwordModel.password)
-            }
-                .onSuccess {
-                    _steps.value = CreateAccountRoute.GoContinue(_state.value.email)
-                }
-                .onFailure { error ->
-                    error.castSafe<ServiceException>()?.let { casted ->
-                        if (casted.errorCode == ServerErrors.EMAIL_ALREADY_REGISTERED)
-                            _state.update {
-                                it.copy(
-                                    emailErrorText = casted.errorMessage,
-                                    isEmail = false
-                                )
-                            }
-                        else {
-                            _state.update { it.copy(alertErrorText = casted.errorMessage) }
-                        }
-                    } ?: run {
-                        Timber.i("serviceException moshi not casted ${error.localizedMessage}")
-                    }
+        _steps.value = CreateAccountRoute.GoContinue(_state.value.email)
 
-                }
-            _state.update { it.copy(isLoading = false) }
 
-        }
+//        _state.update { it.copy(isLoading = true) }
+//        viewModelScope.launch {
+//            kotlin.runCatching {
+//                singUpUseCase.invoke(_state.value.email, _state.value.passwordModel.password)
+//            }
+//                .onSuccess {
+//                    _steps.value = CreateAccountRoute.GoContinue(_state.value.email)
+//                }
+//                .onFailure { error ->
+//                    error.castSafe<ServiceException>()?.let { casted ->
+//                        if (casted.errorCode == ServerErrors.EMAIL_ALREADY_REGISTERED)
+//                            _state.update {
+//                                it.copy(
+//                                    emailErrorText = casted.errorMessage,
+//                                    isEmail = false
+//                                )
+//                            }
+//                        else {
+//                            _state.update { it.copy(alertErrorText = casted.errorMessage) }
+//                        }
+//                    } ?: run {
+//                    }
+//
+//                }
+//            _state.update { it.copy(isLoading = false) }
+//        }
     }
 
     private fun goLogin() {
