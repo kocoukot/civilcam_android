@@ -17,6 +17,6 @@ class SessionIdInterceptor(
     }
 
     companion object {
-        private const val HEADER_SESSION_ID = "X-Session-Id"
+        private const val HEADER_SESSION_ID = "X-Session-Key"
     }
 }

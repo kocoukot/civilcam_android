@@ -55,7 +55,9 @@ val authModule = module {
     viewModel { (verificationFlow: VerificationFlow, verificationSubject: String) ->
         VerificationViewModel(
             verificationFlow,
-            verificationSubject
+            verificationSubject,
+            get(),
+            get()
         )
     }
 

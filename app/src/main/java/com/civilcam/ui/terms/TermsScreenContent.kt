@@ -27,9 +27,9 @@ fun TermsScreenContent(viewModel: TermsViewModel) {
     if (state.isLoading) {
         DialogLoadingContent()
     }
-    if (state.errorText?.isNotEmpty() == true) {
+    if (state.errorText.isNotEmpty()) {
         AlertDialogComp(
-            dialogText = state.errorText ?: stringResource(id = R.string.something_went_wrong),
+            dialogText = state.errorText,
             alertType = AlertDialogTypes.OK,
             onOptionSelected = { state.errorText = "" }
         )

@@ -24,28 +24,42 @@ import com.civilcam.R
 import com.civilcam.common.ext.formatToPhoneNumber
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.VerificationFlow
+import com.civilcam.ui.common.alert.AlertDialogComp
+import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.OtpCodeInputField
+import com.civilcam.ui.common.loading.DialogLoadingContent
 import com.civilcam.ui.verification.model.VerificationActions
 
 @Composable
 fun VerificationScreenContent(
 	viewModel: VerificationViewModel
 ) {
-	val state = viewModel.state.collectAsState()
-	val context = LocalContext.current
-	
-	Scaffold(
-		backgroundColor = CCTheme.colors.white,
-		modifier = Modifier.fillMaxSize(),
-		topBar = {
-			Column {
-				TopAppBarContent(
-					title = when (state.value.verificationFlow) {
-						VerificationFlow.NEW_PHONE, VerificationFlow.CHANGE_PHONE -> {
-							stringResource(id = R.string.phone_verification)
+    val state = viewModel.state.collectAsState()
+    val context = LocalContext.current
+
+    if (state.value.isLoading) {
+        DialogLoadingContent()
+    }
+    if (state.value.errorText.isNotEmpty()) {
+        AlertDialogComp(
+            dialogText = state.value.errorText,
+            alertType = AlertDialogTypes.OK,
+            onOptionSelected = { state.value.errorText = "" }
+        )
+    }
+
+    Scaffold(
+        backgroundColor = CCTheme.colors.white,
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            Column {
+                TopAppBarContent(
+                    title = when (state.value.verificationFlow) {
+                        VerificationFlow.NEW_PHONE, VerificationFlow.CHANGE_PHONE -> {
+                            stringResource(id = R.string.phone_verification)
 						}
 						VerificationFlow.NEW_EMAIL, VerificationFlow.CHANGE_EMAIL -> {
 							stringResource(id = R.string.email_verification)
@@ -73,9 +87,9 @@ fun VerificationScreenContent(
 		) {
 			Column(
 				modifier = Modifier
-					.fillMaxWidth()
-					.padding(horizontal = 16.dp)
-					.weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .weight(1f)
 			) {
 				Spacer(modifier = Modifier.height(32.dp))
 				
@@ -127,8 +141,8 @@ fun VerificationScreenContent(
 			
 			Column(
 				modifier = Modifier
-					.fillMaxWidth()
-					.padding(horizontal = 16.dp),
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
 				
@@ -150,10 +164,10 @@ fun VerificationScreenContent(
 						color = CCTheme.colors.primaryRed,
 						fontSize = 17.sp,
 						modifier = Modifier
-							.clickable {
-								viewModel.setInputActions(VerificationActions.ResendClick)
-							}
-							.background(Color.Transparent, RectangleShape),
+                            .clickable {
+                                viewModel.setInputActions(VerificationActions.ResendClick)
+                            }
+                            .background(Color.Transparent, RectangleShape),
 						fontWeight = FontWeight.SemiBold
 					)
 				}
