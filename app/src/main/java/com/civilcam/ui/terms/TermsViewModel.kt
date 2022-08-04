@@ -54,11 +54,22 @@ class TermsViewModel(
                 .onSuccess {
                     _steps.value = TermsRoute.GoSubscription
                 }
+                .onFailure { error ->
+                    error as ServiceException
+                    _state.update { it.copy(errorText = error.errorMessage) }
+                }
         }
     }
 
     private fun goWebView(webLink: TermsType) {
-        _steps.value = TermsRoute.GoWebView(webLink.name)
+        _state.value.legalDocs?.let {
+            _steps.value = TermsRoute.GoWebView(
+                when (webLink) {
+                    TermsType.TERMS_CONDITIONS -> it.termsAndConditions
+                    TermsType.PRIVACY_POLICY -> it.privacyPolicy
+                }
+            )
+        }
     }
 
 
