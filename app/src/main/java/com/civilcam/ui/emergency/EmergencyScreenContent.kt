@@ -117,7 +117,7 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
                 visible = state.emergencyScreen == EmergencyScreen.NORMAL ||
                         state.emergencyScreen == EmergencyScreen.MAP_EXTENDED,
                 enter = fadeIn(animationSpec = tween(ANIMATION_DURATION)),
-                exit = fadeOut(animationSpec = tween(ANIMATION_DURATION))
+                exit = fadeOut(animationSpec = tween(0))
             ) {
                 EmergencyButtonContent(
                     emergencyButton = state.emergencyButton,
