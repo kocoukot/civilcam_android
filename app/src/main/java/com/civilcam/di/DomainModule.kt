@@ -10,6 +10,8 @@ import com.civilcam.domain.usecase.guardians.GetGuardsListUseCase
 import com.civilcam.domain.usecase.guardians.GetGuardsRequestsUseCase
 import com.civilcam.domain.usecase.guardians.SearchGuardsResultUseCase
 import com.civilcam.domain.usecase.location.GetPlacesAutocompleteUseCase
+import com.civilcam.domain.usecase.profile.SetAvatarUseCase
+import com.civilcam.domain.usecase.profile.SetPersonalInfoUseCase
 import com.civilcam.domain.usecase.settings.CheckCurrentPasswordUseCase
 import com.civilcam.domain.usecase.settings.GetCurrentSubscriptionPlanUseCase
 import com.civilcam.domain.usecase.user.AcceptLegalDocsUseCase
@@ -21,6 +23,10 @@ val domainModule = module {
     factory { AcceptLegalDocsUseCase(get()) }
 
     factory { GetTermsLinksUseCase(get()) }
+
+    factory { SetPersonalInfoUseCase(get()) }
+
+    factory { SetAvatarUseCase(get()) }
 
 
 

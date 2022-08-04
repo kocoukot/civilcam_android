@@ -33,16 +33,15 @@ class ProfileRepositoryImpl(
         }
 
 
-    override suspend fun setUserProfile(userProfile: UserSetupModel) {
+    override suspend fun setUserProfile(userProfile: UserSetupModel): Boolean =
         safeApiCall {
             profileService.setUserProfile(userInfoToDomainMapper.mapData(userProfile))
         }.let { response ->
             when (response) {
-                is Resource.Success -> {}
+                is Resource.Success -> true
                 is Resource.Failure -> throw response.serviceException
             }
         }
-    }
 
     override suspend fun editPhoneNumber(phone: String) {
         safeApiCall {

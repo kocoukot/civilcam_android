@@ -6,8 +6,7 @@ interface PlacesRepository {
 
     suspend fun getPlacesWithType(
         query: String,
-        result: (List<AutocompletePlace>) -> Unit
-    )
+    ): List<AutocompletePlace>
 
 //    fun getPlaceDetails(
 //        placeId: String

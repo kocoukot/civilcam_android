@@ -1,4 +1,4 @@
-package com.civilcam.ui.service
+package com.civilcam.service
 
 import android.accounts.AbstractAccountAuthenticator
 import android.accounts.Account

@@ -13,20 +13,17 @@ class PlacesRepositoryImpl : PlacesRepository {
 
     override suspend fun getPlacesWithType(
         query: String,
-        result: (List<AutocompletePlace>) -> Unit
-    ) {
-        result.invoke(
-            listOf(
-                AutocompletePlace(
-                    placeId = "asdasd",
-                    primary = "New York",
-                    secondary = "NY, USA",
-                    address = "New York NY, USA",
-                ),
-                AutocompletePlace(
-                    placeId = "asdasd",
-                    primary = "New Jersey",
-                    secondary = "",
+    ) = listOf(
+        AutocompletePlace(
+            placeId = "asdasd",
+            primary = "New York",
+            secondary = "NY, USA",
+            address = "New York NY, USA",
+        ),
+        AutocompletePlace(
+            placeId = "asdasd",
+            primary = "New Jersey",
+            secondary = "",
                     address = "New Jersey",
                 ),
                 AutocompletePlace(
@@ -44,7 +41,7 @@ class PlacesRepositoryImpl : PlacesRepository {
             ).filter {
                 it.address.contains(query, true)
             }
-        )
+
 //        val request = buildPlacesRequest(query)
 //        placesClient.findAutocompletePredictions(request)
 //            .addOnSuccessListener { response: FindAutocompletePredictionsResponse ->
@@ -63,7 +60,7 @@ class PlacesRepositoryImpl : PlacesRepository {
 //            .addOnFailureListener {
 //                Result.failure<Exception>(Throwable(""))
 //            }
-    }
+//    }
 
 //    override fun getPlaceDetails(placeId: String): Single<PlaceDetails> = Single
 //        .fromCallable { buildPlaceDetailsRequest(placeId) }

@@ -8,7 +8,7 @@ interface ProfileRepository {
 
     suspend fun getUserProfile(): UserBaseInfo
 
-    suspend fun setUserProfile(userProfile: UserSetupModel)
+    suspend fun setUserProfile(userProfile: UserSetupModel): Boolean
 
     suspend fun editPhoneNumber(phone: String)
 
