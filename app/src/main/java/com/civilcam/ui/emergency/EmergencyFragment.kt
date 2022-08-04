@@ -32,18 +32,16 @@ import timber.log.Timber
 
 class EmergencyFragment : Fragment(), SupportBottomBar {
 	private val viewModel: EmergencyViewModel by viewModel()
-
+	
 	private val permissionsDelegate = registerForPermissionsResult(
 		Manifest.permission.ACCESS_FINE_LOCATION,
 		Manifest.permission.ACCESS_COARSE_LOCATION,
 		Manifest.permission.CAMERA,
 		Manifest.permission.RECORD_AUDIO
 	) { onPermissionsGranted(it) }
-
+	
 	private var pendingAction: (() -> Unit)? = null
-
-	private var cameraManager: CameraManager? = null
-
+	
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
@@ -52,9 +50,7 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 		setFragmentResultListener(PinCodeFragment.RESULT_BACK_STACK) { _, _ ->
 			viewModel.setInputActions(EmergencyActions.DisableSos)
 		}
-
-		cameraManager = activity?.getSystemService(CAMERA_SERVICE) as CameraManager
-
+		
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
 				EmergencyRoute.GoUserProfile -> navController.navigate(R.id.userProfileFragment)
@@ -88,24 +84,24 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 					viewLifecycleOwner
 				)
 			)
-
+			
 			setContent {
 				EmergencyScreenContent(viewModel)
 			}
 		}
 	}
-
+	
 	private fun controlFlashLight(enabled: Boolean, cameraState: Int) {
-		if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) == true) {
-			if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH) == true) {
-				if (cameraState == CameraSelector.LENS_FACING_BACK) {
-					val cameraID = cameraManager?.cameraIdList?.get(0)
-					cameraID?.let { cameraManager?.setTorchMode(it, enabled) }
-				}
+		val camManager = activity?.getSystemService(CAMERA_SERVICE) as CameraManager
+		try {
+			if (cameraState == CameraSelector.LENS_FACING_BACK) {
+				val cameraId = camManager.cameraIdList[0]
+				camManager.setTorchMode(cameraId, enabled)
 			}
+		} catch (e: Exception) {
 		}
 	}
-
+	
 	private fun checkPermissions(launchSos: Boolean = false) {
 		viewModel.isLocationAllowed(permissionsDelegate.checkSelfPermissions())
 		if (permissionsDelegate.checkSelfPermissions()) {
@@ -115,7 +111,7 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 			permissionsDelegate.requestPermissions()
 		}
 	}
-
+	
 	private fun onPermissionsGranted(isGranted: Boolean) {
 		Timber.i("onPermissionsGranted $isGranted")
 		if (isGranted) {
@@ -125,16 +121,16 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 			pendingAction = null
 		}
 	}
-
+	
 	override fun onStart() {
 		super.onStart()
 		checkPermissions()
 		hideSystemUI()
 	}
-
+	
 	override fun onStop() {
 		super.onStop()
 		showSystemUI()
 	}
-
+	
 }
