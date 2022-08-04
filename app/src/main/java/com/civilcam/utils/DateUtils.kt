@@ -11,7 +11,6 @@ object DateUtils {
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("MM.dd.yyyy, HH:mm a", Locale.US)
 
     fun dateOfBirthFormat(date: Long): String = dateOfBirthFormatter.format(date)
-
     fun getFullDateAndTimeString(dateTime: Long): String = fullDateWithTime.format(dateTime)
 
 //    fun formatServerDate(timeString: String): String {

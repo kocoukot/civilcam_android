@@ -5,9 +5,9 @@ import com.civilcam.common.ext.Resource
 import com.civilcam.data.network.service.PublicService
 import com.civilcam.domain.model.docs.LegalDocs
 
-class PublicRepositoryImpl(
+class PublicDocsRepositoryImpl(
     private val publicService: PublicService,
-) : PublicRepository, BaseRepository() {
+) : PublicDocsRepository, BaseRepository() {
 
 
     override suspend fun getLegalDocs(): LegalDocs =

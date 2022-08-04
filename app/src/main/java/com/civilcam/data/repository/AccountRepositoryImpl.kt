@@ -1,6 +1,7 @@
 package com.civilcam.data.repository
 
 import com.civilcam.data.local.AccountStorage
+import com.civilcam.domain.model.CurrentUser
 
 class AccountRepositoryImpl(
     private val accountStorage: AccountStorage
@@ -20,5 +21,8 @@ class AccountRepositoryImpl(
             accountStorage.isUserLoggedIn = value
         }
 
+    override fun loginUser(sessionToken: String, user: CurrentUser) {
+        accountStorage.loginUser(sessionToken, user)
+    }
 
 }

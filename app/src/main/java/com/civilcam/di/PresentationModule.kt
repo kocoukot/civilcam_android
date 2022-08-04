@@ -44,7 +44,7 @@ val authModule = module {
 
     viewModel { OnBoardingViewModel() }
 
-    viewModel { (isSettings: Boolean) -> TermsViewModel(isSettings) }
+    viewModel { (isSettings: Boolean) -> TermsViewModel(isSettings, get(), get()) }
 
     viewModel { ProfileSetupViewModel(get(), get()) }
 

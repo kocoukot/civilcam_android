@@ -18,16 +18,26 @@ abstract class BaseRepository {
             } catch (throwable: Throwable) {
                 when (throwable) {
                     is HttpException -> {
-                        val jsonObj = JSONObject(throwable.response()?.errorBody()?.string() ?: "")
-                        val excep = ServiceException(
-                            title = "Something went wrong",
-                            errorCode = ServerErrors.byCode(
-                                jsonObj["errorCode"].toString().toInt()
-                            ),
-                            isForceLogout = jsonObj["isForceLogout"].toString().toBoolean(),
-                            errorMessage = jsonObj["message"].toString(),
+                        Resource.Failure(
+                            serviceException = try {
+                                val jsonObj =
+                                    JSONObject(throwable.response()?.errorBody()?.string() ?: "")
+                                ServiceException(
+                                    title = "Something went wrong",
+                                    errorCode = ServerErrors.byCode(
+                                        jsonObj["errorCode"].toString().toInt()
+                                    ),
+                                    isForceLogout = jsonObj["isForceLogout"].toString().toBoolean(),
+                                    errorMessage = jsonObj["message"].toString(),
+                                )
+                            } catch (e: Exception) {
+                                ServiceException(
+                                    title = "Something went wrong",
+                                    errorCode = ServerErrors.SOME_ERROR,
+                                    isForceLogout = false,
+                                )
+                            }
                         )
-                        Resource.Failure(serviceException = excep)
                     }
                     else -> {
                         if (isMobileOnline())
