@@ -3,19 +3,17 @@ package com.civilcam.ui.onboarding
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.OnboardingPage
 import com.civilcam.ui.common.compose.ComposeButton
+import com.civilcam.ui.common.compose.IconActionButton
 import com.civilcam.ui.onboarding.content.PageCardUI
 import com.civilcam.ui.onboarding.content.PageUI
 import com.civilcam.ui.onboarding.model.OnboardingActions
@@ -78,14 +76,11 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
                     .fillMaxWidth()
                     .padding(top = 24.dp, start = 16.dp)
             ) {
-                IconButton(onClick = { viewModel.setInputActions(OnboardingActions.ClickGoBack) }) {
-
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_back_navigation),
-                        contentDescription = null,
-                        tint = CCTheme.colors.white
-                    )
-
+                IconActionButton(
+                    buttonIcon = R.drawable.ic_back_navigation,
+                    tint = CCTheme.colors.white
+                ) {
+                    viewModel.setInputActions(OnboardingActions.ClickGoBack)
                 }
             }
 
@@ -148,8 +143,6 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
                     )
                 }
             }
-
-
         }
     }
 }
