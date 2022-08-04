@@ -10,6 +10,7 @@ import com.civilcam.domain.usecase.guardians.GetGuardsListUseCase
 import com.civilcam.domain.usecase.guardians.GetGuardsRequestsUseCase
 import com.civilcam.domain.usecase.guardians.SearchGuardsResultUseCase
 import com.civilcam.domain.usecase.location.GetPlacesAutocompleteUseCase
+import com.civilcam.domain.usecase.profile.GetUserProfileUseCase
 import com.civilcam.domain.usecase.profile.SetAvatarUseCase
 import com.civilcam.domain.usecase.profile.SetPersonalInfoUseCase
 import com.civilcam.domain.usecase.settings.CheckCurrentPasswordUseCase
@@ -34,6 +35,7 @@ val domainModule = module {
 
     factory { SendOtpCodeUseCase(get()) }
 
+    factory { GetUserProfileUseCase(get()) }
 
 
 

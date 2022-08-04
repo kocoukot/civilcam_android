@@ -26,34 +26,33 @@ import coil.compose.rememberImagePainter
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.PictureModel
-import com.civilcam.domain.model.UserInfo
+import com.civilcam.domain.model.UserBaseInfo
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TextActionButton
+import com.civilcam.ui.profile.userProfile.model.UserProfileActions
 import com.civilcam.ui.profile.userProfile.model.UserProfileScreen
-import com.civilcam.utils.DateUtils
 
 @Composable
 fun UserProfileSection(
-	userData: UserInfo,
+	userData: UserBaseInfo,
 	avatar: PictureModel? = null,
 	screenType: UserProfileScreen,
 	isSaveEnabled: Boolean,
-	onBackButtonClick: () -> Unit,
-	onActionClick: (UserProfileScreen) -> Unit,
+	onActionClick: (UserProfileActions) -> Unit,
 	mockAction: () -> Unit
 ) {
-	
+
 	Column(
 		modifier = Modifier
 			.fillMaxWidth()
 			.padding(top = 12.dp),
 		horizontalAlignment = Alignment.CenterHorizontally
 	) {
-		
+
 		Row(Modifier.fillMaxWidth()) {
 			Spacer(modifier = Modifier.width(8.dp))
-			BackButton { onBackButtonClick.invoke() }
+			BackButton { onActionClick.invoke(UserProfileActions.GoBack) }
 			Spacer(modifier = Modifier.weight(1f))
 			Image(
 				contentScale = if (avatar == null) ContentScale.Fit else ContentScale.Crop,
@@ -66,10 +65,8 @@ fun UserProfileSection(
 				modifier = Modifier
 					.size(120.dp)
 					.clip(RoundedCornerShape(50))
-					.clickable {
-						if (screenType == UserProfileScreen.EDIT) {
-							mockAction.invoke()
-						}
+					.clickable(enabled = screenType == UserProfileScreen.EDIT) {
+						mockAction.invoke()
 					},
 			)
 			Spacer(modifier = Modifier.weight(1f))
@@ -80,29 +77,29 @@ fun UserProfileSection(
 					UserProfileScreen.EDIT -> stringResource(id = R.string.save_text)
 				}
 			) {
-				onActionClick.invoke(screenType)
+				onActionClick.invoke(if (screenType == UserProfileScreen.EDIT) UserProfileActions.ClickSave else UserProfileActions.ClickEdit)
 			}
 		}
-		
+
 		AnimatedVisibility(visible = screenType == UserProfileScreen.PROFILE) {
 			Column(
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
 				Text(
-					text = userData.userName,
+					text = "${userData.firstName} ${userData.lastName}",
 					style = CCTheme.typography.button_text,
 					color = CCTheme.colors.black,
 					modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
 				)
-				
-				AdditionalInfo(DateUtils.dateOfBirthFormat(userData.dateOfBirth))
-				
+
+				AdditionalInfo(userData.dob)
+
 				Spacer(modifier = Modifier.height(4.dp))
-				
+
 				AdditionalInfo(userData.address)
 			}
 		}
-		
+
 		AnimatedVisibility(visible = screenType == UserProfileScreen.EDIT) {
 			Text(
 				text = stringResource(id = R.string.user_profile_change_profile_image_title),

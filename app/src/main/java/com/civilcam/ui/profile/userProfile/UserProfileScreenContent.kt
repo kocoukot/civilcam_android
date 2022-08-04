@@ -15,122 +15,118 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.common.alert.AlertDialogComp
+import com.civilcam.ui.common.alert.AlertDialogTypes
+import com.civilcam.ui.common.loading.DialogLoadingContent
 import com.civilcam.ui.profile.setup.content.DatePickerContent
-import com.civilcam.ui.profile.setup.model.UserInfoDataType
+import com.civilcam.ui.profile.userProfile.content.MainProfileContent
 import com.civilcam.ui.profile.userProfile.content.UserProfileEditContent
 import com.civilcam.ui.profile.userProfile.content.UserProfileSection
-import com.civilcam.ui.profile.userProfile.content.MainProfileContent
 import com.civilcam.ui.profile.userProfile.model.UserProfileActions
 import com.civilcam.ui.profile.userProfile.model.UserProfileScreen
 
 @Composable
 fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
-	val state = viewModel.state.collectAsState()
-	
-	if (state.value.showDatePicker) {
-		Dialog(
-			properties = DialogProperties(
-				dismissOnBackPress = true,
-				dismissOnClickOutside = false
-			), onDismissRequest = {
-				viewModel.setInputActions(UserProfileActions.ClickCloseDatePicker)
-			}) {
-			DatePickerContent(
-				onClosePicker = {
-					viewModel.setInputActions(UserProfileActions.ClickCloseDatePicker)
-				},
-				onSelectDate = {
-					viewModel.setInputActions(UserProfileActions.ClickSelectDate(it))
-				},
-			)
-		}
-	}
-	
-	Scaffold(
-		backgroundColor = CCTheme.colors.lightGray,
-		modifier = Modifier.fillMaxSize()
-	
-	) {
-		state.value.data?.userInfoSection?.let { data ->
-			Column(
-				modifier = Modifier
-					.fillMaxWidth()
-					.background(CCTheme.colors.white),
-			) {
-				UserProfileSection(
-					userData = data,
-					avatar = state.value.profileImage,
-					screenType = state.value.screenState,
-					mockAction = {
-						viewModel.setInputActions(UserProfileActions.ClickAvatarSelect)
-					},
-					onBackButtonClick = {
-						viewModel.setInputActions(UserProfileActions.GoBack)
-					},
-					onActionClick = { screenType ->
-						setAction(viewModel, screenType)
-					},
-					isSaveEnabled = state.value.isFilled
-				)
-				
-				Divider(
-					color = CCTheme.colors.lightGray, modifier = Modifier
-						.height(32.dp)
-				)
-				
-				Crossfade(targetState = state.value.screenState) { screenType ->
-					when (screenType) {
-						UserProfileScreen.PROFILE -> {
-							MainProfileContent(
-								data = data,
-							) {
-								viewModel.setInputActions(
-									UserProfileActions.GoCredentials(it)
-								)
-							}
-						}
-						UserProfileScreen.EDIT -> {
-							UserProfileEditContent(
-								userData = data,
-								onValueChanged = { userInfoDataType, data ->
-									when (userInfoDataType) {
-										UserInfoDataType.FIRST_NAME -> viewModel.setInputActions(
-											UserProfileActions.EnterInputData(
-												UserInfoDataType.FIRST_NAME,
-												data
-											)
-										)
-										UserInfoDataType.LAST_NAME -> viewModel.setInputActions(
-											UserProfileActions.EnterInputData(
-												UserInfoDataType.LAST_NAME,
-												data
-											)
-										)
-									}
-								},
-								onDateBirthClick = {
-									viewModel.setInputActions(UserProfileActions.ClickDateSelect)
-								}
-							)
-						}
-					}
-				}
-			}
-		}
-	}
+    val state = viewModel.state.collectAsState()
+
+
+    if (state.value.isLoading) {
+        DialogLoadingContent()
+    }
+
+    if (state.value.errorText.isNotEmpty()) {
+        AlertDialogComp(
+            dialogText = state.value.errorText,
+            alertType = AlertDialogTypes.OK,
+            onOptionSelected = { state.value.errorText = "" }
+        )
+    }
+
+    if (state.value.showDatePicker) {
+        Dialog(
+            properties = DialogProperties(
+                dismissOnBackPress = true,
+                dismissOnClickOutside = false
+            ), onDismissRequest = {
+                viewModel.setInputActions(UserProfileActions.ClickCloseDatePicker)
+            }) {
+            DatePickerContent(
+                onClosePicker = {
+                    viewModel.setInputActions(UserProfileActions.ClickCloseDatePicker)
+                },
+                onSelectDate = {
+                    viewModel.setInputActions(UserProfileActions.ClickSelectDate(it))
+                },
+            )
+        }
+    }
+
+    Scaffold(
+        backgroundColor = CCTheme.colors.lightGray,
+        modifier = Modifier.fillMaxSize()
+
+    ) {
+        state.value.data?.let { data ->
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(CCTheme.colors.white),
+            ) {
+                UserProfileSection(
+                    userData = data,
+                    avatar = state.value.profileImage,
+                    screenType = state.value.screenState,
+                    mockAction = {
+                        viewModel.setInputActions(UserProfileActions.ClickAvatarSelect)
+                    },
+                    onActionClick = { action ->
+                        viewModel.setInputActions(action)
+                    },
+                    isSaveEnabled = state.value.isFilled
+                )
+
+                Divider(
+                    color = CCTheme.colors.lightGray, modifier = Modifier
+                        .height(32.dp)
+                )
+
+                Crossfade(targetState = state.value.screenState) { screenType ->
+                    when (screenType) {
+                        UserProfileScreen.PROFILE -> {
+                            MainProfileContent(
+                                data = data,
+                            ) {
+                                viewModel.setInputActions(
+                                    UserProfileActions.GoCredentials(it)
+                                )
+                            }
+                        }
+                        UserProfileScreen.EDIT -> {
+                            UserProfileEditContent(
+                                userData = data,
+                                onValueChanged = { userInfoDataType, data ->
+                                    viewModel.setInputActions(
+                                        UserProfileActions.EnterInputData(
+                                            userInfoDataType,
+                                            data
+                                        )
+                                    )
+                                },
+                                onDateBirthClick = {
+                                    viewModel.setInputActions(UserProfileActions.ClickDateSelect)
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
-private fun setAction(viewModel: UserProfileViewModel, screenType: UserProfileScreen) {
-	when (screenType) {
-		UserProfileScreen.PROFILE -> viewModel.setInputActions(
-			UserProfileActions.GoEdit(
-				screenType
-			)
-		)
-		UserProfileScreen.EDIT -> viewModel.setInputActions(
-			UserProfileActions.GoSave(
-				screenType
-			)
-		)
-	}
-}
+private fun setAction(screenType: UserProfileScreen) =
+    when (screenType) {
+        UserProfileScreen.PROFILE -> UserProfileActions.ClickEdit
+        UserProfileScreen.EDIT -> UserProfileActions.ClickSave
+
+    }

@@ -1,6 +1,7 @@
 package com.civilcam.utils
 
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -11,26 +12,16 @@ object DateUtils {
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("MM.dd.yyyy, HH:mm a", Locale.US)
     private val dateOfBirthDomainFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
+    private val dateOfBirthTimeFormatter = DateTimeFormatter.ofPattern("MM.dd.yyyy", Locale.US)
+
+
     fun dateOfBirthFormat(date: Long): String = dateOfBirthFormatter.format(date)
+    fun dateOfBirthFormat(date: String): String =
+        dateOfBirthTimeFormatter.format(LocalDate.parse(date))
+
+
     fun dateOfBirthDomainFormat(date: Long): String = dateOfBirthDomainFormatter.format(date)
 
     fun getFullDateAndTimeString(dateTime: Long): String = fullDateWithTime.format(dateTime)
-
-//    fun formatServerDate(timeString: String): String {
-//        val zonedDateTime = localDateToIsoFormat(timeString, inputFormatter)
-//        return "${dayAndMonthDateTimeFormatter.format(zonedDateTime)}, at ${
-//            fullTimeDateTimeFormatter.format(
-//                zonedDateTime
-//            )
-//        }"
-//
-//    }
-//
-//
-//    private fun localDateToIsoFormat(date: String, inputFormat: DateTimeFormatter): ZonedDateTime {
-//        val dateTime = LocalDateTime.parse(date, inputFormat)
-//        return ZonedDateTime.ofLocal(dateTime, ZoneId.of("UTC"), ZoneOffset.UTC)
-//            .withZoneSameInstant(ZoneId.systemDefault())
-//    }
 
 }

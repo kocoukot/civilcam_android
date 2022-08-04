@@ -4,35 +4,37 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.local.MediaStorage
+import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domain.PictureModel
-import com.civilcam.domain.model.UserInfo
-import com.civilcam.domain.usecase.GetUserInformationUseCase
+import com.civilcam.domain.model.UserBaseInfo
+import com.civilcam.domain.usecase.profile.GetUserProfileUseCase
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
 import com.civilcam.ui.profile.userProfile.model.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class UserProfileViewModel(
-	private val getUserInformationUseCase: GetUserInformationUseCase,
+	private val getUserProfileUseCase: GetUserProfileUseCase,
 	private val mediaStorage: MediaStorage
-) :
-	ComposeViewModel<UserProfileState, UserProfileRoute, UserProfileActions>() {
+) : ComposeViewModel<UserProfileState, UserProfileRoute, UserProfileActions>() {
 	override var _state: MutableStateFlow<UserProfileState> = MutableStateFlow(UserProfileState())
-	
+
 	private val disposables = CompositeDisposable()
-	
+
 	init {
 		_state.value = _state.value.copy(isLoading = true)
 		viewModelScope.launch {
-			kotlin.runCatching { getUserInformationUseCase.getUser("") }
+			kotlin.runCatching { getUserProfileUseCase.invoke() }
 				.onSuccess { user ->
-					_state.value = _state.value.copy(data = user)
+					_state.update { it.copy(data = user) }
 				}
-				.onFailure {
-					_state.value = _state.value.copy(errorText = it.localizedMessage)
+				.onFailure { error ->
+					error as ServiceException
+					_state.update { it.copy(errorText = error.errorMessage) }
 				}
 			_state.value = _state.value.copy(isLoading = false)
 		}
@@ -41,8 +43,8 @@ class UserProfileViewModel(
 	override fun setInputActions(action: UserProfileActions) {
 		when (action) {
 			UserProfileActions.GoBack -> goBack()
-			is UserProfileActions.GoEdit -> goEdit()
-			is UserProfileActions.GoSave -> goSave()
+			UserProfileActions.ClickEdit -> goEdit()
+			UserProfileActions.ClickSave -> goSave()
 			is UserProfileActions.GoCredentials -> {
 				when (action.userProfileType) {
 					UserProfileType.EMAIL -> goCredentials(action.userProfileType)
@@ -54,6 +56,7 @@ class UserProfileViewModel(
 				when (action.dataType) {
 					UserInfoDataType.FIRST_NAME -> firstNameEntered(action.data)
 					UserInfoDataType.LAST_NAME -> lastNameEntered(action.data)
+					else -> {}
 				}
 			}
 			UserProfileActions.ClickAvatarSelect -> goAvatarSelect()
@@ -73,21 +76,21 @@ class UserProfileViewModel(
 	
 	private fun getDateFromCalendar(birthDate: Long) {
 		val data = getUserInfo()
-		data.dateOfBirth = birthDate
-		_state.value.data = _state.value.data?.copy(userInfoSection = data)
+		data.dob = birthDate.toString()
+		_state.update { it.copy(data = data) }
 		closeDatePicker()
 	}
 	
 	private fun firstNameEntered(firstName: String) {
 		val data = getUserInfo()
 		data.firstName = firstName
-		_state.value.data = _state.value.data?.copy(userInfoSection = data)
+		_state.update { it.copy(data = data) }
 	}
 	
 	private fun lastNameEntered(lastName: String) {
 		val data = getUserInfo()
 		data.lastName = lastName
-		_state.value.data = _state.value.data?.copy(userInfoSection = data)
+		_state.update { it.copy(data = data) }
 	}
 	
 	private fun goSave() {
@@ -131,6 +134,6 @@ class UserProfileViewModel(
 			}
 			.addTo(disposables)
 	}
-	
-	private fun getUserInfo() = _state.value.data?.userInfoSection?.copy() ?: UserInfo()
+
+	private fun getUserInfo() = _state.value.data?.copy() ?: UserBaseInfo()
 }

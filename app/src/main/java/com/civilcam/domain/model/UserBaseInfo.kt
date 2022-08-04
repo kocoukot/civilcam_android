@@ -5,11 +5,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class UserBaseInfo(
-    val avatar: ImageInfo? = null,
-    val firstName: String? = null,
-    val lastName: String? = null,
-    val dob: String? = null,
-    val address: String? = null,
-    val phone: String? = null,
-    val isPhoneVerified: Boolean = false,
+    var avatar: ImageInfo? = null,
+    var firstName: String? = null,
+    var lastName: String? = null,
+    var dob: String = "",
+    var address: String = "",
+    var phone: String = "",
+    var isPhoneVerified: Boolean = false,
 ) : Parcelable

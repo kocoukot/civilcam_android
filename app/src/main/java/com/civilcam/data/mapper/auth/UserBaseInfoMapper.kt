@@ -13,9 +13,9 @@ class UserBaseInfoMapper(
             avatar = response.avatar?.let { imageInfoMapper.mapData(it) },
             firstName = response.firstName,
             lastName = response.lastName,
-            dob = response.dob,
-            address = response.address,
-            phone = response.phone,
+            dob = response.dob.orEmpty(),
+            address = response.address.orEmpty(),
+            phone = response.phone.orEmpty(),
             isPhoneVerified = response.isPhoneVerified,
         )
     }
