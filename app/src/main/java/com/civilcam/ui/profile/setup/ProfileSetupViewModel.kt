@@ -101,16 +101,14 @@ class ProfileSetupViewModel(
             _state.update { it.copy(isLoading = true) }
             viewModelScope.launch {
                 try {
-//                    userdata.profileImage?.uri?.let { uri -> setAvatarUseCase.invoke(uri) }
+                    userdata.profileImage?.uri?.let { uri -> setAvatarUseCase.invoke(uri) }
                     val result = setPersonalInfoUseCase.invoke(userdata)
                     if (result) _steps.value =
                         ProfileSetupRoute.GoVerification(userdata.phoneNumber)
 
                 } catch (e: ServiceException) {
-//                    withContext(Dispatchers.Main) {
                     Timber.d("resourceLocalized throwable ${e.errorCode}")
                     _state.update { it.copy(errorText = e.errorMessage) }
-//                    }
                 }
                 _state.update { it.copy(isLoading = false) }
             }
