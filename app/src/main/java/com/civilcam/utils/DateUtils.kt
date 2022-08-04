@@ -9,8 +9,11 @@ object DateUtils {
     private val dateOfBirthFormatter = SimpleDateFormat("MM.dd.yyyy", Locale.US)
     private val fullDateWithTime = SimpleDateFormat("MM.dd.yyyy HH:mm:ss a", Locale.US)
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("MM.dd.yyyy, HH:mm a", Locale.US)
+    private val dateOfBirthDomainFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
     fun dateOfBirthFormat(date: Long): String = dateOfBirthFormatter.format(date)
+    fun dateOfBirthDomainFormat(date: Long): String = dateOfBirthDomainFormatter.format(date)
+
     fun getFullDateAndTimeString(dateTime: Long): String = fullDateWithTime.format(dateTime)
 
 //    fun formatServerDate(timeString: String): String {
