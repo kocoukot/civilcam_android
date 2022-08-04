@@ -16,13 +16,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.UserInfo
+import com.civilcam.domain.model.UserBaseInfo
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.profile.userProfile.model.UserProfileType
 
 @Composable
 fun MainProfileContent(
-	data: UserInfo,
+	data: UserBaseInfo,
 	onRowClicked: (UserProfileType) -> Unit,
 ) {
 	Column(
@@ -34,7 +34,7 @@ fun MainProfileContent(
 				UserProfileType.PHONE_NUMBER -> {
 					ProfileRow(
 						title = stringResource(id = type.title),
-						value = data.phoneNumber,
+						value = data.phone,
 						needDivider = type != UserProfileType.PIN_CODE,
 						rowClick = { onRowClicked.invoke(type) }
 					)
@@ -42,7 +42,7 @@ fun MainProfileContent(
 				UserProfileType.EMAIL -> {
 					ProfileRow(
 						title = stringResource(id = type.title),
-						value = data.email,
+						value = "asasd", //todo fix
 						needDivider = type != UserProfileType.PIN_CODE,
 						rowClick = { onRowClicked.invoke(type) }
 					)
@@ -50,7 +50,7 @@ fun MainProfileContent(
 				UserProfileType.PIN_CODE -> {
 					ProfileRow(
 						title = stringResource(id = type.title),
-						value = data.pinCode,
+						value = "••••",
 						needDivider = type != UserProfileType.PIN_CODE,
 						rowClick = { onRowClicked.invoke(type) }
 					)
@@ -74,16 +74,16 @@ fun ProfileRow(
 	
 	Column(
 		modifier = Modifier
-            .fillMaxWidth()
-            .height(45.dp)
-            .background(CCTheme.colors.white)
-            .clickable { rowClick.invoke() },
+			.fillMaxWidth()
+			.height(45.dp)
+			.background(CCTheme.colors.white)
+			.clickable { rowClick.invoke() },
 	) {
 		Row(
 			modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp)
-                .weight(1f),
+				.fillMaxWidth()
+				.padding(start = 16.dp)
+				.weight(1f),
 			verticalAlignment = Alignment.CenterVertically,
 			horizontalArrangement = Arrangement.Start
 		) {

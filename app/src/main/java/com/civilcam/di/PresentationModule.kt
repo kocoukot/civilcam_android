@@ -44,9 +44,9 @@ val authModule = module {
 
     viewModel { OnBoardingViewModel() }
 
-    viewModel { (isSettings: Boolean) -> TermsViewModel(isSettings) }
+    viewModel { (isSettings: Boolean) -> TermsViewModel(isSettings, get(), get()) }
 
-    viewModel { ProfileSetupViewModel(get(), get()) }
+    viewModel { ProfileSetupViewModel(get(), get(), get(), get()) }
 
     viewModel { LoginViewModel() }
 
@@ -55,7 +55,9 @@ val authModule = module {
     viewModel { (verificationFlow: VerificationFlow, verificationSubject: String) ->
         VerificationViewModel(
             verificationFlow,
-            verificationSubject
+            verificationSubject,
+            get(),
+            get()
         )
     }
 

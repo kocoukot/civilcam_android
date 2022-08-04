@@ -6,7 +6,7 @@ import com.civilcam.domain.model.UserSetupModel
 
 data class ProfileSetupState(
     val isLoading: Boolean = false,
-    val errorText: String = "",
+    var errorText: String = "",
     val profileSetupScreen: ProfileSetupScreen = ProfileSetupScreen.SETUP,
     val showDatePicker: Boolean = false,
     val data: UserSetupModel? = null,

@@ -1,21 +1,22 @@
 package com.civilcam.data.mapper.auth
 
+import com.civilcam.data.mapper.ImageInfoMapper
 import com.civilcam.data.mapper.Mapper
 import com.civilcam.data.network.model.response.auth.UseBaseInfoResponse
 import com.civilcam.domain.model.UserBaseInfo
 
-class UserBaseInfoMapper : Mapper<UseBaseInfoResponse, UserBaseInfo>(
+class UserBaseInfoMapper(
+    private val imageInfoMapper: ImageInfoMapper = ImageInfoMapper()
+) : Mapper<UseBaseInfoResponse, UserBaseInfo>(
     fromData = { response ->
-        response.let {
-            UserBaseInfo(
-                avatar = it.avatar,
-                firstName = it.firstName,
-                lastName = it.lastName,
-                dob = it.dob,
-                address = it.address,
-                phone = it.phone,
-                isPhoneVerified = it.isPhoneVerified,
-            )
-        }
+        UserBaseInfo(
+            avatar = response.avatar?.let { imageInfoMapper.mapData(it) },
+            firstName = response.firstName,
+            lastName = response.lastName,
+            dob = response.dob.orEmpty(),
+            address = response.address.orEmpty(),
+            phone = response.phone.orEmpty(),
+            isPhoneVerified = response.isPhoneVerified,
+        )
     }
 )

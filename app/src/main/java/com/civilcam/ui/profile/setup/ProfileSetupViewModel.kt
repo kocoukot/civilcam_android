@@ -4,20 +4,20 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.local.MediaStorage
+import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domain.PictureModel
 import com.civilcam.domain.model.AutocompletePlace
 import com.civilcam.domain.model.SearchModel
 import com.civilcam.domain.model.UserSetupModel
 import com.civilcam.domain.usecase.location.GetPlacesAutocompleteUseCase
+import com.civilcam.domain.usecase.profile.SetAvatarUseCase
+import com.civilcam.domain.usecase.profile.SetPersonalInfoUseCase
 import com.civilcam.ui.profile.setup.model.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -25,7 +25,9 @@ import timber.log.Timber
 class ProfileSetupViewModel(
     private val mediaStorage: MediaStorage,
     private val getPlacesAutocompleteUseCase: GetPlacesAutocompleteUseCase,
-//    private val getPlaceDetailsUseCase: GetPlaceDetailsUseCase
+//    private val getPlaceDetailsUseCase: GetPlaceDetailsUseCase,
+    private val setPersonalInfoUseCase: SetPersonalInfoUseCase,
+    private val setAvatarUseCase: SetAvatarUseCase,
 ) : ComposeViewModel<ProfileSetupState, ProfileSetupRoute, ProfileSetupActions>() {
 
     override var _state: MutableStateFlow<ProfileSetupState> = MutableStateFlow(ProfileSetupState())
@@ -47,14 +49,12 @@ class ProfileSetupViewModel(
                 query
                     .takeIf { it.isNotEmpty() }
                     ?.let {
-                        try {
-                            getPlacesAutocompleteUseCase.invoke(it) { result ->
-                                setSearchResult(result)
+                        kotlin.runCatching { getPlacesAutocompleteUseCase.invoke(it) }
+                            .onSuccess { setSearchResult(it) }
+                            .onFailure { error ->
+                                error as ServiceException
+                                _state.update { it.copy(errorText = error.errorMessage) }
                             }
-                        } catch (e: Exception) {
-                            _state.value =
-                                _state.value.copy(errorText = e.localizedMessage ?: "Some error!")
-                        }
                     } ?: run {
                     setSearchResult(emptyList())
                 }
@@ -97,8 +97,21 @@ class ProfileSetupViewModel(
     }
 
     private fun goNext() {
-        _state.value.data?.let {
-            _steps.value = ProfileSetupRoute.GoVerification(it.phoneNumber)
+        _state.value.data?.let { userdata ->
+            _state.update { it.copy(isLoading = true) }
+            viewModelScope.launch {
+                try {
+                    userdata.profileImage?.uri?.let { uri -> setAvatarUseCase.invoke(uri) }
+                    val result = setPersonalInfoUseCase.invoke(userdata)
+                    if (result) _steps.value =
+                        ProfileSetupRoute.GoVerification(userdata.phoneNumber)
+
+                } catch (e: ServiceException) {
+                    Timber.d("resourceLocalized throwable ${e.errorCode}")
+                    _state.update { it.copy(errorText = e.errorMessage) }
+                }
+                _state.update { it.copy(isLoading = false) }
+            }
         }
     }
 
@@ -113,24 +126,24 @@ class ProfileSetupViewModel(
     private fun getDateFromCalendar(birthDate: Long) {
         val data = getSetupUser()
         data.dateBirth = birthDate
-        _state.value = _state.value.copy(data = data, birthDate = birthDate)
+        _state.update { it.copy(data = data, birthDate = birthDate) }
         closeDatePicker()
     }
 
     private fun firstNameEntered(firstName: String) {
         val data = getSetupUser()
         data.firstName = firstName
-        _state.value = _state.value.copy(data = data)
+        _state.update { it.copy(data = data) }
     }
 
     private fun lastNameEntered(lastName: String) {
-        _state.value = _state.value.copy(data = getSetupUser().copy(lastName = lastName))
+        _state.update { it.copy(data = getSetupUser().copy(lastName = lastName)) }
     }
 
     private fun phoneEntered(phoneNumber: String) {
         val data = getSetupUser()
         data.phoneNumber = phoneNumber
-        _state.value = _state.value.copy(data = data)
+        _state.update { it.copy(data = data) }
     }
 
     private fun goAvatarSelect() {
@@ -157,17 +170,18 @@ class ProfileSetupViewModel(
 
     private fun goLocationPicker() {
         Timber.i("location clicked")
-
-        _state.value = _state.value.copy(profileSetupScreen = ProfileSetupScreen.LOCATION)
+        _state.update { it.copy(profileSetupScreen = ProfileSetupScreen.LOCATION) }
     }
 
     private fun searchAddress(searchQuery: String) {
         _textSearch.value = searchQuery
-        _state.value = _state.value.copy(
-            searchLocationModel = _state.value.searchLocationModel.copy(
-                searchQuery = searchQuery
+        _state.update {
+            it.copy(
+                searchLocationModel = _state.value.searchLocationModel.copy(
+                    searchQuery = searchQuery
+                )
             )
-        )
+        }
     }
 
     private fun setSearchResult(result: List<AutocompletePlace>) {
@@ -180,11 +194,13 @@ class ProfileSetupViewModel(
     }
 
     private fun addressSelected(result: AutocompletePlace) {
-        _state.value = _state.value.copy(
-            profileSetupScreen = ProfileSetupScreen.SETUP,
-            searchLocationModel = SearchModel(),
-            data = getSetupUser().copy(location = result.address)
-        )
+        _state.update {
+            it.copy(
+                profileSetupScreen = ProfileSetupScreen.SETUP,
+                searchLocationModel = SearchModel(),
+                data = getSetupUser().copy(location = result.address)
+            )
+        }
         Timber.i("location selected ${_state.value.data}")
     }
 }

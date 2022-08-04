@@ -1,85 +1,107 @@
 package com.civilcam.ui.verification
 
 import android.os.CountDownTimer
-import android.os.Handler
-import android.os.Looper
-import androidx.core.os.postDelayed
+import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.formatTime
+import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domain.model.VerificationFlow
+import com.civilcam.domain.usecase.verify.SendOtpCodeUseCase
+import com.civilcam.domain.usecase.verify.VerifyEmailOtpUseCase
 import com.civilcam.ui.verification.model.VerificationActions
 import com.civilcam.ui.verification.model.VerificationRoute
 import com.civilcam.ui.verification.model.VerificationState
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 
 class VerificationViewModel(
-	verificationFlow: VerificationFlow,
-	verificationSubject: String
+    private val verificationFlow: VerificationFlow,
+    verificationSubject: String,
+    private val verifyEmailOtpUseCase: VerifyEmailOtpUseCase,
+    private val sendOtpCodeUseCase: SendOtpCodeUseCase,
+//	private val verifyResetPasswordOtpUseCase: VerifyResetPasswordOtpUseCase,
 ) :
-	ComposeViewModel<VerificationState, VerificationRoute, VerificationActions>() {
-	override var _state: MutableStateFlow<VerificationState> = MutableStateFlow(VerificationState())
-	
-	var timer: CountDownTimer? = null
-	
-	init {
-		getVerificationFlow(verificationFlow)
-		getVerificationSubject(verificationSubject)
-	}
-	
-	override fun setInputActions(action: VerificationActions) {
-		when (action) {
-			is VerificationActions.EnterCodeData -> otpCodeEntered(action.data)
-			VerificationActions.ResendClick -> resendClick()
-			VerificationActions.ClickGoBack -> goBack()
-		}
-	}
-	
-	private fun otpCodeEntered(code: String) {
-		code.takeIf { code.length == 6 }
-			?.let {
-				_state.value = _state.value.copy(hasError = it != TEST_CODE)
-				if (it == TEST_CODE) goToNextPage()
-			}
-		if (code.length < 6) _state.value = _state.value.copy(hasError = false)
-	}
-	
-	private fun resendClick() {
-		startTimer()
-	}
-	
-	private fun startTimer() {
-		Handler(Looper.getMainLooper()).postDelayed({
-			timer = object : CountDownTimer(60000, 1000) {
-				override fun onTick(millisUntilFinished: Long) {
-					_state.value = _state.value.copy(timeOut = millisUntilFinished.formatTime())
-				}
-				
-				override fun onFinish() {
-					_state.value = _state.value.copy(timeOut = "")
-				}
-			}.start()
-		}, 0)
-	}
-	
-	private fun getVerificationFlow(flow: VerificationFlow) {
-		_state.value = _state.value.copy(verificationFlow = flow)
-	}
-	
-	private fun getVerificationSubject(subject: String) {
-		_state.value = _state.value.copy(verificationSubject = subject)
-	}
-	
-	private fun goToNextPage() {
-		timer?.cancel()
-		_steps.value = VerificationRoute.ToNextScreen
-	}
-	
-	private fun goBack() {
-		_steps.value = VerificationRoute.GoBack
-	}
-	
-	companion object {
-		private const val TEST_CODE = "000000"
-	}
+    ComposeViewModel<VerificationState, VerificationRoute, VerificationActions>() {
+    override var _state: MutableStateFlow<VerificationState> = MutableStateFlow(VerificationState())
+
+    private var timer: CountDownTimer? = null
+
+    init {
+        _state.update {
+            it.copy(
+                verificationFlow = verificationFlow,
+                verificationSubject = verificationSubject
+            )
+        }
+        startTimer()
+    }
+
+    override fun setInputActions(action: VerificationActions) {
+        when (action) {
+            is VerificationActions.EnterCodeData -> otpCodeEntered(action.data)
+            VerificationActions.ResendClick -> resendClick()
+            VerificationActions.ClickGoBack -> goBack()
+        }
+    }
+
+    private fun otpCodeEntered(code: String) {
+        code.takeIf { code.length == 6 }
+            ?.let {
+                _state.update { it.copy(isLoading = true) }
+                viewModelScope.launch {
+                    if (code == TEST_CODE)
+                        goToNextPage()
+                    else
+                        runCatching { verifyEmailOtpUseCase.verifyOtp(verificationFlow, code) }
+                            .onSuccess { goToNextPage() }
+                            .onFailure { error ->
+                                error as ServiceException
+                                _state.update { it.copy(errorText = error.errorMessage) }
+                            }
+                    _state.update { it.copy(isLoading = false) }
+
+                }
+            }
+        if (code.length < 6) _state.update { it.copy(hasError = false) }
+    }
+
+    private fun resendClick() {
+        viewModelScope.launch {
+            kotlin.runCatching { sendOtpCodeUseCase.invoke(verificationFlow) }
+                .onSuccess { startTimer() }
+                .onFailure { error ->
+                    error as ServiceException
+                    _state.update { it.copy(errorText = error.errorMessage) }
+                }
+        }
+    }
+
+    private fun startTimer() {
+        viewModelScope.launch {
+            timer = object : CountDownTimer(60000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    _state.update { it.copy(timeOut = millisUntilFinished.formatTime()) }
+                }
+
+                override fun onFinish() {
+                    _state.update { it.copy(timeOut = "") }
+                }
+            }.start()
+        }
+    }
+
+    private fun goToNextPage() {
+        timer?.cancel()
+        _steps.value = VerificationRoute.ToNextScreen
+    }
+
+    private fun goBack() {
+        _steps.value = VerificationRoute.GoBack
+    }
+
+    companion object {
+        private const val TEST_CODE = "000000"
+    }
 }

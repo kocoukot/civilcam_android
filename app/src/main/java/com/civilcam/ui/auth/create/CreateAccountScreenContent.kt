@@ -44,10 +44,11 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
     if (state.value.isLoading) {
         DialogLoadingContent()
     }
-    if (state.value.alertErrorText.isNotEmpty()) {
+
+    if (state.value.alertErrorText?.isNotEmpty() == true) {
         AlertDialogComp(
-            dialogTitle = stringResource(id = R.string.something_went_wrong),
-            dialogText = state.value.alertErrorText,
+            dialogText = state.value.alertErrorText
+                ?: stringResource(id = R.string.something_went_wrong),
             alertType = AlertDialogTypes.OK,
             onOptionSelected = {
                 viewModel.setInputActions(CreateAccountActions.ClickOkAlert)

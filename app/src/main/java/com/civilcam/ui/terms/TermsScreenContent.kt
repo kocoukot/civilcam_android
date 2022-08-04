@@ -10,11 +10,10 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.model.TermsType
-import com.civilcam.ui.common.compose.BackButton
-import com.civilcam.ui.common.compose.ComposeButton
-import com.civilcam.ui.common.compose.DividerLightGray
-import com.civilcam.ui.common.compose.RowDividerGrayThree
-import com.civilcam.ui.common.compose.TopAppBarContent
+import com.civilcam.ui.common.alert.AlertDialogComp
+import com.civilcam.ui.common.alert.AlertDialogTypes
+import com.civilcam.ui.common.compose.*
+import com.civilcam.ui.common.loading.DialogLoadingContent
 import com.civilcam.ui.terms.content.AcceptTermsContent
 import com.civilcam.ui.terms.content.WebButton
 import com.civilcam.ui.terms.model.TermsActions
@@ -22,11 +21,21 @@ import com.civilcam.ui.terms.model.TermsActions
 @Composable
 fun TermsScreenContent(viewModel: TermsViewModel) {
 
-    val state = viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsState()
     var isAccepted by remember { mutableStateOf(false) }
 
+    if (state.isLoading) {
+        DialogLoadingContent()
+    }
+    if (state.errorText.isNotEmpty()) {
+        AlertDialogComp(
+            dialogText = state.errorText,
+            alertType = AlertDialogTypes.OK,
+            onOptionSelected = { state.errorText = "" }
+        )
+    }
     Scaffold(
-        backgroundColor = if (state.value.isSettings) CCTheme.colors.lightGray else CCTheme.colors.white,
+        backgroundColor = if (state.isSettings) CCTheme.colors.lightGray else CCTheme.colors.white,
         modifier = Modifier.fillMaxSize(),
         topBar = {
             Column {
@@ -39,7 +48,7 @@ fun TermsScreenContent(viewModel: TermsViewModel) {
                         }
                     },
                 )
-                if (state.value.isSettings) RowDividerGrayThree(0) else DividerLightGray()
+                if (state.isSettings) RowDividerGrayThree(0) else DividerLightGray()
             }
         }
 
@@ -83,14 +92,14 @@ fun TermsScreenContent(viewModel: TermsViewModel) {
                 }
                 Spacer(modifier = Modifier.height(40.dp))
 
-                if (!state.value.isSettings) {
+                if (!state.isSettings) {
                     AcceptTermsContent(isAccepted) {
                         isAccepted = !isAccepted
                     }
                 }
             }
 
-            if (!state.value.isSettings) {
+            if (!state.isSettings) {
                 ComposeButton(
                     title = stringResource(id = R.string.continue_text),
                     Modifier.padding(horizontal = 8.dp),

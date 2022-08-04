@@ -2,7 +2,7 @@ package com.civilcam.data.repository
 
 import com.civilcam.domain.model.docs.LegalDocs
 
-interface PublicRepository {
+interface PublicDocsRepository {
 
     suspend fun getLegalDocs(): LegalDocs
 }

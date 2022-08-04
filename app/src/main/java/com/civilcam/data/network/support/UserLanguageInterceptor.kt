@@ -13,11 +13,14 @@ class UserLanguageInterceptor(
         return chain.request()
             .newBuilder()
             .addHeader(HEADER_LANGUAGE, LocaleHelper.getSelectedLanguage().langValue)
+            .addHeader(HEADER_DEVICE, "android")
             .build()
             .let(chain::proceed)
     }
 
     companion object {
         private const val HEADER_LANGUAGE = "language"
+        private const val HEADER_DEVICE = "x-device-os"
+
     }
 }

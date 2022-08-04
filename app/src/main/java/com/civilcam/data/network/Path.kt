@@ -6,7 +6,7 @@ object Path {
     const val USER = "user"
     const val PROFILE = "profile"
     const val SUBSCRIPTIONS = "subscriptions"
-    const val PUBLIC = "public"
+    const val PUBLIC = "content"
 }
 
 

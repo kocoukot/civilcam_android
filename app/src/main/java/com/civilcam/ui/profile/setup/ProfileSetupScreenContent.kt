@@ -13,9 +13,12 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.ui.common.alert.AlertDialogComp
+import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TopAppBarContent
+import com.civilcam.ui.common.loading.DialogLoadingContent
 import com.civilcam.ui.profile.setup.content.DatePickerContent
 import com.civilcam.ui.profile.setup.content.LocationSelectContent
 import com.civilcam.ui.profile.setup.content.ProfileSetupContent
@@ -27,6 +30,17 @@ import com.civilcam.ui.profile.setup.model.ProfileSetupScreen
 fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
 
     val state = viewModel.state.collectAsState()
+
+    if (state.value.isLoading) {
+        DialogLoadingContent()
+    }
+    if (state.value.errorText.isNotEmpty()) {
+        AlertDialogComp(
+            dialogText = state.value.errorText,
+            alertType = AlertDialogTypes.OK,
+            onOptionSelected = { state.value.errorText = "" }
+        )
+    }
 
     if (state.value.showDatePicker) {
         Dialog(

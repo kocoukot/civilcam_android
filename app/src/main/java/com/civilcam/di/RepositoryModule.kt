@@ -15,4 +15,9 @@ val repositoryModule = module {
 
     factory<AuthRepository> { AuthRepositoryImpl(get(), get()) }
 
+    factory<ProfileRepository> { ProfileRepositoryImpl(get(), get(), get()) }
+
+    factory<PublicDocsRepository> { PublicDocsRepositoryImpl(get()) }
+
+    factory<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
 }

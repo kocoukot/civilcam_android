@@ -15,7 +15,7 @@ import com.civilcam.common.theme.CCTheme
 
 @Composable
 fun AlertDialogComp(
-    dialogTitle: String,
+    dialogTitle: String = "",
     dialogText: String,
     alertType: AlertDialogTypes,
     onOptionSelected: (Boolean) -> Unit

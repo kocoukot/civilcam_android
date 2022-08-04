@@ -9,9 +9,9 @@ sealed class UserProfileActions : ComposeFragmentActions {
 	object ClickDateSelect : UserProfileActions()
 	object ClickCloseDatePicker : UserProfileActions()
 	data class ClickSelectDate(val date: Long) : UserProfileActions()
-	data class GoEdit(val screenType: UserProfileScreen) : UserProfileActions()
+	object ClickEdit : UserProfileActions()
 	data class GoCredentials(val userProfileType: UserProfileType) : UserProfileActions()
-	data class GoSave(val screenType: UserProfileScreen) : UserProfileActions()
+	object ClickSave : UserProfileActions()
 	data class EnterInputData(val dataType: UserInfoDataType, val data: String) :
 		UserProfileActions()
 }

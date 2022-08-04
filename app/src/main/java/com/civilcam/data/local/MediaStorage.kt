@@ -39,7 +39,7 @@ class MediaStorage(private val context: Context) {
                     Calendar.getInstance(TimeZone.getDefault()).timeInMillis
                         .also {
                             imageTitleFormatter.format(it).let { date ->
-                                val title = "IMG_standartM_$date"
+                                val title = "IMG_civilcam_$date"
                                 put(MediaStore.Images.Media.TITLE, title)
                                 put(MediaStore.Images.Media.DISPLAY_NAME, title)
                             }
@@ -85,7 +85,7 @@ class MediaStorage(private val context: Context) {
     fun getImageFile(uri: Uri): Maybe<File> = getImageMetadata(uri)
         .flatMap { metadata ->
             Maybe.fromCallable {
-                FileUtils.createFileFromUri(context, "standartM_${metadata.name}", uri)
+                FileUtils.createFileFromUri(context, "civilcam_${metadata.name}", uri)
                     ?.also {
                         runBlocking {
                             Compressor.compress(context, it) {
