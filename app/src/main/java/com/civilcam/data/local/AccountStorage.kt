@@ -47,6 +47,16 @@ class AccountStorage(
             accountManager.setUserData(getOrCreateAccount(), IS_USER_LOGGED_IN, value.toString())
         }
 
+    fun logOut() {
+        accountManager.apply {
+            clearProfile()
+            isUserLoggedIn = false
+            sessionToken = null
+        }
+    }
+
+    private fun clearProfile() = accountManager.setUserData(getOrCreateAccount(), USER, null)
+
     fun loginUser(sessionToken: String?, user: CurrentUser) {
         getOrCreateAccount()
             .let {

@@ -33,10 +33,13 @@ class SettingsFragment : Fragment() {
                     TermsFragment.createArgs(true)
                 )
                 SettingsRoute.GoLanguageSelect -> {
-                    navController.navigate(R.id.action_settingsFragment_to_languageSelectFragment)
+                    navController.popBackStack()
+                    navController.popBackStack()
+                    navController.navigate(R.id.languageSelectFragment)
+//                    navController.backStack.pop()
+//                    navController.backStack.clear()
+//                    navController.navigate(R.id.action_settingsFragment_to_languageSelectFragment)
                 }
-                is SettingsRoute.IsNavBarVisible -> (activity as MainActivity)
-                    .showBottomNavBar(!route.isVisible)
                 SettingsRoute.GoSubManage -> navController.navigate(R.id.subscriptionFragment, SubscriptionFragment.createArgs(true))
             }
         }

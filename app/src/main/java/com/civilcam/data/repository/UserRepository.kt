@@ -4,7 +4,7 @@ interface UserRepository {
 
     suspend fun acceptTerms()
 
-//	suspend fun signOut(): Boolean
+	suspend fun signOut(): Boolean
 //
 //	suspend fun deleteAccount(): Boolean
 //

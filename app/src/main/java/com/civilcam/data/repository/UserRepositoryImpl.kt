@@ -23,7 +23,10 @@ class UserRepositoryImpl(
             }
         }
 
-//    override suspend fun signOut(): Boolean =
+    override suspend fun signOut(): Boolean {
+        accountStorage.logOut()
+        return true
+    }
 //        safeApiCall {
 //            userService.signOut()
 //        }.let { response ->
