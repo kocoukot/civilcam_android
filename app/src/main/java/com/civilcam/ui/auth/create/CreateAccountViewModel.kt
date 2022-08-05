@@ -76,31 +76,28 @@ class CreateAccountViewModel(
     private fun goContinue() {
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            if (_state.value.email == "test@messapps.com" && _state.value.passwordModel.password == "Password1@")
-                navigateRoute(CreateAccountRoute.GoContinue(_state.value.email))
-            else
-                kotlin.runCatching {
-                    singUpUseCase.invoke(_state.value.email, _state.value.passwordModel.password)
+            kotlin.runCatching {
+                singUpUseCase.invoke(_state.value.email, _state.value.passwordModel.password)
+            }
+                .onSuccess {
+                    navigateRoute(CreateAccountRoute.GoContinue(_state.value.email))
                 }
-                    .onSuccess {
-                        navigateRoute(CreateAccountRoute.GoContinue(_state.value.email))
-                    }
-                    .onFailure { error ->
-                        error.castSafe<ServiceException>()?.let { casted ->
-                            if (casted.errorCode == ServerErrors.EMAIL_ALREADY_REGISTERED)
-                                _state.update {
-                                    it.copy(
-                                        emailErrorText = casted.errorMessage,
-                                        isEmail = false
-                                    )
-                                }
-                            else {
-                                _state.update { it.copy(alertErrorText = casted.errorMessage) }
+                .onFailure { error ->
+                    error.castSafe<ServiceException>()?.let { casted ->
+                        if (casted.errorCode == ServerErrors.EMAIL_ALREADY_REGISTERED)
+                            _state.update {
+                                it.copy(
+                                    emailErrorText = casted.errorMessage,
+                                    isEmail = false
+                                )
                             }
-                        } ?: run {
+                        else {
+                            _state.update { it.copy(alertErrorText = casted.errorMessage) }
                         }
-
+                    } ?: run {
                     }
+
+                }
             _state.update { it.copy(isLoading = false) }
         }
     }
