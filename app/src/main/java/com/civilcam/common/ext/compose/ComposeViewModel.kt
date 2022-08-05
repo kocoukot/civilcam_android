@@ -11,9 +11,13 @@ abstract class ComposeViewModel<A : ComposeFragmentState, R : ComposeFragmentRou
     protected abstract var _state: MutableStateFlow<A>
     val state by lazy { _state.asStateFlow() }
 
-    protected val _steps: SingleLiveEvent<R> = SingleLiveEvent()
+    private val _steps: SingleLiveEvent<R> = SingleLiveEvent()
     val steps: SingleLiveEvent<R> = _steps
 
+
+    protected fun navigateRoute(route: R) {
+        _steps.value = route
+    }
 
     abstract fun setInputActions(action: T)
 }

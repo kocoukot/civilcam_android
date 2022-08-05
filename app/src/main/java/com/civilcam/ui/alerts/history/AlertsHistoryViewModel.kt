@@ -49,7 +49,7 @@ class AlertsHistoryViewModel(
 
     private fun goBack() {
         when (_state.value.alertHistoryScreen) {
-            AlertHistoryScreen.HISTORY_LIST -> _steps.value = AlertHistoryRoute.GoBack
+            AlertHistoryScreen.HISTORY_LIST -> navigateRoute(AlertHistoryRoute.GoBack)
             AlertHistoryScreen.HISTORY_DETAIL -> {
                 _state.update {
                     it.copy(alertHistoryScreen = AlertHistoryScreen.HISTORY_LIST)

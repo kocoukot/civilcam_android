@@ -40,8 +40,12 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
     }
 
     private fun controlFlash() {
-        _steps.value =
-            EmergencyRoute.ControlFlash(_state.value.cameraFlash, _state.value.cameraState)
+        navigateRoute(
+            EmergencyRoute.ControlFlash(
+                _state.value.cameraFlash,
+                _state.value.cameraState
+            )
+        )
         _state.value = _state.value.copy(cameraFlash = !_state.value.cameraFlash)
     }
 
@@ -51,28 +55,28 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
         steps.value = EmergencyRoute.IsNavBarVisible(screen == EmergencyScreen.NORMAL)
         when (screen) {
             EmergencyScreen.NORMAL,
-            EmergencyScreen.COUPLED -> _steps.value =
-                EmergencyRoute.HideSystemUI
-            EmergencyScreen.MAP_EXTENDED, EmergencyScreen.LIVE_EXTENDED -> _steps.value =
+            EmergencyScreen.COUPLED -> navigateRoute(EmergencyRoute.HideSystemUI)
+            EmergencyScreen.MAP_EXTENDED, EmergencyScreen.LIVE_EXTENDED -> navigateRoute(
                 EmergencyRoute.ShowSystemUI
+            )
         }
     }
 
     private fun goBack() {
-        _steps.value = EmergencyRoute.HideSystemUI
+        navigateRoute(EmergencyRoute.HideSystemUI)
         _state.value = _state.value.copy(emergencyScreen = EmergencyScreen.COUPLED)
     }
 
     private fun goSettings() {
-        _steps.value = EmergencyRoute.GoSettings
+        navigateRoute(EmergencyRoute.GoSettings)
     }
 
     private fun goUserProfile() {
-        _steps.value = EmergencyRoute.GoUserProfile
+        navigateRoute(EmergencyRoute.GoUserProfile)
     }
 
     private fun goPinCode() {
-        _steps.value = EmergencyRoute.GoPinCode
+        navigateRoute(EmergencyRoute.GoPinCode)
     }
 
     private fun oneClickSafe() {
@@ -82,7 +86,7 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
     }
 
     private fun doubleClickSos() {
-        _steps.value = EmergencyRoute.CheckPermission
+        navigateRoute(EmergencyRoute.CheckPermission)
     }
 
     fun launchSos() {

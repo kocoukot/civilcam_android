@@ -1,24 +1,18 @@
 package com.civilcam.ui.profile.userDetails
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.civilcam.arch.common.livedata.SingleLiveEvent
+import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.domain.usecase.GetUserInformationUseCase
 import com.civilcam.ui.profile.userDetails.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class UserDetailsViewModel(
     private val userId: Int,
     private val getUserInformationUseCase: GetUserInformationUseCase
-) : ViewModel() {
+) : ComposeViewModel<UserDetailsState, UserDetailsRoute, UserDetailsActions>() {
 
-    private val _state: MutableStateFlow<UserDetailsState> = MutableStateFlow(UserDetailsState())
-    val state = _state.asStateFlow()
-
-    private val _steps: SingleLiveEvent<UserDetailsRoute> = SingleLiveEvent()
-    val steps: SingleLiveEvent<UserDetailsRoute> = _steps
+    override var _state: MutableStateFlow<UserDetailsState> = MutableStateFlow(UserDetailsState())
 
     init {
         _state.value = _state.value.copy(isLoading = true)
@@ -36,7 +30,7 @@ class UserDetailsViewModel(
 
     }
 
-    fun setInputActions(action: UserDetailsActions) {
+    override fun setInputActions(action: UserDetailsActions) {
         when (action) {
             UserDetailsActions.ClickGoBack -> goBack()
             UserDetailsActions.ClickGuardenceChange -> changeGuardence()
@@ -49,7 +43,7 @@ class UserDetailsViewModel(
     }
 
     private fun goBack() {
-        _steps.value = UserDetailsRoute.GoBack
+        navigateRoute(UserDetailsRoute.GoBack)
     }
 
 

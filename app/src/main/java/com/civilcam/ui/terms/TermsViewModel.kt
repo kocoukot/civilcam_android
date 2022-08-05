@@ -45,14 +45,14 @@ class TermsViewModel(
     }
 
     private fun goBack() {
-        _steps.value = TermsRoute.GoBack
+        navigateRoute(TermsRoute.GoBack)
     }
 
     private fun goNext() {
         viewModelScope.launch {
             kotlin.runCatching { acceptLegalDocsUseCase.invoke() }
                 .onSuccess {
-                    _steps.value = TermsRoute.GoSubscription
+                    navigateRoute(TermsRoute.GoSubscription)
                 }
                 .onFailure { error ->
                     error as ServiceException
@@ -63,11 +63,13 @@ class TermsViewModel(
 
     private fun goWebView(webLink: TermsType) {
         _state.value.legalDocs?.let {
-            _steps.value = TermsRoute.GoWebView(
-                when (webLink) {
-                    TermsType.TERMS_CONDITIONS -> it.termsAndConditions
-                    TermsType.PRIVACY_POLICY -> it.privacyPolicy
-                }
+            navigateRoute(
+                TermsRoute.GoWebView(
+                    when (webLink) {
+                        TermsType.TERMS_CONDITIONS -> it.termsAndConditions
+                        TermsType.PRIVACY_POLICY -> it.privacyPolicy
+                    }
+                )
             )
         }
     }

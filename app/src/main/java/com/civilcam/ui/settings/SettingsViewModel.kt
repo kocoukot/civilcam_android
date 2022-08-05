@@ -7,7 +7,6 @@ import com.civilcam.domain.usecase.settings.CheckCurrentPasswordUseCase
 import com.civilcam.domain.usecase.settings.GetCurrentSubscriptionPlanUseCase
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.settings.model.*
-import com.civilcam.ui.subscription.model.SubscriptionRoute
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -31,9 +30,9 @@ class SettingsViewModel(
 			is SettingsActions.ClickCloseAlertDialog -> {
 				if (action.isConfirm) {
 					if (action.isLogOut) {
-						_steps.value = SettingsRoute.GoLanguageSelect // todo add api
+						navigateRoute(SettingsRoute.GoLanguageSelect) // todo add api
 					} else {
-						_steps.value = SettingsRoute.GoLanguageSelect// todo add api
+						navigateRoute(SettingsRoute.GoLanguageSelect)// todo add api
 					}
 				} else goBack()
 			}
@@ -59,7 +58,7 @@ class SettingsViewModel(
 	}
 	
 	private fun goSubManage() {
-		_steps.value = SettingsRoute.GoSubManage
+		navigateRoute(SettingsRoute.GoSubManage)
 	}
 	
 	private fun fetchSubscriptionPlan() {
@@ -80,7 +79,7 @@ class SettingsViewModel(
 	
 	private fun goBack() {
 		when (_state.value.settingsType) {
-			SettingsType.MAIN -> _steps.value = SettingsRoute.GoBack
+			SettingsType.MAIN -> navigateRoute(SettingsRoute.GoBack)
 			SettingsType.CREATE_PASSWORD -> {
 				navBarStatus(true)
 				_state.value = _state.value.copy(settingsType = SettingsType.CHANGE_PASSWORD)
@@ -109,7 +108,7 @@ class SettingsViewModel(
 					data = SettingsModel(changePasswordSectionData = ChangePasswordSectionData())
 				)
 			}
-			SettingsType.TERMS_AND_POLICY -> _steps.value = SettingsRoute.GoTerms
+			SettingsType.TERMS_AND_POLICY -> navigateRoute(SettingsRoute.GoTerms)
 			else -> {
 				_state.value = _state.value.copy(settingsType = section)
 			}
@@ -117,7 +116,7 @@ class SettingsViewModel(
 	}
 	
 	private fun navBarStatus(hideBar: Boolean) {
-		_steps.value = SettingsRoute.IsNavBarVisible(hideBar)
+		navigateRoute(SettingsRoute.IsNavBarVisible(hideBar))
 	}
 	
 	private fun notificationChanged(status: Boolean, notifyType: NotificationsType) {

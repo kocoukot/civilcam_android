@@ -106,15 +106,15 @@ class NetworkMainViewModel(
     }
 
     private fun goContacts() {
-        _steps.value = NetworkMainRoute.GoContacts
+        navigateRoute(NetworkMainRoute.GoContacts)
     }
 
     private fun goMyProfile() {
-        _steps.value = NetworkMainRoute.GoProfile
+        navigateRoute(NetworkMainRoute.GoProfile)
     }
 
     private fun goUser(user: GuardianItem) {
-        _steps.value = NetworkMainRoute.GoUserDetail(user.guardianId)
+        navigateRoute(NetworkMainRoute.GoUserDetail(user.guardianId))
     }
 
     private fun searchGuard() {
@@ -125,7 +125,7 @@ class NetworkMainViewModel(
     }
 
     private fun goSettings() {
-        _steps.value = NetworkMainRoute.GoSettings
+        navigateRoute(NetworkMainRoute.GoSettings)
     }
 
     private fun goRequests() {
@@ -234,18 +234,8 @@ class NetworkMainViewModel(
     fun navBarStatus() {
         Timber.i("onResume ${_state.value.screenState}")
         Handler(Looper.getMainLooper()).postDelayed({
-            _steps.value =
-                NetworkMainRoute.IsNavBarVisible(_state.value.screenState == NetworkScreen.MAIN)
+            navigateRoute(NetworkMainRoute.IsNavBarVisible(_state.value.screenState == NetworkScreen.MAIN))
         }, 100)
 
     }
 }
-
-
-
-
-
-    
-
-
-

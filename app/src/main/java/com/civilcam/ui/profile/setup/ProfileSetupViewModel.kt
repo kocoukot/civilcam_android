@@ -87,7 +87,7 @@ class ProfileSetupViewModel(
 
     private fun goBack() {
         when (_state.value.profileSetupScreen) {
-            ProfileSetupScreen.SETUP -> _steps.value = ProfileSetupRoute.GoBack
+            ProfileSetupScreen.SETUP -> navigateRoute(ProfileSetupRoute.GoBack)
             ProfileSetupScreen.LOCATION -> _state.value =
                 _state.value.copy(
                     profileSetupScreen = ProfileSetupScreen.SETUP,
@@ -103,8 +103,7 @@ class ProfileSetupViewModel(
                 try {
                     userdata.profileImage?.uri?.let { uri -> setAvatarUseCase.invoke(uri) }
                     val result = setPersonalInfoUseCase.invoke(userdata)
-                    if (result) _steps.value =
-                        ProfileSetupRoute.GoVerification(userdata.phoneNumber)
+                    if (result) navigateRoute(ProfileSetupRoute.GoVerification(userdata.phoneNumber))
 
                 } catch (e: ServiceException) {
                     Timber.d("resourceLocalized throwable ${e.errorCode}")
@@ -147,7 +146,7 @@ class ProfileSetupViewModel(
     }
 
     private fun goAvatarSelect() {
-        _steps.value = ProfileSetupRoute.GoGalleryOpen
+        navigateRoute(ProfileSetupRoute.GoGalleryOpen)
     }
 
     fun onPictureUriReceived(uri: Uri) {

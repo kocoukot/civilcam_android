@@ -51,9 +51,9 @@ fun LanguageSelectScreenContent(viewModel: LanguageSelectViewModel) {
                 contentAlignment = Alignment.BottomCenter
             ) {
                 BottomCard(state.value.selectedLang, {
-                    viewModel.setInputAction(LangSelectActions.LanguageSelect(it))
+                    viewModel.setInputActions(LangSelectActions.LanguageSelect(it))
                 }, {
-                    viewModel.setInputAction(LangSelectActions.ClickContinue)
+                    viewModel.setInputActions(LangSelectActions.ClickContinue)
                 })
             }
         },

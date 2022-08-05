@@ -28,16 +28,16 @@ class SubscriptionViewModel(
 	
 	private fun goProfileSetup() {
 		if (_state.value.isReselect) {
-			_steps.value = SubscriptionRoute.GoBack
+			navigateRoute(SubscriptionRoute.GoBack)
 		} else {
-			_steps.value = SubscriptionRoute.GoProfileSetup
+			navigateRoute(SubscriptionRoute.GoProfileSetup)
 		}
 		_state.value = _state.value.copy(purchaseFail = false)
 		_state.value = _state.value.copy(purchaseSuccess = false)
 	}
 	
 	private fun goBack() {
-		_steps.value = SubscriptionRoute.GoBack
+		navigateRoute(SubscriptionRoute.GoBack)
 	}
 	
 	private fun goStart() {

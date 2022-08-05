@@ -22,6 +22,7 @@ class LoginViewModel : ComposeViewModel<LoginState, LoginRoute, LoginActions>() 
 				when (action.dataType) {
 					PasswordInputDataType.EMAIL -> emailEntered(action.data)
 					PasswordInputDataType.PASSWORD -> passwordEntered(action.data)
+					else -> {}
 				}
 			}
 		}
@@ -36,18 +37,18 @@ class LoginViewModel : ComposeViewModel<LoginState, LoginRoute, LoginActions>() 
 	}
 	
 	private fun goBack() {
-		_steps.value = LoginRoute.GoBack
+		navigateRoute(LoginRoute.GoBack)
 	}
 	
 	private fun goLogin() {
-		_steps.value = LoginRoute.GoLogin
+		navigateRoute(LoginRoute.GoLogin)
 	}
 	
 	private fun goReset() {
-		_steps.value = LoginRoute.GoReset
+		navigateRoute(LoginRoute.GoReset)
 	}
 	
 	private fun goRegister() {
-		_steps.value = LoginRoute.GoRegister
+		navigateRoute(LoginRoute.GoRegister)
 	}
 }
