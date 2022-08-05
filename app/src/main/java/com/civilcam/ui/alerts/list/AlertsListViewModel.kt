@@ -47,19 +47,19 @@ class AlertsListViewModel(
 
 
     private fun goMyProfile() {
-        _steps.value = AlertListRoute.GoMyProfile
+        navigateRoute(AlertListRoute.GoMyProfile)
     }
 
     private fun goSettings() {
-        _steps.value = AlertListRoute.GoSettings
+        navigateRoute(AlertListRoute.GoSettings)
     }
 
     private fun goAlertHistory() {
-        _steps.value = AlertListRoute.GoAlertHistory
+        navigateRoute(AlertListRoute.GoAlertHistory)
     }
 
     private fun goUserProfile(userId: Int) {
-        _steps.value = AlertListRoute.GoUserAlert(userId)
+        navigateRoute(AlertListRoute.GoUserAlert(userId))
     }
 
     private fun showResolveAlert(userId: Int) {
@@ -83,6 +83,4 @@ class AlertsListViewModel(
         }
 
     }
-
-
 }

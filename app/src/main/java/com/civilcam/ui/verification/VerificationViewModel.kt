@@ -94,11 +94,11 @@ class VerificationViewModel(
 
     private fun goToNextPage() {
         timer?.cancel()
-        _steps.value = VerificationRoute.ToNextScreen
+        navigateRoute(VerificationRoute.ToNextScreen)
     }
 
     private fun goBack() {
-        _steps.value = VerificationRoute.GoBack
+        navigateRoute(VerificationRoute.GoBack)
     }
 
     companion object {

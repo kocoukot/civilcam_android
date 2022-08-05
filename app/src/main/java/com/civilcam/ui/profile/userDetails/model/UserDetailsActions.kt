@@ -1,6 +1,8 @@
 package com.civilcam.ui.profile.userDetails.model
 
-sealed class UserDetailsActions {
+import com.civilcam.common.ext.compose.ComposeFragmentActions
+
+sealed class UserDetailsActions : ComposeFragmentActions {
     object ClickGoBack : UserDetailsActions()
     object ClickGuardenceChange : UserDetailsActions()
     data class ClickShowAlert(val alertType: StopGuardAlertType) : UserDetailsActions()

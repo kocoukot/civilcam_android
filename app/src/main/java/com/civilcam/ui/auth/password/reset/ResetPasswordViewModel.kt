@@ -32,10 +32,10 @@ class ResetPasswordViewModel : ComposeViewModel<ResetState, ResetRoute, ResetAct
 	}
 	
 	private fun goContinue() {
-		_steps.value = ResetRoute.GoContinue(_state.value.email)
+		navigateRoute(ResetRoute.GoContinue(_state.value.email))
 	}
 	
 	private fun goBack() {
-		_steps.value = ResetRoute.GoBack
+		navigateRoute(ResetRoute.GoBack)
 	}
 }

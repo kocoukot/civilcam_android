@@ -101,12 +101,12 @@ class UserProfileViewModel(
 		if (_state.value.screenState == UserProfileScreen.EDIT) {
 			_state.value = _state.value.copy(screenState = UserProfileScreen.PROFILE)
 		} else {
-			_steps.value = UserProfileRoute.GoBack
+			navigateRoute(UserProfileRoute.GoBack)
 		}
 	}
 	
 	private fun goPinCode() {
-		_steps.value = UserProfileRoute.GoPinCode
+		navigateRoute(UserProfileRoute.GoPinCode)
 	}
 	
 	private fun goEdit() {
@@ -114,11 +114,11 @@ class UserProfileViewModel(
 	}
 	
 	private fun goCredentials(userProfileType: UserProfileType) {
-		_steps.value = UserProfileRoute.GoCredentials(userProfileType)
+		navigateRoute(UserProfileRoute.GoCredentials(userProfileType))
 	}
 	
 	private fun goAvatarSelect() {
-		_steps.value = UserProfileRoute.GoGalleryOpen
+		navigateRoute(UserProfileRoute.GoGalleryOpen)
 	}
 	
 	fun onPictureUriReceived(uri: Uri) {

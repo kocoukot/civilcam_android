@@ -37,10 +37,18 @@ class ChangeCredentialsViewModel(credentialType: CredentialType) :
 	
 	private fun goSave(dataType: CredentialType) {
 		when (dataType) {
-			CredentialType.PHONE -> _steps.value =
-				ChangeCredentialsRoute.GoSave(dataType, _state.value.phone)
-			CredentialType.EMAIL -> _steps.value =
-				ChangeCredentialsRoute.GoSave(dataType, _state.value.email)
+			CredentialType.PHONE -> navigateRoute(
+				ChangeCredentialsRoute.GoSave(
+					dataType,
+					_state.value.phone
+				)
+			)
+			CredentialType.EMAIL -> navigateRoute(
+				ChangeCredentialsRoute.GoSave(
+					dataType,
+					_state.value.email
+				)
+			)
 		}
 	}
 	
@@ -53,6 +61,6 @@ class ChangeCredentialsViewModel(credentialType: CredentialType) :
 	}
 	
 	private fun goBack() {
-		_steps.value = ChangeCredentialsRoute.GoBack
+		navigateRoute(ChangeCredentialsRoute.GoBack)
 	}
 }

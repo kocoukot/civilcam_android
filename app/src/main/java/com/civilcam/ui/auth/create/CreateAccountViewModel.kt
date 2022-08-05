@@ -74,14 +74,14 @@ class CreateAccountViewModel(
     }
 
     private fun goContinue() {
-//        _steps.value = CreateAccountRoute.GoContinue(_state.value.email)
+//        navigateRoute(CreateAccountRoute.GoContinue(_state.value.email)
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             kotlin.runCatching {
                 singUpUseCase.invoke(_state.value.email, _state.value.passwordModel.password)
             }
                 .onSuccess {
-                    _steps.value = CreateAccountRoute.GoContinue(_state.value.email)
+                    navigateRoute(CreateAccountRoute.GoContinue(_state.value.email))
                 }
                 .onFailure { error ->
                     error.castSafe<ServiceException>()?.let { casted ->
@@ -104,10 +104,10 @@ class CreateAccountViewModel(
     }
 
     private fun goLogin() {
-        _steps.value = CreateAccountRoute.GoLogin
+        navigateRoute(CreateAccountRoute.GoLogin)
     }
 
     private fun goBack() {
-        _steps.value = CreateAccountRoute.GoBack
+        navigateRoute(CreateAccountRoute.GoBack)
     }
 }

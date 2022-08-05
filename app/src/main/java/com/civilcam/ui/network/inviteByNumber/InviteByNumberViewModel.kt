@@ -24,7 +24,7 @@ class InviteByNumberViewModel :
     }
 
     private fun goBack() {
-        _steps.value = InviteByNumberRoute.GoBack
+        navigateRoute(InviteByNumberRoute.GoBack)
     }
 
     private fun phoneCleared() {

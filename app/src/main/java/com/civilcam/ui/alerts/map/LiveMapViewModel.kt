@@ -51,17 +51,17 @@ class LiveMapViewModel(
     private fun resolverAlertAnswered(answer: Boolean) {
         _state.update { it.copy(isResolveAlertVisible = false) }
         if (answer) {
-            _steps.value = LiveMapRoute.AlertResolved
+            navigateRoute(LiveMapRoute.AlertResolved)
             //todo API resolve add
         }
     }
 
     private fun callUserPhone() {
-        _steps.value = LiveMapRoute.CallUserPhone("4334234234") // todo fix
+        navigateRoute(LiveMapRoute.CallUserPhone("4334234234")) // todo fix
     }
 
     private fun callPolice() {
-        _steps.value = LiveMapRoute.CallPolice
+        navigateRoute(LiveMapRoute.CallPolice)
     }
 
     private fun resoleUserAlert() {
@@ -69,7 +69,7 @@ class LiveMapViewModel(
     }
 
     private fun goBack() {
-        _steps.value = LiveMapRoute.GoBack
+        navigateRoute(LiveMapRoute.GoBack)
     }
 }
 

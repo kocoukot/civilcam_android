@@ -47,11 +47,11 @@ class ContactsViewModel(
     }
 
     private fun goBack() {
-        _steps.value = ContactsRoute.GoBack
+        navigateRoute(ContactsRoute.GoBack)
     }
 
     private fun moveToInvite() {
-        _steps.value = ContactsRoute.GoInviteByNumber
+        navigateRoute(ContactsRoute.GoInviteByNumber)
     }
 
     private fun searchContact(searchString: String) {

@@ -26,11 +26,11 @@ class CreatePasswordViewModel :
 	}
 	
 	private fun goBack() {
-		_steps.value = CreatePasswordRoute.GoBack
+		navigateRoute(CreatePasswordRoute.GoBack)
 	}
 	
 	private fun goSave() {
-		_steps.value = CreatePasswordRoute.GoSave
+		navigateRoute(CreatePasswordRoute.GoSave)
 	}
 	
 	private fun confirmPasswordEntered(password: String) {
