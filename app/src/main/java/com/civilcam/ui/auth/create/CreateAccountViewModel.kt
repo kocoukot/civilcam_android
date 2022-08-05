@@ -1,21 +1,16 @@
 package com.civilcam.ui.auth.create
 
-import androidx.lifecycle.viewModelScope
 import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.R
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail
-import com.civilcam.data.network.support.ServerErrors
-import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domain.usecase.auth.SingUpUseCase
 import com.civilcam.ui.auth.create.model.CreateAccountActions
 import com.civilcam.ui.auth.create.model.CreateAccountRoute
 import com.civilcam.ui.auth.create.model.CreateAccountState
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
-import com.standartmedia.common.ext.castSafe
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class CreateAccountViewModel(
     private val singUpUseCase: SingUpUseCase
@@ -74,33 +69,33 @@ class CreateAccountViewModel(
     }
 
     private fun goContinue() {
-//        navigateRoute(CreateAccountRoute.GoContinue(_state.value.email)
-        _state.update { it.copy(isLoading = true) }
-        viewModelScope.launch {
-            kotlin.runCatching {
-                singUpUseCase.invoke(_state.value.email, _state.value.passwordModel.password)
-            }
-                .onSuccess {
-                    navigateRoute(CreateAccountRoute.GoContinue(_state.value.email))
-                }
-                .onFailure { error ->
-                    error.castSafe<ServiceException>()?.let { casted ->
-                        if (casted.errorCode == ServerErrors.EMAIL_ALREADY_REGISTERED)
-                            _state.update {
-                                it.copy(
-                                    emailErrorText = casted.errorMessage,
-                                    isEmail = false
-                                )
-                            }
-                        else {
-                            _state.update { it.copy(alertErrorText = casted.errorMessage) }
-                        }
-                    } ?: run {
-                    }
-
-                }
-            _state.update { it.copy(isLoading = false) }
-        }
+        navigateRoute(CreateAccountRoute.GoContinue(_state.value.email))
+//        _state.update { it.copy(isLoading = true) }
+//        viewModelScope.launch {
+//            kotlin.runCatching {
+//                singUpUseCase.invoke(_state.value.email, _state.value.passwordModel.password)
+//            }
+//                .onSuccess {
+//                    navigateRoute(CreateAccountRoute.GoContinue(_state.value.email))
+//                }
+//                .onFailure { error ->
+//                    error.castSafe<ServiceException>()?.let { casted ->
+//                        if (casted.errorCode == ServerErrors.EMAIL_ALREADY_REGISTERED)
+//                            _state.update {
+//                                it.copy(
+//                                    emailErrorText = casted.errorMessage,
+//                                    isEmail = false
+//                                )
+//                            }
+//                        else {
+//                            _state.update { it.copy(alertErrorText = casted.errorMessage) }
+//                        }
+//                    } ?: run {
+//                    }
+//
+//                }
+//            _state.update { it.copy(isLoading = false) }
+//        }
     }
 
     private fun goLogin() {
