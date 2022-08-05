@@ -5,6 +5,7 @@ import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.domain.model.settings.NotificationsType
 import com.civilcam.domain.usecase.settings.CheckCurrentPasswordUseCase
 import com.civilcam.domain.usecase.settings.GetCurrentSubscriptionPlanUseCase
+import com.civilcam.domain.usecase.user.LogoutUseCase
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.settings.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +14,8 @@ import timber.log.Timber
 
 class SettingsViewModel(
 	private val checkCurrentPasswordUseCase: CheckCurrentPasswordUseCase,
-	private val getCurrentSubscriptionPlan: GetCurrentSubscriptionPlanUseCase
+	private val getCurrentSubscriptionPlan: GetCurrentSubscriptionPlanUseCase,
+	private val logoutUseCase: LogoutUseCase
 ) : ComposeViewModel<SettingsState, SettingsRoute, SettingsActions>() {
 	
 	override var _state = MutableStateFlow(SettingsState())
@@ -29,11 +31,15 @@ class SettingsViewModel(
 			SettingsActions.ClickSaveLanguage -> goBack()
 			is SettingsActions.ClickCloseAlertDialog -> {
 				if (action.isConfirm) {
-					if (action.isLogOut) {
-						navigateRoute(SettingsRoute.GoLanguageSelect) // todo add api
-					} else {
-						navigateRoute(SettingsRoute.GoLanguageSelect)// todo add api
+					viewModelScope.launch {
+						logoutUseCase.logout()
+						if (action.isLogOut) {
+							navigateRoute(SettingsRoute.GoLanguageSelect) // todo add api
+						} else {
+							navigateRoute(SettingsRoute.GoLanguageSelect)// todo add api
+						}
 					}
+
 				} else goBack()
 			}
 			// is SettingsActions.IsNavBarVisible -> navBarStatus(action.hideNavBar)
@@ -81,18 +87,18 @@ class SettingsViewModel(
 		when (_state.value.settingsType) {
 			SettingsType.MAIN -> navigateRoute(SettingsRoute.GoBack)
 			SettingsType.CREATE_PASSWORD -> {
-				navBarStatus(true)
+//				navBarStatus(true)
 				_state.value = _state.value.copy(settingsType = SettingsType.CHANGE_PASSWORD)
 			}
 			else -> {
-				navBarStatus(false)
+//				navBarStatus(false)
 				_state.value = SettingsState()
 			}
 		}
 	}
 	
 	private fun changeSection(section: SettingsType) {
-		navBarStatus(!(section == SettingsType.LOG_OUT || section == SettingsType.DELETE_ACCOUNT))
+//		navBarStatus(false)
 		
 		when (section) {
 			
@@ -114,11 +120,11 @@ class SettingsViewModel(
 			}
 		}
 	}
-	
-	private fun navBarStatus(hideBar: Boolean) {
-		navigateRoute(SettingsRoute.IsNavBarVisible(hideBar))
-	}
-	
+
+//	private fun navBarStatus(isVisible: Boolean) {
+//		navigateRoute(SettingsRoute.IsNavBarVisible(isVisible))
+//	}
+
 	private fun notificationChanged(status: Boolean, notifyType: NotificationsType) {
 		Timber.d("updateSettingsModel ${_state.value}")
 		viewModelScope.launch {
@@ -237,7 +243,7 @@ class SettingsViewModel(
 	
 	private fun savePassword() {
 		viewModelScope.launch {
-			navBarStatus(false)
+//			navBarStatus(false)
 			_state.value = SettingsState()
 		}
 	}
