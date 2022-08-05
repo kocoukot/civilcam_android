@@ -8,6 +8,7 @@ import com.civilcam.ui.langSelect.model.LangSelectRoute
 import com.civilcam.ui.langSelect.model.LangSelectState
 import com.civilcam.utils.LocaleHelper
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LanguageSelectViewModel :
@@ -17,8 +18,7 @@ class LanguageSelectViewModel :
 
     init {
         viewModelScope.launch {
-            val selectedLang = LocaleHelper.getSelectedLanguage()
-            _state.value = _state.value.copy(selectedLang = selectedLang)
+            _state.update { it.copy(selectedLang = LocaleHelper.getSelectedLanguage()) }
         }
     }
 
@@ -30,7 +30,7 @@ class LanguageSelectViewModel :
     }
 
     private fun languageSelect(language: LanguageType) {
-        _state.value = _state.value.copy(selectedLang = language)
+        _state.update { it.copy(selectedLang = language) }
     }
 
     private fun toOnBoarding() {
