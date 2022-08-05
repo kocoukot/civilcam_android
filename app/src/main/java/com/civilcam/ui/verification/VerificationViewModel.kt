@@ -51,15 +51,12 @@ class VerificationViewModel(
             ?.let {
                 _state.update { it.copy(isLoading = true) }
                 viewModelScope.launch {
-                    if (code == TEST_CODE)
-                        goToNextPage()
-                    else
-                        runCatching { verifyEmailOtpUseCase.verifyOtp(verificationFlow, code) }
-                            .onSuccess { goToNextPage() }
-                            .onFailure { error ->
-                                error as ServiceException
-                                _state.update { it.copy(errorText = error.errorMessage) }
-                            }
+                    runCatching { verifyEmailOtpUseCase.verifyOtp(verificationFlow, code) }
+                        .onSuccess { goToNextPage() }
+                        .onFailure { error ->
+                            error as ServiceException
+                            _state.update { it.copy(errorText = error.errorMessage) }
+                        }
                     _state.update { it.copy(isLoading = false) }
 
                 }
