@@ -5,13 +5,13 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SessionUser(
-    val id: Int,
-    val email: String,
-    val language: String,
-    val fullName: String,
-    val isEmailVerified: Boolean,
-    val isTermsAndPolicyAccepted: Boolean,
-    val isUserProfileSetupRequired: Boolean,
-    val canChangeEmail: Boolean,
-    val canChangePassword: Boolean
+    val id: Int = 0,
+    val email: String = "",
+    val language: String = "",
+    val fullName: String = "",
+    val isEmailVerified: Boolean = false,
+    val isTermsAndPolicyAccepted: Boolean = false,
+    val isUserProfileSetupRequired: Boolean = false,
+    val canChangeEmail: Boolean = false,
+    val canChangePassword: Boolean = false
 ) : Parcelable

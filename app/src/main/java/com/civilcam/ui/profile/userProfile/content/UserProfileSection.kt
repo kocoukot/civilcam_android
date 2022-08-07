@@ -26,17 +26,19 @@ import coil.compose.rememberImagePainter
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domain.PictureModel
+import com.civilcam.domain.model.CurrentUser
 import com.civilcam.domain.model.UserBaseInfo
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TextActionButton
 import com.civilcam.ui.profile.userProfile.model.UserProfileActions
 import com.civilcam.ui.profile.userProfile.model.UserProfileScreen
+import com.civilcam.utils.DateUtils
 
 @Composable
 fun UserProfileSection(
-	userData: UserBaseInfo,
-	avatar: PictureModel? = null,
+	userData: CurrentUser,
+	avatar: String? = null,
 	screenType: UserProfileScreen,
 	isSaveEnabled: Boolean,
 	onActionClick: (UserProfileActions) -> Unit,
@@ -60,7 +62,7 @@ fun UserProfileSection(
 				if (avatar == null)
 					painterResource(id = R.drawable.img_avatar)
 				else
-					rememberImagePainter(data = avatar.uri),
+					rememberImagePainter(data = avatar),
 				contentDescription = null,
 				modifier = Modifier
 					.size(120.dp)
@@ -71,32 +73,35 @@ fun UserProfileSection(
 			)
 			Spacer(modifier = Modifier.weight(1f))
 			TextActionButton(
-				isEnabled = if (screenType == UserProfileScreen.EDIT) true else isSaveEnabled,
+				isEnabled = if (screenType == UserProfileScreen.PROFILE) true else isSaveEnabled,
 				actionTitle = when (screenType) {
 					UserProfileScreen.PROFILE -> stringResource(id = R.string.user_profile_edit_title)
 					UserProfileScreen.EDIT -> stringResource(id = R.string.save_text)
+					UserProfileScreen.LOCATION -> stringResource(id = R.string.save_text)
 				}
 			) {
 				onActionClick.invoke(if (screenType == UserProfileScreen.EDIT) UserProfileActions.ClickSave else UserProfileActions.ClickEdit)
 			}
 		}
+		
+		val dateOfBirth = userData.userBaseInfo.dob.let { DateUtils.dateOfBirthFormat(it) }
 
 		AnimatedVisibility(visible = screenType == UserProfileScreen.PROFILE) {
 			Column(
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
 				Text(
-					text = "${userData.firstName} ${userData.lastName}",
+					text = "${userData.userBaseInfo.firstName} ${userData.userBaseInfo.lastName}",
 					style = CCTheme.typography.button_text,
 					color = CCTheme.colors.black,
 					modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
 				)
 
-				AdditionalInfo(userData.dob)
+				AdditionalInfo(dateOfBirth)
 
 				Spacer(modifier = Modifier.height(4.dp))
 
-				AdditionalInfo(userData.address)
+				AdditionalInfo(userData.userBaseInfo.address)
 			}
 		}
 

@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class CurrentUser(
-    val accessToken: String?,
-    val sessionUser: SessionUser,
-    val userBaseInfo: UserBaseInfo,
+    val accessToken: String? = "",
+    val sessionUser: SessionUser = SessionUser(),
+    val userBaseInfo: UserBaseInfo = UserBaseInfo(),
 ) : Parcelable

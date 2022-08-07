@@ -4,24 +4,38 @@ import com.civilcam.common.ext.BaseRepository
 import com.civilcam.common.ext.Resource
 import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.local.SharedPreferencesStorage
+import com.civilcam.data.mapper.auth.UserMapper
 import com.civilcam.data.network.model.request.user.AcceptTermsRequest
 import com.civilcam.data.network.service.UserService
+import com.civilcam.domain.model.CurrentUser
 
 class UserRepositoryImpl(
-    private val sharedPreferencesStorage: SharedPreferencesStorage,
-    private val userService: UserService,
-    private val accountStorage: AccountStorage
+	private val sharedPreferencesStorage: SharedPreferencesStorage,
+	private val userService: UserService,
+	private val accountStorage: AccountStorage
 ) : UserRepository, BaseRepository() {
-
-    override suspend fun acceptTerms() =
-        safeApiCall {
-            userService.acceptTermsPolicy(AcceptTermsRequest(true))
-        }.let { response ->
-            when (response) {
-                is Resource.Success -> response.value
-                is Resource.Failure -> throw response.serviceException
-            }
-        }
+	
+	private val userMapper = UserMapper()
+	
+	override suspend fun acceptTerms() =
+		safeApiCall {
+			userService.acceptTermsPolicy(AcceptTermsRequest(true))
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> response.value
+				is Resource.Failure -> throw response.serviceException
+			}
+		}
+	
+	override suspend fun getCurrentUser(): CurrentUser =
+		safeApiCall {
+			userService.currentUser()
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> userMapper.mapData(response.value)
+				is Resource.Failure -> throw response.serviceException
+			}
+		}
 
     override suspend fun signOut(): Boolean {
         accountStorage.logOut()

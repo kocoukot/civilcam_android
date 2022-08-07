@@ -19,6 +19,9 @@ import com.civilcam.domain.usecase.user.AcceptLegalDocsUseCase
 import com.civilcam.domain.usecase.user.LogoutUseCase
 import com.civilcam.domain.usecase.verify.SendOtpCodeUseCase
 import com.civilcam.domain.usecase.verify.VerifyEmailOtpUseCase
+import com.civilcam.domain.usecase.user.GetCurrentUserUseCase
+import com.civilcam.domain.usecase.profile.ChangePhoneNumberUseCase
+import com.civilcam.domain.usecase.profile.UpdateUserProfileUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
@@ -39,8 +42,13 @@ val domainModule = module {
     factory { GetUserProfileUseCase(get()) }
 
     factory { LogoutUseCase(get()) }
-
-
+    
+    factory { GetCurrentUserUseCase(get()) }
+    
+    factory { ChangePhoneNumberUseCase(get()) }
+    
+    factory { UpdateUserProfileUseCase(get()) }
+    
     factory { GetUserInformationUseCase(get()) }
 
     factory { GetAlertsListUseCase(get()) }

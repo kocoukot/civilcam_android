@@ -1,14 +1,22 @@
 package com.civilcam.ui.profile.credentials
 
+import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail
+import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domain.usecase.profile.ChangePhoneNumberUseCase
 import com.civilcam.ui.profile.credentials.model.ChangeCredentialsActions
 import com.civilcam.ui.profile.credentials.model.ChangeCredentialsRoute
 import com.civilcam.ui.profile.credentials.model.ChangeCredentialsState
 import com.civilcam.ui.profile.credentials.model.CredentialType
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class ChangeCredentialsViewModel(credentialType: CredentialType) :
+class ChangeCredentialsViewModel(
+	credentialType: CredentialType,
+	private val changePhoneNumberUseCase: ChangePhoneNumberUseCase
+) :
 	ComposeViewModel<ChangeCredentialsState, ChangeCredentialsRoute, ChangeCredentialsActions>() {
 	override var _state: MutableStateFlow<ChangeCredentialsState> = MutableStateFlow(
 		ChangeCredentialsState()
@@ -37,18 +45,29 @@ class ChangeCredentialsViewModel(credentialType: CredentialType) :
 	
 	private fun goSave(dataType: CredentialType) {
 		when (dataType) {
-			CredentialType.PHONE -> navigateRoute(
-				ChangeCredentialsRoute.GoSave(
-					dataType,
-					_state.value.phone
+			CredentialType.PHONE ->
+				viewModelScope.launch {
+					kotlin.runCatching { changePhoneNumberUseCase.invoke(_state.value.phone) }
+						.onSuccess {
+							navigateRoute(
+								ChangeCredentialsRoute.GoSave(
+									dataType,
+									_state.value.phone
+								)
+							)
+						}
+						.onFailure { error ->
+							error as ServiceException
+							_state.update { it.copy(errorText = error.errorMessage) }
+						}
+				}
+			CredentialType.EMAIL ->
+				navigateRoute(
+					ChangeCredentialsRoute.GoSave(
+						dataType,
+						_state.value.email
+					)
 				)
-			)
-			CredentialType.EMAIL -> navigateRoute(
-				ChangeCredentialsRoute.GoSave(
-					dataType,
-					_state.value.email
-				)
-			)
 		}
 	}
 	

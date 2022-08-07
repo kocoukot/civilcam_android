@@ -12,7 +12,7 @@ class UserInfoToDomainMapper : Mapper<UserSetupModel, UserProfileRequest>(
         UserProfileRequest(
             firstName = it.firstName,
             lastName = it.lastName,
-            dob = DateUtils.dateOfBirthDomainFormat(it.dateBirth),
+            dob = it.dateBirth?.let { date -> DateUtils.dateOfBirthDomainFormat(date) },
             phone = it.phoneNumber,
             address = it.location,
         )
