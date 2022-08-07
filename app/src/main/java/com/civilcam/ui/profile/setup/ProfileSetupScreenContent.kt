@@ -28,84 +28,86 @@ import com.civilcam.ui.profile.setup.model.ProfileSetupScreen
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
-
-    val state = viewModel.state.collectAsState()
-
-    if (state.value.isLoading) {
-        DialogLoadingContent()
-    }
-    if (state.value.errorText.isNotEmpty()) {
-        AlertDialogComp(
-            dialogText = state.value.errorText,
-            alertType = AlertDialogTypes.OK,
-            onOptionSelected = { state.value.errorText = "" }
-        )
-    }
-
-    if (state.value.showDatePicker) {
-        Dialog(
-            properties = DialogProperties(
-                dismissOnBackPress = true,
-                dismissOnClickOutside = false
-            ), onDismissRequest = {
-                viewModel.setInputActions(ProfileSetupActions.ClickCloseDatePicker)
-            }) {
-            DatePickerContent(
-                onClosePicker = {
-                    viewModel.setInputActions(ProfileSetupActions.ClickCloseDatePicker)
-                },
-                onSelectDate = {
-                    viewModel.setInputActions(ProfileSetupActions.ClickSelectDate(it))
-
-                },
-            )
-        }
-    }
-
-    Scaffold(
-        backgroundColor = CCTheme.colors.white,
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            Column {
-
-            TopAppBarContent(
-                    title = if (state.value.profileSetupScreen == ProfileSetupScreen.LOCATION)
-                        stringResource(id = R.string.profile_setup_address_select_title)
-                    else
-                        stringResource(id = R.string.profile_setup_title),
-                    navigationItem = {
-                        BackButton {
-                            viewModel.setInputActions(ProfileSetupActions.ClickGoBack)
-                        }
-                    },
-                )
-                RowDivider()
-            }
-        }
-
-    ) {
-
-        AnimatedContent(targetState = state.value.profileSetupScreen) { screenState ->
-            when (screenState) {
-                ProfileSetupScreen.SETUP -> {
-                    ProfileSetupContent(
-                        avatar = state.value.data?.profileImage,
-                        data = state.value.data,
-                        birthDate = state.value.data?.dateBirth,
-                        setupAction = {
-                            viewModel.setInputActions(it)
-                        }
-                    )
-                }
-                ProfileSetupScreen.LOCATION -> {
-                    LocationSelectContent(
-                        searchData = state.value.searchLocationModel,
-                        locationAction = {
-                            viewModel.setInputActions(it)
-                        },
-                    )
-                }
-            }
-        }
-    }
+	
+	val state = viewModel.state.collectAsState()
+	
+	if (state.value.isLoading) {
+		DialogLoadingContent()
+	}
+	if (state.value.errorText.isNotEmpty()) {
+		AlertDialogComp(
+			dialogText = state.value.errorText,
+			alertType = AlertDialogTypes.OK,
+			onOptionSelected = { state.value.errorText = "" }
+		)
+	}
+	
+	if (state.value.showDatePicker) {
+		Dialog(
+			properties = DialogProperties(
+				dismissOnBackPress = true,
+				dismissOnClickOutside = false
+			), onDismissRequest = {
+				viewModel.setInputActions(ProfileSetupActions.ClickCloseDatePicker)
+			}) {
+			DatePickerContent(
+				onClosePicker = {
+					viewModel.setInputActions(ProfileSetupActions.ClickCloseDatePicker)
+				},
+				onSelectDate = {
+					viewModel.setInputActions(ProfileSetupActions.ClickSelectDate(it))
+					
+				},
+			)
+		}
+	}
+	
+	Scaffold(
+		backgroundColor = CCTheme.colors.white,
+		modifier = Modifier.fillMaxSize(),
+		topBar = {
+			Column {
+				
+				TopAppBarContent(
+					title = if (state.value.profileSetupScreen == ProfileSetupScreen.LOCATION)
+						stringResource(id = R.string.profile_setup_address_select_title)
+					else
+						stringResource(id = R.string.profile_setup_title),
+					navigationItem = {
+						BackButton {
+							viewModel.setInputActions(ProfileSetupActions.ClickGoBack)
+						}
+					},
+				)
+				RowDivider()
+			}
+		}
+	
+	) {
+		
+		AnimatedContent(targetState = state.value.profileSetupScreen) { screenState ->
+			when (screenState) {
+				ProfileSetupScreen.SETUP -> {
+					ProfileSetupContent(
+						avatar = state.value.data?.profileImage,
+						data = state.value.data,
+						birthDate = state.value.data?.dateBirth,
+						setupAction = {
+							viewModel.setInputActions(it)
+						}
+					)
+				}
+				ProfileSetupScreen.LOCATION -> {
+					LocationSelectContent(
+						searchData = state.value.searchLocationModel,
+						isEdit = false,
+						locationAction = {
+							viewModel.setInputActions(it)
+						},
+						editLocationAction = {}
+					)
+				}
+			}
+		}
+	}
 }

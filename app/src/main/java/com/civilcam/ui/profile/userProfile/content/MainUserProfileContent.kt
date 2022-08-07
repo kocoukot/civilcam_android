@@ -15,14 +15,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
+import com.civilcam.common.ext.formatPhoneNumber
+import com.civilcam.common.ext.formatToPhoneNumber
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domain.model.CurrentUser
 import com.civilcam.domain.model.UserBaseInfo
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.profile.userProfile.model.UserProfileType
 
 @Composable
 fun MainProfileContent(
-	data: UserBaseInfo,
+	data: CurrentUser,
 	onRowClicked: (UserProfileType) -> Unit,
 ) {
 	Column(
@@ -34,7 +37,7 @@ fun MainProfileContent(
 				UserProfileType.PHONE_NUMBER -> {
 					ProfileRow(
 						title = stringResource(id = type.title),
-						value = data.phone,
+						value = data.userBaseInfo.phone.formatPhoneNumber(),
 						needDivider = type != UserProfileType.PIN_CODE,
 						rowClick = { onRowClicked.invoke(type) }
 					)
@@ -42,7 +45,7 @@ fun MainProfileContent(
 				UserProfileType.EMAIL -> {
 					ProfileRow(
 						title = stringResource(id = type.title),
-						value = "asasd", //todo fix
+						value = data.sessionUser.email,
 						needDivider = type != UserProfileType.PIN_CODE,
 						rowClick = { onRowClicked.invoke(type) }
 					)

@@ -103,7 +103,11 @@ class ProfileSetupViewModel(
                 try {
                     userdata.profileImage?.uri?.let { uri -> setAvatarUseCase.invoke(uri) }
                     val result = setPersonalInfoUseCase.invoke(userdata)
-                    if (result) navigateRoute(ProfileSetupRoute.GoVerification(userdata.phoneNumber))
+                    if (result) userdata.phoneNumber?.let {
+                        ProfileSetupRoute.GoVerification(
+                            it
+                        )
+                    }?.let { navigateRoute(it) }
 
                 } catch (e: ServiceException) {
                     Timber.d("resourceLocalized throwable ${e.errorCode}")

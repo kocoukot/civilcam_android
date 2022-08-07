@@ -3,13 +3,14 @@ package com.civilcam.ui.profile.userProfile.content
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domain.model.CurrentUser
 import com.civilcam.domain.model.UserBaseInfo
 import com.civilcam.ui.common.compose.inputs.InputField
 import com.civilcam.ui.profile.setup.content.CalendarIcon
@@ -18,10 +19,15 @@ import com.civilcam.utils.DateUtils
 
 @Composable
 fun UserProfileEditContent(
-	userData: UserBaseInfo,
+	userData: CurrentUser,
+	address: String,
+	birthDate: String,
 	onValueChanged: (UserInfoDataType, String) -> Unit,
-	onDateBirthClick: () -> Unit
+	onDateBirthClick: () -> Unit,
+	onLocationClick: () -> Unit
 ) {
+	var dateOfBirth by remember { mutableStateOf("") }
+	
 	Column(
 		modifier = Modifier
 			.fillMaxWidth()
@@ -32,7 +38,7 @@ fun UserProfileEditContent(
 		
 		InputField(
 			title = stringResource(id = R.string.profile_setup_first_name_label),
-			text = userData.firstName.orEmpty(),
+			text = userData.userBaseInfo.firstName.orEmpty(),
 			placeHolder = stringResource(id = R.string.profile_setup_first_name_placeholder),
 			isReversed = true
 		) {
@@ -47,7 +53,7 @@ fun UserProfileEditContent(
 		
 		InputField(
 			title = stringResource(id = R.string.profile_setup_last_name_label),
-			text = userData.lastName.orEmpty(),
+			text = userData.userBaseInfo.lastName.orEmpty(),
 			placeHolder = stringResource(id = R.string.profile_setup_last_name_placeholder),
 			isReversed = true
 		) {
@@ -60,7 +66,7 @@ fun UserProfileEditContent(
 				.background(color = CCTheme.colors.lightGray)
 		)
 
-		val dateOfBirth = userData.dob.let { DateUtils.dateOfBirthFormat(it) }
+		dateOfBirth = birthDate.let { DateUtils.dateOfBirthFormat(it) }
 		
 		val calendarColor =
 			animateColorAsState(targetValue = if (dateOfBirth.isEmpty()) CCTheme.colors.grayOne else CCTheme.colors.primaryRed)
@@ -86,12 +92,14 @@ fun UserProfileEditContent(
 		InputField(
 			isEnable = false,
 			title = stringResource(id = R.string.profile_setup_address_label),
-			text = userData.address,
+			text = address,
 			placeHolder = stringResource(id = R.string.profile_setup_address_placeholder),
-			isReversed = true
-		) {
-		
-		}
+			isReversed = true,
+			onValueChanged = {},
+			onTextClicked = {
+				onLocationClick.invoke()
+			}
+		)
 		
 	}
 }

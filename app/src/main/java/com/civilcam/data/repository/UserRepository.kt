@@ -1,8 +1,12 @@
 package com.civilcam.data.repository
 
-interface UserRepository {
+import com.civilcam.domain.model.CurrentUser
 
-    suspend fun acceptTerms()
+interface UserRepository {
+	
+	suspend fun acceptTerms()
+	
+	suspend fun getCurrentUser(): CurrentUser
 
 	suspend fun signOut(): Boolean
 //

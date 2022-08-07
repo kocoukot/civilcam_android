@@ -20,6 +20,7 @@ object Endpoint {
     object Profile {
         const val GET_USER_PROFILE = "get-user-profile"
         const val SET_USER_PROFILE = "set-user-profile"
+        const val UPDATE_USER_PROFILE = "update-user-profile"
         const val CHANGE_USER_PHONE = "change-user-phone"
         const val SET_USER_AVATAR = "set-user-avatar"
         const val DELETE_USER_AVATAR = "delete-user-avatar"
