@@ -7,7 +7,7 @@ import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail
 import com.civilcam.data.network.support.ServerErrors
 import com.civilcam.data.network.support.ServiceException
-import com.civilcam.domain.usecase.auth.SingUpUseCase
+import com.civilcam.domainLayer.usecase.auth.SingUpUseCase
 import com.civilcam.ui.auth.create.model.CreateAccountActions
 import com.civilcam.ui.auth.create.model.CreateAccountRoute
 import com.civilcam.ui.auth.create.model.CreateAccountState

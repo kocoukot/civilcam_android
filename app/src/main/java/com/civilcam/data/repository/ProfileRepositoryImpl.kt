@@ -9,8 +9,10 @@ import com.civilcam.data.mapper.auth.UserBaseInfoMapper
 import com.civilcam.data.mapper.profile.UserInfoToDomainMapper
 import com.civilcam.data.network.model.request.profile.ChangePhoneNumberRequest
 import com.civilcam.data.network.service.ProfileService
-import com.civilcam.domain.model.UserBaseInfo
-import com.civilcam.domain.model.UserSetupModel
+import com.civilcam.domainLayer.model.UserBaseInfo
+import com.civilcam.domainLayer.model.UserSetupModel
+import com.civilcam.domainLayer.repos.AccountRepository
+import com.civilcam.domainLayer.repos.ProfileRepository
 
 class ProfileRepositoryImpl(
     private val profileService: ProfileService,

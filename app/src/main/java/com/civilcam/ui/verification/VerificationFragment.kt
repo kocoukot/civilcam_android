@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.common.ext.hideKeyboard
 import com.civilcam.common.ext.showKeyboard
-import com.civilcam.domain.model.VerificationFlow
+import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.common.ext.navController
@@ -30,7 +30,7 @@ class VerificationFragment : Fragment() {
 	private val viewModel: VerificationViewModel by viewModel {
 		parametersOf(verificationFlow, subject)
 	}
-	
+
 	private val verificationFlow: VerificationFlow by requireArg(ARG_FLOW)
 	private val subject: String by requireArg(ARG_SUBJECT)
 	

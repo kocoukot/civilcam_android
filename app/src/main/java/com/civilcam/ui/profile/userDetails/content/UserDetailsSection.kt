@@ -5,7 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
@@ -19,12 +19,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.UserDetailsModel
 import com.civilcam.ui.common.compose.CircleUserAvatar
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.profile.userDetails.model.StopGuardAlertType
 import com.civilcam.ui.profile.userDetails.model.UserDetailsActions
-import com.civilcam.ui.profile.userDetails.model.UserDetailsModel
 import com.civilcam.utils.DateUtils
 
 @Composable
@@ -131,9 +131,9 @@ fun InformationBoxContent(
 ) {
     Box(
         modifier = modifier
-            .background(CCTheme.colors.white, RoundedCornerShape(50))
-            .border(1.dp, CCTheme.colors.grayOne, RoundedCornerShape(50))
-            .clip(RoundedCornerShape(50))
+            .background(CCTheme.colors.white, CircleShape)
+            .border(1.dp, CCTheme.colors.grayOne, CircleShape)
+            .clip(CircleShape)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = CCTheme.colors.black),

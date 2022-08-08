@@ -2,10 +2,10 @@ package com.civilcam.ui.settings
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.domain.model.settings.NotificationsType
-import com.civilcam.domain.usecase.settings.CheckCurrentPasswordUseCase
-import com.civilcam.domain.usecase.settings.GetCurrentSubscriptionPlanUseCase
-import com.civilcam.domain.usecase.user.LogoutUseCase
+import com.civilcam.domainLayer.model.settings.NotificationsType
+import com.civilcam.domainLayer.usecase.settings.CheckCurrentPasswordUseCase
+import com.civilcam.domainLayer.usecase.settings.GetCurrentSubscriptionPlanUseCase
+import com.civilcam.domainLayer.usecase.user.LogoutUseCase
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.settings.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -60,6 +60,7 @@ class SettingsViewModel(
 			SettingsActions.SaveNewPassword -> savePassword()
 			SettingsActions.ClickGoSubscription -> fetchSubscriptionPlan()
 			SettingsActions.GoSubscriptionManage -> goSubManage()
+			else -> {}
 		}
 	}
 	

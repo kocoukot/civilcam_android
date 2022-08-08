@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.formatTime
 import com.civilcam.data.network.support.ServiceException
-import com.civilcam.domain.model.VerificationFlow
-import com.civilcam.domain.usecase.verify.SendOtpCodeUseCase
-import com.civilcam.domain.usecase.verify.VerifyEmailOtpUseCase
+import com.civilcam.domainLayer.model.VerificationFlow
+import com.civilcam.domainLayer.usecase.verify.SendOtpCodeUseCase
+import com.civilcam.domainLayer.usecase.verify.VerifyEmailOtpUseCase
 import com.civilcam.ui.verification.model.VerificationActions
 import com.civilcam.ui.verification.model.VerificationRoute
 import com.civilcam.ui.verification.model.VerificationState

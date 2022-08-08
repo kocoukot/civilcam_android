@@ -71,7 +71,7 @@ fun AcceptTermsContent(isAccepted: Boolean, acceptTerms: () -> Unit) {
                         fontWeight = FontWeight.W500
                     ),
                 ) {
-                    append(context.resources.getString(R.string.terms_conditions_terms_button))
+                    append(context.resources.getString(R.string.terms_button))
                 }
 
                 withStyle(
@@ -88,7 +88,7 @@ fun AcceptTermsContent(isAccepted: Boolean, acceptTerms: () -> Unit) {
                         fontWeight = FontWeight.W500
                     ),
                 ) {
-                    append(context.resources.getString(R.string.terms_conditions_privacy_button))
+                    append(context.resources.getString(R.string.privacy_button))
                 }
             })
     }

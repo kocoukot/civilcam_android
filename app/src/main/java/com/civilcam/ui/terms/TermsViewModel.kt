@@ -3,9 +3,9 @@ package com.civilcam.ui.terms
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.network.support.ServiceException
-import com.civilcam.domain.model.TermsType
-import com.civilcam.domain.usecase.docs.GetTermsLinksUseCase
-import com.civilcam.domain.usecase.user.AcceptLegalDocsUseCase
+import com.civilcam.domainLayer.model.TermsType
+import com.civilcam.domainLayer.usecase.docs.GetTermsLinksUseCase
+import com.civilcam.domainLayer.usecase.user.AcceptLegalDocsUseCase
 import com.civilcam.ui.terms.model.TermsActions
 import com.civilcam.ui.terms.model.TermsRoute
 import com.civilcam.ui.terms.model.TermsState

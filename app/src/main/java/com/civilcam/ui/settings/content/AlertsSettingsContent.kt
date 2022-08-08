@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.settings.NotificationsType
+import com.civilcam.domainLayer.model.settings.NotificationsType
 import com.civilcam.ui.common.compose.RowDividerGrayThree
 import com.civilcam.ui.settings.model.SettingsAlertsSectionData
 import timber.log.Timber

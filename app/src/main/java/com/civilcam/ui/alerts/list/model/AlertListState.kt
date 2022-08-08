@@ -1,7 +1,7 @@
 package com.civilcam.ui.alerts.list.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentState
-import com.civilcam.domain.model.alerts.AlertModel
+import com.civilcam.domainLayer.model.alerts.AlertModel
 
 data class AlertListState(
     val isLoading: Boolean = false,

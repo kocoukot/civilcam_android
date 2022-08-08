@@ -2,7 +2,7 @@ package com.civilcam.ui.emergency.model
 
 import androidx.camera.core.CameraSelector
 import com.civilcam.common.ext.compose.ComposeFragmentState
-import com.civilcam.domain.model.alerts.UserEmergencyState
+import com.civilcam.domainLayer.model.alerts.UserEmergencyState
 
 data class EmergencyState(
     val isLoading: Boolean = false,

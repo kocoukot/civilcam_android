@@ -17,8 +17,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.guard.GuardianModel
-import com.civilcam.domain.model.guard.GuardianStatus
+import com.civilcam.domainLayer.model.guard.GuardianModel
+import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.ui.common.compose.*
 import timber.log.Timber
 

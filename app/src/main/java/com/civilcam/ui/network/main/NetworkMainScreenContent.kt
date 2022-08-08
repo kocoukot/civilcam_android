@@ -15,7 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.guard.NetworkType
+import com.civilcam.domainLayer.model.guard.GuardianItem
+import com.civilcam.domainLayer.model.guard.NetworkType
 import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.common.compose.inputs.SearchInputField
 import com.civilcam.ui.common.loading.DialogLoadingContent
@@ -23,7 +24,6 @@ import com.civilcam.ui.network.main.content.GuardianSearchContent
 import com.civilcam.ui.network.main.content.GuardsMainSection
 import com.civilcam.ui.network.main.content.NetworkTabRow
 import com.civilcam.ui.network.main.content.RequestsScreenSection
-import com.civilcam.ui.network.main.model.GuardianItem
 import com.civilcam.ui.network.main.model.NetworkMainActions
 import com.civilcam.ui.network.main.model.NetworkScreen
 

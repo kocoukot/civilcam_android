@@ -16,10 +16,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.ext.formatPhoneNumber
-import com.civilcam.common.ext.formatToPhoneNumber
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.CurrentUser
-import com.civilcam.domain.model.UserBaseInfo
+import com.civilcam.domainLayer.model.CurrentUser
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.profile.userProfile.model.UserProfileType
 

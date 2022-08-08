@@ -1,8 +1,7 @@
 package com.civilcam.ui.profile.userProfile.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentActions
-import com.civilcam.domain.model.AutocompletePlace
-import com.civilcam.ui.profile.setup.model.ProfileSetupActions
+import com.civilcam.domainLayer.model.AutocompletePlace
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
 
 sealed class UserProfileActions : ComposeFragmentActions {

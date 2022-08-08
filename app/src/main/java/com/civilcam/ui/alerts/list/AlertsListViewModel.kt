@@ -2,7 +2,7 @@ package com.civilcam.ui.alerts.list
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.domain.usecase.alerts.GetAlertsListUseCase
+import com.civilcam.domainLayer.usecase.alerts.GetAlertsListUseCase
 import com.civilcam.ui.alerts.list.model.AlertListActions
 import com.civilcam.ui.alerts.list.model.AlertListRoute
 import com.civilcam.ui.alerts.list.model.AlertListState

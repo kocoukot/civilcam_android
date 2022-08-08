@@ -11,18 +11,15 @@ import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.common.ext.hideSystemUI
 import com.civilcam.common.ext.showSystemUI
-import com.civilcam.domain.model.VerificationFlow
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.requireArg
-import com.civilcam.ui.profile.setup.ProfileSetupFragment
 import com.civilcam.ui.subscription.model.SubscriptionRoute
-import com.civilcam.ui.verification.VerificationFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class SubscriptionFragment : Fragment() {
-	private val viewModel: SubscriptionViewModel by viewModel() {
+	private val viewModel: SubscriptionViewModel by viewModel {
 		parametersOf(isReselect)
 	}
 	

@@ -2,7 +2,7 @@ package com.civilcam.data.local
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import com.civilcam.domain.model.CurrentUser
+import com.civilcam.domainLayer.model.CurrentUser
 import com.google.gson.Gson
 import java.util.*
 

@@ -6,7 +6,8 @@ import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.mapper.auth.UserMapper
 import com.civilcam.data.network.model.request.auth.SignUpRequest
 import com.civilcam.data.network.service.AuthService
-import com.civilcam.domain.model.CurrentUser
+import com.civilcam.domainLayer.model.CurrentUser
+import com.civilcam.domainLayer.repos.AuthRepository
 import timber.log.Timber
 
 

@@ -3,7 +3,7 @@ package com.civilcam
 import android.app.Application
 import com.civilcam.di.*
 import com.civilcam.di.source.sourceModule
-import com.civilcam.domain.model.settings.NotificationType
+import com.civilcam.domainLayer.model.settings.NotificationType
 import com.civilcam.service.notifications.NotificationHelper
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger

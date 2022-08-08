@@ -1,7 +1,7 @@
 package com.civilcam.ui.common
 
 import android.os.Parcelable
-import com.civilcam.domain.model.CurrentUser
+import com.civilcam.domainLayer.model.CurrentUser
 import kotlinx.parcelize.Parcelize
 
 sealed class NavigationDirection : Parcelable {

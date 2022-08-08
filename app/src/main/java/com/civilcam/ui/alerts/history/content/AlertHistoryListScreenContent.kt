@@ -10,8 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.domain.model.alerts.AlertModel
-import com.civilcam.domain.model.alerts.AlertType
+import com.civilcam.domainLayer.model.alerts.AlertModel
+import com.civilcam.domainLayer.model.alerts.AlertType
+
 import com.civilcam.ui.alerts.history.model.AlertHistoryActions
 import com.civilcam.ui.common.compose.CircleUserAvatar
 import com.civilcam.ui.common.compose.EmptyListText

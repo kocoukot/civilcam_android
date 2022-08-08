@@ -9,7 +9,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.R
-import com.civilcam.domain.model.VerificationFlow
+import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.requireArg
@@ -20,7 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class ChangeCredentialsFragment : Fragment() {
-	private val viewModel: ChangeCredentialsViewModel by viewModel() {
+	private val viewModel: ChangeCredentialsViewModel by viewModel {
 		parametersOf(credentialType)
 	}
 	

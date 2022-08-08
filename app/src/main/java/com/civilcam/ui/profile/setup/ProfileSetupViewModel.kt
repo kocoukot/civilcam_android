@@ -5,14 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.local.MediaStorage
 import com.civilcam.data.network.support.ServiceException
-import com.civilcam.domain.PictureModel
-import com.civilcam.domain.model.AutocompletePlace
-import com.civilcam.domain.model.SearchModel
-import com.civilcam.domain.model.UserSetupModel
-import com.civilcam.domain.usecase.location.GetPlacesAutocompleteUseCase
-import com.civilcam.domain.usecase.profile.SetAvatarUseCase
-import com.civilcam.domain.usecase.profile.SetPersonalInfoUseCase
+import com.civilcam.domainLayer.PictureModel
+import com.civilcam.domainLayer.model.AutocompletePlace
+import com.civilcam.domainLayer.model.SearchModel
+import com.civilcam.domainLayer.model.UserSetupModel
+import com.civilcam.domainLayer.usecase.location.GetPlacesAutocompleteUseCase
+import com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase
+import com.civilcam.domainLayer.usecase.profile.SetPersonalInfoUseCase
 import com.civilcam.ui.profile.setup.model.*
+import com.civilcam.utils.DateUtils.dateOfBirthFormat
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -104,9 +105,7 @@ class ProfileSetupViewModel(
                     userdata.profileImage?.uri?.let { uri -> setAvatarUseCase.invoke(uri) }
                     val result = setPersonalInfoUseCase.invoke(userdata)
                     if (result) userdata.phoneNumber?.let {
-                        ProfileSetupRoute.GoVerification(
-                            it
-                        )
+                        ProfileSetupRoute.GoVerification(it)
                     }?.let { navigateRoute(it) }
 
                 } catch (e: ServiceException) {
@@ -128,8 +127,8 @@ class ProfileSetupViewModel(
 
     private fun getDateFromCalendar(birthDate: Long) {
         val data = getSetupUser()
-        data.dateBirth = birthDate
-        _state.update { it.copy(data = data, birthDate = birthDate) }
+        data.dateBirth = dateOfBirthFormat(birthDate)
+        _state.update { it.copy(data = data) }
         closeDatePicker()
     }
 
@@ -161,7 +160,8 @@ class ProfileSetupViewModel(
                     _state.value = _state.value.copy(errorText = "Max image size is 5MB")
                 } else {
                     val data = _state.value.data?.copy() ?: UserSetupModel()
-                    data.profileImage = PictureModel(it.name, it.uri, it.sizeMb)
+                    data.profileImage =
+                        PictureModel(it.name, it.uri, it.sizeMb)
                     _state.value = _state.value.copy(data = data)
 
                 }

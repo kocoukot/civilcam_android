@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.guard.NetworkType
+import com.civilcam.domainLayer.model.guard.NetworkType
 import com.civilcam.ui.alerts.history.content.TabCell
 import com.civilcam.ui.alerts.history.content.customTabIndicatorOffset
 

@@ -3,7 +3,7 @@ package com.civilcam.ui.profile.userDetails.content
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.ButtonAnswer
+import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.ui.common.compose.RowDivider
 
 @Composable
@@ -104,7 +104,7 @@ private fun AnswerButton(
         onClick = { onButtonClick.invoke(type.answer) },
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(backgroundColor = CCTheme.colors.white),
-        shape = RoundedCornerShape(50),
+        shape = CircleShape,
         elevation = ButtonDefaults.elevation(0.dp),
         border = BorderStroke(1.dp, CCTheme.colors.grayOne)
     ) {

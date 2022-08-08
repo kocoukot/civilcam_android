@@ -9,13 +9,12 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.civilcam.R
-import com.civilcam.domain.model.VerificationFlow
+import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ui.auth.create.model.CreateAccountRoute
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.verification.VerificationFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 class CreateAccountFragment : Fragment() {
 	private val viewModel: CreateAccountViewModel by viewModel()

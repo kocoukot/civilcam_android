@@ -1,11 +1,12 @@
 package com.civilcam.di
 
 import com.civilcam.data.repository.*
+import com.civilcam.domainLayer.repos.*
 import org.koin.dsl.module
 
 val repositoryModule = module {
 
-    factory { MockRepository() }
+    factory<MockRepository> { MockRepositoryImpl() }
 
     factory<PlacesRepository> { PlacesRepositoryImpl() }
 

@@ -1,6 +1,6 @@
 package com.civilcam.ui.settings.model
 
-import com.civilcam.domain.model.SubscriptionPlan
+import com.civilcam.domainLayer.model.SubscriptionPlan
 import com.civilcam.ui.auth.create.model.PasswordModel
 
 data class SettingsModel(

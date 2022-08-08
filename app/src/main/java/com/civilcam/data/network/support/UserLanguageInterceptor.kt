@@ -1,6 +1,6 @@
 package com.civilcam.data.network.support
 
-import com.civilcam.data.repository.AccountRepository
+import com.civilcam.domainLayer.repos.AccountRepository
 import com.civilcam.utils.LocaleHelper
 import okhttp3.Interceptor
 import okhttp3.Response

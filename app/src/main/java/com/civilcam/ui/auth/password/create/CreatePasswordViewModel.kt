@@ -20,6 +20,7 @@ class CreatePasswordViewModel :
 				when (action.dataType) {
 					PasswordInputDataType.PASSWORD -> passwordEntered(action.data)
 					PasswordInputDataType.PASSWORD_REPEAT -> confirmPasswordEntered(action.data)
+					else -> {}
 				}
 			}
 		}

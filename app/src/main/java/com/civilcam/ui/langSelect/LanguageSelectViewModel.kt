@@ -2,7 +2,7 @@ package com.civilcam.ui.langSelect
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.domain.model.LanguageType
+import com.civilcam.domainLayer.model.LanguageType
 import com.civilcam.ui.langSelect.model.LangSelectActions
 import com.civilcam.ui.langSelect.model.LangSelectRoute
 import com.civilcam.ui.langSelect.model.LangSelectState

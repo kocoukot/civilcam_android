@@ -2,7 +2,7 @@ package com.civilcam.ui.alerts.map
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.domain.model.alerts.UserAlertInformation
+import com.civilcam.domainLayer.model.alerts.UserAlertInformation
 import com.civilcam.ui.alerts.map.model.LiveMapActions
 import com.civilcam.ui.alerts.map.model.LiveMapRoute
 import com.civilcam.ui.alerts.map.model.LiveMapState
@@ -41,6 +41,7 @@ class LiveMapViewModel(
             LiveMapActions.ClickCallPolice -> callPolice()
 //            LiveMapActions.ClickDetectLocation -> TODO()
             is LiveMapActions.ClickScreenChange -> screenChange(action.screenState)
+            else -> {}
         }
     }
 

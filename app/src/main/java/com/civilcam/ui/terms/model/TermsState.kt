@@ -1,7 +1,7 @@
 package com.civilcam.ui.terms.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentState
-import com.civilcam.domain.model.docs.LegalDocs
+import com.civilcam.domainLayer.model.docs.LegalDocs
 
 data class TermsState(
     val isLoading: Boolean = false,

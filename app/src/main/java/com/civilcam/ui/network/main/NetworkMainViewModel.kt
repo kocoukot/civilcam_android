@@ -4,12 +4,10 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.domain.model.guard.GuardianModel
-import com.civilcam.domain.model.guard.GuardianStatus
-import com.civilcam.domain.model.guard.NetworkType
-import com.civilcam.domain.usecase.guardians.GetGuardsListUseCase
-import com.civilcam.domain.usecase.guardians.GetGuardsRequestsUseCase
-import com.civilcam.domain.usecase.guardians.SearchGuardsResultUseCase
+import com.civilcam.domainLayer.model.guard.*
+import com.civilcam.domainLayer.usecase.guardians.GetGuardsListUseCase
+import com.civilcam.domainLayer.usecase.guardians.GetGuardsRequestsUseCase
+import com.civilcam.domainLayer.usecase.guardians.SearchGuardsResultUseCase
 import com.civilcam.ui.network.main.model.*
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async

@@ -1,7 +1,8 @@
 package com.civilcam.data.repository
 
 import com.civilcam.data.local.AccountStorage
-import com.civilcam.domain.model.CurrentUser
+import com.civilcam.domainLayer.model.CurrentUser
+import com.civilcam.domainLayer.repos.AccountRepository
 
 class AccountRepositoryImpl(
     private val accountStorage: AccountStorage

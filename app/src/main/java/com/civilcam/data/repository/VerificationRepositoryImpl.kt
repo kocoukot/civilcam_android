@@ -6,8 +6,9 @@ import com.civilcam.data.mapper.auth.UserMapper
 import com.civilcam.data.network.model.request.verify.OTPTypeRequest
 import com.civilcam.data.network.model.request.verify.VerifyCodeRequest
 import com.civilcam.data.network.service.VerificationService
-import com.civilcam.domain.model.CurrentUser
-import com.civilcam.domain.model.VerificationFlow
+import com.civilcam.domainLayer.model.CurrentUser
+import com.civilcam.domainLayer.model.VerificationFlow
+import com.civilcam.domainLayer.repos.VerificationRepository
 
 class VerificationRepositoryImpl(
     private val verificationService: VerificationService

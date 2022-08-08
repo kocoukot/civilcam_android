@@ -11,7 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.OnboardingPage
+import com.civilcam.domainLayer.model.OnboardingPage
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.IconActionButton
 import com.civilcam.ui.onboarding.content.PageCardUI

@@ -1,6 +1,7 @@
 package com.civilcam.data.repository
 
-import com.civilcam.domain.model.AutocompletePlace
+import com.civilcam.domainLayer.model.AutocompletePlace
+import com.civilcam.domainLayer.repos.PlacesRepository
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
@@ -24,20 +25,20 @@ class PlacesRepositoryImpl : PlacesRepository {
             placeId = "asdasd",
             primary = "New Jersey",
             secondary = "",
-                    address = "New Jersey",
-                ),
-                AutocompletePlace(
-                    placeId = "asdasd",
-                    primary = "Newark Liberty",
-                    secondary = "International Airport",
-                    address = "Newark Liberty International Airport",
-                ),
-                AutocompletePlace(
-                    placeId = "asdasd",
-                    primary = "New York State",
-                    secondary = "USA",
-                    address = " New York State USA",
-                ),
+            address = "New Jersey",
+        ),
+        AutocompletePlace(
+            placeId = "asdasd",
+            primary = "Newark Liberty",
+            secondary = "International Airport",
+            address = "Newark Liberty International Airport",
+        ),
+        AutocompletePlace(
+            placeId = "asdasd",
+            primary = "New York State",
+            secondary = "USA",
+            address = " New York State USA",
+        ),
             ).filter {
                 it.address.contains(query, true)
             }

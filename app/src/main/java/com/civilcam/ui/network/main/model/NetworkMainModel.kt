@@ -1,6 +1,7 @@
 package com.civilcam.ui.network.main.model
 
-import com.civilcam.domain.model.guard.GuardianModel
+import com.civilcam.domainLayer.model.guard.GuardItem
+import com.civilcam.domainLayer.model.guard.GuardianModel
 
 
 data class NetworkMainModel(

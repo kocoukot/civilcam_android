@@ -39,8 +39,6 @@
     <string name="terms_conditions_title"><![CDATA[Terms & Conditions]]>\nand Privacy Policy</string>
     <string name="terms_conditions_subtitle">It\'s never too safe, take care of yourself and your loved ones with CivilCam\n</string>
     <string name="terms_conditions_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem sit lacus nisl donec egestas amet id consequat. Ut velit accumsan in lorem lectus et quis.</string>
-    <string name="terms_conditions_terms_button"><![CDATA[Terms & Conditions]]></string>
-    <string name="terms_conditions_privacy_button">Privacy Policy</string>
     <string name="terms_conditions_i_agree">I agree to the</string>
 
 
@@ -217,12 +215,6 @@
     <string name="subscription_live_stream">Emergency live stream</string>
     <string name="subscription_safety_map">Safety map</string>
     <string name="subscription_detailed_alert">Alert detailed data</string>
-    <string name="subscription_trial_title">Trial</string>
-    <string name="subscription_trial_plan">for 1 month</string>
-    <string name="subscription_monthly_title">Monthly</string>
-    <string name="subscription_monthly_plan">for $4.99/month</string>
-    <string name="subscription_annual_title">Annual</string>
-    <string name="subscription_annual_plan">for $49.99/year</string>
     <string name="subscription_purchase_fail_title">Purchase failed</string>
     <string name="subscription_purchase_fail_description">There was an error while making this purchase. Please try again.</string>
     <string name="subscription_purchase_success_title">Welcome to CivilCam family!</string>
@@ -254,6 +246,9 @@
     <string name="resolve_text_caps">RESOLVE</string>
 
     <string name="something_went_wrong">Something went wrong!</string>
+    <string name="terms_button"><![CDATA[Terms & Conditions]]></string>
+
+    <string name="privacy_button">Privacy Policy</string>
 
 
 </resources>

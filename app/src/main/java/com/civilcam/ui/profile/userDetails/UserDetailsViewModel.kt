@@ -2,14 +2,17 @@ package com.civilcam.ui.profile.userDetails
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.domain.usecase.GetUserInformationUseCase
-import com.civilcam.ui.profile.userDetails.model.*
+import com.civilcam.domainLayer.model.GuardRequest
+import com.civilcam.ui.profile.userDetails.model.StopGuardAlertType
+import com.civilcam.ui.profile.userDetails.model.UserDetailsActions
+import com.civilcam.ui.profile.userDetails.model.UserDetailsRoute
+import com.civilcam.ui.profile.userDetails.model.UserDetailsState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class UserDetailsViewModel(
     private val userId: Int,
-    private val getUserInformationUseCase: GetUserInformationUseCase
+    private val getUserInformationUseCase: com.civilcam.domainLayer.usecase.GetUserInformationUseCase
 ) : ComposeViewModel<UserDetailsState, UserDetailsRoute, UserDetailsActions>() {
 
     override var _state: MutableStateFlow<UserDetailsState> = MutableStateFlow(UserDetailsState())

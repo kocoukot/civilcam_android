@@ -1,27 +1,23 @@
 package com.civilcam.di
 
-import com.civilcam.domain.usecase.GetUserInformationUseCase
-import com.civilcam.domain.usecase.alerts.GetAlertsListUseCase
-import com.civilcam.domain.usecase.alerts.GetHistoryAlertListUseCase
-import com.civilcam.domain.usecase.alerts.GetHistoryDetailUseCase
-import com.civilcam.domain.usecase.auth.SingUpUseCase
-import com.civilcam.domain.usecase.docs.GetTermsLinksUseCase
-import com.civilcam.domain.usecase.guardians.GetGuardsListUseCase
-import com.civilcam.domain.usecase.guardians.GetGuardsRequestsUseCase
-import com.civilcam.domain.usecase.guardians.SearchGuardsResultUseCase
-import com.civilcam.domain.usecase.location.GetPlacesAutocompleteUseCase
-import com.civilcam.domain.usecase.profile.GetUserProfileUseCase
-import com.civilcam.domain.usecase.profile.SetAvatarUseCase
-import com.civilcam.domain.usecase.profile.SetPersonalInfoUseCase
-import com.civilcam.domain.usecase.settings.CheckCurrentPasswordUseCase
-import com.civilcam.domain.usecase.settings.GetCurrentSubscriptionPlanUseCase
-import com.civilcam.domain.usecase.user.AcceptLegalDocsUseCase
-import com.civilcam.domain.usecase.user.LogoutUseCase
-import com.civilcam.domain.usecase.verify.SendOtpCodeUseCase
-import com.civilcam.domain.usecase.verify.VerifyEmailOtpUseCase
-import com.civilcam.domain.usecase.user.GetCurrentUserUseCase
-import com.civilcam.domain.usecase.profile.ChangePhoneNumberUseCase
-import com.civilcam.domain.usecase.profile.UpdateUserProfileUseCase
+import com.civilcam.domainLayer.usecase.GetUserInformationUseCase
+import com.civilcam.domainLayer.usecase.alerts.GetAlertsListUseCase
+import com.civilcam.domainLayer.usecase.alerts.GetHistoryAlertListUseCase
+import com.civilcam.domainLayer.usecase.alerts.GetHistoryDetailUseCase
+import com.civilcam.domainLayer.usecase.auth.SingUpUseCase
+import com.civilcam.domainLayer.usecase.docs.GetTermsLinksUseCase
+import com.civilcam.domainLayer.usecase.guardians.GetGuardsListUseCase
+import com.civilcam.domainLayer.usecase.guardians.GetGuardsRequestsUseCase
+import com.civilcam.domainLayer.usecase.guardians.SearchGuardsResultUseCase
+import com.civilcam.domainLayer.usecase.location.GetPlacesAutocompleteUseCase
+import com.civilcam.domainLayer.usecase.profile.*
+import com.civilcam.domainLayer.usecase.settings.CheckCurrentPasswordUseCase
+import com.civilcam.domainLayer.usecase.settings.GetCurrentSubscriptionPlanUseCase
+import com.civilcam.domainLayer.usecase.user.AcceptLegalDocsUseCase
+import com.civilcam.domainLayer.usecase.user.GetCurrentUserUseCase
+import com.civilcam.domainLayer.usecase.user.LogoutUseCase
+import com.civilcam.domainLayer.usecase.verify.SendOtpCodeUseCase
+import com.civilcam.domainLayer.usecase.verify.VerifyEmailOtpUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
@@ -42,14 +38,16 @@ val domainModule = module {
     factory { GetUserProfileUseCase(get()) }
 
     factory { LogoutUseCase(get()) }
-    
-    factory { GetCurrentUserUseCase(get()) }
-    
-    factory { ChangePhoneNumberUseCase(get()) }
-    
-    factory { UpdateUserProfileUseCase(get()) }
-    
+
     factory { GetUserInformationUseCase(get()) }
+
+
+    factory { GetCurrentUserUseCase(get()) }
+
+    factory { ChangePhoneNumberUseCase(get()) }
+
+    factory { UpdateUserProfileUseCase(get()) }
+
 
     factory { GetAlertsListUseCase(get()) }
 
@@ -70,3 +68,21 @@ val domainModule = module {
     factory { GetPlacesAutocompleteUseCase(get()) }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

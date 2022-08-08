@@ -9,7 +9,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.TermsType
+import com.civilcam.domainLayer.model.TermsType
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.*

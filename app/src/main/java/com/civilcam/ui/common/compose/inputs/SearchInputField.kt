@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -89,7 +90,7 @@ fun SearchInputField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(50))
+                    .clip(CircleShape)
                     .clickable {
 
                     },
@@ -189,7 +190,7 @@ fun SearchInputField(
 private fun ClearButton(onClearText: () -> Unit) {
     Icon(
         modifier = Modifier
-            .clip(RoundedCornerShape(50))
+            .clip(CircleShape)
             .clickable { onClearText.invoke() },
         painter = painterResource(id = R.drawable.ic_clear),
         contentDescription = null,

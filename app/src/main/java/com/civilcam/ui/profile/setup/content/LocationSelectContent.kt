@@ -11,7 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.SearchModel
+import com.civilcam.domainLayer.model.SearchModel
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.inputs.SearchInputField
 import com.civilcam.ui.network.main.content.SearchRow
@@ -26,14 +26,14 @@ fun LocationSelectContent(
 	editLocationAction: (UserProfileActions) -> Unit
 ) {
 	var searchString by remember { mutableStateOf("") }
-	
+
 	Column(
 		modifier = Modifier
 			.fillMaxSize()
 			.background(CCTheme.colors.white)
 	) {
 		Spacer(modifier = Modifier.height(32.dp))
-		
+
 		SearchInputField(
 			onValueChanged = {
 				searchString = it
@@ -43,9 +43,9 @@ fun LocationSelectContent(
 					locationAction.invoke(ProfileSetupActions.LocationSearchQuery(it))
 				}
 			}) {
-			
+
 		}
-		
+
 		LazyColumn {
 			itemsIndexed(searchData.searchResult) { index, item ->
 				SearchRow(
@@ -61,7 +61,7 @@ fun LocationSelectContent(
 					},
 				)
 			}
-			
+
 			item {
 				if (searchData.searchResult.isNotEmpty()) RowDivider()
 			}

@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.alerts.AlertType
+import com.civilcam.domainLayer.model.alerts.AlertType
 import com.civilcam.ui.alerts.history.model.AlertHistoryActions
 import com.civilcam.ui.alerts.history.model.ResolvedUsers
 import com.civilcam.ui.common.compose.CircleUserAvatar

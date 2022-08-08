@@ -24,6 +24,7 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
             is EmergencyActions.ChangeMode -> changeMode(action.mode)
             is EmergencyActions.ClickChangeScreen -> screenChange(action.screenState)
 //            EmergencyActions.DetectLocation -> TODO()
+            else -> {}
         }
     }
 

@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.alerts.AlertType
+import com.civilcam.domainLayer.model.alerts.AlertType
 
 @Composable
 fun AlertHistoryTabRow(

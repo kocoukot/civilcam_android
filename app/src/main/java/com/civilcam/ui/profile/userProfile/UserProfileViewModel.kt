@@ -5,17 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.local.MediaStorage
 import com.civilcam.data.network.support.ServiceException
-import com.civilcam.domain.PictureModel
-import com.civilcam.domain.model.AutocompletePlace
-import com.civilcam.domain.model.SearchModel
-import com.civilcam.domain.model.UserSetupModel
-import com.civilcam.domain.usecase.location.GetPlacesAutocompleteUseCase
-import com.civilcam.domain.usecase.profile.SetAvatarUseCase
-import com.civilcam.domain.usecase.profile.UpdateUserProfileUseCase
-import com.civilcam.domain.usecase.user.GetCurrentUserUseCase
+import com.civilcam.domainLayer.model.*
+import com.civilcam.domainLayer.usecase.location.GetPlacesAutocompleteUseCase
+import com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase
+import com.civilcam.domainLayer.usecase.profile.UpdateUserProfileUseCase
+import com.civilcam.domainLayer.usecase.user.GetCurrentUserUseCase
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
 import com.civilcam.ui.profile.userProfile.model.*
 import com.civilcam.utils.DateUtils
+import com.standartmedia.common.ext.castSafe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -33,15 +31,15 @@ class UserProfileViewModel(
 	private val getPlacesAutocompleteUseCase: GetPlacesAutocompleteUseCase
 ) : ComposeViewModel<UserProfileState, UserProfileRoute, UserProfileActions>() {
 	override var _state: MutableStateFlow<UserProfileState> = MutableStateFlow(UserProfileState())
-	
+
 	private val disposables = CompositeDisposable()
-	
+
 	private val _textSearch = MutableStateFlow("")
 	private val textSearch: StateFlow<String> = _textSearch.asStateFlow()
-	
+
 	init {
 		fetchCurrentUser()
-		
+
 		viewModelScope.launch {
 			textSearch.debounce(400).collect { query ->
 				query
@@ -57,7 +55,7 @@ class UserProfileViewModel(
 					setSearchResult(emptyList())
 				}
 			}
-			
+
 		}
 	}
 	
@@ -89,7 +87,7 @@ class UserProfileViewModel(
 			is UserProfileActions.ClickAddressSelect -> addressSelected(action.address)
 		}
 	}
-	
+
 	private fun searchAddress(searchQuery: String) {
 		_textSearch.value = searchQuery
 		_state.update {
@@ -100,7 +98,7 @@ class UserProfileViewModel(
 			)
 		}
 	}
-	
+
 	private fun fetchCurrentUser() {
 		_state.value = _state.value.copy(isLoading = true)
 		viewModelScope.launch {
@@ -110,23 +108,22 @@ class UserProfileViewModel(
 						it.copy(
 							data = user,
 							profileImage = user.userBaseInfo.avatar?.imageUrl,
-							address = user.userBaseInfo.address,
-							birthDate = user.userBaseInfo.dob
 						)
 					}
 				}
 				.onFailure { error ->
-					error as ServiceException
-					_state.update { it.copy(errorText = error.errorMessage) }
+					error.castSafe<ServiceException>()?.let {
+						_state.update { it.copy(errorText = it.errorText) }
+					}
 				}
 			_state.value = _state.value.copy(isLoading = false)
 		}
 	}
-	
+
 	private fun openLocationSelect() {
 		_state.update { it.copy(screenState = UserProfileScreen.LOCATION) }
 	}
-	
+
 	private fun openDatePicker() {
 		_state.value = _state.value.copy(showDatePicker = true)
 	}
@@ -137,47 +134,45 @@ class UserProfileViewModel(
 	
 	private fun getDateFromCalendar(birthDate: Long) {
 		val data = getUserInfo()
-		data.dateBirth = birthDate
-		_state.update { it.copy(user = data, birthDate = DateUtils.dateOfBirthDomainFormat(birthDate)) }
+		data.userBaseInfo.dob = DateUtils.dateOfBirthDomainFormat(birthDate)
+		_state.update { it.copy(data = data) }
 		closeDatePicker()
 	}
 	
 	private fun firstNameEntered(firstName: String) {
 		val data = getUserInfo()
-		data.firstName = firstName
-		_state.update { it.copy(user = data) }
+		data.userBaseInfo.firstName = firstName
+		_state.update { it.copy(data = data) }
 	}
 	
 	private fun lastNameEntered(lastName: String) {
 		val data = getUserInfo()
-		data.lastName = lastName
-		_state.update { it.copy(user = data) }
+		data.userBaseInfo.lastName = lastName
+		_state.update { it.copy(data = data) }
 	}
 	
 	private fun goSave() {
-		_state.value.user?.let { userdata ->
+		_state.value.data?.let { userdata ->
 			_state.update { it.copy(isLoading = true) }
 			viewModelScope.launch {
 				try {
-					userdata.profileImage?.uri.let { uri ->
-						if (uri != null) {
-							setAvatarUseCase.invoke(uri)
-						}
+					userdata.userBaseInfo.avatar?.imageUrl?.let { uri ->
+						if (!uri.contains("http")) setAvatarUseCase.invoke(Uri.parse(uri))
 					}
 					val result = updateUserProfileUseCase.invoke(
 						UserSetupModel(
-							firstName = userdata.firstName,
-							lastName = userdata.lastName,
-							dateBirth = userdata.dateBirth,
-							phoneNumber = userdata.phoneNumber,
-							location = userdata.location
+							firstName = userdata.userBaseInfo.firstName,
+							lastName = userdata.userBaseInfo.lastName,
+							dateBirth = userdata.userBaseInfo.dob,
+							phoneNumber = userdata.userBaseInfo.phone,
+							location = userdata.userBaseInfo.address
 						)
 					)
 					if (result) _state.value =
 						_state.value.copy(screenState = UserProfileScreen.PROFILE)
-					_state.value = _state.value.copy(user = UserSetupModel())
+					_state.value = _state.value.copy(data = CurrentUser())
 					fetchCurrentUser()
-					
+
 				} catch (e: ServiceException) {
 					Timber.d("resourceLocalized throwable ${e.errorCode}")
 					_state.update { it.copy(errorText = e.errorMessage) }
@@ -191,7 +186,6 @@ class UserProfileViewModel(
 		when (_state.value.screenState) {
 			UserProfileScreen.EDIT -> {
 				_state.value = _state.value.copy(screenState = UserProfileScreen.PROFILE)
-				_state.value = _state.value.copy(user = UserSetupModel())
 				fetchCurrentUser()
 			}
 			UserProfileScreen.LOCATION -> {
@@ -227,14 +221,14 @@ class UserProfileViewModel(
 					_state.value = _state.value.copy(errorText = "Max image size is 5MB")
 				} else {
 					val data = getUserInfo()
-					data.profileImage = PictureModel(image.name, image.uri, image.sizeMb)
-					_state.update { it.copy(user = data) }
-					_state.update { it.copy(profileImage = image.uri.toString()) }
+					data.userBaseInfo.avatar =
+						ImageInfo(imageUrl = image.uri.toString(), sizeMb = image.sizeMb)
+					_state.update { it.copy(data = data, profileImage = image.uri.toString()) }
 				}
 			}
 			.addTo(disposables)
 	}
-	
+
 	private fun setSearchResult(result: List<AutocompletePlace>) {
 		Timber.i("location result $result")
 		_state.value = _state.value.copy(
@@ -243,18 +237,19 @@ class UserProfileViewModel(
 			).copy()
 		)
 	}
-	
+
 	private fun addressSelected(result: AutocompletePlace) {
 		_state.update {
 			it.copy(
 				screenState = UserProfileScreen.EDIT,
 				searchLocationModel = SearchModel(),
-				user = getUserInfo().copy(location = result.address),
-				address = result.address
+				data = getUserInfo().copy(
+					userBaseInfo = it.data?.userBaseInfo?.copy(address = result.address)
+						?: UserBaseInfo()
+				),
 			)
 		}
-		Timber.i("location selected ${_state.value.user}")
 	}
-	
-	private fun getUserInfo() = _state.value.user?.copy() ?: UserSetupModel()
+
+	private fun getUserInfo() = _state.value.data?.copy() ?: CurrentUser()
 }
