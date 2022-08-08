@@ -10,7 +10,7 @@ class UserBaseInfoMapper(
 ) : Mapper<UseBaseInfoResponse, UserBaseInfo>(
     fromData = { response ->
         UserBaseInfo(
-           // avatar = response.avatar?.let { imageInfoMapper.mapData(it) },
+            avatar = response.avatar?.let { imageInfoMapper.mapData(it) },
             firstName = response.firstName,
             lastName = response.lastName,
             dob = response.dob.orEmpty(),

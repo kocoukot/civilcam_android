@@ -14,16 +14,14 @@ import com.civilcam.domainLayer.model.CurrentUser
 import com.civilcam.ui.common.compose.inputs.InputField
 import com.civilcam.ui.profile.setup.content.CalendarIcon
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
+import com.civilcam.ui.profile.userProfile.model.UserProfileActions
 import com.civilcam.utils.DateUtils
 
 @Composable
 fun UserProfileEditContent(
 	userData: CurrentUser,
-	address: String,
-	birthDate: String,
 	onValueChanged: (UserInfoDataType, String) -> Unit,
-	onDateBirthClick: () -> Unit,
-	onLocationClick: () -> Unit
+	onActionClicked: (UserProfileActions) -> Unit,
 ) {
 	var dateOfBirth by remember { mutableStateOf("") }
 
@@ -66,7 +64,8 @@ fun UserProfileEditContent(
 		)
 
 		dateOfBirth =
-			birthDate.takeIf { it.isNotEmpty() }?.let { DateUtils.dateOfBirthFormat(it) }.orEmpty()
+			userData.userBaseInfo.dob.takeIf { it.isNotEmpty() }
+				?.let { DateUtils.dateOfBirthFormat(it) }.orEmpty()
 		
 		val calendarColor =
 			animateColorAsState(targetValue = if (dateOfBirth.isEmpty()) CCTheme.colors.grayOne else CCTheme.colors.primaryRed)
@@ -77,7 +76,7 @@ fun UserProfileEditContent(
 			title = stringResource(id = R.string.profile_setup_date_of_birth_label),
 			placeHolder = stringResource(id = R.string.profile_setup_date_of_birth_placeholder),
 			onTextClicked = {
-				onDateBirthClick.invoke()
+				onActionClicked.invoke(UserProfileActions.ClickDateSelect)
 			},
 			onValueChanged = {},
 			isReversed = true
@@ -92,12 +91,12 @@ fun UserProfileEditContent(
 		InputField(
 			isEnable = false,
 			title = stringResource(id = R.string.profile_setup_address_label),
-			text = address,
+			text = userData.userBaseInfo.address,
 			placeHolder = stringResource(id = R.string.profile_setup_address_placeholder),
 			isReversed = true,
 			onValueChanged = {},
 			onTextClicked = {
-				onLocationClick.invoke()
+				onActionClicked.invoke(UserProfileActions.ClickLocationSelect)
 			}
 		)
 		

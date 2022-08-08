@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleTheme
@@ -54,7 +53,7 @@ fun ComposeButton(
                 onClick = { buttonClick.invoke() },
                 modifier = modifier.fillMaxWidth(),
                 elevation = ButtonDefaults.elevation(0.dp),
-                shape = RoundedCornerShape(50),
+                shape = CircleShape,
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = backgroundColor.value,
                     disabledBackgroundColor = Color.White

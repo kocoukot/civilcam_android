@@ -92,13 +92,12 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 		state.value.data?.let { data ->
 			Column(
 				modifier = Modifier
-					.fillMaxWidth()
-					.background(CCTheme.colors.white),
+                    .fillMaxWidth()
+                    .background(CCTheme.colors.white),
 			) {
 				AnimatedVisibility(visible = state.value.screenState != UserProfileScreen.LOCATION) {
 					UserProfileSection(
 						userData = data,
-						avatar = state.value.data?.userBaseInfo?.avatar,
 						screenType = state.value.screenState,
 						mockAction = {
 							viewModel.setInputActions(UserProfileActions.ClickAvatarSelect)
@@ -134,8 +133,6 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 						UserProfileScreen.EDIT -> {
 							UserProfileEditContent(
 								userData = data,
-								address = state.value.data?.userBaseInfo?.address.orEmpty(),
-								birthDate = state.value.data?.userBaseInfo?.dob.orEmpty(),
 								onValueChanged = { userInfoDataType, data ->
 									viewModel.setInputActions(
 										UserProfileActions.EnterInputData(
@@ -144,12 +141,7 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 										)
 									)
 								},
-								onDateBirthClick = {
-									viewModel.setInputActions(UserProfileActions.ClickDateSelect)
-								},
-								onLocationClick = {
-									viewModel.setInputActions(UserProfileActions.ClickLocationSelect)
-								}
+								onActionClicked = viewModel::setInputActions
 							)
 						}
 						UserProfileScreen.LOCATION -> {

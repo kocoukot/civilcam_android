@@ -157,7 +157,7 @@ class UserProfileViewModel(
 			viewModelScope.launch {
 				try {
 					userdata.userBaseInfo.avatar?.imageUrl?.let { uri ->
-						setAvatarUseCase.invoke(Uri.parse(uri))
+						if (!uri.contains("http")) setAvatarUseCase.invoke(Uri.parse(uri))
 					}
 					val result = updateUserProfileUseCase.invoke(
 						UserSetupModel(
