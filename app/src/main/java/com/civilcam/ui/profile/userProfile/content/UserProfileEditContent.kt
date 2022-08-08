@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domainLayer.model.UserBaseInfo
+import com.civilcam.domainLayer.model.CurrentUser
 import com.civilcam.ui.common.compose.inputs.InputField
 import com.civilcam.ui.profile.setup.content.CalendarIcon
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
@@ -18,7 +18,7 @@ import com.civilcam.utils.DateUtils
 
 @Composable
 fun UserProfileEditContent(
-	userData: UserBaseInfo,
+	userData: CurrentUser,
 	address: String,
 	birthDate: String,
 	onValueChanged: (UserInfoDataType, String) -> Unit,
@@ -65,7 +65,8 @@ fun UserProfileEditContent(
 				.background(color = CCTheme.colors.lightGray)
 		)
 
-		dateOfBirth = birthDate.let { DateUtils.dateOfBirthFormat(it) }
+		dateOfBirth =
+			birthDate.takeIf { it.isNotEmpty() }?.let { DateUtils.dateOfBirthFormat(it) }.orEmpty()
 		
 		val calendarColor =
 			animateColorAsState(targetValue = if (dateOfBirth.isEmpty()) CCTheme.colors.grayOne else CCTheme.colors.primaryRed)

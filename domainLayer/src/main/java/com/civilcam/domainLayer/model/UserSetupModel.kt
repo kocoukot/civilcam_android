@@ -6,7 +6,7 @@ import com.google.android.gms.maps.model.LatLng
 data class UserSetupModel(
     var firstName: String? = null,
     var lastName: String? = null,
-    var dateBirth: Long? = null,
+    var dateBirth: String? = "",
     var profileImage: PictureModel? = null,
     var coords: LatLng? = LatLng(0.0, 0.0), //todo fix remove later
     var location: String? = null,
@@ -17,7 +17,7 @@ data class UserSetupModel(
         get() =
             firstName?.isNotEmpty() == true &&
                     lastName?.isNotEmpty() == true &&
-                    dateBirth != 0L &&
+                    !dateBirth.isNullOrEmpty() &&
                     profileImage != null &&
                     phoneNumber?.length == 10 &&
                     location?.isNotEmpty() == true
@@ -29,8 +29,3 @@ data class UserSetupModel(
     val isPhoneEntered: Boolean
         get() = phoneNumber?.isNotEmpty() == true
 }
-
-data class SearchModel(
-    val searchResult: List<AutocompletePlace> = emptyList(),
-    val searchQuery: String = ""
-)

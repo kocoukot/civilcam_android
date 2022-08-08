@@ -1,11 +1,12 @@
 package com.civilcam.domainLayer.repos
 
-import com.civilcam.domain.model.CurrentUser
+import com.civilcam.domainLayer.model.CurrentUser
+
 
 interface UserRepository {
-	
+
 	suspend fun acceptTerms()
-	
+
 	suspend fun getCurrentUser(): CurrentUser
 
 	suspend fun signOut(): Boolean

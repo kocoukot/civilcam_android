@@ -18,7 +18,7 @@ import com.civilcam.ui.common.compose.inputs.InputField
 import com.civilcam.ui.common.compose.inputs.PhoneInputField
 import com.civilcam.ui.profile.setup.model.ProfileSetupActions
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
-import com.civilcam.utils.DateUtils
+import com.civilcam.utils.DateUtils.dateOfBirthFormat
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -26,7 +26,7 @@ import timber.log.Timber
 fun ProfileSetupContent(
     avatar: PictureModel?,
     data: UserSetupModel?,
-    birthDate: Long?,
+    birthDate: String?,
     setupAction: (ProfileSetupActions) -> Unit
 ) {
     val listState = rememberScrollState()
@@ -79,11 +79,7 @@ fun ProfileSetupContent(
 
 
             dateOfBirth = birthDate
-                ?.takeIf {
-                    it > 0
-                }?.let {
-                    DateUtils.dateOfBirthFormat(it)
-                }.orEmpty()
+                ?.takeIf { it.isNotEmpty() }?.let { dateOfBirthFormat(it) }.orEmpty()
             Timber.d("getDateFromCalendar dateOfBirth $dateOfBirth birthDate $birthDate")
 
             val calendarColor =

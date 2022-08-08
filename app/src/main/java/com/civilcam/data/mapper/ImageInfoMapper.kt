@@ -7,9 +7,9 @@ class ImageInfoMapper : Mapper<ImageInfoResponse, ImageInfo>(
     fromData = { response ->
         response.let {
             ImageInfo(
-                mimetype = it.mimetype,
-                imageUrl = it.imageUrl,
                 imageKey = it.imageKey,
+                imageUrl = it.imageUrl,
+                mimetype = it.mimetype,
                 thumbnailKey = it.thumbnailKey,
                 thumbnailUrl = it.thumbnailUrl,
             )

@@ -7,6 +7,7 @@ import com.civilcam.data.local.SharedPreferencesStorage
 import com.civilcam.data.mapper.auth.UserMapper
 import com.civilcam.data.network.model.request.user.AcceptTermsRequest
 import com.civilcam.data.network.service.UserService
+import com.civilcam.domainLayer.model.CurrentUser
 import com.civilcam.domainLayer.repos.UserRepository
 
 class UserRepositoryImpl(

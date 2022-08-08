@@ -25,7 +25,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domainLayer.model.UserBaseInfo
+import com.civilcam.domainLayer.model.CurrentUser
+import com.civilcam.domainLayer.model.ImageInfo
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TextActionButton
@@ -35,18 +36,18 @@ import com.civilcam.utils.DateUtils
 
 @Composable
 fun UserProfileSection(
-	userData: UserBaseInfo,
-	avatar: PictureModel? = null,
-	screenType: UserProfileScreen,
-	isSaveEnabled: Boolean,
-	onActionClick: (UserProfileActions) -> Unit,
-	mockAction: () -> Unit
+    userData: CurrentUser,
+    avatar: ImageInfo? = null,
+    screenType: UserProfileScreen,
+    isSaveEnabled: Boolean,
+    onActionClick: (UserProfileActions) -> Unit,
+    mockAction: () -> Unit
 ) {
 
 	Column(
 		modifier = Modifier
-			.fillMaxWidth()
-			.padding(top = 12.dp),
+            .fillMaxWidth()
+            .padding(top = 12.dp),
 		horizontalAlignment = Alignment.CenterHorizontally
 	) {
 
@@ -63,36 +64,38 @@ fun UserProfileSection(
 					rememberImagePainter(data = avatar),
 				contentDescription = null,
 				modifier = Modifier
-					.size(120.dp)
-					.clip(RoundedCornerShape(50))
-					.clickable(enabled = screenType == UserProfileScreen.EDIT) {
-						mockAction.invoke()
-					},
+                    .size(120.dp)
+                    .clip(RoundedCornerShape(50))
+                    .clickable(enabled = screenType == UserProfileScreen.EDIT) {
+                        mockAction.invoke()
+                    },
 			)
 			Spacer(modifier = Modifier.weight(1f))
 			TextActionButton(
 				isEnabled = if (screenType == UserProfileScreen.PROFILE) true else isSaveEnabled,
-				actionTitle = when (screenType) {
-					UserProfileScreen.PROFILE -> stringResource(id = R.string.user_profile_edit_title)
-					UserProfileScreen.EDIT -> stringResource(id = R.string.save_text)
-					UserProfileScreen.LOCATION -> stringResource(id = R.string.save_text)
-				}
-			) {
-				onActionClick.invoke(if (screenType == UserProfileScreen.EDIT) UserProfileActions.ClickSave else UserProfileActions.ClickEdit)
-			}
-		}
+                actionTitle = when (screenType) {
+                    UserProfileScreen.PROFILE -> stringResource(id = R.string.user_profile_edit_title)
+                    UserProfileScreen.EDIT -> stringResource(id = R.string.save_text)
+                    UserProfileScreen.LOCATION -> stringResource(id = R.string.save_text)
+                }
+            ) {
+                onActionClick.invoke(if (screenType == UserProfileScreen.EDIT) UserProfileActions.ClickSave else UserProfileActions.ClickEdit)
+            }
+        }
 
-		val dateOfBirth = userData.userBaseInfo.dob.let { DateUtils.dateOfBirthFormat(it) }
+        val dateOfBirth = userData.userBaseInfo.dob.takeIf { it.isNotEmpty() }
+            ?.let { DateUtils.dateOfBirthFormat(it) }
+            .orEmpty()
 
-		AnimatedVisibility(visible = screenType == UserProfileScreen.PROFILE) {
-			Column(
-				horizontalAlignment = Alignment.CenterHorizontally
-			) {
-				Text(
-					text = "${userData.userBaseInfo.firstName} ${userData.userBaseInfo.lastName}",
-					style = CCTheme.typography.button_text,
-					color = CCTheme.colors.black,
-					modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+        AnimatedVisibility(visible = screenType == UserProfileScreen.PROFILE) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "${userData.userBaseInfo.firstName} ${userData.userBaseInfo.lastName}",
+                    style = CCTheme.typography.button_text,
+                    color = CCTheme.colors.black,
+                    modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
 				)
 
 				AdditionalInfo(dateOfBirth)
@@ -108,8 +111,8 @@ fun UserProfileSection(
 				text = stringResource(id = R.string.user_profile_change_profile_image_title),
 				color = CCTheme.colors.primaryRed,
 				modifier = Modifier
-					.padding(top = 16.dp)
-					.clickable { mockAction.invoke() },
+                    .padding(top = 16.dp)
+                    .clickable { mockAction.invoke() },
 				fontWeight = FontWeight.W500,
 				fontSize = 15.sp
 			)
@@ -139,16 +142,16 @@ private fun InformationBoxContent(
 ) {
 	Box(
 		modifier = modifier
-			.background(CCTheme.colors.white, RoundedCornerShape(50))
-			.border(1.dp, CCTheme.colors.grayOne, RoundedCornerShape(50))
-			.clip(RoundedCornerShape(50))
-			.clickable(
-				interactionSource = remember { MutableInteractionSource() },
-				indication = rememberRipple(color = CCTheme.colors.black),
-				enabled = !text.contains("+")
-			) {
-				if (!text.contains("+")) onButtonClick?.invoke()
-			},
+            .background(CCTheme.colors.white, RoundedCornerShape(50))
+            .border(1.dp, CCTheme.colors.grayOne, RoundedCornerShape(50))
+            .clip(RoundedCornerShape(50))
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(color = CCTheme.colors.black),
+                enabled = !text.contains("+")
+            ) {
+                if (!text.contains("+")) onButtonClick?.invoke()
+            },
 		contentAlignment = Alignment.Center
 	) {
 		Text(

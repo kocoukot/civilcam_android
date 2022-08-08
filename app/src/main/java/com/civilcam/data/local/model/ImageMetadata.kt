@@ -1,4 +1,4 @@
-package com.standartmedia.data.local.model
+package com.civilcam.data.local.model
 
 import android.net.Uri
 

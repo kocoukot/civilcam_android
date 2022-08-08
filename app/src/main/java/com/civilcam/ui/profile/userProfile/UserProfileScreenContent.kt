@@ -26,8 +26,6 @@ import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.loading.DialogLoadingContent
 import com.civilcam.ui.profile.setup.content.DatePickerContent
 import com.civilcam.ui.profile.setup.content.LocationSelectContent
-import com.civilcam.ui.profile.setup.model.ProfileSetupActions
-import com.civilcam.ui.profile.setup.model.ProfileSetupScreen
 import com.civilcam.ui.profile.userProfile.content.MainProfileContent
 import com.civilcam.ui.profile.userProfile.content.UserProfileEditContent
 import com.civilcam.ui.profile.userProfile.content.UserProfileSection
@@ -100,7 +98,7 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 				AnimatedVisibility(visible = state.value.screenState != UserProfileScreen.LOCATION) {
 					UserProfileSection(
 						userData = data,
-						avatar = state.value.profileImage,
+						avatar = state.value.data?.userBaseInfo?.avatar,
 						screenType = state.value.screenState,
 						mockAction = {
 							viewModel.setInputActions(UserProfileActions.ClickAvatarSelect)
@@ -136,8 +134,8 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 						UserProfileScreen.EDIT -> {
 							UserProfileEditContent(
 								userData = data,
-								address = state.value.address,
-								birthDate = state.value.birthDate,
+								address = state.value.data?.userBaseInfo?.address.orEmpty(),
+								birthDate = state.value.data?.userBaseInfo?.dob.orEmpty(),
 								onValueChanged = { userInfoDataType, data ->
 									viewModel.setInputActions(
 										UserProfileActions.EnterInputData(

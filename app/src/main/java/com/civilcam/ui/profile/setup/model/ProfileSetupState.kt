@@ -10,6 +10,5 @@ data class ProfileSetupState(
     val profileSetupScreen: ProfileSetupScreen = ProfileSetupScreen.SETUP,
     val showDatePicker: Boolean = false,
     val data: UserSetupModel? = null,
-    val birthDate: Long? = null,
     val searchLocationModel: SearchModel = SearchModel()
 ) : ComposeFragmentState

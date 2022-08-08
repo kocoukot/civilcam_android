@@ -13,6 +13,7 @@ import com.civilcam.domainLayer.usecase.location.GetPlacesAutocompleteUseCase
 import com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase
 import com.civilcam.domainLayer.usecase.profile.SetPersonalInfoUseCase
 import com.civilcam.ui.profile.setup.model.*
+import com.civilcam.utils.DateUtils.dateOfBirthFormat
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -101,12 +102,10 @@ class ProfileSetupViewModel(
             _state.update { it.copy(isLoading = true) }
             viewModelScope.launch {
                 try {
-                    userdata.profileImage?.uri?.let { uri -> setAvatarUseCase.invoke(uri) }
+                    //  userdata.profileImage?.uri?.let { uri -> setAvatarUseCase.invoke(uri) }
                     val result = setPersonalInfoUseCase.invoke(userdata)
                     if (result) userdata.phoneNumber?.let {
-                        ProfileSetupRoute.GoVerification(
-                            it
-                        )
+                        ProfileSetupRoute.GoVerification(it)
                     }?.let { navigateRoute(it) }
 
                 } catch (e: ServiceException) {
@@ -128,8 +127,8 @@ class ProfileSetupViewModel(
 
     private fun getDateFromCalendar(birthDate: Long) {
         val data = getSetupUser()
-        data.dateBirth = birthDate
-        _state.update { it.copy(data = data, birthDate = birthDate) }
+        data.dateBirth = dateOfBirthFormat(birthDate)
+        _state.update { it.copy(data = data) }
         closeDatePicker()
     }
 
