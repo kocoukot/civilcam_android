@@ -102,7 +102,7 @@ class ProfileSetupViewModel(
             _state.update { it.copy(isLoading = true) }
             viewModelScope.launch {
                 try {
-                    //  userdata.profileImage?.uri?.let { uri -> setAvatarUseCase.invoke(uri) }
+                    userdata.profileImage?.uri?.let { uri -> setAvatarUseCase.invoke(uri) }
                     val result = setPersonalInfoUseCase.invoke(userdata)
                     if (result) userdata.phoneNumber?.let {
                         ProfileSetupRoute.GoVerification(it)
