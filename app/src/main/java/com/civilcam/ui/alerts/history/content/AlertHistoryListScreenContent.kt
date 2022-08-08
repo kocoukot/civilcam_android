@@ -10,8 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.domain.model.alerts.AlertModel
-import com.civilcam.domain.model.alerts.AlertType
 import com.civilcam.ui.alerts.history.model.AlertHistoryActions
 import com.civilcam.ui.common.compose.CircleUserAvatar
 import com.civilcam.ui.common.compose.EmptyListText
@@ -22,8 +20,8 @@ import com.civilcam.utils.DateUtils
 @Composable
 fun AlertHistoryListScreenContent(
     onScreenAction: (AlertHistoryActions) -> Unit,
-    alertListData: List<AlertModel>?,
-    alertType: AlertType
+    alertListData: List<com.civilcam.domainLayer.model.alerts.AlertModel>?,
+    alertType: com.civilcam.domainLayer.model.alerts.AlertType
 ) {
     var tabPage by remember { mutableStateOf(alertType) }
 
@@ -47,13 +45,13 @@ fun AlertHistoryListScreenContent(
 
                 itemsIndexed(data) { index, item ->
                     InformationRow(
-                        title = if (alertType == AlertType.RECEIVED) item.userInfo.userName else stringResource(
+                        title = if (alertType == com.civilcam.domainLayer.model.alerts.AlertType.RECEIVED) item.userInfo.userName else stringResource(
                             id = R.string.alerts_history_sent_alert
                         ),
                         text = DateUtils.getFullDateAndTimeString(item.alertDate),
                         needDivider = index < data.lastIndex,
                         leadingIcon = {
-                            if (alertType == AlertType.RECEIVED)
+                            if (alertType == com.civilcam.domainLayer.model.alerts.AlertType.RECEIVED)
                                 CircleUserAvatar(item.userInfo.avatar, 36)
                         },
                         rowClick = {
@@ -74,7 +72,7 @@ fun AlertHistoryListScreenContent(
                 contentAlignment = Alignment.Center
             ) {
                 EmptyListText(
-                    stringResource(id = if (alertType == AlertType.RECEIVED) R.string.alerts_list_received_empty_state else R.string.alerts_list_sent_empty_state)
+                    stringResource(id = if (alertType == com.civilcam.domainLayer.model.alerts.AlertType.RECEIVED) R.string.alerts_list_received_empty_state else R.string.alerts_list_sent_empty_state)
                 )
             }
         }

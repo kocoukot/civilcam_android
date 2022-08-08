@@ -2,7 +2,6 @@ package com.civilcam.ui.emergency
 
 import android.Manifest
 import android.content.Context.CAMERA_SERVICE
-import android.content.pm.PackageManager
 import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -76,6 +75,7 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 				is EmergencyRoute.IsNavBarVisible -> (activity as MainActivity).showBottomNavBar(
 					route.isVisible
 				)
+				else -> {}
 			}
 		}
 		return ComposeView(requireContext()).apply {

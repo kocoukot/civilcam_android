@@ -11,8 +11,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.PictureModel
-import com.civilcam.domain.model.UserSetupModel
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.inputs.InputField
 import com.civilcam.ui.common.compose.inputs.PhoneInputField
@@ -24,8 +22,8 @@ import timber.log.Timber
 
 @Composable
 fun ProfileSetupContent(
-    avatar: PictureModel?,
-    data: UserSetupModel?,
+    avatar: com.civilcam.domainLayer.PictureModel?,
+    data: com.civilcam.domainLayer.model.UserSetupModel?,
     birthDate: Long?,
     setupAction: (ProfileSetupActions) -> Unit
 ) {

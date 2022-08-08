@@ -17,16 +17,14 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.guard.GuardianModel
-import com.civilcam.domain.model.guard.GuardianStatus
 import com.civilcam.ui.common.compose.*
 import timber.log.Timber
 
 @Composable
 fun GuardianSearchContent(
-    data: List<GuardianModel>,
+    data: List<com.civilcam.domainLayer.model.guard.GuardianModel>,
     searchPart: String,
-    clickAddNew: (GuardianModel) -> Unit
+    clickAddNew: (com.civilcam.domainLayer.model.guard.GuardianModel) -> Unit
 
 ) {
     Timber.d("addUser ${data}")
@@ -65,9 +63,9 @@ private fun EmptySearchScreenState() {
 
 @Composable
 private fun SearchResults(
-    results: List<GuardianModel>,
+    results: List<com.civilcam.domainLayer.model.guard.GuardianModel>,
     searchPart: String,
-    clickAddNew: (GuardianModel) -> Unit
+    clickAddNew: (com.civilcam.domainLayer.model.guard.GuardianModel) -> Unit
 ) {
     LazyColumn {
         item {
@@ -93,7 +91,7 @@ private fun SearchResults(
                 },
                 trailingIcon = {
                     when (userStatus) {
-                        GuardianStatus.PENDING -> {
+                        com.civilcam.domainLayer.model.guard.GuardianStatus.PENDING -> {
                             Text(
                                 text = stringResource(id = R.string.pending_text),
                                 style = CCTheme.typography.common_text_medium,
@@ -101,9 +99,9 @@ private fun SearchResults(
                                 color = CCTheme.colors.grayOne,
                             )
                         }
-                        GuardianStatus.NEW -> {
+                        com.civilcam.domainLayer.model.guard.GuardianStatus.NEW -> {
                             TextActionButton(actionTitle = stringResource(id = R.string.add_text)) {
-                                userStatus = GuardianStatus.PENDING
+                                userStatus = com.civilcam.domainLayer.model.guard.GuardianStatus.PENDING
                                 clickAddNew.invoke(item)
                             }
                         }

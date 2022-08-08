@@ -3,20 +3,19 @@ package com.civilcam.data.repository
 import com.civilcam.common.ext.BaseRepository
 import com.civilcam.common.ext.Resource
 import com.civilcam.data.network.service.PublicService
-import com.civilcam.domain.model.docs.LegalDocs
 
 class PublicDocsRepositoryImpl(
     private val publicService: PublicService,
-) : PublicDocsRepository, BaseRepository() {
+) : com.civilcam.domainLayer.repos.PublicDocsRepository, BaseRepository() {
 
 
-    override suspend fun getLegalDocs(): LegalDocs =
+    override suspend fun getLegalDocs(): com.civilcam.domainLayer.model.docs.LegalDocs =
         safeApiCall {
             publicService.legalDocs()
         }.let { response ->
             when (response) {
                 is Resource.Success -> {
-                    LegalDocs(
+                    com.civilcam.domainLayer.model.docs.LegalDocs(
                         response.value.termsAndConditions,
                         response.value.privacyPolicy
                     )

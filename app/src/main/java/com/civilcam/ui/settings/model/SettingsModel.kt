@@ -1,6 +1,5 @@
 package com.civilcam.ui.settings.model
 
-import com.civilcam.domain.model.SubscriptionPlan
 import com.civilcam.ui.auth.create.model.PasswordModel
 
 data class SettingsModel(
@@ -8,7 +7,7 @@ data class SettingsModel(
     val contactSupportSectionData: ContactSupportSectionData? = null,
     var changePasswordSectionData: ChangePasswordSectionData? = null,
     var createPasswordSectionData: PasswordModel = PasswordModel(),
-    val subscriptionData: SubscriptionPlan = SubscriptionPlan()
+    val subscriptionData: com.civilcam.domainLayer.model.SubscriptionPlan = com.civilcam.domainLayer.model.SubscriptionPlan()
 )
 
 data class SettingsAlertsSectionData(

@@ -14,9 +14,9 @@ class UserRepositoryImpl(
 	private val userService: UserService,
 	private val accountStorage: AccountStorage
 ) : UserRepository, BaseRepository() {
-	
+
 	private val userMapper = UserMapper()
-	
+
 	override suspend fun acceptTerms() =
 		safeApiCall {
 			userService.acceptTermsPolicy(AcceptTermsRequest(true))
@@ -26,7 +26,7 @@ class UserRepositoryImpl(
 				is Resource.Failure -> throw response.serviceException
 			}
 		}
-	
+
 	override suspend fun getCurrentUser(): CurrentUser =
 		safeApiCall {
 			userService.currentUser()

@@ -1,12 +1,11 @@
 package com.civilcam.data.repository
 
-import com.civilcam.domain.model.AutocompletePlace
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 
-class PlacesRepositoryImpl : PlacesRepository {
+class PlacesRepositoryImpl : com.civilcam.domainLayer.repos.PlacesRepository {
 //    private val sessionToken by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
 //        AutocompleteSessionToken.newInstance()
 //    }
@@ -14,30 +13,30 @@ class PlacesRepositoryImpl : PlacesRepository {
     override suspend fun getPlacesWithType(
         query: String,
     ) = listOf(
-        AutocompletePlace(
+        com.civilcam.domainLayer.model.AutocompletePlace(
             placeId = "asdasd",
             primary = "New York",
             secondary = "NY, USA",
             address = "New York NY, USA",
         ),
-        AutocompletePlace(
+        com.civilcam.domainLayer.model.AutocompletePlace(
             placeId = "asdasd",
             primary = "New Jersey",
             secondary = "",
-                    address = "New Jersey",
-                ),
-                AutocompletePlace(
-                    placeId = "asdasd",
-                    primary = "Newark Liberty",
-                    secondary = "International Airport",
-                    address = "Newark Liberty International Airport",
-                ),
-                AutocompletePlace(
-                    placeId = "asdasd",
-                    primary = "New York State",
-                    secondary = "USA",
-                    address = " New York State USA",
-                ),
+            address = "New Jersey",
+        ),
+        com.civilcam.domainLayer.model.AutocompletePlace(
+            placeId = "asdasd",
+            primary = "Newark Liberty",
+            secondary = "International Airport",
+            address = "Newark Liberty International Airport",
+        ),
+        com.civilcam.domainLayer.model.AutocompletePlace(
+            placeId = "asdasd",
+            primary = "New York State",
+            secondary = "USA",
+            address = " New York State USA",
+        ),
             ).filter {
                 it.address.contains(query, true)
             }

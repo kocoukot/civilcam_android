@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="subscription_trial_title">Trial</string>
+    <string name="subscription_trial_plan">for 1 month</string>
+    <string name="subscription_monthly_plan">for $4.99/month</string>
+    <string name="subscription_monthly_title">Monthly</string>
+    <string name="subscription_annual_title">Annual</string>
+    <string name="subscription_annual_plan">for $49.99/year</string>
+    <string name="terms_conditions_terms_button"><![CDATA[Terms & Conditions]]></string>
+    <string name="terms_conditions_privacy_button">Privacy Policy</string>
+</resources>

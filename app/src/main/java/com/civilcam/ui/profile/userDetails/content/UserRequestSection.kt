@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.ButtonAnswer
 import com.civilcam.ui.common.compose.RowDivider
 
 @Composable
@@ -75,14 +74,14 @@ fun UserRequestSection(
         ) {
             AnswerButton(
                 text = stringResource(id = R.string.decline_text),
-                type = ButtonAnswer.DECLINE,
+                type = com.civilcam.domainLayer.model.ButtonAnswer.DECLINE,
                 modifier = Modifier.weight(1f),
                 onButtonClick = requestAnswer
             )
             AnswerButton(
                 text = stringResource(id = R.string.accept_text),
                 modifier = Modifier.weight(1f),
-                type = ButtonAnswer.ACCEPT,
+                type = com.civilcam.domainLayer.model.ButtonAnswer.ACCEPT,
                 onButtonClick = requestAnswer
             )
         }
@@ -96,7 +95,7 @@ fun UserRequestSection(
 @Composable
 private fun AnswerButton(
     text: String,
-    type: ButtonAnswer,
+    type: com.civilcam.domainLayer.model.ButtonAnswer,
     modifier: Modifier = Modifier,
     onButtonClick: ((Boolean) -> Unit)
 ) {

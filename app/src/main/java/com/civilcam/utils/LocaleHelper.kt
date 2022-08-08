@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import com.civilcam.CivilcamApplication.Companion.instance
-import com.civilcam.domain.model.LanguageType
 import java.util.*
 
 
@@ -19,10 +18,10 @@ object LocaleHelper {
         return updateResources(context, language)
     }
 
-    fun getSelectedLanguage(): LanguageType {
+    fun getSelectedLanguage(): com.civilcam.domainLayer.model.LanguageType {
         val sharedPref = instance.getSharedPreferences(SELECTED_LANGUAGE, Context.MODE_PRIVATE)
         val value = sharedPref.getString(SELECTED_LANGUAGE, "en") ?: "en"
-        return LanguageType.byValue(value)
+        return com.civilcam.domainLayer.model.LanguageType.byValue(value)
     }
 
     private fun persist(context: Context, language: String) {
@@ -45,7 +44,7 @@ object LocaleHelper {
 
 
     @Composable
-    fun SetLanguageCompose(lang: LanguageType) {
+    fun SetLanguageCompose(lang: com.civilcam.domainLayer.model.LanguageType) {
         LocaleHelper.setLocale(LocalContext.current, lang.langValue)
         val locale = Locale(lang.langValue)
         val configuration = LocalConfiguration.current

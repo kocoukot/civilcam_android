@@ -1,6 +1,5 @@
 package com.civilcam.di
 
-import com.civilcam.domain.model.VerificationFlow
 import com.civilcam.ui.alerts.history.AlertsHistoryViewModel
 import com.civilcam.ui.alerts.list.AlertsListViewModel
 import com.civilcam.ui.alerts.map.LiveMapViewModel
@@ -32,7 +31,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val baseModule = module {
-	
+
 	single<KoinInjector> { GlobalKoinInjector(getKoin()) }
 
 //	single { Places.createClient(get()) }
@@ -40,76 +39,76 @@ val baseModule = module {
 }
 
 val authModule = module {
-	viewModel { LanguageSelectViewModel() }
-	
-	viewModel { OnBoardingViewModel() }
-	
-	viewModel { (isSettings: Boolean) -> TermsViewModel(isSettings, get(), get()) }
-	
-	viewModel { ProfileSetupViewModel(get(), get(), get(), get()) }
-	
-	viewModel { LoginViewModel() }
-	
-	viewModel { CreateAccountViewModel(get()) }
-	
-	viewModel { (verificationFlow: VerificationFlow, verificationSubject: String) ->
-		VerificationViewModel(
-			verificationFlow,
-			verificationSubject,
-			get(),
-			get()
-		)
-	}
-	
-	viewModel { ResetPasswordViewModel() }
-	
-	viewModel { CreatePasswordViewModel() }
-	
-	viewModel { (pinCodeFlow: PinCodeFlow) -> PinCodeViewModel(pinCodeFlow) }
-	
-	viewModel { (isReselect: Boolean) -> SubscriptionViewModel(isReselect) }
-	
+    viewModel { LanguageSelectViewModel() }
+
+    viewModel { OnBoardingViewModel() }
+
+    viewModel { (isSettings: Boolean) -> TermsViewModel(isSettings, get(), get()) }
+
+    viewModel { ProfileSetupViewModel(get(), get(), get(), get()) }
+
+    viewModel { LoginViewModel() }
+
+    viewModel { CreateAccountViewModel(get()) }
+
+    viewModel { (verificationFlow: com.civilcam.domainLayer.model.VerificationFlow, verificationSubject: String) ->
+        VerificationViewModel(
+            verificationFlow,
+            verificationSubject,
+            get(),
+            get()
+        )
+    }
+
+    viewModel { ResetPasswordViewModel() }
+
+    viewModel { CreatePasswordViewModel() }
+
+    viewModel { (pinCodeFlow: PinCodeFlow) -> PinCodeViewModel(pinCodeFlow) }
+
+    viewModel { (isReselect: Boolean) -> SubscriptionViewModel(isReselect) }
+
 }
 
 val networkRootModule = module {
-	
+
 	viewModel { (userId: Int) -> UserDetailsViewModel(userId, get()) }
-	
+
 	viewModel { ContactsViewModel(get()) }
-	
+
 	viewModel { InviteByNumberViewModel() }
-	
+
 	viewModel { (screen: NetworkScreen) -> NetworkMainViewModel(screen, get(), get(), get()) }
-	
+
 }
 
 val alertsRootModule = module {
-	
+
 	viewModel { AlertsListViewModel(get()) }
-	
+
 	viewModel { AlertsHistoryViewModel(get()) }
-	
+
 	viewModel { (userId: Int) -> LiveMapViewModel(userId) }
-	
-	
+
+
 }
 
 val profileModule = module {
-	
+
 	viewModel { SettingsViewModel(get(), get(), get()) }
-	
+
 	viewModel { (credentialType: CredentialType) ->
 		ChangeCredentialsViewModel(
 			credentialType,
 			get()
 		)
 	}
-	
+
 	viewModel { UserProfileViewModel(get(), get(), get(), get(), get()) }
 }
 
 val emergencyModule = module {
-	
+
 	viewModel { EmergencyViewModel() }
 }
 

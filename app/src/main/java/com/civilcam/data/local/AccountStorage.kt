@@ -2,7 +2,6 @@ package com.civilcam.data.local
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import com.civilcam.domain.model.CurrentUser
 import com.google.gson.Gson
 import java.util.*
 
@@ -57,7 +56,7 @@ class AccountStorage(
 
     private fun clearProfile() = accountManager.setUserData(getOrCreateAccount(), USER, null)
 
-    fun loginUser(sessionToken: String?, user: CurrentUser) {
+    fun loginUser(sessionToken: String?, user: com.civilcam.domainLayer.model.CurrentUser) {
         getOrCreateAccount()
             .let {
                 accountManager.setAuthToken(it, SESSION_TOKEN, sessionToken)
@@ -70,7 +69,7 @@ class AccountStorage(
             }
     }
 
-    private fun updateUser(currentAccount: Account, user: CurrentUser) =
+    private fun updateUser(currentAccount: Account, user: com.civilcam.domainLayer.model.CurrentUser) =
         accountManager.setUserData(currentAccount, USER, gson.toJson(user))
 
 

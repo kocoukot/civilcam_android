@@ -83,7 +83,7 @@ fun UserProfileSection(
 				onActionClick.invoke(if (screenType == UserProfileScreen.EDIT) UserProfileActions.ClickSave else UserProfileActions.ClickEdit)
 			}
 		}
-		
+
 		val dateOfBirth = userData.userBaseInfo.dob.let { DateUtils.dateOfBirthFormat(it) }
 
 		AnimatedVisibility(visible = screenType == UserProfileScreen.PROFILE) {

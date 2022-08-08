@@ -2,7 +2,6 @@ package com.civilcam.ui.alerts.list
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.domain.usecase.alerts.GetAlertsListUseCase
 import com.civilcam.ui.alerts.list.model.AlertListActions
 import com.civilcam.ui.alerts.list.model.AlertListRoute
 import com.civilcam.ui.alerts.list.model.AlertListState
@@ -10,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class AlertsListViewModel(
-    private val getAlertsListUseCase: GetAlertsListUseCase
+    private val getAlertsListUseCase: com.civilcam.domainLayer.usecase.alerts.GetAlertsListUseCase
 ) : ComposeViewModel<AlertListState, AlertListRoute, AlertListActions>() {
 
     override var _state: MutableStateFlow<AlertListState> = MutableStateFlow(AlertListState())

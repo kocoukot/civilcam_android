@@ -17,12 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.LanguageType
 
 @Composable
 fun LanguageSettingsContent(
-    currentLanguage: LanguageType,
-    onLanguageSelect: (LanguageType) -> Unit
+    currentLanguage: com.civilcam.domainLayer.model.LanguageType,
+    onLanguageSelect: (com.civilcam.domainLayer.model.LanguageType) -> Unit
 ) {
 
 //    var currentLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
@@ -35,21 +34,21 @@ fun LanguageSettingsContent(
         Divider(color = CCTheme.colors.lightGray, modifier = Modifier.height(30.dp))
 
         LanguageSelectSection(
-            LanguageType.ENGLISH,
+            com.civilcam.domainLayer.model.LanguageType.ENGLISH,
             currentLanguage = currentLanguage,
             onLanguageSelect = {
 //                currentLanguage = LanguageType.ENGLISH
-                onLanguageSelect.invoke(LanguageType.ENGLISH)
+                onLanguageSelect.invoke(com.civilcam.domainLayer.model.LanguageType.ENGLISH)
             }
         )
 
         Spacer(modifier = Modifier.height(12.dp))
         LanguageSelectSection(
-            LanguageType.SPAIN,
+            com.civilcam.domainLayer.model.LanguageType.SPAIN,
             currentLanguage = currentLanguage,
             onLanguageSelect = {
 //                currentLanguage = LanguageType.SPAIN
-                onLanguageSelect.invoke(LanguageType.SPAIN)
+                onLanguageSelect.invoke(com.civilcam.domainLayer.model.LanguageType.SPAIN)
             }
         )
     }
@@ -57,8 +56,8 @@ fun LanguageSettingsContent(
 
 @Composable
 fun LanguageSelectSection(
-    languageType: LanguageType,
-    currentLanguage: LanguageType,
+    languageType: com.civilcam.domainLayer.model.LanguageType,
+    currentLanguage: com.civilcam.domainLayer.model.LanguageType,
     onLanguageSelect: () -> Unit
 ) {
 

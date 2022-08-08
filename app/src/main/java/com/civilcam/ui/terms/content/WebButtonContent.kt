@@ -18,13 +18,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.TermsType
 
 
 @Composable
 fun WebButton(
-    buttonType: TermsType,
-    onButtonClicked: (TermsType) -> Unit
+    buttonType: com.civilcam.domainLayer.model.TermsType,
+    onButtonClicked: (com.civilcam.domainLayer.model.TermsType) -> Unit
 ) {
 
     OutlinedButton(

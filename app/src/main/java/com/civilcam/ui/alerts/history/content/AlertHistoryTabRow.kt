@@ -21,12 +21,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.alerts.AlertType
 
 @Composable
 fun AlertHistoryTabRow(
-    tabPage: AlertType,
-    onTabSelected: (tabPage: AlertType) -> Unit
+    tabPage: com.civilcam.domainLayer.model.alerts.AlertType,
+    onTabSelected: (tabPage: com.civilcam.domainLayer.model.alerts.AlertType) -> Unit
 ) {
 
     val tabWidths = remember {
@@ -57,18 +56,18 @@ fun AlertHistoryTabRow(
         }) {
 
         TabCell(
-            isSelected = tabPage == AlertType.RECEIVED,
+            isSelected = tabPage == com.civilcam.domainLayer.model.alerts.AlertType.RECEIVED,
             title = stringResource(id = R.string.alerts_history_received_tab),
             textLength = { tabWidths[0] = it },
-            onTabCLick = { onTabSelected(AlertType.RECEIVED) },
+            onTabCLick = { onTabSelected(com.civilcam.domainLayer.model.alerts.AlertType.RECEIVED) },
 
             )
 
         TabCell(
-            isSelected = tabPage == AlertType.SENT,
+            isSelected = tabPage == com.civilcam.domainLayer.model.alerts.AlertType.SENT,
             title = stringResource(id = R.string.alerts_history_sent_tab),
             textLength = { tabWidths[1] = it },
-            onTabCLick = { onTabSelected(AlertType.SENT) },
+            onTabCLick = { onTabSelected(com.civilcam.domainLayer.model.alerts.AlertType.SENT) },
         )
 
     }
@@ -105,7 +104,7 @@ fun TabCell(
 @Preview
 @Composable
 private fun AlertHistoryTabRowPreview() {
-    var tabPage by remember { mutableStateOf(AlertType.RECEIVED) }
+    var tabPage by remember { mutableStateOf(com.civilcam.domainLayer.model.alerts.AlertType.RECEIVED) }
 
     AlertHistoryTabRow(
         tabPage = tabPage

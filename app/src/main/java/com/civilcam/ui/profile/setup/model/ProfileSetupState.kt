@@ -1,15 +1,13 @@
 package com.civilcam.ui.profile.setup.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentState
-import com.civilcam.domain.model.SearchModel
-import com.civilcam.domain.model.UserSetupModel
 
 data class ProfileSetupState(
     val isLoading: Boolean = false,
     var errorText: String = "",
     val profileSetupScreen: ProfileSetupScreen = ProfileSetupScreen.SETUP,
     val showDatePicker: Boolean = false,
-    val data: UserSetupModel? = null,
+    val data: com.civilcam.domainLayer.model.UserSetupModel? = null,
     val birthDate: Long? = null,
-    val searchLocationModel: SearchModel = SearchModel()
+    val searchLocationModel: com.civilcam.domainLayer.model.SearchModel = com.civilcam.domainLayer.model.SearchModel()
 ) : ComposeFragmentState

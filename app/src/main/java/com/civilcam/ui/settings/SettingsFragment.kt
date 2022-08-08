@@ -41,6 +41,7 @@ class SettingsFragment : Fragment() {
 //                    navController.navigate(R.id.action_settingsFragment_to_languageSelectFragment)
                 }
                 SettingsRoute.GoSubManage -> navController.navigate(R.id.subscriptionFragment, SubscriptionFragment.createArgs(true))
+                else -> {}
             }
         }
         return ComposeView(requireContext()).apply {

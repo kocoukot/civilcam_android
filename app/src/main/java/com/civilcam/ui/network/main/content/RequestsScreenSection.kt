@@ -11,11 +11,11 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.guard.GuardianItem
 import com.civilcam.ui.common.compose.CircleUserAvatar
 import com.civilcam.ui.common.compose.IconActionButton
 import com.civilcam.ui.common.compose.InformationRow
 import com.civilcam.ui.common.compose.RowDivider
-import com.civilcam.ui.network.main.model.GuardianItem
 
 @Composable
 fun RequestsScreenSection(

@@ -1,7 +1,6 @@
 package com.civilcam.ui.subscription
 
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.domain.model.SubscriptionType
 import com.civilcam.ui.subscription.model.SubscriptionActions
 import com.civilcam.ui.subscription.model.SubscriptionRoute
 import com.civilcam.ui.subscription.model.SubscriptionState
@@ -42,14 +41,14 @@ class SubscriptionViewModel(
 	
 	private fun goStart() {
 		//just for ui test
-		if (_state.value.selectedSubscriptionType == SubscriptionType.TRIAL) {
+		if (_state.value.selectedSubscriptionType == com.civilcam.domainLayer.model.SubscriptionType.TRIAL) {
 			_state.value = _state.value.copy(purchaseFail = true)
 		} else {
 			_state.value = _state.value.copy(purchaseSuccess = true)
 		}
 	}
 	
-	private fun onSubSelected(subscriptionType: SubscriptionType) {
+	private fun onSubSelected(subscriptionType: com.civilcam.domainLayer.model.SubscriptionType) {
 		_state.value = _state.value.copy(selectedSubscriptionType = subscriptionType)
 	}
 }

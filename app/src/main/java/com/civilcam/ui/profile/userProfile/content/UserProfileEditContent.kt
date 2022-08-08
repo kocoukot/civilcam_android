@@ -27,7 +27,7 @@ fun UserProfileEditContent(
 	onLocationClick: () -> Unit
 ) {
 	var dateOfBirth by remember { mutableStateOf("") }
-	
+
 	Column(
 		modifier = Modifier
 			.fillMaxWidth()

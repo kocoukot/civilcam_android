@@ -19,12 +19,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.UserDetailsModel
 import com.civilcam.ui.common.compose.CircleUserAvatar
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.profile.userDetails.model.StopGuardAlertType
 import com.civilcam.ui.profile.userDetails.model.UserDetailsActions
-import com.civilcam.ui.profile.userDetails.model.UserDetailsModel
 import com.civilcam.utils.DateUtils
 
 @Composable

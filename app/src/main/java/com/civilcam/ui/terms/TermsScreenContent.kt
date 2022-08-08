@@ -9,7 +9,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.TermsType
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.*
@@ -82,12 +81,12 @@ fun TermsScreenContent(viewModel: TermsViewModel) {
                 )
 
                 Spacer(modifier = Modifier.height(28.dp))
-                WebButton(TermsType.TERMS_CONDITIONS) {
+                WebButton(com.civilcam.domainLayer.model.TermsType.TERMS_CONDITIONS) {
                     viewModel.setInputActions(TermsActions.ClickDocument(it))
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
-                WebButton(TermsType.PRIVACY_POLICY) {
+                WebButton(com.civilcam.domainLayer.model.TermsType.PRIVACY_POLICY) {
                     viewModel.setInputActions(TermsActions.ClickDocument(it))
                 }
                 Spacer(modifier = Modifier.height(40.dp))

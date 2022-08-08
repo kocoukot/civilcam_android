@@ -13,15 +13,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.guard.NetworkType
 import com.civilcam.ui.alerts.history.content.TabCell
 import com.civilcam.ui.alerts.history.content.customTabIndicatorOffset
 
 
 @Composable
 fun NetworkTabRow(
-    tabPage: NetworkType,
-    onTabSelected: (tabPage: NetworkType) -> Unit
+    tabPage: com.civilcam.domainLayer.model.guard.NetworkType,
+    onTabSelected: (tabPage: com.civilcam.domainLayer.model.guard.NetworkType) -> Unit
 ) {
 
     val tabWidths = remember {
@@ -54,18 +53,18 @@ fun NetworkTabRow(
         }) {
 
         TabCell(
-            isSelected = tabPage == NetworkType.ON_GUARD,
+            isSelected = tabPage == com.civilcam.domainLayer.model.guard.NetworkType.ON_GUARD,
             title = stringResource(id = R.string.network_main_on_guard),
             textLength = { tabWidths[0] = it },
-            onTabCLick = { onTabSelected(NetworkType.ON_GUARD) },
+            onTabCLick = { onTabSelected(com.civilcam.domainLayer.model.guard.NetworkType.ON_GUARD) },
 
             )
 
         TabCell(
-            isSelected = tabPage == NetworkType.GUARDIANS,
+            isSelected = tabPage == com.civilcam.domainLayer.model.guard.NetworkType.GUARDIANS,
             title = stringResource(id = R.string.network_main_guardians),
             textLength = { tabWidths[1] = it },
-            onTabCLick = { onTabSelected(NetworkType.GUARDIANS) },
+            onTabCLick = { onTabSelected(com.civilcam.domainLayer.model.guard.NetworkType.GUARDIANS) },
         )
 
     }

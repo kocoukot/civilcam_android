@@ -16,7 +16,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.civilcam.R
-import com.civilcam.domain.model.settings.NotificationType
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
@@ -28,7 +27,7 @@ class NotificationHelper : KoinComponent {
         val maxProgress = 5
         var mProgressStatus = 0
         showRequestProgress = true
-        val channelId = "${context.packageName}-${NotificationType.REQUESTS.notifyName}"
+        val channelId = "${context.packageName}-${com.civilcam.domainLayer.model.settings.NotificationType.REQUESTS.notifyName}"
         val notificationTitle = context.getString(R.string.notification_request_title)
         val notificationText = openHoursText(
             userName = name,
@@ -148,7 +147,7 @@ class NotificationHelper : KoinComponent {
         val maxProgress = 5
         var mProgressStatus = 0
         showAlertProgress = true
-        val channelId = "${context.packageName}-${NotificationType.ALERTS.notifyName}"
+        val channelId = "${context.packageName}-${com.civilcam.domainLayer.model.settings.NotificationType.ALERTS.notifyName}"
         val notificationTitle = context.getString(R.string.notification_alert_title)
         val notificationText = openHoursText(
             userName = name,

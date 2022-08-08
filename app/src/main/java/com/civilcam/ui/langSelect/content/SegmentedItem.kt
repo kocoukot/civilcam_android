@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.LanguageType
 import com.civilcam.utils.LocaleHelper
 
 
@@ -50,12 +49,12 @@ private val BACKGROUND_SHAPE = RoundedCornerShape(4.dp)
 
 
 @Composable
-fun SegmentedItem(currentLang: LanguageType, selectedLang: (LanguageType) -> Unit) {
+fun SegmentedItem(currentLang: com.civilcam.domainLayer.model.LanguageType, selectedLang: (com.civilcam.domainLayer.model.LanguageType) -> Unit) {
     val context = LocalContext.current
     MaterialTheme {
         Surface {
             Column(Modifier.padding(16.dp), verticalArrangement = spacedBy(16.dp)) {
-                val twoSegments = remember { listOf(LanguageType.ENGLISH, LanguageType.SPAIN) }
+                val twoSegments = remember { listOf(com.civilcam.domainLayer.model.LanguageType.ENGLISH, com.civilcam.domainLayer.model.LanguageType.SPAIN) }
                 var selectedTwoSegment by remember { mutableStateOf(currentLang) }
                 SegmentedControl(
                     twoSegments,
@@ -130,7 +129,7 @@ fun <T : Any> SegmentedControl(
 }
 
 @Composable
-fun SegmentText(text: LanguageType, isSelected: Boolean) {
+fun SegmentText(text: com.civilcam.domainLayer.model.LanguageType, isSelected: Boolean) {
     Text(
         text.langTitle, maxLines = 1,
         color = if (isSelected) CCTheme.colors.black else CCTheme.colors.grayOne,
@@ -341,7 +340,7 @@ private suspend fun AwaitPointerEventScope.waitForUpOrCancellation(inBounds: Rec
         // Check for cancel by position consumption. We can look on the Final pass of the
         // existing pointer event because it comes after the Main pass we checked above.
         val consumeCheck = awaitPointerEvent(PointerEventPass.Final)
-        if (consumeCheck.changes.any { it.positionChangeConsumed() }) {
+        if (consumeCheck.changes.any { it.isConsumed }) {
             return null
         }
     }

@@ -247,5 +247,7 @@
     <string name="alert_user_detail_request_sent">Request sent %s</string>
 
     <string name="something_went_wrong">Something went wrong!</string>
+    <string name="privacy_button">Privacy Policy</string>
+    <string name="terms_button"><![CDATA[Terms & Conditions]]></string>
 
 </resources>

@@ -11,7 +11,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.OnboardingPage
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.IconActionButton
 import com.civilcam.ui.onboarding.content.PageCardUI
@@ -149,17 +148,17 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
 
 
 private val onboardPages = listOf(
-    OnboardingPage(
+    com.civilcam.domainLayer.model.OnboardingPage(
         title = R.string.onboarding_page_one_title,
         text = R.string.onboarding_page_one_text,
         image = R.drawable.img_onboarding_one,
     ),
-    OnboardingPage(
+    com.civilcam.domainLayer.model.OnboardingPage(
         title = R.string.onboarding_page_two_title,
         text = R.string.onboarding_page_two_text,
         image = R.drawable.img_onboarding_two,
     ),
-    OnboardingPage(
+    com.civilcam.domainLayer.model.OnboardingPage(
         title = R.string.onboarding_page_three_title,
         text = R.string.onboarding_page_three_text,
         image = R.drawable.img_onboarding_three,

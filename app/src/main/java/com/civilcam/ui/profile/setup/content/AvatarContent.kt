@@ -22,11 +22,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.PictureModel
 
 
 @Composable
-fun AvatarContent(avatar: PictureModel? = null, onChangeAvatar: () -> Unit) {
+fun AvatarContent(avatar: com.civilcam.domainLayer.PictureModel? = null, onChangeAvatar: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
