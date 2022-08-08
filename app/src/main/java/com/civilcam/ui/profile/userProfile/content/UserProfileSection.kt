@@ -25,9 +25,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.PictureModel
-import com.civilcam.domain.model.CurrentUser
-import com.civilcam.domain.model.UserBaseInfo
+import com.civilcam.domainLayer.model.UserBaseInfo
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TextActionButton
@@ -37,8 +35,8 @@ import com.civilcam.utils.DateUtils
 
 @Composable
 fun UserProfileSection(
-	userData: CurrentUser,
-	avatar: String? = null,
+	userData: UserBaseInfo,
+	avatar: PictureModel? = null,
 	screenType: UserProfileScreen,
 	isSaveEnabled: Boolean,
 	onActionClick: (UserProfileActions) -> Unit,

@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.common.ext.showAlertDialogFragment
+import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
@@ -47,7 +48,10 @@ class ProfileSetupFragment : Fragment() {
 				ProfileSetupRoute.GoBack -> navController.popBackStack()
 				is ProfileSetupRoute.GoVerification -> navController.navigate(
 					R.id.verificationFragment,
-					VerificationFragment.createArgs(com.civilcam.domainLayer.model.VerificationFlow.NEW_PHONE, resources.getString(R.string.verification_phone_mask, route.phoneNumber))
+					VerificationFragment.createArgs(
+						VerificationFlow.NEW_PHONE,
+						resources.getString(R.string.verification_phone_mask, route.phoneNumber)
+					)
 				)
 				ProfileSetupRoute.GoLocationSelect -> {}
 				ProfileSetupRoute.GoGalleryOpen -> onChooseFromGalleryCaseClicked()

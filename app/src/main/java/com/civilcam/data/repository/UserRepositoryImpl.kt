@@ -7,15 +7,15 @@ import com.civilcam.data.local.SharedPreferencesStorage
 import com.civilcam.data.mapper.auth.UserMapper
 import com.civilcam.data.network.model.request.user.AcceptTermsRequest
 import com.civilcam.data.network.service.UserService
-import com.civilcam.domain.model.CurrentUser
+import com.civilcam.domainLayer.repos.UserRepository
 
 class UserRepositoryImpl(
-	private val sharedPreferencesStorage: SharedPreferencesStorage,
-	private val userService: UserService,
-	private val accountStorage: AccountStorage
+    private val sharedPreferencesStorage: SharedPreferencesStorage,
+    private val userService: UserService,
+    private val accountStorage: AccountStorage
 ) : UserRepository, BaseRepository() {
 
-	private val userMapper = UserMapper()
+    private val userMapper = UserMapper()
 
 	override suspend fun acceptTerms() =
 		safeApiCall {

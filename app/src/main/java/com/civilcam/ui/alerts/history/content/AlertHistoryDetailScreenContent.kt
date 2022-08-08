@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.alerts.AlertType
 import com.civilcam.ui.alerts.history.model.AlertHistoryActions
 import com.civilcam.ui.alerts.history.model.ResolvedUsers
 import com.civilcam.ui.common.compose.CircleUserAvatar
@@ -30,7 +31,7 @@ import com.civilcam.ui.profile.userDetails.content.InformationBoxContent
 @Composable
 fun AlertHistoryDetailScreenContent(
     onScreenAction: (AlertHistoryActions) -> Unit,
-    alertType: com.civilcam.domainLayer.model.alerts.AlertType
+    alertType: AlertType
 ) {
 
     Column(
@@ -61,7 +62,7 @@ fun AlertHistoryDetailScreenContent(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (alertType == com.civilcam.domainLayer.model.alerts.AlertType.RECEIVED) {
+            if (alertType == AlertType.RECEIVED) {
                 InformationBoxContent(
                     text = "+1 (123) 456 7890",
                     modifier = Modifier.weight(1f),
@@ -72,7 +73,7 @@ fun AlertHistoryDetailScreenContent(
                 Spacer(modifier = Modifier.width(8.dp))
             }
 
-            val buttonModifier = if (alertType == com.civilcam.domainLayer.model.alerts.AlertType.RECEIVED) {
+            val buttonModifier = if (alertType == AlertType.RECEIVED) {
                 Modifier.weight(1f)
             } else {
                 Modifier
@@ -80,7 +81,7 @@ fun AlertHistoryDetailScreenContent(
             InformationBoxContent(
                 text = stringResource(id = R.string.history_detail_download_video),
                 modifier = buttonModifier,
-                textModifier = Modifier.padding(horizontal = if (alertType == com.civilcam.domainLayer.model.alerts.AlertType.RECEIVED) 0.dp else 34.dp),
+                textModifier = Modifier.padding(horizontal = if (alertType == AlertType.RECEIVED) 0.dp else 34.dp),
                 onButtonClick = {
                     onScreenAction.invoke(AlertHistoryActions.CLickUploadVideo)
                 }
@@ -129,7 +130,7 @@ fun AlertHistoryDetailScreenContent(
                     .padding(end = 16.dp)
 
             ) {
-                items(if (alertType == com.civilcam.domainLayer.model.alerts.AlertType.RECEIVED) resolvedDataList.take(1) else resolvedDataList) { item ->
+                items(if (alertType == AlertType.RECEIVED) resolvedDataList.take(1) else resolvedDataList) { item ->
 
                     Text(
                         buildAnnotatedString {

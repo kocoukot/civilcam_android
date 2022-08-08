@@ -2,12 +2,13 @@ package com.civilcam.data.mapper.auth
 
 import com.civilcam.data.mapper.Mapper
 import com.civilcam.data.network.model.response.auth.SessionUserResponse
+import com.civilcam.domainLayer.model.SessionUser
 
 class SessionUserMapper
-    : Mapper<SessionUserResponse, com.civilcam.domainLayer.model.SessionUser>(
+    : Mapper<SessionUserResponse, SessionUser>(
     fromData = { response ->
         response.let {
-            com.civilcam.domainLayer.model.SessionUser(
+            SessionUser(
                 id = it.id,
                 email = it.email,
                 language = it.language,

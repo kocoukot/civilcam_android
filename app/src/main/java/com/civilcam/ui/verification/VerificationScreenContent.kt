@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.ext.formatToPhoneNumber
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
@@ -57,13 +58,13 @@ fun VerificationScreenContent(
             Column {
                 TopAppBarContent(
                     title = when (state.value.verificationFlow) {
-                        com.civilcam.domainLayer.model.VerificationFlow.NEW_PHONE, com.civilcam.domainLayer.model.VerificationFlow.CHANGE_PHONE -> {
-                            stringResource(id = R.string.phone_verification)
+						VerificationFlow.NEW_PHONE, VerificationFlow.CHANGE_PHONE -> {
+							stringResource(id = R.string.phone_verification)
 						}
-						com.civilcam.domainLayer.model.VerificationFlow.NEW_EMAIL, com.civilcam.domainLayer.model.VerificationFlow.CHANGE_EMAIL -> {
+						VerificationFlow.NEW_EMAIL, VerificationFlow.CHANGE_EMAIL -> {
 							stringResource(id = R.string.email_verification)
 						}
-						com.civilcam.domainLayer.model.VerificationFlow.RESET_PASSWORD -> {
+						VerificationFlow.RESET_PASSWORD -> {
 							stringResource(id = R.string.verification_title)
 						}
 					},
@@ -86,9 +87,9 @@ fun VerificationScreenContent(
 		) {
 			Column(
 				modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .weight(1f)
+					.fillMaxWidth()
+					.padding(horizontal = 16.dp)
+					.weight(1f)
 			) {
 				Spacer(modifier = Modifier.height(32.dp))
 				
@@ -118,8 +119,8 @@ fun VerificationScreenContent(
 								fontWeight = FontWeight.W500
 							),
 						) {
-							if (state.value.verificationFlow == com.civilcam.domainLayer.model.VerificationFlow.NEW_PHONE ||
-								state.value.verificationFlow == com.civilcam.domainLayer.model.VerificationFlow.CHANGE_PHONE
+							if (state.value.verificationFlow == VerificationFlow.NEW_PHONE ||
+								state.value.verificationFlow == VerificationFlow.CHANGE_PHONE
 							) {
 								append("${state.value.verificationSubject.formatToPhoneNumber()}\n")
 							} else {
@@ -140,8 +141,8 @@ fun VerificationScreenContent(
 			
 			Column(
 				modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+					.fillMaxWidth()
+					.padding(horizontal = 16.dp),
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
 				
@@ -163,10 +164,10 @@ fun VerificationScreenContent(
 						color = CCTheme.colors.primaryRed,
 						fontSize = 17.sp,
 						modifier = Modifier
-                            .clickable {
-                                viewModel.setInputActions(VerificationActions.ResendClick)
-                            }
-                            .background(Color.Transparent, RectangleShape),
+							.clickable {
+								viewModel.setInputActions(VerificationActions.ResendClick)
+							}
+							.background(Color.Transparent, RectangleShape),
 						fontWeight = FontWeight.SemiBold
 					)
 				}

@@ -6,6 +6,8 @@ import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.mapper.auth.UserMapper
 import com.civilcam.data.network.model.request.auth.SignUpRequest
 import com.civilcam.data.network.service.AuthService
+import com.civilcam.domainLayer.model.CurrentUser
+import com.civilcam.domainLayer.repos.AuthRepository
 import timber.log.Timber
 
 
@@ -13,7 +15,7 @@ class AuthRepositoryImpl(
     private val accountStorage: AccountStorage,
     private val authService: AuthService,
 //	private val googleOAuthService: GoogleOAuthService
-) : com.civilcam.domainLayer.repos.AuthRepository, BaseRepository() {
+) : AuthRepository, BaseRepository() {
 
     private val sessionUserMapper = UserMapper()
 
@@ -49,7 +51,7 @@ class AuthRepositoryImpl(
 //		}
 
 
-    override suspend fun signUp(email: String, password: String): com.civilcam.domainLayer.model.CurrentUser =
+    override suspend fun signUp(email: String, password: String): CurrentUser =
         safeApiCall {
             authService.signUp(
                 SignUpRequest(email = email, password = password)

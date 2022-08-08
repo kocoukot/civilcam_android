@@ -12,9 +12,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.OnboardingPage
 
 @Composable
-fun PageUI(page: com.civilcam.domainLayer.model.OnboardingPage) {
+fun PageUI(page: OnboardingPage) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -30,7 +31,7 @@ fun PageUI(page: com.civilcam.domainLayer.model.OnboardingPage) {
 }
 
 @Composable
-fun PageCardUI(page: com.civilcam.domainLayer.model.OnboardingPage) {
+fun PageCardUI(page: OnboardingPage) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally

@@ -3,6 +3,9 @@ package com.civilcam.ui.terms
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.model.TermsType
+import com.civilcam.domainLayer.usecase.docs.GetTermsLinksUseCase
+import com.civilcam.domainLayer.usecase.user.AcceptLegalDocsUseCase
 import com.civilcam.ui.terms.model.TermsActions
 import com.civilcam.ui.terms.model.TermsRoute
 import com.civilcam.ui.terms.model.TermsState
@@ -12,8 +15,8 @@ import kotlinx.coroutines.launch
 
 class TermsViewModel(
     isSettings: Boolean,
-    getTermsLinksUseCase: com.civilcam.domainLayer.usecase.docs.GetTermsLinksUseCase,
-    private val acceptLegalDocsUseCase: com.civilcam.domainLayer.usecase.user.AcceptLegalDocsUseCase
+    getTermsLinksUseCase: GetTermsLinksUseCase,
+    private val acceptLegalDocsUseCase: AcceptLegalDocsUseCase
 ) : ComposeViewModel<TermsState, TermsRoute, TermsActions>() {
 
     override var _state = MutableStateFlow(TermsState())
@@ -58,13 +61,13 @@ class TermsViewModel(
         }
     }
 
-    private fun goWebView(webLink: com.civilcam.domainLayer.model.TermsType) {
+    private fun goWebView(webLink: TermsType) {
         _state.value.legalDocs?.let {
             navigateRoute(
                 TermsRoute.GoWebView(
                     when (webLink) {
-                        com.civilcam.domainLayer.model.TermsType.TERMS_CONDITIONS -> it.termsAndConditions
-                        com.civilcam.domainLayer.model.TermsType.PRIVACY_POLICY -> it.privacyPolicy
+                        TermsType.TERMS_CONDITIONS -> it.termsAndConditions
+                        TermsType.PRIVACY_POLICY -> it.privacyPolicy
                     }
                 )
             )

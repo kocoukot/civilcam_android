@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.settings.NotificationsType
 import com.civilcam.ui.common.compose.RowDividerGrayThree
 import com.civilcam.ui.settings.model.SettingsAlertsSectionData
 import timber.log.Timber
@@ -20,7 +21,7 @@ import timber.log.Timber
 @Composable
 fun AlertsSettingsContent(
     data: SettingsAlertsSectionData,
-    onSwitchChanged: (Boolean, com.civilcam.domainLayer.model.settings.NotificationsType) -> Unit
+    onSwitchChanged: (Boolean, NotificationsType) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -34,7 +35,7 @@ fun AlertsSettingsContent(
         SwitcherRowContent(
             title = stringResource(id = R.string.settings_alerts_sms),
             _isSwitched = data.isSMS,
-            onCheckedChange = { onSwitchChanged.invoke(it, com.civilcam.domainLayer.model.settings.NotificationsType.SMS) },
+            onCheckedChange = { onSwitchChanged.invoke(it, NotificationsType.SMS) },
         )
         RowDividerGrayThree()
 
@@ -42,7 +43,7 @@ fun AlertsSettingsContent(
         SwitcherRowContent(
             title = stringResource(id = R.string.settings_alerts_email),
             _isSwitched = data.isEmail,
-            onCheckedChange = { onSwitchChanged.invoke(it, com.civilcam.domainLayer.model.settings.NotificationsType.EMAIL) },
+            onCheckedChange = { onSwitchChanged.invoke(it, NotificationsType.EMAIL) },
         )
         RowDividerGrayThree(0)
 

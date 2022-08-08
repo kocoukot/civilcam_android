@@ -5,14 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.local.MediaStorage
 import com.civilcam.data.network.support.ServiceException
-import com.civilcam.domain.PictureModel
-import com.civilcam.domain.model.AutocompletePlace
-import com.civilcam.domain.model.SearchModel
-import com.civilcam.domain.model.UserSetupModel
-import com.civilcam.domain.usecase.location.GetPlacesAutocompleteUseCase
-import com.civilcam.domain.usecase.profile.SetAvatarUseCase
-import com.civilcam.domain.usecase.profile.UpdateUserProfileUseCase
-import com.civilcam.domain.usecase.user.GetCurrentUserUseCase
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
 import com.civilcam.ui.profile.userProfile.model.*
 import com.civilcam.utils.DateUtils

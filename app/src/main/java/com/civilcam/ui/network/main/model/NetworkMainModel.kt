@@ -1,6 +1,7 @@
 package com.civilcam.ui.network.main.model
 
 import com.civilcam.domainLayer.model.guard.GuardItem
+import com.civilcam.domainLayer.model.guard.GuardianModel
 
 
 data class NetworkMainModel(
@@ -14,5 +15,5 @@ data class NetworkMainModel(
 
 //
 data class SearchScreenSectionModel(
-    var searchResult: List<com.civilcam.domainLayer.model.guard.GuardianModel> = emptyList()
+    var searchResult: List<GuardianModel> = emptyList()
 )

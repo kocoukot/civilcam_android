@@ -1,10 +1,11 @@
 package com.civilcam.ui.subscription.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentActions
+import com.civilcam.domainLayer.model.SubscriptionType
 
 sealed class SubscriptionActions : ComposeFragmentActions{
 	object GoBack : SubscriptionActions()
-	data class OnSubSelect(val type: com.civilcam.domainLayer.model.SubscriptionType) : SubscriptionActions()
+    data class OnSubSelect(val type: SubscriptionType) : SubscriptionActions()
 	object GoStart : SubscriptionActions()
 	object GoProfileSetup : SubscriptionActions()
 }

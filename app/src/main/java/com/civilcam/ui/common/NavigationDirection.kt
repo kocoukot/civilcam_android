@@ -1,6 +1,7 @@
 package com.civilcam.ui.common
 
 import android.os.Parcelable
+import com.civilcam.domainLayer.model.CurrentUser
 import kotlinx.parcelize.Parcelize
 
 sealed class NavigationDirection : Parcelable {
@@ -14,7 +15,7 @@ sealed class NavigationDirection : Parcelable {
 	class EmailVerification(val email: String) : NavigationDirection()
 	
 	companion object {
-		fun resolveDirectionFor(user: com.civilcam.domainLayer.model.CurrentUser?) = user.let {
+		fun resolveDirectionFor(user: CurrentUser?) = user.let {
 			when {
 				else -> SignInSuccess
 			}

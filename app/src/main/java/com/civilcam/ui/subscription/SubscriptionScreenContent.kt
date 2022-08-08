@@ -238,7 +238,7 @@ fun SubscriptionOption(
 @Composable
 fun SubscriptionPlanRow(
     subscriptionType: SubscriptionType,
-    onButtonClicked: (com.civilcam.domainLayer.model.SubscriptionType) -> Unit,
+    onButtonClicked: (SubscriptionType) -> Unit,
     isActivated: Boolean = false
 ) {
 

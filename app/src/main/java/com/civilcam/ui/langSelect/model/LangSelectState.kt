@@ -1,8 +1,9 @@
 package com.civilcam.ui.langSelect.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentState
+import com.civilcam.domainLayer.model.LanguageType
 
 data class LangSelectState(
-    val selectedLang: com.civilcam.domainLayer.model.LanguageType = com.civilcam.domainLayer.model.LanguageType.ENGLISH
+    val selectedLang: LanguageType = LanguageType.ENGLISH
 ) : ComposeFragmentState
 

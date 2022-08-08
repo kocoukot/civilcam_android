@@ -1,11 +1,13 @@
 package com.civilcam.data.repository
 
+import com.civilcam.domainLayer.model.AutocompletePlace
+import com.civilcam.domainLayer.repos.PlacesRepository
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 
-class PlacesRepositoryImpl : com.civilcam.domainLayer.repos.PlacesRepository {
+class PlacesRepositoryImpl : PlacesRepository {
 //    private val sessionToken by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
 //        AutocompleteSessionToken.newInstance()
 //    }
@@ -13,25 +15,25 @@ class PlacesRepositoryImpl : com.civilcam.domainLayer.repos.PlacesRepository {
     override suspend fun getPlacesWithType(
         query: String,
     ) = listOf(
-        com.civilcam.domainLayer.model.AutocompletePlace(
+        AutocompletePlace(
             placeId = "asdasd",
             primary = "New York",
             secondary = "NY, USA",
             address = "New York NY, USA",
         ),
-        com.civilcam.domainLayer.model.AutocompletePlace(
+        AutocompletePlace(
             placeId = "asdasd",
             primary = "New Jersey",
             secondary = "",
             address = "New Jersey",
         ),
-        com.civilcam.domainLayer.model.AutocompletePlace(
+        AutocompletePlace(
             placeId = "asdasd",
             primary = "Newark Liberty",
             secondary = "International Airport",
             address = "Newark Liberty International Airport",
         ),
-        com.civilcam.domainLayer.model.AutocompletePlace(
+        AutocompletePlace(
             placeId = "asdasd",
             primary = "New York State",
             secondary = "USA",

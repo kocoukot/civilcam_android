@@ -4,9 +4,10 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.domainLayer.model.guard.GuardItem
-import com.civilcam.domainLayer.model.guard.GuardianItem
-import com.civilcam.domainLayer.model.guard.LetterGuardItem
+import com.civilcam.domainLayer.model.guard.*
+import com.civilcam.domainLayer.usecase.guardians.GetGuardsListUseCase
+import com.civilcam.domainLayer.usecase.guardians.GetGuardsRequestsUseCase
+import com.civilcam.domainLayer.usecase.guardians.SearchGuardsResultUseCase
 import com.civilcam.ui.network.main.model.*
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
@@ -23,9 +24,9 @@ import java.util.*
 @OptIn(FlowPreview::class)
 class NetworkMainViewModel(
     private val screen: NetworkScreen = NetworkScreen.MAIN,
-    private val getGuardsListUseCase: com.civilcam.domainLayer.usecase.guardians.GetGuardsListUseCase,
-    private val getGuardsRequestsUseCase: com.civilcam.domainLayer.usecase.guardians.GetGuardsRequestsUseCase,
-    private val searchGuardsResultUseCase: com.civilcam.domainLayer.usecase.guardians.SearchGuardsResultUseCase
+    private val getGuardsListUseCase: GetGuardsListUseCase,
+    private val getGuardsRequestsUseCase: GetGuardsRequestsUseCase,
+    private val searchGuardsResultUseCase: SearchGuardsResultUseCase
 
 ) :
     ComposeViewModel<NetworkMainState, NetworkMainRoute, NetworkMainActions>() {
@@ -130,7 +131,7 @@ class NetworkMainViewModel(
         navBarStatus()
     }
 
-    private fun changeAlertType(networkType: com.civilcam.domainLayer.model.guard.NetworkType) {
+    private fun changeAlertType(networkType: NetworkType) {
         _state.value = _state.value.copy(networkType = networkType)
         getMockInfo()
     }
@@ -143,7 +144,7 @@ class NetworkMainViewModel(
             try {
                 val guardsList = async { getGuardsListUseCase.getGuards(_state.value.networkType) }
                 val requestsList =
-                    async { if (_state.value.networkType == com.civilcam.domainLayer.model.guard.NetworkType.ON_GUARD) getGuardsRequestsUseCase.getGuardRequests() else emptyList() }
+                    async { if (_state.value.networkType == NetworkType.ON_GUARD) getGuardsRequestsUseCase.getGuardRequests() else emptyList() }
                 _state.value =
                     _state.value.copy(
                         data = NetworkMainModel(
@@ -196,13 +197,13 @@ class NetworkMainViewModel(
         }
     }
 
-    private fun addUser(user: com.civilcam.domainLayer.model.guard.GuardianModel) {
+    private fun addUser(user: GuardianModel) {
         viewModelScope.launch {
             val contactsModel =
                 _state.value.data?.searchScreenSectionModel ?: SearchScreenSectionModel()
             contactsModel.searchResult.let { contacts ->
                 contacts.find { it.guardianId == user.guardianId }?.guardianStatus =
-                    com.civilcam.domainLayer.model.guard.GuardianStatus.PENDING
+                    GuardianStatus.PENDING
 
             }
             _state.value =
@@ -220,7 +221,7 @@ class NetworkMainViewModel(
         }
     }
 
-    private fun setSearchResult(result: List<com.civilcam.domainLayer.model.guard.GuardianModel>) {
+    private fun setSearchResult(result: List<GuardianModel>) {
         var data = _state.value.data
         data?.let {
             data = data!!.copy(searchScreenSectionModel = SearchScreenSectionModel(result))

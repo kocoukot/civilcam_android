@@ -9,18 +9,22 @@ import com.civilcam.data.mapper.auth.UserBaseInfoMapper
 import com.civilcam.data.mapper.profile.UserInfoToDomainMapper
 import com.civilcam.data.network.model.request.profile.ChangePhoneNumberRequest
 import com.civilcam.data.network.service.ProfileService
+import com.civilcam.domainLayer.model.UserBaseInfo
+import com.civilcam.domainLayer.model.UserSetupModel
+import com.civilcam.domainLayer.repos.AccountRepository
+import com.civilcam.domainLayer.repos.ProfileRepository
 
 class ProfileRepositoryImpl(
     private val profileService: ProfileService,
     private val mediaStorage: MediaStorage,
-    private val accountRepository: com.civilcam.domainLayer.repos.AccountRepository
-) : com.civilcam.domainLayer.repos.ProfileRepository, BaseRepository() {
+    private val accountRepository: AccountRepository
+) : ProfileRepository, BaseRepository() {
 
     private val userBaseInfoMapper = UserBaseInfoMapper()
 
     private val userInfoToDomainMapper = UserInfoToDomainMapper()
 
-    override suspend fun getUserProfile(): com.civilcam.domainLayer.model.UserBaseInfo =
+    override suspend fun getUserProfile(): UserBaseInfo =
         safeApiCall {
             profileService.getUserProfile()
         }.let { response ->
@@ -31,7 +35,7 @@ class ProfileRepositoryImpl(
         }
 
 
-    override suspend fun setUserProfile(userProfile: com.civilcam.domainLayer.model.UserSetupModel): Boolean =
+    override suspend fun setUserProfile(userProfile: UserSetupModel): Boolean =
         safeApiCall {
             profileService.setUserProfile(userInfoToDomainMapper.mapData(userProfile))
         }.let { response ->

@@ -15,14 +15,16 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.guard.GuardianItem
+import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.domainLayer.model.guard.LetterGuardItem
+import com.civilcam.domainLayer.model.guard.NetworkType
 import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.network.main.model.NetworkMainModel
 
 @Composable
 fun GuardsMainSection(
     screenData: NetworkMainModel,
-    tabPage: com.civilcam.domainLayer.model.guard.NetworkType,
+    tabPage: NetworkType,
     clickGoRequests: () -> Unit,
     clickGoUser: (GuardianItem) -> Unit
 ) {
@@ -37,8 +39,8 @@ fun GuardsMainSection(
                 stringResource(
                     id =
                     when (tabPage) {
-                        com.civilcam.domainLayer.model.guard.NetworkType.ON_GUARD -> R.string.network_main_on_guard_list_is_empty
-                        com.civilcam.domainLayer.model.guard.NetworkType.GUARDIANS -> R.string.network_main_guardians_list_is_empty
+                        NetworkType.ON_GUARD -> R.string.network_main_on_guard_list_is_empty
+                        NetworkType.GUARDIANS -> R.string.network_main_guardians_list_is_empty
                     }
                 )
             )
@@ -98,24 +100,24 @@ fun GuardsMainSection(
 }
 
 @Composable
-private fun getUserStatus(guardianStatus: com.civilcam.domainLayer.model.guard.GuardianStatus) {
+private fun getUserStatus(guardianStatus: GuardianStatus) {
     var text = ""
     var textColor = CCTheme.colors.black
 
     when (guardianStatus) {
-        com.civilcam.domainLayer.model.guard.GuardianStatus.PENDING -> {
+        GuardianStatus.PENDING -> {
             text = stringResource(id = R.string.pending_text)
             textColor = CCTheme.colors.grayOne
         }
-        com.civilcam.domainLayer.model.guard.GuardianStatus.DECLINED -> {
+        GuardianStatus.DECLINED -> {
             text = stringResource(id = R.string.decline_text)
             textColor = CCTheme.colors.primaryRed
         }
-        com.civilcam.domainLayer.model.guard.GuardianStatus.NEED_HELP -> {
+        GuardianStatus.NEED_HELP -> {
             text = stringResource(id = R.string.network_main_help_me)
             textColor = CCTheme.colors.black
         }
-        com.civilcam.domainLayer.model.guard.GuardianStatus.SAFE -> {
+        GuardianStatus.SAFE -> {
             text = stringResource(id = R.string.network_main_safe)
             textColor = CCTheme.colors.grayOne
         }

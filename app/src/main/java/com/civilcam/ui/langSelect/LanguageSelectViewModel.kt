@@ -2,6 +2,7 @@ package com.civilcam.ui.langSelect
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
+import com.civilcam.domainLayer.model.LanguageType
 import com.civilcam.ui.langSelect.model.LangSelectActions
 import com.civilcam.ui.langSelect.model.LangSelectRoute
 import com.civilcam.ui.langSelect.model.LangSelectState
@@ -28,7 +29,7 @@ class LanguageSelectViewModel :
         }
     }
 
-    private fun languageSelect(language: com.civilcam.domainLayer.model.LanguageType) {
+    private fun languageSelect(language: LanguageType) {
         _state.update { it.copy(selectedLang = language) }
     }
 

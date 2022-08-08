@@ -2,6 +2,7 @@ package com.civilcam.ui.alerts.map
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
+import com.civilcam.domainLayer.model.alerts.UserAlertInformation
 import com.civilcam.ui.alerts.map.model.LiveMapActions
 import com.civilcam.ui.alerts.map.model.LiveMapRoute
 import com.civilcam.ui.alerts.map.model.LiveMapState
@@ -20,7 +21,7 @@ class LiveMapViewModel(
         viewModelScope.launch {
             _state.update {
                 it.copy(
-                    userInformation = com.civilcam.domainLayer.model.alerts.UserAlertInformation(
+                    userInformation = UserAlertInformation(
                         userId = 23123,
                         userName = "Sylvanas Windrunner",
                         userPhoneNumber = "+15675473876",

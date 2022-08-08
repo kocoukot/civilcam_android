@@ -1,44 +1,47 @@
 package com.civilcam.di
 
-import com.civilcam.domain.usecase.GetUserInformationUseCase
-import com.civilcam.domain.usecase.alerts.GetAlertsListUseCase
-import com.civilcam.domain.usecase.alerts.GetHistoryAlertListUseCase
-import com.civilcam.domain.usecase.alerts.GetHistoryDetailUseCase
-import com.civilcam.domain.usecase.auth.SingUpUseCase
-import com.civilcam.domain.usecase.docs.GetTermsLinksUseCase
-import com.civilcam.domain.usecase.guardians.GetGuardsListUseCase
-import com.civilcam.domain.usecase.guardians.GetGuardsRequestsUseCase
-import com.civilcam.domain.usecase.guardians.SearchGuardsResultUseCase
-import com.civilcam.domain.usecase.location.GetPlacesAutocompleteUseCase
-import com.civilcam.domain.usecase.profile.GetUserProfileUseCase
-import com.civilcam.domain.usecase.profile.SetAvatarUseCase
-import com.civilcam.domain.usecase.profile.SetPersonalInfoUseCase
-import com.civilcam.domain.usecase.settings.CheckCurrentPasswordUseCase
-import com.civilcam.domain.usecase.settings.GetCurrentSubscriptionPlanUseCase
-import com.civilcam.domain.usecase.user.AcceptLegalDocsUseCase
-import com.civilcam.domain.usecase.user.LogoutUseCase
-import com.civilcam.domain.usecase.verify.SendOtpCodeUseCase
-import com.civilcam.domain.usecase.verify.VerifyEmailOtpUseCase
+import com.civilcam.domainLayer.usecase.GetUserInformationUseCase
+import com.civilcam.domainLayer.usecase.alerts.GetAlertsListUseCase
+import com.civilcam.domainLayer.usecase.alerts.GetHistoryAlertListUseCase
+import com.civilcam.domainLayer.usecase.alerts.GetHistoryDetailUseCase
+import com.civilcam.domainLayer.usecase.auth.SingUpUseCase
+import com.civilcam.domainLayer.usecase.docs.GetTermsLinksUseCase
+import com.civilcam.domainLayer.usecase.guardians.GetGuardsListUseCase
+import com.civilcam.domainLayer.usecase.guardians.GetGuardsRequestsUseCase
+import com.civilcam.domainLayer.usecase.guardians.SearchGuardsResultUseCase
+import com.civilcam.domainLayer.usecase.location.GetPlacesAutocompleteUseCase
+import com.civilcam.domainLayer.usecase.profile.GetUserProfileUseCase
+import com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase
+import com.civilcam.domainLayer.usecase.profile.SetPersonalInfoUseCase
+import com.civilcam.domainLayer.usecase.settings.CheckCurrentPasswordUseCase
+import com.civilcam.domainLayer.usecase.settings.GetCurrentSubscriptionPlanUseCase
+import com.civilcam.domainLayer.usecase.user.AcceptLegalDocsUseCase
+import com.civilcam.domainLayer.usecase.user.LogoutUseCase
+import com.civilcam.domainLayer.usecase.verify.SendOtpCodeUseCase
+import com.civilcam.domainLayer.usecase.verify.VerifyEmailOtpUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
-    factory { com.civilcam.domainLayer.usecase.auth.SingUpUseCase(get(), get()) }
+    factory { SingUpUseCase(get(), get()) }
 
-    factory { com.civilcam.domainLayer.usecase.user.AcceptLegalDocsUseCase(get()) }
+    factory { AcceptLegalDocsUseCase(get()) }
 
-    factory { com.civilcam.domainLayer.usecase.docs.GetTermsLinksUseCase(get()) }
+    factory { GetTermsLinksUseCase(get()) }
 
-    factory { com.civilcam.domainLayer.usecase.profile.SetPersonalInfoUseCase(get()) }
+    factory { SetPersonalInfoUseCase(get()) }
 
-    factory { com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase(get()) }
+    factory { SetAvatarUseCase(get()) }
 
-    factory { com.civilcam.domainLayer.usecase.verify.VerifyEmailOtpUseCase(get()) }
+    factory { VerifyEmailOtpUseCase(get()) }
 
-    factory { com.civilcam.domainLayer.usecase.verify.SendOtpCodeUseCase(get()) }
+    factory { SendOtpCodeUseCase(get()) }
 
-    factory { com.civilcam.domainLayer.usecase.profile.GetUserProfileUseCase(get()) }
+    factory { GetUserProfileUseCase(get()) }
 
     factory { LogoutUseCase(get()) }
+
+    factory { GetUserInformationUseCase(get()) }
+
 
     factory { GetCurrentUserUseCase(get()) }
 
@@ -46,28 +49,41 @@ val domainModule = module {
 
     factory { UpdateUserProfileUseCase(get()) }
 
-    factory { GetUserInformationUseCase(get()) }
-    factory { com.civilcam.domainLayer.usecase.user.LogoutUseCase(get()) }
 
+    factory { GetAlertsListUseCase(get()) }
 
-    factory { com.civilcam.domainLayer.usecase.GetUserInformationUseCase(get()) }
+    factory { GetHistoryAlertListUseCase(get()) }
 
-    factory { com.civilcam.domainLayer.usecase.alerts.GetAlertsListUseCase(get()) }
+    factory { GetHistoryDetailUseCase(get()) }
 
-    factory { com.civilcam.domainLayer.usecase.alerts.GetHistoryAlertListUseCase(get()) }
+    factory { CheckCurrentPasswordUseCase(get()) }
 
-    factory { com.civilcam.domainLayer.usecase.alerts.GetHistoryDetailUseCase(get()) }
+    factory { GetGuardsListUseCase(get()) }
 
-    factory { com.civilcam.domainLayer.usecase.settings.CheckCurrentPasswordUseCase(get()) }
+    factory { GetGuardsRequestsUseCase(get()) }
 
-    factory { com.civilcam.domainLayer.usecase.guardians.GetGuardsListUseCase(get()) }
+    factory { SearchGuardsResultUseCase(get()) }
 
-    factory { com.civilcam.domainLayer.usecase.guardians.GetGuardsRequestsUseCase(get()) }
+    factory { GetCurrentSubscriptionPlanUseCase(get()) }
 
-    factory { com.civilcam.domainLayer.usecase.guardians.SearchGuardsResultUseCase(get()) }
-
-    factory { com.civilcam.domainLayer.usecase.settings.GetCurrentSubscriptionPlanUseCase(get()) }
-
-    factory { com.civilcam.domainLayer.usecase.location.GetPlacesAutocompleteUseCase(get()) }
+    factory { GetPlacesAutocompleteUseCase(get()) }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

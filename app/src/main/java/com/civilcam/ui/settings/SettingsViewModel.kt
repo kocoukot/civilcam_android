@@ -2,6 +2,7 @@ package com.civilcam.ui.settings
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
+import com.civilcam.domainLayer.model.settings.NotificationsType
 import com.civilcam.domainLayer.usecase.settings.CheckCurrentPasswordUseCase
 import com.civilcam.domainLayer.usecase.settings.GetCurrentSubscriptionPlanUseCase
 import com.civilcam.domainLayer.usecase.user.LogoutUseCase
@@ -125,14 +126,14 @@ class SettingsViewModel(
 //		navigateRoute(SettingsRoute.IsNavBarVisible(isVisible))
 //	}
 
-	private fun notificationChanged(status: Boolean, notifyType: com.civilcam.domainLayer.model.settings.NotificationsType) {
+	private fun notificationChanged(status: Boolean, notifyType: NotificationsType) {
 		Timber.d("updateSettingsModel ${_state.value}")
 		viewModelScope.launch {
 			_state.value.data.let { model ->
 				model.alertsSectionData?.let { alert ->
 					when (notifyType) {
-						com.civilcam.domainLayer.model.settings.NotificationsType.SMS -> alert.isSMS = status
-						com.civilcam.domainLayer.model.settings.NotificationsType.EMAIL -> alert.isEmail = status
+						NotificationsType.SMS -> alert.isSMS = status
+						NotificationsType.EMAIL -> alert.isEmail = status
 					}
 				}
 				updateSettingsModel(model = model)

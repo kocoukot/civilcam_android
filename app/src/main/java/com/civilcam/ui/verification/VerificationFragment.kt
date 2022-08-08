@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.common.ext.hideKeyboard
 import com.civilcam.common.ext.showKeyboard
+import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.common.ext.navController
@@ -29,8 +30,8 @@ class VerificationFragment : Fragment() {
 	private val viewModel: VerificationViewModel by viewModel {
 		parametersOf(verificationFlow, subject)
 	}
-	
-	private val verificationFlow: com.civilcam.domainLayer.model.VerificationFlow by requireArg(ARG_FLOW)
+
+	private val verificationFlow: VerificationFlow by requireArg(ARG_FLOW)
 	private val subject: String by requireArg(ARG_SUBJECT)
 	
 	override fun onCreateView(
@@ -47,22 +48,22 @@ class VerificationFragment : Fragment() {
 				VerificationRoute.ToNextScreen -> {
 					Handler(Looper.getMainLooper()).postDelayed(300) {
 						when (verificationFlow) {
-							com.civilcam.domainLayer.model.VerificationFlow.NEW_EMAIL -> navController.navigate(
+							VerificationFlow.NEW_EMAIL -> navController.navigate(
 								R.id.termsFragment,
 								TermsFragment.createArgs(false)
 							)
-							com.civilcam.domainLayer.model.VerificationFlow.NEW_PHONE -> navController.navigate(
+							VerificationFlow.NEW_PHONE -> navController.navigate(
 								R.id.pinCodeFragment,
 								PinCodeFragment.createArgs(PinCodeFlow.CREATE_PIN_CODE)
 							)
-							com.civilcam.domainLayer.model.VerificationFlow.RESET_PASSWORD -> navController.navigate(
+							VerificationFlow.RESET_PASSWORD -> navController.navigate(
 								R.id.createPasswordFragment
 							)
-							com.civilcam.domainLayer.model.VerificationFlow.CHANGE_PHONE -> navController.popBackStack(
+							VerificationFlow.CHANGE_PHONE -> navController.popBackStack(
 								R.id.userProfileFragment,
 								false
 							)
-							com.civilcam.domainLayer.model.VerificationFlow.CHANGE_EMAIL -> navController.popBackStack(
+							VerificationFlow.CHANGE_EMAIL -> navController.popBackStack(
 								R.id.userProfileFragment,
 								false
 							)
@@ -98,7 +99,7 @@ class VerificationFragment : Fragment() {
 		private const val ARG_FLOW = "verification_flow"
 		private const val ARG_SUBJECT = "verification_subject"
 
-		fun createArgs(flow: com.civilcam.domainLayer.model.VerificationFlow, subject: String) = bundleOf(
+		fun createArgs(flow: VerificationFlow, subject: String) = bundleOf(
 			ARG_FLOW to flow,
 			ARG_SUBJECT to subject
 		)

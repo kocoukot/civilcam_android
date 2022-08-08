@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.SearchModel
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.inputs.SearchInputField
 import com.civilcam.ui.network.main.content.SearchRow

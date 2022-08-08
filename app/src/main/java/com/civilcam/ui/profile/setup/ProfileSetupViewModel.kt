@@ -5,6 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.local.MediaStorage
 import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.PictureModel
+import com.civilcam.domainLayer.model.AutocompletePlace
+import com.civilcam.domainLayer.model.SearchModel
+import com.civilcam.domainLayer.model.UserSetupModel
+import com.civilcam.domainLayer.usecase.location.GetPlacesAutocompleteUseCase
+import com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase
+import com.civilcam.domainLayer.usecase.profile.SetPersonalInfoUseCase
 import com.civilcam.ui.profile.setup.model.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -17,10 +24,10 @@ import timber.log.Timber
 @OptIn(FlowPreview::class)
 class ProfileSetupViewModel(
     private val mediaStorage: MediaStorage,
-    private val getPlacesAutocompleteUseCase: com.civilcam.domainLayer.usecase.location.GetPlacesAutocompleteUseCase,
+    private val getPlacesAutocompleteUseCase: GetPlacesAutocompleteUseCase,
 //    private val getPlaceDetailsUseCase: GetPlaceDetailsUseCase,
-    private val setPersonalInfoUseCase: com.civilcam.domainLayer.usecase.profile.SetPersonalInfoUseCase,
-    private val setAvatarUseCase: com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase,
+    private val setPersonalInfoUseCase: SetPersonalInfoUseCase,
+    private val setAvatarUseCase: SetAvatarUseCase,
 ) : ComposeViewModel<ProfileSetupState, ProfileSetupRoute, ProfileSetupActions>() {
 
     override var _state: MutableStateFlow<ProfileSetupState> = MutableStateFlow(ProfileSetupState())
@@ -84,7 +91,7 @@ class ProfileSetupViewModel(
             ProfileSetupScreen.LOCATION -> _state.value =
                 _state.value.copy(
                     profileSetupScreen = ProfileSetupScreen.SETUP,
-                    searchLocationModel = com.civilcam.domainLayer.model.SearchModel(),
+                    searchLocationModel = SearchModel(),
                 )
         }
     }
@@ -153,9 +160,9 @@ class ProfileSetupViewModel(
                 if (it.sizeMb > 5f) {
                     _state.value = _state.value.copy(errorText = "Max image size is 5MB")
                 } else {
-                    val data = _state.value.data?.copy() ?: com.civilcam.domainLayer.model.UserSetupModel()
+                    val data = _state.value.data?.copy() ?: UserSetupModel()
                     data.profileImage =
-                        com.civilcam.domainLayer.PictureModel(it.name, it.uri, it.sizeMb)
+                        PictureModel(it.name, it.uri, it.sizeMb)
                     _state.value = _state.value.copy(data = data)
 
                 }
@@ -163,7 +170,7 @@ class ProfileSetupViewModel(
             .addTo(disposables)
     }
 
-    private fun getSetupUser() = _state.value.data?.copy() ?: com.civilcam.domainLayer.model.UserSetupModel()
+    private fun getSetupUser() = _state.value.data?.copy() ?: UserSetupModel()
 
     private fun goLocationPicker() {
         Timber.i("location clicked")
@@ -181,7 +188,7 @@ class ProfileSetupViewModel(
         }
     }
 
-    private fun setSearchResult(result: List<com.civilcam.domainLayer.model.AutocompletePlace>) {
+    private fun setSearchResult(result: List<AutocompletePlace>) {
         Timber.i("location result $result")
         _state.value = _state.value.copy(
             searchLocationModel = _state.value.searchLocationModel.copy(
@@ -190,11 +197,11 @@ class ProfileSetupViewModel(
         )
     }
 
-    private fun addressSelected(result: com.civilcam.domainLayer.model.AutocompletePlace) {
+    private fun addressSelected(result: AutocompletePlace) {
         _state.update {
             it.copy(
                 profileSetupScreen = ProfileSetupScreen.SETUP,
-                searchLocationModel = com.civilcam.domainLayer.model.SearchModel(),
+                searchLocationModel = SearchModel(),
                 data = getSetupUser().copy(location = result.address)
             )
         }

@@ -10,8 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domain.model.CurrentUser
-import com.civilcam.domain.model.UserBaseInfo
+import com.civilcam.domainLayer.model.UserBaseInfo
 import com.civilcam.ui.common.compose.inputs.InputField
 import com.civilcam.ui.profile.setup.content.CalendarIcon
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
@@ -19,7 +18,7 @@ import com.civilcam.utils.DateUtils
 
 @Composable
 fun UserProfileEditContent(
-	userData: CurrentUser,
+	userData: UserBaseInfo,
 	address: String,
 	birthDate: String,
 	onValueChanged: (UserInfoDataType, String) -> Unit,

@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.civilcam.R
+import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ui.auth.password.reset.model.ResetRoute
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
@@ -27,7 +28,7 @@ class ResetPasswordFragment : Fragment() {
 				ResetRoute.GoBack -> navController.popBackStack()
 				is ResetRoute.GoContinue -> navController.navigate(
 					R.id.verificationFragment,
-					VerificationFragment.createArgs(com.civilcam.domainLayer.model.VerificationFlow.RESET_PASSWORD, route.email)
+					VerificationFragment.createArgs(VerificationFlow.RESET_PASSWORD, route.email)
 				)
 			}
 		}

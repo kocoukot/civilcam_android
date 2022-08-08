@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.civilcam.R
+import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ui.auth.create.model.CreateAccountRoute
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
@@ -36,7 +37,7 @@ class CreateAccountFragment : Fragment() {
 					navController.navigate(
 						R.id.verificationFragment,
 						VerificationFragment.createArgs(
-							com.civilcam.domainLayer.model.VerificationFlow.NEW_EMAIL,
+							VerificationFlow.NEW_EMAIL,
 							route.email
 						)
 					)

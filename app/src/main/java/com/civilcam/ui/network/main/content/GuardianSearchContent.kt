@@ -17,14 +17,16 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.guard.GuardianModel
+import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.ui.common.compose.*
 import timber.log.Timber
 
 @Composable
 fun GuardianSearchContent(
-    data: List<com.civilcam.domainLayer.model.guard.GuardianModel>,
+    data: List<GuardianModel>,
     searchPart: String,
-    clickAddNew: (com.civilcam.domainLayer.model.guard.GuardianModel) -> Unit
+    clickAddNew: (GuardianModel) -> Unit
 
 ) {
     Timber.d("addUser ${data}")
@@ -63,9 +65,9 @@ private fun EmptySearchScreenState() {
 
 @Composable
 private fun SearchResults(
-    results: List<com.civilcam.domainLayer.model.guard.GuardianModel>,
+    results: List<GuardianModel>,
     searchPart: String,
-    clickAddNew: (com.civilcam.domainLayer.model.guard.GuardianModel) -> Unit
+    clickAddNew: (GuardianModel) -> Unit
 ) {
     LazyColumn {
         item {
@@ -91,7 +93,7 @@ private fun SearchResults(
                 },
                 trailingIcon = {
                     when (userStatus) {
-                        com.civilcam.domainLayer.model.guard.GuardianStatus.PENDING -> {
+                        GuardianStatus.PENDING -> {
                             Text(
                                 text = stringResource(id = R.string.pending_text),
                                 style = CCTheme.typography.common_text_medium,
@@ -99,9 +101,9 @@ private fun SearchResults(
                                 color = CCTheme.colors.grayOne,
                             )
                         }
-                        com.civilcam.domainLayer.model.guard.GuardianStatus.NEW -> {
+                        GuardianStatus.NEW -> {
                             TextActionButton(actionTitle = stringResource(id = R.string.add_text)) {
-                                userStatus = com.civilcam.domainLayer.model.guard.GuardianStatus.PENDING
+                                userStatus = GuardianStatus.PENDING
                                 clickAddNew.invoke(item)
                             }
                         }

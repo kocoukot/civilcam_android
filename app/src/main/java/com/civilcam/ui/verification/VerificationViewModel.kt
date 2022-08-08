@@ -5,6 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.formatTime
 import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.model.VerificationFlow
+import com.civilcam.domainLayer.usecase.verify.SendOtpCodeUseCase
+import com.civilcam.domainLayer.usecase.verify.VerifyEmailOtpUseCase
 import com.civilcam.ui.verification.model.VerificationActions
 import com.civilcam.ui.verification.model.VerificationRoute
 import com.civilcam.ui.verification.model.VerificationState
@@ -14,10 +17,10 @@ import kotlinx.coroutines.launch
 
 
 class VerificationViewModel(
-    private val verificationFlow: com.civilcam.domainLayer.model.VerificationFlow,
+    private val verificationFlow: VerificationFlow,
     verificationSubject: String,
-    private val verifyEmailOtpUseCase: com.civilcam.domainLayer.usecase.verify.VerifyEmailOtpUseCase,
-    private val sendOtpCodeUseCase: com.civilcam.domainLayer.usecase.verify.SendOtpCodeUseCase,
+    private val verifyEmailOtpUseCase: VerifyEmailOtpUseCase,
+    private val sendOtpCodeUseCase: SendOtpCodeUseCase,
 //	private val verifyResetPasswordOtpUseCase: VerifyResetPasswordOtpUseCase,
 ) :
     ComposeViewModel<VerificationState, VerificationRoute, VerificationActions>() {

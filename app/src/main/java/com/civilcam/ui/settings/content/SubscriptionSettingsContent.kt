@@ -12,15 +12,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.SubscriptionPlan
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.profile.userProfile.content.ProfileRow
 
 @Composable
 fun SubscriptionSettingsContent(
-    subscriptionPlan: com.civilcam.domainLayer.model.SubscriptionPlan,
-    onManageClicked: () -> Unit,
-    onRestoreClicked: () -> Unit,
-    onSubscriptionPlanClick: () -> Unit
+	subscriptionPlan: SubscriptionPlan,
+	onManageClicked: () -> Unit,
+	onRestoreClicked: () -> Unit,
+	onSubscriptionPlanClick: () -> Unit
 ) {
 	Column(
 		Modifier.fillMaxWidth()
@@ -60,8 +61,8 @@ fun SubscriptionSettingsContent(
 
 @Composable
 fun SubscriptionStatus(
-    subscriptionPlan: com.civilcam.domainLayer.model.SubscriptionPlan,
-    rowClick: () -> Unit,
+	subscriptionPlan: SubscriptionPlan,
+	rowClick: () -> Unit,
 ) {
 	Column(
 		modifier = Modifier

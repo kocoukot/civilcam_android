@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.guard.GuardianItem
+import com.civilcam.domainLayer.model.guard.NetworkType
 import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.common.compose.inputs.SearchInputField
 import com.civilcam.ui.common.loading.DialogLoadingContent
@@ -31,7 +32,7 @@ import com.civilcam.ui.network.main.model.NetworkScreen
 fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
 
     val state = viewModel.state.collectAsState()
-    var tabPage by remember { mutableStateOf(com.civilcam.domainLayer.model.guard.NetworkType.ON_GUARD) }
+    var tabPage by remember { mutableStateOf(NetworkType.ON_GUARD) }
     tabPage = state.value.networkType
 
 
@@ -141,7 +142,7 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
         },
         floatingActionButton = {
             AnimatedVisibility(
-                visible = tabPage == com.civilcam.domainLayer.model.guard.NetworkType.GUARDIANS && state.value.screenState == NetworkScreen.MAIN,
+                visible = tabPage == NetworkType.GUARDIANS && state.value.screenState == NetworkScreen.MAIN,
                 enter = scaleIn(),
                 exit = scaleOut(),
             ) {
