@@ -96,12 +96,11 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
                 ) {
                     EmergencyLiveContent(
                         screen = state.emergencyScreen,
-                        cameraState = state.cameraState,
+                        viewModel = viewModel,
                         onClick = viewModel::setInputActions,
                         flashState = state.cameraFlash
                     )
                 }
-
 
                 EmergencyMapContent(
                     modifier = Modifier

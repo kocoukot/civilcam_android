@@ -11,6 +11,7 @@ import com.civilcam.ui.auth.password.reset.ResetPasswordViewModel
 import com.civilcam.ui.auth.pincode.PinCodeViewModel
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.emergency.EmergencyViewModel
+import com.civilcam.ui.emergency.utils.FileManager
 import com.civilcam.ui.langSelect.LanguageSelectViewModel
 import com.civilcam.ui.network.contacts.ContactsViewModel
 import com.civilcam.ui.network.inviteByNumber.InviteByNumberViewModel
