@@ -148,9 +148,7 @@ class EmergencyViewModel: ComposeViewModel<EmergencyState, EmergencyRoute, Emerg
 		} else {
 			CameraSelector.LENS_FACING_FRONT
 		}
-		if (_state.value.lensInfo[lens] != null) {
-			_state.update { it.copy(lens = lens) }
-		}
+		_state.update { it.copy(lens = lens) }
 	}
 	
 	private fun onFlashTapped() {
