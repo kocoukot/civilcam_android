@@ -1,5 +1,6 @@
 package com.civilcam.ui.emergency
 
+import androidx.camera.core.TorchState
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -98,7 +99,7 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
                         screen = state.emergencyScreen,
                         viewModel = viewModel,
                         onClick = viewModel::setInputActions,
-                        flashState = state.cameraFlash
+                        flashState = state.torchState == TorchState.ON
                     )
                 }
 
