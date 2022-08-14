@@ -24,6 +24,6 @@ fun String.formatToPhoneNumber(): String = String.format(
 )
 
 fun String.formatPhoneNumber(): String = String.format(
-    "+1 (%s) %s %s", this.substring(0, 3), this.substring(2, 5),
-    this.substring(5, 9)
+    "+1 (%s) %s %s", this.substring(0, 3), this.substring(3, 6),
+    this.substring(6, 10)
 )

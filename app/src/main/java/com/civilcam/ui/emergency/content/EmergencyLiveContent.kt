@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.compose.IconActionButton
+import com.civilcam.ui.emergency.EmergencyViewModel
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyScreen
 import com.civilcam.utils.DateUtils.getFullDateAndTimeString
@@ -30,7 +31,7 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 fun EmergencyLiveContent(
     screen: EmergencyScreen,
-    cameraState: Int,
+    viewModel: EmergencyViewModel,
     flashState: Boolean,
     onClick: (EmergencyActions) -> Unit
 ) {
@@ -45,11 +46,11 @@ fun EmergencyLiveContent(
     }
 
     Box {
-        EmergencyCameraPreview(
-            cameraState = cameraState,
-            modifier = Modifier.fillMaxSize()
+    
+        EmergencyLivePreview(
+            recordingViewModel = viewModel,
+            onActionClick = {}
         )
-
 
         LiveBottomBar(
             modifier = Modifier
@@ -133,7 +134,10 @@ fun LiveBottomBar(
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .size(44.dp)
-                        .background(if (flashState) CCTheme.colors.white else CCTheme.colors.black_70, CircleShape),
+                        .background(
+                            if (flashState) CCTheme.colors.white else CCTheme.colors.black_70,
+                            CircleShape
+                        ),
                     tint = if (flashState) CCTheme.colors.black else CCTheme.colors.white,
                     buttonIcon = R.drawable.ic_flashlight,
                     buttonClick = { onClick.invoke(EmergencyActions.ControlFlash) }
