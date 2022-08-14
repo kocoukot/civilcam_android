@@ -1,13 +1,11 @@
 package com.civilcam.ui.emergency
 
-import android.net.Uri
 import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.TorchState
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.ui.emergency.model.*
-import com.civilcam.ui.emergency.utils.FileManager
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -15,7 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class EmergencyViewModel: ComposeViewModel<EmergencyState, EmergencyRoute, EmergencyActions>() {
+class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, EmergencyActions>() {
 	override var _state: MutableStateFlow<EmergencyState> = MutableStateFlow(EmergencyState())
 	
 	private val _effect = MutableSharedFlow<CameraEffect>()
@@ -50,7 +48,7 @@ class EmergencyViewModel: ComposeViewModel<EmergencyState, EmergencyRoute, Emerg
 		when (screen) {
 			EmergencyScreen.NORMAL,
 			EmergencyScreen.COUPLED -> {
-				onRecordStarted()
+				//onRecordStarted()
 				navigateRoute(EmergencyRoute.HideSystemUI)
 			}
 			EmergencyScreen.MAP_EXTENDED, EmergencyScreen.LIVE_EXTENDED -> navigateRoute(
@@ -112,7 +110,7 @@ class EmergencyViewModel: ComposeViewModel<EmergencyState, EmergencyRoute, Emerg
 			_effect.emit(CameraEffect.StopRecording)
 		}
 	}
-
+	
 	private fun onRecordStarted() {
 		viewModelScope.launch {
 			try {
