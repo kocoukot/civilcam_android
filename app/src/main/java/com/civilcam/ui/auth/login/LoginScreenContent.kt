@@ -42,13 +42,13 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 		topBar = {
 			Column {
 				TopAppBarContent(
-                    title = stringResource(id = R.string.log_in),
-                    navigationItem = {
-                        BackButton {
-                            viewModel.setInputActions(LoginActions.ClickBack)
-                        }
-                    },
-                )
+					title = stringResource(id = R.string.log_in),
+					navigationItem = {
+						BackButton {
+							viewModel.setInputActions(LoginActions.ClickBack)
+						}
+					},
+				)
 				RowDivider()
 			}
 		}
@@ -63,15 +63,16 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 				.verticalScroll(rememberScrollState()),
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
-
+			
 			Spacer(modifier = Modifier.height(32.dp))
 			
 			EmailInputField(
 				title = stringResource(id = R.string.create_account_email_label),
 				text = state.value.email,
 				placeHolder = stringResource(id = R.string.create_account_email_placeholder),
-				errorMessage = state.value.errorText,
-				hasError = !state.value.isEmail && !focusState.value,
+				errorMessage = if (state.value.credError) "" else state.value.errorText,
+				hasError = (!state.value.isEmail && !focusState.value) ||
+						state.value.emailError || state.value.credError,
 				onValueChanged = {
 					viewModel.setInputActions(
 						LoginActions.EnterInputData(
@@ -84,9 +85,9 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 					focusState.value = it
 				}
 			)
-
+			
 			Spacer(modifier = Modifier.height(16.dp))
-
+			
 			PasswordField(
 				name = stringResource(id = R.string.password),
 				text = state.value.password,
@@ -99,11 +100,14 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 						)
 					)
 				},
-				onFocusChanged = {}
+				onFocusChanged = {},
+				hasError = state.value.credError,
+				error = state.value.errorText,
+				isReEnter = state.value.credError
 			)
-
+			
 			Spacer(modifier = Modifier.height(8.dp))
-
+			
 			Row(
 				modifier = Modifier
 					.fillMaxWidth(),
@@ -120,9 +124,9 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 					}
 				)
 			}
-
+			
 			Spacer(modifier = Modifier.weight(1f))
-
+			
 			ComposeButton(
 				title = stringResource(id = R.string.log_in),
 				Modifier
@@ -135,9 +139,9 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 					)
 				}
 			)
-
+			
 			Spacer(modifier = Modifier.height(24.dp))
-
+			
 			Row(
 				horizontalArrangement = Arrangement.Center,
 				modifier = Modifier.fillMaxWidth()
@@ -154,9 +158,9 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 					)
 				)
 			}
-
+			
 			Spacer(modifier = Modifier.height(16.dp))
-
+			
 			Row(
 				horizontalArrangement = Arrangement.Center,
 				modifier = Modifier.fillMaxWidth(),
@@ -178,9 +182,9 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 					}
 				)
 			}
-
+			
 			Spacer(modifier = Modifier.height(16.dp))
-
+			
 		}
 	}
 }
