@@ -4,6 +4,8 @@ import com.civilcam.common.ext.BaseRepository
 import com.civilcam.common.ext.Resource
 import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.mapper.auth.UserMapper
+import com.civilcam.data.network.model.request.auth.CheckEmailRequest
+import com.civilcam.data.network.model.request.auth.SignInRequest
 import com.civilcam.data.network.model.request.auth.SignUpRequest
 import com.civilcam.data.network.service.AuthService
 import com.civilcam.domainLayer.model.CurrentUser
@@ -12,82 +14,84 @@ import timber.log.Timber
 
 
 class AuthRepositoryImpl(
-    private val accountStorage: AccountStorage,
-    private val authService: AuthService,
+	private val accountStorage: AccountStorage,
+	private val authService: AuthService,
 //	private val googleOAuthService: GoogleOAuthService
 ) : AuthRepository, BaseRepository() {
-
-    private val sessionUserMapper = UserMapper()
-
-    override var sessionToken: String = ""
-        get() = accountStorage.sessionToken.orEmpty()
-        set(value) {
-            field = value
-            accountStorage.sessionToken = value
-        }
+	
+	private val sessionUserMapper = UserMapper()
+	
+	override var sessionToken: String = ""
+		get() = accountStorage.sessionToken.orEmpty()
+		set(value) {
+			field = value
+			accountStorage.sessionToken = value
+		}
 
 //	override fun setFcmToken(token: String) {
 //		accountStorage.fcmToken = token
 //	}
 
 //	override fun getFcmToken(): String? = accountStorage.fcmToken
+	
+	override suspend fun checkEmail(email: String): Boolean =
+		safeApiCall {
+			authService.checkUserExists(
+				CheckEmailRequest(
+					email = email
+				)
+			)
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> {
+					response.value.exists
+				}
+				is Resource.Failure -> {
+					throw response.serviceException
+				}
+			}
+		}
+	
+	
+	override suspend fun signUp(email: String, password: String): CurrentUser =
+		safeApiCall {
+			authService.signUp(
+				SignUpRequest(email = email, password = password)
+			)
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> {
+					sessionUserMapper.mapData(response.value)
+				}
+				is Resource.Failure -> {
+					Timber.i("serviceException ${response.serviceException}")
+					throw response.serviceException
+				}
+			}
+		}
+	
+	
+	override suspend fun signIn(email: String, password: String): CurrentUser =
+		safeApiCall {
+			authService.signIn(
+				SignInRequest(
+					email = email,
+					password = password,
+					null
+				)
+			)
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> {
+					sessionUserMapper.mapData(response.value)
+				}
+				is Resource.Failure -> {
+					Timber.i("serviceException ${response.serviceException}")
+					throw response.serviceException
+				}
+			}
+		}
 
-//	override suspend fun checkEmail(email: String): Boolean =
-//		safeApiCall {
-//			authService.checkUserExists(
-//				CheckEmailRequest(
-//					email = email
-//				)
-//			)
-//		}.let { response ->
-//			when (response) {
-//				is Resource.Success -> {
-//					response.value.exists
-//				}
-//				is Resource.Failure -> {
-//					throw exceptionErrorMapper.mapData(response)
-//				}
-//			}
-//		}
-
-
-    override suspend fun signUp(email: String, password: String): CurrentUser =
-        safeApiCall {
-            authService.signUp(
-                SignUpRequest(email = email, password = password)
-            )
-        }.let { response ->
-            when (response) {
-                is Resource.Success -> {
-                    sessionUserMapper.mapData(response.value)
-                }
-                is Resource.Failure -> {
-                    Timber.i("serviceException ${response.serviceException}")
-                    throw response.serviceException
-                }
-            }
-        }
-
-
-//    override suspend fun signIn(email: String, password: String): CurrentUser =
-//        safeApiCall {
-//            authService.signIn(
-//                SignInRequest(
-//                    email = email,
-//                    password = password,
-//                )
-//            )
-//        }.let { response ->
-//            when (response) {
-//                is Resource.Success -> {
-//					sessionUserMapper.mapData(response.value)
-//				}
-//				is Resource.Failure -> {
-//					throw exceptionErrorMapper.mapData(response)
-//				}
-//			}
-//		}
-//
 //	override suspend fun resetPassword(email: String): Long =
 //		safeApiCall {
 //			authService.resetPassword(

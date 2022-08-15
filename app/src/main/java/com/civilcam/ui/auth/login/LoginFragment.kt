@@ -25,9 +25,9 @@ class LoginFragment : Fragment() {
 	): View {
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
-				LoginRoute.GoLogin ->
+				is LoginRoute.GoLogin ->
 					navController.navigateByDirection(
-						NavigationDirection.resolveDirectionFor(null)
+						NavigationDirection.resolveDirectionFor(route.user)
 					)
 				LoginRoute.GoRegister -> navController.navigate(R.id.createAccountFragment)
 				LoginRoute.GoReset -> navController.navigate(R.id.resetPasswordFragment)

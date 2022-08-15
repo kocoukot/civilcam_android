@@ -5,6 +5,7 @@ object Endpoint {
     object Auth {
         const val CHECK_USER = "check-user-exists"
         const val SIGN_UP = "sign-up"
+        const val SIGN_IN = "sign-in"
     }
 
     object Verification {

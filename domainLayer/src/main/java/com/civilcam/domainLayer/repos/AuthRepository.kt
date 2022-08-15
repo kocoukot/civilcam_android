@@ -11,12 +11,12 @@ interface AuthRepository {
 
 //    fun getFcmToken(): String?
 
-//    suspend fun checkEmail(email: String): Boolean
+    suspend fun checkEmail(email: String): Boolean
 
     suspend fun signUp(email: String, password: String): CurrentUser
 
-//    suspend fun signIn(email: String, password: String): CurrentUser
-//
+    suspend fun signIn(email: String, password: String): CurrentUser
+
 //    suspend fun resetPassword(email: String): Long
 //
 //    suspend fun recoverPassword(recoveryToken: String, newPassword: String): Boolean
