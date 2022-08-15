@@ -5,9 +5,7 @@ import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail
 import com.civilcam.data.network.support.ServerErrors
 import com.civilcam.data.network.support.ServiceException
-import com.civilcam.domainLayer.usecase.auth.CheckEmailUseCase
 import com.civilcam.domainLayer.usecase.auth.SignInUseCase
-import com.civilcam.ui.auth.create.model.CreateAccountRoute
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.login.model.LoginActions
 import com.civilcam.ui.auth.login.model.LoginRoute
@@ -17,11 +15,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class LoginViewModel(
-	private val signInUseCase: SignInUseCase,
-	private val checkEmailUseCase: CheckEmailUseCase
+	private val signInUseCase: SignInUseCase
 ) : ComposeViewModel<LoginState, LoginRoute, LoginActions>() {
 	
 	override var _state: MutableStateFlow<LoginState> = MutableStateFlow(LoginState())
@@ -46,23 +42,32 @@ class LoginViewModel(
 		_state.update { it.copy(isLoading = true) }
 		viewModelScope.launch {
 			try {
-				if (checkEmailUseCase.checkEmail(_state.value.email)) {
-					val response =
-						signInUseCase.invoke(
-							_state.value.email,
-							_state.value.password,
-						)
-					if (response != null) {
-						navigateRoute(LoginRoute.GoLogin(response))
-					}
-				} else {
-					withContext(Dispatchers.Main) {
-						_state.update { it.copy(errorText = ServiceException(ServerErrors.USER_NOT_FOUND_BY_EMAIL).errorMessage) }
-					}
+				val response =
+					signInUseCase.invoke(
+						_state.value.email,
+						_state.value.password,
+					)
+				if (response != null) {
+					navigateRoute(LoginRoute.GoLogin(response))
 				}
 			} catch (e: ServiceException) {
 				withContext(Dispatchers.Main) {
-					_state.update { it.copy(errorText = e.errorMessage) }
+					if (e.errorCode == ServerErrors.USER_NOT_FOUND) {
+						_state.update {
+							it.copy(
+								emailError = true,
+								errorText = e.errorMessage
+							)
+						}
+					}
+					if (e.errorCode == ServerErrors.EMAIL_ALREADY_REGISTERED) {
+						_state.update {
+							it.copy(
+								credError = true,
+								errorText = e.errorMessage
+							)
+						}
+					}
 				}
 			}
 			_state.update { it.copy(isLoading = false) }
@@ -70,11 +75,16 @@ class LoginViewModel(
 	}
 	
 	private fun emailEntered(email: String) {
-		_state.value = _state.value.copy(email = email, isEmail = email.isEmail())
+		_state.value = _state.value.copy(
+			email = email,
+			isEmail = email.isEmail(),
+			emailError = false,
+			credError = false
+		)
 	}
 	
 	private fun passwordEntered(password: String) {
-		_state.value = _state.value.copy(password = password)
+		_state.value = _state.value.copy(password = password, credError = false)
 	}
 	
 	private fun goBack() {

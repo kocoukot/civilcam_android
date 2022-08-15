@@ -265,7 +265,7 @@ fun EmailInputField(
 			)
 		}
 		
-		AnimatedVisibility(visible = hasError && inputText.isNotEmpty()) {
+		AnimatedVisibility(visible = hasError && inputText.isNotEmpty() && errorMessage.isNotEmpty()) {
 			ErrorText(errorMessage)
 		}
 	}
@@ -394,6 +394,7 @@ fun PasswordField(
 	name: String,
 	placeholder: String,
 	hasError: Boolean = false,
+	error: String = "",
 	noMatch: Boolean = false,
 	isReEnter: Boolean = false,
 	text: String = "",
@@ -511,7 +512,7 @@ fun PasswordField(
 			)
 		}
 		AnimatedVisibility(visible = isReEnter && inputText.isNotEmpty()) {
-			ErrorText(stringResource(id = R.string.password_no_match))
+			ErrorText(error)
 		}
 	}
 }
