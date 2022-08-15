@@ -4,7 +4,10 @@ import androidx.annotation.IdRes
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import com.civilcam.R
+import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ui.common.NavigationDirection
+import com.civilcam.ui.terms.TermsFragment
+import com.civilcam.ui.verification.VerificationFragment
 import com.google.android.gms.tasks.Task
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -41,8 +44,26 @@ fun NavController.navigateByDirection(
         is NavigationDirection.SignInSuccess -> {
             navigate(R.id.emergency_root)
         }
-        is NavigationDirection.EmailVerification -> {}
-        is NavigationDirection.ProfileSetup -> {}
+        is NavigationDirection.EmailVerification -> {
+            navigate(
+                R.id.verificationFragment,
+                VerificationFragment.createArgs(
+                    VerificationFlow.NEW_EMAIL,
+                    direction.email
+                )
+            )
+        }
+        is NavigationDirection.ProfileSetup -> {
+            navigate(
+                R.id.profileSetupFragment,
+            )
+        }
+        is NavigationDirection.TermsAndPolicyAccept -> {
+            navigate(
+                R.id.termsFragment,
+                TermsFragment.createArgs(true)
+            )
+        }
     }
 }
 
