@@ -16,6 +16,10 @@ object Endpoint {
     object User {
         const val CURRENT_USER = "current-user"
         const val ACCEPT_TERMS_POLICY = "accept-terms-policy"
+        const val CHANGE_EMAIL = "change-email"
+        const val CHECK_PASSWORD = "check-password"
+        const val CHANGE_PASSWORD = "change-password"
+        const val SET_USER_LANGUAGE = "set-user-language"
     }
 
     object Profile {

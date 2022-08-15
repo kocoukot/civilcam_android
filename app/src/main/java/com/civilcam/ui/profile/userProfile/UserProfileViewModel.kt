@@ -3,6 +3,7 @@ package com.civilcam.ui.profile.userProfile
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
+import com.civilcam.common.ext.formatPhoneNumber
 import com.civilcam.data.local.MediaStorage
 import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.model.*
@@ -31,15 +32,15 @@ class UserProfileViewModel(
 	private val getPlacesAutocompleteUseCase: GetPlacesAutocompleteUseCase
 ) : ComposeViewModel<UserProfileState, UserProfileRoute, UserProfileActions>() {
 	override var _state: MutableStateFlow<UserProfileState> = MutableStateFlow(UserProfileState())
-
+	
 	private val disposables = CompositeDisposable()
-
+	
 	private val _textSearch = MutableStateFlow("")
 	private val textSearch: StateFlow<String> = _textSearch.asStateFlow()
-
+	
 	init {
 		fetchCurrentUser()
-
+		
 		viewModelScope.launch {
 			textSearch.debounce(400).collect { query ->
 				query
@@ -55,7 +56,7 @@ class UserProfileViewModel(
 					setSearchResult(emptyList())
 				}
 			}
-
+			
 		}
 	}
 	
@@ -87,7 +88,7 @@ class UserProfileViewModel(
 			is UserProfileActions.ClickAddressSelect -> addressSelected(action.address)
 		}
 	}
-
+	
 	private fun searchAddress(searchQuery: String) {
 		_textSearch.value = searchQuery
 		_state.update {
@@ -98,8 +99,8 @@ class UserProfileViewModel(
 			)
 		}
 	}
-
-	private fun fetchCurrentUser() {
+	
+	fun fetchCurrentUser() {
 		_state.value = _state.value.copy(isLoading = true)
 		viewModelScope.launch {
 			kotlin.runCatching { getCurrentUserUseCase.invoke() }
@@ -119,11 +120,11 @@ class UserProfileViewModel(
 			_state.value = _state.value.copy(isLoading = false)
 		}
 	}
-
+	
 	private fun openLocationSelect() {
 		_state.update { it.copy(screenState = UserProfileScreen.LOCATION) }
 	}
-
+	
 	private fun openDatePicker() {
 		_state.value = _state.value.copy(showDatePicker = true)
 	}
@@ -172,7 +173,7 @@ class UserProfileViewModel(
 						_state.value.copy(screenState = UserProfileScreen.PROFILE)
 					_state.value = _state.value.copy(data = CurrentUser())
 					fetchCurrentUser()
-
+					
 				} catch (e: ServiceException) {
 					Timber.d("resourceLocalized throwable ${e.errorCode}")
 					_state.update { it.copy(errorText = e.errorMessage) }
@@ -206,7 +207,25 @@ class UserProfileViewModel(
 	}
 	
 	private fun goCredentials(userProfileType: UserProfileType) {
-		navigateRoute(UserProfileRoute.GoCredentials(userProfileType))
+		when (userProfileType) {
+			UserProfileType.EMAIL -> {
+				navigateRoute(
+					UserProfileRoute.GoCredentials(
+						userProfileType,
+						_state.value.data?.sessionUser?.email
+					)
+				)
+			}
+			UserProfileType.PHONE_NUMBER -> {
+				navigateRoute(
+					UserProfileRoute.GoCredentials(
+						userProfileType,
+						""
+					)
+				)
+			}
+			UserProfileType.PIN_CODE -> {}
+		}
 	}
 	
 	private fun goAvatarSelect() {
@@ -228,7 +247,7 @@ class UserProfileViewModel(
 			}
 			.addTo(disposables)
 	}
-
+	
 	private fun setSearchResult(result: List<AutocompletePlace>) {
 		Timber.i("location result $result")
 		_state.value = _state.value.copy(
@@ -237,7 +256,7 @@ class UserProfileViewModel(
 			).copy()
 		)
 	}
-
+	
 	private fun addressSelected(result: AutocompletePlace) {
 		_state.update {
 			it.copy(
@@ -250,6 +269,6 @@ class UserProfileViewModel(
 			)
 		}
 	}
-
+	
 	private fun getUserInfo() = _state.value.data?.copy() ?: CurrentUser()
 }

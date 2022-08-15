@@ -4,7 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail
 import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.usecase.auth.CheckEmailUseCase
 import com.civilcam.domainLayer.usecase.profile.ChangePhoneNumberUseCase
+import com.civilcam.domainLayer.usecase.user.ChangeEmailUseCase
 import com.civilcam.ui.profile.credentials.model.ChangeCredentialsActions
 import com.civilcam.ui.profile.credentials.model.ChangeCredentialsRoute
 import com.civilcam.ui.profile.credentials.model.ChangeCredentialsState
@@ -15,15 +17,17 @@ import kotlinx.coroutines.launch
 
 class ChangeCredentialsViewModel(
 	credentialType: CredentialType,
-	private val changePhoneNumberUseCase: ChangePhoneNumberUseCase
-) :
-	ComposeViewModel<ChangeCredentialsState, ChangeCredentialsRoute, ChangeCredentialsActions>() {
+	credential: String,
+	private val changePhoneNumberUseCase: ChangePhoneNumberUseCase,
+	private val changeEmailUseCase: ChangeEmailUseCase
+) : ComposeViewModel<ChangeCredentialsState, ChangeCredentialsRoute, ChangeCredentialsActions>() {
 	override var _state: MutableStateFlow<ChangeCredentialsState> = MutableStateFlow(
 		ChangeCredentialsState()
 	)
 	
 	init {
 		_state.value = _state.value.copy(screenState = credentialType)
+		_state.value = _state.value.copy(currentEmail = credential)
 	}
 	
 	override fun setInputActions(action: ChangeCredentialsActions) {
@@ -58,25 +62,39 @@ class ChangeCredentialsViewModel(
 						}
 						.onFailure { error ->
 							error as ServiceException
-							_state.update { it.copy(errorText = error.errorMessage) }
+							_state.update { it.copy(errorText = error.errorMessage, phoneError = true) }
 						}
 				}
 			CredentialType.EMAIL ->
-				navigateRoute(
-					ChangeCredentialsRoute.GoSave(
-						dataType,
-						_state.value.email
-					)
-				)
+				viewModelScope.launch {
+					kotlin.runCatching {
+						changeEmailUseCase.changeEmail(
+							_state.value.currentEmail,
+							_state.value.email
+						)
+					}
+						.onSuccess {
+							navigateRoute(
+								ChangeCredentialsRoute.GoSave(
+									dataType,
+									_state.value.email
+								)
+							)
+						}
+						.onFailure { error ->
+							error as ServiceException
+							_state.update { it.copy(errorText = error.errorMessage, emailError = true) }
+						}
+				}
 		}
 	}
 	
 	private fun emailEntered(email: String) {
-		_state.value = _state.value.copy(email = email, isEmail = true)
+		_state.value = _state.value.copy(email = email, isEmail = true, emailError = false)
 	}
 	
 	private fun phoneEntered(phone: String) {
-		_state.value = _state.value.copy(phone = phone)
+		_state.value = _state.value.copy(phone = phone, phoneError = false)
 	}
 	
 	private fun goBack() {

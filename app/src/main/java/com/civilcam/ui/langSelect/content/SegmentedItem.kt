@@ -55,7 +55,7 @@ fun SegmentedItem(currentLang: LanguageType, selectedLang: (LanguageType) -> Uni
     MaterialTheme {
         Surface {
             Column(Modifier.padding(16.dp), verticalArrangement = spacedBy(16.dp)) {
-                val twoSegments = remember { listOf(LanguageType.ENGLISH, LanguageType.SPAIN) }
+                val twoSegments = remember { listOf(LanguageType.en, LanguageType.es) }
                 var selectedTwoSegment by remember { mutableStateOf(currentLang) }
                 SegmentedControl(
                     twoSegments,

@@ -15,9 +15,7 @@ import com.civilcam.domainLayer.usecase.location.GetPlacesAutocompleteUseCase
 import com.civilcam.domainLayer.usecase.profile.*
 import com.civilcam.domainLayer.usecase.settings.CheckCurrentPasswordUseCase
 import com.civilcam.domainLayer.usecase.settings.GetCurrentSubscriptionPlanUseCase
-import com.civilcam.domainLayer.usecase.user.AcceptLegalDocsUseCase
-import com.civilcam.domainLayer.usecase.user.GetCurrentUserUseCase
-import com.civilcam.domainLayer.usecase.user.LogoutUseCase
+import com.civilcam.domainLayer.usecase.user.*
 import com.civilcam.domainLayer.usecase.verify.SendOtpCodeUseCase
 import com.civilcam.domainLayer.usecase.verify.VerifyEmailOtpUseCase
 import org.koin.dsl.module
@@ -71,6 +69,13 @@ val domainModule = module {
 	
 	factory { GetPlacesAutocompleteUseCase(get()) }
 	
+	factory { ChangeEmailUseCase(get()) }
+	
+	factory { CheckPasswordUseCase(get()) }
+	
+	factory { ChangePasswordUseCase(get()) }
+	
+	factory { SetUserLanguageUseCase(get()) }
 }
 
 
