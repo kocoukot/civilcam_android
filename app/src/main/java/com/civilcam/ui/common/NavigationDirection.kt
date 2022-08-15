@@ -18,11 +18,15 @@ sealed class NavigationDirection : Parcelable {
 	@Parcelize
 	class EmailVerification(val email: String) : NavigationDirection()
 	
+	@Parcelize
+	class PhoneVerification(val phone: String) : NavigationDirection()
+	
 	companion object {
 		fun resolveDirectionFor(user: CurrentUser) = user.let {
 			when {
 				!user.sessionUser.isEmailVerified -> EmailVerification(user.sessionUser.email)
-				!user.sessionUser.isTermsAndPolicyAccepted && it.sessionUser.authType == AuthType.EMAIL -> TermsAndPolicyAccept
+//				!user.userBaseInfo.isPhoneVerified -> PhoneVerification(user.userBaseInfo.phone)
+				!user.sessionUser.isTermsAndPolicyAccepted && it.sessionUser.authType == AuthType.email -> TermsAndPolicyAccept
 				user.sessionUser.isUserProfileSetupRequired -> ProfileSetup
 				else -> SignInSuccess
 			}

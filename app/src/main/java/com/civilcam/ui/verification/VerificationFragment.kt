@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import com.civilcam.R
 import com.civilcam.common.ext.hideKeyboard
 import com.civilcam.common.ext.showKeyboard
@@ -59,14 +60,26 @@ class VerificationFragment : Fragment() {
 							VerificationFlow.RESET_PASSWORD -> navController.navigate(
 								R.id.createPasswordFragment
 							)
-							VerificationFlow.CHANGE_PHONE -> navController.popBackStack(
-								R.id.userProfileFragment,
-								false
-							)
-							VerificationFlow.CHANGE_EMAIL -> navController.popBackStack(
-								R.id.userProfileFragment,
-								false
-							)
+							VerificationFlow.CHANGE_PHONE -> {
+								setFragmentResult(
+									RESULT_BACK_STACK,
+									bundleOf(RESULT_BACK_STACK to true)
+								)
+								navController.popBackStack(
+									R.id.userProfileFragment,
+									false
+								)
+							}
+							VerificationFlow.CHANGE_EMAIL -> {
+								setFragmentResult(
+									RESULT_BACK_STACK,
+									bundleOf(RESULT_BACK_STACK to true)
+								)
+								navController.popBackStack(
+									R.id.userProfileFragment,
+									false
+								)
+							}
 						}
 					}
 				}
@@ -98,6 +111,7 @@ class VerificationFragment : Fragment() {
 	companion object {
 		private const val ARG_FLOW = "verification_flow"
 		private const val ARG_SUBJECT = "verification_subject"
+		const val RESULT_BACK_STACK = "back_stack"
 
 		fun createArgs(flow: VerificationFlow, subject: String) = bundleOf(
 			ARG_FLOW to flow,

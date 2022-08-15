@@ -21,10 +21,11 @@ import org.koin.core.parameter.parametersOf
 
 class ChangeCredentialsFragment : Fragment() {
 	private val viewModel: ChangeCredentialsViewModel by viewModel {
-		parametersOf(credentialType)
+		parametersOf(credentialType, credential)
 	}
 	
 	private val credentialType: CredentialType by requireArg(ARG_CRED_TYPE)
+	private val credential: String by requireArg(ARG_CRED)
 	
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -76,9 +77,11 @@ class ChangeCredentialsFragment : Fragment() {
 	
 	companion object {
 		private const val ARG_CRED_TYPE = "credential_type"
+		private const val ARG_CRED = "credential"
 		
-		fun createArgs(credentialType: CredentialType) = bundleOf(
-			ARG_CRED_TYPE to credentialType
+		fun createArgs(credentialType: CredentialType, credential: String) = bundleOf(
+			ARG_CRED_TYPE to credentialType,
+			ARG_CRED to credential
 		)
 	}
 }

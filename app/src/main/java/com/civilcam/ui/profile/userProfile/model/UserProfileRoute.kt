@@ -6,5 +6,5 @@ sealed class UserProfileRoute : ComposeFragmentRoute {
 	object GoBack : UserProfileRoute()
 	object GoGalleryOpen : UserProfileRoute()
 	object GoPinCode : UserProfileRoute()
-	data class GoCredentials(val userProfileType: UserProfileType) : UserProfileRoute()
+	data class GoCredentials(val userProfileType: UserProfileType, val credential: String?) : UserProfileRoute()
 }
