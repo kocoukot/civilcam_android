@@ -50,7 +50,8 @@ class ProfileSetupFragment : Fragment() {
 					R.id.verificationFragment,
 					VerificationFragment.createArgs(
 						VerificationFlow.NEW_PHONE,
-						resources.getString(R.string.verification_phone_mask, route.phoneNumber)
+						resources.getString(R.string.verification_phone_mask, route.phoneNumber),
+						""
 					)
 				)
 				ProfileSetupRoute.GoLocationSelect -> {}

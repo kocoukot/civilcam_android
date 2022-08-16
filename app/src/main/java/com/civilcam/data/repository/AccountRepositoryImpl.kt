@@ -25,5 +25,5 @@ class AccountRepositoryImpl(
     override fun loginUser(sessionToken: String, user: CurrentUser) {
         accountStorage.loginUser(sessionToken, user)
     }
-
+    
 }

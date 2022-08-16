@@ -10,11 +10,10 @@ import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.login.model.LoginActions
 import com.civilcam.ui.auth.login.model.LoginRoute
 import com.civilcam.ui.auth.login.model.LoginState
-import kotlinx.coroutines.Dispatchers
+import com.standartmedia.common.ext.castSafe
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class LoginViewModel(
 	private val signInUseCase: SignInUseCase
@@ -41,35 +40,36 @@ class LoginViewModel(
 	private fun goLogin() {
 		_state.update { it.copy(isLoading = true) }
 		viewModelScope.launch {
-			try {
-				val response =
-					signInUseCase.invoke(
-						_state.value.email,
-						_state.value.password,
-					)
-				if (response != null) {
-					navigateRoute(LoginRoute.GoLogin(response))
-				}
-			} catch (e: ServiceException) {
-				withContext(Dispatchers.Main) {
-					if (e.errorCode == ServerErrors.USER_NOT_FOUND) {
-						_state.update {
-							it.copy(
-								emailError = true,
-								errorText = e.errorMessage
-							)
-						}
-					}
-					if (e.errorCode == ServerErrors.EMAIL_ALREADY_REGISTERED) {
-						_state.update {
-							it.copy(
-								credError = true,
-								errorText = e.errorMessage
-							)
-						}
-					}
-				}
+			kotlin.runCatching {
+				signInUseCase.invoke(
+					_state.value.email,
+					_state.value.password,
+				)
 			}
+				.onSuccess {
+					navigateRoute(LoginRoute.GoLogin(it))
+				}
+				.onFailure { error ->
+					error.castSafe<ServiceException>()?.let { casted ->
+						if (casted.errorCode == ServerErrors.EMAIL_ALREADY_REGISTERED)
+							_state.update {
+								it.copy(
+									credError = true,
+									errorText = casted.errorMessage
+								)
+							}
+						else {
+							_state.update {
+								it.copy(
+									emailError = true,
+									errorText = casted.errorMessage
+								)
+							}
+						}
+					} ?: run {
+					}
+					
+				}
 			_state.update { it.copy(isLoading = false) }
 		}
 	}

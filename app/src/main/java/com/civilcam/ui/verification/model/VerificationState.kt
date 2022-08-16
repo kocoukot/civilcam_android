@@ -9,5 +9,6 @@ data class VerificationState(
     val hasError: Boolean = false,
     val timeOut: String = "",
     val verificationFlow: VerificationFlow = VerificationFlow.NEW_EMAIL,
-    val verificationSubject: String = ""
+    val verificationSubject: String = "",
+    val newSubject: String = ""
 ) : ComposeFragmentState

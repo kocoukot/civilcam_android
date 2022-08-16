@@ -38,7 +38,8 @@ class CreateAccountFragment : Fragment() {
 						R.id.verificationFragment,
 						VerificationFragment.createArgs(
 							VerificationFlow.NEW_EMAIL,
-							route.email
+							route.email,
+							""
 						)
 					)
 				}

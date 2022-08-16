@@ -18,7 +18,8 @@ import kotlinx.coroutines.launch
 
 class VerificationViewModel(
     private val verificationFlow: VerificationFlow,
-    verificationSubject: String,
+    private val verificationSubject: String,
+    private val newSubject: String,
     private val verifyEmailOtpUseCase: VerifyEmailOtpUseCase,
     private val sendOtpCodeUseCase: SendOtpCodeUseCase,
 //	private val verifyResetPasswordOtpUseCase: VerifyResetPasswordOtpUseCase,
@@ -32,10 +33,10 @@ class VerificationViewModel(
         _state.update {
             it.copy(
                 verificationFlow = verificationFlow,
-                verificationSubject = verificationSubject
+                verificationSubject = verificationSubject,
+                newSubject = newSubject
             )
         }
-        startTimer()
     }
 
     override fun setInputActions(action: VerificationActions) {
@@ -96,9 +97,5 @@ class VerificationViewModel(
 
     private fun goBack() {
         navigateRoute(VerificationRoute.GoBack)
-    }
-
-    companion object {
-        private const val TEST_CODE = "000000"
     }
 }

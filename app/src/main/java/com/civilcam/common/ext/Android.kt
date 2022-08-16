@@ -49,7 +49,8 @@ fun NavController.navigateByDirection(
 				R.id.verificationFragment,
 				VerificationFragment.createArgs(
 					VerificationFlow.NEW_EMAIL,
-					direction.email
+					direction.email,
+					""
 				)
 			)
 		}
