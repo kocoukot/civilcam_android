@@ -58,9 +58,7 @@ class AuthRepositoryImpl(
             )
         }.let { response ->
             when (response) {
-                is Resource.Success -> {
-                    sessionUserMapper.mapData(response.value)
-                }
+                is Resource.Success -> sessionUserMapper.mapData(response.value)
                 is Resource.Failure -> {
                     Timber.i("serviceException ${response.serviceException}")
                     throw response.serviceException

@@ -61,7 +61,6 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                         }
                     },
                 )
-
                 RowDivider()
             }
         },
@@ -86,7 +85,8 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                         Spacer(modifier = Modifier.height(32.dp))
                         RowDivider()
                     }
-                    itemsIndexed(data) { index, item ->
+
+                    itemsIndexed(data, key = { _, item -> item.alertId }) { index, item ->
                         InformationRow(
                             title = item.userInfo.userName,
                             text = DateUtils.getFullDateAndTimeString(item.alertDate),

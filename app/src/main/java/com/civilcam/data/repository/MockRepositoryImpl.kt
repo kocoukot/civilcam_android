@@ -30,16 +30,16 @@ class MockRepositoryImpl: MockRepository {
 
     override suspend fun getAlerts() = listOf(
        AlertModel(
-            alertId = 342342,
-            userInfo = UserInfo(
-                userName = "Alleria Windrunner",
-                avatar = R.drawable.img_avatar_one
-            ),
-            isResolved = false,
-            alertDate = 1643803200000,
-        ),
+           alertId = 2534,
+           userInfo = UserInfo(
+               userName = "Alleria Windrunner",
+               avatar = R.drawable.img_avatar_one
+           ),
+           isResolved = false,
+           alertDate = 1643803200000,
+       ),
         AlertModel(
-            alertId = 634634,
+            alertId = 5345,
             userInfo = UserInfo(
                 userName = "Arthas Menethil",
                 avatar = R.drawable.img_avatar_two
@@ -53,7 +53,7 @@ class MockRepositoryImpl: MockRepository {
     override suspend fun getHistoryAlert(alertType: AlertType) = when (alertType) {
         AlertType.RECEIVED -> listOf(
             AlertModel(
-                alertId = 342342,
+                alertId = 74545,
                 userInfo = UserInfo(
                     userName = "Alleria Windrunner",
                     avatar = R.drawable.img_avatar_one
@@ -62,7 +62,7 @@ class MockRepositoryImpl: MockRepository {
                 alertDate = 1643803200000,
             ),
             AlertModel(
-                alertId = 634634,
+                alertId = 27457,
                 userInfo = UserInfo(
                     userName = "Arthas Menethil",
                     avatar = R.drawable.img_avatar_two
@@ -73,7 +73,7 @@ class MockRepositoryImpl: MockRepository {
         )
         AlertType.SENT -> listOf(
             AlertModel(
-                alertId = 342342,
+                alertId = 53468,
                 userInfo = UserInfo(
                     userName = "Alleria Windrunner",
                     avatar = R.drawable.img_avatar_one
@@ -82,7 +82,7 @@ class MockRepositoryImpl: MockRepository {
                 alertDate = 1643803200000,
             ),
             AlertModel(
-                alertId = 634634,
+                alertId = 6767,
                 userInfo = UserInfo(
                     userName = "Arthas Menethil",
                     avatar = R.drawable.img_avatar_two
@@ -188,115 +188,115 @@ class MockRepositoryImpl: MockRepository {
                 guardianStatus = GuardianStatus.NEW,
             ),
             GuardianModel(
-                guardianId = 335,
+                guardianId = 848567,
                 guardianName = "Arthas Menethil",
                 guardianAvatar = R.drawable.img_avatar_two,
                 guardianStatus = GuardianStatus.NEW,
             ),
             GuardianModel(
-                guardianId = 5243,
+                guardianId = 63457,
                 guardianName = "Bobby Axelrod",
                 guardianAvatar = R.drawable.img_avatar_three,
                 guardianStatus = GuardianStatus.NEW,
             ),
             GuardianModel(
-                guardianId = 4324,
+                guardianId = 53452,
                 guardianName = "Bane Hardy",
                 guardianAvatar = R.drawable.img_avatar_four,
                 guardianStatus = GuardianStatus.NEW,
             ),
             GuardianModel(
-                guardianId = 35432,
+                guardianId = 67462,
                 guardianName = "Sylvanas Windrunner",
                 guardianAvatar = R.drawable.img_avatar,
                 guardianStatus = GuardianStatus.ACCEPTED,
             ),
             GuardianModel(
-                guardianId = 16434,
+                guardianId = 64566,
                 guardianName = "Alleria Windrunner",
                 guardianAvatar = R.drawable.img_avatar_one,
                 guardianStatus = GuardianStatus.PENDING,
             ),
             GuardianModel(
-                guardianId = 335,
+                guardianId = 6065456,
                 guardianName = "Arthas Menethil",
                 guardianAvatar = R.drawable.img_avatar_two,
                 guardianStatus = GuardianStatus.NEW,
             ),
             GuardianModel(
-                guardianId = 5243,
+                guardianId = 673,
                 guardianName = "Bobby Axelrod",
                 guardianAvatar = R.drawable.img_avatar_three,
                 guardianStatus = GuardianStatus.PENDING,
             ),
             GuardianModel(
-                guardianId = 4324,
+                guardianId = 589,
                 guardianName = "Bane Hardy",
                 guardianAvatar = R.drawable.img_avatar_four,
                 guardianStatus = GuardianStatus.ACCEPTED,
             ),
             GuardianModel(
-                guardianId = 35432,
+                guardianId = 664,
                 guardianName = "Sylvanas Windrunner",
                 guardianAvatar = R.drawable.img_avatar,
                 guardianStatus = GuardianStatus.PENDING,
             ),
             GuardianModel(
-                guardianId = 16434,
+                guardianId = 158,
                 guardianName = "Alleria Windrunner",
                 guardianAvatar = R.drawable.img_avatar_one,
                 guardianStatus = GuardianStatus.NEW,
             ),
             GuardianModel(
-                guardianId = 335,
+                guardianId = 521,
                 guardianName = "Arthas Menethil",
                 guardianAvatar = R.drawable.img_avatar_two,
                 guardianStatus = GuardianStatus.ACCEPTED,
             ),
             GuardianModel(
-                guardianId = 5243,
+                guardianId = 675,
                 guardianName = "Bobby Axelrod",
                 guardianAvatar = R.drawable.img_avatar_three,
                 guardianStatus = GuardianStatus.DECLINED,
             ),
             GuardianModel(
-                guardianId = 4324,
+                guardianId = 765,
                 guardianName = "Bane Hardy",
                 guardianAvatar = R.drawable.img_avatar_four,
                 guardianStatus = GuardianStatus.ACCEPTED,
             ),
             GuardianModel(
-                guardianId = 35432,
+                guardianId = 245,
                 guardianName = "Sylvanas Windrunner",
                 guardianAvatar = R.drawable.img_avatar,
                 guardianStatus = GuardianStatus.ACCEPTED,
             ),
             GuardianModel(
-                guardianId = 16434,
+                guardianId = 89556,
                 guardianName = "Alleria Windrunner",
                 guardianAvatar = R.drawable.img_avatar_one,
                 guardianStatus = GuardianStatus.PENDING,
             ),
             GuardianModel(
-                guardianId = 335,
+                guardianId = 783345,
                 guardianName = "Arthas Menethil",
                 guardianAvatar = R.drawable.img_avatar_two,
                 guardianStatus = GuardianStatus.DECLINED,
             ),
             GuardianModel(
-                guardianId = 5243,
+                guardianId = 8467837,
                 guardianName = "Bobby Axelrod",
                 guardianAvatar = R.drawable.img_avatar_three,
                 guardianStatus = GuardianStatus.DECLINED,
             ),
             GuardianModel(
-                guardianId = 4324,
+                guardianId = 65745,
                 guardianName = "Bane Hardy",
                 guardianAvatar = R.drawable.img_avatar_four,
                 guardianStatus = GuardianStatus.ACCEPTED,
             ),
             GuardianModel(
-                guardianId = 35432,
+                guardianId = 8334563,
                 guardianName = "Sylvanas Windrunner",
                 guardianAvatar = R.drawable.img_avatar,
                 guardianStatus = GuardianStatus.ACCEPTED,

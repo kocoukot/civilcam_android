@@ -47,7 +47,9 @@ fun LocationSelectContent(
 		}
 
 		LazyColumn {
-			itemsIndexed(searchData.searchResult) { index, item ->
+			itemsIndexed(
+				searchData.searchResult,
+				key = { _, item -> item.placeId }) { index, item ->
 				SearchRow(
 					title = "${item.primary} ${item.secondary}",
 					searchPart = searchString,

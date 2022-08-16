@@ -12,10 +12,7 @@ import com.civilcam.ui.network.main.model.*
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
@@ -36,12 +33,12 @@ class NetworkMainViewModel(
     private val textSearch: StateFlow<String> = _textSearch.asStateFlow()
 
     init {
-        _state.value = _state.value.copy(screenState = screen)
+        _state.update { it.copy(screenState = screen) }
         Timber.i("Screen type $screen")
-        navBarStatus()
+        checkNavBarStatus()
         getMockInfo()
         viewModelScope.launch {
-            _state.value = _state.value.copy(data = NetworkMainModel())
+            _state.update { it.copy(data = NetworkMainModel()) }
 
             textSearch.debounce(400).collect { query ->
                 query
@@ -54,8 +51,7 @@ class NetworkMainViewModel(
                             setSearchResult(result)
                         } catch (e: Exception) {
 //                            Timber.d("guardianSearchQuery error ${e.localizedMessage}")
-                            _state.value =
-                                _state.value.copy(errorText = e.localizedMessage)
+                            _state.update { it.copy(errorText = e.localizedMessage) }
                         }
                     } ?: run {
                     setSearchResult(emptyList())
@@ -85,22 +81,18 @@ class NetworkMainViewModel(
         when (_state.value.screenState) {
             NetworkScreen.MAIN -> {}
             NetworkScreen.REQUESTS -> {
-                _state.value =
-                    _state.value.copy(screenState = NetworkScreen.MAIN)
+                _state.update { it.copy(screenState = NetworkScreen.MAIN) }
             }
             NetworkScreen.SEARCH_GUARD, NetworkScreen.ADD_GUARD -> {
-                _state.value = _state.value.copy(
-                    screenState = NetworkScreen.MAIN,
-                )
+                _state.update { it.copy(screenState = NetworkScreen.MAIN) }
             }
-
         }
-        navBarStatus()
+        checkNavBarStatus()
     }
 
     private fun addGuardian() {
-        _state.value = _state.value.copy(screenState = NetworkScreen.ADD_GUARD)
-        navBarStatus()
+        _state.update { it.copy(screenState = NetworkScreen.ADD_GUARD) }
+        checkNavBarStatus()
     }
 
     private fun goContacts() {
@@ -117,8 +109,8 @@ class NetworkMainViewModel(
 
     private fun searchGuard() {
         if (_state.value.screenState == NetworkScreen.MAIN) {
-            _state.value = _state.value.copy(screenState = NetworkScreen.SEARCH_GUARD)
-            navBarStatus()
+            _state.update { it.copy(screenState = NetworkScreen.SEARCH_GUARD) }
+            checkNavBarStatus()
         }
     }
 
@@ -127,36 +119,37 @@ class NetworkMainViewModel(
     }
 
     private fun goRequests() {
-        _state.value = _state.value.copy(screenState = NetworkScreen.REQUESTS)
-        navBarStatus()
+        _state.update { it.copy(screenState = NetworkScreen.REQUESTS) }
+        checkNavBarStatus()
     }
 
     private fun changeAlertType(networkType: NetworkType) {
-        _state.value = _state.value.copy(networkType = networkType)
+        _state.update { it.copy(networkType = networkType) }
         getMockInfo()
     }
 
     private fun getMockInfo() {
         Timber.d("getMockInfo")
-        _state.value = _state.value.copy(isLoading = true)
+        _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             delay(2000)
             try {
                 val guardsList = async { getGuardsListUseCase.getGuards(_state.value.networkType) }
                 val requestsList =
                     async { if (_state.value.networkType == NetworkType.ON_GUARD) getGuardsRequestsUseCase.getGuardRequests() else emptyList() }
-                _state.value =
-                    _state.value.copy(
+                _state.update {
+                    it.copy(
                         data = NetworkMainModel(
                             requestsList = requestsList.await(),
                             guardiansList = mapToItems(guardsList.await()),
                         )
                     )
+                }
             } catch (e: Exception) {
-                _state.value = _state.value.copy(errorText = e.localizedMessage)
+                _state.update { it.copy(errorText = e.localizedMessage) }
 
             }.also {
-                _state.value = _state.value.copy(isLoading = false)
+                _state.update { it.copy(isLoading = false) }
             }
         }
     }
@@ -188,12 +181,9 @@ class NetworkMainViewModel(
     }
 
     private fun searchContact(searchString: String) {
-        var searchData = _state.value.data
-        searchData?.let {
-            searchData = searchData!!.copy(searchText = searchString)
-            _state.value = _state.value.copy(data = searchData!!.copy())
+        _state.value.data?.let { sData ->
+            _state.update { it.copy(data = sData.copy(searchText = searchString)) }
             _textSearch.value = searchString
-
         }
     }
 
@@ -206,10 +196,11 @@ class NetworkMainViewModel(
                     GuardianStatus.PENDING
 
             }
-            _state.value =
-                _state.value.copy(
-                    data = _state.value.data!!.copy(searchScreenSectionModel = contactsModel).copy()
+            _state.update {
+                it.copy(
+                    data = _state.value.data?.copy(searchScreenSectionModel = contactsModel)?.copy()
                 )
+            }
 
 //            _state.value.data?.let { model ->
 //
@@ -222,14 +213,21 @@ class NetworkMainViewModel(
     }
 
     private fun setSearchResult(result: List<GuardianModel>) {
-        var data = _state.value.data
-        data?.let {
-            data = data!!.copy(searchScreenSectionModel = SearchScreenSectionModel(result))
-            _state.value = _state.value.copy(data = data!!.copy())
+        val data = _state.value.data
+        data?.let { d ->
+            _state.update {
+                it.copy(
+                    data = d.copy(
+                        searchScreenSectionModel = SearchScreenSectionModel(
+                            result
+                        )
+                    )
+                )
+            }
         }
     }
 
-    fun navBarStatus() {
+    fun checkNavBarStatus() {
         Timber.i("onResume ${_state.value.screenState}")
         Handler(Looper.getMainLooper()).postDelayed({
             navigateRoute(NetworkMainRoute.IsNavBarVisible(_state.value.screenState == NetworkScreen.MAIN))

@@ -2,11 +2,13 @@ package com.civilcam.ui.alerts.list
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
+import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.usecase.alerts.GetAlertsListUseCase
 import com.civilcam.ui.alerts.list.model.AlertListActions
 import com.civilcam.ui.alerts.list.model.AlertListRoute
 import com.civilcam.ui.alerts.list.model.AlertListState
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AlertsListViewModel(
@@ -20,16 +22,15 @@ class AlertsListViewModel(
     }
 
     private fun getAlertsList() {
-        _state.value = _state.value.copy(isLoading = true)
+        _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             kotlin.runCatching { getAlertsListUseCase.getAlerts() }
-                .onSuccess { user ->
-                    _state.value = _state.value.copy(data = user)
+                .onSuccess { user -> _state.update { it.copy(data = user) } }
+                .onFailure { error ->
+                    error as ServiceException
+                    _state.update { it.copy(errorText = it.errorText) }
                 }
-                .onFailure {
-                    _state.value = _state.value.copy(errorText = it.localizedMessage)
-                }
-            _state.value = _state.value.copy(isLoading = false)
+            _state.update { it.copy(isLoading = false) }
         }
     }
 
@@ -63,7 +64,7 @@ class AlertsListViewModel(
     }
 
     private fun showResolveAlert(userId: Int) {
-        _state.value = _state.value.copy(resolveId = userId)
+        _state.update { it.copy(resolveId = userId) }
     }
 
     private fun alertResult(isResolved: Boolean) {
@@ -75,12 +76,10 @@ class AlertsListViewModel(
                         it.alertId == _state.value.resolveId
                     }?.isResolved = true
                 }
-                _state.value = _state.value.copy(data = data.toList())
-                _state.value = _state.value.copy(resolveId = null)
+                _state.update { it.copy(data = data.toList(), resolveId = null) }
             }
         } else {
-            _state.value = _state.value.copy(resolveId = null)
+            _state.update { it.copy(resolveId = null) }
         }
-
     }
 }

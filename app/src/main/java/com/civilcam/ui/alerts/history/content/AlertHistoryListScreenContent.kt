@@ -46,7 +46,7 @@ fun AlertHistoryListScreenContent(
                 }
 
 
-                itemsIndexed(data) { index, item ->
+                itemsIndexed(data, key = { _, item -> item.alertId }) { index, item ->
                     InformationRow(
                         title = if (alertType == AlertType.RECEIVED) item.userInfo.userName else stringResource(
                             id = R.string.alerts_history_sent_alert

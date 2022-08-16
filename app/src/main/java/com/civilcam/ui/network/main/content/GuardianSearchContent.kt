@@ -78,7 +78,7 @@ private fun SearchResults(
 
         }
 
-        itemsIndexed(results) { index, item ->
+        itemsIndexed(results, key = { _, item -> item.guardianId }) { index, item ->
             var userStatus by remember { mutableStateOf(item.guardianStatus) }
             userStatus = item.guardianStatus
             SearchRow(

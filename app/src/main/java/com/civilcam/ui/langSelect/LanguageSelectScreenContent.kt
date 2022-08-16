@@ -1,5 +1,6 @@
 package com.civilcam.ui.langSelect
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -50,21 +51,17 @@ fun LanguageSelectScreenContent(viewModel: LanguageSelectViewModel) {
                     .fillMaxSize(),
                 contentAlignment = Alignment.BottomCenter
             ) {
-                BottomCard(state.value.selectedLang, {
-                    viewModel.setInputActions(LangSelectActions.LanguageSelect(it))
-                }, {
-                    viewModel.setInputActions(LangSelectActions.ClickContinue)
-                })
+                BottomCard(state.value.selectedLang, viewModel::setInputActions)
             }
         },
     )
 }
 
+@SuppressLint("UnusedCrossfadeTargetStateParameter")
 @Composable
 fun BottomCard(
     selectedLang: LanguageType,
-    tabSelected: (LanguageType) -> Unit,
-    continueClicked: () -> Unit
+    actionClicked: (LangSelectActions) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(
@@ -94,9 +91,7 @@ fun BottomCard(
                 )
             }
 
-            SegmentedItem(selectedLang) {
-                tabSelected.invoke(it)
-            }
+            SegmentedItem(selectedLang) { actionClicked.invoke(LangSelectActions.LanguageSelect(it)) }
             Crossfade(
                 targetState = selectedLang,
                 modifier = Modifier.fillMaxWidth(),
@@ -116,7 +111,7 @@ fun BottomCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp),
-                buttonClick = { continueClicked.invoke() }
+                buttonClick = { actionClicked.invoke(LangSelectActions.ClickContinue) }
             )
         }
     }
