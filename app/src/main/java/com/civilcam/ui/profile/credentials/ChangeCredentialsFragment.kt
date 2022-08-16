@@ -46,7 +46,8 @@ class ChangeCredentialsFragment : Fragment() {
 									resources.getString(
 										R.string.verification_phone_mask,
 										route.data
-									)
+									),
+									""
 								)
 							)
 						CredentialType.EMAIL ->
@@ -54,6 +55,7 @@ class ChangeCredentialsFragment : Fragment() {
 								R.id.verificationFragment,
 								VerificationFragment.createArgs(
 									VerificationFlow.CHANGE_EMAIL,
+									route.currentEmail,
 									route.data
 								)
 							)

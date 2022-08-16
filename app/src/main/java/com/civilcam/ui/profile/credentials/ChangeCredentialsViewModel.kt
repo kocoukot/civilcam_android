@@ -56,7 +56,8 @@ class ChangeCredentialsViewModel(
 							navigateRoute(
 								ChangeCredentialsRoute.GoSave(
 									dataType,
-									_state.value.phone
+									_state.value.phone,
+									""
 								)
 							)
 						}
@@ -77,7 +78,8 @@ class ChangeCredentialsViewModel(
 							navigateRoute(
 								ChangeCredentialsRoute.GoSave(
 									dataType,
-									_state.value.email
+									_state.value.email,
+									_state.value.currentEmail
 								)
 							)
 						}

@@ -28,7 +28,7 @@ class ResetPasswordFragment : Fragment() {
 				ResetRoute.GoBack -> navController.popBackStack()
 				is ResetRoute.GoContinue -> navController.navigate(
 					R.id.verificationFragment,
-					VerificationFragment.createArgs(VerificationFlow.RESET_PASSWORD, route.email)
+					VerificationFragment.createArgs(VerificationFlow.RESET_PASSWORD, route.email, "")
 				)
 			}
 		}
