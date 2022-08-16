@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.civilcam.R
-import com.civilcam.common.ext.Keyboard
 import com.civilcam.common.ext.keyboardAsState
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.alert.AlertDialogComp
@@ -20,6 +19,7 @@ import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TextActionButton
 import com.civilcam.ui.common.compose.TopAppBarContent
+import com.civilcam.ui.common.loading.DialogLoadingContent
 import com.civilcam.ui.settings.content.*
 import com.civilcam.ui.settings.model.SettingsActions
 import com.civilcam.ui.settings.model.SettingsType
@@ -31,18 +31,28 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 	
 	val state = viewModel.state.collectAsState()
 	val isKeyboardOpen by keyboardAsState()
-	viewModel.setInputActions(SettingsActions.IsNavBarVisible(isKeyboardOpen == Keyboard.Opened))
-	
-	
+
+
 	var currentLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
 	var selectedLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
 	var isActionActive by remember { mutableStateOf(false) }
 	SetLanguageCompose(selectedLanguage)
-	
+
 	BackHandler {
 		viewModel.setInputActions(SettingsActions.ClickGoBack)
 	}
-	
+
+	if (state.value.isLoading) {
+		DialogLoadingContent()
+	}
+	if (state.value.errorText.isNotEmpty()) {
+		AlertDialogComp(
+			dialogText = state.value.errorText,
+			alertType = AlertDialogTypes.OK,
+			onOptionSelected = { viewModel.setInputActions(SettingsActions.ClearErrorText) }
+		)
+	}
+
 	Scaffold(
 		modifier = Modifier
 			.fillMaxSize()

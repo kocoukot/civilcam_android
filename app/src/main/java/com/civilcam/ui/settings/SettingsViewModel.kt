@@ -2,6 +2,7 @@ package com.civilcam.ui.settings
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
+import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.model.settings.NotificationsType
 import com.civilcam.domainLayer.usecase.settings.CheckCurrentPasswordUseCase
 import com.civilcam.domainLayer.usecase.settings.GetCurrentSubscriptionPlanUseCase
@@ -31,17 +32,7 @@ class SettingsViewModel(
             )
             SettingsActions.ClickSaveLanguage -> goBack()
             is SettingsActions.ClickCloseAlertDialog -> {
-                if (action.isConfirm) {
-                    viewModelScope.launch {
-                        logoutUseCase.logout()
-                        if (action.isLogOut) {
-                            navigateRoute(SettingsRoute.GoLanguageSelect) // todo add api
-                        } else {
-                            navigateRoute(SettingsRoute.GoLanguageSelect)// todo add api
-                        }
-                    }
-
-                } else goBack()
+                if (action.isConfirm) doActionOnAccount(action.isConfirm) else goBack()
             }
             SettingsActions.ClickSendToSupport -> contactSupport()
             is SettingsActions.EnterContactSupportInfo -> setContactSupportInfo(
@@ -60,12 +51,31 @@ class SettingsViewModel(
             SettingsActions.SaveNewPassword -> savePassword()
             SettingsActions.ClickGoSubscription -> fetchSubscriptionPlan()
             SettingsActions.GoSubscriptionManage -> goSubManage()
-            else -> {}
+            SettingsActions.ClearErrorText -> hideAlert()
         }
+    }
+
+    private fun hideAlert() {
+        _state.update { it.copy(errorText = "") }
     }
 
     private fun goSubManage() {
         navigateRoute(SettingsRoute.GoSubManage)
+    }
+
+    private fun doActionOnAccount(isLogOut: Boolean) {
+        _state.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            kotlin.runCatching {
+                if (isLogOut) logoutUseCase() else logoutUseCase()
+            }
+                .onSuccess { navigateRoute(SettingsRoute.GoLanguageSelect) }
+                .onFailure { error ->
+                    error as ServiceException
+                    _state.update { it.copy(errorText = error.errorMessage) }
+                }
+            _state.update { it.copy(isLoading = false) }
+        }
     }
 
     private fun fetchSubscriptionPlan() {

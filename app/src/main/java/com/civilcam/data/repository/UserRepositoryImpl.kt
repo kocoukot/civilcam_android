@@ -38,22 +38,19 @@ class UserRepositoryImpl(
 			}
 		}
 
-    override suspend fun signOut(): Boolean {
-        accountStorage.logOut()
-        return true
-    }
-//        safeApiCall {
-//            userService.signOut()
-//        }.let { response ->
-//            when (response) {
-//                is Resource.Success -> {
-//                    accountStorage.logOut()
-//                    response.value.ok
-//                }
-//                is Resource.Failure -> throw exceptionErrorMapper.mapData(response)
-//            }
-//        }
-//
+	override suspend fun logout(): Boolean =
+		safeApiCall {
+			userService.logout()
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> {
+					accountStorage.logOut()
+					response.value.isOk
+				}
+				is Resource.Failure -> throw response.serviceException
+			}
+		}
+
 //    override suspend fun deleteAccount(): Boolean =
 //        safeApiCall {
 //            userService.deleteAccount()

@@ -9,7 +9,7 @@ interface UserRepository {
 
 	suspend fun getCurrentUser(): CurrentUser
 
-	suspend fun signOut(): Boolean
+	suspend fun logout(): Boolean
 //
 //	suspend fun deleteAccount(): Boolean
 //
