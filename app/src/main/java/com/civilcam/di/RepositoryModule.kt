@@ -21,4 +21,7 @@ val repositoryModule = module {
     factory<PublicDocsRepository> { PublicDocsRepositoryImpl(get()) }
 
     factory<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
+
+    factory<LocationRepository> { LocationRepositoryImpl(get()) }
+
 }

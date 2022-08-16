@@ -5,6 +5,7 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.TorchState
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
+import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.ui.emergency.model.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,12 +14,23 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, EmergencyActions>() {
+class EmergencyViewModel(
+	private val fetchUserLocationUseCase: FetchUserLocationUseCase
+) : ComposeViewModel<EmergencyState, EmergencyRoute, EmergencyActions>() {
 	override var _state: MutableStateFlow<EmergencyState> = MutableStateFlow(EmergencyState())
-	
+
 	private val _effect = MutableSharedFlow<CameraEffect>()
 	val effect: SharedFlow<CameraEffect> = _effect
-	
+
+	init {
+		viewModelScope.launch {
+			fetchUserLocationUseCase()
+				.collect {
+					Timber.i("fetchUserLocationUseCase ${it.first}")
+				}
+		}
+	}
+
 	override fun setInputActions(action: EmergencyActions) {
 		when (action) {
 			EmergencyActions.DoubleClickSos -> doubleClickSos()
@@ -36,11 +48,11 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
 			else -> {}
 		}
 	}
-	
+
 	private fun screenChange(newScreenState: EmergencyScreen) {
 		_state.update { it.copy(emergencyScreen = newScreenState) }
 	}
-	
+
 	private fun changeMode(screen: EmergencyScreen) {
 		Timber.d("changeMode $screen")
 		_state.value = _state.value.copy(emergencyScreen = screen)
@@ -56,34 +68,34 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
 			)
 		}
 	}
-	
+
 	private fun goBack() {
 		navigateRoute(EmergencyRoute.HideSystemUI)
 		_state.value = _state.value.copy(emergencyScreen = EmergencyScreen.COUPLED)
 	}
-	
+
 	private fun goSettings() {
 		navigateRoute(EmergencyRoute.GoSettings)
 	}
-	
+
 	private fun goUserProfile() {
 		navigateRoute(EmergencyRoute.GoUserProfile)
 	}
-	
+
 	private fun goPinCode() {
 		navigateRoute(EmergencyRoute.GoPinCode)
 	}
-	
+
 	private fun doubleClickSos() {
 		navigateRoute(EmergencyRoute.CheckPermission)
 	}
-	
+
 	private fun oneClickSafe() {
 		if (state.value.emergencyButton == EmergencyButton.InDangerButton) {
 			goPinCode()
 		}
 	}
-	
+
 	fun launchSos() {
 		steps.value = EmergencyRoute.IsNavBarVisible(false)
 		if (state.value.emergencyButton == EmergencyButton.InSafeButton) {
@@ -93,24 +105,24 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
 			)
 		}
 	}
-	
+
 	private fun disableSosStatus() {
 		_state.value = _state.value.copy(
 			emergencyScreen = EmergencyScreen.NORMAL,
 			emergencyButton = EmergencyButton.InSafeButton
 		)
 	}
-	
+
 	fun isLocationAllowed(isAllowed: Boolean) {
 		_state.update { it.copy(isLocationAllowed = isAllowed) }
 	}
-	
+
 	private fun onStopTapped() {
 		viewModelScope.launch {
 			_effect.emit(CameraEffect.StopRecording)
 		}
 	}
-	
+
 	private fun onRecordStarted() {
 		viewModelScope.launch {
 			try {
@@ -121,7 +133,7 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
 			}
 		}
 	}
-	
+
 	private fun onCameraInitialized(cameraLensInfo: HashMap<Int, CameraInfo>) {
 		if (cameraLensInfo.isNotEmpty()) {
 			val defaultLens = if (cameraLensInfo[CameraSelector.LENS_FACING_BACK] != null) {
@@ -139,7 +151,7 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
 			}
 		}
 	}
-	
+
 	private fun onCameraFlip() {
 		val lens = if (_state.value.lens == CameraSelector.LENS_FACING_FRONT) {
 			CameraSelector.LENS_FACING_BACK
@@ -148,7 +160,7 @@ class EmergencyViewModel : ComposeViewModel<EmergencyState, EmergencyRoute, Emer
 		}
 		_state.update { it.copy(lens = lens) }
 	}
-	
+
 	private fun onFlashTapped() {
 		_state.update {
 			when (_state.value.torchState) {
