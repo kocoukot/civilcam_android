@@ -4,6 +4,7 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import com.civilcam.domainLayer.model.CurrentUser
 import com.google.gson.Gson
+import io.reactivex.Maybe
 import java.util.*
 
 
@@ -85,12 +86,15 @@ class AccountStorage(
 	private fun getAccount(): Account? =
 		accountManager.getAccountsByType(ACCOUNT_TYPE).singleOrNull()
 	
-	fun getUser(): CurrentUser =
-		getAccount().let { account ->
-			accountManager.getUserData(account, USER)
-				.takeIf { it.isNotEmpty() }
-				.let { gson.fromJson(it, CurrentUser::class.java) }
-		}
+	
+	fun getUser(): Maybe<CurrentUser> = Maybe.fromCallable {
+		getAccount()
+			?.let { account ->
+				accountManager.getUserData(account, USER)
+					?.takeIf { it.isNotEmpty() }
+					?.let { gson.fromJson(it, CurrentUser::class.java) }
+			}
+	}
 	
 	companion object {
 		private const val ACCOUNT_NAME = "CivilCam"

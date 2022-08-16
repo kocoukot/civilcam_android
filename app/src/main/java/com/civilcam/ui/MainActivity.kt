@@ -8,8 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
+import com.civilcam.common.ext.navigateByDirection
 import com.civilcam.databinding.ActivityMainBinding
 import com.civilcam.service.notifications.NotificationHelper
+import com.civilcam.ui.common.NavigationDirection
 import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.setupWithNavController
 import com.standartmedia.common.ext.castSafe
@@ -46,6 +48,13 @@ class MainActivity : AppCompatActivity() {
                 navController = nav.navController
             ) {}
         }
+    
+        intent?.extras?.getParcelable<NavigationDirection>(EXTRA_DIRECTION)
+            ?.let(::navigateByDirection)
+    }
+    
+    private fun navigateByDirection(direction: NavigationDirection) {
+        navHost?.navController?.navigateByDirection(direction)
     }
 
     private val onBackStackChangedListener by lazy {
@@ -87,5 +96,11 @@ class MainActivity : AppCompatActivity() {
                 true
             }
         }
+    }
+    
+    companion object {
+        const val FROM_NOTIFICATION = "fromNotification"
+        const val EXTRA_DIRECTION = "extra_nav_direction"
+        const val SHARED_RATING = "sharedRating"
     }
 }

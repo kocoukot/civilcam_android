@@ -23,6 +23,7 @@ import com.civilcam.ui.profile.setup.ProfileSetupViewModel
 import com.civilcam.ui.profile.userDetails.UserDetailsViewModel
 import com.civilcam.ui.profile.userProfile.UserProfileViewModel
 import com.civilcam.ui.settings.SettingsViewModel
+import com.civilcam.ui.splash.SplashViewModel
 import com.civilcam.ui.subscription.SubscriptionViewModel
 import com.civilcam.ui.terms.TermsViewModel
 import com.civilcam.ui.verification.VerificationViewModel
@@ -43,6 +44,8 @@ val authModule = module {
 	viewModel { LanguageSelectViewModel() }
 	
 	viewModel { OnBoardingViewModel() }
+	
+	viewModel { SplashViewModel(get()) }
 	
 	viewModel { (isSettings: Boolean) -> TermsViewModel(isSettings, get(), get()) }
 	
