@@ -165,13 +165,11 @@ class UserProfileViewModel(
 							firstName = userdata.userBaseInfo.firstName,
 							lastName = userdata.userBaseInfo.lastName,
 							dateBirth = userdata.userBaseInfo.dob,
-							phoneNumber = userdata.userBaseInfo.phone,
 							location = userdata.userBaseInfo.address
 						)
 					)
 					if (result) _state.value =
 						_state.value.copy(screenState = UserProfileScreen.PROFILE)
-					_state.value = _state.value.copy(data = CurrentUser())
 					fetchCurrentUser()
 					
 				} catch (e: ServiceException) {
