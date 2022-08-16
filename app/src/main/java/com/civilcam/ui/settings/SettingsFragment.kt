@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.civilcam.R
+import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
@@ -33,12 +34,9 @@ class SettingsFragment : Fragment() {
                     TermsFragment.createArgs(true)
                 )
                 SettingsRoute.GoLanguageSelect -> {
-                    navController.popBackStack()
-                    navController.popBackStack()
-                    navController.navigate(R.id.languageSelectFragment)
-//                    navController.backStack.pop()
-//                    navController.backStack.clear()
-//                    navController.navigate(R.id.action_settingsFragment_to_languageSelectFragment)
+//                    navController.popBackStack()
+//                    navController.popBackStack()
+                    navController.navigateToRoot(R.id.languageSelectFragment)
                 }
                 SettingsRoute.GoSubManage -> navController.navigate(R.id.subscriptionFragment, SubscriptionFragment.createArgs(true))
                 else -> {}
