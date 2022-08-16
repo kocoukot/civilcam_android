@@ -86,15 +86,12 @@ class AccountStorage(
 	private fun getAccount(): Account? =
 		accountManager.getAccountsByType(ACCOUNT_TYPE).singleOrNull()
 	
-	
-	fun getUser(): Maybe<CurrentUser> = Maybe.fromCallable {
-		getAccount()
-			?.let { account ->
-				accountManager.getUserData(account, USER)
-					?.takeIf { it.isNotEmpty() }
-					?.let { gson.fromJson(it, CurrentUser::class.java) }
-			}
-	}
+	fun getUser(): CurrentUser =
+		getAccount().let { account ->
+			accountManager.getUserData(account, USER)
+				.takeIf { it.isNotEmpty() }
+				.let { gson.fromJson(it, CurrentUser::class.java) }
+		}
 	
 	companion object {
 		private const val ACCOUNT_NAME = "CivilCam"
