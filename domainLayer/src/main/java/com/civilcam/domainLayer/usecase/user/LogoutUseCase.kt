@@ -5,5 +5,5 @@ import com.civilcam.domainLayer.repos.UserRepository
 class LogoutUseCase(
     private val userRepository: UserRepository
 ) {
-    suspend fun logout() = userRepository.signOut()
+    suspend operator fun invoke() = userRepository.logout()
 }

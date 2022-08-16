@@ -2,6 +2,7 @@ package com.civilcam.data.network.service
 
 import com.civilcam.data.network.Endpoint
 import com.civilcam.data.network.model.request.user.AcceptTermsRequest
+import com.civilcam.data.network.model.response.SuccessResponse
 import com.civilcam.data.network.model.response.auth.UserResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -30,8 +31,8 @@ interface UserService {
 //    @POST(Endpoint.User.CONTACT_SUPPORT)
 //    suspend fun contactSupport(@Body request: ContactSupportRequest): SuccessResponse
 //
-//    @POST(Endpoint.User.SIGN_OUT)
-//    suspend fun signOut(): SuccessResponse
+@POST(Endpoint.User.LOGOUT)
+suspend fun logout(): SuccessResponse
 //
 //    @POST(Endpoint.User.DELETE_ACCOUNT)
 //    suspend fun deleteAccount(): SuccessResponse

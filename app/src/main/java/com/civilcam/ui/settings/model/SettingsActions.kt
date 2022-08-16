@@ -17,7 +17,6 @@ sealed class SettingsActions : ComposeFragmentActions {
         SettingsActions()
 
     object ClickSendToSupport : SettingsActions()
-    data class IsNavBarVisible(val hideNavBar: Boolean) : SettingsActions()
 
     data class EnterContactSupportInfo(
         val issue: String,
@@ -38,7 +37,10 @@ sealed class SettingsActions : ComposeFragmentActions {
 
 
     object SaveNewPassword : SettingsActions()
-    
+
     object GoSubscriptionManage : SettingsActions()
+
+
+    object ClearErrorText : SettingsActions()
 
 }

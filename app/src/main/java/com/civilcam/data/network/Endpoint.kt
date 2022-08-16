@@ -15,6 +15,8 @@ object Endpoint {
     object User {
         const val CURRENT_USER = "current-user"
         const val ACCEPT_TERMS_POLICY = "accept-terms-policy"
+        const val LOGOUT = "logout"
+
     }
 
     object Profile {
