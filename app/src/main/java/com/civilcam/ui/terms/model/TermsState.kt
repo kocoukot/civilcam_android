@@ -6,7 +6,7 @@ import com.civilcam.domainLayer.model.docs.LegalDocs
 data class TermsState(
     val isLoading: Boolean = false,
     var errorText: String = "",
-    val isSettings: Boolean = false,
+    val isSettings: Boolean = true,
     val isTermsAccepted: Boolean = false,
     val legalDocs: LegalDocs? = null
 ) : ComposeFragmentState

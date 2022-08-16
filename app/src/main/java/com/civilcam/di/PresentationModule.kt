@@ -110,7 +110,7 @@ val profileModule = module {
 
 val emergencyModule = module {
 	
-	viewModel { EmergencyViewModel() }
+	viewModel { EmergencyViewModel(get()) }
 }
 
 
