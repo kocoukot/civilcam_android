@@ -2,6 +2,7 @@ package com.civilcam.ui.alerts.history
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
+import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.model.alerts.AlertType
 import com.civilcam.domainLayer.usecase.alerts.GetHistoryAlertListUseCase
 import com.civilcam.ui.alerts.history.model.AlertHistoryActions
@@ -35,15 +36,14 @@ class AlertsHistoryViewModel(
 
     private fun getAlertHistoryList() {
         viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true)
+            _state.update { it.copy(isLoading = true) }
             kotlin.runCatching { getHistoryAlertListUseCase.getAlerts(_state.value.alertType) }
-                .onSuccess { user ->
-                    _state.value = _state.value.copy(data = user)
+                .onSuccess { user -> _state.update { it.copy(data = user) } }
+                .onFailure { error ->
+                    error as ServiceException
+                    _state.update { it.copy(errorText = error.errorMessage) }
                 }
-                .onFailure {
-                    _state.value = _state.value.copy(errorText = it.localizedMessage)
-                }
-            _state.value = _state.value.copy(isLoading = false)
+            _state.update { it.copy(isLoading = false) }
         }
     }
 
@@ -51,12 +51,9 @@ class AlertsHistoryViewModel(
         when (_state.value.alertHistoryScreen) {
             AlertHistoryScreen.HISTORY_LIST -> navigateRoute(AlertHistoryRoute.GoBack)
             AlertHistoryScreen.HISTORY_DETAIL -> {
-                _state.update {
-                    it.copy(alertHistoryScreen = AlertHistoryScreen.HISTORY_LIST)
-                }
+                _state.update { it.copy(alertHistoryScreen = AlertHistoryScreen.HISTORY_LIST) }
             }
         }
-
     }
 
     private fun goAlertDetails(alertId: Int) {
@@ -64,9 +61,7 @@ class AlertsHistoryViewModel(
     }
 
     private fun changeAlertType(alertType: AlertType) {
-        _state.value = _state.value.copy(alertType = alertType)
+        _state.update { it.copy(alertType = alertType) }
         if (_state.value.mockNeedToLoad) getAlertHistoryList()
     }
-
-
 }

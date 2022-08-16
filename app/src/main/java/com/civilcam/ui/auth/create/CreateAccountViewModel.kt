@@ -51,16 +51,18 @@ class CreateAccountViewModel(
     }
 
     private fun confirmPasswordEntered(password: String) {
-        _state.value =
-            _state.value.copy(passwordModel = _state.value.passwordModel.copy(confirmPassword = password))
+        _state.update { it.copy(passwordModel = _state.value.passwordModel.copy(confirmPassword = password)) }
     }
 
     private fun passwordEntered(password: String, meetCriteria: Boolean) {
-        _state.value =
-            _state.value.copy(passwordModel = _state.value.passwordModel.copy(password = password))
-        _state.value =
-            _state.value.copy(passwordModel = _state.value.passwordModel.copy(meetCriteria = meetCriteria))
-
+        _state.update {
+            it.copy(
+                passwordModel = _state.value.passwordModel.copy(
+                    password = password,
+                    meetCriteria = meetCriteria
+                )
+            )
+        }
     }
 
     private fun emailEntered(email: String) {

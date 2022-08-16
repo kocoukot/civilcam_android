@@ -24,7 +24,7 @@ class LanguageSelectFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         (activity as MainActivity).showBottomNavBar(false)
-        WindowCompat.setDecorFitsSystemWindows(activity!!.window!!, true)
+        WindowCompat.setDecorFitsSystemWindows(requireActivity().window!!, true)
 
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {

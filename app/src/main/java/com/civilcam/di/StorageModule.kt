@@ -41,10 +41,6 @@ val storageModule = module {
 
     single { SharedPreferencesStorage(get()) }
 
-//	single { ObjectsSharedPreferencesStorage(get(), get()) }
-//
-//	single { AssetsStorage(get()) }
-
     single { ContactsStorage(get()) }
 
     single { MediaStorage(get()) }
