@@ -11,8 +11,6 @@ interface UserRepository {
 	suspend fun getCurrentUser(): CurrentUser
 
 	suspend fun logout(): Boolean
-
-	suspend fun signOut(): Boolean
 	
 	suspend fun changeEmail(currentEmail: String, newEmail: String): Boolean
 	
