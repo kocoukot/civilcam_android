@@ -37,6 +37,7 @@ class VerificationViewModel(
                 newSubject = newSubject
             )
         }
+        startTimer()
     }
 
     override fun setInputActions(action: VerificationActions) {
