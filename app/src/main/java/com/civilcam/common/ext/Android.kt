@@ -4,46 +4,76 @@ import androidx.annotation.IdRes
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import com.civilcam.R
+import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ui.common.NavigationDirection
+import com.civilcam.ui.terms.TermsFragment
+import com.civilcam.ui.verification.VerificationFragment
 import com.google.android.gms.tasks.Task
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 fun NavController.navigateToRoot(
-    @IdRes rootScreen: Int,
-    @IdRes vararg backStack: Int = intArrayOf()
+	@IdRes rootScreen: Int,
+	@IdRes vararg backStack: Int = intArrayOf()
 ) {
-    backStack.forEachIndexed { index, screen ->
-        if (index == 0) {
-            navigate(
-                screen, null,
-                NavOptions
-                    .Builder()
-                    .setPopUpTo(R.id.nav_graph, false)
-                    .build()
-            )
-        } else {
-            navigate(screen)
-        }
-    }
-    navigate(
-        rootScreen, null,
-        NavOptions.Builder()
-            .setPopUpTo(backStack.lastOrNull() ?: R.id.nav_graph, false)
-            .build()
-    )
+	backStack.forEachIndexed { index, screen ->
+		if (index == 0) {
+			navigate(
+				screen, null,
+				NavOptions
+					.Builder()
+					.setPopUpTo(R.id.nav_graph, false)
+					.build()
+			)
+		} else {
+			navigate(screen)
+		}
+	}
+	navigate(
+		rootScreen, null,
+		NavOptions.Builder()
+			.setPopUpTo(backStack.lastOrNull() ?: R.id.nav_graph, false)
+			.build()
+	)
 }
 
 fun NavController.navigateByDirection(
-    direction: NavigationDirection
+	direction: NavigationDirection
 ) {
-    when (direction) {
-        is NavigationDirection.SignInSuccess -> {
-            navigate(R.id.emergency_root)
-        }
-        is NavigationDirection.EmailVerification -> {}
-        is NavigationDirection.ProfileSetup -> {}
-    }
+	when (direction) {
+		is NavigationDirection.SignInSuccess -> {
+			navigate(R.id.emergency_root)
+		}
+		is NavigationDirection.EmailVerification -> {
+			navigate(
+				R.id.verificationFragment,
+				VerificationFragment.createArgs(
+					VerificationFlow.NEW_EMAIL,
+					direction.email
+				)
+			)
+		}
+		is NavigationDirection.ProfileSetup -> {
+			navigate(
+				R.id.profileSetupFragment,
+			)
+		}
+		is NavigationDirection.TermsAndPolicyAccept -> {
+			navigate(
+				R.id.termsFragment,
+				TermsFragment.createArgs(true)
+			)
+		}
+		is NavigationDirection.PhoneVerification -> {
+//			navigate(
+//				R.id.verificationFragment,
+//				VerificationFragment.createArgs(
+//					VerificationFlow.NEW_PHONE,
+//					direction.phone
+//				)
+//			)
+		}
+	}
 }
 
 suspend fun <T> Task<T>.awaitResult() = suspendCoroutine<T?> { continuation ->

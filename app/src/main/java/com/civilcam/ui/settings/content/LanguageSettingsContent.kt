@@ -35,21 +35,21 @@ fun LanguageSettingsContent(
         Divider(color = CCTheme.colors.lightGray, modifier = Modifier.height(30.dp))
 
         LanguageSelectSection(
-            LanguageType.ENGLISH,
+            LanguageType.en,
             currentLanguage = currentLanguage,
             onLanguageSelect = {
 //                currentLanguage = LanguageType.ENGLISH
-                onLanguageSelect.invoke(LanguageType.ENGLISH)
+                onLanguageSelect.invoke(LanguageType.en)
             }
         )
 
         Spacer(modifier = Modifier.height(12.dp))
         LanguageSelectSection(
-            LanguageType.SPAIN,
+            LanguageType.es,
             currentLanguage = currentLanguage,
             onLanguageSelect = {
 //                currentLanguage = LanguageType.SPAIN
-                onLanguageSelect.invoke(LanguageType.SPAIN)
+                onLanguageSelect.invoke(LanguageType.es)
             }
         )
     }

@@ -1,7 +1,10 @@
 package com.civilcam.data.network.service
 
 import com.civilcam.data.network.Endpoint
+import com.civilcam.data.network.model.request.auth.CheckEmailRequest
+import com.civilcam.data.network.model.request.auth.SignInRequest
 import com.civilcam.data.network.model.request.auth.SignUpRequest
+import com.civilcam.data.network.model.response.auth.CheckEmailResponse
 import com.civilcam.data.network.model.response.auth.UserResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -9,15 +12,15 @@ import retrofit2.http.POST
 
 interface AuthService {
 
-//    @POST(Endpoint.Auth.CHECK_USER_EXISTS)
-//    suspend fun checkUserExists(@Body request: CheckEmailRequest): CheckEmailResponse
+    @POST(Endpoint.Auth.CHECK_USER)
+    suspend fun checkUserExists(@Body request: CheckEmailRequest): CheckEmailResponse
 
     @POST(Endpoint.Auth.SIGN_UP)
     suspend fun signUp(@Body request: SignUpRequest): UserResponse
 
-//    @POST(Endpoint.Auth.SIGN_IN)
-//    suspend fun signIn(@Body request: SignInRequest): UserResponse
-//
+    @POST(Endpoint.Auth.SIGN_IN)
+    suspend fun signIn(@Body request: SignInRequest): UserResponse
+
 //    @POST(Endpoint.Auth.GOOGLE_SIGN_IN)
 //    suspend fun googleSignIn(@Body request: SocialLoginRequest): UserResponse
 //

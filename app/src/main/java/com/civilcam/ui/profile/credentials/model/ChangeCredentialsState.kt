@@ -5,18 +5,16 @@ import com.civilcam.common.ext.isEmail
 
 data class ChangeCredentialsState(
 	val isLoading: Boolean = false,
-	val errorText: String = "Invalid email. Please try again. (eg:email@gmail.com)",
-	val phoneError: String = "This phone number is already taken. Please try another one",
+	val errorText: String = "",
 	val email: String = "",
 	val phone: String = "",
 	val isEmail: Boolean = true,
-	val screenState: CredentialType = CredentialType.PHONE
+	val screenState: CredentialType = CredentialType.PHONE,
+	val currentEmail: String = "",
+	val emailError: Boolean = false,
+	val phoneError: Boolean = false
 ) : ComposeFragmentState {
 	
-	//for ui test
-	val phoneTaken = phone == "1111111111"
-	
-	val validPhone = phone != "1111111111" && phone.length == 10
-	
+	val validPhone = phone.length == 10
 	val isFilled: Boolean = email.isNotEmpty() && email.isEmail()
 }

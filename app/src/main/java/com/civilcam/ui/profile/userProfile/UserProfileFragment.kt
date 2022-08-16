@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import com.civilcam.R
 import com.civilcam.common.ext.showAlertDialogFragment
 import com.civilcam.ui.auth.pincode.PinCodeFragment
@@ -19,6 +20,7 @@ import com.civilcam.ui.profile.credentials.ChangeCredentialsFragment
 import com.civilcam.ui.profile.credentials.model.CredentialType
 import com.civilcam.ui.profile.userProfile.model.UserProfileRoute
 import com.civilcam.ui.profile.userProfile.model.UserProfileType
+import com.civilcam.ui.verification.VerificationFragment
 import com.civilcam.utils.contract.GalleryActivityResultContract
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -44,6 +46,11 @@ class UserProfileFragment : Fragment() {
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
+		
+		setFragmentResultListener(VerificationFragment.RESULT_BACK_STACK) { _, _ ->
+			viewModel.fetchCurrentUser()
+		}
+		
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
 				UserProfileRoute.GoBack -> navController.popBackStack()
@@ -53,7 +60,8 @@ class UserProfileFragment : Fragment() {
 							navController.navigate(
 								R.id.changeCredentialsFragment,
 								ChangeCredentialsFragment.createArgs(
-									CredentialType.PHONE
+									CredentialType.PHONE,
+									route.credential ?: ""
 								)
 							)
 						}
@@ -61,7 +69,8 @@ class UserProfileFragment : Fragment() {
 							navController.navigate(
 								R.id.changeCredentialsFragment,
 								ChangeCredentialsFragment.createArgs(
-									CredentialType.EMAIL
+									CredentialType.EMAIL,
+									route.credential ?: ""
 								)
 							)
 						}

@@ -48,7 +48,7 @@ val authModule = module {
 	
 	viewModel { ProfileSetupViewModel(get(), get(), get(), get()) }
 	
-	viewModel { LoginViewModel() }
+	viewModel { LoginViewModel(get()) }
 	
 	viewModel { CreateAccountViewModel(get()) }
 	
@@ -98,9 +98,11 @@ val profileModule = module {
 	
 	viewModel { SettingsViewModel(get(), get(), get()) }
 	
-	viewModel { (credentialType: CredentialType) ->
+	viewModel { (credentialType: CredentialType, credential: String) ->
 		ChangeCredentialsViewModel(
 			credentialType,
+			credential,
+			get(),
 			get()
 		)
 	}

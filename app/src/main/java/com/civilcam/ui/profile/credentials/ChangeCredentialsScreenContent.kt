@@ -99,7 +99,7 @@ fun ChangeCredentialsScreenContent(viewModel: ChangeCredentialsViewModel) {
 							},
 							value = state.value.email,
 							errorMessage = state.value.errorText,
-							isEmail = state.value.isEmail
+							isEmail = !state.value.emailError
 						)
 					}
 					CredentialType.PHONE -> {
@@ -113,8 +113,8 @@ fun ChangeCredentialsScreenContent(viewModel: ChangeCredentialsViewModel) {
 									)
 								)
 							},
-							isPhoneTaken = state.value.phoneTaken,
-							errorMessage = state.value.phoneError
+							errorMessage = state.value.errorText,
+							isPhoneTaken = state.value.phoneError
 						)
 					}
 				}

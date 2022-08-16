@@ -5,6 +5,7 @@ object Endpoint {
     object Auth {
         const val CHECK_USER = "check-user-exists"
         const val SIGN_UP = "sign-up"
+        const val SIGN_IN = "sign-in"
     }
 
     object Verification {
@@ -16,7 +17,10 @@ object Endpoint {
         const val CURRENT_USER = "current-user"
         const val ACCEPT_TERMS_POLICY = "accept-terms-policy"
         const val LOGOUT = "logout"
-
+        const val CHANGE_EMAIL = "change-email"
+        const val CHECK_PASSWORD = "check-password"
+        const val CHANGE_PASSWORD = "change-password"
+        const val SET_USER_LANGUAGE = "set-user-language"
     }
 
     object Profile {
