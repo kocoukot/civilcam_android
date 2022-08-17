@@ -5,7 +5,7 @@ import com.civilcam.common.ext.isEmail
 
 data class LoginState(
 	val isLoading: Boolean = false,
-	val errorText: String = "",
+	val errorText: String = "Invalid email. Please try again. (eg:email@gmail.com)",
 	val email: String = "",
 	val password: String = "",
 	val isEmail: Boolean = false,
