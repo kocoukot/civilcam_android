@@ -15,7 +15,6 @@ import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.domainLayer.usecase.location.GetLastKnownLocationUseCase
 import com.civilcam.domainLayer.usecase.location.GetPlacesAutocompleteUseCase
 import com.civilcam.domainLayer.usecase.profile.*
-import com.civilcam.domainLayer.usecase.settings.CheckCurrentPasswordUseCase
 import com.civilcam.domainLayer.usecase.settings.GetCurrentSubscriptionPlanUseCase
 import com.civilcam.domainLayer.usecase.user.*
 import com.civilcam.domainLayer.usecase.verify.SendOtpCodeUseCase
@@ -58,9 +57,7 @@ val domainModule = module {
 	factory { GetHistoryAlertListUseCase(get()) }
 	
 	factory { GetHistoryDetailUseCase(get()) }
-	
-	factory { CheckCurrentPasswordUseCase(get()) }
-	
+
 	factory { GetGuardsListUseCase(get()) }
 	
 	factory { GetGuardsRequestsUseCase(get()) }
@@ -76,8 +73,8 @@ val domainModule = module {
     factory { GetLastKnownLocationUseCase(get()) }
 	
 	factory { ChangeEmailUseCase(get()) }
-	
-	factory { CheckPasswordUseCase(get()) }
+
+    factory { CheckCurrentPasswordUseCase(get()) }
 	
 	factory { ChangePasswordUseCase(get()) }
 	

@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.civilcam.R
-import com.civilcam.common.ext.keyboardAsState
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.alert.AlertDialogTypes
@@ -28,10 +27,8 @@ import com.civilcam.utils.LocaleHelper.SetLanguageCompose
 
 @Composable
 fun SettingsScreenContent(viewModel: SettingsViewModel) {
-	
-	val state = viewModel.state.collectAsState()
-	val isKeyboardOpen by keyboardAsState()
 
+	val state = viewModel.state.collectAsState()
 
 	var currentLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
 	var selectedLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
@@ -55,15 +52,15 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 
 	Scaffold(
 		modifier = Modifier
-			.fillMaxSize()
-			.background(CCTheme.colors.lightGray),
+            .fillMaxSize()
+            .background(CCTheme.colors.lightGray),
 		backgroundColor = CCTheme.colors.lightGray,
 		topBar = {
 			Column(
 				modifier = Modifier.fillMaxWidth()
 			) {
 				Crossfade(state.value.settingsType) { settingsType ->
-					
+
 					val isActionEnabled =
 						if (settingsType == SettingsType.LANGUAGE ||
 							settingsType == SettingsType.CONTACT_SUPPORT ||
@@ -88,34 +85,21 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 							}
 						},
 						actionItem = {
-							when (settingsType) {
-								SettingsType.CONTACT_SUPPORT -> {
-									TextActionButton(
-										isEnabled = isActionEnabled,
-										actionTitle = stringResource(id = R.string.send_text)
-									) {
-										setAction(viewModel, settingsType)
-									}
-								}
-								SettingsType.LANGUAGE, SettingsType.CREATE_PASSWORD -> {
-									TextActionButton(
-										isEnabled = isActionEnabled,
-										actionTitle = stringResource(id = R.string.save_text)
-									) {
-										setAction(viewModel, settingsType)
-									}
-								}
-								SettingsType.CHANGE_PASSWORD -> {
-									TextActionButton(
-										isEnabled = isActionEnabled,
-										actionTitle = stringResource(id = R.string.continue_text)
-									) {
-										setAction(viewModel, settingsType)
-									}
-								}
-								else -> {}
-							}
-						}
+                            if (settingsType in listOf(
+                                    SettingsType.LANGUAGE,
+                                    SettingsType.CREATE_PASSWORD,
+                                    SettingsType.CONTACT_SUPPORT,
+                                    SettingsType.CHANGE_PASSWORD
+                                )
+                            ) {
+                                TextActionButton(
+                                    isEnabled = isActionEnabled,
+                                    actionTitle = stringResource(id = settingsType.actionBtnTitle)
+                                ) {
+                                    viewModel.setInputActions(setAction(settingsType))
+                                }
+                            }
+                        }
 					)
 				}
 				RowDivider()
@@ -133,7 +117,7 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 						selectedLanguage = LocaleHelper.getSelectedLanguage()
 						isActionActive = false
 					}
-				
+
 				SettingsType.ALERTS -> {
 					state.value.data.alertsSectionData?.let { settingsAlertsSectionData ->
 						AlertsSettingsContent(settingsAlertsSectionData) { isSwitched, type ->
@@ -146,16 +130,16 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 						}
 					}
 				}
-				
-				SettingsType.CREATE_PASSWORD -> {
+
+                SettingsType.CREATE_PASSWORD -> {
 					state.value.data.createPasswordSectionData.let { data ->
 						isActionActive = data.isFilled
 						CreatePasswordSettingsContent(
 							data
 						) { type, meetCriteria, password ->
 							isActionActive = data.isFilled
-							
-							viewModel.setInputActions(
+
+                            viewModel.setInputActions(
 								SettingsActions.NewPasswordEntered(
 									type,
 									meetCriteria,
@@ -164,23 +148,20 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 							)
 						}
 					}
-					
-				}
-				
-				SettingsType.CHANGE_PASSWORD -> {
+
+                }
+
+                SettingsType.CHANGE_PASSWORD -> {
 					state.value.data.changePasswordSectionData?.let { data ->
-						isActionActive =
-							data.error.isNullOrEmpty() && data.currentPassword.isNotEmpty()
-						ChangePasswordSettingsContent(
-							data
-						) {
-							viewModel.setInputActions(SettingsActions.EnterCurrentPassword(it))
-						}
-					}
+                        isActionActive = !data.hasError && data.currentPassword.isNotEmpty()
+                        ChangePasswordSettingsContent(data) {
+                            viewModel.setInputActions(SettingsActions.EnterCurrentPassword(it))
+                        }
+                    }
 				}
-				
-				
-				SettingsType.LANGUAGE -> {
+
+
+                SettingsType.LANGUAGE -> {
 					LanguageSettingsContent(
 						selectedLanguage
 					) {
@@ -243,22 +224,23 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 						onSubscriptionPlanClick = {}
 					)
 				}
-				
-				else -> {}
+
+                else -> {}
 			}
 		}
 	}
 }
 
-private fun setAction(viewModel: SettingsViewModel, settingsType: SettingsType) {
-	when (settingsType) {
-		SettingsType.LANGUAGE -> viewModel.setInputActions(SettingsActions.ClickSaveLanguage)
-		SettingsType.CONTACT_SUPPORT -> viewModel.setInputActions(SettingsActions.ClickSendToSupport)
-		SettingsType.CHANGE_PASSWORD -> viewModel.setInputActions(SettingsActions.CheckCurrentPassword)
-		SettingsType.CREATE_PASSWORD -> viewModel.setInputActions(SettingsActions.SaveNewPassword)
-		else -> {}
-	}
-}
+private fun setAction(settingsType: SettingsType): SettingsActions =
+    when (settingsType) {
+        SettingsType.LANGUAGE -> SettingsActions.ClickSaveLanguage(LocaleHelper.getSelectedLanguage())
+        SettingsType.CONTACT_SUPPORT -> SettingsActions.ClickSendToSupport
+        SettingsType.CHANGE_PASSWORD -> SettingsActions.CheckCurrentPassword
+        SettingsType.CREATE_PASSWORD -> SettingsActions.SaveNewPassword
+        else -> {
+            SettingsActions.ClickGoBack
+        }
+    }
 
 private fun screenTitle(settingsType: SettingsType) = when (settingsType) {
 	SettingsType.MAIN, SettingsType.LOG_OUT, SettingsType.TERMS_AND_POLICY, SettingsType.DELETE_ACCOUNT -> R.string.settings_title

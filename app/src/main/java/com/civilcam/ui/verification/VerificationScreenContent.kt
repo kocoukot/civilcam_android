@@ -59,14 +59,14 @@ fun VerificationScreenContent(
                 TopAppBarContent(
                     title = when (state.value.verificationFlow) {
 						VerificationFlow.NEW_PHONE, VerificationFlow.CHANGE_PHONE -> {
-							stringResource(id = R.string.phone_verification)
-						}
-						VerificationFlow.NEW_EMAIL, VerificationFlow.CHANGE_EMAIL -> {
-							stringResource(id = R.string.email_verification)
-						}
-						VerificationFlow.RESET_PASSWORD -> {
-							stringResource(id = R.string.verification_title)
-						}
+                            stringResource(id = R.string.phone_verification)
+                        }
+                        VerificationFlow.CURRENT_EMAIL, VerificationFlow.NEW_EMAIL, VerificationFlow.CHANGE_EMAIL -> {
+                            stringResource(id = R.string.email_verification)
+                        }
+                        VerificationFlow.RESET_PASSWORD -> {
+                            stringResource(id = R.string.verification_title)
+                        }
 					},
 					navigationItem = {
 						BackButton {
@@ -87,9 +87,9 @@ fun VerificationScreenContent(
 		) {
 			Column(
 				modifier = Modifier
-					.fillMaxWidth()
-					.padding(horizontal = 16.dp)
-					.weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .weight(1f)
 			) {
 				Spacer(modifier = Modifier.height(32.dp))
 				
@@ -141,8 +141,8 @@ fun VerificationScreenContent(
 			
 			Column(
 				modifier = Modifier
-					.fillMaxWidth()
-					.padding(horizontal = 16.dp),
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
 				
@@ -164,10 +164,10 @@ fun VerificationScreenContent(
 						color = CCTheme.colors.primaryRed,
 						fontSize = 17.sp,
 						modifier = Modifier
-							.clickable {
-								viewModel.setInputActions(VerificationActions.ResendClick)
-							}
-							.background(Color.Transparent, RectangleShape),
+                            .clickable {
+                                viewModel.setInputActions(VerificationActions.ResendClick)
+                            }
+                            .background(Color.Transparent, RectangleShape),
 						fontWeight = FontWeight.SemiBold
 					)
 				}

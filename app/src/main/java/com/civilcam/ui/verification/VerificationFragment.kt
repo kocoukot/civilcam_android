@@ -31,11 +31,11 @@ class VerificationFragment : Fragment() {
 	private val viewModel: VerificationViewModel by viewModel {
 		parametersOf(verificationFlow, subject, newSubject)
 	}
-	
+
 	private val verificationFlow: VerificationFlow by requireArg(ARG_FLOW)
 	private val subject: String by requireArg(ARG_SUBJECT)
 	private val newSubject: String by requireArg(ARG_NEW_SUBJECT)
-	
+
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
@@ -50,17 +50,17 @@ class VerificationFragment : Fragment() {
 				VerificationRoute.ToNextScreen -> {
 					Handler(Looper.getMainLooper()).postDelayed(300) {
 						when (verificationFlow) {
-							VerificationFlow.NEW_EMAIL ->
-								if (newSubject.isEmpty()) {
-									navController.navigate(
-										R.id.termsFragment,
-										TermsFragment.createArgs(false)
-									)
-								} else {
-									setFragmentResult(
-										RESULT_BACK_STACK,
-										bundleOf(RESULT_BACK_STACK to true)
-									)
+                            VerificationFlow.CURRENT_EMAIL ->
+                                if (newSubject.isEmpty()) {
+                                    navController.navigate(
+                                        R.id.termsFragment,
+                                        TermsFragment.createArgs(false)
+                                    )
+                                } else {
+                                    setFragmentResult(
+                                        RESULT_BACK_STACK,
+                                        bundleOf(RESULT_BACK_STACK to true)
+                                    )
 									navController.popBackStack(
 										R.id.userProfileFragment,
 										false
@@ -83,16 +83,17 @@ class VerificationFragment : Fragment() {
 									false
 								)
 							}
-							VerificationFlow.CHANGE_EMAIL -> {
-								navController.navigate(
-									R.id.verificationFragment,
-									createArgs(
-										VerificationFlow.NEW_EMAIL,
-										newSubject,
-										newSubject
-									)
-								)
-							}
+                            VerificationFlow.CHANGE_EMAIL -> {
+                                navController.navigate(
+                                    R.id.verificationFragment,
+                                    createArgs(
+                                        VerificationFlow.NEW_EMAIL,
+                                        newSubject,
+                                        newSubject
+                                    )
+                                )
+                            }
+                            VerificationFlow.NEW_EMAIL -> {}
 						}
 					}
 				}
@@ -110,24 +111,24 @@ class VerificationFragment : Fragment() {
 			}
 		}
 	}
-	
-	override fun onStart() {
+
+    override fun onStart() {
 		super.onStart()
 		showKeyboard()
 	}
-	
-	override fun onStop() {
+
+    override fun onStop() {
 		super.onStop()
 		hideKeyboard()
 	}
-	
-	companion object {
+
+    companion object {
 		private const val ARG_FLOW = "verification_flow"
 		private const val ARG_SUBJECT = "verification_subject"
 		private const val ARG_NEW_SUBJECT = "new_subject"
 		const val RESULT_BACK_STACK = "back_stack"
-		
-		fun createArgs(flow: VerificationFlow, subject: String, newSubject: String) = bundleOf(
+
+        fun createArgs(flow: VerificationFlow, subject: String, newSubject: String) = bundleOf(
 			ARG_FLOW to flow,
 			ARG_SUBJECT to subject,
 			ARG_NEW_SUBJECT to newSubject

@@ -48,7 +48,7 @@ fun ChangePasswordSettingsContent(
 
         PasswordField(
             text = passwordData.currentPassword,
-            hasError = !passwordData.error.isNullOrEmpty(),
+            hasError = passwordData.hasError,
             onValueChanged = {
                 currentPassword.invoke(it)
             }
