@@ -1,5 +1,6 @@
 package com.civilcam.ui.auth.login
 
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail
@@ -81,6 +82,9 @@ class LoginViewModel(
 			emailError = false,
 			credError = false
 		)
+		if (!email.isEmail()) {
+			_state.value = _state.value.copy(errorText = "Invalid email. Please try again. (eg:email@gmail.com)")
+		}
 	}
 	
 	private fun passwordEntered(password: String) {
