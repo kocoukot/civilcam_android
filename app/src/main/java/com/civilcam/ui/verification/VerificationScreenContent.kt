@@ -173,14 +173,6 @@ fun VerificationScreenContent(
 						)
 					}
 				}
-//				AnimatedVisibility(visible = state.value.timeOut != "") {
-//
-//				}
-//
-//				AnimatedVisibility(visible = state.value.timeOut == "") {
-//
-//				}
-
 				Spacer(modifier = Modifier.height(20.dp))
 			}
 		}
