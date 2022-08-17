@@ -81,6 +81,9 @@ class LoginViewModel(
 			emailError = false,
 			credError = false
 		)
+		if (!email.isEmail()) {
+			_state.value = _state.value.copy(errorText = "Invalid email. Please try again. (eg:email@gmail.com)")
+		}
 	}
 	
 	private fun passwordEntered(password: String) {
