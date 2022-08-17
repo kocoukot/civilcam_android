@@ -1,6 +1,5 @@
 package com.civilcam.data.network.support
 
-//@JsonClass(generateAdapter = true)
 class ServiceException(
     val errorCode: ServerErrors = ServerErrors.SOME_ERROR,
     val title: String? = "Something went wrong",

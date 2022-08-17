@@ -8,57 +8,49 @@ import com.civilcam.domainLayer.model.guard.*
 import com.civilcam.domainLayer.usecase.guardians.GetGuardsListUseCase
 import com.civilcam.domainLayer.usecase.guardians.GetGuardsRequestsUseCase
 import com.civilcam.domainLayer.usecase.guardians.SearchGuardsResultUseCase
+import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.network.main.model.*
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 
 
-@OptIn(FlowPreview::class)
 class NetworkMainViewModel(
     private val screen: NetworkScreen = NetworkScreen.MAIN,
     private val getGuardsListUseCase: GetGuardsListUseCase,
     private val getGuardsRequestsUseCase: GetGuardsRequestsUseCase,
     private val searchGuardsResultUseCase: SearchGuardsResultUseCase
 
-) :
-    ComposeViewModel<NetworkMainState, NetworkMainRoute, NetworkMainActions>() {
+) : ComposeViewModel<NetworkMainState, NetworkMainRoute, NetworkMainActions>(), SearchQuery {
     override var _state: MutableStateFlow<NetworkMainState> = MutableStateFlow(NetworkMainState())
-
-    private val _textSearch = MutableStateFlow("")
-    private val textSearch: StateFlow<String> = _textSearch.asStateFlow()
+    override val mTextSearch = MutableStateFlow("")
 
     init {
         _state.update { it.copy(screenState = screen) }
         Timber.i("Screen type $screen")
         checkNavBarStatus()
         getMockInfo()
-        viewModelScope.launch {
-            _state.update { it.copy(data = NetworkMainModel()) }
-
-            textSearch.debounce(400).collect { query ->
-                query
-                    .takeIf { it.isNotEmpty() }
-                    ?.let {
-//                        Timber.d("guardianSearchQuery $it")
+        _state.update { it.copy(data = NetworkMainModel()) }
+        query(viewModelScope) { query ->
+            query.takeIf { it.isNotEmpty() }
+                ?.let {
+                    viewModelScope.launch {
                         try {
                             val result = searchGuardsResultUseCase.searchGuards(it)
-//                            Timber.d("guardianSearchQuery result $result")
                             setSearchResult(result)
                         } catch (e: Exception) {
-//                            Timber.d("guardianSearchQuery error ${e.localizedMessage}")
                             _state.update { it.copy(errorText = e.localizedMessage) }
                         }
-                    } ?: run {
-                    setSearchResult(emptyList())
-                }
+                    }
+                } ?: run {
+                setSearchResult(emptyList())
             }
-
         }
+
     }
 
     override fun setInputActions(action: NetworkMainActions) {
@@ -183,7 +175,7 @@ class NetworkMainViewModel(
     private fun searchContact(searchString: String) {
         _state.value.data?.let { sData ->
             _state.update { it.copy(data = sData.copy(searchText = searchString)) }
-            _textSearch.value = searchString
+            mTextSearch.value = searchString
         }
     }
 

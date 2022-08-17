@@ -20,6 +20,7 @@ import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.TopAppBarContent
+import com.civilcam.ui.common.loading.DialogLoadingContent
 import com.civilcam.ui.profile.userDetails.content.UserDetailsSection
 import com.civilcam.ui.profile.userDetails.content.UserRequestSection
 import com.civilcam.ui.profile.userDetails.model.StopGuardAlertType
@@ -32,6 +33,9 @@ fun UserDetailsScreenContent(viewModel: UserDetailsViewModel) {
 
     val state = viewModel.state.collectAsState()
 
+    if (state.value.isLoading) {
+        DialogLoadingContent()
+    }
 
     if (state.value.alertType != null) {
         AlertDialogComp(
