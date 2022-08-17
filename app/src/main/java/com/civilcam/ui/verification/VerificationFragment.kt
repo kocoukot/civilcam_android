@@ -51,25 +51,14 @@ class VerificationFragment : Fragment() {
 					Handler(Looper.getMainLooper()).postDelayed(300) {
 						when (verificationFlow) {
                             VerificationFlow.CURRENT_EMAIL ->
-                                if (newSubject.isEmpty()) {
-                                    navController.navigate(
-                                        R.id.termsFragment,
-                                        TermsFragment.createArgs(false)
-                                    )
-                                } else {
-                                    setFragmentResult(
-                                        RESULT_BACK_STACK,
-                                        bundleOf(RESULT_BACK_STACK to true)
-                                    )
-									navController.popBackStack(
-										R.id.userProfileFragment,
-										false
-									)
-								}
-							VerificationFlow.NEW_PHONE -> navController.navigate(
-								R.id.pinCodeFragment,
-								PinCodeFragment.createArgs(PinCodeFlow.CREATE_PIN_CODE)
-							)
+                                navController.navigate(
+                                    R.id.termsFragment,
+                                    TermsFragment.createArgs(false)
+                                )
+                            VerificationFlow.NEW_PHONE -> navController.navigate(
+                                R.id.pinCodeFragment,
+                                PinCodeFragment.createArgs(PinCodeFlow.CREATE_PIN_CODE)
+                            )
 							VerificationFlow.RESET_PASSWORD -> navController.navigate(
 								R.id.createPasswordFragment
 							)
@@ -93,14 +82,23 @@ class VerificationFragment : Fragment() {
                                     )
                                 )
                             }
-                            VerificationFlow.NEW_EMAIL -> {}
-						}
+                            VerificationFlow.NEW_EMAIL -> {
+                                setFragmentResult(
+                                    RESULT_BACK_STACK,
+                                    bundleOf(RESULT_BACK_STACK to true)
+                                )
+                                navController.popBackStack(
+                                    R.id.userProfileFragment,
+                                    false
+                                )
+                            }
+                        }
 					}
 				}
 			}
 		}
-		
-		return ComposeView(requireContext()).apply {
+
+        return ComposeView(requireContext()).apply {
 			setViewCompositionStrategy(
 				ViewCompositionStrategy.DisposeOnLifecycleDestroyed(
 					viewLifecycleOwner
