@@ -1,5 +1,6 @@
 package com.civilcam.ui.auth.login
 
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail

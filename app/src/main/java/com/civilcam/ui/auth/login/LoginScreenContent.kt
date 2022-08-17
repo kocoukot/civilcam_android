@@ -27,6 +27,7 @@ import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.EmailInputField
 import com.civilcam.ui.common.compose.inputs.PasswordField
+import com.civilcam.ui.common.loading.DialogLoadingContent
 
 
 @Composable
@@ -35,6 +36,10 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 	val state = viewModel.state.collectAsState()
 	
 	val focusState = remember { mutableStateOf(false) }
+	
+	if (state.value.isLoading) {
+		DialogLoadingContent()
+	}
 	
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
