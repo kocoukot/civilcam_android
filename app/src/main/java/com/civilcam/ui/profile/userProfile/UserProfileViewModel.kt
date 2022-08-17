@@ -3,7 +3,6 @@ package com.civilcam.ui.profile.userProfile
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.common.ext.formatPhoneNumber
 import com.civilcam.data.local.MediaStorage
 import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.model.*
@@ -11,6 +10,7 @@ import com.civilcam.domainLayer.usecase.location.GetPlacesAutocompleteUseCase
 import com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase
 import com.civilcam.domainLayer.usecase.profile.UpdateUserProfileUseCase
 import com.civilcam.domainLayer.usecase.user.GetCurrentUserUseCase
+import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
 import com.civilcam.ui.profile.userProfile.model.*
 import com.civilcam.utils.DateUtils
@@ -18,48 +18,43 @@ import com.standartmedia.common.ext.castSafe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@OptIn(FlowPreview::class)
+
 class UserProfileViewModel(
 	private val mediaStorage: MediaStorage,
 	private val getCurrentUserUseCase: GetCurrentUserUseCase,
 	private val updateUserProfileUseCase: UpdateUserProfileUseCase,
 	private val setAvatarUseCase: SetAvatarUseCase,
 	private val getPlacesAutocompleteUseCase: GetPlacesAutocompleteUseCase
-) : ComposeViewModel<UserProfileState, UserProfileRoute, UserProfileActions>() {
+) : ComposeViewModel<UserProfileState, UserProfileRoute, UserProfileActions>(), SearchQuery {
 	override var _state: MutableStateFlow<UserProfileState> = MutableStateFlow(UserProfileState())
-	
+	override val mTextSearch = MutableStateFlow("")
 	private val disposables = CompositeDisposable()
-	
-	private val _textSearch = MutableStateFlow("")
-	private val textSearch: StateFlow<String> = _textSearch.asStateFlow()
-	
+
 	init {
 		fetchCurrentUser()
-		
-		viewModelScope.launch {
-			textSearch.debounce(400).collect { query ->
-				query
-					.takeIf { it.isNotEmpty() }
-					?.let {
+		query(viewModelScope) { query ->
+			query
+				.takeIf { it.isNotEmpty() }
+				?.let {
+					viewModelScope.launch {
 						kotlin.runCatching { getPlacesAutocompleteUseCase.invoke(it) }
 							.onSuccess { setSearchResult(it) }
 							.onFailure { error ->
 								error as ServiceException
 								_state.update { it.copy(errorText = error.errorMessage) }
 							}
-					} ?: run {
-					setSearchResult(emptyList())
-				}
+					}
+				} ?: run {
+				setSearchResult(emptyList())
 			}
-			
 		}
 	}
-	
+
 	override fun setInputActions(action: UserProfileActions) {
 		when (action) {
 			UserProfileActions.GoBack -> goBack()
@@ -88,9 +83,9 @@ class UserProfileViewModel(
 			is UserProfileActions.ClickAddressSelect -> addressSelected(action.address)
 		}
 	}
-	
+
 	private fun searchAddress(searchQuery: String) {
-		_textSearch.value = searchQuery
+		mTextSearch.value = searchQuery
 		_state.update {
 			it.copy(
 				searchLocationModel = _state.value.searchLocationModel.copy(
@@ -99,7 +94,7 @@ class UserProfileViewModel(
 			)
 		}
 	}
-	
+
 	fun fetchCurrentUser() {
 		_state.value = _state.value.copy(isLoading = true)
 		viewModelScope.launch {
@@ -120,38 +115,38 @@ class UserProfileViewModel(
 			_state.value = _state.value.copy(isLoading = false)
 		}
 	}
-	
+
 	private fun openLocationSelect() {
 		_state.update { it.copy(screenState = UserProfileScreen.LOCATION) }
 	}
-	
+
 	private fun openDatePicker() {
 		_state.value = _state.value.copy(showDatePicker = true)
 	}
-	
+
 	private fun closeDatePicker() {
 		_state.value = _state.value.copy(showDatePicker = false)
 	}
-	
+
 	private fun getDateFromCalendar(birthDate: Long) {
 		val data = getUserInfo()
 		data.userBaseInfo.dob = DateUtils.dateOfBirthDomainFormat(birthDate)
 		_state.update { it.copy(data = data) }
 		closeDatePicker()
 	}
-	
+
 	private fun firstNameEntered(firstName: String) {
 		val data = getUserInfo()
 		data.userBaseInfo.firstName = firstName
 		_state.update { it.copy(data = data) }
 	}
-	
+
 	private fun lastNameEntered(lastName: String) {
 		val data = getUserInfo()
 		data.userBaseInfo.lastName = lastName
 		_state.update { it.copy(data = data) }
 	}
-	
+
 	private fun goSave() {
 		_state.value.data?.let { userdata ->
 			_state.update { it.copy(isLoading = true) }
@@ -171,7 +166,7 @@ class UserProfileViewModel(
 					if (result) _state.value =
 						_state.value.copy(screenState = UserProfileScreen.PROFILE)
 					fetchCurrentUser()
-					
+
 				} catch (e: ServiceException) {
 					Timber.d("resourceLocalized throwable ${e.errorCode}")
 					_state.update { it.copy(errorText = e.errorMessage) }
@@ -180,7 +175,7 @@ class UserProfileViewModel(
 			}
 		}
 	}
-	
+
 	private fun goBack() {
 		when (_state.value.screenState) {
 			UserProfileScreen.EDIT -> {
@@ -195,15 +190,15 @@ class UserProfileViewModel(
 			}
 		}
 	}
-	
+
 	private fun goPinCode() {
 		navigateRoute(UserProfileRoute.GoPinCode)
 	}
-	
+
 	private fun goEdit() {
 		_state.value = _state.value.copy(screenState = UserProfileScreen.EDIT)
 	}
-	
+
 	private fun goCredentials(userProfileType: UserProfileType) {
 		when (userProfileType) {
 			UserProfileType.EMAIL -> {
@@ -225,11 +220,11 @@ class UserProfileViewModel(
 			UserProfileType.PIN_CODE -> {}
 		}
 	}
-	
+
 	private fun goAvatarSelect() {
 		navigateRoute(UserProfileRoute.GoGalleryOpen)
 	}
-	
+
 	fun onPictureUriReceived(uri: Uri) {
 		mediaStorage.getImageMetadata(uri)
 			.observeOn(AndroidSchedulers.mainThread())
@@ -245,7 +240,7 @@ class UserProfileViewModel(
 			}
 			.addTo(disposables)
 	}
-	
+
 	private fun setSearchResult(result: List<AutocompletePlace>) {
 		Timber.i("location result $result")
 		_state.value = _state.value.copy(
@@ -254,7 +249,7 @@ class UserProfileViewModel(
 			).copy()
 		)
 	}
-	
+
 	private fun addressSelected(result: AutocompletePlace) {
 		_state.update {
 			it.copy(
@@ -267,6 +262,6 @@ class UserProfileViewModel(
 			)
 		}
 	}
-	
+
 	private fun getUserInfo() = _state.value.data?.copy() ?: CurrentUser()
 }

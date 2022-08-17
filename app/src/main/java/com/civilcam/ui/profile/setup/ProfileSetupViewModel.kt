@@ -12,30 +12,27 @@ import com.civilcam.domainLayer.model.UserSetupModel
 import com.civilcam.domainLayer.usecase.location.GetPlacesAutocompleteUseCase
 import com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase
 import com.civilcam.domainLayer.usecase.profile.SetPersonalInfoUseCase
+import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.profile.setup.model.*
 import com.civilcam.utils.DateUtils.dateOfBirthFormat
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-@OptIn(FlowPreview::class)
 class ProfileSetupViewModel(
     private val mediaStorage: MediaStorage,
     private val getPlacesAutocompleteUseCase: GetPlacesAutocompleteUseCase,
 //    private val getPlaceDetailsUseCase: GetPlaceDetailsUseCase,
     private val setPersonalInfoUseCase: SetPersonalInfoUseCase,
     private val setAvatarUseCase: SetAvatarUseCase,
-) : ComposeViewModel<ProfileSetupState, ProfileSetupRoute, ProfileSetupActions>() {
+) : ComposeViewModel<ProfileSetupState, ProfileSetupRoute, ProfileSetupActions>(), SearchQuery {
 
     override var _state: MutableStateFlow<ProfileSetupState> = MutableStateFlow(ProfileSetupState())
-
-    private val _textSearch = MutableStateFlow("")
-    private val textSearch: StateFlow<String> = _textSearch.asStateFlow()
-
+    override val mTextSearch = MutableStateFlow("")
 
     private val disposables = CompositeDisposable()
 
@@ -45,22 +42,22 @@ class ProfileSetupViewModel(
     }
 
     init {
-        viewModelScope.launch {
-            textSearch.debounce(400).collect { query ->
-                query
-                    .takeIf { it.isNotEmpty() }
-                    ?.let {
+        query(viewModelScope) { query ->
+            Timber.d("viewModelScope $query")
+            query
+                .takeIf { it.isNotEmpty() }
+                ?.let {
+                    viewModelScope.launch {
                         kotlin.runCatching { getPlacesAutocompleteUseCase.invoke(it) }
                             .onSuccess { setSearchResult(it) }
                             .onFailure { error ->
                                 error as ServiceException
                                 _state.update { it.copy(errorText = error.errorMessage) }
                             }
-                    } ?: run {
-                    setSearchResult(emptyList())
-                }
+                    }
+                } ?: run {
+                setSearchResult(emptyList())
             }
-
         }
     }
 
@@ -177,7 +174,7 @@ class ProfileSetupViewModel(
     }
 
     private fun searchAddress(searchQuery: String) {
-        _textSearch.value = searchQuery
+        mTextSearch.value = searchQuery
         _state.update {
             it.copy(
                 searchLocationModel = _state.value.searchLocationModel.copy(
@@ -206,4 +203,5 @@ class ProfileSetupViewModel(
         }
         Timber.i("location selected ${_state.value.data}")
     }
+
 }

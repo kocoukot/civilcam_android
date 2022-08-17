@@ -58,12 +58,13 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 				viewModel.setInputActions(UserProfileActions.ClickCloseDatePicker)
 			}) {
 			DatePickerContent(
-				onClosePicker = {
-					viewModel.setInputActions(UserProfileActions.ClickCloseDatePicker)
-				},
-				onSelectDate = {
-					viewModel.setInputActions(UserProfileActions.ClickSelectDate(it))
-				},
+				onPickerAction = { dateInMillis ->
+					dateInMillis?.let {
+						viewModel.setInputActions(UserProfileActions.ClickSelectDate(it))
+					} ?: run {
+						viewModel.setInputActions(UserProfileActions.ClickCloseDatePicker)
+					}
+				}
 			)
 		}
 	}
@@ -92,8 +93,8 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 		state.value.data?.let { data ->
 			Column(
 				modifier = Modifier
-                    .fillMaxWidth()
-                    .background(CCTheme.colors.white),
+					.fillMaxWidth()
+					.background(CCTheme.colors.white),
 			) {
 				AnimatedVisibility(visible = state.value.screenState != UserProfileScreen.LOCATION) {
 					UserProfileSection(

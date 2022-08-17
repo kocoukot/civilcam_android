@@ -7,6 +7,7 @@ import com.civilcam.ui.network.inviteByNumber.model.InviteByNumberModel
 import com.civilcam.ui.network.inviteByNumber.model.InviteByNumberRoute
 import com.civilcam.ui.network.inviteByNumber.model.InviteByNumberState
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
@@ -28,19 +29,20 @@ class InviteByNumberViewModel :
     }
 
     private fun phoneCleared() {
-        _state.value = _state.value.copy(clearNumber = null)
+        _state.update { it.copy(clearNumber = null) }
     }
 
     private fun sendInvite(phoneNumber: String) {
         val numbersList = _state.value.data?.invitationList?.toMutableList() ?: mutableListOf()
         numbersList.add("+1${phoneNumber}")
         viewModelScope.launch {
-            _state.value = _state.value.copy(clearNumber = Unit)
-            _state.value = _state.value.copy(
-                data = InviteByNumberModel(invitationList = numbersList.toList())
-            )
+            _state.update {
+                it.copy(
+                    clearNumber = Unit,
+                    data = InviteByNumberModel(invitationList = numbersList.toList())
+                )
+            }
         }
-
     }
 }
 

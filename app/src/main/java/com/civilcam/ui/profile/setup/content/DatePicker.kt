@@ -26,8 +26,7 @@ import java.util.*
 
 @Composable
 fun DatePickerContent(
-    onClosePicker: () -> Unit,
-    onSelectDate: (Long) -> Unit,
+    onPickerAction: (Long?) -> Unit,
 ) {
     val calendar = LocalDate.now()
 
@@ -113,7 +112,7 @@ fun DatePickerContent(
                 TextActionButton(
                     actionTitle = stringResource(id = R.string.cancel_text_caps),
                     textColor = CCTheme.colors.cianColor,
-                    actionAction = onClosePicker
+                    actionAction = { onPickerAction.invoke(null) }
                 )
 
                 TextActionButton(
@@ -129,7 +128,7 @@ fun DatePickerContent(
                             )
                         }
                         Timber.d("LocalDate ${date.timeInMillis}")
-                        onSelectDate.invoke(date.timeInMillis)
+                        onPickerAction.invoke(date.timeInMillis)
                     }
                 )
             }

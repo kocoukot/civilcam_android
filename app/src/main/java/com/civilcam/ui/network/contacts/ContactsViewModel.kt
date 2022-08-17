@@ -6,32 +6,29 @@ import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.local.ContactsStorage
 import com.civilcam.data.local.model.Contact
 import com.civilcam.data.local.model.PersonContactFilter
+import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.network.contacts.model.*
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.*
 
-
-@OptIn(FlowPreview::class)
 class ContactsViewModel(
     private val contactsStorage: ContactsStorage
-) : ComposeViewModel<ContactsState, ContactsRoute, ContactsActions>() {
+) : ComposeViewModel<ContactsState, ContactsRoute, ContactsActions>(), SearchQuery {
     override var _state: MutableStateFlow<ContactsState> = MutableStateFlow(ContactsState())
-
-    private val _textSearch = MutableStateFlow("")
-    private val textSearch: StateFlow<String> = _textSearch.asStateFlow()
+    override val mTextSearch = MutableStateFlow("")
 
     init {
-        viewModelScope.launch {
-            textSearch.debounce(400).collect { query ->
+        query(viewModelScope) { query ->
+            viewModelScope.launch {
                 val contactList =
-                    contactsStorage.getContacts(PersonContactFilter()).sortedBy { it.name }.filter {
-                        it.name.contains(query, ignoreCase = true) || it.phoneNumber.contains(query)
-                    }
+                    contactsStorage.getContacts(PersonContactFilter())
+                        .sortedBy { it.name }
+                        .filter {
+                            it.name.contains(query, ignoreCase = true)
+                                    || it.phoneNumber.contains(query)
+                        }
                 mapToItems(contactList)
             }
         }
@@ -55,7 +52,7 @@ class ContactsViewModel(
     }
 
     private fun searchContact(searchString: String) {
-        _textSearch.value = searchString
+        mTextSearch.value = searchString
     }
 
     private fun inviteContact(contact: PersonContactItem) {
@@ -64,7 +61,7 @@ class ContactsViewModel(
             (contacts.find { it is PersonContactItem && it.name == contact.name && it.phoneNumber == contact.phoneNumber } as PersonContactItem).isInvited =
                 true
         }
-        _state.value = _state.value.copy(data = ContactsModel(contactsModel))
+        _state.update { it.copy(data = ContactsModel(contactsModel)) }
     }
 
 
@@ -91,7 +88,7 @@ class ContactsViewModel(
                 addAll(value)
             }
         }
-        _state.value = _state.value.copy(data = ContactsModel(items))
+        _state.update { it.copy(data = ContactsModel(items)) }
     }
 
 }

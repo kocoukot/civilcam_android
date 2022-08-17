@@ -51,14 +51,14 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
 				viewModel.setInputActions(ProfileSetupActions.ClickCloseDatePicker)
 			}) {
 			DatePickerContent(
-				onClosePicker = {
-					viewModel.setInputActions(ProfileSetupActions.ClickCloseDatePicker)
-				},
-				onSelectDate = {
-					viewModel.setInputActions(ProfileSetupActions.ClickSelectDate(it))
-					
-				},
-			)
+                onPickerAction = { dateInMillis ->
+                    dateInMillis?.let {
+                        viewModel.setInputActions(ProfileSetupActions.ClickSelectDate(it))
+                    } ?: run {
+                        viewModel.setInputActions(ProfileSetupActions.ClickCloseDatePicker)
+                    }
+                }
+            )
 		}
 	}
 	
