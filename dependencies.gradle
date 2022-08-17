@@ -91,13 +91,13 @@ ext {
 //
 //    }
 //
-//    firebase = dependencyGroup {
-//        implementation platform('com.google.firebase:firebase-bom:28.4.2')
-//        implementation 'com.google.firebase:firebase-auth'
-////        implementation 'com.google.firebase:firebase-crashlytics-ktx'
-//        implementation 'com.google.firebase:firebase-analytics-ktx'
-//        implementation 'com.google.firebase:firebase-messaging-ktx'
-//    }
+    firebase = dependencyGroup {
+        implementation platform('com.google.firebase:firebase-bom:30.3.2')
+        implementation 'com.google.firebase:firebase-auth'
+        implementation 'com.google.firebase:firebase-crashlytics-ktx'
+        implementation 'com.google.firebase:firebase-analytics-ktx'
+        implementation 'com.google.firebase:firebase-messaging-ktx'
+    }
 
     retrofit = dependencyGroup {
         implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"

@@ -5,6 +5,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 static String getKeystorePath() {
@@ -126,6 +128,7 @@ dependencies {
     gleap()
     datePicker()
     camera()
+    firebase()
     //Timber
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
