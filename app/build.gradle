@@ -36,8 +36,8 @@ android {
         buildConfigField "String", "GLEAP_KEY", '"6mCvq0I9X4vV8tascP6NIhmYKWztnr4u"'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "API_GATEWAY", '" http://ec2-3-18-220-66.us-east-2.compute.amazonaws.com:6116/api"'
-        buildConfigField "String", "BASE_URL", '" http://ec2-3-18-220-66.us-east-2.compute.amazonaws.com:6116"'
+        buildConfigField "String", "API_GATEWAY", '"https://api.staging.civilcam.cloud/api"'
+        buildConfigField "String", "BASE_URL", '"https://api.staging.civilcam.cloud"'
         buildConfigField "String", "API_KEY", '"c&c753"'
     }
 
