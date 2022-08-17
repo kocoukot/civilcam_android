@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "403034509114",
+    "project_id": "civilcam-d9c51",
+    "storage_bucket": "civilcam-d9c51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:403034509114:android:e124ffb3e86937a7174a03",
+        "android_client_info": {
+          "package_name": "com.civilcam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "403034509114-qqms4bo95o4pvq8haun5hai7glfa9uca.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.civilcam",
+            "certificate_hash": "2ea92608f0aacf56fe3109f5695e1e724bddb78a"
+          }
+        },
+        {
+          "client_id": "403034509114-947n70hs8m69p1ft8ogbbqgg0mdj3bor.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAObhen7ewiyITA8KZArKhDXzo9tbxCJ5M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "403034509114-947n70hs8m69p1ft8ogbbqgg0mdj3bor.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
