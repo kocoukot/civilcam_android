@@ -4,5 +4,5 @@ import com.civilcam.domainLayer.model.LanguageType
 import com.google.gson.annotations.SerializedName
 
 class SetUserLanguageRequest(
-	@SerializedName("language") val language: LanguageType
+    @SerializedName("language") private val language: LanguageType
 )

@@ -8,4 +8,9 @@
     <string name="subscription_annual_plan">for $49.99/year</string>
     <string name="terms_conditions_terms_button"><![CDATA[Terms & Conditions]]></string>
     <string name="terms_conditions_privacy_button">Privacy Policy</string>
+
+    <string name="email_verification">Email verification</string>
+    <string name="phone_verification">Phone verification</string>
+    <string name="verification_title">Verification</string>
+
 </resources>

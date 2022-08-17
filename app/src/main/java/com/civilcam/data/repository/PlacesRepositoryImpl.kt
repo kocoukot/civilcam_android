@@ -16,25 +16,25 @@ class PlacesRepositoryImpl : PlacesRepository {
         query: String,
     ) = listOf(
         AutocompletePlace(
-            placeId = "asdasd",
+            placeId = "hservarg",
             primary = "New York",
             secondary = "NY, USA",
             address = "New York NY, USA",
         ),
         AutocompletePlace(
-            placeId = "asdasd",
+            placeId = "bsaetbaef",
             primary = "New Jersey",
             secondary = "",
             address = "New Jersey",
         ),
         AutocompletePlace(
-            placeId = "asdasd",
+            placeId = "bttrdfafds",
             primary = "Newark Liberty",
             secondary = "International Airport",
             address = "Newark Liberty International Airport",
         ),
         AutocompletePlace(
-            placeId = "asdasd",
+            placeId = "tntbadfga",
             primary = "New York State",
             secondary = "USA",
             address = " New York State USA",

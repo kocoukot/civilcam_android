@@ -99,17 +99,22 @@ val alertsRootModule = module {
 }
 
 val profileModule = module {
-	
-	viewModel { SettingsViewModel(get(), get(), get()) }
-	
-	viewModel { (credentialType: CredentialType, credential: String) ->
-		ChangeCredentialsViewModel(
-			credentialType,
-			credential,
-			get(),
-			get()
-		)
-	}
+
+    viewModel {
+        SettingsViewModel(
+            get(), get(), get(), get(),
+            get()
+        )
+    }
+
+    viewModel { (credentialType: CredentialType, credential: String) ->
+        ChangeCredentialsViewModel(
+            credentialType,
+            credential,
+            get(),
+            get(),
+        )
+    }
 	
 	viewModel { UserProfileViewModel(get(), get(), get(), get(), get()) }
 }

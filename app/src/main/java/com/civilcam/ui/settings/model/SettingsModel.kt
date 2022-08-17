@@ -25,5 +25,5 @@ data class ContactSupportSectionData(
 
 data class ChangePasswordSectionData(
     val currentPassword: String = "",
-    val error: String? = ""
+    val hasError: Boolean = false
 )

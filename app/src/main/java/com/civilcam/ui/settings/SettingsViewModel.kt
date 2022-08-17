@@ -3,10 +3,13 @@ package com.civilcam.ui.settings
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.model.LanguageType
 import com.civilcam.domainLayer.model.settings.NotificationsType
-import com.civilcam.domainLayer.usecase.settings.CheckCurrentPasswordUseCase
 import com.civilcam.domainLayer.usecase.settings.GetCurrentSubscriptionPlanUseCase
+import com.civilcam.domainLayer.usecase.user.ChangePasswordUseCase
+import com.civilcam.domainLayer.usecase.user.CheckCurrentPasswordUseCase
 import com.civilcam.domainLayer.usecase.user.LogoutUseCase
+import com.civilcam.domainLayer.usecase.user.SetUserLanguageUseCase
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.settings.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +19,8 @@ import timber.log.Timber
 
 class SettingsViewModel(
     private val checkCurrentPasswordUseCase: CheckCurrentPasswordUseCase,
+    private val changePasswordUseCase: ChangePasswordUseCase,
+    private val setUserLanguageUseCase: SetUserLanguageUseCase,
     private val getCurrentSubscriptionPlan: GetCurrentSubscriptionPlanUseCase,
     private val logoutUseCase: LogoutUseCase
 ) : ComposeViewModel<SettingsState, SettingsRoute, SettingsActions>() {
@@ -30,7 +35,7 @@ class SettingsViewModel(
                 action.status,
                 action.switchType
             )
-            SettingsActions.ClickSaveLanguage -> goBack()
+            is SettingsActions.ClickSaveLanguage -> onLanguageChange(action.languageType)
             is SettingsActions.ClickCloseAlertDialog -> {
                 if (action.isConfirm) doActionOnAccount(action.isConfirm) else goBack()
             }
@@ -52,6 +57,20 @@ class SettingsViewModel(
             SettingsActions.ClickGoSubscription -> fetchSubscriptionPlan()
             SettingsActions.GoSubscriptionManage -> goSubManage()
             SettingsActions.ClearErrorText -> hideAlert()
+        }
+    }
+
+    private fun onLanguageChange(languageType: LanguageType) {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            kotlin.runCatching { setUserLanguageUseCase(languageType) }
+                .onSuccess { goBack() }
+                .onFailure { error ->
+                    error as ServiceException
+                    _state.update { it.copy(errorText = error.errorMessage) }
+                }
+            _state.update { it.copy(isLoading = false) }
+
         }
     }
 
@@ -185,7 +204,7 @@ class SettingsViewModel(
         data = data.copy(
             changePasswordSectionData = ChangePasswordSectionData(
                 currentPassword = password,
-                error = ""
+                hasError = false
             )
         )
         _state.update { it.copy(data = data) }
@@ -194,27 +213,29 @@ class SettingsViewModel(
     private fun checkCurrentPassword() {
         _state.value.data.changePasswordSectionData?.let { data ->
             viewModelScope.launch {
-                kotlin.runCatching {
-                    checkCurrentPasswordUseCase.checkPassword(data.currentPassword)
-                }
-                    .onSuccess {
-                        Timber.d("checkCurrentPassword $it")
-                        if (it)
-                            _state.value =
-                                _state.value.copy(settingsType = SettingsType.CREATE_PASSWORD)
+                _state.update { it.copy(isLoading = true) }
+                kotlin.runCatching { checkCurrentPasswordUseCase(data.currentPassword) }
+                    .onSuccess { isCorrect ->
+                        Timber.d("checkCurrentPassword $isCorrect")
+                        if (isCorrect) _state.update { it.copy(settingsType = SettingsType.CREATE_PASSWORD) }
                         else {
-                            var setModel = _state.value.data
-                            var section = setModel.changePasswordSectionData
-                            section =
-                                section?.copy(error = "The password is incorrect. Please try one more time or Restore your current password.")
-
-                            setModel = setModel.copy(changePasswordSectionData = section)
-                            _state.value = _state.value.copy(data = setModel)
+                            _state.update {
+                                it.copy(
+                                    data = _state.value.data.copy(
+                                        changePasswordSectionData = _state.value.data.changePasswordSectionData?.copy(
+                                            hasError = true
+                                        )
+                                    )
+                                )
+                            }
                         }
                     }
-                    .onFailure {
-
+                    .onFailure { error ->
+                        error as ServiceException
+                        _state.update { it.copy(errorText = error.errorMessage) }
                     }
+                _state.update { it.copy(isLoading = false) }
+
             }
         }
     }
@@ -239,8 +260,22 @@ class SettingsViewModel(
 
 
     private fun savePassword() {
-        viewModelScope.launch {
-            _state.value = SettingsState()
+        _state.value.data.changePasswordSectionData?.currentPassword?.let { currentPassword ->
+            viewModelScope.launch {
+                _state.update { it.copy(isLoading = true) }
+                kotlin.runCatching {
+                    changePasswordUseCase(
+                        currentPassword = currentPassword,
+                        newPassword = _state.value.data.createPasswordSectionData.password,
+                    )
+                }
+                    .onSuccess { _state.value = SettingsState() }
+                    .onFailure { error ->
+                        error as ServiceException
+                        _state.update { it.copy(errorText = error.errorMessage) }
+                    }
+                _state.update { it.copy(isLoading = false) }
+            }
         }
     }
 }

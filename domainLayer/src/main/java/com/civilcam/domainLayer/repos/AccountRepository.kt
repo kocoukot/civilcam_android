@@ -1,7 +1,6 @@
 package com.civilcam.domainLayer.repos
 
 import com.civilcam.domainLayer.model.CurrentUser
-import io.reactivex.Maybe
 
 interface AccountRepository {
 	

@@ -37,10 +37,10 @@ class CreateAccountFragment : Fragment() {
 					navController.navigate(
 						R.id.verificationFragment,
 						VerificationFragment.createArgs(
-							VerificationFlow.NEW_EMAIL,
-							route.email,
-							""
-						)
+                            VerificationFlow.CURRENT_EMAIL,
+                            route.email,
+                            ""
+                        )
 					)
 				}
 			}

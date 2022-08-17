@@ -1,5 +1,6 @@
 package com.civilcam.ui.settings.content
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
@@ -55,6 +56,7 @@ fun LanguageSettingsContent(
     }
 }
 
+@SuppressLint("UnusedCrossfadeTargetStateParameter")
 @Composable
 fun LanguageSelectSection(
     languageType: LanguageType,

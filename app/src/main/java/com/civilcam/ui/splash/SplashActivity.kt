@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.civilcam.databinding.ActivitySplashBinding
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.common.NavigationDirection
+import com.civilcam.ui.common.ext.observeNonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @SuppressLint("CustomSplashScreen")
@@ -47,9 +48,9 @@ class SplashActivity : AppCompatActivity() {
     }
     
     private fun observeLiveData() = with(viewModel) {
-        user.observe(this@SplashActivity) { user ->
-            if (user != null) {
-                navigateToTargetActivity(NavigationDirection.resolveDirectionFor(user))
+        user.observeNonNull(this@SplashActivity) { user ->
+            user?.let {
+                navigateToTargetActivity(NavigationDirection.resolveDirectionFor(it))
             }
         }
     }

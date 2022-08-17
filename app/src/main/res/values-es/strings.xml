@@ -6,6 +6,7 @@
     <string name="continue_text">"Continuar "</string>
     <string name="back_text">Atrás</string>
     <string name="save_text">Guardar</string>
+    <string name="empty_string"></string>
 
     <string name="and_text">y</string>
     <string name="get_start_text">Empezar</string>

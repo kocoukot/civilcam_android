@@ -57,7 +57,7 @@ fun SwitcherRowContent(
     onCheckedChange: (Boolean) -> Unit
 ) {
     var isSwitched by remember { mutableStateOf(_isSwitched) }
-    // isSwitched = _isSwitched
+
     Row(
         modifier = Modifier
             .fillMaxWidth()

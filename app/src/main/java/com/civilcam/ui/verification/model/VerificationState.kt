@@ -8,7 +8,7 @@ data class VerificationState(
     var errorText: String = "",
     val hasError: Boolean = false,
     val timeOut: String = "",
-    val verificationFlow: VerificationFlow = VerificationFlow.NEW_EMAIL,
+    val verificationFlow: VerificationFlow = VerificationFlow.CURRENT_EMAIL,
     val verificationSubject: String = "",
     val newSubject: String = ""
 ) : ComposeFragmentState
