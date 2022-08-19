@@ -6,6 +6,7 @@ import com.civilcam.data.mapper.auth.UserMapper
 import com.civilcam.data.network.model.request.auth.*
 import com.civilcam.data.network.service.AuthService
 import com.civilcam.data.network.service.GoogleOAuthService
+import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.model.CurrentUser
 import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
@@ -51,8 +52,8 @@ class AuthRepositoryImpl(
 				}
 			}
 		}
-	
-	
+
+
 	override suspend fun signUp(email: String, password: String): CurrentUser =
 		safeApiCall {
 			authService.signUp(
@@ -69,8 +70,8 @@ class AuthRepositoryImpl(
 				}
 			}
 		}
-	
-	
+
+
 	override suspend fun signIn(email: String, password: String): CurrentUser =
 		safeApiCall {
 			authService.signIn(
@@ -133,7 +134,12 @@ class AuthRepositoryImpl(
 		safeApiCall {
 			val googleAuthResponse =
 				googleOAuthService.signOAuth(GoogleOAuthRequest(code = authToken))
-			val gAccessToken = googleAuthResponse.map { it.accessToken }.blockingGet()
+			val gAccessToken = googleAuthResponse.map { it.accessToken }
+				.doOnError { throw ServiceException(errorMessage = "${it.localizedMessage}") }
+				.blockingGet()
+
+			Timber.i("gAccessToken gAccessToken $gAccessToken \n authToken $authToken")
+
 			authService.googleSignIn(SocialLoginRequest(gAccessToken))
 		}.let { response ->
 			when (response) {

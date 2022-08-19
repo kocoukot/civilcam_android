@@ -42,7 +42,7 @@ android {
         buildConfigField "String", "GOOGLE_AUTOCOMPLETE_KEY", '"AIzaSyDuK_krNRNpPVB254Qux1OvAG2wqusmaY4"'
 
         buildConfigField "String", "GOOGLE_WEB_CLIENT_ID", '"403034509114-8e3bvocoju9cn67uhuk7ktce39no0erb.apps.googleusercontent.com"'
-        buildConfigField "String", "GOOGLE_CLIENT_SECRET", '"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"'
+        buildConfigField "String", "GOOGLE_CLIENT_SECRET", '"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"'
         buildConfigField "String", "GOOGLE_API_GATEWAY", '"https://www.googleapis.com\"'
 
 
