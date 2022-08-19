@@ -19,36 +19,44 @@ import com.civilcam.ui.common.Constant.ANIMATION_DURATION
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.DividerLightGray
 import com.civilcam.ui.common.compose.TopAppBarContent
+import com.civilcam.ui.common.loading.DialogLoadingContent
 import com.civilcam.ui.emergency.content.EmergencyButtonContent
 import com.civilcam.ui.emergency.content.EmergencyLiveContent
 import com.civilcam.ui.emergency.content.EmergencyMapContent
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyScreen
-import com.google.android.gms.maps.model.LatLng
 
 @Composable
 fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 
     val state by viewModel.state.collectAsState()
-    val singapore = LatLng(1.35, 103.87)
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
+    val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
 
     val liveHeight by animateDpAsState(
-        targetValue = if (state.emergencyScreen == EmergencyScreen.LIVE_EXTENDED) screenHeight
-        else if (state.emergencyScreen == EmergencyScreen.COUPLED) screenHeight / 2
-        else 0.dp,
+        targetValue = when (state.emergencyScreen) {
+            EmergencyScreen.LIVE_EXTENDED -> screenHeight
+            EmergencyScreen.COUPLED -> screenHeight / 2
+            else -> 0.dp
+        },
         animationSpec = tween(ANIMATION_DURATION)
     )
 
     val mapHeight by animateDpAsState(
-        targetValue = if (state.emergencyScreen == EmergencyScreen.MAP_EXTENDED || state.emergencyScreen == EmergencyScreen.NORMAL) screenHeight
-        else if (state.emergencyScreen == EmergencyScreen.COUPLED) screenHeight / 2
-        else 0.dp,
+        targetValue = when (state.emergencyScreen) {
+            EmergencyScreen.MAP_EXTENDED, EmergencyScreen.NORMAL -> screenHeight
+            EmergencyScreen.COUPLED -> (screenHeight / 2) + systemBarsPadding.calculateTopPadding()
+            else -> 0.dp
+        },
         animationSpec = tween(ANIMATION_DURATION)
     )
 
     var screenModifier = Modifier.fillMaxSize()
+
+    if (state.isLoading) {
+        DialogLoadingContent()
+    }
 
     if (state.emergencyScreen == EmergencyScreen.LIVE_EXTENDED || state.emergencyScreen == EmergencyScreen.MAP_EXTENDED) {
         screenModifier = screenModifier.statusBarsPadding()
@@ -76,8 +84,7 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
         }
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
 
             Column {
@@ -102,15 +109,16 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
                         flashState = state.torchState == TorchState.ON
                     )
                 }
-
-                EmergencyMapContent(
-                    modifier = Modifier
-                        .height(mapHeight)
-                        .fillMaxWidth(),
-                    screenState = state.emergencyScreen,
-                    locationData = state.location,
-                    onActionClicked = viewModel::setInputActions,
-                )
+                state.emergencyUserModel?.let { userLocationData ->
+                    EmergencyMapContent(
+                        modifier = Modifier
+                            .height(mapHeight)
+                            .fillMaxWidth(),
+                        screenState = state.emergencyScreen,
+                        userLocationData = userLocationData,
+                        onActionClicked = viewModel::setInputActions,
+                    )
+                }
             }
 
             AnimatedVisibility(

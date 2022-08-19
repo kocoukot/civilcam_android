@@ -72,6 +72,14 @@
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" />
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/GOOGLE_MAP_API" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
     </application>
 
 </manifest>

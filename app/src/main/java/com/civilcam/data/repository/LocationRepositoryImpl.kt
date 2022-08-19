@@ -24,10 +24,6 @@ class LocationRepositoryImpl(
         LocationServices.getFusedLocationProviderClient(context)
     }
 
-    private val locationRequest = LocationRequest.create()
-        .setInterval(Constant.LOCATION_REQUEST_INTERVAL_IN_MILLIS)
-        .setFastestInterval(Constant.LOCATION_REQUEST_FASTEST_INTERVAL_IN_MILLIS)
-        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
 
 
     @SuppressLint("MissingPermission")
@@ -43,6 +39,13 @@ class LocationRepositoryImpl(
 
     @SuppressLint("MissingPermission")
     override suspend fun fetchLocation(): Flow<Pair<LatLng, Float>> = callbackFlow {
+        val locationRequest = LocationRequest.create().apply {
+            interval = Constant.LOCATION_REQUEST_INTERVAL_IN_MILLIS
+            fastestInterval = Constant.LOCATION_REQUEST_FASTEST_INTERVAL_IN_MILLIS
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+
+
         val callBack = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)

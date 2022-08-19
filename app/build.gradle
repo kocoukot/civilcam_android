@@ -7,6 +7,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 static String getKeystorePath() {
@@ -38,6 +39,7 @@ android {
         buildConfigField "String", "GLEAP_KEY", '"6mCvq0I9X4vV8tascP6NIhmYKWztnr4u"'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "GOOGLE_AUTOCOMPLETE_KEY", '"AIzaSyDuK_krNRNpPVB254Qux1OvAG2wqusmaY4"'
+        resValue "string", "GOOGLE_MAP_API", '"AIzaSyDOrnwsLae_Up5kVdDtEqQvSjxcS7ge7Ig"'
 
         buildConfigField "String", "API_GATEWAY", '"https://api.staging.civilcam.cloud/api"'
         buildConfigField "String", "BASE_URL", '"https://api.staging.civilcam.cloud"'

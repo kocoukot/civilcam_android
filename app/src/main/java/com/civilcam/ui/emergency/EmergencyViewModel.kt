@@ -1,32 +1,74 @@
 package com.civilcam.ui.emergency
 
+import android.location.Address
+import android.location.Geocoder
 import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.TorchState
 import androidx.lifecycle.viewModelScope
+import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.ui.emergency.model.*
+import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.*
 
 class EmergencyViewModel(
 	private val fetchUserLocationUseCase: FetchUserLocationUseCase
 ) : ComposeViewModel<EmergencyState, EmergencyRoute, EmergencyActions>() {
 	override var _state: MutableStateFlow<EmergencyState> = MutableStateFlow(EmergencyState())
-
+	private var geocoder = Geocoder(instance, Locale.US)
 	private val _effect = MutableSharedFlow<CameraEffect>()
 	val effect: SharedFlow<CameraEffect> = _effect
 
 	init {
-		viewModelScope.launch {
+		_state.update { it.copy(isLoading = true) }
+		fetchUserLocation()
+	}
+
+	private fun fetchUserLocation() {
+		viewModelScope.launch(Dispatchers.IO) {
 			fetchUserLocationUseCase()
-				.collect {
-					Timber.i("fetchUserLocationUseCase ${it.first}")
+				.collect { location ->
+					_state.update {
+						it.copy(
+							emergencyUserModel = it.emergencyUserModel?.copy(
+								userLocation = location.first,
+								userBearing = location.second
+							) ?: EmergencyUserModel(
+								userLocation = location.first,
+								userBearing = location.second,
+							),
+							isLoading = false
+						)
+					}
+
+					Timber.i("fetchUserLocationUseCase latlng ${location.first} bearing ${location.second}")
+					val addressList: MutableList<Address>
+					var address = ""
+					try {
+						addressList = geocoder.getFromLocation(
+							location.first.latitude,
+							location.first.longitude,
+							1
+						)
+						if (addressList.isNotEmpty()) address =
+							addressList[0].getAddressLine(0).takeIf { it.isNotEmpty() } ?: address
+						_state.update {
+							it.copy(
+								emergencyUserModel = it.emergencyUserModel?.copy(locationData = address)
+							)
+						}
+					} catch (e: Exception) {
+					}
+					Timber.i("fetchUserLocationUseCase $address")
 				}
 		}
 	}
@@ -41,37 +83,27 @@ class EmergencyViewModel(
 			EmergencyActions.GoBack -> goBack()
 			EmergencyActions.ControlFlash -> onFlashTapped()
 			EmergencyActions.ChangeCamera -> onCameraFlip()
-			is EmergencyActions.ChangeMode -> changeMode(action.mode)
 			is EmergencyActions.ClickChangeScreen -> screenChange(action.screenState)
 			is EmergencyActions.CameraInitialized -> onCameraInitialized(action.cameraLensInfo)
-//            EmergencyActions.DetectLocation -> TODO()
 			else -> {}
 		}
 	}
 
 	private fun screenChange(newScreenState: EmergencyScreen) {
+		Timber.d("changeMode $newScreenState")
 		_state.update { it.copy(emergencyScreen = newScreenState) }
-	}
-
-	private fun changeMode(screen: EmergencyScreen) {
-		Timber.d("changeMode $screen")
-		_state.value = _state.value.copy(emergencyScreen = screen)
-		steps.value = EmergencyRoute.IsNavBarVisible(screen == EmergencyScreen.NORMAL)
-		when (screen) {
-			EmergencyScreen.NORMAL,
-			EmergencyScreen.COUPLED -> {
-				//onRecordStarted()
+		when (newScreenState) {
+			EmergencyScreen.NORMAL, EmergencyScreen.COUPLED -> {
 				navigateRoute(EmergencyRoute.HideSystemUI)
 			}
-			EmergencyScreen.MAP_EXTENDED, EmergencyScreen.LIVE_EXTENDED -> navigateRoute(
-				EmergencyRoute.ShowSystemUI
-			)
+			EmergencyScreen.MAP_EXTENDED, EmergencyScreen.LIVE_EXTENDED ->
+				navigateRoute(EmergencyRoute.ShowSystemUI)
 		}
 	}
 
 	private fun goBack() {
 		navigateRoute(EmergencyRoute.HideSystemUI)
-		_state.value = _state.value.copy(emergencyScreen = EmergencyScreen.COUPLED)
+		_state.update { it.copy(emergencyScreen = EmergencyScreen.COUPLED) }
 	}
 
 	private fun goSettings() {
@@ -99,18 +131,31 @@ class EmergencyViewModel(
 	fun launchSos() {
 		steps.value = EmergencyRoute.IsNavBarVisible(false)
 		if (state.value.emergencyButton == EmergencyButton.InSafeButton) {
-			_state.value = _state.value.copy(
-				emergencyScreen = EmergencyScreen.COUPLED,
-				emergencyButton = EmergencyButton.InDangerButton
-			)
+			_state.update {
+				it.copy(
+					emergencyScreen = EmergencyScreen.COUPLED,
+					emergencyButton = EmergencyButton.InDangerButton,
+					emergencyUserModel = it.emergencyUserModel?.copy(
+						guardsLocation = listOf(
+							LatLng(41.950188, -87.780036),
+							LatLng(41.852063, -87.679099),
+							LatLng(41.737393, -87.772483),
+						)
+					)
+				)
+			}
 		}
 	}
 
 	private fun disableSosStatus() {
-		_state.value = _state.value.copy(
-			emergencyScreen = EmergencyScreen.NORMAL,
-			emergencyButton = EmergencyButton.InSafeButton
-		)
+		navigateRoute(EmergencyRoute.HideSystemUI)
+		_state.update {
+			it.copy(
+				emergencyScreen = EmergencyScreen.NORMAL,
+				emergencyButton = EmergencyButton.InSafeButton,
+				emergencyUserModel = it.emergencyUserModel?.copy(guardsLocation = emptyList())
+			)
+		}
 	}
 
 	fun isLocationAllowed(isAllowed: Boolean) {
@@ -168,6 +213,15 @@ class EmergencyViewModel(
 				TorchState.ON -> it.copy(torchState = TorchState.OFF)
 				else -> it.copy(torchState = TorchState.OFF)
 			}
+		}
+	}
+
+	fun screenStateCheck() {
+		when (_state.value.emergencyScreen) {
+			EmergencyScreen.NORMAL, EmergencyScreen.COUPLED -> navigateRoute(EmergencyRoute.HideSystemUI)
+			EmergencyScreen.MAP_EXTENDED, EmergencyScreen.LIVE_EXTENDED -> navigateRoute(
+				EmergencyRoute.ShowSystemUI
+			)
 		}
 	}
 }

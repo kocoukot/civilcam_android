@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.camera.core.CameraSelector
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.civilcam.R
@@ -66,15 +65,10 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 					route.cameraState
 				)
 				EmergencyRoute.HideSystemUI -> hideSystemUI()
-				EmergencyRoute.ShowSystemUI -> {
-					activity?.window?.apply {
-						WindowCompat.setDecorFitsSystemWindows(this, true)
-					}
-					showSystemUI()
-				}
-				is EmergencyRoute.IsNavBarVisible -> (activity as MainActivity).showBottomNavBar(
-					route.isVisible
-				)
+                EmergencyRoute.ShowSystemUI -> showSystemUI()
+                is EmergencyRoute.IsNavBarVisible -> (activity as MainActivity).showBottomNavBar(
+                    route.isVisible
+                )
 				else -> {}
 			}
 		}
@@ -114,21 +108,21 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 	
 	private fun onPermissionsGranted(isGranted: Boolean) {
 		Timber.i("onPermissionsGranted $isGranted")
-		if (isGranted) {
-			pendingAction?.invoke()
-			pendingAction = null
-		} else {
-			pendingAction = null
-		}
+        pendingAction = if (isGranted) {
+            pendingAction?.invoke()
+            null
+        } else {
+            null
+        }
 	}
 	
 	override fun onStart() {
 		super.onStart()
 		checkPermissions()
-		hideSystemUI()
+        viewModel.screenStateCheck()
 	}
-	
-	override fun onStop() {
+
+    override fun onStop() {
 		super.onStop()
 		showSystemUI()
 	}
