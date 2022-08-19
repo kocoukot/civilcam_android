@@ -39,7 +39,7 @@ fun EmergencyButtonContent(
     onButtonClick: (EmergencyActions) -> Unit,
 ) {
 
-    val buttonColorAnimated by animateColorAsState(targetValue = if (emergencyButton is EmergencyButton.InDangerButton) CCTheme.colors.primaryRed else CCTheme.colors.white)
+    val buttonColorAnimated by animateColorAsState(targetValue = emergencyButton.buttonColor)
 
     with(emergencyButton) {
         Box(modifier = Modifier.fillMaxSize()) {

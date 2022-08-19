@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
@@ -55,9 +56,10 @@ fun EmergencyTopBarContent(
             )
         }
 
-
         Row(
-            modifier = Modifier.background(CCTheme.colors.white, CircleShape),
+            modifier = Modifier
+                .background(CCTheme.colors.white, CircleShape)
+                .fillMaxWidth(0.65f),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
@@ -75,7 +77,10 @@ fun EmergencyTopBarContent(
                     end = 15.dp,
                     top = 7.dp,
                     bottom = 7.dp
-                )
+                ),
+                overflow = TextOverflow.Ellipsis,
+                softWrap = true,
+                maxLines = 1
             )
         }
 

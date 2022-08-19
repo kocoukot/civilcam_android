@@ -109,16 +109,16 @@ fun isMobileOnline(): Boolean {
 }
 
 fun Fragment.setPan() {
-    activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+    requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 }
 
 fun Fragment.setResize() {
-    activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+    requireActivity().window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 }
 
 
 fun Fragment.hideSystemUI() {
-    activity?.window?.apply {
+    requireActivity().window?.apply {
         statusBarColor = Color.TRANSPARENT
 //            if (Build.VERSION.SDK_INT in 21..29) {
         clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -130,7 +130,7 @@ fun Fragment.hideSystemUI() {
 
 fun Fragment.showSystemUI() {
 
-    activity?.window?.apply {
+    requireActivity().window?.apply {
 //            if (Build.VERSION.SDK_INT in 21..29) {
         statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
         decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR

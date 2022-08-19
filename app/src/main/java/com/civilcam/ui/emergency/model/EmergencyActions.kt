@@ -19,5 +19,4 @@ sealed class EmergencyActions : ComposeFragmentActions {
 	
 	data class ClickChangeScreen(val screenState: EmergencyScreen) : EmergencyActions()
 	
-	data class ChangeMode(val mode: EmergencyScreen) : EmergencyActions()
 }
