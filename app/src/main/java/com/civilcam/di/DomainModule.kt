@@ -13,7 +13,7 @@ import com.civilcam.domainLayer.usecase.guardians.GetGuardsRequestsUseCase
 import com.civilcam.domainLayer.usecase.guardians.SearchGuardsResultUseCase
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.domainLayer.usecase.location.GetLastKnownLocationUseCase
-import com.civilcam.domainLayer.usecase.location.GetPlacesAutocompleteUseCase
+import com.civilcam.domainLayer.usecase.places.GetPlacesAutocompleteUseCase
 import com.civilcam.domainLayer.usecase.profile.*
 import com.civilcam.domainLayer.usecase.settings.GetCurrentSubscriptionPlanUseCase
 import com.civilcam.domainLayer.usecase.user.*

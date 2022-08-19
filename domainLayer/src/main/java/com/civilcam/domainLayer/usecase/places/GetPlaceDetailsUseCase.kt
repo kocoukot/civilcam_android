@@ -1,4 +1,4 @@
-package com.civilcam.domainLayer.usecase.location
+package com.civilcam.domainLayer.usecase.places
 
 //class GetPlaceDetailsUseCase(private val placesRepository: PlacesRepository) {
 //	operator fun invoke(

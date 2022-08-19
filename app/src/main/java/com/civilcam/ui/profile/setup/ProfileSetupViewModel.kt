@@ -9,7 +9,7 @@ import com.civilcam.domainLayer.PictureModel
 import com.civilcam.domainLayer.model.AutocompletePlace
 import com.civilcam.domainLayer.model.SearchModel
 import com.civilcam.domainLayer.model.UserSetupModel
-import com.civilcam.domainLayer.usecase.location.GetPlacesAutocompleteUseCase
+import com.civilcam.domainLayer.usecase.places.GetPlacesAutocompleteUseCase
 import com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase
 import com.civilcam.domainLayer.usecase.profile.SetPersonalInfoUseCase
 import com.civilcam.ui.common.ext.SearchQuery
@@ -51,8 +51,11 @@ class ProfileSetupViewModel(
                         kotlin.runCatching { getPlacesAutocompleteUseCase.invoke(it) }
                             .onSuccess { setSearchResult(it) }
                             .onFailure { error ->
-                                error as ServiceException
-                                _state.update { it.copy(errorText = error.errorMessage) }
+                                _state.update {
+                                    it.copy(
+                                        errorText = error.localizedMessage ?: "Something went wrong"
+                                    )
+                                }
                             }
                     }
                 } ?: run {

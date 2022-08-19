@@ -15,35 +15,27 @@ import com.civilcam.domainLayer.model.SearchModel
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.inputs.SearchInputField
 import com.civilcam.ui.network.main.content.SearchRow
-import com.civilcam.ui.profile.setup.model.ProfileSetupActions
-import com.civilcam.ui.profile.userProfile.model.UserProfileActions
 
 @Composable
 fun LocationSelectContent(
-	searchData: SearchModel,
-	isEdit: Boolean,
-	locationAction: (ProfileSetupActions) -> Unit,
-	editLocationAction: (UserProfileActions) -> Unit
+    searchData: SearchModel,
+    onAction: (Any) -> Unit,
 ) {
 	var searchString by remember { mutableStateOf("") }
 
 	Column(
 		modifier = Modifier
-			.fillMaxSize()
-			.background(CCTheme.colors.white)
+            .fillMaxSize()
+            .background(CCTheme.colors.white)
 	) {
 		Spacer(modifier = Modifier.height(32.dp))
 
 		SearchInputField(
-			onValueChanged = {
-				searchString = it
-				if (isEdit) {
-					editLocationAction.invoke(UserProfileActions.LocationSearchQuery(it))
-				} else {
-					locationAction.invoke(ProfileSetupActions.LocationSearchQuery(it))
-				}
-			}) {
-
+            isLetters = false,
+            onValueChanged = {
+                searchString = it
+                onAction.invoke(it)
+            }) {
 		}
 
 		LazyColumn {
@@ -51,17 +43,11 @@ fun LocationSelectContent(
 				searchData.searchResult,
 				key = { _, item -> item.placeId }) { index, item ->
 				SearchRow(
-					title = "${item.primary} ${item.secondary}",
-					searchPart = searchString,
-					needDivider = index < searchData.searchResult.lastIndex,
-					rowClick = {
-						if (isEdit) {
-							editLocationAction(UserProfileActions.ClickAddressSelect(item))
-						} else {
-							locationAction(ProfileSetupActions.ClickAddressSelect(item))
-						}
-					},
-				)
+                    title = "${item.primary} ${item.secondary}",
+                    searchPart = searchString,
+                    needDivider = index < searchData.searchResult.lastIndex,
+                    rowClick = { onAction.invoke(item) },
+                )
 			}
 
 			item {

@@ -41,6 +41,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchInputField(
     text: String = "",
+    isLetters: Boolean = true,
     looseFocus: Boolean = false,
     isReversed: Boolean = false,
     onValueChanged: (String) -> Unit,
@@ -97,7 +98,7 @@ fun SearchInputField(
                 singleLine = true,
                 value = inputText,
                 onValueChange = {
-                    inputText = it.letters()
+                    inputText = if (isLetters) it.letters() else it
                     onValueChanged.invoke(inputText.trim())
                 },
                 keyboardOptions = KeyboardOptions(

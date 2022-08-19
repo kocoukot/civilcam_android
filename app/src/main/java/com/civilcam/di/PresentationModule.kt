@@ -27,6 +27,7 @@ import com.civilcam.ui.splash.SplashViewModel
 import com.civilcam.ui.subscription.SubscriptionViewModel
 import com.civilcam.ui.terms.TermsViewModel
 import com.civilcam.ui.verification.VerificationViewModel
+import com.google.android.libraries.places.api.Places
 import com.standartmedia.di.source.GlobalKoinInjector
 import com.standartmedia.di.source.KoinInjector
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -36,7 +37,7 @@ val baseModule = module {
 	
 	single<KoinInjector> { GlobalKoinInjector(getKoin()) }
 
-//	single { Places.createClient(get()) }
+    single { Places.createClient(get()) }
 
 }
 

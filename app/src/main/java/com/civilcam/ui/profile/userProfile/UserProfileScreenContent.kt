@@ -18,6 +18,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.AutocompletePlace
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
@@ -93,8 +94,8 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 		state.value.data?.let { data ->
 			Column(
 				modifier = Modifier
-					.fillMaxWidth()
-					.background(CCTheme.colors.white),
+                    .fillMaxWidth()
+                    .background(CCTheme.colors.white),
 			) {
 				AnimatedVisibility(visible = state.value.screenState != UserProfileScreen.LOCATION) {
 					UserProfileSection(
@@ -147,13 +148,18 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 						}
 						UserProfileScreen.LOCATION -> {
 							LocationSelectContent(
-								searchData = state.value.searchLocationModel,
-								isEdit = true,
-								locationAction = {},
-								editLocationAction = {
-									viewModel.setInputActions(it)
-								}
-							)
+                                searchData = state.value.searchLocationModel,
+                                onAction = { result ->
+                                    when (result) {
+                                        is String -> viewModel.setInputActions(
+                                            UserProfileActions.LocationSearchQuery(result)
+                                        )
+                                        is AutocompletePlace -> viewModel.setInputActions(
+                                            UserProfileActions.ClickAddressSelect(result)
+                                        )
+                                    }
+                                }
+                            )
 						}
 					}
 				}
