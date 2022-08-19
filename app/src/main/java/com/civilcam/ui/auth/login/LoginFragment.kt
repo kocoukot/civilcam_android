@@ -9,7 +9,6 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.common.ext.navigateByDirection
-import com.civilcam.common.ext.showLoadingFragment
 import com.civilcam.common.ext.showToast
 import com.civilcam.ui.auth.GoogleFragmentAuthHandler
 import com.civilcam.ui.auth.login.model.LoginRoute
@@ -25,7 +24,6 @@ class LoginFragment : Fragment() {
 	//	private val facebookAuthHandler =
 //		FacebookFragmentAuthHandler({
 //			if (it.isNotEmpty()) {
-//				showLoadingFragment(true)
 //				viewModel.onFacebookSignedIn(it)
 //			} else {
 //				showToast("Unfortunately we couldn't get your profile information")
@@ -34,7 +32,6 @@ class LoginFragment : Fragment() {
 	private val googleAuthHandler =
 		GoogleFragmentAuthHandler(this, {
 			if (it.isNotEmpty()) {
-				showLoadingFragment(true)
 				viewModel.onGoogleSignedIn(it)
 			} else {
 				showToast("Unfortunately we couldn't get your profile information")

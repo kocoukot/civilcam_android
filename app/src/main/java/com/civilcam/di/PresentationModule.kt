@@ -54,7 +54,7 @@ val authModule = module {
 	
 	viewModel { LoginViewModel(get(), get()) }
 	
-	viewModel { CreateAccountViewModel(get()) }
+	viewModel { CreateAccountViewModel(get(), get()) }
 	
 	viewModel { (verificationFlow: VerificationFlow, verificationSubject: String, newSubject: String) ->
 		VerificationViewModel(

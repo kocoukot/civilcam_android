@@ -150,6 +150,7 @@ class CreateAccountViewModel(
                 .onSuccess {
 //					saveFcmUseCase.saveFcmToken()
                     navigateRoute(CreateAccountRoute.GoSocialsLogin(it))
+                    _state.update { it.copy(isLoading = false) }
                 }
                 .onFailure { error ->
                     error.castSafe<ServiceException>()?.let { castedError ->
@@ -157,8 +158,7 @@ class CreateAccountViewModel(
                     } ?: run {
                         _state.update { it.copy(alertErrorText = error.localizedMessage) }
                     }
+                    _state.update { it.copy(isLoading = false) }
                 }
-
-            _state.update { it.copy(isLoading = false) }
         }
 }

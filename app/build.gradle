@@ -36,19 +36,17 @@ android {
         versionCode computeVersionCode()
         versionName computeVersionName()
 
-        buildConfigField "String", "GLEAP_KEY", '"6mCvq0I9X4vV8tascP6NIhmYKWztnr4u"'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "GLEAP_KEY", '"6mCvq0I9X4vV8tascP6NIhmYKWztnr4u"'
         buildConfigField "String", "GOOGLE_AUTOCOMPLETE_KEY", '"AIzaSyDuK_krNRNpPVB254Qux1OvAG2wqusmaY4"'
 
-        buildConfigField "String", "GOOGLE_WEB_CLIENT_ID", '"403034509114-h5c52vtjem0rvrv3jv6c4l4ro85tknp5.apps.googleusercontent.com"'
-        buildConfigField "String", "GOOGLE_CLIENT_SECRET", '"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"'
+        buildConfigField "String", "GOOGLE_WEB_CLIENT_ID", '"403034509114-8e3bvocoju9cn67uhuk7ktce39no0erb.apps.googleusercontent.com"'
+        buildConfigField "String", "GOOGLE_CLIENT_SECRET", '"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"'
         buildConfigField "String", "GOOGLE_API_GATEWAY", '"https://www.googleapis.com\"'
 
-        buildConfigField "String", "API_GATEWAY", '"https://api.staging.civilcam.cloud/api"'
-        buildConfigField "String", "BASE_URL", '"https://api.staging.civilcam.cloud"'
-        buildConfigField "String", "API_KEY", '"c&c753"'
-    }
 
+    }
     signingConfigs {
         debug_config {
             try {
@@ -75,13 +73,30 @@ android {
 
 
     buildTypes {
+
+        debug {
+            buildConfigField "String", "API_GATEWAY", '"https://api.staging.civilcam.cloud/api"'
+            buildConfigField "String", "BASE_URL", '"https://api.staging.civilcam.cloud"'
+            buildConfigField "String", "API_KEY", '"c&c753"'
+            minifyEnabled false
+            debuggable true
+            signingConfig signingConfigs.default_config
+        }
+
+
         sandbox {
+            buildConfigField "String", "API_GATEWAY", '"https://api.staging.civilcam.cloud/api"'
+            buildConfigField "String", "BASE_URL", '"https://api.staging.civilcam.cloud"'
+            buildConfigField "String", "API_KEY", '"c&c753"'
             minifyEnabled false
             debuggable true
             signingConfig signingConfigs.default_config
         }
 
         production {
+            buildConfigField "String", "API_GATEWAY", '"https://api.staging.civilcam.cloud/api"'
+            buildConfigField "String", "BASE_URL", '"https://api.staging.civilcam.cloud"'
+            buildConfigField "String", "API_KEY", '"c&c753"'
             minifyEnabled true
             debuggable false
             signingConfig signingConfigs.default_config

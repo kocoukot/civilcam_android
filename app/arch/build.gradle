@@ -20,15 +20,18 @@ android {
         debug {
             minifyEnabled false
         }
+
+
         sandbox {
             minifyEnabled false
         }
+
         production {
-        }
-        release {
-            minifyEnabled false
+            minifyEnabled true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
