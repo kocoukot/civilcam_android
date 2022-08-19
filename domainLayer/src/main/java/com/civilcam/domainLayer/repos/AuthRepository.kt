@@ -21,7 +21,7 @@ interface AuthRepository {
 
     suspend fun recoverPassword(recoveryToken: String, newPassword: String): Boolean
 //
-//    suspend fun googleSignIn(authToken: String): CurrentUser
+suspend fun googleSignIn(authToken: String): CurrentUser
 //
 //    suspend fun facebookSignIn(accessToken: String): CurrentUser
 //

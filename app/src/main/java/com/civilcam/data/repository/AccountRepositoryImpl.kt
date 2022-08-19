@@ -22,10 +22,13 @@ class AccountRepositoryImpl(
             accountStorage.isUserLoggedIn = value
         }
 
+    override val deviceIdToken: String
+        get() = accountStorage.deviceIdToken
+
     override fun loginUser(sessionToken: String, user: CurrentUser) {
         accountStorage.loginUser(sessionToken, user)
     }
-    
+
     override fun getUser(): CurrentUser = accountStorage.getUser()
-    
+
 }

@@ -52,7 +52,7 @@ val authModule = module {
 	
 	viewModel { ProfileSetupViewModel(get(), get(), get(), get()) }
 	
-	viewModel { LoginViewModel(get()) }
+	viewModel { LoginViewModel(get(), get()) }
 	
 	viewModel { CreateAccountViewModel(get()) }
 	

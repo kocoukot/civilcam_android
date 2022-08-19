@@ -54,6 +54,13 @@ val networkModule = module {
             .build()
     }
 
+    single(GoogleRetrofit) {
+        get<Retrofit>()
+            .newBuilder()
+            .baseUrl("${BuildConfig.GOOGLE_API_GATEWAY}/")
+            .build()
+    }
+
     single {
         get<Retrofit> { parametersOf(Path.AUTH) }
             .create(AuthService::class.java)
@@ -82,5 +89,10 @@ val networkModule = module {
     single {
         get<Retrofit> { parametersOf(Path.VERIFICATION) }
             .create(VerificationService::class.java)
+    }
+
+    single {
+        get<Retrofit>(GoogleRetrofit)
+            .create(GoogleOAuthService::class.java)
     }
 }

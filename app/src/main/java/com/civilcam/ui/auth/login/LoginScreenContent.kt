@@ -21,6 +21,8 @@ import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.create.SocialImage
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.login.model.LoginActions
+import com.civilcam.ui.common.alert.AlertDialogComp
+import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.RowDivider
@@ -32,15 +34,21 @@ import com.civilcam.ui.common.loading.DialogLoadingContent
 
 @Composable
 fun LoginScreenContent(viewModel: LoginViewModel) {
-	
+
 	val state = viewModel.state.collectAsState()
-	
+
 	val focusState = remember { mutableStateOf(false) }
-	
+
 	if (state.value.isLoading) {
 		DialogLoadingContent()
 	}
-	
+	if (state.value.alertError.isNotEmpty()) {
+		AlertDialogComp(
+			dialogText = state.value.alertError,
+			alertType = AlertDialogTypes.OK,
+			onOptionSelected = { viewModel.setInputActions(LoginActions.ClearErrorText) }
+		)
+	}
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
 		modifier = Modifier.fillMaxSize(),
@@ -151,17 +159,15 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 				horizontalArrangement = Arrangement.Center,
 				modifier = Modifier.fillMaxWidth()
 			) {
-				SocialImage(
-					painterResource(
-						id = R.drawable.ic_facebook
-					)
-				)
+				SocialImage(painterResource(id = R.drawable.ic_facebook)) {
+					viewModel.setInputActions(LoginActions.FBLogin)
+				}
+
 				Spacer(modifier = Modifier.width(16.dp))
-				SocialImage(
-					painterResource(
-						id = R.drawable.ic_google
-					)
-				)
+
+				SocialImage(painterResource(id = R.drawable.ic_google)) {
+					viewModel.setInputActions(LoginActions.GoogleLogin)
+				}
 			}
 			
 			Spacer(modifier = Modifier.height(16.dp))

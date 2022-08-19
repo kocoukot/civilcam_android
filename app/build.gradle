@@ -40,6 +40,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "GOOGLE_AUTOCOMPLETE_KEY", '"AIzaSyDuK_krNRNpPVB254Qux1OvAG2wqusmaY4"'
 
+        buildConfigField "String", "GOOGLE_WEB_CLIENT_ID", '"403034509114-h5c52vtjem0rvrv3jv6c4l4ro85tknp5.apps.googleusercontent.com"'
+        buildConfigField "String", "GOOGLE_CLIENT_SECRET", '"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"'
+        buildConfigField "String", "GOOGLE_API_GATEWAY", '"https://www.googleapis.com\"'
+
         buildConfigField "String", "API_GATEWAY", '"https://api.staging.civilcam.cloud/api"'
         buildConfigField "String", "BASE_URL", '"https://api.staging.civilcam.cloud"'
         buildConfigField "String", "API_KEY", '"c&c753"'

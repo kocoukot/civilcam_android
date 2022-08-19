@@ -31,7 +31,6 @@ import com.civilcam.ui.common.compose.inputs.PasswordField
 import com.civilcam.ui.common.compose.inputs.PasswordStrategyBlocks
 import com.civilcam.ui.common.loading.DialogLoadingContent
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 
@@ -45,14 +44,11 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
         DialogLoadingContent()
     }
 
-    if (state.value.alertErrorText?.isNotEmpty() == true) {
+    if (state.value.alertErrorText.isNotEmpty()) {
         AlertDialogComp(
-            dialogText = state.value.alertErrorText
-                ?: stringResource(id = R.string.something_went_wrong),
+            dialogText = state.value.alertErrorText,
             alertType = AlertDialogTypes.OK,
-            onOptionSelected = {
-                viewModel.setInputActions(CreateAccountActions.ClickOkAlert)
-            })
+            onOptionSelected = { viewModel.setInputActions(CreateAccountActions.ClickOkAlert) })
     }
     Scaffold(
         backgroundColor = CCTheme.colors.white,
@@ -179,17 +175,15 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                SocialImage(
-                    painterResource(
-                        id = R.drawable.ic_facebook
-                    )
-                )
+                SocialImage(painterResource(id = R.drawable.ic_facebook)) {
+                    viewModel.setInputActions(CreateAccountActions.FBLogin)
+                }
+
                 Spacer(modifier = Modifier.width(16.dp))
-                SocialImage(
-                    painterResource(
-                        id = R.drawable.ic_google
-                    )
-                )
+
+                SocialImage(painterResource(id = R.drawable.ic_google)) {
+                    viewModel.setInputActions(CreateAccountActions.GoogleLogin)
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -223,13 +217,14 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
 
 @Composable
 fun SocialImage(
-    painter: Painter
+    painter: Painter,
+    onImageClick: () -> Unit
 ) {
     Image(
         painter = painter,
         contentDescription = null,
         modifier = Modifier
-            .height(44.dp)
-            .width(44.dp)
+            .size(44.dp)
+            .clickable { onImageClick.invoke() }
     )
 }
