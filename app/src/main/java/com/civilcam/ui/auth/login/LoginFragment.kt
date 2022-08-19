@@ -71,4 +71,8 @@ class LoginFragment : Fragment() {
 			}
 		}
 	}
+
+//	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//		facebookAuthHandler.onActivityResult(requestCode, resultCode, data)
+//	}
 }

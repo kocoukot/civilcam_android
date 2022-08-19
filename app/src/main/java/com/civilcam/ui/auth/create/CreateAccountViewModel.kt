@@ -8,6 +8,7 @@ import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail
 import com.civilcam.data.network.support.ServerErrors
 import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.usecase.auth.GoogleSignInUseCase
 import com.civilcam.domainLayer.usecase.auth.SingUpUseCase
 import com.civilcam.ui.auth.create.model.CreateAccountActions
 import com.civilcam.ui.auth.create.model.CreateAccountRoute
@@ -18,7 +19,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CreateAccountViewModel(
-    private val singUpUseCase: SingUpUseCase
+    private val singUpUseCase: SingUpUseCase,
+    private val googleSignInUseCase: GoogleSignInUseCase,
 ) : ComposeViewModel<CreateAccountState, CreateAccountRoute, CreateAccountActions>() {
 
     override var _state: MutableStateFlow<CreateAccountState> =
@@ -43,6 +45,8 @@ class CreateAccountViewModel(
                 }
             }
             CreateAccountActions.ClickOkAlert -> closeAlert()
+            CreateAccountActions.FBLogin -> onFacebookSignIn()
+            CreateAccountActions.GoogleLogin -> onGoogleSignIn()
         }
     }
 
@@ -111,4 +115,50 @@ class CreateAccountViewModel(
     private fun goBack() {
         navigateRoute(CreateAccountRoute.GoBack)
     }
+
+    private fun onFacebookSignIn() {
+        navigateRoute(CreateAccountRoute.OnFacebookSignIn)
+    }
+
+//    fun onFacebookSignedIn(accessToken: String) =
+//        viewModelScope.launch {
+//            _state.update { it.copy(isLoading = true) }
+//            kotlin.runCatching { googleSignInUseCase.invoke(accessToken) }
+//                .onSuccess {
+////					saveFcmUseCase.saveFcmToken()
+//    navigateRoute(CreateAccountRoute.GoSocialsLogin(it))
+//                }
+//                .onFailure { error ->
+//                    error.castSafe<ServiceException>()?.let { castedError ->
+//                        _state.update { it.copy(alertError = castedError.errorMessage) }
+//                    } ?: run {
+//                        _state.update { it.copy(alertError = error.localizedMessage) }
+//                    }
+//                }
+//
+//            _state.update { it.copy(isLoading = false) }
+//        }
+
+    private fun onGoogleSignIn() {
+        navigateRoute(CreateAccountRoute.OnGoogleSignIn)
+    }
+
+    fun onGoogleSignedIn(accessToken: String) =
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            kotlin.runCatching { googleSignInUseCase.invoke(accessToken) }
+                .onSuccess {
+//					saveFcmUseCase.saveFcmToken()
+                    navigateRoute(CreateAccountRoute.GoSocialsLogin(it))
+                }
+                .onFailure { error ->
+                    error.castSafe<ServiceException>()?.let { castedError ->
+                        _state.update { it.copy(alertErrorText = castedError.errorMessage) }
+                    } ?: run {
+                        _state.update { it.copy(alertErrorText = error.localizedMessage) }
+                    }
+                }
+
+            _state.update { it.copy(isLoading = false) }
+        }
 }
