@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import com.civilcam.BuildConfig
 import com.civilcam.R
 import com.civilcam.common.ext.showAlertDialogFragment
 import com.civilcam.domainLayer.model.VerificationFlow
@@ -17,6 +18,7 @@ import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.profile.setup.model.ProfileSetupRoute
 import com.civilcam.ui.verification.VerificationFragment
 import com.civilcam.utils.contract.GalleryActivityResultContract
+import com.google.android.libraries.places.api.Places
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -62,25 +64,35 @@ class ProfileSetupFragment : Fragment() {
 		
 		return ComposeView(requireContext()).apply {
 			setViewCompositionStrategy(
-				ViewCompositionStrategy.DisposeOnLifecycleDestroyed(
-					viewLifecycleOwner
-				)
-			)
-			
-			setContent {
-				ProfileSetupScreenContent(viewModel)
-			}
-		}
-	}
-	
-	private fun onChooseFromGalleryCaseClicked() {
-		if (cameraPermissionsDelegate.checkSelfPermissions()) {
-			chooseFromGalleryActivityLauncher.launch(Unit)
-		} else {
-			pendingAction = { onChooseFromGalleryCaseClicked() }
-			cameraPermissionsDelegate.requestPermissions()
-		}
-	}
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(
+                    viewLifecycleOwner
+                )
+            )
+
+            setContent {
+                ProfileSetupScreenContent(viewModel)
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Places.initialize(requireContext(), BuildConfig.GOOGLE_AUTOCOMPLETE_KEY)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Places.deinitialize()
+    }
+
+    private fun onChooseFromGalleryCaseClicked() {
+        if (cameraPermissionsDelegate.checkSelfPermissions()) {
+            chooseFromGalleryActivityLauncher.launch(Unit)
+        } else {
+            pendingAction = { onChooseFromGalleryCaseClicked() }
+            cameraPermissionsDelegate.requestPermissions()
+        }
+    }
 	
 	private fun onPermissionsGranted(isGranted: Boolean) {
 		if (isGranted) {

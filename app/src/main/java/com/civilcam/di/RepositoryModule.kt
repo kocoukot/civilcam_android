@@ -8,7 +8,7 @@ val repositoryModule = module {
 
     factory<MockRepository> { MockRepositoryImpl() }
 
-    factory<PlacesRepository> { PlacesRepositoryImpl() }
+    factory<PlacesRepository> { PlacesRepositoryImpl(get()) }
 
     factory<AccountRepository> { AccountRepositoryImpl(get()) }
 

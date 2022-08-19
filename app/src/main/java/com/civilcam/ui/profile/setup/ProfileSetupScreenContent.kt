@@ -13,6 +13,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.AutocompletePlace
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
@@ -99,13 +100,18 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
 				}
 				ProfileSetupScreen.LOCATION -> {
 					LocationSelectContent(
-						searchData = state.value.searchLocationModel,
-						isEdit = false,
-						locationAction = {
-							viewModel.setInputActions(it)
-						},
-						editLocationAction = {}
-					)
+                        searchData = state.value.searchLocationModel,
+                        onAction = { result ->
+                            when (result) {
+                                is String -> viewModel.setInputActions(
+                                    ProfileSetupActions.LocationSearchQuery(result)
+                                )
+                                is AutocompletePlace -> viewModel.setInputActions(
+                                    ProfileSetupActions.ClickAddressSelect(result)
+                                )
+                            }
+                        },
+                    )
 				}
 			}
 		}

@@ -1,67 +1,40 @@
 package com.civilcam.data.repository
 
+import com.civilcam.common.ext.awaitResult
 import com.civilcam.domainLayer.model.AutocompletePlace
 import com.civilcam.domainLayer.repos.PlacesRepository
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
+import com.google.android.libraries.places.api.net.PlacesClient
+import timber.log.Timber
 
-class PlacesRepositoryImpl : PlacesRepository {
-//    private val sessionToken by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-//        AutocompleteSessionToken.newInstance()
-//    }
+class PlacesRepositoryImpl(private val placesClient: PlacesClient) : PlacesRepository {
+    private val sessionToken by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+        AutocompleteSessionToken.newInstance()
+    }
 
-    override suspend fun getPlacesWithType(
-        query: String,
-    ) = listOf(
-        AutocompletePlace(
-            placeId = "hservarg",
-            primary = "New York",
-            secondary = "NY, USA",
-            address = "New York NY, USA",
-        ),
-        AutocompletePlace(
-            placeId = "bsaetbaef",
-            primary = "New Jersey",
-            secondary = "",
-            address = "New Jersey",
-        ),
-        AutocompletePlace(
-            placeId = "bttrdfafds",
-            primary = "Newark Liberty",
-            secondary = "International Airport",
-            address = "Newark Liberty International Airport",
-        ),
-        AutocompletePlace(
-            placeId = "tntbadfga",
-            primary = "New York State",
-            secondary = "USA",
-            address = " New York State USA",
-        ),
-            ).filter {
-                it.address.contains(query, true)
-            }
-
-//        val request = buildPlacesRequest(query)
-//        placesClient.findAutocompletePredictions(request)
-//            .addOnSuccessListener { response: FindAutocompletePredictionsResponse ->
-//                val mappedResult = response.autocompletePredictions
-//                    .map {
-//                        Timber.d("AutocompletePlace $it")
-//                        AutocompletePlace(
-//                            it.placeId,
-//                            it.getPrimaryText(null).toString(),
-//                            it.getSecondaryText(null).toString(),
-//                            it.getFullText(null).toString()
-//                        )
-//                    }
-//                result.invoke(mappedResult)
-//            }
-//            .addOnFailureListener {
-//                Result.failure<Exception>(Throwable(""))
-//            }
-//    }
+    override suspend fun getPlacesWithType(query: String): List<AutocompletePlace> {
+        val request = buildPlacesRequest(query)
+        val predictResponse = placesClient.findAutocompletePredictions(request).awaitResult()
+        return predictResponse?.let { response: FindAutocompletePredictionsResponse ->
+            response.autocompletePredictions
+                .map {
+                    Timber.d("AutocompletePlace $it")
+                    AutocompletePlace(
+                        it.placeId,
+                        it.getPrimaryText(null).toString(),
+                        it.getSecondaryText(null).toString(),
+                        it.getFullText(null).toString()
+                    )
+                }
+        } ?: run {
+            emptyList()
+        }
+    }
 
 //    override fun getPlaceDetails(placeId: String): Single<PlaceDetails> = Single
 //        .fromCallable { buildPlaceDetailsRequest(placeId) }
@@ -112,7 +85,7 @@ class PlacesRepositoryImpl : PlacesRepository {
         return FindAutocompletePredictionsRequest.builder()
             .setCountries("US")
             .setTypeFilter(TypeFilter.ADDRESS)
-//            .setSessionToken(sessionToken)
+            .setSessionToken(sessionToken)
             .setQuery(query)
             .build()
     }
@@ -136,7 +109,5 @@ class PlacesRepositoryImpl : PlacesRepository {
         private const val STATE_VALUE_TYPE = "administrative_area_level_1"
         private const val POSTAL_CODE_TYPE = "postal_code"
         private const val SUB_CITY_TYPE = "sublocality"
-
     }
-
 }

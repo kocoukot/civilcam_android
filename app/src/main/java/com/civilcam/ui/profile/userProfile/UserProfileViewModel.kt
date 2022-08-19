@@ -6,7 +6,7 @@ import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.local.MediaStorage
 import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.model.*
-import com.civilcam.domainLayer.usecase.location.GetPlacesAutocompleteUseCase
+import com.civilcam.domainLayer.usecase.places.GetPlacesAutocompleteUseCase
 import com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase
 import com.civilcam.domainLayer.usecase.profile.UpdateUserProfileUseCase
 import com.civilcam.domainLayer.usecase.user.GetCurrentUserUseCase
@@ -45,9 +45,12 @@ class UserProfileViewModel(
 						kotlin.runCatching { getPlacesAutocompleteUseCase.invoke(it) }
 							.onSuccess { setSearchResult(it) }
 							.onFailure { error ->
-								error as ServiceException
-								_state.update { it.copy(errorText = error.errorMessage) }
-							}
+                                _state.update {
+                                    it.copy(
+                                        errorText = error.localizedMessage ?: "Something went wrong"
+                                    )
+                                }
+                            }
 					}
 				} ?: run {
 				setSearchResult(emptyList())
