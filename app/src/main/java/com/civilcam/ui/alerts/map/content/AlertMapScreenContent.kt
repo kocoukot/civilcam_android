@@ -1,40 +1,100 @@
 package com.civilcam.ui.alerts.map.content
 
+import android.content.Context
+import android.graphics.Bitmap
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.civilcam.R
+import com.civilcam.common.ext.toDp
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.alerts.GuardianAlertInformation
 import com.civilcam.ui.alerts.map.model.LiveMapActions
+import com.civilcam.ui.alerts.map.model.UserAlertLocationData
 import com.civilcam.ui.common.compose.IconActionButton
+import com.civilcam.ui.common.compose.LocationData
+import com.civilcam.ui.common.compose.LocationDetectButton
 import com.civilcam.ui.emergency.model.EmergencyScreen
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.*
+import kotlinx.coroutines.launch
 
 @Composable
 fun AlertMapScreenContent(
     modifier: Modifier = Modifier,
+    isLocationAllowed: Boolean,
     alertScreenState: EmergencyScreen,
+    guardianInformation: GuardianAlertInformation?,
+    userAlertLocationData: UserAlertLocationData?,
     onActionClick: (LiveMapActions) -> Unit
 ) {
+
+
+    val scope = rememberCoroutineScope()
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(LatLng(45.0, -98.0), 0f)
+    }
+
+    LaunchedEffect(key1 = userAlertLocationData != null) {
+        userAlertLocationData?.let { loc ->
+            scope.launch {
+                cameraPositionState
+                    .animate(
+                        CameraUpdateFactory.newCameraPosition(
+                            CameraPosition.fromLatLngZoom(
+                                loc.userLocation,
+                                15f
+                            )
+                        ), 500
+                    )
+            }
+        }
+    }
+
+    var userLocationAddress by remember {
+        mutableStateOf(guardianInformation?.userAddress)
+    }
 
     val topBarPadding by animateDpAsState(
         targetValue = if (alertScreenState == EmergencyScreen.COUPLED) 16.dp else 68.dp,
         animationSpec = tween(delayMillis = 250)
     )
     Box(modifier = modifier.background(CCTheme.colors.grayOne)) {
+
+        GoogleMap(
+            cameraPositionState = cameraPositionState,
+            uiSettings = MapUiSettings(zoomControlsEnabled = false, compassEnabled = false)
+        ) {
+            userAlertLocationData?.let {
+                Marker(
+                    state = MarkerState(position = userAlertLocationData.userLocation),
+                    rotation = userAlertLocationData.userBearing,
+                    icon = bitmapUserAvatarFromVector(LocalContext.current),
+                )
+            }
+
+            guardianInformation?.userLocation?.let {
+                Marker(
+                    state = MarkerState(position = it),
+                    icon = bitmapDescriptorFromVector(LocalContext.current, R.drawable.img_guard),
+                )
+            }
+
+        }
 
         Row(
             modifier = Modifier
@@ -46,41 +106,27 @@ fun AlertMapScreenContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            IconActionButton(
-                buttonIcon = R.drawable.ic_location_pin,
-                buttonClick = { onActionClick.invoke(LiveMapActions.ClickDetectLocation) },
-                tint = CCTheme.colors.primaryRed,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(color = CCTheme.colors.white)
-                    .size(28.dp)
+            LocationDetectButton(
+                isAllowed = isLocationAllowed,
+                onDetectLocation = {
+                    onActionClick.invoke(LiveMapActions.ClickDetectLocation)
+                    userAlertLocationData?.userLocation?.let { location ->
+                        scope.launch {
+                            cameraPositionState
+                                .animate(
+                                    CameraUpdateFactory.newCameraPosition(
+                                        CameraPosition.fromLatLngZoom(
+                                            location,
+                                            15f
+                                        )
+                                    ), 500
+                                )
+                        }
+                    }
+                },
             )
 
-
-            Row(
-                modifier = Modifier
-                    .background(CCTheme.colors.white, CircleShape)
-                    .width(160.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_map_pin),
-                    contentDescription = null,
-                    modifier = Modifier.padding(start = 4.dp)
-                )
-
-                Text(
-                    text = "locationData locationData",
-                    style = CCTheme.typography.common_text_small_regular,
-                    color = CCTheme.colors.black,
-                    modifier = Modifier
-                        .padding(vertical = 4.dp)
-                        .padding(start = 6.dp, end = 15.dp),
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
-                )
-            }
-
+            userLocationAddress?.let { address -> LocationData(address) }
 
             Crossfade(targetState = alertScreenState) { state ->
                 IconActionButton(
@@ -106,4 +152,46 @@ fun AlertMapScreenContent(
             }
         }
     }
+}
+
+
+private fun bitmapUserAvatarFromVector(
+    context: Context,
+): BitmapDescriptor? {
+
+    // retrieve the actual drawable
+    val drawable = ContextCompat.getDrawable(context, R.drawable.ic_user_location) ?: return null
+    drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+
+    val bm = Bitmap.createBitmap(
+        drawable.intrinsicWidth,
+        drawable.intrinsicHeight,
+        Bitmap.Config.ARGB_8888
+    )
+
+    // draw it onto the bitmap
+    val canvas = android.graphics.Canvas(bm)
+    drawable.draw(canvas)
+    return BitmapDescriptorFactory.fromBitmap(bm)
+}
+
+private fun bitmapDescriptorFromVector(
+    context: Context,
+    drawableInt: Int
+): BitmapDescriptor? {
+
+    // retrieve the actual drawable
+    val drawable = ContextCompat.getDrawable(context, drawableInt) ?: return null
+    drawable.setBounds(0, 0, 32.toDp(), 32.toDp())
+
+    val bm = Bitmap.createBitmap(
+        drawable.intrinsicWidth,
+        drawable.intrinsicHeight,
+        Bitmap.Config.ARGB_8888
+    )
+
+    // draw it onto the bitmap
+    val canvas = android.graphics.Canvas(bm)
+    drawable.draw(canvas)
+    return BitmapDescriptorFactory.fromBitmap(bm)
 }

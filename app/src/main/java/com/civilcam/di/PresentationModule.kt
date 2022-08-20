@@ -94,7 +94,7 @@ val alertsRootModule = module {
 	
 	viewModel { AlertsHistoryViewModel(get()) }
 	
-	viewModel { (userId: Int) -> LiveMapViewModel(userId) }
+	viewModel { (userId: Int) -> LiveMapViewModel(userId, get(), get()) }
 	
 	
 }

@@ -6,11 +6,13 @@ import com.civilcam.domainLayer.model.UserDetailsModel
 import com.civilcam.domainLayer.model.UserInfo
 import com.civilcam.domainLayer.model.alerts.AlertModel
 import com.civilcam.domainLayer.model.alerts.AlertType
+import com.civilcam.domainLayer.model.alerts.GuardianAlertInformation
 import com.civilcam.domainLayer.model.guard.GuardianItem
 import com.civilcam.domainLayer.model.guard.GuardianModel
 import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.domainLayer.model.guard.NetworkType
 import com.civilcam.domainLayer.repos.MockRepository
+import com.google.android.gms.maps.model.LatLng
 
 class MockRepositoryImpl: MockRepository {
 
@@ -302,6 +304,15 @@ class MockRepositoryImpl: MockRepository {
                 guardianStatus = GuardianStatus.ACCEPTED,
             ),
         ).filter { it.guardianName.contains(query, true) }
+
+    override suspend fun getMapAlert(): GuardianAlertInformation = GuardianAlertInformation(
+        userId = 23123,
+        userName = "Sylvanas Windrunner",
+        userPhoneNumber = "+15675473876",
+        requestSent = "02.02.2022",
+        userAddress = "12564 Nox Street, Chicago, IL 60607, USA",
+        userLocation = LatLng(41.950188, -87.780036),
+    )
 
 
 }

@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domainLayer.model.alerts.UserAlertInformation
+import com.civilcam.domainLayer.model.alerts.GuardianAlertInformation
 import com.civilcam.ui.alerts.map.model.LiveMapActions
 import com.civilcam.ui.common.compose.CircleUserAvatar
 import com.civilcam.ui.common.compose.IconActionButton
@@ -22,7 +22,7 @@ import com.civilcam.ui.common.compose.IconActionButton
 @Composable
 fun UserInformationContent(
     modifier: Modifier = Modifier,
-    userInformation: UserAlertInformation,
+    userInformation: GuardianAlertInformation,
     onAction: (LiveMapActions) -> Unit
 ) {
     Row(

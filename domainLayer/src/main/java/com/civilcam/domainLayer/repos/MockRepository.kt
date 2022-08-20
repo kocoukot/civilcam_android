@@ -4,6 +4,7 @@ import com.civilcam.domainLayer.model.SubscriptionPlan
 import com.civilcam.domainLayer.model.UserDetailsModel
 import com.civilcam.domainLayer.model.alerts.AlertModel
 import com.civilcam.domainLayer.model.alerts.AlertType
+import com.civilcam.domainLayer.model.alerts.GuardianAlertInformation
 import com.civilcam.domainLayer.model.guard.GuardianItem
 import com.civilcam.domainLayer.model.guard.GuardianModel
 import com.civilcam.domainLayer.model.guard.NetworkType
@@ -26,6 +27,8 @@ interface MockRepository {
     fun getCurrentSubscriptionPlan(): SubscriptionPlan
 
     fun searchGuards(query: String): List<GuardianModel>
+
+    suspend fun getMapAlert(): GuardianAlertInformation
 }
 
 

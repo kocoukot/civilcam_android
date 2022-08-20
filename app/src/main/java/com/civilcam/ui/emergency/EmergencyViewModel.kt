@@ -11,6 +11,7 @@ import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.ui.emergency.model.*
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,48 +29,55 @@ class EmergencyViewModel(
 	private val _effect = MutableSharedFlow<CameraEffect>()
 	val effect: SharedFlow<CameraEffect> = _effect
 
+	private val locationScope = CoroutineScope(Dispatchers.IO)
+
 	init {
-		_state.update { it.copy(isLoading = true) }
 		fetchUserLocation()
 	}
 
-	private fun fetchUserLocation() {
-		viewModelScope.launch(Dispatchers.IO) {
-			fetchUserLocationUseCase()
-				.collect { location ->
-					_state.update {
-						it.copy(
-							emergencyUserModel = it.emergencyUserModel?.copy(
-								userLocation = location.first,
-								userBearing = location.second
-							) ?: EmergencyUserModel(
-								userLocation = location.first,
-								userBearing = location.second,
-							),
-							isLoading = false
-						)
-					}
+	fun fetchUserLocation() {
+		if (!state.value.isLocationAllowed) {
+			locationScope.launch {
+				fetchUserLocationUseCase()
+					.collect { location ->
+						_state.update {
+							it.copy(
+								emergencyUserModel = it.emergencyUserModel?.copy(
+									userLocation = location.first,
+									userBearing = location.second
+								) ?: EmergencyUserModel(
+									userLocation = location.first,
+									userBearing = location.second,
+								),
+								isLoading = false
+							)
+						}
 
-					Timber.i("fetchUserLocationUseCase latlng ${location.first} bearing ${location.second}")
-					val addressList: MutableList<Address>
-					var address = ""
-					try {
-						addressList = geocoder.getFromLocation(
-							location.first.latitude,
-							location.first.longitude,
-							1
-						)
-						if (addressList.isNotEmpty()) address =
-							addressList[0].getAddressLine(0).takeIf { it.isNotEmpty() } ?: address
+						Timber.i("fetchUserLocationUseCase latlng ${location.first} bearing ${location.second}")
+						val addressList: MutableList<Address>
+						var address = ""
+						try {
+							addressList = geocoder.getFromLocation(
+								location.first.latitude,
+								location.first.longitude,
+								1
+							)
+							if (addressList.isNotEmpty())
+								address =
+									addressList[0].getAddressLine(0).takeIf { it.isNotEmpty() }
+										?: address
+
+						} catch (e: Exception) {
+
+						}
 						_state.update {
 							it.copy(
 								emergencyUserModel = it.emergencyUserModel?.copy(locationData = address)
 							)
 						}
-					} catch (e: Exception) {
+						Timber.i("fetchUserLocationUseCase $address")
 					}
-					Timber.i("fetchUserLocationUseCase $address")
-				}
+			}
 		}
 	}
 
@@ -85,8 +93,13 @@ class EmergencyViewModel(
 			EmergencyActions.ChangeCamera -> onCameraFlip()
 			is EmergencyActions.ClickChangeScreen -> screenChange(action.screenState)
 			is EmergencyActions.CameraInitialized -> onCameraInitialized(action.cameraLensInfo)
-			else -> {}
+			EmergencyActions.DetectLocation -> checkPermission()
 		}
+	}
+
+	private fun checkPermission() {
+		Timber.i("checkPermission ")
+		navigateRoute(EmergencyRoute.CheckPermission(false))
 	}
 
 	private fun screenChange(newScreenState: EmergencyScreen) {
@@ -119,7 +132,7 @@ class EmergencyViewModel(
 	}
 
 	private fun doubleClickSos() {
-		navigateRoute(EmergencyRoute.CheckPermission)
+		navigateRoute(EmergencyRoute.CheckPermission(true))
 	}
 
 	private fun oneClickSafe() {

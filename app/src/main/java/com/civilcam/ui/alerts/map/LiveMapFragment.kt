@@ -1,5 +1,6 @@
 package com.civilcam.ui.alerts.map
 
+import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,15 +14,24 @@ import androidx.fragment.app.Fragment
 import com.civilcam.ui.alerts.map.model.LiveMapRoute
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
+import com.civilcam.ui.common.ext.registerForPermissionsResult
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 
 class LiveMapFragment : Fragment() {
     private val viewModel: LiveMapViewModel by viewModel {
         parametersOf(userId)
     }
+    private val permissionsDelegate = registerForPermissionsResult(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.CAMERA,
+        Manifest.permission.RECORD_AUDIO
+    ) { onPermissionsGranted(it) }
 
+    private var pendingAction: (() -> Unit)? = null
     private val userId = 1//by requireArg<Int>(ARG_ALERT_USER_ID)
 
     override fun onCreateView(
@@ -35,6 +45,7 @@ class LiveMapFragment : Fragment() {
                 is LiveMapRoute.CallUserPhone -> callPhone(route.userPhoneNumber)
                 LiveMapRoute.CallPolice -> callPhone("911")
                 LiveMapRoute.AlertResolved -> navController.popBackStack()
+                LiveMapRoute.CheckPermission -> checkPermissions()
             }
         }
         return ComposeView(requireContext()).apply {
@@ -55,6 +66,35 @@ class LiveMapFragment : Fragment() {
         intent.data = Uri.parse("tel:$phoneNumber")
         startActivity(intent)
     }
+
+    private fun checkPermissions() {
+
+        viewModel.isLocationAllowed(permissionsDelegate.checkSelfPermissions())
+        if (permissionsDelegate.checkSelfPermissions()) {
+            viewModel.fetchUserLocation()
+        } else {
+            pendingAction = { checkPermissions() }
+            Timber.i("checkPermission request ")
+            permissionsDelegate.requestPermissions()
+        }
+    }
+
+    private fun onPermissionsGranted(isGranted: Boolean) {
+        Timber.i("onPermissionsGranted $isGranted")
+        pendingAction = if (isGranted) {
+            pendingAction?.invoke()
+            null
+        } else {
+            null
+        }
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        checkPermissions()
+    }
+
 
     companion object {
         const val ARG_ALERT_USER_ID = "alert_user_id"

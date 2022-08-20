@@ -7,6 +7,8 @@ import androidx.compose.ui.graphics.Color
 //data class SMTypography internal constructor
 data class CCColors internal constructor(
     val white: Color = Color(0xFFFFFFFF),
+    val white30: Color = Color(0x4DFFFFFF),
+
     val black: Color = Color(0xFF111111),
     val black_70: Color = Color(0xB3111111),
 
