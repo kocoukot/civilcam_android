@@ -54,16 +54,14 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 				EmergencyRoute.GoUserProfile -> navController.navigate(R.id.userProfileFragment)
 				EmergencyRoute.GoSettings -> navController.navigate(R.id.settingsFragment)
 				EmergencyRoute.GoPinCode -> navController.navigate(
-					R.id.pinCodeFragment,
-					PinCodeFragment.createArgs(PinCodeFlow.SOS_PIN_CODE)
-				)
-				EmergencyRoute.CheckPermission -> {
-					checkPermissions(true)
-				}
-				is EmergencyRoute.ControlFlash -> controlFlashLight(
-					route.enabled,
-					route.cameraState
-				)
+                    R.id.pinCodeFragment,
+                    PinCodeFragment.createArgs(PinCodeFlow.SOS_PIN_CODE)
+                )
+                is EmergencyRoute.CheckPermission -> checkPermissions(route.isSos)
+                is EmergencyRoute.ControlFlash -> controlFlashLight(
+                    route.enabled,
+                    route.cameraState
+                )
 				EmergencyRoute.HideSystemUI -> hideSystemUI()
                 EmergencyRoute.ShowSystemUI -> showSystemUI()
                 is EmergencyRoute.IsNavBarVisible -> (activity as MainActivity).showBottomNavBar(
@@ -99,7 +97,7 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 	private fun checkPermissions(launchSos: Boolean = false) {
 		viewModel.isLocationAllowed(permissionsDelegate.checkSelfPermissions())
 		if (permissionsDelegate.checkSelfPermissions()) {
-			if (launchSos) viewModel.launchSos()
+            if (launchSos) viewModel.launchSos() else viewModel.fetchUserLocation()
 		} else {
 			pendingAction = { checkPermissions() }
 			permissionsDelegate.requestPermissions()

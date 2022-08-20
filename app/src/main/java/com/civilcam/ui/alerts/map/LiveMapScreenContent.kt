@@ -36,17 +36,23 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
     val state by viewModel.state.collectAsState()
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
+    val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
+
     val liveHeight by animateDpAsState(
-        targetValue = if (state.emergencyScreen == EmergencyScreen.LIVE_EXTENDED) screenHeight
-        else if (state.emergencyScreen == EmergencyScreen.COUPLED) (screenHeight / 2) - 50.dp
-        else 0.dp,
+        targetValue = when (state.emergencyScreen) {
+            EmergencyScreen.LIVE_EXTENDED -> screenHeight
+            EmergencyScreen.COUPLED -> screenHeight / 2
+            else -> 0.dp
+        },
         animationSpec = tween(ANIMATION_DURATION)
     )
 
     val mapHeight by animateDpAsState(
-        targetValue = if (state.emergencyScreen == EmergencyScreen.MAP_EXTENDED) screenHeight
-        else if (state.emergencyScreen == EmergencyScreen.COUPLED) (screenHeight / 2) + 50.dp
-        else 0.dp,
+        targetValue = when (state.emergencyScreen) {
+            EmergencyScreen.MAP_EXTENDED, EmergencyScreen.NORMAL -> screenHeight
+            EmergencyScreen.COUPLED -> (screenHeight / 2) + systemBarsPadding.calculateTopPadding()
+            else -> 0.dp
+        },
         animationSpec = tween(ANIMATION_DURATION)
     )
 
@@ -104,7 +110,10 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                     modifier = Modifier
                         .height(mapHeight)
                         .fillMaxWidth(),
+                    isLocationAllowed = state.isLocationAllowed,
                     alertScreenState = state.emergencyScreen,
+                    guardianInformation = state.userInformation,
+                    userAlertLocationData = state.userAlertLocationData,
                     onActionClick = viewModel::setInputActions
                 )
             }

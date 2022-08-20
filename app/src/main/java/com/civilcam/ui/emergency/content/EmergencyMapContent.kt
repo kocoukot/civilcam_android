@@ -3,10 +3,7 @@ package com.civilcam.ui.emergency.content
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -14,6 +11,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.civilcam.R
 import com.civilcam.common.ext.toDp
+import com.civilcam.ui.common.compose.LocationData
+import com.civilcam.ui.common.compose.LocationDetectButton
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyScreen
 import com.civilcam.ui.emergency.model.EmergencyUserModel
@@ -21,26 +20,44 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Composable
 fun EmergencyMapContent(
     modifier: Modifier = Modifier,
     screenState: EmergencyScreen,
-    userLocationData: EmergencyUserModel,
+    isLocationAllowed: Boolean,
+    userLocationData: EmergencyUserModel?,
     onActionClicked: (EmergencyActions) -> Unit
 ) {
 
     val scope = rememberCoroutineScope()
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(userLocationData.userLocation, 13f)
-    }
-    val userLocationAddress = remember {
-        derivedStateOf { userLocationData.locationData }
+        position = CameraPosition.fromLatLngZoom(LatLng(45.0, -98.0), 0f)
     }
 
+    LaunchedEffect(key1 = userLocationData != null) {
+        userLocationData?.let { loc ->
+            scope.launch {
+                cameraPositionState
+                    .animate(
+                        CameraUpdateFactory.newCameraPosition(
+                            CameraPosition.fromLatLngZoom(
+                                loc.userLocation,
+                                15f
+                            )
+                        ), 500
+                    )
+            }
+        }
+    }
+
+    var userLocationAddress by remember {
+        mutableStateOf(userLocationData?.locationData)
+    }
+    userLocationAddress = userLocationData?.locationData
     Box(modifier = modifier.fillMaxSize()) {
         var tobBarModifier = Modifier
             .align(Alignment.TopCenter)
@@ -49,45 +66,60 @@ fun EmergencyMapContent(
 
         if (screenState == EmergencyScreen.NORMAL)
             tobBarModifier = tobBarModifier.statusBarsPadding()
-        Timber.i("fetchUserLocationUseCase latlng ${userLocationData.userLocation} bearing ${userLocationData.userBearing}")
 
         GoogleMap(
             cameraPositionState = cameraPositionState,
             uiSettings = MapUiSettings(zoomControlsEnabled = false, compassEnabled = false)
         ) {
-
-            Marker(
-                state = MarkerState(position = userLocationData.userLocation),
-                rotation = userLocationData.userBearing,
-                icon = bitmapUserAvatarFromVector(LocalContext.current),
-            )
-
-            for (user in userLocationData.guardsLocation) {
+            userLocationData?.let { userLocation ->
                 Marker(
-                    state = MarkerState(position = user),
-                    icon = bitmapDescriptorFromVector(LocalContext.current, R.drawable.img_guard),
+                    state = MarkerState(position = userLocation.userLocation),
+                    rotation = userLocation.userBearing,
+                    icon = bitmapUserAvatarFromVector(LocalContext.current),
                 )
+            }
+
+            userLocationData?.guardsLocation?.takeIf { it.isNotEmpty() }?.let {
+                for (user in userLocationData.guardsLocation) {
+                    Marker(
+                        state = MarkerState(position = user),
+                        icon = bitmapDescriptorFromVector(
+                            LocalContext.current,
+                            R.drawable.img_guard
+                        ),
+                    )
+                }
             }
         }
 
         EmergencyTopBarContent(
             modifier = tobBarModifier,
-            locationData = userLocationAddress.value,
+            locationDetectContent = {
+                LocationDetectButton(
+                    isAllowed = isLocationAllowed,
+                    onDetectLocation = {
+                        onActionClicked.invoke(EmergencyActions.DetectLocation)
+                        userLocationData?.userLocation?.let { location ->
+                            scope.launch {
+                                cameraPositionState
+                                    .animate(
+                                        CameraUpdateFactory.newCameraPosition(
+                                            CameraPosition.fromLatLngZoom(
+                                                location,
+                                                15f
+                                            )
+                                        ), 500
+                                    )
+                            }
+                        }
+                    },
+                )
+            },
+            locationDataContent = {
+                userLocationAddress?.let { LocationData(it) }
+            },
             screen = screenState,
             onClick = { action ->
-                if (action == EmergencyActions.DetectLocation) {
-                    scope.launch {
-                        cameraPositionState
-                            .animate(
-                                CameraUpdateFactory.newCameraPosition(
-                                    CameraPosition.fromLatLngZoom(
-                                        userLocationData.userLocation,
-                                        15f
-                                    )
-                                ), 500
-                            )
-                    }
-                }
                 onActionClicked.invoke(action)
             }
         )

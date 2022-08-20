@@ -109,16 +109,15 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
                         flashState = state.torchState == TorchState.ON
                     )
                 }
-                state.emergencyUserModel?.let { userLocationData ->
-                    EmergencyMapContent(
-                        modifier = Modifier
-                            .height(mapHeight)
-                            .fillMaxWidth(),
-                        screenState = state.emergencyScreen,
-                        userLocationData = userLocationData,
-                        onActionClicked = viewModel::setInputActions,
-                    )
-                }
+                EmergencyMapContent(
+                    modifier = Modifier
+                        .height(mapHeight)
+                        .fillMaxWidth(),
+                    isLocationAllowed = state.isLocationAllowed,
+                    screenState = state.emergencyScreen,
+                    userLocationData = state.emergencyUserModel,
+                    onActionClicked = viewModel::setInputActions,
+                )
             }
 
             AnimatedVisibility(
