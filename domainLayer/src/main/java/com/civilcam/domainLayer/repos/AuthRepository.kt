@@ -17,9 +17,9 @@ interface AuthRepository {
 
     suspend fun signIn(email: String, password: String): CurrentUser
 
-//    suspend fun resetPassword(email: String): Long
-//
-//    suspend fun recoverPassword(recoveryToken: String, newPassword: String): Boolean
+    suspend fun resetPassword(email: String): Long
+
+    suspend fun recoverPassword(recoveryToken: String, newPassword: String): Boolean
 //
 //    suspend fun googleSignIn(authToken: String): CurrentUser
 //
@@ -27,5 +27,5 @@ interface AuthRepository {
 //
 ////	fun sendPasswordOtpCode(email: String): Single<Long>
 //
-//    suspend fun verifyResetPasswordOtpCode(email: String, code: String): String
+    suspend fun verifyResetPasswordOtpCode(email: String, code: String): String
 }

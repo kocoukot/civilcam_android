@@ -17,6 +17,7 @@ import com.civilcam.R
 import com.civilcam.common.ext.hideKeyboard
 import com.civilcam.common.ext.showKeyboard
 import com.civilcam.domainLayer.model.VerificationFlow
+import com.civilcam.ui.auth.password.create.CreatePasswordFragment
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.common.ext.navController
@@ -46,6 +47,12 @@ class VerificationFragment : Fragment() {
 			when (route) {
 				VerificationRoute.GoBack -> {
 					navController.popBackStack()
+				}
+				is VerificationRoute.GoPasswordCreate -> {
+					navController.navigate(
+						R.id.createPasswordFragment,
+						CreatePasswordFragment.createArgs(route.token)
+					)
 				}
 				VerificationRoute.ToNextScreen -> {
 					Handler(Looper.getMainLooper()).postDelayed(300) {

@@ -7,6 +7,7 @@ data class CreatePasswordState(
 	val errorText: String = "Invalid email. Please try again. (eg:email@gmail.com)",
 	val password: String = "",
 	val confirmPassword: String = "",
+	val token: String = ""
 ) : ComposeFragmentState {
 	val isFilled: Boolean
 		get() = password == confirmPassword &&

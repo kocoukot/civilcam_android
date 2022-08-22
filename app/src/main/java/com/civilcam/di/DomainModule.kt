@@ -5,6 +5,7 @@ import com.civilcam.domainLayer.usecase.alerts.GetAlertsListUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetHistoryAlertListUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetHistoryDetailUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetMapAlertUserDataUseCase
+import com.civilcam.domainLayer.usecase.auth.*
 import com.civilcam.domainLayer.usecase.auth.CheckEmailUseCase
 import com.civilcam.domainLayer.usecase.auth.SetFcmTokenUseCase
 import com.civilcam.domainLayer.usecase.auth.SignInUseCase
@@ -59,7 +60,7 @@ val domainModule = module {
 	factory { GetHistoryAlertListUseCase(get()) }
 	
 	factory { GetHistoryDetailUseCase(get()) }
-
+	
 	factory { GetGuardsListUseCase(get()) }
 	
 	factory { GetGuardsRequestsUseCase(get()) }
@@ -69,23 +70,36 @@ val domainModule = module {
 	factory { GetCurrentSubscriptionPlanUseCase(get()) }
 	
 	factory { GetPlacesAutocompleteUseCase(get()) }
-    
-    factory { FetchUserLocationUseCase(get()) }
-
-    factory { GetLastKnownLocationUseCase(get()) }
-
+	
+	factory { FetchUserLocationUseCase(get()) }
+	
+	factory { GetLastKnownLocationUseCase(get()) }
+	
 	factory { ChangeEmailUseCase(get()) }
-
+	
 	factory { CheckCurrentPasswordUseCase(get()) }
-
+	
 	factory { ChangePasswordUseCase(get()) }
-
+	
 	factory { SetUserLanguageUseCase(get()) }
-
+	
 	factory { GetMapAlertUserDataUseCase(get()) }
-
+	
+	factory { ResetPasswordUseCase(get()) }
+	
+	factory { VerifyResetPasswordOtpUseCase(get()) }
+	
+	factory { RecoverPasswordUseCase(get()) }
+	
 	factory { SetFcmTokenUseCase(get()) }
-
+	
 	factory { DeleteAccountUseCase(get()) }
-
 }
+
+
+
+
+
+
+
+

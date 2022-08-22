@@ -22,12 +22,17 @@ import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.password.reset.model.ResetActions
 import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.common.compose.inputs.EmailInputField
+import com.civilcam.ui.common.loading.DialogLoadingContent
 import timber.log.Timber
 
 @Composable
 fun ResetPasswordScreenContent(viewModel: ResetPasswordViewModel) {
 	
 	val state = viewModel.state.collectAsState()
+	
+	if (state.value.isLoading) {
+		DialogLoadingContent()
+	}
 	
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
@@ -72,7 +77,7 @@ fun ResetPasswordScreenContent(viewModel: ResetPasswordViewModel) {
 				text = state.value.email,
 				placeHolder = stringResource(id = R.string.create_account_email_placeholder),
 				errorMessage = state.value.errorText,
-				hasError = !state.value.isEmail,
+				hasError = !state.value.isEmail || state.value.emailError,
 				onValueChanged = {
 					viewModel.setInputActions(
 						ResetActions.EnterInputData(
