@@ -18,10 +18,10 @@ import com.civilcam.ui.network.main.NetworkMainViewModel
 import com.civilcam.ui.network.main.model.NetworkScreen
 import com.civilcam.ui.onboarding.OnBoardingViewModel
 import com.civilcam.ui.profile.credentials.ChangeCredentialsViewModel
-import com.civilcam.ui.profile.credentials.model.CredentialType
 import com.civilcam.ui.profile.setup.ProfileSetupViewModel
 import com.civilcam.ui.profile.userDetails.UserDetailsViewModel
 import com.civilcam.ui.profile.userProfile.UserProfileViewModel
+import com.civilcam.ui.profile.userProfile.model.UserProfileType
 import com.civilcam.ui.settings.SettingsViewModel
 import com.civilcam.ui.splash.SplashViewModel
 import com.civilcam.ui.subscription.SubscriptionViewModel
@@ -108,14 +108,14 @@ val profileModule = module {
         )
     }
 
-    viewModel { (credentialType: CredentialType, credential: String) ->
-        ChangeCredentialsViewModel(
-            credentialType,
-            credential,
-            get(),
-            get(),
-        )
-    }
+	viewModel { (credentialType: UserProfileType, credential: String) ->
+		ChangeCredentialsViewModel(
+			credentialType,
+			credential,
+			get(),
+			get(),
+		)
+	}
 	
 	viewModel { UserProfileViewModel(get(), get(), get(), get(), get()) }
 }

@@ -65,9 +65,9 @@ class UserProfileViewModel(
 			UserProfileActions.ClickSave -> goSave()
 			is UserProfileActions.GoCredentials -> {
 				when (action.userProfileType) {
-					UserProfileType.EMAIL -> goCredentials(action.userProfileType)
-					UserProfileType.PIN_CODE -> goPinCode()
 					UserProfileType.PHONE_NUMBER -> goCredentials(action.userProfileType)
+                    UserProfileType.EMAIL -> goCredentials(action.userProfileType)
+					UserProfileType.PIN_CODE -> goPinCode()
 				}
 			}
 			is UserProfileActions.EnterInputData -> {
@@ -172,6 +172,7 @@ class UserProfileViewModel(
 
 				} catch (e: ServiceException) {
 					Timber.d("resourceLocalized throwable ${e.errorCode}")
+                    if (e.isForceLogout) navigateRoute(UserProfileRoute.ForceLogout)
 					_state.update { it.copy(errorText = e.errorMessage) }
 				}
 				_state.update { it.copy(isLoading = false) }
@@ -203,26 +204,16 @@ class UserProfileViewModel(
 	}
 
 	private fun goCredentials(userProfileType: UserProfileType) {
-		when (userProfileType) {
-			UserProfileType.EMAIL -> {
-				navigateRoute(
-					UserProfileRoute.GoCredentials(
-						userProfileType,
-						_state.value.data?.sessionUser?.email
-					)
-				)
-			}
-			UserProfileType.PHONE_NUMBER -> {
-				navigateRoute(
-					UserProfileRoute.GoCredentials(
-						userProfileType,
-						""
-					)
-				)
-			}
-			UserProfileType.PIN_CODE -> {}
-		}
-	}
+        navigateRoute(
+            UserProfileRoute.GoCredentials(
+                userProfileType,
+                if (userProfileType == UserProfileType.EMAIL)
+                    _state.value.data?.sessionUser?.email
+                else
+                    ""
+            )
+        )
+    }
 
 	private fun goAvatarSelect() {
 		navigateRoute(UserProfileRoute.GoGalleryOpen)

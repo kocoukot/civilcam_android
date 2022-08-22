@@ -3,7 +3,6 @@ package com.civilcam.ui.profile.userProfile.content
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,44 +18,31 @@ import com.civilcam.common.ext.formatPhoneNumber
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.CurrentUser
 import com.civilcam.ui.common.compose.RowDivider
+import com.civilcam.ui.common.compose.RowDividerGrayThree
+import com.civilcam.ui.profile.userProfile.model.UserProfileActions
 import com.civilcam.ui.profile.userProfile.model.UserProfileType
 
 @Composable
 fun MainProfileContent(
 	data: CurrentUser,
-	onRowClicked: (UserProfileType) -> Unit,
+	onRowClicked: (UserProfileActions) -> Unit,
 ) {
 	Column(
 		modifier = Modifier.fillMaxWidth()
 	) {
         RowDivider()
 		for (type in UserProfileType.values()) {
-			when(type) {
-				UserProfileType.PHONE_NUMBER -> {
-					ProfileRow(
-						title = stringResource(id = type.title),
-						value = data.userBaseInfo.phone.formatPhoneNumber(),
-						needDivider = type != UserProfileType.PIN_CODE,
-						rowClick = { onRowClicked.invoke(type) }
-					)
-				}
-				UserProfileType.EMAIL -> {
-					ProfileRow(
-						title = stringResource(id = type.title),
-						value = data.sessionUser.email,
-						needDivider = type != UserProfileType.PIN_CODE,
-						rowClick = { onRowClicked.invoke(type) }
-					)
-				}
-				UserProfileType.PIN_CODE -> {
-					ProfileRow(
-						title = stringResource(id = type.title),
-						value = "••••",
-						needDivider = type != UserProfileType.PIN_CODE,
-						rowClick = { onRowClicked.invoke(type) }
-					)
-				}
+			val rowValue = when (type) {
+				UserProfileType.PHONE_NUMBER -> data.userBaseInfo.phone.formatPhoneNumber()
+				UserProfileType.EMAIL -> data.sessionUser.email
+				UserProfileType.PIN_CODE -> "••••"
 			}
+			ProfileRow(
+				title = stringResource(id = type.title),
+				value = rowValue,
+				needDivider = type != UserProfileType.PIN_CODE,
+				rowClick = { onRowClicked.invoke(UserProfileActions.GoCredentials(type)) }
+			)
 		}
         RowDivider()
 	}
@@ -110,9 +96,6 @@ fun ProfileRow(
 			}
 			Spacer(modifier = Modifier.width(16.dp))
 		}
-		if (needDivider) Divider(
-			color = CCTheme.colors.grayThree,
-			modifier = Modifier.padding(start = 16.dp)
-		)
+		if (needDivider) RowDividerGrayThree()
 	}
 }

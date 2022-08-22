@@ -51,9 +51,7 @@ class TermsViewModel(
     private fun goNext() {
         viewModelScope.launch {
             kotlin.runCatching { acceptLegalDocsUseCase.invoke() }
-                .onSuccess {
-                    navigateRoute(TermsRoute.GoSubscription)
-                }
+                .onSuccess { navigateRoute(TermsRoute.GoSubscription) }
                 .onFailure { error ->
                     error as ServiceException
                     _state.update { it.copy(errorText = error.errorMessage) }

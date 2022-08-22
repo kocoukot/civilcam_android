@@ -144,55 +144,43 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
                             .padding(top = 16.dp),
                         horizontalAlignment = Alignment.Start
                     ) {
-                        SubscriptionOption(
-                            stringResource(id = R.string.subscription_safety_network)
+                        for (textString in listOf(
+                            stringResource(id = R.string.subscription_safety_network),
+                            stringResource(id = R.string.subscription_emergency_alert),
+                            stringResource(id = R.string.subscription_live_stream),
+                            stringResource(id = R.string.subscription_safety_map),
+                            stringResource(id = R.string.subscription_detailed_alert),
                         )
-
-                        SubscriptionOption(
-                            stringResource(id = R.string.subscription_emergency_alert)
-                        )
-
-                        SubscriptionOption(
-                            stringResource(id = R.string.subscription_live_stream)
-                        )
-
-                        SubscriptionOption(
-                            stringResource(id = R.string.subscription_safety_map)
-                        )
-
-                        SubscriptionOption(
-                            stringResource(id = R.string.subscription_detailed_alert)
-                        )
+                        ) {
+                            SubscriptionOption(textString)
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(18.dp))
 
-                    state.value.selectedSubscriptionType.let { subscriptionType ->
-                        LazyColumn(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            items(SubscriptionType.values()) { subscription ->
-                                SubscriptionPlanRow(
-                                    subscriptionType = subscription,
-                                    onButtonClicked = { type ->
-                                        viewModel.setInputActions(
-                                            SubscriptionActions.OnSubSelect(type)
-                                        )
-                                    },
-                                    isActivated = subscriptionType == subscription
-                                )
-                            }
+                    LazyColumn(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        items(SubscriptionType.values()) { subscription ->
+                            SubscriptionPlanRow(
+                                subscriptionType = subscription,
+                                onButtonClicked = { type ->
+                                    viewModel.setInputActions(
+                                        SubscriptionActions.OnSubSelect(type)
+                                    )
+                                },
+                                isActivated = state.value.selectedSubscriptionType == subscription
+                            )
                         }
                     }
+
 
                     Spacer(modifier = Modifier.height(40.dp))
 
                     ComposeButton(
                         title = if (state.value.isReselect) stringResource(id = R.string.subscriptions_change_plan)
                         else
-                            stringResource(
-                                id = R.string.start_text
-                            ),
+                            stringResource(id = R.string.start_text),
                         modifier = Modifier
                             .fillMaxWidth()
                             .navigationBarsPadding(),
