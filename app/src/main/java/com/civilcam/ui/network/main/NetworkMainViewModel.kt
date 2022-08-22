@@ -139,7 +139,6 @@ class NetworkMainViewModel(
                 }
             } catch (e: Exception) {
                 _state.update { it.copy(errorText = e.localizedMessage) }
-
             }.also {
                 _state.update { it.copy(isLoading = false) }
             }
@@ -209,11 +208,7 @@ class NetworkMainViewModel(
         data?.let { d ->
             _state.update {
                 it.copy(
-                    data = d.copy(
-                        searchScreenSectionModel = SearchScreenSectionModel(
-                            result
-                        )
-                    )
+                    data = d.copy(searchScreenSectionModel = SearchScreenSectionModel(result))
                 )
             }
         }

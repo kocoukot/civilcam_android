@@ -125,12 +125,9 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 					when (screenType) {
 						UserProfileScreen.PROFILE -> {
 							MainProfileContent(
-								data = data,
-							) {
-								viewModel.setInputActions(
-									UserProfileActions.GoCredentials(it)
-								)
-							}
+                                data = data,
+                                onRowClicked = viewModel::setInputActions
+                            )
 						}
 						UserProfileScreen.EDIT -> {
 							UserProfileEditContent(

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.civilcam.BuildConfig
 import com.civilcam.R
+import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.common.ext.showAlertDialogFragment
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
@@ -18,9 +19,7 @@ import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.profile.credentials.ChangeCredentialsFragment
-import com.civilcam.ui.profile.credentials.model.CredentialType
 import com.civilcam.ui.profile.userProfile.model.UserProfileRoute
-import com.civilcam.ui.profile.userProfile.model.UserProfileType
 import com.civilcam.ui.verification.VerificationFragment
 import com.civilcam.utils.contract.GalleryActivityResultContract
 import com.google.android.libraries.places.api.Places
@@ -55,29 +54,16 @@ class UserProfileFragment : Fragment() {
 		
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
+				UserProfileRoute.ForceLogout -> navController.navigateToRoot(R.id.onBoardingFragment)
 				UserProfileRoute.GoBack -> navController.popBackStack()
 				is UserProfileRoute.GoCredentials -> {
-					when (route.userProfileType) {
-						UserProfileType.PHONE_NUMBER -> {
-							navController.navigate(
-								R.id.changeCredentialsFragment,
-								ChangeCredentialsFragment.createArgs(
-									CredentialType.PHONE,
-									route.credential ?: ""
-								)
-							)
-						}
-						UserProfileType.EMAIL -> {
-							navController.navigate(
-								R.id.changeCredentialsFragment,
-								ChangeCredentialsFragment.createArgs(
-									CredentialType.EMAIL,
-									route.credential ?: ""
-								)
-							)
-						}
-						UserProfileType.PIN_CODE -> {}
-					}
+					navController.navigate(
+						R.id.changeCredentialsFragment,
+						ChangeCredentialsFragment.createArgs(
+							route.userProfileType,
+							route.credential.orEmpty()
+						)
+					)
 				}
 				UserProfileRoute.GoGalleryOpen -> onChooseFromGalleryCaseClicked()
 				UserProfileRoute.GoPinCode -> navController.navigate(

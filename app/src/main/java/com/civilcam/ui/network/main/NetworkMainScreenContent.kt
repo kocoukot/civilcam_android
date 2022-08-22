@@ -53,25 +53,18 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                 AnimatedContent(targetState = state.value.screenState) { screenState ->
                     Column {
                         TopAppBarContent(
-                            title = when (screenState) {
-                                NetworkScreen.MAIN -> stringResource(id = R.string.navigation_bar_network)
-                                NetworkScreen.REQUESTS -> stringResource(id = R.string.network_main_requests)
-                                NetworkScreen.SEARCH_GUARD, NetworkScreen.ADD_GUARD -> stringResource(
-                                    id = R.string.add_guardian_title
-                                )
-                            },
+                            title = stringResource(id = screenState.screenTitle),
                             navigationItem = {
                                 when (screenState) {
-                                    NetworkScreen.MAIN -> AvatarButton {
-                                        viewModel.setInputActions(NetworkMainActions.ClickGoMyProfile)
-                                    }
-                                    NetworkScreen.REQUESTS,
-                                    NetworkScreen.SEARCH_GUARD, NetworkScreen.ADD_GUARD -> BackButton {
-                                        viewModel.setInputActions(NetworkMainActions.ClickGoBack)
-                                    }
+                                    NetworkScreen.MAIN ->
+                                        AvatarButton {
+                                            viewModel.setInputActions(NetworkMainActions.ClickGoMyProfile)
+                                        }
+                                    NetworkScreen.REQUESTS, NetworkScreen.SEARCH_GUARD, NetworkScreen.ADD_GUARD ->
+                                        BackButton {
+                                            viewModel.setInputActions(NetworkMainActions.ClickGoBack)
+                                        }
                                 }
-                                
-                                
                             },
                             actionItem = {
                                 when (screenState) {
@@ -102,32 +95,21 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                             text = state.value.data?.searchText.orEmpty(),
                             onValueChanged = {
                                 viewModel.setInputActions(NetworkMainActions.EnteredSearchString(it))
-
                             },
                             isFocused = {
-                                if (state.value.screenState == NetworkScreen.MAIN) viewModel.setInputActions(
-                                    NetworkMainActions.ClickGoSearch
-                                )
-
+                                if (state.value.screenState == NetworkScreen.MAIN)
+                                    viewModel.setInputActions(NetworkMainActions.ClickGoSearch)
                             })
                         Spacer(modifier = Modifier.height(6.dp))
                     }
                 }
 
-
-
                 AnimatedVisibility(visible = state.value.screenState == NetworkScreen.MAIN) {
-
-
                     NetworkTabRow(
                         tabPage
                     ) {
                         tabPage = it
-                        viewModel.setInputActions(
-                            NetworkMainActions.ClickNetworkTypeChange(
-                                it
-                            )
-                        )
+                        viewModel.setInputActions(NetworkMainActions.ClickNetworkTypeChange(it))
                     }
                 }
 
@@ -135,7 +117,6 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                             state.value.data?.requestsList?.isNotEmpty() == true) ||
                     state.value.screenState == NetworkScreen.SEARCH_GUARD ||
                     state.value.screenState == NetworkScreen.ADD_GUARD
-
                 ) RowDivider()
 
             }
@@ -143,8 +124,8 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
         floatingActionButton = {
             AnimatedVisibility(
                 visible = tabPage == NetworkType.GUARDIANS && state.value.screenState == NetworkScreen.MAIN,
-                enter = scaleIn(),
-                exit = scaleOut(),
+                enter = scaleIn() + fadeIn(),
+                exit = scaleOut() + fadeOut(),
             ) {
                 FloatingActionButton(
                     elevation = FloatingActionButtonDefaults.elevation(8.dp),
