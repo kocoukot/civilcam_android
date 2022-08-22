@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "403034509114-lp4t5oa9ufptfmcrc0nk2443tk6nkl1b.apps.googleusercontent.com",
+          "client_id": "403034509114-22phca4cdld52m0pe6go5eets1r9pm77.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.civilcam",
+            "certificate_hash": "663009f6149ec0479668d1ed02ce9d8836e575a7"
+          }
+        },
+        {
+          "client_id": "403034509114-in7em9rhm0nn04tkbqicaisiafs94hv6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.civilcam",
@@ -22,8 +30,12 @@
           }
         },
         {
-          "client_id": "403034509114-947n70hs8m69p1ft8ogbbqgg0mdj3bor.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "403034509114-npk9urkmbc6mv3d0g5jn0brh7mj79f7g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.civilcam",
+            "certificate_hash": "37c250b911435b970c2070aa7bb433b648a772df"
+          }
         }
       ],
       "api_key": [
@@ -35,7 +47,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "403034509114-947n70hs8m69p1ft8ogbbqgg0mdj3bor.apps.googleusercontent.com",
+              "client_id": "403034509114-i70e7lel3joqeuprgis5cuuu8anbm7ss.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

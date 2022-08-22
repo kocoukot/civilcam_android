@@ -11,6 +11,7 @@ import com.civilcam.domainLayer.model.CurrentUser
 import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
 import com.civilcam.domainLayer.repos.AuthRepository
+import timber.log.Timber
 
 
 class AuthRepositoryImpl(

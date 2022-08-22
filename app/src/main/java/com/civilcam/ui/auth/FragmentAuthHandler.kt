@@ -36,8 +36,7 @@ class GoogleFragmentAuthHandler(
             ?: kotlin.run {
 
                 val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                    .requestServerAuthCode(BuildConfig.GOOGLE_WEB_CLIENT_ID)
-                    .requestServerAuthCode("403034509114-8e3bvocoju9cn67uhuk7ktce39no0erb.apps.googleusercontent.com")
+                    .requestServerAuthCode(BuildConfig.GOOGLE_WEB_CLIENT_ID)
                     .requestEmail()
                     .build()
 

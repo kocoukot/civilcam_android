@@ -41,11 +41,11 @@ android {
         buildConfigField "String", "GLEAP_KEY", '"6mCvq0I9X4vV8tascP6NIhmYKWztnr4u"'
         buildConfigField "String", "GOOGLE_AUTOCOMPLETE_KEY", '"AIzaSyDuK_krNRNpPVB254Qux1OvAG2wqusmaY4"'
 
-        buildConfigField "String", "GOOGLE_WEB_CLIENT_ID", '"403034509114-8e3bvocoju9cn67uhuk7ktce39no0erb.apps.googleusercontent.com"'
-        buildConfigField "String", "GOOGLE_CLIENT_SECRET", '"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"'
+        buildConfigField "String", "GOOGLE_WEB_CLIENT_ID", '"403034509114-i70e7lel3joqeuprgis5cuuu8anbm7ss.apps.googleusercontent.com"'
+        buildConfigField "String", "GOOGLE_CLIENT_SECRET", '"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"'
         buildConfigField "String", "GOOGLE_API_GATEWAY", '"https://www.googleapis.com\"'
 
-
+//        https://api.staging.civilcam.cloud/api
     }
     signingConfigs {
         debug_config {
