@@ -16,26 +16,32 @@ class UserRepositoryImpl(
 	private val userService: UserService,
 	private val accountStorage: AccountStorage
 ) : UserRepository, BaseRepository() {
-	
+
 	private val userMapper = UserMapper()
-	
+
 	override suspend fun acceptTerms() =
 		safeApiCall {
 			userService.acceptTermsPolicy(AcceptTermsRequest(true))
 		}.let { response ->
 			when (response) {
 				is Resource.Success -> response.value
-				is Resource.Failure -> throw response.serviceException
+				is Resource.Failure -> {
+					if (response.serviceException.isForceLogout) accountStorage.logOut()
+					throw response.serviceException
+				}
 			}
 		}
-	
+
 	override suspend fun getCurrentUser(): CurrentUser =
 		safeApiCall {
 			userService.currentUser()
 		}.let { response ->
 			when (response) {
 				is Resource.Success -> userMapper.mapData(response.value)
-				is Resource.Failure -> throw response.serviceException
+				is Resource.Failure -> {
+					if (response.serviceException.isForceLogout) accountStorage.logOut()
+					throw response.serviceException
+				}
 			}
 		}
 
@@ -48,7 +54,10 @@ class UserRepositoryImpl(
 					accountStorage.logOut()
 					response.value.ok
 				}
-				is Resource.Failure -> throw response.serviceException
+				is Resource.Failure -> {
+					if (response.serviceException.isForceLogout) accountStorage.logOut()
+					throw response.serviceException
+				}
 			}
 		}
 
@@ -84,37 +93,49 @@ class UserRepositoryImpl(
 		}.let { response ->
 			when (response) {
 				is Resource.Success -> response.value.isMatch
-				is Resource.Failure -> throw response.serviceException
+				is Resource.Failure -> {
+					if (response.serviceException.isForceLogout) accountStorage.logOut()
+					throw response.serviceException
+				}
 			}
 		}
-	
+
 	override suspend fun changePassword(currentPassword: String, newPassword: String): Boolean =
 		safeApiCall {
 			userService.changePassword(ChangePasswordRequest(currentPassword, newPassword))
 		}.let { response ->
 			when (response) {
 				is Resource.Success -> response.value.ok
-				is Resource.Failure -> throw response.serviceException
+				is Resource.Failure -> {
+					if (response.serviceException.isForceLogout) accountStorage.logOut()
+					throw response.serviceException
+				}
 			}
 		}
-	
+
 	override suspend fun setUserLanguage(languageType: LanguageType): CurrentUser =
 		safeApiCall {
 			userService.setUserLanguage(SetUserLanguageRequest(languageType))
 		}.let { response ->
 			when (response) {
 				is Resource.Success -> userMapper.mapData(response.value)
-				is Resource.Failure -> throw response.serviceException
+				is Resource.Failure -> {
+					if (response.serviceException.isForceLogout) accountStorage.logOut()
+					throw response.serviceException
+				}
 			}
 		}
-	
+
 	override suspend fun changeEmail(currentEmail: String, newEmail: String): Boolean =
 		safeApiCall {
 			userService.changeEmail(ChangeEmailRequest(currentEmail, newEmail))
 		}.let { response ->
 			when (response) {
 				is Resource.Success -> response.value.ok
-				is Resource.Failure -> throw response.serviceException
+				is Resource.Failure -> {
+					if (response.serviceException.isForceLogout) accountStorage.logOut()
+					throw response.serviceException
+				}
 			}
 		}
 

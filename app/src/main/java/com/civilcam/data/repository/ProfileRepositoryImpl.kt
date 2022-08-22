@@ -4,6 +4,7 @@ import android.net.Uri
 import com.civilcam.common.ext.BaseRepository
 import com.civilcam.common.ext.Resource
 import com.civilcam.data.ext.toPart
+import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.local.MediaStorage
 import com.civilcam.data.mapper.auth.UserBaseInfoMapper
 import com.civilcam.data.mapper.profile.UserInfoToDomainMapper
@@ -17,6 +18,7 @@ import com.civilcam.domainLayer.repos.ProfileRepository
 class ProfileRepositoryImpl(
     private val profileService: ProfileService,
     private val mediaStorage: MediaStorage,
+    private val accountStorage: AccountStorage,
     private val accountRepository: AccountRepository
 ) : ProfileRepository, BaseRepository() {
 
@@ -30,7 +32,10 @@ class ProfileRepositoryImpl(
         }.let { response ->
             when (response) {
                 is Resource.Success -> userBaseInfoMapper.mapData(response.value.profile)
-                is Resource.Failure -> throw response.serviceException
+                is Resource.Failure -> {
+                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    throw response.serviceException
+                }
             }
         }
 
@@ -41,7 +46,10 @@ class ProfileRepositoryImpl(
         }.let { response ->
             when (response) {
                 is Resource.Success -> true
-                is Resource.Failure -> throw response.serviceException
+                is Resource.Failure -> {
+                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    throw response.serviceException
+                }
             }
         }
     
@@ -51,7 +59,10 @@ class ProfileRepositoryImpl(
         }.let { response ->
             when (response) {
                 is Resource.Success -> true
-                is Resource.Failure -> throw response.serviceException
+                is Resource.Failure -> {
+                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    throw response.serviceException
+                }
             }
         }
     
@@ -61,7 +72,10 @@ class ProfileRepositoryImpl(
         }.let { response ->
             when (response) {
                 is Resource.Success -> true
-                is Resource.Failure -> throw response.serviceException
+                is Resource.Failure -> {
+                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    throw response.serviceException
+                }
             }
         }
     }
@@ -73,7 +87,10 @@ class ProfileRepositoryImpl(
         }.let { response ->
             when (response) {
                 is Resource.Success -> userBaseInfoMapper.mapData(response.value.profile)
-                is Resource.Failure -> throw response.serviceException
+                is Resource.Failure -> {
+                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    throw response.serviceException
+                }
             }
         }
     }
@@ -84,7 +101,10 @@ class ProfileRepositoryImpl(
         }.let { response ->
             when (response) {
                 is Resource.Success -> {}
-                is Resource.Failure -> throw response.serviceException
+                is Resource.Failure -> {
+                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    throw response.serviceException
+                }
             }
         }
     }

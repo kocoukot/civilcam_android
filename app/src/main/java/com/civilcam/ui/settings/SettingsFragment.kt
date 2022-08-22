@@ -33,13 +33,12 @@ class SettingsFragment : Fragment() {
                     R.id.termsFragment,
                     TermsFragment.createArgs(true)
                 )
-                SettingsRoute.GoLanguageSelect -> {
-//                    navController.popBackStack()
-//                    navController.popBackStack()
-                    navController.navigateToRoot(R.id.languageSelectFragment)
-                }
-                SettingsRoute.GoSubManage -> navController.navigate(R.id.subscriptionFragment, SubscriptionFragment.createArgs(true))
-                else -> {}
+                SettingsRoute.GoLanguageSelect -> navController.navigateToRoot(R.id.languageSelectFragment)
+                SettingsRoute.GoSubManage -> navController.navigate(
+                    R.id.subscriptionFragment,
+                    SubscriptionFragment.createArgs(true)
+                )
+                SettingsRoute.ForceLogout -> navController.navigateToRoot(R.id.onBoardingFragment)
             }
         }
         return ComposeView(requireContext()).apply {
