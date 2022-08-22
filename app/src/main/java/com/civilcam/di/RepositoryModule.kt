@@ -12,13 +12,13 @@ val repositoryModule = module {
 
     factory<AccountRepository> { AccountRepositoryImpl(get()) }
 
-    factory<VerificationRepository> { VerificationRepositoryImpl(get()) }
+    factory<VerificationRepository> { VerificationRepositoryImpl(get(), get()) }
 
     factory<AuthRepository> { AuthRepositoryImpl(get(), get()) }
 
-    factory<ProfileRepository> { ProfileRepositoryImpl(get(), get(), get()) }
+    factory<ProfileRepository> { ProfileRepositoryImpl(get(), get(), get(), get()) }
 
-    factory<PublicDocsRepository> { PublicDocsRepositoryImpl(get()) }
+    factory<PublicDocsRepository> { PublicDocsRepositoryImpl(get(), get()) }
 
     factory<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
 

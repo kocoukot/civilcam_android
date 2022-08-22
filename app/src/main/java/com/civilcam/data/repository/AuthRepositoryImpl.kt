@@ -10,7 +10,6 @@ import com.civilcam.data.network.model.request.auth.SignUpRequest
 import com.civilcam.data.network.service.AuthService
 import com.civilcam.domainLayer.model.CurrentUser
 import com.civilcam.domainLayer.repos.AuthRepository
-import timber.log.Timber
 
 
 class AuthRepositoryImpl(
@@ -47,6 +46,7 @@ class AuthRepositoryImpl(
 					response.value.exists
 				}
 				is Resource.Failure -> {
+					if (response.serviceException.isForceLogout) accountStorage.logOut()
 					throw response.serviceException
 				}
 			}
@@ -64,7 +64,7 @@ class AuthRepositoryImpl(
 					sessionUserMapper.mapData(response.value)
 				}
 				is Resource.Failure -> {
-					Timber.i("serviceException ${response.serviceException}")
+					if (response.serviceException.isForceLogout) accountStorage.logOut()
 					throw response.serviceException
 				}
 			}
@@ -86,7 +86,7 @@ class AuthRepositoryImpl(
 					sessionUserMapper.mapData(response.value)
 				}
 				is Resource.Failure -> {
-					Timber.i("serviceException ${response.serviceException}")
+					if (response.serviceException.isForceLogout) accountStorage.logOut()
 					throw response.serviceException
 				}
 			}

@@ -7,6 +7,5 @@ sealed class SettingsRoute : ComposeFragmentRoute {
     object GoTerms : SettingsRoute()
     object GoLanguageSelect : SettingsRoute()
     object GoSubManage : SettingsRoute()
-    data class IsNavBarVisible(val isVisible: Boolean) : SettingsRoute()
-
+    object ForceLogout : SettingsRoute()
 }

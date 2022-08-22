@@ -91,7 +91,8 @@ class SettingsViewModel(
                 .onSuccess { navigateRoute(SettingsRoute.GoLanguageSelect) }
                 .onFailure { error ->
                     error as ServiceException
-                    _state.update { it.copy(errorText = error.errorMessage) }
+                    if (error.isForceLogout) navigateRoute(SettingsRoute.ForceLogout)
+                    else _state.update { it.copy(errorText = error.errorMessage) }
                 }
             _state.update { it.copy(isLoading = false) }
         }

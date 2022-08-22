@@ -2,12 +2,14 @@ package com.civilcam.data.repository
 
 import com.civilcam.common.ext.BaseRepository
 import com.civilcam.common.ext.Resource
+import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.network.service.PublicService
 import com.civilcam.domainLayer.model.docs.LegalDocs
 import com.civilcam.domainLayer.repos.PublicDocsRepository
 
 class PublicDocsRepositoryImpl(
     private val publicService: PublicService,
+    private val accountStorage: AccountStorage,
 ) : PublicDocsRepository, BaseRepository() {
 
 
@@ -23,6 +25,7 @@ class PublicDocsRepositoryImpl(
                     )
                 }
                 is Resource.Failure -> {
+                    if (response.serviceException.isForceLogout) accountStorage.logOut()
                     throw response.serviceException
                 }
             }
