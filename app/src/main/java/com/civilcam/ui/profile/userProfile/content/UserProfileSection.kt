@@ -109,7 +109,10 @@ fun UserProfileSection(
 
         AnimatedVisibility(visible = screenType == UserProfileScreen.PROFILE) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
             ) {
                 Text(
                     text = "${userData.userBaseInfo.firstName} ${userData.userBaseInfo.lastName}",
@@ -148,8 +151,7 @@ fun UserProfileSection(
 private fun AdditionalInfo(text: String, modifier: Modifier = Modifier) {
     Text(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .fillMaxWidth(),
         text = text,
         textAlign = TextAlign.Center,
         style = CCTheme.typography.common_text_regular,

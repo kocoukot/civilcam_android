@@ -11,8 +11,6 @@ android {
     defaultConfig {
         minSdkVersion rootProject.min_sdk
         targetSdkVersion rootProject.target_sdk
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -21,11 +19,9 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
-            debuggable true
         }
         sandbox {
             minifyEnabled false
-            debuggable true
         }
         production {
         }
