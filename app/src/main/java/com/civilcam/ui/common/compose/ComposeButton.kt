@@ -1,5 +1,6 @@
 package com.civilcam.ui.common.compose
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
@@ -29,6 +30,7 @@ import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 
 
+@SuppressLint("UnusedCrossfadeTargetStateParameter")
 @Composable
 fun ComposeButton(
     title: String,
@@ -115,9 +117,9 @@ fun IconActionButton(
 
 
 @Composable
-fun BackButton(navigationAction: () -> Unit) {
+fun BackButton(modifier: Modifier = Modifier, navigationAction: () -> Unit) {
     IconButton(
-        modifier = Modifier,
+        modifier = modifier,
         onClick = navigationAction
     ) {
         Icon(

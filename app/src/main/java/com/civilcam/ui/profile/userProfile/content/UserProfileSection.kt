@@ -56,10 +56,15 @@ fun UserProfileSection(
     ) {
 
         val avatarPainter = rememberImagePainter(data = userData.userBaseInfo.avatar?.imageUrl)
-        Row(Modifier.fillMaxWidth()) {
-            Spacer(modifier = Modifier.width(8.dp))
-            BackButton { onActionClick.invoke(UserProfileActions.GoBack) }
-            Spacer(modifier = Modifier.weight(1f))
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            BackButton(modifier = Modifier.padding(start = 8.dp)) {
+                onActionClick.invoke(
+                    UserProfileActions.GoBack
+                )
+            }
             Box(
                 modifier = Modifier
                     .size(120.dp)
@@ -86,7 +91,6 @@ fun UserProfileSection(
             }
 
 
-            Spacer(modifier = Modifier.weight(1f))
             TextActionButton(
                 isEnabled = if (screenType == UserProfileScreen.PROFILE) true else isSaveEnabled,
                 actionTitle = when (screenType) {
@@ -143,8 +147,11 @@ fun UserProfileSection(
 @Composable
 private fun AdditionalInfo(text: String, modifier: Modifier = Modifier) {
     Text(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         text = text,
+        textAlign = TextAlign.Center,
         style = CCTheme.typography.common_text_regular,
         color = CCTheme.colors.grayOne,
     )

@@ -51,7 +51,7 @@ fun UserDetailsSection(
             color = CCTheme.colors.black,
             modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
         )
-        AdditionalInfo(DateUtils.dateOfBirthFormat(userData.userInfoSection.dateOfBirth))
+        AdditionalInfo(DateUtils.dateOfBirthMockFormat(userData.userInfoSection.dateOfBirth))
 
         if (userData.isMyGuard || userData.guardRequest?.isGuarding == true) {
             AdditionalInfo(
