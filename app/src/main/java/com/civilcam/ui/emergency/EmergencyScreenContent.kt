@@ -1,5 +1,6 @@
 package com.civilcam.ui.emergency
 
+import android.os.Build
 import androidx.camera.core.TorchState
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
@@ -58,9 +59,11 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
         DialogLoadingContent()
     }
 
-    if (state.emergencyScreen == EmergencyScreen.LIVE_EXTENDED || state.emergencyScreen == EmergencyScreen.MAP_EXTENDED) {
-        screenModifier = screenModifier.statusBarsPadding()
+
+    if (Build.VERSION.SDK_INT in 21..29 && (state.emergencyScreen == EmergencyScreen.LIVE_EXTENDED || state.emergencyScreen == EmergencyScreen.MAP_EXTENDED)) {
+        // screenModifier = screenModifier.statusBarsPadding()
     }
+
     Scaffold(
         backgroundColor = CCTheme.colors.grayThree,
         modifier = screenModifier,
