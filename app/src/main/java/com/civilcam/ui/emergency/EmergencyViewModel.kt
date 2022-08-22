@@ -58,10 +58,10 @@ class EmergencyViewModel(
 						var address = ""
 						try {
 							addressList = geocoder.getFromLocation(
-								location.first.latitude,
-								location.first.longitude,
-								1
-							)
+                                location.first.latitude,
+                                location.first.longitude,
+                                1
+                            )?.toMutableList() ?: mutableListOf()
 							if (addressList.isNotEmpty())
 								address =
 									addressList[0].getAddressLine(0).takeIf { it.isNotEmpty() }
