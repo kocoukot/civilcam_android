@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -23,32 +24,37 @@ import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.langSelect.content.SegmentedItem
 import com.civilcam.ui.langSelect.model.LangSelectActions
 import com.civilcam.utils.LocaleHelper
+import timber.log.Timber
 
 @Composable
 fun LanguageSelectScreenContent(viewModel: LanguageSelectViewModel) {
 
     val state = viewModel.state.collectAsState()
     LocaleHelper.SetLanguageCompose(state.value.selectedLang)
-
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.dp
+    Timber.i("screenHeight $screenHeight")
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         content = {
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .height(screenHeight - 300.dp)
                     .padding(horizontal = 48.dp)
-                    .padding(top = 130.dp),
+                    .padding(bottom = 15.dp),
                 contentAlignment = Alignment.TopCenter
             ) {
                 Image(
+                    modifier = Modifier.fillMaxSize(),
                     painter = painterResource(id = R.drawable.img_splash),
-                    contentDescription = null
+                    contentDescription = null,
+                    alignment = Alignment.Center
                 )
             }
 
             Box(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.BottomCenter
             ) {
                 BottomCard(state.value.selectedLang, viewModel::setInputActions)
@@ -102,7 +108,7 @@ fun BottomCard(
                         style = CCTheme.typography.common_text_regular,
                         color = CCTheme.colors.grayOne,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(bottom = 90.dp, top = 16.dp)
+                        modifier = Modifier.padding(bottom = 70.dp, top = 16.dp)
                     )
                 }
             }
