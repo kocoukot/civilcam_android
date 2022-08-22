@@ -95,13 +95,13 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 	}
 	
 	private fun checkPermissions(launchSos: Boolean = false) {
-		viewModel.isLocationAllowed(permissionsDelegate.checkSelfPermissions())
 		if (permissionsDelegate.checkSelfPermissions()) {
             if (launchSos) viewModel.launchSos() else viewModel.fetchUserLocation()
 		} else {
 			pendingAction = { checkPermissions() }
 			permissionsDelegate.requestPermissions()
 		}
+		viewModel.isLocationAllowed(permissionsDelegate.checkSelfPermissions())
 	}
 	
 	private fun onPermissionsGranted(isGranted: Boolean) {

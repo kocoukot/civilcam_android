@@ -68,8 +68,6 @@ class LiveMapFragment : Fragment() {
     }
 
     private fun checkPermissions() {
-
-        viewModel.isLocationAllowed(permissionsDelegate.checkSelfPermissions())
         if (permissionsDelegate.checkSelfPermissions()) {
             viewModel.fetchUserLocation()
         } else {
@@ -77,6 +75,7 @@ class LiveMapFragment : Fragment() {
             Timber.i("checkPermission request ")
             permissionsDelegate.requestPermissions()
         }
+        viewModel.isLocationAllowed(permissionsDelegate.checkSelfPermissions())
     }
 
     private fun onPermissionsGranted(isGranted: Boolean) {
