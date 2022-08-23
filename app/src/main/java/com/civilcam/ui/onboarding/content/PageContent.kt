@@ -20,7 +20,7 @@ import com.civilcam.domainLayer.model.OnboardingPage
 fun PageUI(page: OnboardingPage) {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
-    val imagePadding = (screenHeight - 280.dp) / screenHeight
+    val imagePadding = (screenHeight - 240.dp) / screenHeight
     Column(
         modifier = Modifier
             .fillMaxWidth()
