@@ -62,7 +62,7 @@ fun NavController.navigateByDirection(
 		is NavigationDirection.TermsAndPolicyAccept -> {
 			navigate(
 				R.id.termsFragment,
-                TermsFragment.createArgs(false)
+                TermsFragment.createArgs()
 			)
 		}
 		is NavigationDirection.PhoneVerification -> {

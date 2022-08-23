@@ -3,7 +3,6 @@ package com.civilcam.utils
 import android.content.Context
 import android.net.Uri
 import com.civilcam.BuildConfig
-import com.civilcam.ui.common.Constant
 import java.io.*
 
 

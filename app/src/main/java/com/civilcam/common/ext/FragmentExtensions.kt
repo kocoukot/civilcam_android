@@ -1,7 +1,6 @@
 package com.civilcam.common.ext
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -15,24 +14,7 @@ import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.R
 import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.alert.DialogAlertFragment
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.standartmedia.ui.common.loading.DialogLoadingFragment
-
-fun Fragment.showDatePicker(
-    updatedDate: (Long) -> Unit
-) {
-
-    val picker = MaterialDatePicker.Builder.datePicker()
-        .setTitleText("Select date")
-//        .setCalendarConstraints(DateUtils.getRestrictsForPast())
-        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-        .build()
-
-    picker.show(parentFragmentManager, picker.toString())
-    picker.addOnPositiveButtonClickListener {
-        updatedDate(it)
-    }
-}
 
 
 fun Fragment.showToast(text: String = "") {
@@ -61,31 +43,6 @@ fun Fragment.showAlertDialogFragment(
         onOptionSelected
     )
 }
-
-fun getTextHintColor(needWhite: Boolean): ColorStateList {
-    val states = arrayOf(
-        intArrayOf(-android.R.attr.state_checked),
-        intArrayOf(android.R.attr.state_checked),
-        intArrayOf(android.R.attr.state_pressed),
-    )
-
-    val colorsWhite = intArrayOf(
-        Color.parseColor("#FFFFFFFF"),
-        Color.parseColor("#FFFFFFFF"),
-        Color.parseColor("#FFFFFFFF"),
-    )
-
-    val colorsGrey = intArrayOf(
-        Color.parseColor("#7C7D7E"),
-        Color.parseColor("#7C7D7E"),
-        Color.parseColor("#7C7D7E"),
-    )
-
-    return ColorStateList(states, if (needWhite) colorsWhite else colorsGrey)
-}
-
-fun Fragment.getColorFromRes(color: Int) =
-    ContextCompat.getColor(requireContext(), color)
 
 fun isMobileOnline(): Boolean {
     val connectivityManager =

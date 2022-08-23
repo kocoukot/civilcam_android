@@ -21,7 +21,6 @@ import com.civilcam.ui.alerts.map.content.AlertMapScreenContent
 import com.civilcam.ui.alerts.map.content.AlertStreamScreenContent
 import com.civilcam.ui.alerts.map.content.UserInformationContent
 import com.civilcam.ui.alerts.map.model.LiveMapActions
-import com.civilcam.ui.common.Constant.ANIMATION_DURATION
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
@@ -29,6 +28,7 @@ import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.TextActionButton
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.emergency.model.EmergencyScreen
+import com.civilcam.utils.Constant.ANIMATION_DURATION
 
 @Composable
 fun LiveMapScreenContent(viewModel: LiveMapViewModel) {

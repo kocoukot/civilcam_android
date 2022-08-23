@@ -13,9 +13,9 @@ import androidx.compose.ui.unit.dp
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.common.Constant.MINIMUM_AGE
 import com.civilcam.ui.common.compose.ListItemPicker
 import com.civilcam.ui.common.compose.TextActionButton
+import com.civilcam.utils.Constant.MINIMUM_AGE
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.Month
@@ -30,7 +30,7 @@ fun DatePickerContent(
 ) {
     val calendar = LocalDate.now()
 
-    val maxYear = calendar.year - 18
+    val maxYear = calendar.year - MINIMUM_AGE
     var yearPickerValue by remember { mutableStateOf(maxYear) }
     var monthPickerValue by remember { mutableStateOf(calendar.month) }
     var daysPickerValue by remember { mutableStateOf(calendar.dayOfMonth) }

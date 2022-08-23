@@ -14,12 +14,9 @@ class SplashViewModel(
 	val user: LiveData<CurrentUser?> = _user
 	
 	init {
-		if (accountRepository.isUserLoggedIn) {
-			val user = accountRepository.getUser()
-			_user.value = user
-		} else {
-			_user.value = null
-		}
+		_user.value = if (accountRepository.isUserLoggedIn)
+			accountRepository.getUser()
+		else
+			null
 	}
-	
 }

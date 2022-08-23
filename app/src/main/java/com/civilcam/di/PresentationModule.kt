@@ -1,5 +1,7 @@
 package com.civilcam.di
 
+import com.civilcam.di.source.GlobalKoinInjector
+import com.civilcam.di.source.KoinInjector
 import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ui.alerts.history.AlertsHistoryViewModel
 import com.civilcam.ui.alerts.list.AlertsListViewModel
@@ -28,8 +30,6 @@ import com.civilcam.ui.subscription.SubscriptionViewModel
 import com.civilcam.ui.terms.TermsViewModel
 import com.civilcam.ui.verification.VerificationViewModel
 import com.google.android.libraries.places.api.Places
-import com.standartmedia.di.source.GlobalKoinInjector
-import com.standartmedia.di.source.KoinInjector
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

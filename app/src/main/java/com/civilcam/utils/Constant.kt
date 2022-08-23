@@ -1,4 +1,4 @@
-package com.civilcam.ui.common
+package com.civilcam.utils
 
 object Constant {
     const val DEFAULT_PICTURE_EXTENSION = "png"

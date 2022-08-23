@@ -31,8 +31,9 @@ fun AvatarContent(avatar: com.civilcam.domainLayer.PictureModel? = null, onChang
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val avatarText =
-            if (avatar == null) stringResource(id = R.string.profile_setup_upload_photo) else stringResource(
-                id = R.string.profile_setup_change_photo
+            stringResource(
+                id = if (avatar == null) R.string.profile_setup_upload_photo else
+                    R.string.profile_setup_change_photo
             )
         val stroke = Stroke(
             width = 3f,

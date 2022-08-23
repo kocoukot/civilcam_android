@@ -1,4 +1,4 @@
-package com.standartmedia.di.source
+package com.civilcam.di.source
 
 import org.koin.core.Koin
 

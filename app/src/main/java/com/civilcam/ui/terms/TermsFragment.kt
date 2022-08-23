@@ -63,7 +63,7 @@ class TermsFragment : Fragment() {
 	companion object {
 		private const val ARG_IS_SETTINGS = "is_settings"
 		
-		fun createArgs(isSettings: Boolean) = bundleOf(
+		fun createArgs(isSettings: Boolean = false) = bundleOf(
 			ARG_IS_SETTINGS to isSettings
 		)
 	}

@@ -16,7 +16,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.common.Constant.ANIMATION_DURATION
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.DividerLightGray
 import com.civilcam.ui.common.compose.TopAppBarContent
@@ -26,6 +25,7 @@ import com.civilcam.ui.emergency.content.EmergencyLiveContent
 import com.civilcam.ui.emergency.content.EmergencyMapContent
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyScreen
+import com.civilcam.utils.Constant.ANIMATION_DURATION
 
 @Composable
 fun EmergencyScreenContent(viewModel: EmergencyViewModel) {

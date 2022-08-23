@@ -1,4 +1,4 @@
-package com.standartmedia.common.ext
+package com.civilcam.common.ext
 
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols

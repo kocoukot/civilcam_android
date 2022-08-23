@@ -8,13 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
+import com.civilcam.common.ext.castSafe
 import com.civilcam.common.ext.navigateByDirection
 import com.civilcam.databinding.ActivityMainBinding
 import com.civilcam.service.notifications.NotificationHelper
 import com.civilcam.ui.common.NavigationDirection
 import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.setupWithNavController
-import com.standartmedia.common.ext.castSafe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

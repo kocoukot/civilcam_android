@@ -6,7 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import com.civilcam.data.local.model.ImageMetadata
-import com.civilcam.ui.common.Constant
+import com.civilcam.utils.Constant
 import com.civilcam.utils.FileUtils
 import com.standartmedia.data.local.model.ImageData
 import id.zelory.compressor.Compressor
