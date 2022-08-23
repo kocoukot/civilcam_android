@@ -5,6 +5,7 @@ import com.civilcam.di.*
 import com.civilcam.di.source.sourceModule
 import com.civilcam.domainLayer.model.settings.NotificationType
 import com.civilcam.service.notifications.NotificationHelper
+import io.gleap.Gleap
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -31,7 +32,7 @@ class CivilcamApplication : Application() {
 
     private fun gleapInit() {
         if (BuildConfig.DEBUG) {
-            //   Gleap.initialize(BuildConfig.GLEAP_KEY, this)
+            Gleap.initialize(BuildConfig.GLEAP_KEY, this)
         }
     }
 

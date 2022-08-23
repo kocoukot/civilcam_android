@@ -1,6 +1,7 @@
 package com.civilcam.ui.profile.setup
 
 import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,27 +25,33 @@ import timber.log.Timber
 
 class ProfileSetupFragment : Fragment() {
 	private val viewModel: ProfileSetupViewModel by viewModel()
-	
-	private val cameraPermissionsDelegate = registerForPermissionsResult(
-		Manifest.permission.READ_EXTERNAL_STORAGE,
-		Manifest.permission.WRITE_EXTERNAL_STORAGE,
-	) { onPermissionsGranted(it) }
-	
+
+	private val cameraPermissionsDelegate =
+		if (Build.VERSION.SDK_INT >= 33)
+			registerForPermissionsResult(Manifest.permission.READ_MEDIA_IMAGES) {
+				onPermissionsGranted(it)
+			}
+		else {
+			registerForPermissionsResult(Manifest.permission.READ_EXTERNAL_STORAGE) {
+				onPermissionsGranted(it)
+			}
+		}
+
 	private val chooseFromGalleryActivityLauncher =
 		registerForActivityResult(GalleryActivityResultContract()) { uri ->
 			Timber.d("onPictureUriReceived $uri")
 			uri?.let(viewModel::onPictureUriReceived)
 		}
-	
-	
+
+
 	private var pendingAction: (() -> Unit)? = null
-	
+
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
-		
+
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
 				ProfileSetupRoute.GoBack -> navController.popBackStack()
@@ -60,8 +67,8 @@ class ProfileSetupFragment : Fragment() {
 				ProfileSetupRoute.GoGalleryOpen -> onChooseFromGalleryCaseClicked()
 			}
 		}
-		
-		
+
+
 		return ComposeView(requireContext()).apply {
 			setViewCompositionStrategy(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(
@@ -93,7 +100,7 @@ class ProfileSetupFragment : Fragment() {
             cameraPermissionsDelegate.requestPermissions()
         }
     }
-	
+
 	private fun onPermissionsGranted(isGranted: Boolean) {
 		if (isGranted) {
 			pendingAction?.invoke()

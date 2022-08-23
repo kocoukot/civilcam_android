@@ -10,7 +10,4 @@ sealed class UserDetailsActions : ComposeFragmentActions {
 
     data class ClickRequestAnswer(val isAccepted: Boolean) : UserDetailsActions()
     object ClickStopGuarding : UserDetailsActions()
-
-    object Mock : UserDetailsActions()
-
 }

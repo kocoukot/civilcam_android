@@ -40,7 +40,6 @@ class UserDetailsViewModel(
             UserDetailsActions.ClickGoBack -> goBack()
             UserDetailsActions.ClickGuardenceChange -> changeGuardence()
             UserDetailsActions.ClickStopGuarding -> stopGuarding()
-            UserDetailsActions.Mock -> mockAddRequest()
             is UserDetailsActions.ClickRequestAnswer -> requestAnswer(action.isAccepted)
             is UserDetailsActions.ClickShowAlert -> showAlert(action.alertType)
             UserDetailsActions.ClickCloseAlert -> closeAlert()
@@ -71,22 +70,9 @@ class UserDetailsViewModel(
     private fun requestAnswer(isAccepted: Boolean) {
         val data = _state.value.data?.copy()
         data?.let {
-            if (isAccepted) {
-                it.guardRequest = GuardRequest(isGuarding = true)
-            } else {
-                it.guardRequest = null
-            }
-            _state.update { it.copy(data = data) }
-        }
+            it.guardRequest = if (isAccepted) GuardRequest(isGuarding = true) else null
 
-
-    }
-
-    private fun mockAddRequest() {
-        val data = _state.value.data?.copy()
-        data?.let {
-            it.guardRequest = GuardRequest()
-            _state.value = _state.value.copy(data = data)
+            _state.update { state -> state.copy(data = data) }
         }
     }
 

@@ -5,6 +5,6 @@ import com.civilcam.domainLayer.repos.UserRepository
 class ChangeEmailUseCase(
 	private val userRepository: UserRepository
 ) {
-	suspend fun changeEmail(currentEmail: String, newEmail: String) =
-		userRepository.changeEmail(currentEmail, newEmail)
+	suspend operator fun invoke(currentEmail: String, newEmail: String) =
+        userRepository.changeEmail(currentEmail, newEmail)
 }
