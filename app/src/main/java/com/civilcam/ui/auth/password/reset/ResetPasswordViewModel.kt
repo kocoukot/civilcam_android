@@ -1,14 +1,21 @@
 package com.civilcam.ui.auth.password.reset
 
+import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail
+import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.usecase.auth.ResetPasswordUseCase
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.password.reset.model.ResetActions
 import com.civilcam.ui.auth.password.reset.model.ResetRoute
 import com.civilcam.ui.auth.password.reset.model.ResetState
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class ResetPasswordViewModel : ComposeViewModel<ResetState, ResetRoute, ResetActions>() {
+class ResetPasswordViewModel(
+	private val resetPasswordUseCase: ResetPasswordUseCase
+) : ComposeViewModel<ResetState, ResetRoute, ResetActions>() {
 	override var _state: MutableStateFlow<ResetState> = MutableStateFlow(ResetState())
 	
 	override fun setInputActions(action: ResetActions) {
@@ -22,17 +29,31 @@ class ResetPasswordViewModel : ComposeViewModel<ResetState, ResetRoute, ResetAct
 				}
 			}
 			ResetActions.CheckIfEmail -> {
-				_state.value = _state.value.copy(isEmail = if (_state.value.email.isEmpty()) true else _state.value.email.isEmail())
+				_state.value =
+					_state.value.copy(isEmail = if (_state.value.email.isEmpty()) true else _state.value.email.isEmail())
 			}
 		}
 	}
 	
-	private fun emailEntered(email: String) {
-		_state.value = _state.value.copy(email = email, isEmail = true)
+	private fun goContinue() {
+		_state.update { it.copy(isLoading = true) }
+		viewModelScope.launch {
+			kotlin.runCatching { resetPasswordUseCase.resetPassword(_state.value.email) }
+				.onSuccess { response ->
+					if (response >= 0) {
+						navigateRoute(ResetRoute.GoContinue(_state.value.email))
+					}
+				}
+				.onFailure { error ->
+					error as ServiceException
+					_state.update { it.copy(errorText = error.errorMessage, emailError = true) }
+				}
+			_state.update { it.copy(isLoading = false) }
+		}
 	}
 	
-	private fun goContinue() {
-		navigateRoute(ResetRoute.GoContinue(_state.value.email))
+	private fun emailEntered(email: String) {
+		_state.value = _state.value.copy(email = email, isEmail = true, emailError = false)
 	}
 	
 	private fun goBack() {

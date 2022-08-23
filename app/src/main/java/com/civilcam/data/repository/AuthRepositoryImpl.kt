@@ -2,9 +2,7 @@ package com.civilcam.data.repository
 
 import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.mapper.auth.UserMapper
-import com.civilcam.data.network.model.request.auth.CheckEmailRequest
-import com.civilcam.data.network.model.request.auth.SignInRequest
-import com.civilcam.data.network.model.request.auth.SignUpRequest
+import com.civilcam.data.network.model.request.auth.*
 import com.civilcam.data.network.service.AuthService
 import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
@@ -92,43 +90,43 @@ class AuthRepositoryImpl(
 			}
 		}
 
-//	override suspend fun resetPassword(email: String): Long =
-//		safeApiCall {
-//			authService.resetPassword(
-//				ResetPasswordRequest(
-//					email = email,
-//				)
-//			)
-//		}.let { response ->
-//			when (response) {
-//				is Resource.Success -> {
-//					response.value.timeout.toLong()
-//				}
-//				is Resource.Failure -> {
-//					throw exceptionErrorMapper.mapData(response)
-//				}
-//			}
-//		}
-//
-//	override suspend fun recoverPassword(recoveryToken: String, newPassword: String): Boolean =
-//		safeApiCall {
-//			authService.recoverPassword(
-//				RecoverPasswordRequest(
-//					recoveryToken = recoveryToken,
-//					newPassword = newPassword,
-//				)
-//			)
-//		}.let { response ->
-//			when (response) {
-//				is Resource.Success -> {
-//					response.value.ok
-//				}
-//				is Resource.Failure -> {
-//					throw exceptionErrorMapper.mapData(response)
-//				}
-//			}
-//		}
-//
+	override suspend fun resetPassword(email: String): Long =
+		safeApiCall {
+			authService.resetPassword(
+				ResetPasswordRequest(
+					email = email,
+				)
+			)
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> {
+					response.value.timeout.toLong()
+				}
+				is Resource.Failure -> {
+					throw response.serviceException
+				}
+			}
+		}
+
+	override suspend fun recoverPassword(recoveryToken: String, newPassword: String): Boolean =
+		safeApiCall {
+			authService.recoverPassword(
+				RecoverPasswordRequest(
+					recoveryToken = recoveryToken,
+					newPassword = newPassword,
+				)
+			)
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> {
+					response.value.ok
+				}
+				is Resource.Failure -> {
+					throw response.serviceException
+				}
+			}
+		}
+
 //	override suspend fun googleSignIn(authToken: String): CurrentUser =
 //		safeApiCall {
 //			val googleAouthRespone =
@@ -160,23 +158,23 @@ class AuthRepositoryImpl(
 //				}
 //			}
 //		}
-//
-//	override suspend fun verifyResetPasswordOtpCode(email: String, code: String): String =
-//		safeApiCall {
-//			authService.verifyResetPasswordOtp(
-//				VerifyResetPasswordRequest(email, code)
-//			)
-//		}.let { response ->
-//			when (response) {
-//				is Resource.Success -> {
-//					response.value.recoveryToken
-//				}
-//				is Resource.Failure -> {
-//					throw exceptionErrorMapper.mapData(response)
-//				}
-//			}
-//		}
-//
+
+	override suspend fun verifyResetPasswordOtpCode(email: String, code: String): String =
+		safeApiCall {
+			authService.verifyResetPasswordOtp(
+				VerifyResetPasswordRequest(email, code)
+			)
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> {
+					response.value.recoveryToken
+				}
+				is Resource.Failure -> {
+					throw response.serviceException
+				}
+			}
+		}
+
 
 //	override fun sendPasswordOtpCode(email: String): Single<Long> =
 //		authService.sendPasswordOtpCode(SendPasswordOtpCodeRequest(email))

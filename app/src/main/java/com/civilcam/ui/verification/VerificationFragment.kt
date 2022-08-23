@@ -17,6 +17,7 @@ import com.civilcam.R
 import com.civilcam.common.ext.hideKeyboard
 import com.civilcam.common.ext.showKeyboard
 import com.civilcam.domainLayer.model.VerificationFlow
+import com.civilcam.ui.auth.password.create.CreatePasswordFragment
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.common.ext.navController
@@ -47,6 +48,12 @@ class VerificationFragment : Fragment() {
 				VerificationRoute.GoBack -> {
 					navController.popBackStack()
 				}
+				is VerificationRoute.GoPasswordCreate -> {
+					navController.navigate(
+						R.id.createPasswordFragment,
+						CreatePasswordFragment.createArgs(route.token)
+					)
+				}
 				VerificationRoute.ToNextScreen -> {
 					Handler(Looper.getMainLooper()).postDelayed(300) {
 						when (verificationFlow) {
@@ -64,8 +71,8 @@ class VerificationFragment : Fragment() {
 							)
 							VerificationFlow.CHANGE_PHONE -> {
 								setFragmentResult(
-									RESULT_BACK_STACK,
-									bundleOf(RESULT_BACK_STACK to true)
+									RESULT_BACK_PHONE,
+									bundleOf(RESULT_BACK_PHONE to true)
 								)
 								navController.popBackStack(
 									R.id.userProfileFragment,
@@ -84,8 +91,8 @@ class VerificationFragment : Fragment() {
                             }
                             VerificationFlow.NEW_EMAIL -> {
                                 setFragmentResult(
-                                    RESULT_BACK_STACK,
-                                    bundleOf(RESULT_BACK_STACK to true)
+	                                RESULT_BACK_EMAIL,
+                                    bundleOf(RESULT_BACK_EMAIL to true)
                                 )
                                 navController.popBackStack(
                                     R.id.userProfileFragment,
@@ -124,7 +131,8 @@ class VerificationFragment : Fragment() {
 		private const val ARG_FLOW = "verification_flow"
 		private const val ARG_SUBJECT = "verification_subject"
 		private const val ARG_NEW_SUBJECT = "new_subject"
-		const val RESULT_BACK_STACK = "back_stack"
+		const val RESULT_BACK_PHONE = "back_phone"
+	    const val RESULT_BACK_EMAIL = "back_email"
 
         fun createArgs(flow: VerificationFlow, subject: String, newSubject: String) = bundleOf(
 			ARG_FLOW to flow,

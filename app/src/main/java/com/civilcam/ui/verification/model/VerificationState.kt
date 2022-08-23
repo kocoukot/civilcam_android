@@ -10,5 +10,6 @@ data class VerificationState(
     val timeOut: String = "",
     val verificationFlow: VerificationFlow = VerificationFlow.CURRENT_EMAIL,
     val verificationSubject: String = "",
-    val newSubject: String = ""
+    val newSubject: String = "",
+    val token: String = ""
 ) : ComposeFragmentState

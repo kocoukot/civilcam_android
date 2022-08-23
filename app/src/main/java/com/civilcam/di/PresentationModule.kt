@@ -62,13 +62,14 @@ val authModule = module {
 			verificationSubject,
 			newSubject,
 			get(),
+			get(),
 			get()
 		)
 	}
 	
-	viewModel { ResetPasswordViewModel() }
+	viewModel { ResetPasswordViewModel(get()) }
 	
-	viewModel { CreatePasswordViewModel() }
+	viewModel { (token: String) -> CreatePasswordViewModel(token, get()) }
 	
 	viewModel { (pinCodeFlow: PinCodeFlow) -> PinCodeViewModel(pinCodeFlow) }
 	

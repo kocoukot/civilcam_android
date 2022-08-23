@@ -16,6 +16,8 @@ import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.common.ext.showAlertDialogFragment
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
+import com.civilcam.ui.common.alert.AlertDialogTypes
+import com.civilcam.ui.common.alert.DialogAlertFragment
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
@@ -29,8 +31,8 @@ import timber.log.Timber
 
 class UserProfileFragment : Fragment() {
 	private val viewModel: UserProfileViewModel by viewModel()
-
-
+	
+	
 	private val cameraPermissionsDelegate =
 		if (Build.VERSION.SDK_INT >= 33)
 			registerForPermissionsResult(Manifest.permission.READ_MEDIA_IMAGES)
@@ -39,25 +41,41 @@ class UserProfileFragment : Fragment() {
 			registerForPermissionsResult(Manifest.permission.READ_EXTERNAL_STORAGE)
 			{ onPermissionsGranted(it) }
 		}
-
+	
 	private val chooseFromGalleryActivityLauncher =
 		registerForActivityResult(GalleryActivityResultContract()) { uri ->
 			Timber.d("onPictureUriReceived $uri")
 			uri?.let(viewModel::onPictureUriReceived)
 		}
-
+	
 	private var pendingAction: (() -> Unit)? = null
-
+	
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
-
-		setFragmentResultListener(VerificationFragment.RESULT_BACK_STACK) { _, _ ->
+		
+		setFragmentResultListener(VerificationFragment.RESULT_BACK_EMAIL) { _, _ ->
 			viewModel.fetchCurrentUser()
+			DialogAlertFragment.create(
+				parentFragmentManager,
+				resources.getString(R.string.user_profile_email_change_title),
+				resources.getString(R.string.user_profile_email_change_desc),
+				AlertDialogTypes.OK
+			)
 		}
-
+		
+		setFragmentResultListener(VerificationFragment.RESULT_BACK_PHONE) { _, _ ->
+			viewModel.fetchCurrentUser()
+			DialogAlertFragment.create(
+				parentFragmentManager,
+				resources.getString(R.string.user_profile_phone_change_title),
+				resources.getString(R.string.user_profile_phone_change_desc),
+				AlertDialogTypes.OK
+			)
+		}
+		
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
 				UserProfileRoute.ForceLogout -> navController.navigateToRoot(R.id.onBoardingFragment)
@@ -78,45 +96,45 @@ class UserProfileFragment : Fragment() {
 				)
 			}
 		}
-
+		
 		return ComposeView(requireContext()).apply {
 			setViewCompositionStrategy(
 				ViewCompositionStrategy.DisposeOnLifecycleDestroyed(
 					viewLifecycleOwner
 				)
 			)
-
+			
 			setContent {
 				UserProfileScreenContent(viewModel)
 			}
 		}
-    }
-
-    private fun onChooseFromGalleryCaseClicked() {
-        if (cameraPermissionsDelegate.checkSelfPermissions()) {
-            chooseFromGalleryActivityLauncher.launch(Unit)
-        } else {
-            pendingAction = { onChooseFromGalleryCaseClicked() }
-            cameraPermissionsDelegate.requestPermissions()
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Places.initialize(requireContext(), BuildConfig.GOOGLE_AUTOCOMPLETE_KEY)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Places.deinitialize()
-    }
-
-    private fun onPermissionsGranted(isGranted: Boolean) {
-        if (isGranted) {
-            pendingAction?.invoke()
-            pendingAction = null
-        } else {
-            showAlertDialogFragment(title = "Sorry, we need permission!")
-        }
-    }
+	}
+	
+	private fun onChooseFromGalleryCaseClicked() {
+		if (cameraPermissionsDelegate.checkSelfPermissions()) {
+			chooseFromGalleryActivityLauncher.launch(Unit)
+		} else {
+			pendingAction = { onChooseFromGalleryCaseClicked() }
+			cameraPermissionsDelegate.requestPermissions()
+		}
+	}
+	
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		Places.initialize(requireContext(), BuildConfig.GOOGLE_AUTOCOMPLETE_KEY)
+	}
+	
+	override fun onDestroy() {
+		super.onDestroy()
+		Places.deinitialize()
+	}
+	
+	private fun onPermissionsGranted(isGranted: Boolean) {
+		if (isGranted) {
+			pendingAction?.invoke()
+			pendingAction = null
+		} else {
+			showAlertDialogFragment(title = "Sorry, we need permission!")
+		}
+	}
 }

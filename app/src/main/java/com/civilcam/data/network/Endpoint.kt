@@ -6,6 +6,9 @@ object Endpoint {
         const val CHECK_USER = "check-user-exists"
         const val SIGN_UP = "sign-up"
         const val SIGN_IN = "sign-in"
+        const val RESET_PASSWORD = "reset-password"
+        const val VERIFY_RESET_PASSWORD_OTP = "verify-reset-password-otp"
+        const val RECOVER_PASSWORD = "recover-password"
     }
 
     object Verification {

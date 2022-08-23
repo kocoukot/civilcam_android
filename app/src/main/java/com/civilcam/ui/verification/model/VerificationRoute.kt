@@ -5,4 +5,5 @@ import com.civilcam.common.ext.compose.ComposeFragmentRoute
 sealed class VerificationRoute : ComposeFragmentRoute {
 	object GoBack : VerificationRoute()
 	object ToNextScreen : VerificationRoute()
+	data class GoPasswordCreate(val token: String) : VerificationRoute()
 }
