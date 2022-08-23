@@ -1,12 +1,12 @@
 package com.civilcam.data.ext
 
+import com.civilcam.common.ext.castSafe
 import com.google.gson.Gson
 import com.google.gson.JsonIOException
 import com.google.gson.TypeAdapter
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
-import com.standartmedia.common.ext.castSafe
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody

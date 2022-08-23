@@ -3,11 +3,11 @@ package com.civilcam.di
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import com.civilcam.common.ext.cast
 import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.local.ContactsStorage
 import com.civilcam.data.local.MediaStorage
 import com.civilcam.data.local.SharedPreferencesStorage
-import com.standartmedia.common.ext.cast
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 

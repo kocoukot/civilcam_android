@@ -53,7 +53,7 @@ class VerificationFragment : Fragment() {
                             VerificationFlow.CURRENT_EMAIL ->
                                 navController.navigate(
                                     R.id.termsFragment,
-                                    TermsFragment.createArgs(false)
+                                    TermsFragment.createArgs()
                                 )
                             VerificationFlow.NEW_PHONE -> navController.navigate(
                                 R.id.pinCodeFragment,

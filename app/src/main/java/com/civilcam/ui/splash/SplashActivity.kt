@@ -31,14 +31,7 @@ class SplashActivity : AppCompatActivity() {
         observeLiveData()
     }
 
-    private fun navigateToTargetActivity() {
-        startActivity(
-            Intent(this, MainActivity::class.java)
-        )
-        finish()
-    }
-    
-    private fun navigateToTargetActivity(direction: NavigationDirection?) {
+    private fun navigateToTargetActivity(direction: NavigationDirection? = null) {
         startActivity(
             Intent(this, MainActivity::class.java).apply {
                 if (direction != null) putExtra(MainActivity.EXTRA_DIRECTION, direction)

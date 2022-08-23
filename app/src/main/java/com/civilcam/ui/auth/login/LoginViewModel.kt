@@ -1,7 +1,7 @@
 package com.civilcam.ui.auth.login
 
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewModelScope
+import com.civilcam.common.ext.castSafe
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail
 import com.civilcam.data.network.support.ServerErrors
@@ -11,7 +11,6 @@ import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.login.model.LoginActions
 import com.civilcam.ui.auth.login.model.LoginRoute
 import com.civilcam.ui.auth.login.model.LoginState
-import com.standartmedia.common.ext.castSafe
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch

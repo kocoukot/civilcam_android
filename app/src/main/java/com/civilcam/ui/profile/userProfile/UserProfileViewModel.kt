@@ -2,6 +2,7 @@ package com.civilcam.ui.profile.userProfile
 
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
+import com.civilcam.common.ext.castSafe
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.local.MediaStorage
 import com.civilcam.data.network.support.ServiceException
@@ -14,7 +15,6 @@ import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
 import com.civilcam.ui.profile.userProfile.model.*
 import com.civilcam.utils.DateUtils
-import com.standartmedia.common.ext.castSafe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo

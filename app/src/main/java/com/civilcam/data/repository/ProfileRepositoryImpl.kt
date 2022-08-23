@@ -1,7 +1,6 @@
 package com.civilcam.data.repository
 
 import android.net.Uri
-import com.civilcam.common.ext.BaseRepository
 import com.civilcam.common.ext.Resource
 import com.civilcam.data.ext.toPart
 import com.civilcam.data.local.AccountStorage
@@ -10,6 +9,7 @@ import com.civilcam.data.mapper.auth.UserBaseInfoMapper
 import com.civilcam.data.mapper.profile.UserInfoToDomainMapper
 import com.civilcam.data.network.model.request.profile.ChangePhoneNumberRequest
 import com.civilcam.data.network.service.ProfileService
+import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.domainLayer.model.UserBaseInfo
 import com.civilcam.domainLayer.model.UserSetupModel
 import com.civilcam.domainLayer.repos.AccountRepository

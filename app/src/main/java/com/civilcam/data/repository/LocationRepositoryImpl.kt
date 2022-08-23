@@ -5,7 +5,7 @@ import android.content.Context
 import android.os.Looper
 import com.civilcam.common.ext.awaitResult
 import com.civilcam.domainLayer.repos.LocationRepository
-import com.civilcam.ui.common.Constant
+import com.civilcam.utils.Constant
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult

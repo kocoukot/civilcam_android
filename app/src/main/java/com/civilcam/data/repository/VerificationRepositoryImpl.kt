@@ -1,12 +1,12 @@
 package com.civilcam.data.repository
 
-import com.civilcam.common.ext.BaseRepository
 import com.civilcam.common.ext.Resource
 import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.mapper.auth.UserMapper
 import com.civilcam.data.network.model.request.verify.OTPTypeRequest
 import com.civilcam.data.network.model.request.verify.VerifyCodeRequest
 import com.civilcam.data.network.service.VerificationService
+import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.domainLayer.model.CurrentUser
 import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.domainLayer.repos.VerificationRepository
