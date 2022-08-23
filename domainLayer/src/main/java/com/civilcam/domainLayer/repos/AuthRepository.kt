@@ -7,9 +7,9 @@ interface AuthRepository {
 
     var sessionToken: String
 
-//    fun setFcmToken(token: String)
+    fun setFcmToken(token: String)
 
-//    fun getFcmToken(): String?
+    fun getFcmToken(): String?
 
     suspend fun checkEmail(email: String): Boolean
 

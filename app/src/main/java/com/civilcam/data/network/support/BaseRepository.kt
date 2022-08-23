@@ -1,6 +1,5 @@
 package com.civilcam.data.network.support
 
-import com.civilcam.common.ext.Resource
 import com.civilcam.common.ext.isMobileOnline
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -70,6 +70,28 @@
                 android:resource="@xml/authenticator" />
         </service>
 
+        <service
+            android:name=".service.CCFireBaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/white" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="4ec001e8ef13b52db85cb6c957f5a703" />
+
         <receiver
             android:name=".service.notifications.NotificationRequestButtonListener"
             android:exported="true"

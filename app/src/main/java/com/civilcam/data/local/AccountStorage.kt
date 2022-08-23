@@ -4,7 +4,6 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import com.civilcam.domainLayer.model.CurrentUser
 import com.google.gson.Gson
-import io.reactivex.Maybe
 import java.util.*
 
 
@@ -18,14 +17,20 @@ class AccountStorage(
 		set(value) {
 			accountManager.setAuthToken(getOrCreateAccount(), SESSION_TOKEN, value)
 		}
-	
+
+	var fcmToken: String?
+		get() = sharedPreferencesStorage.get<String>(SharedPreferencesStorage.fcmTokenKey)
+		set(value) {
+			sharedPreferencesStorage[SharedPreferencesStorage.fcmTokenKey] = value
+		}
+
 	val deviceIdToken: String
 		get() = accountManager.peekAuthToken(getOrCreateAccount(), DEVICE_ID_TOKEN) ?: run {
 			val deviceId = UUID.randomUUID().toString()
 			accountManager.setAuthToken(getOrCreateAccount(), DEVICE_ID_TOKEN, deviceId)
 			deviceId
 		}
-	
+
 	var isUserLoggedIn: Boolean
 		get() {
 			return getAccount()

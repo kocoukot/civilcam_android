@@ -1,6 +1,5 @@
 package com.civilcam.data.repository
 
-import com.civilcam.common.ext.Resource
 import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.mapper.auth.UserMapper
 import com.civilcam.data.network.model.request.auth.CheckEmailRequest
@@ -8,6 +7,7 @@ import com.civilcam.data.network.model.request.auth.SignInRequest
 import com.civilcam.data.network.model.request.auth.SignUpRequest
 import com.civilcam.data.network.service.AuthService
 import com.civilcam.data.network.support.BaseRepository
+import com.civilcam.data.network.support.Resource
 import com.civilcam.domainLayer.model.CurrentUser
 import com.civilcam.domainLayer.repos.AuthRepository
 
@@ -17,9 +17,9 @@ class AuthRepositoryImpl(
 	private val authService: AuthService,
 //	private val googleOAuthService: GoogleOAuthService
 ) : AuthRepository, BaseRepository() {
-	
+
 	private val sessionUserMapper = UserMapper()
-	
+
 	override var sessionToken: String = ""
 		get() = accountStorage.sessionToken.orEmpty()
 		set(value) {
@@ -27,12 +27,12 @@ class AuthRepositoryImpl(
 			accountStorage.sessionToken = value
 		}
 
-//	override fun setFcmToken(token: String) {
-//		accountStorage.fcmToken = token
-//	}
+	override fun setFcmToken(token: String) {
+		accountStorage.fcmToken = token
+	}
 
-//	override fun getFcmToken(): String? = accountStorage.fcmToken
-	
+	override fun getFcmToken(): String? = accountStorage.fcmToken
+
 	override suspend fun checkEmail(email: String): Boolean =
 		safeApiCall {
 			authService.checkUserExists(

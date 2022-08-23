@@ -1,9 +1,9 @@
 package com.civilcam.data.repository
 
-import com.civilcam.common.ext.Resource
 import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.network.service.PublicService
 import com.civilcam.data.network.support.BaseRepository
+import com.civilcam.data.network.support.Resource
 import com.civilcam.domainLayer.model.docs.LegalDocs
 import com.civilcam.domainLayer.repos.PublicDocsRepository
 
