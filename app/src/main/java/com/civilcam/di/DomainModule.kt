@@ -85,4 +85,7 @@ val domainModule = module {
 	factory { GetMapAlertUserDataUseCase(get()) }
 
 	factory { SetFcmTokenUseCase(get()) }
+
+	factory { DeleteAccountUseCase(get()) }
+
 }

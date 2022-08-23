@@ -49,32 +49,26 @@ class UserRepositoryImpl(
 		safeApiCall {
 			userService.logout()
 		}.let { response ->
+			accountStorage.logOut()
 			when (response) {
-				is Resource.Success -> {
-					accountStorage.logOut()
-					response.value.ok
-				}
-				is Resource.Failure -> {
-					if (response.serviceException.isForceLogout) accountStorage.logOut()
-					throw response.serviceException
-				}
+				is Resource.Success -> response.value.ok
+				is Resource.Failure -> throw response.serviceException
+			}
+
+		}
+
+	override suspend fun deleteAccount(): Boolean =
+		safeApiCall {
+			userService.deleteAccount()
+		}.let { response ->
+			accountStorage.logOut()
+			when (response) {
+				is Resource.Success -> response.value.ok
+				is Resource.Failure -> throw response.serviceException
 			}
 		}
 
-//    override suspend fun deleteAccount(): Boolean =
-//        safeApiCall {
-//            userService.deleteAccount()
-//        }.let { response ->
-//            when (response) {
-//                is Resource.Success -> {
-//                    accountStorage.logOut()
-//                    response.value.ok
-//                }
-//                is Resource.Failure -> throw exceptionErrorMapper.mapData(response)
-//            }
-//        }
-//
-//    override fun getUserEmail(): Pair<String, Boolean> =
+	//    override fun getUserEmail(): Pair<String, Boolean> =
 //        accountStorage.getUserEmail()
 //
 //    override suspend fun contactSupport(message: String, email: String): Boolean =
