@@ -57,8 +57,7 @@ class LanguageSelectFragment : Fragment() {
     }
 
     private fun checkPermissions() {
-        if (permissionsDelegate.checkSelfPermissions()) {
-        } else {
+        if (!permissionsDelegate.checkSelfPermissions()) {
             pendingAction = { checkPermissions() }
             permissionsDelegate.requestPermissions()
         }
@@ -73,8 +72,9 @@ class LanguageSelectFragment : Fragment() {
 
     private fun onPermissionsGranted(isGranted: Boolean) {
         Timber.i("onPermissionsGranted $isGranted")
-        if (isGranted) pendingAction?.invoke()
-        pendingAction = null
-
+        if (isGranted) {
+            pendingAction?.invoke()
+            pendingAction = null
+        }
     }
 }

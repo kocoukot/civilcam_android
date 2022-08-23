@@ -12,5 +12,3 @@ enum class NotificationAction(val description: String) {
             values().find { it.description.equals(description, true) }
     }
 }
-
-

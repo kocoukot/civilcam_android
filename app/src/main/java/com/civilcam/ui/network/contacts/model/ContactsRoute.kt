@@ -5,5 +5,4 @@ import com.civilcam.common.ext.compose.ComposeFragmentRoute
 sealed class ContactsRoute : ComposeFragmentRoute {
     object GoBack : ContactsRoute()
     object GoInviteByNumber : ContactsRoute()
-
 }

@@ -12,5 +12,3 @@ data class ImageInfo(
     val thumbnailUrl: String? = "",
     val sizeMb: Float? = null
 ) : Parcelable
-
-

@@ -26,7 +26,6 @@ import timber.log.Timber
 class ProfileSetupViewModel(
     private val mediaStorage: MediaStorage,
     private val getPlacesAutocompleteUseCase: GetPlacesAutocompleteUseCase,
-//    private val getPlaceDetailsUseCase: GetPlaceDetailsUseCase,
     private val setPersonalInfoUseCase: SetPersonalInfoUseCase,
     private val setAvatarUseCase: SetAvatarUseCase,
 ) : ComposeViewModel<ProfileSetupState, ProfileSetupRoute, ProfileSetupActions>(), SearchQuery {
@@ -189,11 +188,13 @@ class ProfileSetupViewModel(
 
     private fun setSearchResult(result: List<AutocompletePlace>) {
         Timber.i("location result $result")
-        _state.value = _state.value.copy(
-            searchLocationModel = _state.value.searchLocationModel.copy(
-                searchResult = result
-            ).copy()
-        )
+        _state.update {
+            it.copy(
+                searchLocationModel = _state.value.searchLocationModel.copy(
+                    searchResult = result
+                ).copy()
+            )
+        }
     }
 
     private fun addressSelected(result: AutocompletePlace) {

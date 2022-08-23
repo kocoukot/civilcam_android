@@ -6,5 +6,4 @@ sealed class InviteByNumberActions : ComposeFragmentActions {
     object ClickGoBack : InviteByNumberActions()
     object PhoneCleared : InviteByNumberActions()
     data class SendInvite(val phoneNumber: String) : InviteByNumberActions()
-
 }

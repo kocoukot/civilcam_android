@@ -7,10 +7,8 @@ import com.civilcam.ui.onboarding.model.OnboardingRoute
 
 class OnBoardingViewModel : ViewModel() {
 
-
     private val _steps: SingleLiveEvent<OnboardingRoute> = SingleLiveEvent()
     val steps: SingleLiveEvent<OnboardingRoute> = _steps
-
 
     fun setInputActions(action: OnboardingActions) {
         when (action) {

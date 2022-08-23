@@ -192,14 +192,6 @@ class NetworkMainViewModel(
                     data = _state.value.data?.copy(searchScreenSectionModel = contactsModel)?.copy()
                 )
             }
-
-//            _state.value.data?.let { model ->
-//
-//                model.searchResult.find { it.guardianId == user.guardianId }?.guardianStatus =
-//                    GuardianStatus.PENDING
-//                _state.value = _state.value.copy(data = model.copy())
-////                Timber.d("addUser ${_state.value.data}")
-//            }
         }
     }
 

@@ -92,9 +92,3 @@ class ContactsViewModel(
     }
 
 }
-
-
-    
-
-
-

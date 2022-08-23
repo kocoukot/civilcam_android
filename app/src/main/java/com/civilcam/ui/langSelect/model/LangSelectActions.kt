@@ -6,5 +6,4 @@ import com.civilcam.domainLayer.model.LanguageType
 sealed class LangSelectActions : ComposeFragmentActions {
     data class LanguageSelect(val language: LanguageType) : LangSelectActions()
     object ClickContinue : LangSelectActions()
-
 }

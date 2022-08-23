@@ -7,5 +7,4 @@ sealed class ContactsActions : ComposeFragmentActions {
     object ClickGoInviteByNumber : ContactsActions()
     data class ClickInvite(val contact: PersonContactItem) : ContactsActions()
     data class ClickSearch(val searchString: String) : ContactsActions()
-
 }

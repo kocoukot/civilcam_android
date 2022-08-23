@@ -238,9 +238,3 @@ class EmergencyViewModel(
 		}
 	}
 }
-
-
-    
-
-
-
