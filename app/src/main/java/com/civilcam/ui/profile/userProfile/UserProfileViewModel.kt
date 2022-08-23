@@ -112,6 +112,7 @@ class UserProfileViewModel(
 				}
 				.onFailure { error ->
 					error.castSafe<ServiceException>()?.let {
+						if (it.isForceLogout) navigateRoute(UserProfileRoute.ForceLogout)
 						_state.update { it.copy(errorText = it.errorText) }
 					}
 				}

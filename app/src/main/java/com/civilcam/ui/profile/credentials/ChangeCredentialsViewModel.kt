@@ -44,11 +44,8 @@ class ChangeCredentialsViewModel(
             _state.update { it.copy(isLoading = true) }
             kotlin.runCatching {
                 when (dataType) {
-                    UserProfileType.PHONE_NUMBER -> changePhoneNumberUseCase.invoke(_state.value.phone)
-                    else -> changeEmailUseCase.changeEmail(
-                        _state.value.currentEmail,
-                        _state.value.email
-                    )
+                    UserProfileType.PHONE_NUMBER -> changePhoneNumberUseCase(_state.value.phone)
+                    else -> changeEmailUseCase(_state.value.currentEmail, _state.value.email)
                 }
             }.onSuccess {
                 navigateRoute(
