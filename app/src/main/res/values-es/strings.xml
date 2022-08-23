@@ -250,5 +250,12 @@
     <string name="something_went_wrong">Something went wrong!</string>
     <string name="privacy_button">Privacy Policy</string>
     <string name="terms_button"><![CDATA[Terms & Conditions]]></string>
+    <string name="change_credentials_current_email_title">Current email</string>
+    <string name="change_credentials_new_email_placeholder">Enter your new email</string>
+    <string name="change_credentials_new_email_title">New email</string>
+    <string name="user_profile_email_change_title">Your email has been saved successfully!</string>
+    <string name="user_profile_email_change_desc">Now you can log in with your new email</string>
+    <string name="user_profile_phone_change_title">Your phone number has been saved successfully!</string>
+    <string name="user_profile_phone_change_desc">Now it will be displayed in your profile</string>
 
 </resources>

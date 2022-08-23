@@ -93,7 +93,8 @@ fun ChangeCredentialsScreenContent(viewModel: ChangeCredentialsViewModel) {
                             },
                             value = state.value.email,
                             errorMessage = state.value.errorText,
-                            isEmail = !state.value.emailError
+                            isEmail = !state.value.emailError,
+	                        currentEmail = state.value.currentEmail
                         )
                     }
                     UserProfileType.PHONE_NUMBER -> {

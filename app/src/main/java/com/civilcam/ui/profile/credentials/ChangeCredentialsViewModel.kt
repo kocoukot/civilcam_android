@@ -62,7 +62,7 @@ class ChangeCredentialsViewModel(
                 .onFailure { error ->
                     error as ServiceException
                     if (error.isForceLogout) navigateRoute(ChangeCredentialsRoute.ForceLogout)
-                    _state.update { it.copy(errorText = error.errorMessage, phoneError = true) }
+                    _state.update { it.copy(errorText = error.errorMessage, phoneError = true, emailError = true) }
                 }
         }
     }
