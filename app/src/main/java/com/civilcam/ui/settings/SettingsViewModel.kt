@@ -6,10 +6,7 @@ import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.model.LanguageType
 import com.civilcam.domainLayer.model.settings.NotificationsType
 import com.civilcam.domainLayer.usecase.settings.GetCurrentSubscriptionPlanUseCase
-import com.civilcam.domainLayer.usecase.user.ChangePasswordUseCase
-import com.civilcam.domainLayer.usecase.user.CheckCurrentPasswordUseCase
-import com.civilcam.domainLayer.usecase.user.LogoutUseCase
-import com.civilcam.domainLayer.usecase.user.SetUserLanguageUseCase
+import com.civilcam.domainLayer.usecase.user.*
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.settings.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +19,8 @@ class SettingsViewModel(
     private val changePasswordUseCase: ChangePasswordUseCase,
     private val setUserLanguageUseCase: SetUserLanguageUseCase,
     private val getCurrentSubscriptionPlan: GetCurrentSubscriptionPlanUseCase,
-    private val logoutUseCase: LogoutUseCase
+    private val logoutUseCase: LogoutUseCase,
+    private val deleteAccountUseCase: DeleteAccountUseCase,
 ) : ComposeViewModel<SettingsState, SettingsRoute, SettingsActions>() {
 
     override var _state = MutableStateFlow(SettingsState())
@@ -37,7 +35,7 @@ class SettingsViewModel(
             )
             is SettingsActions.ClickSaveLanguage -> onLanguageChange(action.languageType)
             is SettingsActions.ClickCloseAlertDialog -> {
-                if (action.isConfirm) doActionOnAccount(action.isConfirm) else goBack()
+                if (action.isConfirm) doActionOnAccount(action.isLogOut) else goBack()
             }
             SettingsActions.ClickSendToSupport -> contactSupport()
             is SettingsActions.EnterContactSupportInfo -> setContactSupportInfo(
@@ -85,9 +83,7 @@ class SettingsViewModel(
     private fun doActionOnAccount(isLogOut: Boolean) {
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            kotlin.runCatching {
-                if (isLogOut) logoutUseCase() else logoutUseCase()
-            }
+            kotlin.runCatching { if (isLogOut) logoutUseCase() else deleteAccountUseCase() }
                 .onSuccess { navigateRoute(SettingsRoute.GoLanguageSelect) }
                 .onFailure { error ->
                     error as ServiceException

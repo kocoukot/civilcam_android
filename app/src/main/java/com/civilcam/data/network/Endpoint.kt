@@ -21,6 +21,8 @@ object Endpoint {
         const val CHECK_PASSWORD = "check-password"
         const val CHANGE_PASSWORD = "change-password"
         const val SET_USER_LANGUAGE = "set-user-language"
+        const val DELETE_ACCOUNT = "delete-account"
+
     }
 
     object Profile {

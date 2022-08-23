@@ -3,10 +3,10 @@ package com.civilcam.data.network.service
 import com.civilcam.data.network.Endpoint
 import com.civilcam.data.network.model.request.user.*
 import com.civilcam.data.network.model.response.SuccessResponse
-import com.civilcam.data.network.model.request.user.AcceptTermsRequest
 import com.civilcam.data.network.model.response.auth.UserResponse
 import com.civilcam.data.network.model.response.user.CheckPasswordResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 
@@ -32,15 +32,16 @@ interface UserService {
 	
 	@POST(Endpoint.User.SET_USER_LANGUAGE)
 	suspend fun setUserLanguage(@Body request: SetUserLanguageRequest): UserResponse
-	
+
 	//    @POST(Endpoint.User.CONTACT_SUPPORT)
 //    suspend fun contactSupport(@Body request: ContactSupportRequest): SuccessResponse
 //
 	@POST(Endpoint.User.LOGOUT)
 	suspend fun logout(): SuccessResponse
-//
-//    @POST(Endpoint.User.DELETE_ACCOUNT)
-//    suspend fun deleteAccount(): SuccessResponse
+
+	//
+	@DELETE(Endpoint.User.DELETE_ACCOUNT)
+	suspend fun deleteAccount(): SuccessResponse
 //
 //    @POST(Endpoint.User.CHANGE_USER_NAME)
 //    suspend fun changeUsername(@Body request: ChangeUsernameRequest): SuccessResponse
