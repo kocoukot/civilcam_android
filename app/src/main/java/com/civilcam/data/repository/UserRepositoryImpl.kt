@@ -1,12 +1,12 @@
 package com.civilcam.data.repository
 
-import com.civilcam.common.ext.Resource
 import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.local.SharedPreferencesStorage
 import com.civilcam.data.mapper.auth.UserMapper
 import com.civilcam.data.network.model.request.user.*
 import com.civilcam.data.network.service.UserService
 import com.civilcam.data.network.support.BaseRepository
+import com.civilcam.data.network.support.Resource
 import com.civilcam.domainLayer.model.CurrentUser
 import com.civilcam.domainLayer.model.LanguageType
 import com.civilcam.domainLayer.repos.UserRepository

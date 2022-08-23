@@ -4,14 +4,20 @@ import android.app.Application
 import com.civilcam.di.*
 import com.civilcam.di.source.sourceModule
 import com.civilcam.domainLayer.model.settings.NotificationType
+import com.civilcam.domainLayer.usecase.auth.SetFcmTokenUseCase
 import com.civilcam.service.notifications.NotificationHelper
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import io.gleap.Gleap
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import timber.log.Timber
 
 class CivilcamApplication : Application() {
+
+    private val setFcmTokenUseCase: SetFcmTokenUseCase by inject()
 
 
     override fun onCreate() {
@@ -26,6 +32,7 @@ class CivilcamApplication : Application() {
             androidContext(this@CivilcamApplication)
             modules(*presentationModules + sourceModule + storageModule + repositoryModule + domainModule + networkModule)
         }
+        startFireBaseNotification()
     }
 
     private fun startTimber() = Timber.plant(Timber.DebugTree())
@@ -34,6 +41,24 @@ class CivilcamApplication : Application() {
         if (BuildConfig.DEBUG) {
             Gleap.initialize(BuildConfig.GLEAP_KEY, this)
         }
+    }
+
+    private fun startFireBaseNotification() {
+        Timber.d("Start Firebase Notificaiton")
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener(OnCompleteListener { task ->
+
+                if (!task.isSuccessful) {
+                    Timber.d("Fetching FCM registration token failed ${task.exception}")
+                    return@OnCompleteListener
+                }
+
+                val token = task.result
+                setFcmTokenUseCase(token)
+
+                Timber.d("FCM TOKEN $token")
+
+            })
     }
 
     private fun createNotificationChannels() {
