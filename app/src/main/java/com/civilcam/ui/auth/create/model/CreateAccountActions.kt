@@ -13,5 +13,4 @@ sealed class CreateAccountActions : ComposeFragmentActions {
 	) : CreateAccountActions()
 
 	object ClickOkAlert : CreateAccountActions()
-
 }

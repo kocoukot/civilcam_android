@@ -7,5 +7,4 @@ class ErrorResponse(
     @SerializedName("title") val title: String,
     @SerializedName("message") val message: String,
     @SerializedName("isForceLogout") val isForceLogout: Boolean
-
 )

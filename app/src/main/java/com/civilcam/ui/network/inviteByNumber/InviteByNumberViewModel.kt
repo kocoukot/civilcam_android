@@ -45,9 +45,3 @@ class InviteByNumberViewModel :
         }
     }
 }
-
-
-    
-
-
-

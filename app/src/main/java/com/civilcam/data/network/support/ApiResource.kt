@@ -5,6 +5,4 @@ sealed class Resource<out T> {
     data class Failure(
         val serviceException: ServiceException,
     ) : Resource<Nothing>()
-
 }
-

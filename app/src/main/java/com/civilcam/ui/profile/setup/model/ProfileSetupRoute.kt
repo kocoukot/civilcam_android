@@ -7,5 +7,4 @@ sealed class ProfileSetupRoute : ComposeFragmentRoute {
     object GoBack : ProfileSetupRoute()
     object GoLocationSelect : ProfileSetupRoute()
     object GoGalleryOpen : ProfileSetupRoute()
-
 }

@@ -29,6 +29,4 @@ class GalleryActivityResultContract : ActivityResultContract<Unit, Uri>() {
     companion object {
         private const val INTENT_TYPE_IMAGES = "image/*"
     }
-
-
 }

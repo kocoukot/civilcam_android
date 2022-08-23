@@ -308,7 +308,7 @@ class NotificationHelper : KoinComponent {
         ) {
             val channelId = "${context.packageName}-$name"
             val channel =
-                NotificationChannel(channelId, name, NotificationManagerCompat.IMPORTANCE_HIGH)
+                NotificationChannel(channelId, name, NotificationManager.IMPORTANCE_HIGH)
             channel.description = description
             channel.lockscreenVisibility = VISIBILITY_PUBLIC
             channel.setShowBadge(true)

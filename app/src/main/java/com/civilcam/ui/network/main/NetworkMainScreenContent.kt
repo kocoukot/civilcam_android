@@ -105,9 +105,7 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                 }
 
                 AnimatedVisibility(visible = state.value.screenState == NetworkScreen.MAIN) {
-                    NetworkTabRow(
-                        tabPage
-                    ) {
+                    NetworkTabRow(tabPage) {
                         tabPage = it
                         viewModel.setInputActions(NetworkMainActions.ClickNetworkTypeChange(it))
                     }

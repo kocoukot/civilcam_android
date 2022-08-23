@@ -7,8 +7,4 @@ interface PlacesRepository {
     suspend fun getPlacesWithType(
         query: String,
     ): List<AutocompletePlace>
-
-//    fun getPlaceDetails(
-//        placeId: String
-//    ): Single<PlaceDetails>
 }

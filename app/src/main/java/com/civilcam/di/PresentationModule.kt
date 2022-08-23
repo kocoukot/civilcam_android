@@ -73,8 +73,8 @@ val authModule = module {
 	viewModel { (pinCodeFlow: PinCodeFlow) -> PinCodeViewModel(pinCodeFlow) }
 	
 	viewModel { (isReselect: Boolean) -> SubscriptionViewModel(isReselect) }
-	
 }
+
 
 val networkRootModule = module {
 	
@@ -85,7 +85,6 @@ val networkRootModule = module {
 	viewModel { InviteByNumberViewModel() }
 	
 	viewModel { (screen: NetworkScreen) -> NetworkMainViewModel(screen, get(), get(), get()) }
-	
 }
 
 val alertsRootModule = module {
@@ -95,8 +94,6 @@ val alertsRootModule = module {
 	viewModel { AlertsHistoryViewModel(get()) }
 	
 	viewModel { (userId: Int) -> LiveMapViewModel(userId, get(), get()) }
-	
-	
 }
 
 val profileModule = module {
@@ -125,7 +122,6 @@ val profileModule = module {
 }
 
 val emergencyModule = module {
-	
 	viewModel { EmergencyViewModel(get()) }
 }
 

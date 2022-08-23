@@ -8,6 +8,4 @@ sealed class NetworkMainRoute : ComposeFragmentRoute {
     object GoProfile : NetworkMainRoute()
     data class GoUserDetail(val userId: Int) : NetworkMainRoute()
     data class IsNavBarVisible(val isVisible: Boolean) : NetworkMainRoute()
-
-
 }

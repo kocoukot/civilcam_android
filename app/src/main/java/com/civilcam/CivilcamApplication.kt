@@ -80,5 +80,3 @@ class CivilcamApplication : Application() {
             private set
     }
 }
-
-
