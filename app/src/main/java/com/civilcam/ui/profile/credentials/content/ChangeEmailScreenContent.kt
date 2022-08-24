@@ -16,7 +16,7 @@ fun ChangeEmailScreenContent(
 	onValueChanged: (String) -> Unit,
 	value: String,
 	currentEmail: String,
-	isEmail: Boolean,
+	hasError: Boolean,
 	errorMessage: String
 ) {
 	Column {
@@ -42,7 +42,7 @@ fun ChangeEmailScreenContent(
 			text = value,
 			placeHolder = stringResource(id = R.string.change_credentials_new_email_placeholder),
 			errorMessage = errorMessage,
-			hasError = !isEmail,
+			hasError = hasError,
 			onValueChanged = {
 				onValueChanged.invoke(it)
 			},
