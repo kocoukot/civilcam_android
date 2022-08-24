@@ -66,9 +66,6 @@ class VerificationFragment : Fragment() {
                                 R.id.pinCodeFragment,
                                 PinCodeFragment.createArgs(PinCodeFlow.CREATE_PIN_CODE)
                             )
-							VerificationFlow.RESET_PASSWORD -> navController.navigate(
-								R.id.createPasswordFragment
-							)
 							VerificationFlow.CHANGE_PHONE -> {
 								setFragmentResult(
 									RESULT_BACK_PHONE,
@@ -99,6 +96,7 @@ class VerificationFragment : Fragment() {
                                     false
                                 )
                             }
+							else -> {}
                         }
 					}
 				}
