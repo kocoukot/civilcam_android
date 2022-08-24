@@ -3,6 +3,7 @@ package com.civilcam.ui.settings
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.model.AuthType
 import com.civilcam.domainLayer.model.LanguageType
 import com.civilcam.domainLayer.model.ScreenAlert
 import com.civilcam.domainLayer.model.settings.NotificationsType
@@ -22,23 +23,10 @@ class SettingsViewModel(
     private val getCurrentSubscriptionPlan: GetCurrentSubscriptionPlanUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val deleteAccountUseCase: DeleteAccountUseCase,
-    getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase
+    private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase
 ) : ComposeViewModel<SettingsState, SettingsRoute, SettingsActions>() {
 
     override var _state = MutableStateFlow(SettingsState())
-
-    init {
-        _state.update {
-            it.copy(
-                data = it.data.copy(
-                    contactSupportSectionData = ContactSupportSectionData(
-                        replyEmail = getLocalCurrentUserUseCase().sessionUser.email,
-                        canChangeEmail = getLocalCurrentUserUseCase().sessionUser.canChangeEmail
-                    )
-                )
-            )
-        }
-    }
 
     override fun setInputActions(action: SettingsActions) {
         when (action) {
@@ -148,6 +136,21 @@ class SettingsViewModel(
                     it.copy(
                         settingsType = section,
                         data = SettingsModel(alertsSectionData = getNotificationsTypeList())
+                    )
+                }
+            }
+
+            SettingsType.CONTACT_SUPPORT -> {
+                val user = getLocalCurrentUserUseCase()
+                _state.update {
+                    it.copy(
+                        settingsType = section,
+                        data = it.data.copy(
+                            contactSupportSectionData = ContactSupportSectionData(
+                                replyEmail = if (user.sessionUser.authType == AuthType.email) user.sessionUser.email else "",
+                                canChangeEmail = getLocalCurrentUserUseCase().sessionUser.canChangeEmail
+                            )
+                        )
                     )
                 }
             }
