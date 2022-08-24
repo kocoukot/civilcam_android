@@ -34,34 +34,36 @@ fun ChangeCredentialsScreenContent(viewModel: ChangeCredentialsViewModel) {
 	Scaffold(
 		backgroundColor = CCTheme.colors.lightGray,
 		modifier = Modifier
-            .fillMaxSize()
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = {
-                    viewModel.setInputActions(ChangeCredentialsActions.CheckCredential)
-                },
-            ),
+			.fillMaxSize()
+			.clickable(
+				interactionSource = remember { MutableInteractionSource() },
+				indication = null,
+				onClick = {
+					viewModel.setInputActions(ChangeCredentialsActions.CheckCredential)
+				},
+			),
 		topBar = {
 			Column {
 				Crossfade(targetState = state.value.screenState) { credentialType ->
 					TopAppBarContent(
-                        title = stringResource(id = credentialType.title),
-                        navigationItem = {
-                            BackButton {
-                                viewModel.setInputActions(ChangeCredentialsActions.ClickBack)
-                            }
-                        },
-                        actionItem = {
-                            TextActionButton(
-                                isEnabled = isActionActive.value,
-                                actionTitle = stringResource(id = R.string.save_text)
-                            ) {
-                                viewModel.setInputActions(
-                                    ChangeCredentialsActions.ClickSave(
-                                        credentialType
-                                    )
-                                )
+						title = if (credentialType == UserProfileType.EMAIL) stringResource(id = R.string.change_credentials_email_title) else stringResource(
+							id = credentialType.title
+						),
+						navigationItem = {
+							BackButton {
+								viewModel.setInputActions(ChangeCredentialsActions.ClickBack)
+							}
+						},
+						actionItem = {
+							TextActionButton(
+								isEnabled = isActionActive.value,
+								actionTitle = stringResource(id = R.string.save_text)
+							) {
+								viewModel.setInputActions(
+									ChangeCredentialsActions.ClickSave(
+										credentialType
+									)
+								)
 							}
 						}
 					)
@@ -77,39 +79,39 @@ fun ChangeCredentialsScreenContent(viewModel: ChangeCredentialsViewModel) {
 		) {
 			Column(
 				modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(listState)
-                    .padding(horizontal = 16.dp)
+					.fillMaxSize()
+					.verticalScroll(listState)
+					.padding(horizontal = 16.dp)
 			) {
 				
 				Spacer(modifier = Modifier.height(32.dp))
 				
 				when (state.value.screenState) {
-                    UserProfileType.EMAIL -> {
-                        isActionActive.value = state.value.isFilled
-                        ChangeEmailScreenContent(
-                            onValueChanged = {
-                                viewModel.setInputActions(ChangeCredentialsActions.EnteredEmail(it))
-                            },
-                            value = state.value.email,
-                            errorMessage = state.value.errorText,
-                            isEmail = !state.value.emailError,
-	                        currentEmail = state.value.currentEmail
-                        )
-                    }
-                    UserProfileType.PHONE_NUMBER -> {
-                        isActionActive.value = state.value.validPhone
-                        ChangePhoneScreenContent(
-                            onValueChanged = {
-                                viewModel.setInputActions(ChangeCredentialsActions.EnteredPhone(it))
-                            },
-                            errorMessage = state.value.errorText,
-                            isPhoneTaken = state.value.phoneError
-                        )
-                    }
-                    else -> {}
-                }
-            }
-        }
+					UserProfileType.EMAIL -> {
+						isActionActive.value = state.value.isFilled
+						ChangeEmailScreenContent(
+							onValueChanged = {
+								viewModel.setInputActions(ChangeCredentialsActions.EnteredEmail(it))
+							},
+							value = state.value.email,
+							errorMessage = state.value.errorText,
+							hasError = state.value.emailError || !state.value.isEmail,
+							currentEmail = state.value.currentEmail
+						)
+					}
+					UserProfileType.PHONE_NUMBER -> {
+						isActionActive.value = state.value.validPhone
+						ChangePhoneScreenContent(
+							onValueChanged = {
+								viewModel.setInputActions(ChangeCredentialsActions.EnteredPhone(it))
+							},
+							errorMessage = state.value.errorText,
+							isPhoneTaken = state.value.phoneError
+						)
+					}
+					else -> {}
+				}
+			}
+		}
 	}
 }

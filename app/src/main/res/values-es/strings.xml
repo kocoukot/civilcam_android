@@ -257,5 +257,6 @@
     <string name="user_profile_email_change_desc">Now you can log in with your new email</string>
     <string name="user_profile_phone_change_title">Your phone number has been saved successfully!</string>
     <string name="user_profile_phone_change_desc">Now it will be displayed in your profile</string>
+    <string name="change_credentials_email_title">Change email</string>
 
 </resources>
