@@ -57,7 +57,10 @@ fun ChangeCredentialsScreenContent(viewModel: ChangeCredentialsViewModel) {
 						actionItem = {
 							TextActionButton(
 								isEnabled = isActionActive.value,
-								actionTitle = stringResource(id = R.string.save_text)
+								actionTitle = if (state.value.screenState == UserProfileType.EMAIL)
+									stringResource(id = R.string.continue_text) else stringResource(
+									id = R.string.save_text
+								)
 							) {
 								viewModel.setInputActions(
 									ChangeCredentialsActions.ClickSave(
