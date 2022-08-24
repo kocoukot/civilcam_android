@@ -26,9 +26,9 @@ import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.common.ext.formatToPhoneNumber
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.AlertDialogTypes
 import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ui.common.alert.AlertDialogComp
-import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TopAppBarContent

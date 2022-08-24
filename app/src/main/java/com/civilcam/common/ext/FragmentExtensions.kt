@@ -12,7 +12,7 @@ import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.R
-import com.civilcam.ui.common.alert.AlertDialogTypes
+import com.civilcam.domainLayer.model.AlertDialogTypes
 import com.civilcam.ui.common.alert.DialogAlertFragment
 import com.standartmedia.ui.common.loading.DialogLoadingFragment
 

@@ -14,9 +14,10 @@ import com.civilcam.BuildConfig
 import com.civilcam.R
 import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.common.ext.showAlertDialogFragment
+import com.civilcam.domainLayer.model.AlertDialogTypes
+import com.civilcam.domainLayer.model.ScreenAlert
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
-import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.alert.DialogAlertFragment
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
@@ -55,7 +56,7 @@ class UserProfileFragment : Fragment() {
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
-		
+
 		setFragmentResultListener(VerificationFragment.RESULT_BACK_EMAIL) { _, _ ->
 			viewModel.fetchCurrentUser()
 			DialogAlertFragment.create(
@@ -65,7 +66,7 @@ class UserProfileFragment : Fragment() {
 				AlertDialogTypes.OK
 			)
 		}
-		
+
 		setFragmentResultListener(VerificationFragment.RESULT_BACK_PHONE) { _, _ ->
 			viewModel.fetchCurrentUser()
 			DialogAlertFragment.create(
@@ -75,7 +76,16 @@ class UserProfileFragment : Fragment() {
 				AlertDialogTypes.OK
 			)
 		}
-		
+
+		setFragmentResultListener(PinCodeFragment.RESULT_SAVED_NEW_PIN) { _, _ ->
+			viewModel.fetchCurrentUser()
+			DialogAlertFragment.create(
+				fragmentManager = parentFragmentManager,
+				text = resources.getString(ScreenAlert.PinChangedAlert.text),
+				alertType = ScreenAlert.PinChangedAlert.alertType
+			)
+		}
+
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
 				UserProfileRoute.ForceLogout -> navController.navigateToRoot(R.id.onBoardingFragment)

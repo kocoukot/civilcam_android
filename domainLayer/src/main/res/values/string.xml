@@ -12,7 +12,16 @@
     <string name="email_verification">Email verification</string>
     <string name="phone_verification">Phone verification</string>
     <string name="verification_title">Verification</string>
-    <string name="contact_support_alert_sent_text">Your message has been sent\nour support team will answer your ASAP</string>
+    <string name="contact_support_alert_sent_text">Your message has been sent. Our support team will answer your ASAP</string>
     <string name="password_changed_alert_text">Your password has been changed successfully! Now you can log in with your new password</string>
     <string name="pincode_changed_alert_text">Your pin-code has been successfully changed. Please remember it.</string>
+
+    <string name="decline_text">Decline</string>
+    <string name="accept_text">Accept</string>
+    <string name="cancel_text_caps">CANCEL</string>
+    <string name="ok_text_caps">OK</string>
+    <string name="yes_text_caps">YES</string>
+    <string name="confirm_text_caps">CONFIRM</string>
+    <string name="resolve_text_caps">RESOLVE</string>
+
 </resources>

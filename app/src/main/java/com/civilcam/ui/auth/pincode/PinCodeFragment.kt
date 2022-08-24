@@ -48,7 +48,13 @@ class PinCodeFragment : Fragment() {
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
 				PinCodeRoute.GoBack -> navController.popBackStack()
-				PinCodeRoute.GoUserProfile -> navController.popBackStack(R.id.userProfileFragment, false)
+				PinCodeRoute.GoUserProfile -> {
+					setFragmentResult(
+						RESULT_SAVED_NEW_PIN,
+						bundleOf(RESULT_SAVED_NEW_PIN to true)
+					)
+					navController.popBackStack(R.id.userProfileFragment, false)
+				}
 				PinCodeRoute.GoGuardians -> checkPermissions()
 				PinCodeRoute.GoEmergency -> {
 					setFragmentResult(
@@ -106,7 +112,8 @@ class PinCodeFragment : Fragment() {
 
     companion object {
         private const val ARG_FLOW = "pin_code_flow"
-        const val RESULT_BACK_STACK = "back_stack"
+		const val RESULT_BACK_STACK = "back_stack"
+		const val RESULT_SAVED_NEW_PIN = "saved_new_pin"
 
         fun createArgs(flow: PinCodeFlow) = bundleOf(
             ARG_FLOW to flow

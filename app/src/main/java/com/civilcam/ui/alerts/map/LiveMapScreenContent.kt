@@ -17,12 +17,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.AlertDialogTypes
 import com.civilcam.ui.alerts.map.content.AlertMapScreenContent
 import com.civilcam.ui.alerts.map.content.AlertStreamScreenContent
 import com.civilcam.ui.alerts.map.content.UserInformationContent
 import com.civilcam.ui.alerts.map.model.LiveMapActions
 import com.civilcam.ui.common.alert.AlertDialogComp
-import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.TextActionButton

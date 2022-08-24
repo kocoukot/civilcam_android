@@ -1,7 +1,7 @@
-package com.civilcam.ui.common.alert
+package com.civilcam.domainLayer.model
 
 import androidx.annotation.StringRes
-import com.civilcam.R
+import com.civilcam.domainLayer.R
 
 enum class AlertDialogTypes(@StringRes val negativeText: Int, @StringRes val positiveText: Int) {
     CONFIRM_CANCEL(R.string.cancel_text_caps, R.string.confirm_text_caps),
