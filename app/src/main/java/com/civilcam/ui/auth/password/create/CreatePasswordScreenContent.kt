@@ -19,6 +19,7 @@ import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.PasswordField
 import com.civilcam.ui.common.compose.inputs.PasswordStrategyBlocks
+import com.civilcam.ui.common.loading.DialogLoadingContent
 
 @Composable
 fun CreatePasswordScreenContent(viewModel: CreatePasswordViewModel) {
@@ -28,7 +29,11 @@ fun CreatePasswordScreenContent(viewModel: CreatePasswordViewModel) {
 	val checkedStrategies = remember { mutableStateOf(0) }
 	var passwordFocusState by remember { mutableStateOf(PasswordStrategyState.NONE) }
 	var passwordHadFocus by remember { mutableStateOf(false) }
-
+	
+	if (state.value.isLoading) {
+		DialogLoadingContent()
+	}
+	
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
 		modifier = Modifier.fillMaxSize(),
