@@ -42,7 +42,7 @@ fun VerificationScreenContent(
 ) {
 	val state = viewModel.state.collectAsState()
 	val context = LocalContext.current
-
+	
 	val timer = remember {
 		derivedStateOf {
 			state.value.timeOut
@@ -58,14 +58,24 @@ fun VerificationScreenContent(
 			onOptionSelected = { state.value.errorText = "" }
 		)
 	}
-
-    Scaffold(
-        backgroundColor = CCTheme.colors.white,
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            Column {
-                TopAppBarContent(
-					title = stringResource(id = state.value.verificationFlow.title),
+	
+	Scaffold(
+		backgroundColor = CCTheme.colors.white,
+		modifier = Modifier.fillMaxSize(),
+		topBar = {
+			Column {
+				TopAppBarContent(
+					title = when (state.value.verificationFlow) {
+						VerificationFlow.CHANGE_EMAIL -> {
+							stringResource(id = R.string.verification_current_email_title)
+						}
+						VerificationFlow.NEW_EMAIL -> {
+							stringResource(id = R.string.verification_new_email_title)
+						}
+						else -> {
+							stringResource(id = state.value.verificationFlow.title)
+						}
+					},
 					navigationItem = {
 						BackButton {
 							viewModel.setInputActions(VerificationActions.ClickGoBack)
@@ -143,7 +153,7 @@ fun VerificationScreenContent(
 					.padding(horizontal = 16.dp),
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
-
+				
 				Crossfade(
 					targetState = state.value.timeOut != "",
 					modifier = Modifier

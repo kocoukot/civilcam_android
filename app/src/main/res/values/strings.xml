@@ -258,5 +258,7 @@
     <string name="user_profile_phone_change_title">Your phone number has been saved successfully!</string>
     <string name="user_profile_phone_change_desc">Now it will be displayed in your profile</string>
     <string name="change_credentials_email_title">Change email</string>
+    <string name="verification_current_email_title">Current email verification</string>
+    <string name="verification_new_email_title">New email verification</string>
 
 </resources>
