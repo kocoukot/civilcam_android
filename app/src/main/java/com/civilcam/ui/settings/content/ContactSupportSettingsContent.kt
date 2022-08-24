@@ -26,11 +26,13 @@ import com.civilcam.common.ext.isEmail
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.compose.PlaceholderText
 import com.civilcam.ui.common.compose.inputs.EmailInputField
+import com.civilcam.ui.settings.model.ContactSupportSectionData
 import com.civilcam.utils.Constant.ISSUE_DESCRIPTION_LIMIT
 import com.civilcam.utils.Constant.ISSUE_LIMIT
 
 @Composable
 fun ContactSupportContent(
+    contactSupportModel: ContactSupportSectionData,
     supportInformation: (issue: String, description: String, email: String) -> Unit
 ) {
 
@@ -38,7 +40,7 @@ fun ContactSupportContent(
     var issueDescription by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var isEmailError by remember { mutableStateOf(false) }
-
+    email = contactSupportModel.replyEmail
 
     Column(
         modifier = Modifier
@@ -75,6 +77,8 @@ fun ContactSupportContent(
 
         EmailInputField(
             isReversed = true,
+            text = email,
+            isEnable = !contactSupportModel.canChangeEmail,
             title = stringResource(id = R.string.settings_contact_reply_title),
             placeHolder = stringResource(id = R.string.settings_contact_reply_placeholder),
             errorMessage = stringResource(id = R.string.settings_contact_error_text),

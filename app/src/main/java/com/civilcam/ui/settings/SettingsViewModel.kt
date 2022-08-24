@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.model.LanguageType
+import com.civilcam.domainLayer.model.ScreenAlert
 import com.civilcam.domainLayer.model.settings.NotificationsType
 import com.civilcam.domainLayer.usecase.settings.GetCurrentSubscriptionPlanUseCase
 import com.civilcam.domainLayer.usecase.user.*
@@ -21,9 +22,23 @@ class SettingsViewModel(
     private val getCurrentSubscriptionPlan: GetCurrentSubscriptionPlanUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val deleteAccountUseCase: DeleteAccountUseCase,
+    getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase
 ) : ComposeViewModel<SettingsState, SettingsRoute, SettingsActions>() {
 
     override var _state = MutableStateFlow(SettingsState())
+
+    init {
+        _state.update {
+            it.copy(
+                data = it.data.copy(
+                    contactSupportSectionData = ContactSupportSectionData(
+                        replyEmail = getLocalCurrentUserUseCase().sessionUser.email,
+                        canChangeEmail = getLocalCurrentUserUseCase().sessionUser.canChangeEmail
+                    )
+                )
+            )
+        }
+    }
 
     override fun setInputActions(action: SettingsActions) {
         when (action) {
@@ -55,7 +70,12 @@ class SettingsViewModel(
             SettingsActions.ClickGoSubscription -> fetchSubscriptionPlan()
             SettingsActions.GoSubscriptionManage -> goSubManage()
             SettingsActions.ClearErrorText -> hideAlert()
+            SettingsActions.ClickCloseScreenAlert -> closeScreenAlert()
         }
+    }
+
+    private fun closeScreenAlert() {
+        _state.update { it.copy(screenAlert = null) }
     }
 
     private fun onLanguageChange(languageType: LanguageType) {
@@ -108,7 +128,7 @@ class SettingsViewModel(
     }
 
 
-    private fun goBack() {
+    private fun goBack(screenAlert: ScreenAlert? = null) {
         when (_state.value.settingsType) {
             SettingsType.MAIN -> navigateRoute(SettingsRoute.GoBack)
             SettingsType.CREATE_PASSWORD -> {
@@ -118,6 +138,7 @@ class SettingsViewModel(
                 _state.value = SettingsState()
             }
         }
+        _state.update { it.copy(screenAlert = screenAlert) }
     }
 
     private fun changeSection(section: SettingsType) {
@@ -157,7 +178,6 @@ class SettingsViewModel(
                 }
                 updateSettingsModel(model = model)
                 _state.value = _state.value.copy(data = model.copy())
-
             }
         }
     }
@@ -192,8 +212,7 @@ class SettingsViewModel(
 
 
     private fun contactSupport() {
-        //todo api add
-        goBack()
+        goBack(ScreenAlert.ReportSentAlert)
     }
 
     private fun enteredCurrentPassword(password: String) {
@@ -266,7 +285,9 @@ class SettingsViewModel(
                         newPassword = _state.value.data.createPasswordSectionData.password,
                     )
                 }
-                    .onSuccess { _state.value = SettingsState() }
+                    .onSuccess {
+                        _state.value = SettingsState(screenAlert = ScreenAlert.PasswordChangedAlert)
+                    }
                     .onFailure { error ->
                         error as ServiceException
                         _state.update { it.copy(errorText = error.errorMessage) }

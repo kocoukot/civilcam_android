@@ -42,5 +42,6 @@ sealed class SettingsActions : ComposeFragmentActions {
     object GoSubscriptionManage : SettingsActions()
 
     object ClearErrorText : SettingsActions()
+    object ClickCloseScreenAlert : SettingsActions()
 
 }

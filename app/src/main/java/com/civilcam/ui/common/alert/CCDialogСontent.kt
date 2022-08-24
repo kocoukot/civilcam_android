@@ -109,7 +109,8 @@ fun AlertDialogComp(
                                 dialogText,
                                 color = CCTheme.colors.grayOne,
                                 style = CCTheme.typography.common_text_small_regular,
-                                fontSize = 15.sp
+                                fontSize = 16.sp,
+                                lineHeight = 24.sp
                             )
                         },
                         confirmButton = {

@@ -49,11 +49,18 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 			onOptionSelected = { viewModel.setInputActions(SettingsActions.ClearErrorText) }
 		)
 	}
+	state.value.screenAlert?.let { alert ->
+		AlertDialogComp(
+			dialogText = stringResource(id = alert.text),
+			alertType = AlertDialogTypes.OK,
+			onOptionSelected = { viewModel.setInputActions(SettingsActions.ClickCloseScreenAlert) }
+		)
+	}
 
 	Scaffold(
 		modifier = Modifier
-            .fillMaxSize()
-            .background(CCTheme.colors.lightGray),
+			.fillMaxSize()
+			.background(CCTheme.colors.lightGray),
 		backgroundColor = CCTheme.colors.lightGray,
 		topBar = {
 			Column(
@@ -171,6 +178,7 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 				}
 				SettingsType.CONTACT_SUPPORT -> {
 					ContactSupportContent(
+						contactSupportModel = state.value.data.contactSupportSectionData,
 						supportInformation = { issue, description, email ->
 							isActionActive = couldBeSend(issue, description, email)
 							viewModel.setInputActions(
