@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.civilcam.domainLayer.model.AlertDialogTypes
 
 
 class DialogAlertFragment(
@@ -60,7 +61,20 @@ class DialogAlertFragment(
 
         fun create(
             fragmentManager: FragmentManager,
-            title: String,
+            text: String,
+            alertType: AlertDialogTypes,
+            onOptionSelected: ((Boolean) -> Unit)? = null
+        ) {
+            with(fragmentManager) {
+                DialogAlertFragment("", text, alertType)
+                    .apply { onItemSelected = onOptionSelected }
+                    .show(this, TAG)
+            }
+        }
+
+        fun create(
+            fragmentManager: FragmentManager,
+            title: String = "",
             text: String,
             alertType: AlertDialogTypes,
             onOptionSelected: ((Boolean) -> Unit)? = null

@@ -46,7 +46,7 @@ val authModule = module {
 	
 	viewModel { OnBoardingViewModel() }
 	
-	viewModel { SplashViewModel(get()) }
+	viewModel { SplashViewModel(get(), get()) }
 	
 	viewModel { (isSettings: Boolean) -> TermsViewModel(isSettings, get(), get()) }
 	
@@ -101,6 +101,7 @@ val profileModule = module {
 
 	viewModel {
 		SettingsViewModel(
+			get(),
 			get(),
 			get(),
 			get(),

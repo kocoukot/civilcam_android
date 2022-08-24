@@ -4,18 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.civilcam.domainLayer.model.CurrentUser
-import com.civilcam.domainLayer.repos.AccountRepository
+import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
+import com.civilcam.domainLayer.usecase.user.IsUserLoggedInUseCase
 
 class SplashViewModel(
-	private val accountRepository: AccountRepository
+	getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
+	isUserLoggedInUseCase: IsUserLoggedInUseCase,
 ) : ViewModel() {
 	
 	private val _user = MutableLiveData<CurrentUser?>()
 	val user: LiveData<CurrentUser?> = _user
 	
 	init {
-		_user.value = if (accountRepository.isUserLoggedIn)
-			accountRepository.getUser()
+		_user.value = if (isUserLoggedInUseCase())
+			getLocalCurrentUserUseCase()
 		else
 			null
 	}

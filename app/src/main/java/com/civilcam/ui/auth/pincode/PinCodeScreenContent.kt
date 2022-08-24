@@ -19,8 +19,6 @@ import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.pincode.content.PinCodeErrorBlock
 import com.civilcam.ui.auth.pincode.model.PinCodeActions
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
-import com.civilcam.ui.common.alert.AlertDialogComp
-import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TopAppBarContent

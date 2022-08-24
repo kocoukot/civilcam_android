@@ -18,9 +18,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.AlertDialogTypes
 import com.civilcam.domainLayer.model.AutocompletePlace
 import com.civilcam.ui.common.alert.AlertDialogComp
-import com.civilcam.ui.common.alert.AlertDialogTypes
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TopAppBarContent
@@ -94,8 +94,8 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 		state.value.data?.let { data ->
 			Column(
 				modifier = Modifier
-                    .fillMaxWidth()
-                    .background(CCTheme.colors.white),
+					.fillMaxWidth()
+					.background(CCTheme.colors.white),
 			) {
 				AnimatedVisibility(visible = state.value.screenState != UserProfileScreen.LOCATION) {
 					UserProfileSection(

@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.AlertDialogTypes
 
 @Composable
 fun AlertDialogComp(
@@ -109,7 +110,8 @@ fun AlertDialogComp(
                                 dialogText,
                                 color = CCTheme.colors.grayOne,
                                 style = CCTheme.typography.common_text_small_regular,
-                                fontSize = 15.sp
+                                fontSize = 16.sp,
+                                lineHeight = 24.sp
                             )
                         },
                         confirmButton = {
