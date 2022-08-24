@@ -30,7 +30,10 @@ class ResetPasswordViewModel(
 			}
 			ResetActions.CheckIfEmail -> {
 				_state.value =
-					_state.value.copy(isEmail = if (_state.value.email.isEmpty()) true else _state.value.email.isEmail())
+					_state.value.copy(
+						isEmail = if (_state.value.email.isEmpty()) true else _state.value.email.isEmail(),
+						errorText = if (_state.value.email.isEmail()) "" else "Invalid email. Please try again. (eg:email@gmail.com)"
+					)
 			}
 		}
 	}
