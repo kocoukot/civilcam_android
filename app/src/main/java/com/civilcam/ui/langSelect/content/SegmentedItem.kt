@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domainLayer.model.LanguageType
+import com.civilcam.domainLayer.model.user.LanguageType
 import com.civilcam.utils.LocaleHelper
 
 

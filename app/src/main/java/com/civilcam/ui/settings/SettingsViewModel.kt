@@ -4,9 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.model.AuthType
-import com.civilcam.domainLayer.model.LanguageType
 import com.civilcam.domainLayer.model.ScreenAlert
-import com.civilcam.domainLayer.model.settings.NotificationsType
+import com.civilcam.domainLayer.model.user.LanguageType
+import com.civilcam.domainLayer.model.user.SettingsNotificationType
 import com.civilcam.domainLayer.usecase.settings.GetCurrentSubscriptionPlanUseCase
 import com.civilcam.domainLayer.usecase.user.*
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
@@ -23,7 +23,9 @@ class SettingsViewModel(
     private val getCurrentSubscriptionPlan: GetCurrentSubscriptionPlanUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val deleteAccountUseCase: DeleteAccountUseCase,
-    private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase
+    private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
+    private val contactSupportUseCase: ContactSupportUseCase,
+    private val toggleSettingsUseCase: ToggleSettingsUseCase,
 ) : ComposeViewModel<SettingsState, SettingsRoute, SettingsActions>() {
 
     override var _state = MutableStateFlow(SettingsState())
@@ -132,11 +134,22 @@ class SettingsViewModel(
     private fun changeSection(section: SettingsType) {
         when (section) {
             SettingsType.ALERTS -> {
-                _state.update {
-                    it.copy(
-                        settingsType = section,
-                        data = SettingsModel(alertsSectionData = getNotificationsTypeList())
-                    )
+                viewModelScope.launch {
+                    getLocalCurrentUserUseCase().settings.let { settings ->
+                        Timber.i("getLocalCurrentUserUseCase ${getLocalCurrentUserUseCase.invoke()}")
+
+                        _state.update {
+                            it.copy(
+                                settingsType = section,
+                                data = it.data.copy(
+                                    alertsSectionData = SettingsAlertsSectionData(
+                                        isSMS = settings.smsNotifications,
+                                        isEmail = settings.emailNotification
+                                    )
+                                )
+                            )
+                        }
+                    }
                 }
             }
 
@@ -169,29 +182,32 @@ class SettingsViewModel(
         }
     }
 
-    private fun notificationChanged(status: Boolean, notifyType: NotificationsType) {
+    private fun notificationChanged(status: Boolean, notifyType: SettingsNotificationType) {
         Timber.d("updateSettingsModel ${_state.value}")
+        _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            _state.value.data.let { model ->
-                model.alertsSectionData?.let { alert ->
-                    when (notifyType) {
-                        NotificationsType.SMS -> alert.isSMS = status
-                        NotificationsType.EMAIL -> alert.isEmail = status
+            kotlin.runCatching { toggleSettingsUseCase(type = notifyType.domain, isOn = status) }
+                .onSuccess {
+                    _state.update {
+                        it.copy(
+                            data = _state.value.data.copy(
+                                alertsSectionData = when (notifyType) {
+                                    SettingsNotificationType.SMS -> _state.value.data.alertsSectionData.copy(
+                                        isSMS = status
+                                    )
+                                    else -> _state.value.data.alertsSectionData.copy(isEmail = status)
+                                }
+                            )
+                        )
                     }
                 }
-                updateSettingsModel(model = model)
-                _state.value = _state.value.copy(data = model.copy())
-            }
+                .onFailure { error ->
+                    error as ServiceException
+                    if (error.isForceLogout) navigateRoute(SettingsRoute.ForceLogout)
+                    else _state.update { it.copy(errorText = error.errorMessage) }
+                }
+            _state.update { it.copy(isLoading = false) }
         }
-    }
-
-
-    private fun getNotificationsTypeList() = SettingsAlertsSectionData(isSMS = true, isEmail = true)
-
-
-    private fun updateSettingsModel(model: SettingsModel) {
-        _state.update { it.copy(data = SettingsModel(alertsSectionData = model.alertsSectionData)) }
-
     }
 
     private fun setContactSupportInfo(
@@ -199,23 +215,42 @@ class SettingsViewModel(
         issueDescription: String,
         replyEmail: String,
     ) {
-        var data = _state.value.data
-        data.let { settingsData ->
-            data = data.copy(
-                contactSupportSectionData = ContactSupportSectionData(
-                    issueTheme = issueTheme,
-                    issueDescription = issueDescription,
-                    replyEmail = replyEmail,
+        _state.update {
+            it.copy(
+                data =
+                _state.value.data.copy(
+                    contactSupportSectionData = _state.value.data.contactSupportSectionData.copy(
+                        issueTheme = issueTheme,
+                        issueDescription = issueDescription,
+                        replyEmail = replyEmail
+                    )
                 )
             )
-
-            _state.update { it.copy(data = settingsData) }
         }
+        Timber.i("setContactSupportInfo ${_state.value.data}  issueTheme $issueTheme")
     }
 
 
     private fun contactSupport() {
-        goBack(ScreenAlert.ReportSentAlert)
+        _state.update { it.copy(isLoading = true) }
+        _state.value.data.contactSupportSectionData.let {
+            viewModelScope.launch {
+                kotlin.runCatching {
+                    contactSupportUseCase(
+                        issue = it.issueTheme,
+                        text = it.issueDescription,
+                        email = it.replyEmail,
+                    )
+                }
+                    .onSuccess { goBack(ScreenAlert.ReportSentAlert) }
+                    .onFailure { error ->
+                        error as ServiceException
+                        if (error.isForceLogout) navigateRoute(SettingsRoute.ForceLogout)
+                        else _state.update { it.copy(errorText = error.errorMessage) }
+                    }
+                _state.update { it.copy(isLoading = false) }
+            }
+        }
     }
 
     private fun enteredCurrentPassword(password: String) {

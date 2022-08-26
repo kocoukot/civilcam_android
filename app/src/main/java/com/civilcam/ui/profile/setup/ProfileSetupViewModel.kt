@@ -8,7 +8,7 @@ import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.PictureModel
 import com.civilcam.domainLayer.model.AutocompletePlace
 import com.civilcam.domainLayer.model.SearchModel
-import com.civilcam.domainLayer.model.UserSetupModel
+import com.civilcam.domainLayer.model.profile.UserSetupModel
 import com.civilcam.domainLayer.usecase.places.GetPlacesAutocompleteUseCase
 import com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase
 import com.civilcam.domainLayer.usecase.profile.SetPersonalInfoUseCase

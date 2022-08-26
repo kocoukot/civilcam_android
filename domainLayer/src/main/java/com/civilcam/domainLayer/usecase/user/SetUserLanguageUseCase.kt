@@ -1,6 +1,6 @@
 package com.civilcam.domainLayer.usecase.user
 
-import com.civilcam.domainLayer.model.LanguageType
+import com.civilcam.domainLayer.model.user.LanguageType
 import com.civilcam.domainLayer.repos.UserRepository
 
 class SetUserLanguageUseCase(

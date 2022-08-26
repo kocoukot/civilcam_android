@@ -1,4 +1,4 @@
-package com.civilcam.domainLayer.model
+package com.civilcam.domainLayer.model.docs
 
 import androidx.annotation.StringRes
 import com.civilcam.domainLayer.R

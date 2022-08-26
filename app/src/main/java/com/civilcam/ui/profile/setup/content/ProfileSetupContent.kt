@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.PictureModel
-import com.civilcam.domainLayer.model.UserSetupModel
+import com.civilcam.domainLayer.model.profile.UserSetupModel
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.inputs.InputField
 import com.civilcam.ui.common.compose.inputs.PhoneInputField

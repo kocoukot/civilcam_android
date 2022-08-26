@@ -3,7 +3,6 @@ package com.civilcam.data.repository
 import com.civilcam.R
 import com.civilcam.domainLayer.model.SubscriptionPlan
 import com.civilcam.domainLayer.model.UserDetailsModel
-import com.civilcam.domainLayer.model.UserInfo
 import com.civilcam.domainLayer.model.alerts.AlertModel
 import com.civilcam.domainLayer.model.alerts.AlertType
 import com.civilcam.domainLayer.model.alerts.GuardianAlertInformation
@@ -11,6 +10,7 @@ import com.civilcam.domainLayer.model.guard.GuardianItem
 import com.civilcam.domainLayer.model.guard.GuardianModel
 import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.domainLayer.model.guard.NetworkType
+import com.civilcam.domainLayer.model.user.UserInfo
 import com.civilcam.domainLayer.repos.MockRepository
 import com.google.android.gms.maps.model.LatLng
 

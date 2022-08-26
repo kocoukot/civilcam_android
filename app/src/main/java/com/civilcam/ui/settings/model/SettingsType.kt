@@ -17,5 +17,13 @@ enum class SettingsType(@StringRes val title: Int, @StringRes val actionBtnTitle
     TERMS_AND_POLICY(R.string.settings_terms, R.string.empty_string),
 
     LOG_OUT(R.string.settings_log_out, R.string.empty_string),
-    DELETE_ACCOUNT(R.string.settings_delete_account, R.string.empty_string),
+    DELETE_ACCOUNT(R.string.settings_delete_account, R.string.empty_string);
+
+    companion object {
+        fun SettingsType.hasActionButton() =
+            this == LANGUAGE ||
+                    this == CREATE_PASSWORD ||
+                    this == CONTACT_SUPPORT ||
+                    this == CHANGE_PASSWORD
+    }
 }

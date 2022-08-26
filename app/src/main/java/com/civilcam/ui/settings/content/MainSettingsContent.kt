@@ -2,11 +2,13 @@ package com.civilcam.ui.settings.content
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.compose.RowDivider
+import com.civilcam.ui.common.compose.RowDividerGrayThree
 import com.civilcam.ui.settings.model.SettingsType
 
 @Composable
@@ -74,7 +77,10 @@ fun SettingsRow(
             .fillMaxWidth()
             .height(45.dp)
             .background(CCTheme.colors.white)
-            .clickable { rowClick.invoke() },
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(color = CCTheme.colors.black)
+            ) { rowClick.invoke() },
     ) {
         Row(
             modifier = Modifier
@@ -97,9 +103,6 @@ fun SettingsRow(
                 tint = CCTheme.colors.grayOne
             )
         }
-        if (needDivider) Divider(
-            color = CCTheme.colors.grayThree,
-            modifier = Modifier.padding(start = 16.dp)
-        )
+        if (needDivider) RowDividerGrayThree()
     }
 }

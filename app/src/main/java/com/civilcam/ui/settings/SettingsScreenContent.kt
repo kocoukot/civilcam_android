@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.civilcam.R
+import com.civilcam.common.ext.isEmail
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.AlertDialogTypes
 import com.civilcam.ui.common.alert.AlertDialogComp
@@ -22,6 +23,7 @@ import com.civilcam.ui.common.loading.DialogLoadingContent
 import com.civilcam.ui.settings.content.*
 import com.civilcam.ui.settings.model.SettingsActions
 import com.civilcam.ui.settings.model.SettingsType
+import com.civilcam.ui.settings.model.SettingsType.Companion.hasActionButton
 import com.civilcam.utils.LocaleHelper
 import com.civilcam.utils.LocaleHelper.SetLanguageCompose
 
@@ -69,43 +71,25 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 				Crossfade(state.value.settingsType) { settingsType ->
 
 					val isActionEnabled =
-						if (settingsType == SettingsType.LANGUAGE ||
-							settingsType == SettingsType.CONTACT_SUPPORT ||
-							settingsType == SettingsType.CHANGE_PASSWORD ||
-							settingsType == SettingsType.CREATE_PASSWORD
-						) {
-							isActionActive
-						} else true
+						if (settingsType.hasActionButton()) isActionActive else true
 					TopAppBarContent(
 						title = stringResource(id = screenTitle(settingsType)),
 						navigationItem = {
 							BackButton {
-								when (settingsType) {
-									SettingsType.LANGUAGE -> {
-										viewModel.setInputActions(SettingsActions.ClickGoBack)
-										selectedLanguage = currentLanguage
-									}
-									else -> {
-										viewModel.setInputActions(SettingsActions.ClickGoBack)
-									}
-								}
+								if (settingsType == SettingsType.LANGUAGE) selectedLanguage =
+									currentLanguage
+								viewModel.setInputActions(SettingsActions.ClickGoBack)
 							}
 						},
 						actionItem = {
-                            if (settingsType in listOf(
-                                    SettingsType.LANGUAGE,
-                                    SettingsType.CREATE_PASSWORD,
-                                    SettingsType.CONTACT_SUPPORT,
-                                    SettingsType.CHANGE_PASSWORD
-                                )
-                            ) {
-                                TextActionButton(
-                                    isEnabled = isActionEnabled,
-                                    actionTitle = stringResource(id = settingsType.actionBtnTitle)
-                                ) {
-                                    viewModel.setInputActions(setAction(settingsType))
-                                }
-                            }
+							if (settingsType.hasActionButton()) {
+								TextActionButton(
+									isEnabled = isActionEnabled,
+									actionTitle = stringResource(id = settingsType.actionBtnTitle)
+								) {
+									viewModel.setInputActions(setAction(settingsType))
+								}
+							}
                         }
 					)
 				}
@@ -126,7 +110,7 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 					}
 
 				SettingsType.ALERTS -> {
-					state.value.data.alertsSectionData?.let { settingsAlertsSectionData ->
+					state.value.data.alertsSectionData.let { settingsAlertsSectionData ->
 						AlertsSettingsContent(settingsAlertsSectionData) { isSwitched, type ->
 							viewModel.setInputActions(
 								SettingsActions.ClickAlertSwitch(
@@ -180,7 +164,8 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 					ContactSupportContent(
 						contactSupportModel = state.value.data.contactSupportSectionData,
 						supportInformation = { issue, description, email ->
-							isActionActive = couldBeSend(issue, description, email)
+							isActionActive =
+								issue.isNotEmpty() && description.isNotEmpty() && email.isNotEmpty() && email.isEmail()
 							viewModel.setInputActions(
 								SettingsActions.EnterContactSupportInfo(
 									issue,
@@ -240,15 +225,14 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 }
 
 private fun setAction(settingsType: SettingsType): SettingsActions =
-    when (settingsType) {
-        SettingsType.LANGUAGE -> SettingsActions.ClickSaveLanguage(LocaleHelper.getSelectedLanguage())
-        SettingsType.CONTACT_SUPPORT -> SettingsActions.ClickSendToSupport
-        SettingsType.CHANGE_PASSWORD -> SettingsActions.CheckCurrentPassword
-        SettingsType.CREATE_PASSWORD -> SettingsActions.SaveNewPassword
-        else -> {
-            SettingsActions.ClickGoBack
-        }
-    }
+	when (settingsType) {
+		SettingsType.LANGUAGE -> SettingsActions.ClickSaveLanguage(LocaleHelper.getSelectedLanguage())
+		SettingsType.CONTACT_SUPPORT -> SettingsActions.ClickSendToSupport
+		SettingsType.CHANGE_PASSWORD -> SettingsActions.CheckCurrentPassword
+		SettingsType.CREATE_PASSWORD -> SettingsActions.SaveNewPassword
+		else -> SettingsActions.ClickGoBack
+
+	}
 
 private fun screenTitle(settingsType: SettingsType) = when (settingsType) {
 	SettingsType.MAIN, SettingsType.LOG_OUT, SettingsType.TERMS_AND_POLICY, SettingsType.DELETE_ACCOUNT -> R.string.settings_title
@@ -256,8 +240,3 @@ private fun screenTitle(settingsType: SettingsType) = when (settingsType) {
 	else -> settingsType.title
 }
 
-private fun couldBeSend(
-	issue: String,
-	issueDescription: String,
-	email: String
-) = issue.isNotEmpty() && issueDescription.isNotEmpty() && email.isNotEmpty()

@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import com.civilcam.CivilcamApplication.Companion.instance
-import com.civilcam.domainLayer.model.LanguageType
+import com.civilcam.domainLayer.model.user.LanguageType
 import java.util.*
 
 

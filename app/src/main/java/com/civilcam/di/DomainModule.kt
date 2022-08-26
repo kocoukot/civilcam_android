@@ -22,63 +22,63 @@ import org.koin.dsl.module
 
 val domainModule = module {
 	factory { SingUpUseCase(get(), get()) }
-	
+
 	factory { SignInUseCase(get(), get()) }
-	
+
 	factory { CheckEmailUseCase(get()) }
-	
+
 	factory { AcceptLegalDocsUseCase(get()) }
-	
+
 	factory { GetTermsLinksUseCase(get()) }
-	
+
 	factory { SetPersonalInfoUseCase(get()) }
-	
+
 	factory { SetAvatarUseCase(get()) }
-	
+
 	factory { VerifyEmailOtpUseCase(get()) }
-	
+
 	factory { SendOtpCodeUseCase(get()) }
-	
+
 	factory { GetUserProfileUseCase(get()) }
-	
+
 	factory { LogoutUseCase(get()) }
-	
+
 	factory { GetUserInformationUseCase(get()) }
-	
+
 	factory { GetCurrentUserUseCase(get()) }
-	
+
 	factory { ChangePhoneNumberUseCase(get()) }
-	
+
 	factory { UpdateUserProfileUseCase(get()) }
-	
+
 	factory { GetAlertsListUseCase(get()) }
-	
+
 	factory { GetHistoryAlertListUseCase(get()) }
-	
+
 	factory { GetHistoryDetailUseCase(get()) }
-	
+
 	factory { GetGuardsListUseCase(get()) }
-	
+
 	factory { GetGuardsRequestsUseCase(get()) }
-	
+
 	factory { SearchGuardsResultUseCase(get()) }
-	
+
 	factory { GetCurrentSubscriptionPlanUseCase(get()) }
-	
+
 	factory { GetPlacesAutocompleteUseCase(get()) }
-	
+
 	factory { FetchUserLocationUseCase(get()) }
-	
+
 	factory { GetLastKnownLocationUseCase(get()) }
-	
+
 	factory { ChangeEmailUseCase(get()) }
-	
+
 	factory { CheckCurrentPasswordUseCase(get()) }
-	
+
 	factory { ChangePasswordUseCase(get()) }
-	
+
 	factory { SetUserLanguageUseCase(get()) }
-	
+
 	factory { GetMapAlertUserDataUseCase(get()) }
 
 	factory { ResetPasswordUseCase(get()) }
@@ -95,6 +95,9 @@ val domainModule = module {
 
 	factory { IsUserLoggedInUseCase(get()) }
 
+	factory { ContactSupportUseCase(get()) }
+
+	factory { ToggleSettingsUseCase(get()) }
 }
 
 

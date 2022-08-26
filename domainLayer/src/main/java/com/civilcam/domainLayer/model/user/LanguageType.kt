@@ -1,4 +1,4 @@
-package com.civilcam.domainLayer.model
+package com.civilcam.domainLayer.model.user
 
 enum class LanguageType(val langTitle: String, val langValue: String) {
     en("English", "en"),

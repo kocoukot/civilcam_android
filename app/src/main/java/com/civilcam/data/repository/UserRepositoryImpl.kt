@@ -7,8 +7,8 @@ import com.civilcam.data.network.model.request.user.*
 import com.civilcam.data.network.service.UserService
 import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
-import com.civilcam.domainLayer.model.CurrentUser
-import com.civilcam.domainLayer.model.LanguageType
+import com.civilcam.domainLayer.model.user.CurrentUser
+import com.civilcam.domainLayer.model.user.LanguageType
 import com.civilcam.domainLayer.repos.UserRepository
 
 class UserRepositoryImpl(
@@ -67,6 +67,34 @@ class UserRepositoryImpl(
 				is Resource.Failure -> throw response.serviceException
 			}
 		}
+
+	override suspend fun contactSupport(issue: String, text: String, email: String): Boolean =
+		safeApiCall {
+			userService.contactSupport(
+				ContactSupportRequest(
+					issueName = issue,
+					message = text,
+					replyTo = email
+				)
+			)
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> response.value.ok
+				is Resource.Failure -> throw response.serviceException
+			}
+		}
+
+	override suspend fun toggleSettings(type: String, isOn: Boolean): CurrentUser =
+		safeApiCall {
+			userService.toggleSettings(ToggleSettingsRequest(type, isOn))
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> userMapper.mapData(response.value)
+					.also { accountStorage.updateUser(it) }
+				is Resource.Failure -> throw response.serviceException
+			}
+		}
+
 
 	//    override fun getUserEmail(): Pair<String, Boolean> =
 //        accountStorage.getUserEmail()

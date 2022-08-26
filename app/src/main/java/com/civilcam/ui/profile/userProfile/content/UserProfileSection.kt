@@ -28,7 +28,7 @@ import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domainLayer.model.CurrentUser
+import com.civilcam.domainLayer.model.user.CurrentUser
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TextActionButton

@@ -26,24 +26,22 @@ interface UserService {
 	
 	@POST(Endpoint.User.CHANGE_PASSWORD)
 	suspend fun changePassword(@Body request: ChangePasswordRequest): SuccessResponse
-	
+
 	@POST(Endpoint.User.CHANGE_EMAIL)
 	suspend fun changeEmail(@Body request: ChangeEmailRequest): SuccessResponse
-	
+
 	@POST(Endpoint.User.SET_USER_LANGUAGE)
 	suspend fun setUserLanguage(@Body request: SetUserLanguageRequest): UserResponse
 
-	//    @POST(Endpoint.User.CONTACT_SUPPORT)
-//    suspend fun contactSupport(@Body request: ContactSupportRequest): SuccessResponse
-//
 	@POST(Endpoint.User.LOGOUT)
 	suspend fun logout(): SuccessResponse
 
-	//
+	@POST(Endpoint.User.CONTACT_SUPPORT)
+	suspend fun contactSupport(@Body request: ContactSupportRequest): SuccessResponse
+
+	@POST(Endpoint.User.TOGGLE_SETTINGS)
+	suspend fun toggleSettings(@Body request: ToggleSettingsRequest): UserResponse
+
 	@DELETE(Endpoint.User.DELETE_ACCOUNT)
 	suspend fun deleteAccount(): SuccessResponse
-//
-//    @POST(Endpoint.User.CHANGE_USER_NAME)
-//    suspend fun changeUsername(@Body request: ChangeUsernameRequest): SuccessResponse
-
 }

@@ -18,15 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domainLayer.model.LanguageType
+import com.civilcam.domainLayer.model.user.LanguageType
 
 @Composable
 fun LanguageSettingsContent(
     currentLanguage: LanguageType,
     onLanguageSelect: (LanguageType) -> Unit
 ) {
-
-//    var currentLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
 
     Column(
         modifier = Modifier

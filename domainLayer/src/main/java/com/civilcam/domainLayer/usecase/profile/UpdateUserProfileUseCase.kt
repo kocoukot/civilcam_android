@@ -1,6 +1,6 @@
 package com.civilcam.domainLayer.usecase.profile
 
-import com.civilcam.domainLayer.model.UserSetupModel
+import com.civilcam.domainLayer.model.profile.UserSetupModel
 import com.civilcam.domainLayer.repos.ProfileRepository
 
 class UpdateUserProfileUseCase(

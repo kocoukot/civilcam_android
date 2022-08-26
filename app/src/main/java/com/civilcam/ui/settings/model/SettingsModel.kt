@@ -4,7 +4,7 @@ import com.civilcam.domainLayer.model.SubscriptionPlan
 import com.civilcam.ui.auth.create.model.PasswordModel
 
 data class SettingsModel(
-    val alertsSectionData: SettingsAlertsSectionData? = null,
+    val alertsSectionData: SettingsAlertsSectionData = SettingsAlertsSectionData(),
     val contactSupportSectionData: ContactSupportSectionData = ContactSupportSectionData(),
     var changePasswordSectionData: ChangePasswordSectionData? = null,
     var createPasswordSectionData: PasswordModel = PasswordModel(),
@@ -12,8 +12,8 @@ data class SettingsModel(
 )
 
 data class SettingsAlertsSectionData(
-    var isSMS: Boolean,
-    var isEmail: Boolean
+    var isSMS: Boolean = false,
+    var isEmail: Boolean = false
 )
 
 

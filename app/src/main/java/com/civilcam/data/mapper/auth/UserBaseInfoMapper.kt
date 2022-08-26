@@ -3,7 +3,7 @@ package com.civilcam.data.mapper.auth
 import com.civilcam.data.mapper.ImageInfoMapper
 import com.civilcam.data.mapper.Mapper
 import com.civilcam.data.network.model.response.auth.UseBaseInfoResponse
-import com.civilcam.domainLayer.model.UserBaseInfo
+import com.civilcam.domainLayer.model.user.UserBaseInfo
 
 class UserBaseInfoMapper(
     private val imageInfoMapper: ImageInfoMapper = ImageInfoMapper()

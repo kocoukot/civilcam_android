@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domainLayer.model.LanguageType
+import com.civilcam.domainLayer.model.user.LanguageType
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.langSelect.content.SegmentedItem
 import com.civilcam.ui.langSelect.model.LangSelectActions

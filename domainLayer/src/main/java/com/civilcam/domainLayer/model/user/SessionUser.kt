@@ -1,6 +1,7 @@
-package com.civilcam.domainLayer.model
+package com.civilcam.domainLayer.model.user
 
 import android.os.Parcelable
+import com.civilcam.domainLayer.model.AuthType
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
