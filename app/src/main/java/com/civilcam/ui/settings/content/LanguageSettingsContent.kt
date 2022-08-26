@@ -26,8 +26,6 @@ fun LanguageSettingsContent(
     onLanguageSelect: (LanguageType) -> Unit
 ) {
 
-//    var currentLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
-
     Column(
         modifier = Modifier
             .fillMaxWidth()

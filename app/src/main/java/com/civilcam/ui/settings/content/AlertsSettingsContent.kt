@@ -16,7 +16,6 @@ import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.user.SettingsNotificationType
 import com.civilcam.ui.common.compose.RowDividerGrayThree
 import com.civilcam.ui.settings.model.SettingsAlertsSectionData
-import timber.log.Timber
 
 @Composable
 fun AlertsSettingsContent(
@@ -84,7 +83,6 @@ fun SwitcherRowContent(
             checked = isSwitched,
             onCheckedChange = {
                 isSwitched = it
-                Timber.d("updateSettingsModel switcher $it")
                 onCheckedChange.invoke(it)
             })
     }

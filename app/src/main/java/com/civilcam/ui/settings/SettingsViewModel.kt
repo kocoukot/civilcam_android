@@ -24,7 +24,6 @@ class SettingsViewModel(
     private val logoutUseCase: LogoutUseCase,
     private val deleteAccountUseCase: DeleteAccountUseCase,
     private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
-
     private val contactSupportUseCase: ContactSupportUseCase,
     private val toggleSettingsUseCase: ToggleSettingsUseCase,
 ) : ComposeViewModel<SettingsState, SettingsRoute, SettingsActions>() {
