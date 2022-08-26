@@ -1,15 +1,14 @@
 package com.civilcam.data.repository
 
-import com.civilcam.common.ext.Resource
 import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.mapper.auth.UserMapper
 import com.civilcam.data.network.model.request.auth.*
 import com.civilcam.data.network.service.AuthService
 import com.civilcam.data.network.service.GoogleOAuthService
-import com.civilcam.data.network.support.ServiceException
-import com.civilcam.domainLayer.model.CurrentUser
 import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
+import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.model.user.CurrentUser
 import com.civilcam.domainLayer.repos.AuthRepository
 import timber.log.Timber
 
@@ -136,7 +135,12 @@ class AuthRepositoryImpl(
 			val googleAuthResponse =
 				googleOAuthService.signOAuth(GoogleOAuthRequest(code = authToken))
 			val gAccessToken = googleAuthResponse.map { it.accessToken }
-				.doOnError { throw ServiceException(errorMessage = "${it.localizedMessage}") }
+				.doOnError {
+					throw ServiceException(
+						errorMessage = it.localizedMessage?.toString()
+							?: "Some error"
+					)
+				}
 				.blockingGet()
 
 			Timber.i("gAccessToken gAccessToken $gAccessToken \n authToken $authToken")

@@ -1,7 +1,7 @@
 package com.civilcam.ui.auth.create.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentRoute
-import com.civilcam.domainLayer.model.CurrentUser
+import com.civilcam.domainLayer.model.user.CurrentUser
 
 sealed class CreateAccountRoute : ComposeFragmentRoute {
 	object GoBack : CreateAccountRoute()
