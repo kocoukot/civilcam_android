@@ -1,7 +1,7 @@
 package com.civilcam.domainLayer.repos
 
-import com.civilcam.domainLayer.model.CurrentUser
-import com.civilcam.domainLayer.model.LanguageType
+import com.civilcam.domainLayer.model.user.CurrentUser
+import com.civilcam.domainLayer.model.user.LanguageType
 
 
 interface UserRepository {
@@ -22,9 +22,7 @@ interface UserRepository {
 
 	suspend fun deleteAccount(): Boolean
 
-//	fun getUserEmail(): Pair<String, Boolean>
-//
-//	suspend fun contactSupport(message: String, email: String): Boolean
-//
-//	suspend fun setFcmToken(): Boolean
+	suspend fun contactSupport(issue: String, text: String, email: String): Boolean
+
+	suspend fun toggleSettings(type: String, isOn: Boolean): CurrentUser
 }

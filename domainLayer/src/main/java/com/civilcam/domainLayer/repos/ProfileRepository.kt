@@ -1,8 +1,8 @@
 package com.civilcam.domainLayer.repos
 
 import android.net.Uri
-import com.civilcam.domainLayer.model.UserBaseInfo
-import com.civilcam.domainLayer.model.UserSetupModel
+import com.civilcam.domainLayer.model.profile.UserSetupModel
+import com.civilcam.domainLayer.model.user.UserBaseInfo
 
 interface ProfileRepository {
 	

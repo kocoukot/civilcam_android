@@ -10,8 +10,8 @@ import com.civilcam.data.network.model.request.profile.ChangePhoneNumberRequest
 import com.civilcam.data.network.service.ProfileService
 import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
-import com.civilcam.domainLayer.model.UserBaseInfo
-import com.civilcam.domainLayer.model.UserSetupModel
+import com.civilcam.domainLayer.model.profile.UserSetupModel
+import com.civilcam.domainLayer.model.user.UserBaseInfo
 import com.civilcam.domainLayer.repos.AccountRepository
 import com.civilcam.domainLayer.repos.ProfileRepository
 

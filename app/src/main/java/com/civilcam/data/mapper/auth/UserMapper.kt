@@ -2,7 +2,7 @@ package com.civilcam.data.mapper.auth
 
 import com.civilcam.data.mapper.Mapper
 import com.civilcam.data.network.model.response.auth.UserResponse
-import com.civilcam.domainLayer.model.CurrentUser
+import com.civilcam.domainLayer.model.user.CurrentUser
 
 class UserMapper(
     private val sessionUserMapper: SessionUserMapper = SessionUserMapper(),

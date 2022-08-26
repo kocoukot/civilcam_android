@@ -1,4 +1,4 @@
-package com.civilcam.domainLayer.model
+package com.civilcam.domainLayer.model.user
 
 data class UserInfo(
 	val userId: Int = 0,

@@ -1,5 +1,7 @@
 package com.civilcam.domainLayer.model
 
+import com.civilcam.domainLayer.model.user.UserInfo
+
 
 data class UserDetailsModel(
     var userInfoSection: UserInfo = UserInfo(),

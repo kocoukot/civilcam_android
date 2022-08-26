@@ -1,4 +1,4 @@
-package com.civilcam.domainLayer.model
+package com.civilcam.domainLayer.model.profile
 
 import com.civilcam.domainLayer.PictureModel
 

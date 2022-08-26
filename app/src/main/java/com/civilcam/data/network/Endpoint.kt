@@ -25,6 +25,8 @@ object Endpoint {
         const val CHANGE_PASSWORD = "change-password"
         const val SET_USER_LANGUAGE = "set-user-language"
         const val DELETE_ACCOUNT = "delete-account"
+        const val CONTACT_SUPPORT = "contact-support"
+        const val TOGGLE_SETTINGS = "toggle-settings"
 
     }
 

@@ -1,7 +1,7 @@
 package com.civilcam.data.mapper
 
 import com.civilcam.data.network.model.response.ImageInfoResponse
-import com.civilcam.domainLayer.model.ImageInfo
+import com.civilcam.domainLayer.model.user.ImageInfo
 
 class ImageInfoMapper : Mapper<ImageInfoResponse, ImageInfo>(
     fromData = { response ->

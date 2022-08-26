@@ -2,7 +2,7 @@ package com.civilcam.ui.profile.setup.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentState
 import com.civilcam.domainLayer.model.SearchModel
-import com.civilcam.domainLayer.model.UserSetupModel
+import com.civilcam.domainLayer.model.profile.UserSetupModel
 
 data class ProfileSetupState(
     val isLoading: Boolean = false,

@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.AlertDialogTypes
-import com.civilcam.domainLayer.model.TermsType
+import com.civilcam.domainLayer.model.docs.TermsType
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.common.loading.DialogLoadingContent

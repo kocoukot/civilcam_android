@@ -2,8 +2,7 @@ package com.civilcam.data.mapper.auth
 
 import com.civilcam.data.mapper.Mapper
 import com.civilcam.data.network.model.response.auth.SessionUserResponse
-import com.civilcam.domainLayer.model.LanguageType
-import com.civilcam.domainLayer.model.SessionUser
+import com.civilcam.domainLayer.model.user.SessionUser
 
 class SessionUserMapper
 	: Mapper<SessionUserResponse, SessionUser>(

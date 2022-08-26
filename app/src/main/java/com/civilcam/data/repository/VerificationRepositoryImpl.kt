@@ -7,8 +7,8 @@ import com.civilcam.data.network.model.request.verify.VerifyCodeRequest
 import com.civilcam.data.network.service.VerificationService
 import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
-import com.civilcam.domainLayer.model.CurrentUser
 import com.civilcam.domainLayer.model.VerificationFlow
+import com.civilcam.domainLayer.model.user.CurrentUser
 import com.civilcam.domainLayer.repos.VerificationRepository
 
 class VerificationRepositoryImpl(

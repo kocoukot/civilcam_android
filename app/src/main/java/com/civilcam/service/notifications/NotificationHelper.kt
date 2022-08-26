@@ -16,7 +16,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.civilcam.R
-import com.civilcam.domainLayer.model.settings.NotificationType
+import com.civilcam.domainLayer.model.user.NotificationType
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
 

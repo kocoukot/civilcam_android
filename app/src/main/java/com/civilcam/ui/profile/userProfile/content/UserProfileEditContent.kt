@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domainLayer.model.CurrentUser
+import com.civilcam.domainLayer.model.user.CurrentUser
 import com.civilcam.ui.common.compose.inputs.InputField
 import com.civilcam.ui.profile.setup.content.CalendarIcon
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
@@ -19,17 +19,17 @@ import com.civilcam.utils.DateUtils
 
 @Composable
 fun UserProfileEditContent(
-	userData: CurrentUser,
-	onValueChanged: (UserInfoDataType, String) -> Unit,
-	onActionClicked: (UserProfileActions) -> Unit,
+    userData: CurrentUser,
+    onValueChanged: (UserInfoDataType, String) -> Unit,
+    onActionClicked: (UserProfileActions) -> Unit,
 ) {
 	var dateOfBirth by remember { mutableStateOf("") }
 
 	Column(
 		modifier = Modifier
-			.fillMaxWidth()
-			.background(color = CCTheme.colors.lightGray)
-			.padding(horizontal = 16.dp),
+            .fillMaxWidth()
+            .background(color = CCTheme.colors.lightGray)
+            .padding(horizontal = 16.dp),
 		horizontalAlignment = Alignment.CenterHorizontally
 	) {
 		
@@ -44,8 +44,8 @@ fun UserProfileEditContent(
 		
 		Spacer(
 			modifier = Modifier
-				.height(16.dp)
-				.background(color = CCTheme.colors.lightGray)
+                .height(16.dp)
+                .background(color = CCTheme.colors.lightGray)
 		)
 		
 		InputField(
@@ -59,8 +59,8 @@ fun UserProfileEditContent(
 		
 		Spacer(
 			modifier = Modifier
-				.height(16.dp)
-				.background(color = CCTheme.colors.lightGray)
+                .height(16.dp)
+                .background(color = CCTheme.colors.lightGray)
 		)
 
 		dateOfBirth =
@@ -84,8 +84,8 @@ fun UserProfileEditContent(
 		
 		Spacer(
 			modifier = Modifier
-				.height(16.dp)
-				.background(color = CCTheme.colors.lightGray)
+                .height(16.dp)
+                .background(color = CCTheme.colors.lightGray)
 		)
 		
 		InputField(
