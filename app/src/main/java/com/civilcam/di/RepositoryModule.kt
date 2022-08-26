@@ -24,4 +24,6 @@ val repositoryModule = module {
 
     factory<LocationRepository> { LocationRepositoryImpl(get()) }
 
+	factory<SubscriptionsRepository> { SubscriptionsRepositoryImpl(get()) }
+	
 }
