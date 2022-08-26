@@ -73,7 +73,7 @@ val authModule = module {
 	
 	viewModel { (pinCodeFlow: PinCodeFlow) -> PinCodeViewModel(pinCodeFlow) }
 	
-	viewModel { (isReselect: Boolean) -> SubscriptionViewModel(isReselect) }
+	viewModel { (isReselect: Boolean) -> SubscriptionViewModel(isReselect, get()) }
 }
 
 

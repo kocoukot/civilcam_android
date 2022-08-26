@@ -36,12 +36,17 @@ import com.civilcam.domainLayer.model.SubscriptionType
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.IconActionButton
+import com.civilcam.ui.common.loading.DialogLoadingContent
 import com.civilcam.ui.subscription.model.SubscriptionActions
 
 @Composable
 fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 
     val state = viewModel.state.collectAsState()
+    
+    if (state.value.isLoading) {
+        DialogLoadingContent()
+    }
 
     Crossfade(targetState = state.value.purchaseFail) { purchaseFail ->
         if (purchaseFail) {
