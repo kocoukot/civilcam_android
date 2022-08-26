@@ -9,6 +9,7 @@ object Endpoint {
         const val RESET_PASSWORD = "reset-password"
         const val VERIFY_RESET_PASSWORD_OTP = "verify-reset-password-otp"
         const val RECOVER_PASSWORD = "recover-password"
+        const val GOOGLE_SIGN_IN = "google-sign-in"
     }
 
     object Verification {
@@ -46,6 +47,10 @@ object Endpoint {
 
     object Public {
         const val LEGAL_DOCS = "legal-docs"
+    }
+
+    object Google {
+        const val OAUTH_V4_TOKEN = "oauth2/v4/token"
     }
 }
 

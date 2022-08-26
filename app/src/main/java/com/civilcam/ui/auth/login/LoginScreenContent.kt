@@ -18,9 +18,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.AlertDialogTypes
 import com.civilcam.ui.auth.create.SocialImage
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.login.model.LoginActions
+import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.RowDivider
@@ -32,15 +34,21 @@ import com.civilcam.ui.common.loading.DialogLoadingContent
 
 @Composable
 fun LoginScreenContent(viewModel: LoginViewModel) {
-	
+
 	val state = viewModel.state.collectAsState()
-	
+
 	val focusState = remember { mutableStateOf(false) }
-	
+
 	if (state.value.isLoading) {
 		DialogLoadingContent()
 	}
-	
+	if (state.value.alertError.isNotEmpty()) {
+		AlertDialogComp(
+			dialogText = state.value.alertError,
+			alertType = AlertDialogTypes.OK,
+			onOptionSelected = { viewModel.setInputActions(LoginActions.ClearErrorText) }
+		)
+	}
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
 		modifier = Modifier.fillMaxSize(),
@@ -62,10 +70,10 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 		
 		Column(
 			modifier = Modifier
-				.padding(horizontal = 16.dp)
-				.fillMaxSize()
-				.imePadding()
-				.verticalScroll(rememberScrollState()),
+                .padding(horizontal = 16.dp)
+                .fillMaxSize()
+                .imePadding()
+                .verticalScroll(rememberScrollState()),
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
 			
@@ -134,9 +142,9 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 			
 			ComposeButton(
 				title = stringResource(id = R.string.log_in),
-				Modifier
-					.padding(horizontal = 8.dp)
-					.padding(top = 40.dp),
+                Modifier
+                    .padding(horizontal = 8.dp)
+                    .padding(top = 40.dp),
 				isActivated = state.value.isFilled,
 				buttonClick = {
 					viewModel.setInputActions(
@@ -151,17 +159,15 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 				horizontalArrangement = Arrangement.Center,
 				modifier = Modifier.fillMaxWidth()
 			) {
-				SocialImage(
-					painterResource(
-						id = R.drawable.ic_facebook
-					)
-				)
+				SocialImage(painterResource(id = R.drawable.ic_facebook)) {
+					viewModel.setInputActions(LoginActions.FBLogin)
+				}
+
 				Spacer(modifier = Modifier.width(16.dp))
-				SocialImage(
-					painterResource(
-						id = R.drawable.ic_google
-					)
-				)
+
+				SocialImage(painterResource(id = R.drawable.ic_google)) {
+					viewModel.setInputActions(LoginActions.GoogleLogin)
+				}
 			}
 			
 			Spacer(modifier = Modifier.height(16.dp))

@@ -13,4 +13,6 @@ sealed class CreateAccountActions : ComposeFragmentActions {
 	) : CreateAccountActions()
 
 	object ClickOkAlert : CreateAccountActions()
+	object FBLogin : CreateAccountActions()
+	object GoogleLogin : CreateAccountActions()
 }

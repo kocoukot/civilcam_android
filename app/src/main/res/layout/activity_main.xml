@@ -48,10 +48,8 @@
         app:itemTextAppearanceInactive="@style/NavBarTextActive"
         app:itemTextColor="@color/color_navbar_item"
         app:labelVisibilityMode="labeled"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/menu_bottom_navigation"
-        tools:visibility="invisible" />
+        app:menu="@menu/menu_bottom_navigation" />
 
 
     <androidx.constraintlayout.widget.Group

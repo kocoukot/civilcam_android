@@ -5,6 +5,10 @@ import com.civilcam.domainLayer.usecase.alerts.GetAlertsListUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetHistoryAlertListUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetHistoryDetailUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetMapAlertUserDataUseCase
+import com.civilcam.domainLayer.usecase.auth.CheckEmailUseCase
+import com.civilcam.domainLayer.usecase.auth.GoogleSignInUseCase
+import com.civilcam.domainLayer.usecase.auth.SignInUseCase
+import com.civilcam.domainLayer.usecase.auth.SingUpUseCase
 import com.civilcam.domainLayer.usecase.auth.*
 import com.civilcam.domainLayer.usecase.docs.GetTermsLinksUseCase
 import com.civilcam.domainLayer.usecase.guardians.GetGuardsListUseCase
@@ -73,13 +77,15 @@ val domainModule = module {
 
 	factory { ChangeEmailUseCase(get()) }
 
-	factory { CheckCurrentPasswordUseCase(get()) }
+    factory { CheckCurrentPasswordUseCase(get()) }
 
-	factory { ChangePasswordUseCase(get()) }
+    factory { ChangePasswordUseCase(get()) }
 
-	factory { SetUserLanguageUseCase(get()) }
+    factory { SetUserLanguageUseCase(get()) }
 
-	factory { GetMapAlertUserDataUseCase(get()) }
+    factory { GetMapAlertUserDataUseCase(get()) }
+
+	factory { GoogleSignInUseCase(get(), get()) }
 
 	factory { ResetPasswordUseCase(get()) }
 

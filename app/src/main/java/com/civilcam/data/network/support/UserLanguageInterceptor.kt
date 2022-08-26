@@ -14,6 +14,7 @@ class UserLanguageInterceptor(
             .newBuilder()
             .addHeader(HEADER_LANGUAGE, LocaleHelper.getSelectedLanguage().langValue)
             .addHeader(HEADER_DEVICE, "android")
+            .addHeader(HEADER_SESSION_ID, accountRepository.deviceIdToken)
             .build()
             .let(chain::proceed)
     }
@@ -21,6 +22,7 @@ class UserLanguageInterceptor(
     companion object {
         private const val HEADER_LANGUAGE = "language"
         private const val HEADER_DEVICE = "x-device-os"
+        private const val HEADER_SESSION_ID = "x-device-id"
 
     }
 }

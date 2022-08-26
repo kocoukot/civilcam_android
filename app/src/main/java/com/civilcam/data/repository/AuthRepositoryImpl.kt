@@ -4,16 +4,19 @@ import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.mapper.auth.UserMapper
 import com.civilcam.data.network.model.request.auth.*
 import com.civilcam.data.network.service.AuthService
+import com.civilcam.data.network.service.GoogleOAuthService
 import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
+import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.model.user.CurrentUser
 import com.civilcam.domainLayer.repos.AuthRepository
+import timber.log.Timber
 
 
 class AuthRepositoryImpl(
-	private val accountStorage: AccountStorage,
-	private val authService: AuthService,
-//	private val googleOAuthService: GoogleOAuthService
+    private val accountStorage: AccountStorage,
+    private val authService: AuthService,
+    private val googleOAuthService: GoogleOAuthService
 ) : AuthRepository, BaseRepository() {
 
 	private val sessionUserMapper = UserMapper()
@@ -49,8 +52,8 @@ class AuthRepositoryImpl(
 				}
 			}
 		}
-	
-	
+
+
 	override suspend fun signUp(email: String, password: String): CurrentUser =
 		safeApiCall {
 			authService.signUp(
@@ -67,8 +70,8 @@ class AuthRepositoryImpl(
 				}
 			}
 		}
-	
-	
+
+
 	override suspend fun signIn(email: String, password: String): CurrentUser =
 		safeApiCall {
 			authService.signIn(
@@ -127,22 +130,28 @@ class AuthRepositoryImpl(
 			}
 		}
 
-//	override suspend fun googleSignIn(authToken: String): CurrentUser =
-//		safeApiCall {
-//			val googleAouthRespone =
-//				googleOAuthService.signOAuth(GoogleOAuthRequest(code = authToken))
-//			val gAccessToken = googleAouthRespone.map { it.accessToken }.blockingGet()
-//			authService.googleSignIn(SocialLoginRequest(gAccessToken))
-//		}.let { response ->
-//			when (response) {
-//				is Resource.Success -> {
-//					sessionUserMapper.mapData(response.value)
-//				}
-//				is Resource.Failure -> {
-//					throw exceptionErrorMapper.mapData(response)
-//				}
-//			}
-//		}
+	override suspend fun googleSignIn(authToken: String): CurrentUser =
+		safeApiCall {
+			val googleAuthResponse =
+				googleOAuthService.signOAuth(GoogleOAuthRequest(code = authToken))
+			val gAccessToken = googleAuthResponse.map { it.accessToken }
+				.doOnError {
+					throw ServiceException(
+						errorMessage = it.localizedMessage?.toString()
+							?: "Some error"
+					)
+				}
+				.blockingGet()
+
+			Timber.i("gAccessToken gAccessToken $gAccessToken \n authToken $authToken")
+
+			authService.googleSignIn(SocialLoginRequest(gAccessToken))
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> sessionUserMapper.mapData(response.value)
+				is Resource.Failure -> throw response.serviceException
+			}
+		}
 //
 //
 //	override suspend fun facebookSignIn(accessToken: String): CurrentUser =

@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 class SessionUserResponse(
     @SerializedName("id") val id: Int,
     @SerializedName("authType") val authType: AuthType,
-    @SerializedName("email") val email: String,
+    @SerializedName("email") val email: String? = "",
     @SerializedName("language") val language: LanguageType,
     @SerializedName("fullName") val fullName: String,
     @SerializedName("isEmailVerified") val isEmailVerified: Boolean = false,

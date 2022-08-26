@@ -52,9 +52,9 @@ val authModule = module {
 	
 	viewModel { ProfileSetupViewModel(get(), get(), get(), get()) }
 	
-	viewModel { LoginViewModel(get()) }
+	viewModel { LoginViewModel(get(), get()) }
 	
-	viewModel { CreateAccountViewModel(get()) }
+	viewModel { CreateAccountViewModel(get(), get()) }
 	
 	viewModel { (verificationFlow: VerificationFlow, verificationSubject: String, newSubject: String) ->
 		VerificationViewModel(
