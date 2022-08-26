@@ -65,26 +65,30 @@ class AccountStorage(
 	
 	fun loginUser(sessionToken: String?, user: CurrentUser) {
 		getOrCreateAccount()
-			.let {
-				accountManager.setAuthToken(it, SESSION_TOKEN, sessionToken)
-				accountManager.setUserData(
-					it,
-					IS_USER_LOGGED_IN,
-					(!user.sessionUser.isUserProfileSetupRequired).toString()
-				)
-				updateUser(it, user)
-			}
-	}
-	
-	private fun updateUser(currentAccount: Account, user: CurrentUser) =
-		accountManager.setUserData(currentAccount, USER, gson.toJson(user))
-	
-	
-	private fun getOrCreateAccount(): Account {
-		return getAccount()
-			?: run {
-				Account(ACCOUNT_NAME, ACCOUNT_TYPE)
-					.also { accountManager.addAccountExplicitly(it, ACCOUNT_PASSWORD, null) }
+            .let {
+                accountManager.setAuthToken(it, SESSION_TOKEN, sessionToken)
+                accountManager.setUserData(
+                    it,
+                    IS_USER_LOGGED_IN,
+                    (!user.sessionUser.isUserProfileSetupRequired).toString()
+                )
+                updateUser(it, user)
+            }
+    }
+
+    fun updateUser(user: CurrentUser) =
+        accountManager.setUserData(getOrCreateAccount(), USER, gson.toJson(user))
+
+
+    private fun updateUser(currentAccount: Account, user: CurrentUser) =
+        accountManager.setUserData(currentAccount, USER, gson.toJson(user))
+
+
+    private fun getOrCreateAccount(): Account {
+        return getAccount()
+            ?: run {
+                Account(ACCOUNT_NAME, ACCOUNT_TYPE)
+                    .also { accountManager.addAccountExplicitly(it, ACCOUNT_PASSWORD, null) }
 			}
 	}
 	

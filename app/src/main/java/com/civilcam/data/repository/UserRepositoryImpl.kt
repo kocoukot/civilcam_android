@@ -89,9 +89,8 @@ class UserRepositoryImpl(
 			userService.toggleSettings(ToggleSettingsRequest(type, isOn))
 		}.let { response ->
 			when (response) {
-				is Resource.Success -> {
-					userMapper.mapData(response.value)
-				}
+				is Resource.Success -> userMapper.mapData(response.value)
+					.also { accountStorage.updateUser(it) }
 				is Resource.Failure -> throw response.serviceException
 			}
 		}

@@ -135,11 +135,22 @@ class SettingsViewModel(
     private fun changeSection(section: SettingsType) {
         when (section) {
             SettingsType.ALERTS -> {
-                _state.update {
-                    it.copy(
-                        settingsType = section,
-                        data = SettingsModel(alertsSectionData = getNotificationsTypeList())
-                    )
+                viewModelScope.launch {
+                    getLocalCurrentUserUseCase().settings.let { settings ->
+                        Timber.i("getLocalCurrentUserUseCase ${getLocalCurrentUserUseCase.invoke()}")
+
+                        _state.update {
+                            it.copy(
+                                settingsType = section,
+                                data = it.data.copy(
+                                    alertsSectionData = SettingsAlertsSectionData(
+                                        isSMS = settings.smsNotifications,
+                                        isEmail = settings.emailNotification
+                                    )
+                                )
+                            )
+                        }
+                    }
                 }
             }
 
@@ -174,28 +185,30 @@ class SettingsViewModel(
 
     private fun notificationChanged(status: Boolean, notifyType: SettingsNotificationType) {
         Timber.d("updateSettingsModel ${_state.value}")
+        _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            _state.value.data.let { model ->
-                model.alertsSectionData?.let { alert ->
-                    when (notifyType) {
-                        SettingsNotificationType.SMS -> alert.isSMS = status
-                        SettingsNotificationType.EMAIL -> alert.isEmail = status
-                        else -> {}
+            kotlin.runCatching { toggleSettingsUseCase(type = notifyType.domain, isOn = status) }
+                .onSuccess {
+                    _state.update {
+                        it.copy(
+                            data = _state.value.data.copy(
+                                alertsSectionData = when (notifyType) {
+                                    SettingsNotificationType.SMS -> _state.value.data.alertsSectionData.copy(
+                                        isSMS = status
+                                    )
+                                    else -> _state.value.data.alertsSectionData.copy(isEmail = status)
+                                }
+                            )
+                        )
                     }
                 }
-                updateSettingsModel(model = model)
-                _state.value = _state.value.copy(data = model.copy())
-            }
+                .onFailure { error ->
+                    error as ServiceException
+                    if (error.isForceLogout) navigateRoute(SettingsRoute.ForceLogout)
+                    else _state.update { it.copy(errorText = error.errorMessage) }
+                }
+            _state.update { it.copy(isLoading = false) }
         }
-    }
-
-
-    private fun getNotificationsTypeList() = SettingsAlertsSectionData(isSMS = true, isEmail = true)
-
-
-    private fun updateSettingsModel(model: SettingsModel) {
-        _state.update { it.copy(data = SettingsModel(alertsSectionData = model.alertsSectionData)) }
-
     }
 
     private fun setContactSupportInfo(
