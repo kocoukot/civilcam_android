@@ -94,8 +94,6 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-
             Card(
                 shape = RoundedCornerShape(
                     topStart = 12.dp, topEnd = 12.dp
@@ -105,8 +103,7 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
                     .fillMaxWidth()
                     .navigationBarsPadding(),
                 elevation = 8.dp,
-
-                ) {
+            ) {
                 Column(
                     modifier = Modifier.padding(
                         horizontal = 20.dp,
@@ -121,7 +118,6 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
                             .padding(16.dp),
                         activeColor = CCTheme.colors.primaryRed
                     )
-
 
                     HorizontalPager(
                         count = onboardPages.size,

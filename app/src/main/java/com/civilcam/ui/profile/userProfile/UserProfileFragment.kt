@@ -15,7 +15,6 @@ import com.civilcam.R
 import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.common.ext.showAlertDialogFragment
 import com.civilcam.domainLayer.model.AlertDialogTypes
-import com.civilcam.domainLayer.model.ScreenAlert
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.common.alert.DialogAlertFragment
@@ -58,47 +57,28 @@ class UserProfileFragment : Fragment() {
 	): View {
 
 		setFragmentResultListener(VerificationFragment.RESULT_BACK_EMAIL) { _, _ ->
-			viewModel.fetchCurrentUser()
-			DialogAlertFragment.create(
-				parentFragmentManager,
-				resources.getString(R.string.user_profile_email_change_title),
-				resources.getString(R.string.user_profile_email_change_desc),
-				AlertDialogTypes.OK
-			)
+			showAlert(resources.getString(R.string.user_profile_email_change_desc))
 		}
 
 		setFragmentResultListener(VerificationFragment.RESULT_BACK_PHONE) { _, _ ->
-			viewModel.fetchCurrentUser()
-			DialogAlertFragment.create(
-				parentFragmentManager,
-				resources.getString(R.string.user_profile_phone_change_title),
-				resources.getString(R.string.user_profile_phone_change_desc),
-				AlertDialogTypes.OK
-			)
+			showAlert(resources.getString(R.string.user_profile_phone_change_desc))
 		}
 
 		setFragmentResultListener(PinCodeFragment.RESULT_SAVED_NEW_PIN) { _, _ ->
-			viewModel.fetchCurrentUser()
-			DialogAlertFragment.create(
-				fragmentManager = parentFragmentManager,
-				text = resources.getString(ScreenAlert.PinChangedAlert.text),
-				alertType = ScreenAlert.PinChangedAlert.alertType
-			)
+			showAlert(resources.getString(R.string.pincode_changed_alert_text))
 		}
 
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
 				UserProfileRoute.ForceLogout -> navController.navigateToRoot(R.id.onBoardingFragment)
 				UserProfileRoute.GoBack -> navController.popBackStack()
-				is UserProfileRoute.GoCredentials -> {
-					navController.navigate(
-						R.id.changeCredentialsFragment,
-						ChangeCredentialsFragment.createArgs(
-							route.userProfileType,
-							route.credential.orEmpty()
-						)
+				is UserProfileRoute.GoCredentials -> navController.navigate(
+					R.id.changeCredentialsFragment,
+					ChangeCredentialsFragment.createArgs(
+						route.userProfileType,
+						route.credential.orEmpty()
 					)
-				}
+				)
 				UserProfileRoute.GoGalleryOpen -> onChooseFromGalleryCaseClicked()
 				UserProfileRoute.GoPinCode -> navController.navigate(
 					R.id.pinCodeFragment,
@@ -138,7 +118,7 @@ class UserProfileFragment : Fragment() {
 		super.onDestroy()
 		Places.deinitialize()
 	}
-	
+
 	private fun onPermissionsGranted(isGranted: Boolean) {
 		if (isGranted) {
 			pendingAction?.invoke()
@@ -146,5 +126,14 @@ class UserProfileFragment : Fragment() {
 		} else {
 			showAlertDialogFragment(title = "Sorry, we need permission!")
 		}
+	}
+
+	private fun showAlert(text: String) {
+		viewModel.fetchCurrentUser()
+		DialogAlertFragment.create(
+			parentFragmentManager,
+			text,
+			AlertDialogTypes.OK
+		)
 	}
 }

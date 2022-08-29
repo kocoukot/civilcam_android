@@ -27,12 +27,8 @@ class OnBoardingFragment : Fragment() {
     ): View {
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
-                OnboardingRoute.GoBack -> {
-                    navController.popBackStack()
-                }
-                OnboardingRoute.ToCreateAccount -> {
-                    navController.navigate(R.id.createAccountFragment)
-                }
+                OnboardingRoute.GoBack -> navController.popBackStack()
+                OnboardingRoute.ToCreateAccount -> navController.navigate(R.id.createAccountFragment)
             }
         }
 

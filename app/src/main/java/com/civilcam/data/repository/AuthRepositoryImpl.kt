@@ -78,7 +78,7 @@ class AuthRepositoryImpl(
 				SignInRequest(
 					email = email,
 					password = password,
-					null
+					accountStorage.fcmToken
 				)
 			)
 		}.let { response ->

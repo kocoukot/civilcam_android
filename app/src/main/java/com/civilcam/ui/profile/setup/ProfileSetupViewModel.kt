@@ -102,8 +102,8 @@ class ProfileSetupViewModel(
             viewModelScope.launch {
                 try {
                     userdata.profileImage?.uri?.let { uri -> setAvatarUseCase.invoke(uri) }
-                    val result = setPersonalInfoUseCase.invoke(userdata)
-                    if (result) userdata.phoneNumber?.let {
+                    val isSuccessResult = setPersonalInfoUseCase.invoke(userdata)
+                    if (isSuccessResult) userdata.phoneNumber?.let {
                         ProfileSetupRoute.GoVerification(it)
                     }?.let { navigateRoute(it) }
 
@@ -117,34 +117,32 @@ class ProfileSetupViewModel(
     }
 
     private fun openDatePicker() {
-        _state.value = _state.value.copy(showDatePicker = true)
+        _state.update { it.copy(showDatePicker = true) }
     }
 
     private fun closeDatePicker() {
-        _state.value = _state.value.copy(showDatePicker = false)
+        _state.update { it.copy(showDatePicker = false) }
     }
 
-    private fun getDateFromCalendar(birthDate: Long) {
-        val data = getSetupUser()
-        data.dateBirth = dateOfBirthFormat(birthDate)
-        _state.update { it.copy(data = data) }
-        closeDatePicker()
+    private fun getDateFromCalendar(birthDate: Long) = updateInfo {
+        copy(dateBirth = dateOfBirthFormat(birthDate))
     }
 
-    private fun firstNameEntered(firstName: String) {
-        val data = getSetupUser()
-        data.firstName = firstName
-        _state.update { it.copy(data = data) }
+    private fun firstNameEntered(firstName: String) = updateInfo {
+        copy(firstName = firstName)
     }
 
-    private fun lastNameEntered(lastName: String) {
-        _state.update { it.copy(data = getSetupUser().copy(lastName = lastName)) }
+    private fun lastNameEntered(lastName: String) = updateInfo {
+        copy(lastName = lastName)
     }
 
-    private fun phoneEntered(phoneNumber: String) {
-        val data = getSetupUser()
-        data.phoneNumber = phoneNumber
-        _state.update { it.copy(data = data) }
+    private fun phoneEntered(phoneNumber: String) = updateInfo {
+        copy(phoneNumber = phoneNumber)
+    }
+
+    private fun updateInfo(info: (UserSetupModel.() -> UserSetupModel?)) {
+        _state.update { it.copy(data = info.invoke(getSetupUser())) }
+        Timber.i("updateInfo ${_state.value}")
     }
 
     private fun goAvatarSelect() {
@@ -171,7 +169,6 @@ class ProfileSetupViewModel(
     private fun getSetupUser() = _state.value.data?.copy() ?: UserSetupModel()
 
     private fun goLocationPicker() {
-        Timber.i("location clicked")
         _state.update { it.copy(profileSetupScreen = ProfileSetupScreen.LOCATION) }
     }
 

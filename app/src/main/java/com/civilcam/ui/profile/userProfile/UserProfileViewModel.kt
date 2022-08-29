@@ -137,23 +137,21 @@ class UserProfileViewModel(
 		_state.value = _state.value.copy(showDatePicker = false)
 	}
 
-	private fun getDateFromCalendar(birthDate: Long) {
-		val data = getUserInfo()
-		data.userBaseInfo.dob = DateUtils.dateOfBirthDomainFormat(birthDate)
-		_state.update { it.copy(data = data) }
+	private fun firstNameEntered(firstName: String) = updateInfo {
+		copy(userBaseInfo = userBaseInfo.copy(firstName = firstName))
+	}
+
+	private fun lastNameEntered(lastName: String) = updateInfo {
+		copy(userBaseInfo = userBaseInfo.copy(lastName = lastName))
+	}
+
+	private fun getDateFromCalendar(birthDate: Long) = updateInfo {
 		closeDatePicker()
+		copy(userBaseInfo = userBaseInfo.copy(dob = DateUtils.dateOfBirthDomainFormat(birthDate)))
 	}
 
-	private fun firstNameEntered(firstName: String) {
-		val data = getUserInfo()
-		data.userBaseInfo.firstName = firstName
-		_state.update { it.copy(data = data) }
-	}
-
-	private fun lastNameEntered(lastName: String) {
-		val data = getUserInfo()
-		data.userBaseInfo.lastName = lastName
-		_state.update { it.copy(data = data) }
+	private fun updateInfo(info: (CurrentUser.() -> CurrentUser?)) {
+		_state.update { it.copy(data = info.invoke(getUserInfo())) }
 	}
 
 	private fun goSave() {
@@ -172,8 +170,7 @@ class UserProfileViewModel(
 							location = userdata.userBaseInfo.address
 						)
 					)
-					if (result) _state.value =
-						_state.value.copy(screenState = UserProfileScreen.PROFILE)
+					if (result) _state.update { it.copy(screenState = UserProfileScreen.PROFILE) }
 					fetchCurrentUser()
 
 				} catch (e: ServiceException) {
@@ -189,11 +186,11 @@ class UserProfileViewModel(
 	private fun goBack() {
 		when (_state.value.screenState) {
 			UserProfileScreen.EDIT -> {
-				_state.value = _state.value.copy(screenState = UserProfileScreen.PROFILE)
+				_state.update { it.copy(screenState = UserProfileScreen.PROFILE) }
 				fetchCurrentUser()
 			}
 			UserProfileScreen.LOCATION -> {
-				_state.value = _state.value.copy(screenState = UserProfileScreen.EDIT)
+				_state.update { it.copy(screenState = UserProfileScreen.EDIT) }
 			}
 			else -> {
 				navigateRoute(UserProfileRoute.GoBack)
@@ -206,7 +203,7 @@ class UserProfileViewModel(
 	}
 
 	private fun goEdit() {
-		_state.value = _state.value.copy(screenState = UserProfileScreen.EDIT)
+		_state.update { it.copy(screenState = UserProfileScreen.EDIT) }
 	}
 
 	private fun goCredentials(userProfileType: UserProfileType) {
@@ -230,7 +227,7 @@ class UserProfileViewModel(
 			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe { image ->
 				if (image.sizeMb > 5f) {
-					_state.value = _state.value.copy(errorText = "Max image size is 5MB")
+					_state.update { it.copy(errorText = "Max image size is 5MB") }
 				} else {
 					val data = getUserInfo()
 					data.userBaseInfo.avatar =
@@ -243,11 +240,13 @@ class UserProfileViewModel(
 
 	private fun setSearchResult(result: List<AutocompletePlace>) {
 		Timber.i("location result $result")
-		_state.value = _state.value.copy(
-			searchLocationModel = _state.value.searchLocationModel.copy(
-				searchResult = result
-			).copy()
-		)
+		_state.update {
+			it.copy(
+				searchLocationModel = _state.value.searchLocationModel.copy(
+					searchResult = result
+				)
+			)
+		}
 	}
 
 	private fun addressSelected(result: AutocompletePlace) {
