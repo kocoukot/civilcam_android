@@ -124,9 +124,7 @@ class SettingsViewModel(
             SettingsType.CREATE_PASSWORD -> {
                 _state.value = _state.value.copy(settingsType = SettingsType.CHANGE_PASSWORD)
             }
-            else -> {
-                _state.value = SettingsState()
-            }
+            else -> _state.value = SettingsState()
         }
         _state.update { it.copy(screenAlert = screenAlert) }
     }
@@ -137,7 +135,6 @@ class SettingsViewModel(
                 viewModelScope.launch {
                     getLocalCurrentUserUseCase().settings.let { settings ->
                         Timber.i("getLocalCurrentUserUseCase ${getLocalCurrentUserUseCase.invoke()}")
-
                         _state.update {
                             it.copy(
                                 settingsType = section,
@@ -176,9 +173,7 @@ class SettingsViewModel(
                 }
             }
             SettingsType.TERMS_AND_POLICY -> navigateRoute(SettingsRoute.GoTerms)
-            else -> {
-                _state.update { it.copy(settingsType = section) }
-            }
+            else -> _state.update { it.copy(settingsType = section) }
         }
     }
 
@@ -254,14 +249,16 @@ class SettingsViewModel(
     }
 
     private fun enteredCurrentPassword(password: String) {
-        var data = _state.value.data
-        data = data.copy(
-            changePasswordSectionData = ChangePasswordSectionData(
-                currentPassword = password,
-                hasError = false
+        _state.update {
+            it.copy(
+                data = _state.value.data.copy(
+                    changePasswordSectionData = ChangePasswordSectionData(
+                        currentPassword = password,
+                        hasError = false
+                    )
+                )
             )
-        )
-        _state.update { it.copy(data = data) }
+        }
     }
 
     private fun checkCurrentPassword() {
@@ -301,11 +298,10 @@ class SettingsViewModel(
     ) {
         var passwordData = _state.value.data.createPasswordSectionData
         when (type) {
-            PasswordInputDataType.PASSWORD -> {
-                passwordData = passwordData.copy(password = password, meetCriteria = meetCriteria)
-            }
-            PasswordInputDataType.PASSWORD_REPEAT ->
-                passwordData = passwordData.copy(confirmPassword = password)
+            PasswordInputDataType.PASSWORD -> passwordData =
+                passwordData.copy(password = password, meetCriteria = meetCriteria)
+            PasswordInputDataType.PASSWORD_REPEAT -> passwordData =
+                passwordData.copy(confirmPassword = password)
             else -> {}
         }
         _state.update { it.copy(data = _state.value.data.copy(createPasswordSectionData = passwordData)) }

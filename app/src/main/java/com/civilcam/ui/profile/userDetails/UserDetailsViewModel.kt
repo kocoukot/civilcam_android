@@ -3,6 +3,7 @@ package com.civilcam.ui.profile.userDetails
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.domainLayer.model.GuardRequest
+import com.civilcam.domainLayer.model.UserDetailsModel
 import com.civilcam.domainLayer.usecase.GetUserInformationUseCase
 import com.civilcam.ui.profile.userDetails.model.StopGuardAlertType
 import com.civilcam.ui.profile.userDetails.model.UserDetailsActions
@@ -20,7 +21,7 @@ class UserDetailsViewModel(
     override var _state: MutableStateFlow<UserDetailsState> = MutableStateFlow(UserDetailsState())
 
     init {
-        _state.value = _state.value.copy(isLoading = true)
+        _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             kotlin.runCatching { getUserInformationUseCase.getUser("") }
                 .onSuccess { user ->
@@ -29,10 +30,13 @@ class UserDetailsViewModel(
                 .onFailure { error ->
                     _state.update { it.copy(errorText = error.localizedMessage) }
                 }
-            _state.value = _state.value.copy(isLoading = false)
+            _state.update { it.copy(isLoading = false) }
 
         }
+    }
 
+    private fun updateInfo(info: (UserDetailsModel.() -> UserDetailsModel?)) {
+        _state.update { it.copy(data = info.invoke(getData()), alertType = null) }
     }
 
     override fun setInputActions(action: UserDetailsActions) {
@@ -50,30 +54,16 @@ class UserDetailsViewModel(
         navigateRoute(UserDetailsRoute.GoBack)
     }
 
-
-    private fun changeGuardence() {
-        val data = _state.value.data?.copy()
-        data?.let { dataM ->
-            dataM.isMyGuard = !dataM.isMyGuard
-            _state.update { it.copy(data = dataM, alertType = null) }
-        }
+    private fun changeGuardence() = updateInfo {
+        copy(isMyGuard = !isMyGuard)
     }
 
-    private fun stopGuarding() {
-        val data = _state.value.data?.copy()
-        data?.let {
-            it.guardRequest = null
-            _state.update { state -> state.copy(data = data, alertType = null) }
-        }
+    private fun stopGuarding() = updateInfo {
+        copy(guardRequest = null)
     }
 
-    private fun requestAnswer(isAccepted: Boolean) {
-        val data = _state.value.data?.copy()
-        data?.let {
-            it.guardRequest = if (isAccepted) GuardRequest(isGuarding = true) else null
-
-            _state.update { state -> state.copy(data = data) }
-        }
+    private fun requestAnswer(isAccepted: Boolean) = updateInfo {
+        copy(guardRequest = if (isAccepted) GuardRequest(isGuarding = true) else null)
     }
 
     private fun showAlert(alertType: StopGuardAlertType) {
@@ -93,4 +83,6 @@ class UserDetailsViewModel(
     private fun closeAlert() {
         _state.update { it.copy(alertType = null) }
     }
+
+    private fun getData() = _state.value.data?.copy() ?: UserDetailsModel()
 }

@@ -253,10 +253,9 @@
     <string name="change_credentials_current_email_title">Current email</string>
     <string name="change_credentials_new_email_placeholder">Enter your new email</string>
     <string name="change_credentials_new_email_title">New email</string>
-    <string name="user_profile_email_change_title">Your email has been saved successfully!</string>
-    <string name="user_profile_email_change_desc">Now you can log in with your new email</string>
-    <string name="user_profile_phone_change_title">Your phone number has been saved successfully!</string>
-    <string name="user_profile_phone_change_desc">Now it will be displayed in your profile</string>
+    <string name="user_profile_email_change_desc">Your email has been successfully changed. Now you can log in with new email </string>
+    <string name="user_profile_phone_change_desc">Your phone number has been changed. Now it will be displayed in your profile</string>
+    <string name="pincode_changed_alert_text">Your pin-code has been successfully changed. Please remember it.</string>
     <string name="change_credentials_email_title">Change email</string>
     <string name="verification_current_email_title">Current email verification</string>
     <string name="verification_new_email_title">New email verification</string>
