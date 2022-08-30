@@ -83,7 +83,7 @@ val networkRootModule = module {
 	
 	viewModel { ContactsViewModel(get()) }
 	
-	viewModel { InviteByNumberViewModel() }
+	viewModel { InviteByNumberViewModel(get()) }
 	
 	viewModel { (screen: NetworkScreen) -> NetworkMainViewModel(get(), screen, get(), get()) }
 }

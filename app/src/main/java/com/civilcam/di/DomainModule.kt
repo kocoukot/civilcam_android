@@ -5,14 +5,11 @@ import com.civilcam.domainLayer.usecase.alerts.GetAlertsListUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetHistoryAlertListUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetHistoryDetailUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetMapAlertUserDataUseCase
-import com.civilcam.domainLayer.usecase.auth.CheckEmailUseCase
-import com.civilcam.domainLayer.usecase.auth.GoogleSignInUseCase
-import com.civilcam.domainLayer.usecase.auth.SignInUseCase
-import com.civilcam.domainLayer.usecase.auth.SingUpUseCase
 import com.civilcam.domainLayer.usecase.auth.*
 import com.civilcam.domainLayer.usecase.docs.GetTermsLinksUseCase
 import com.civilcam.domainLayer.usecase.guardians.GetGuardsListUseCase
 import com.civilcam.domainLayer.usecase.guardians.GetGuardsRequestsUseCase
+import com.civilcam.domainLayer.usecase.guardians.InviteByNumberUseCase
 import com.civilcam.domainLayer.usecase.guardians.SearchGuardsResultUseCase
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.domainLayer.usecase.location.GetLastKnownLocationUseCase
@@ -97,16 +94,18 @@ val domainModule = module {
 	factory { SetFcmTokenUseCase(get()) }
 	
 	factory { DeleteAccountUseCase(get()) }
-	
+
 	factory { GetLocalCurrentUserUseCase(get()) }
-	
+
 	factory { IsUserLoggedInUseCase(get()) }
-	
+
 	factory { ContactSupportUseCase(get()) }
-	
+
 	factory { ToggleSettingsUseCase(get()) }
-	
+
 	factory { GetSubscriptionsUseCase(get()) }
+
+	factory { InviteByNumberUseCase(get()) }
 }
 
 

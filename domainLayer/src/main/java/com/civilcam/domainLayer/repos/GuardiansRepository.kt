@@ -6,8 +6,9 @@ import com.civilcam.domainLayer.model.guard.GuardianModel
 interface GuardiansRepository {
 
     suspend fun searchGuardian(
-        query: String,
-        page: PaginationRequest.Pagination
+        query: String, page: PaginationRequest.Pagination
     ): List<GuardianModel>
+
+    suspend fun inviteByNumber(phoneNumber: String): Boolean
 
 }

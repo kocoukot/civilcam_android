@@ -42,6 +42,7 @@ object Endpoint {
 
     object Guardians {
         const val SEARCH = "search"
+        const val INVITE_BY_PHONE = "invite-by-phone"
     }
 
 

@@ -1,14 +1,14 @@
 package com.civilcam.data.repository
 
 import com.civilcam.data.local.AccountStorage
+import com.civilcam.data.mapper.guardian.SearchGuardianListMapper
+import com.civilcam.data.network.model.request.guardians.InviteByPhoneRequest
 import com.civilcam.data.network.model.request.guardians.SearchGuardiansRequest
 import com.civilcam.data.network.service.GuardiansService
 import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
 import com.civilcam.domainLayer.model.PaginationRequest
 import com.civilcam.domainLayer.model.guard.GuardianModel
-import com.civilcam.domainLayer.model.guard.GuardianStatus
-import com.civilcam.domainLayer.model.user.ImageInfo
 import com.civilcam.domainLayer.repos.GuardiansRepository
 
 class GuardiansRepositoryImpl(
@@ -16,6 +16,7 @@ class GuardiansRepositoryImpl(
     private val accountStorage: AccountStorage,
 ) : GuardiansRepository, BaseRepository() {
 
+    private val guardianSearchMapper = SearchGuardianListMapper()
 
     override suspend fun searchGuardian(
         query: String,
@@ -30,24 +31,20 @@ class GuardiansRepositoryImpl(
             )
         }.let { response ->
             when (response) {
-                is Resource.Success -> {
-                    response.value.list.map {
-                        GuardianModel(
-                            guardianId = it.id,
-                            guardianName = it.fullName,
-                            guardianAvatar = it.avatar?.let { avatar ->
-                                ImageInfo(
-                                    mimetype = avatar.imageMimetype,
-                                    imageUrl = avatar.imageUrl,
-                                    imageKey = avatar.imageKey,
-                                    thumbnailKey = avatar.thumbnailKey,
-                                    thumbnailUrl = avatar.thumbnailUrl,
-                                )
-                            },
-                            guardianStatus = GuardianStatus.NEW,
-                        )
-                    }
+                is Resource.Success -> guardianSearchMapper.mapData(response.value.list)
+                is Resource.Failure -> {
+                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    throw response.serviceException
                 }
+            }
+        }
+
+    override suspend fun inviteByNumber(phoneNumber: String): Boolean =
+        safeApiCall {
+            guardiansService.inviteByPhone(InviteByPhoneRequest(phoneNumber))
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> response.value.ok
                 is Resource.Failure -> {
                     if (response.serviceException.isForceLogout) accountStorage.logOut()
                     throw response.serviceException
