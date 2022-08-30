@@ -8,7 +8,6 @@ import com.civilcam.domainLayer.model.user.UserSettings
 class UserMapper(
     private val sessionUserMapper: SessionUserMapper = SessionUserMapper(),
     private val userBaseInfoMapper: UserBaseInfoMapper = UserBaseInfoMapper(),
-//    private val userSettingsMapper: UserSettingsMapper = UserSettingsMapper(),
     ) : Mapper<UserResponse, CurrentUser>(
     fromData = { response ->
         response.let {

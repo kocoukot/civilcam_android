@@ -8,7 +8,6 @@ data class NetworkMainModel(
     val requestsList: List<GuardItem> = emptyList(),
     val guardiansList: List<GuardItem> = emptyList(),
     var searchText: String = "",
-//    var searchResult: List<GuardianModel> = emptyList()
     val searchScreenSectionModel: SearchScreenSectionModel = SearchScreenSectionModel()
 )
 

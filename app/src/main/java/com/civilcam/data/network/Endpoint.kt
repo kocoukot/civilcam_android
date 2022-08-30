@@ -40,6 +40,10 @@ object Endpoint {
         const val DELETE_USER_AVATAR = "delete-user-avatar"
     }
 
+    object Guardians {
+        const val SEARCH = "search"
+    }
+
 
     object Subscriptions {
         const val GET_SUBSCRIPTIONS_LIST = "get-subscriptions-list"

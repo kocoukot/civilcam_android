@@ -24,6 +24,8 @@ val repositoryModule = module {
 
     factory<LocationRepository> { LocationRepositoryImpl(get()) }
 
-	factory<SubscriptionsRepository> { SubscriptionsRepositoryImpl(get()) }
-	
+    factory<SubscriptionsRepository> { SubscriptionsRepositoryImpl(get()) }
+
+    factory<GuardiansRepository> { GuardiansRepositoryImpl(get(), get()) }
+
 }

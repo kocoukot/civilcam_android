@@ -67,6 +67,10 @@ ext {
         implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
 //        implementation "com.google.accompanist:accompanist-insets-ui:$accompanist_version"
 
+        implementation("androidx.paging:paging-runtime:$paging_version")
+        implementation "androidx.paging:paging-compose:1.0.0-alpha16"
+
+
 
         //map
         implementation  "com.google.maps.android:maps-compose:2.2.0"

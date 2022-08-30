@@ -9,7 +9,7 @@ class ImageInfoMapper : Mapper<ImageInfoResponse, ImageInfo>(
             ImageInfo(
                 imageKey = it.imageKey,
                 imageUrl = it.imageUrl,
-                mimetype = it.mimetype,
+                mimetype = it.imageMimetype,
                 thumbnailKey = it.thumbnailKey,
                 thumbnailUrl = it.thumbnailUrl,
             )

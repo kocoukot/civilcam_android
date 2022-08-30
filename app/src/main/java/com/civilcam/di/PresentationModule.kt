@@ -85,7 +85,7 @@ val networkRootModule = module {
 	
 	viewModel { InviteByNumberViewModel() }
 	
-	viewModel { (screen: NetworkScreen) -> NetworkMainViewModel(screen, get(), get(), get()) }
+	viewModel { (screen: NetworkScreen) -> NetworkMainViewModel(get(), screen, get(), get()) }
 }
 
 val alertsRootModule = module {

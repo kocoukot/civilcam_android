@@ -3,31 +3,40 @@ package com.civilcam.ui.network.main
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.civilcam.common.ext.compose.ComposeViewModel
+import com.civilcam.di.source.KoinInjector
 import com.civilcam.domainLayer.model.guard.*
 import com.civilcam.domainLayer.usecase.guardians.GetGuardsListUseCase
 import com.civilcam.domainLayer.usecase.guardians.GetGuardsRequestsUseCase
-import com.civilcam.domainLayer.usecase.guardians.SearchGuardsResultUseCase
 import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.network.main.model.*
+import com.civilcam.ui.network.source.SearchGuardiansDataSource
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.util.*
 
 
 class NetworkMainViewModel(
+    injector: KoinInjector,
     private val screen: NetworkScreen = NetworkScreen.MAIN,
     private val getGuardsListUseCase: GetGuardsListUseCase,
     private val getGuardsRequestsUseCase: GetGuardsRequestsUseCase,
-    private val searchGuardsResultUseCase: SearchGuardsResultUseCase
-
-) : ComposeViewModel<NetworkMainState, NetworkMainRoute, NetworkMainActions>(), SearchQuery {
+) : ComposeViewModel<NetworkMainState, NetworkMainRoute, NetworkMainActions>(), SearchQuery,
+    KoinInjector by injector {
     override var _state: MutableStateFlow<NetworkMainState> = MutableStateFlow(NetworkMainState())
     override val mTextSearch = MutableStateFlow("")
+    var searchList = loadRPlacesList()
 
     init {
         _state.update { it.copy(screenState = screen) }
@@ -40,8 +49,7 @@ class NetworkMainViewModel(
                 ?.let {
                     viewModelScope.launch {
                         try {
-                            val result = searchGuardsResultUseCase.searchGuards(it)
-                            setSearchResult(result)
+                            _state.update { it.copy(refreshList = Unit) }
                         } catch (e: Exception) {
                             _state.update { it.copy(errorText = e.localizedMessage) }
                         }
@@ -53,6 +61,10 @@ class NetworkMainViewModel(
 
     }
 
+    fun stopRefresh() {
+        _state.update { it.copy(refreshList = null) }
+    }
+
     override fun setInputActions(action: NetworkMainActions) {
         when (action) {
             NetworkMainActions.ClickGoMyProfile -> goMyProfile()
@@ -62,7 +74,7 @@ class NetworkMainViewModel(
             is NetworkMainActions.ClickUser -> goUser(action.user)
             NetworkMainActions.ClickGoBack -> goBack()
             NetworkMainActions.ClickAddGuardian -> addGuardian()
-            NetworkMainActions.ClickGoSearch -> searchGuard()
+            NetworkMainActions.ClickGoSearch -> goSearchGuard()
             NetworkMainActions.ClickGoContacts -> goContacts()
             is NetworkMainActions.EnteredSearchString -> searchContact(action.searchQuery)
             is NetworkMainActions.ClickAddUser -> addUser(action.user)
@@ -76,6 +88,7 @@ class NetworkMainViewModel(
                 _state.update { it.copy(screenState = NetworkScreen.MAIN) }
             }
             NetworkScreen.SEARCH_GUARD, NetworkScreen.ADD_GUARD -> {
+                mTextSearch.value = ""
                 _state.update { it.copy(screenState = NetworkScreen.MAIN) }
             }
         }
@@ -99,7 +112,8 @@ class NetworkMainViewModel(
         navigateRoute(NetworkMainRoute.GoUserDetail(user.guardianId))
     }
 
-    private fun searchGuard() {
+    private fun goSearchGuard() {
+        searchList = loadRPlacesList()
         if (_state.value.screenState == NetworkScreen.MAIN) {
             _state.update { it.copy(screenState = NetworkScreen.SEARCH_GUARD) }
             checkNavBarStatus()
@@ -172,16 +186,16 @@ class NetworkMainViewModel(
     }
 
     private fun searchContact(searchString: String) {
-        _state.value.data?.let { sData ->
-            _state.update { it.copy(data = sData.copy(searchText = searchString)) }
-            mTextSearch.value = searchString
-        }
+        Timber.tag("networkSearch").i("searchString $searchString")
+        _state.update { it.copy(data = _state.value.data.copy(searchText = searchString)) }
+        mTextSearch.value = searchString
+        if (searchString.isEmpty()) searchList = emptyList<PagingData<GuardianModel>>().asFlow()
     }
 
     private fun addUser(user: GuardianModel) {
         viewModelScope.launch {
             val contactsModel =
-                _state.value.data?.searchScreenSectionModel ?: SearchScreenSectionModel()
+                _state.value.data.searchScreenSectionModel
             contactsModel.searchResult.let { contacts ->
                 contacts.find { it.guardianId == user.guardianId }?.guardianStatus =
                     GuardianStatus.PENDING
@@ -189,7 +203,7 @@ class NetworkMainViewModel(
             }
             _state.update {
                 it.copy(
-                    data = _state.value.data?.copy(searchScreenSectionModel = contactsModel)?.copy()
+                    data = _state.value.data.copy(searchScreenSectionModel = contactsModel)
                 )
             }
         }
@@ -197,7 +211,7 @@ class NetworkMainViewModel(
 
     private fun setSearchResult(result: List<GuardianModel>) {
         val data = _state.value.data
-        data?.let { d ->
+        data.let { d ->
             _state.update {
                 it.copy(
                     data = d.copy(searchScreenSectionModel = SearchScreenSectionModel(result))
@@ -212,5 +226,15 @@ class NetworkMainViewModel(
             navigateRoute(NetworkMainRoute.IsNavBarVisible(_state.value.screenState == NetworkScreen.MAIN))
         }, 100)
 
+    }
+
+    private fun loadRPlacesList(): Flow<PagingData<GuardianModel>> {
+        return Pager(
+            config = PagingConfig(pageSize = 40, initialLoadSize = 20, prefetchDistance = 6),
+            pagingSourceFactory = {
+                koin.get<SearchGuardiansDataSource> { parametersOf(mTextSearch.value) }
+            }
+        ).flow
+            .cachedIn(viewModelScope)
     }
 }
