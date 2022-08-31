@@ -95,6 +95,18 @@ class UserRepositoryImpl(
 			}
 		}
 
+	override suspend fun setFcmToken(): Boolean =
+		safeApiCall {
+			accountStorage.fcmToken?.let {
+				userService.setFcmToken(FCMTokenRequest(it))
+			}
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> response.value?.ok ?: false
+				is Resource.Failure -> throw response.serviceException
+			}
+		}
+
 
 	//    override fun getUserEmail(): Pair<String, Boolean> =
 //        accountStorage.getUserEmail()
