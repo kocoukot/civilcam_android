@@ -36,12 +36,6 @@ class ContactsFragment : Fragment() {
             }
         }
 
-        if (contactsPermissionDelegate.checkSelfPermissions()) {
-            viewModel.fetchContacts()
-        } else {
-            pendingAction = { viewModel.fetchContacts() }
-            contactsPermissionDelegate.requestPermissions()
-        }
 
 
         return ComposeView(requireContext()).apply {
@@ -62,5 +56,16 @@ class ContactsFragment : Fragment() {
             pendingAction?.invoke()
             pendingAction = null
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (contactsPermissionDelegate.checkSelfPermissions()) {
+            viewModel.fetchContacts()
+        } else {
+            pendingAction = { viewModel.fetchContacts() }
+            contactsPermissionDelegate.requestPermissions()
+        }
+
     }
 }

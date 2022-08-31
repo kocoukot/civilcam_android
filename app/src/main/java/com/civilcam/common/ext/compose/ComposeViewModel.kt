@@ -27,14 +27,15 @@ abstract class ComposeViewModel<A : ComposeFragmentState, R : ComposeFragmentRou
     protected fun <Response> networkRequest(
         action: suspend () -> Response,
         onSuccess: (Response) -> Unit,
-        onFailure: (Throwable) -> Unit
+        onFailure: (Throwable) -> Unit,
+        onComplete: (() -> Unit)? = null
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { action.invoke() }
                 .onSuccess { onSuccess.invoke(it) }
                 .onFailure { error ->
                     onFailure.invoke(error)
-                }
+                }.also { onComplete?.invoke() }
         }
     }
 }

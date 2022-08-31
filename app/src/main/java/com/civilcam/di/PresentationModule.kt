@@ -81,7 +81,7 @@ val networkRootModule = module {
 	
 	viewModel { (userId: Int) -> UserDetailsViewModel(userId, get(), get()) }
 	
-	viewModel { ContactsViewModel(get()) }
+	viewModel { ContactsViewModel(get(), get()) }
 	
 	viewModel { InviteByNumberViewModel(get()) }
 

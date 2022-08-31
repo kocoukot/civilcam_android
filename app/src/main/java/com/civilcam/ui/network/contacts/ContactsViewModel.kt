@@ -6,6 +6,8 @@ import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.local.ContactsStorage
 import com.civilcam.data.local.model.Contact
 import com.civilcam.data.local.model.PersonContactFilter
+import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.usecase.guardians.InviteByNumberUseCase
 import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.network.contacts.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +16,8 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class ContactsViewModel(
-    private val contactsStorage: ContactsStorage
+    private val contactsStorage: ContactsStorage,
+    private val inviteByNumberUseCase: InviteByNumberUseCase
 ) : ComposeViewModel<ContactsState, ContactsRoute, ContactsActions>(), SearchQuery {
     override var _state: MutableStateFlow<ContactsState> = MutableStateFlow(ContactsState())
     override val mTextSearch = MutableStateFlow("")
@@ -56,19 +59,30 @@ class ContactsViewModel(
     }
 
     private fun inviteContact(contact: PersonContactItem) {
-        val contactsModel = _state.value.data?.contactsList ?: mutableListOf()
-        contactsModel.let { contacts ->
-            (contacts.find { it is PersonContactItem && it.name == contact.name && it.phoneNumber == contact.phoneNumber } as PersonContactItem).isInvited =
-                true
-        }
-        _state.update { it.copy(data = ContactsModel(contactsModel)) }
+        _state.update { it.copy(isLoading = true) }
+        networkRequest(
+            action = { inviteByNumberUseCase.invoke(contact.phoneNumber) },
+            onSuccess = {
+                val contactsModel = _state.value.data?.contactsList ?: mutableListOf()
+                contactsModel.let { contacts ->
+                    (contacts.find { it is PersonContactItem && it.name == contact.name && it.phoneNumber == contact.phoneNumber } as PersonContactItem).isInvited =
+                        true
+                }
+                _state.update { it.copy(data = ContactsModel(contactsModel)) }
+            },
+            onFailure = { error ->
+                error as ServiceException
+            },
+            onComplete = { _state.update { it.copy(isLoading = false) } }
+        )
     }
 
 
     fun fetchContacts() {
         viewModelScope.launch {
-            val contacts = contactsStorage.getContacts(PersonContactFilter()).sortedBy { it.name }
-            mapToItems(contacts)
+            contactsStorage.getContacts(PersonContactFilter()).sortedBy { it.name }.let {
+                mapToItems(it)
+            }
         }
     }
 

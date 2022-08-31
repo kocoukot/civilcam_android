@@ -76,8 +76,9 @@ class SettingsViewModel(
             onFailure = { error ->
                 error as ServiceException
                 _state.update { it.copy(errorText = error.errorMessage) }
-            })
-            .also { _state.update { it.copy(isLoading = false) } }
+            },
+            onComplete = { _state.update { it.copy(isLoading = false) } }
+        )
     }
 
     private fun hideAlert() {
