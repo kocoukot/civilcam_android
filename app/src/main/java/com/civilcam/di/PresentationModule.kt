@@ -50,7 +50,7 @@ val authModule = module {
 	
 	viewModel { (isSettings: Boolean) -> TermsViewModel(isSettings, get(), get()) }
 	
-	viewModel { ProfileSetupViewModel(get(), get(), get(), get()) }
+	viewModel { ProfileSetupViewModel(get(), get(), get(), get(), get()) }
 	
 	viewModel { LoginViewModel(get(), get()) }
 	
