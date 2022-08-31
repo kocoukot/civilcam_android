@@ -33,7 +33,7 @@ class ProfileRepositoryImpl(
             when (response) {
                 is Resource.Success -> userBaseInfoMapper.mapData(response.value.profile)
                 is Resource.Failure -> {
-                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
                 }
             }
@@ -47,7 +47,7 @@ class ProfileRepositoryImpl(
             when (response) {
                 is Resource.Success -> true
                 is Resource.Failure -> {
-                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
                 }
             }
@@ -60,7 +60,7 @@ class ProfileRepositoryImpl(
             when (response) {
                 is Resource.Success -> true
                 is Resource.Failure -> {
-                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
                 }
             }
@@ -73,7 +73,7 @@ class ProfileRepositoryImpl(
             when (response) {
                 is Resource.Success -> true
                 is Resource.Failure -> {
-                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
                 }
             }
@@ -88,7 +88,7 @@ class ProfileRepositoryImpl(
             when (response) {
                 is Resource.Success -> userBaseInfoMapper.mapData(response.value.profile)
                 is Resource.Failure -> {
-                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
                 }
             }
@@ -102,12 +102,10 @@ class ProfileRepositoryImpl(
             when (response) {
                 is Resource.Success -> {}
                 is Resource.Failure -> {
-                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
                 }
             }
         }
     }
-
-
 }

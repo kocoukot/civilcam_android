@@ -1,6 +1,7 @@
 package com.civilcam.domainLayer.model.guard
 
 import android.os.Parcelable
+import com.civilcam.domainLayer.model.user.ImageInfo
 import kotlinx.parcelize.Parcelize
 
 sealed class GuardItem(val type: Int) {
@@ -15,8 +16,8 @@ sealed class GuardItem(val type: Int) {
 data class GuardianItem(
     val guardianId: Int,
     val guardianName: String,
-    val guardianAvatar: Int,
-    val guardianStatus: com.civilcam.domainLayer.model.guard.GuardianStatus,
+    val guardianAvatar: ImageInfo?,
+    val guardianStatus: GuardianStatus,
 ) : GuardItem(ITEM_TYPE_PERSON), Parcelable
 //
 //@Parcelize

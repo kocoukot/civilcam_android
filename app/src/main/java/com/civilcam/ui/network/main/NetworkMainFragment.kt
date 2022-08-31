@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.R
+import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.common.ext.setPan
 import com.civilcam.common.ext.setResize
 import com.civilcam.ui.MainActivity
@@ -54,7 +55,8 @@ class NetworkMainFragment : Fragment(), SupportBottomBar {
 					UserDetailsFragment.createArgs(route.userId)
 				)
 				is NetworkMainRoute.IsNavBarVisible -> (activity as MainActivity)
-                    .showBottomNavBar(route.isVisible)
+					.showBottomNavBar(route.isVisible)
+				NetworkMainRoute.ForceLogout -> navController.navigateToRoot(R.id.onBoardingFragment)
 			}
 		}
 		return ComposeView(requireContext()).apply {

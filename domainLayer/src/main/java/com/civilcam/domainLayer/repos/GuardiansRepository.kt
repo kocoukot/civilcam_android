@@ -11,4 +11,6 @@ interface GuardiansRepository {
 
     suspend fun inviteByNumber(phoneNumber: String): Boolean
 
+    suspend fun askToGuard(personId: Int): Boolean
+
 }

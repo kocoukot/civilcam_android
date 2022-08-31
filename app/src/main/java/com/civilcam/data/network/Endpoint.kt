@@ -43,8 +43,8 @@ object Endpoint {
     object Guardians {
         const val SEARCH = "search"
         const val INVITE_BY_PHONE = "invite-by-phone"
+        const val ASK_TO_GUARD = "ask-to-guard"
     }
-
 
     object Subscriptions {
         const val GET_SUBSCRIPTIONS_LIST = "get-subscriptions-list"

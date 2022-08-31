@@ -36,10 +36,12 @@ fun RequestsScreenSection(
                 needDivider = index < guardRequestsList.lastIndex,
                 isClickable = false,
                 leadingIcon = {
-                    CircleUserAvatar(
-                        avatar = guard.guardianAvatar,
-                        avatarSize = 36,
-                    )
+                    guard.guardianAvatar?.imageUrl?.let {
+                        CircleUserAvatar(
+                            avatar = it,
+                            avatarSize = 36,
+                        )
+                    }
                 },
                 trailingIcon = {
                     RequestAnswers {

@@ -2,9 +2,11 @@ package com.civilcam.ui.profile.userDetails
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
+import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.model.GuardRequest
 import com.civilcam.domainLayer.model.UserDetailsModel
 import com.civilcam.domainLayer.usecase.GetUserInformationUseCase
+import com.civilcam.domainLayer.usecase.guardians.AskToGuardUseCase
 import com.civilcam.ui.profile.userDetails.model.StopGuardAlertType
 import com.civilcam.ui.profile.userDetails.model.UserDetailsActions
 import com.civilcam.ui.profile.userDetails.model.UserDetailsRoute
@@ -12,15 +14,18 @@ import com.civilcam.ui.profile.userDetails.model.UserDetailsState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class UserDetailsViewModel(
     private val userId: Int,
-    private val getUserInformationUseCase: GetUserInformationUseCase
+    private val getUserInformationUseCase: GetUserInformationUseCase,
+    private val askToGuardUseCase: AskToGuardUseCase
 ) : ComposeViewModel<UserDetailsState, UserDetailsRoute, UserDetailsActions>() {
 
     override var _state: MutableStateFlow<UserDetailsState> = MutableStateFlow(UserDetailsState())
 
     init {
+        Timber.i("userDetail id $userId")
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             kotlin.runCatching { getUserInformationUseCase.getUser("") }
@@ -35,9 +40,10 @@ class UserDetailsViewModel(
         }
     }
 
-    private fun updateInfo(info: (UserDetailsModel.() -> UserDetailsModel?)) {
+    private fun updateInfo(info: (UserDetailsModel.() -> UserDetailsModel)) {
         _state.update { it.copy(data = info.invoke(getData()), alertType = null) }
     }
+
 
     override fun setInputActions(action: UserDetailsActions) {
         when (action) {
@@ -54,9 +60,17 @@ class UserDetailsViewModel(
         navigateRoute(UserDetailsRoute.GoBack)
     }
 
-    private fun changeGuardence() = updateInfo {
-        copy(isMyGuard = !isMyGuard)
+    private fun changeGuardence() {
+        _state.update { it.copy(isLoading = true) }
+        networkRequest(
+            action = { askToGuardUseCase(userId) },
+            onSuccess = { updateInfo { copy(isMyGuard = !isMyGuard) } },
+            onFailure = { error ->
+                error as ServiceException
+                _state.update { it.copy(errorText = error.errorMessage) }
+            }).also { _state.update { it.copy(isLoading = false) } }
     }
+
 
     private fun stopGuarding() = updateInfo {
         copy(guardRequest = null)
@@ -72,7 +86,7 @@ class UserDetailsViewModel(
                 _state.update { it.copy(alertType = alertType) }
             }
             StopGuardAlertType.REMOVE_GUARDIAN ->
-                if (_state.value.data?.isMyGuard == true) {
+                if (_state.value.data.isMyGuard) {
                     _state.update { it.copy(alertType = alertType) }
                 } else {
                     changeGuardence()
@@ -84,5 +98,5 @@ class UserDetailsViewModel(
         _state.update { it.copy(alertType = null) }
     }
 
-    private fun getData() = _state.value.data?.copy() ?: UserDetailsModel()
+    private fun getData() = _state.value.data.copy()
 }

@@ -1,9 +1,12 @@
 package com.civilcam.common.ext.compose
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.civilcam.arch.common.livedata.SingleLiveEvent
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 abstract class ComposeViewModel<A : ComposeFragmentState, R : ComposeFragmentRoute, T : ComposeFragmentActions> :
     ViewModel() {
@@ -20,4 +23,18 @@ abstract class ComposeViewModel<A : ComposeFragmentState, R : ComposeFragmentRou
     }
 
     abstract fun setInputActions(action: T)
+
+    protected fun <Response> networkRequest(
+        action: suspend () -> Response,
+        onSuccess: (Response) -> Unit,
+        onFailure: (Throwable) -> Unit
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            kotlin.runCatching { action.invoke() }
+                .onSuccess { onSuccess.invoke(it) }
+                .onFailure { error ->
+                    onFailure.invoke(error)
+                }
+        }
+    }
 }

@@ -2,6 +2,7 @@ package com.civilcam.data.repository
 
 import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.mapper.guardian.SearchGuardianListMapper
+import com.civilcam.data.network.model.request.guardians.AskToGuardRequest
 import com.civilcam.data.network.model.request.guardians.InviteByPhoneRequest
 import com.civilcam.data.network.model.request.guardians.SearchGuardiansRequest
 import com.civilcam.data.network.service.GuardiansService
@@ -33,7 +34,7 @@ class GuardiansRepositoryImpl(
             when (response) {
                 is Resource.Success -> guardianSearchMapper.mapData(response.value.list)
                 is Resource.Failure -> {
-                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
                 }
             }
@@ -46,7 +47,20 @@ class GuardiansRepositoryImpl(
             when (response) {
                 is Resource.Success -> response.value.ok
                 is Resource.Failure -> {
-                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    response.checkIfLogOut { accountStorage.logOut() }
+                    throw response.serviceException
+                }
+            }
+        }
+
+    override suspend fun askToGuard(personId: Int): Boolean =
+        safeApiCall {
+            guardiansService.askToGuard(AskToGuardRequest(personId = personId))
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> response.value.ok
+                is Resource.Failure -> {
+                    response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
                 }
             }

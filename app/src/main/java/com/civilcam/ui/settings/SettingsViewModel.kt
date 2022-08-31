@@ -69,17 +69,15 @@ class SettingsViewModel(
     }
 
     private fun onLanguageChange(languageType: LanguageType) {
-        viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
-            kotlin.runCatching { setUserLanguageUseCase(languageType) }
-                .onSuccess { goBack() }
-                .onFailure { error ->
-                    error as ServiceException
-                    _state.update { it.copy(errorText = error.errorMessage) }
-                }
-            _state.update { it.copy(isLoading = false) }
-
-        }
+        _state.update { it.copy(isLoading = true) }
+        networkRequest(
+            action = { setUserLanguageUseCase(languageType) },
+            onSuccess = { goBack() },
+            onFailure = { error ->
+                error as ServiceException
+                _state.update { it.copy(errorText = error.errorMessage) }
+            })
+            .also { _state.update { it.copy(isLoading = false) } }
     }
 
     private fun hideAlert() {

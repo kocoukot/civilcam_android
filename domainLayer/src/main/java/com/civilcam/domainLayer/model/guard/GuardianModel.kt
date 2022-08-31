@@ -10,4 +10,11 @@ data class GuardianModel(
     val guardianName: String,
     val guardianAvatar: ImageInfo?,
     var guardianStatus: GuardianStatus,
-) : Parcelable
+) : Parcelable {
+    fun mapToItem() = GuardianItem(
+        guardianId = guardianId,
+        guardianName = guardianName,
+        guardianAvatar = guardianAvatar,
+        guardianStatus = guardianStatus,
+    )
+}

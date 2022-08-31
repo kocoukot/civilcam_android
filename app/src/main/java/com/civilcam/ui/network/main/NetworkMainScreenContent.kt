@@ -13,9 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.civilcam.R
+import com.civilcam.common.ext.castSafe
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.model.guard.GuardianItem
 import com.civilcam.domainLayer.model.guard.NetworkType
 import com.civilcam.ui.common.compose.*
@@ -27,6 +30,7 @@ import com.civilcam.ui.network.main.content.NetworkTabRow
 import com.civilcam.ui.network.main.content.RequestsScreenSection
 import com.civilcam.ui.network.main.model.NetworkMainActions
 import com.civilcam.ui.network.main.model.NetworkScreen
+import timber.log.Timber
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -36,21 +40,21 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
     var tabPage by remember { mutableStateOf(NetworkType.ON_GUARD) }
     tabPage = state.value.networkType
 
-    val list =
-        if (state.value.screenState == NetworkScreen.SEARCH_GUARD)
-            viewModel.searchList.collectAsLazyPagingItems()
-        else
-            null
+    val searchList = if (state.value.screenState == NetworkScreen.SEARCH_GUARD)
+        viewModel.searchList.collectAsLazyPagingItems()
+    else
+        null
 
 //    Timber.tag("networkSearch").i("lazyList ${list?.itemCount}")
     if (state.value.refreshList == Unit) {
-        list?.refresh()
+        searchList?.refresh()
         viewModel.stopRefresh()
     }
 
     if (state.value.isLoading) {
         DialogLoadingContent()
     }
+
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
         modifier = Modifier
@@ -123,8 +127,8 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                     }
                 }
 
-                if (!(state.value.data.guardiansList?.isNotEmpty() == true ||
-                            state.value.data.requestsList?.isNotEmpty() == true) ||
+                if (!(state.value.data.guardiansList.isNotEmpty() == true ||
+                            state.value.data.requestsList.isNotEmpty() == true) ||
                     state.value.screenState == NetworkScreen.SEARCH_GUARD ||
                     state.value.screenState == NetworkScreen.ADD_GUARD
                 ) RowDivider()
@@ -179,16 +183,31 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                     NetworkScreen.SEARCH_GUARD, NetworkScreen.ADD_GUARD -> {
                         state.value.data.let { data ->
                             GuardianSearchContent(
-                                list,
+                                searchList,
+                                pendingList = state.value.data.searchScreenSectionModel.pendingList,
                                 data.searchText,
-                                clickAddNew = {
-                                    viewModel.setInputActions(NetworkMainActions.ClickAddUser(it))
-                                })
+                                onSearchAction = viewModel::setInputActions
+                            )
                         }
                     }
                 }
             }
 
+        }
+    }
+
+    searchList?.apply {
+
+        Timber.d("lazyPlace loadState $loadState")
+        when {
+            loadState.refresh is LoadState.Error -> {
+                (loadState.refresh as LoadState.Error).error.castSafe<ServiceException>()
+                    ?.let { error ->
+                        viewModel.resolveSearchError(error)
+
+                    }
+            }
+            else -> {}
         }
     }
 }

@@ -8,8 +8,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.civilcam.common.ext.compose.ComposeViewModel
+import com.civilcam.data.network.support.ServiceException
 import com.civilcam.di.source.KoinInjector
 import com.civilcam.domainLayer.model.guard.*
+import com.civilcam.domainLayer.usecase.guardians.AskToGuardUseCase
 import com.civilcam.domainLayer.usecase.guardians.GetGuardsListUseCase
 import com.civilcam.domainLayer.usecase.guardians.GetGuardsRequestsUseCase
 import com.civilcam.ui.common.ext.SearchQuery
@@ -32,6 +34,7 @@ class NetworkMainViewModel(
     private val screen: NetworkScreen = NetworkScreen.MAIN,
     private val getGuardsListUseCase: GetGuardsListUseCase,
     private val getGuardsRequestsUseCase: GetGuardsRequestsUseCase,
+    private val askToGuardUseCase: AskToGuardUseCase
 ) : ComposeViewModel<NetworkMainState, NetworkMainRoute, NetworkMainActions>(), SearchQuery,
     KoinInjector by injector {
     override var _state: MutableStateFlow<NetworkMainState> = MutableStateFlow(NetworkMainState())
@@ -45,20 +48,16 @@ class NetworkMainViewModel(
         getMockInfo()
         _state.update { it.copy(data = NetworkMainModel()) }
         query(viewModelScope) { query ->
-            query.takeIf { it.isNotEmpty() }
-                ?.let {
-                    viewModelScope.launch {
-                        try {
-                            _state.update { it.copy(refreshList = Unit) }
-                        } catch (e: Exception) {
-                            _state.update { it.copy(errorText = e.localizedMessage) }
-                        }
+            query.let {
+                viewModelScope.launch {
+                    try {
+                        _state.update { it.copy(refreshList = Unit) }
+                    } catch (e: Exception) {
+                        _state.update { it.copy(errorText = e.localizedMessage) }
                     }
-                } ?: run {
-                setSearchResult(emptyList())
+                }
             }
         }
-
     }
 
     fun stopRefresh() {
@@ -76,6 +75,7 @@ class NetworkMainViewModel(
             NetworkMainActions.ClickAddGuardian -> addGuardian()
             NetworkMainActions.ClickGoSearch -> goSearchGuard()
             NetworkMainActions.ClickGoContacts -> goContacts()
+
             is NetworkMainActions.EnteredSearchString -> searchContact(action.searchQuery)
             is NetworkMainActions.ClickAddUser -> addUser(action.user)
         }
@@ -194,29 +194,27 @@ class NetworkMainViewModel(
 
     private fun addUser(user: GuardianModel) {
         viewModelScope.launch {
-            val contactsModel =
-                _state.value.data.searchScreenSectionModel
-            contactsModel.searchResult.let { contacts ->
-                contacts.find { it.guardianId == user.guardianId }?.guardianStatus =
-                    GuardianStatus.PENDING
+            _state.update { it.copy(isLoading = true) }
+            kotlin.runCatching { askToGuardUseCase(user.guardianId) }
+                .onSuccess {
+                    var contactsModel =
+                        _state.value.data.searchScreenSectionModel
+                    contactsModel =
+                        contactsModel.copy(pendingList = contactsModel.pendingList + listOf(user.guardianId))
+                    _state.update {
+                        it.copy(
+                            data = _state.value.data.copy(searchScreenSectionModel = contactsModel)
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    error as ServiceException
+                    _state.update { it.copy(errorText = error.errorMessage) }
+                }
+                .also {
+                    _state.update { it.copy(isLoading = false) }
+                }
 
-            }
-            _state.update {
-                it.copy(
-                    data = _state.value.data.copy(searchScreenSectionModel = contactsModel)
-                )
-            }
-        }
-    }
-
-    private fun setSearchResult(result: List<GuardianModel>) {
-        val data = _state.value.data
-        data.let { d ->
-            _state.update {
-                it.copy(
-                    data = d.copy(searchScreenSectionModel = SearchScreenSectionModel(result))
-                )
-            }
         }
     }
 
@@ -236,5 +234,9 @@ class NetworkMainViewModel(
             }
         ).flow
             .cachedIn(viewModelScope)
+    }
+
+    fun resolveSearchError(error: ServiceException) {
+        if (error.isForceLogout) navigateRoute(NetworkMainRoute.ForceLogout)
     }
 }

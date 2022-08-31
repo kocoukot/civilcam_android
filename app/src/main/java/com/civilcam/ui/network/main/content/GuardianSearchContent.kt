@@ -22,24 +22,27 @@ import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.guard.GuardianModel
 import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.ui.common.compose.*
+import com.civilcam.ui.network.main.model.NetworkMainActions
 import timber.log.Timber
 
 @Composable
 fun GuardianSearchContent(
     lazyData: LazyPagingItems<GuardianModel>?,
+    pendingList: List<Int>,
     searchPart: String,
-    clickAddNew: (GuardianModel) -> Unit
-
+    onSearchAction: (NetworkMainActions) -> Unit,
 ) {
     Timber.tag("networkSearch").i("lazyList ${lazyData?.itemSnapshotList}")
 
     Crossfade(targetState = (lazyData?.itemCount ?: 0) > 0) { targetState ->
         when (targetState) {
             false -> EmptySearchScreenState()
-            true -> SearchResults(lazyData, searchPart,
-                clickAddNew = {
-                    clickAddNew.invoke(it)
-                })
+            true -> SearchResults(
+                lazyData,
+                pendingList,
+                searchPart,
+                onRowAction = onSearchAction::invoke
+            )
         }
     }
 }
@@ -69,8 +72,9 @@ private fun EmptySearchScreenState() {
 @Composable
 private fun SearchResults(
     results: LazyPagingItems<GuardianModel>?,
+    pendingList: List<Int>,
     searchPart: String,
-    clickAddNew: (GuardianModel) -> Unit
+    onRowAction: (NetworkMainActions) -> Unit,
 ) {
     Timber.tag("networkSearch").i("lazyList ${results?.itemCount}")
 
@@ -102,8 +106,8 @@ private fun SearchResults(
                             }
                         },
                         trailingIcon = {
-                            when (userStatus) {
-                                GuardianStatus.PENDING -> {
+                            when {
+                                userStatus == GuardianStatus.PENDING || item.guardianId in pendingList -> {
                                     Text(
                                         text = stringResource(id = R.string.pending_text),
                                         style = CCTheme.typography.common_text_medium,
@@ -111,19 +115,18 @@ private fun SearchResults(
                                         color = CCTheme.colors.grayOne,
                                     )
                                 }
-                                GuardianStatus.NEW -> {
+                                else -> {
                                     TextActionButton(actionTitle = stringResource(id = R.string.add_text)) {
                                         userStatus = GuardianStatus.PENDING
-                                        clickAddNew.invoke(item)
+                                        onRowAction.invoke(NetworkMainActions.ClickAddUser(item))
                                     }
                                 }
-                                else -> {}
                             }
-
                         },
-                    ) {
-
-                    }
+                        rowClick = {
+                            onRowAction.invoke(NetworkMainActions.ClickUser(item.mapToItem()))
+                        }
+                    )
                 }
 
             }

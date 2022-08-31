@@ -7,10 +7,7 @@ import com.civilcam.domainLayer.usecase.alerts.GetHistoryDetailUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetMapAlertUserDataUseCase
 import com.civilcam.domainLayer.usecase.auth.*
 import com.civilcam.domainLayer.usecase.docs.GetTermsLinksUseCase
-import com.civilcam.domainLayer.usecase.guardians.GetGuardsListUseCase
-import com.civilcam.domainLayer.usecase.guardians.GetGuardsRequestsUseCase
-import com.civilcam.domainLayer.usecase.guardians.InviteByNumberUseCase
-import com.civilcam.domainLayer.usecase.guardians.SearchGuardsResultUseCase
+import com.civilcam.domainLayer.usecase.guardians.*
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.domainLayer.usecase.location.GetLastKnownLocationUseCase
 import com.civilcam.domainLayer.usecase.places.GetPlacesAutocompleteUseCase
@@ -97,15 +94,18 @@ val domainModule = module {
 
 	factory { GetLocalCurrentUserUseCase(get()) }
 
-	factory { IsUserLoggedInUseCase(get()) }
+    factory { IsUserLoggedInUseCase(get()) }
 
-	factory { ContactSupportUseCase(get()) }
+    factory { ContactSupportUseCase(get()) }
 
-	factory { ToggleSettingsUseCase(get()) }
+    factory { ToggleSettingsUseCase(get()) }
 
-	factory { GetSubscriptionsUseCase(get()) }
+    factory { GetSubscriptionsUseCase(get()) }
 
-	factory { InviteByNumberUseCase(get()) }
+    factory { InviteByNumberUseCase(get()) }
+
+    factory { AskToGuardUseCase(get()) }
+
 }
 
 
