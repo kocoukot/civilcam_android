@@ -11,19 +11,19 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface UserService {
-	
+
 	@GET(Endpoint.User.CURRENT_USER)
 	suspend fun currentUser(): UserResponse
-	
+
 	@POST(Endpoint.User.ACCEPT_TERMS_POLICY)
 	suspend fun acceptTermsPolicy(@Body request: AcceptTermsRequest)
 
-//	@POST(Endpoint.User.SET_FCM_TOKEN)
-//	suspend fun setFcmToken(@Body request: FCMTokenRequest): SuccessResponse
-	
+	@POST(Endpoint.User.SET_FCM_TOKEN)
+	suspend fun setFcmToken(@Body request: FCMTokenRequest): SuccessResponse
+
 	@POST(Endpoint.User.CHECK_PASSWORD)
 	suspend fun checkPassword(@Body request: CheckPasswordRequest): CheckPasswordResponse
-	
+
 	@POST(Endpoint.User.CHANGE_PASSWORD)
 	suspend fun changePassword(@Body request: ChangePasswordRequest): SuccessResponse
 

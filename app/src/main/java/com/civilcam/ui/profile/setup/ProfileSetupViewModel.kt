@@ -12,6 +12,7 @@ import com.civilcam.domainLayer.model.profile.UserSetupModel
 import com.civilcam.domainLayer.usecase.places.GetPlacesAutocompleteUseCase
 import com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase
 import com.civilcam.domainLayer.usecase.profile.SetPersonalInfoUseCase
+import com.civilcam.domainLayer.usecase.user.SetFCMTokenUseCase
 import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.profile.setup.model.*
 import com.civilcam.utils.DateUtils.dateOfBirthFormat
@@ -28,6 +29,7 @@ class ProfileSetupViewModel(
     private val getPlacesAutocompleteUseCase: GetPlacesAutocompleteUseCase,
     private val setPersonalInfoUseCase: SetPersonalInfoUseCase,
     private val setAvatarUseCase: SetAvatarUseCase,
+    private val setFCMTokenUseCase: SetFCMTokenUseCase
 ) : ComposeViewModel<ProfileSetupState, ProfileSetupRoute, ProfileSetupActions>(), SearchQuery {
 
     override var _state: MutableStateFlow<ProfileSetupState> = MutableStateFlow(ProfileSetupState())
@@ -104,6 +106,7 @@ class ProfileSetupViewModel(
                     userdata.profileImage?.uri?.let { uri -> setAvatarUseCase.invoke(uri) }
                     val isSuccessResult = setPersonalInfoUseCase.invoke(userdata)
                     if (isSuccessResult) userdata.phoneNumber?.let {
+                        setFCMTokenUseCase.invoke()
                         ProfileSetupRoute.GoVerification(it)
                     }?.let { navigateRoute(it) }
 

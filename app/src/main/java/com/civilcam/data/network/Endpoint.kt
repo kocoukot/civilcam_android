@@ -28,7 +28,7 @@ object Endpoint {
         const val DELETE_ACCOUNT = "delete-account"
         const val CONTACT_SUPPORT = "contact-support"
         const val TOGGLE_SETTINGS = "toggle-settings"
-
+        const val SET_FCM_TOKEN = "set-fcm-token"
     }
 
     object Profile {
