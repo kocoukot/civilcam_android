@@ -15,6 +15,7 @@ class SessionUserMapper : Mapper<SessionUserResponse, SessionUser>(
             isEmailVerified = it.isEmailVerified,
             isTermsAndPolicyAccepted = it.isTermsAndPolicyAccepted,
             isUserProfileSetupRequired = it.isUserProfileSetupRequired,
+			isPinCodeSet = it.isPinCodeSet,
             canChangeEmail = it.canChangeEmail,
             canChangePassword = it.canChangePassword,
         )
