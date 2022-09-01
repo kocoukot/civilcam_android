@@ -16,9 +16,9 @@ class UserRepositoryImpl(
 	private val userService: UserService,
 	private val accountStorage: AccountStorage
 ) : UserRepository, BaseRepository() {
-
+	
 	private val userMapper = UserMapper()
-
+	
 	override suspend fun acceptTerms() =
 		safeApiCall {
 			userService.acceptTermsPolicy(AcceptTermsRequest(true))
@@ -31,7 +31,7 @@ class UserRepositoryImpl(
 				}
 			}
 		}
-
+	
 	override suspend fun getCurrentUser(): CurrentUser =
 		safeApiCall {
 			userService.currentUser()
@@ -44,7 +44,7 @@ class UserRepositoryImpl(
 				}
 			}
 		}
-
+	
 	override suspend fun logout(): Boolean =
 		safeApiCall {
 			userService.logout()
@@ -54,9 +54,9 @@ class UserRepositoryImpl(
 				is Resource.Success -> response.value.ok
 				is Resource.Failure -> throw response.serviceException
 			}
-
+			
 		}
-
+	
 	override suspend fun deleteAccount(): Boolean =
 		safeApiCall {
 			userService.deleteAccount()
@@ -67,7 +67,7 @@ class UserRepositoryImpl(
 				is Resource.Failure -> throw response.serviceException
 			}
 		}
-
+	
 	override suspend fun contactSupport(issue: String, text: String, email: String): Boolean =
 		safeApiCall {
 			userService.contactSupport(
@@ -83,7 +83,7 @@ class UserRepositoryImpl(
 				is Resource.Failure -> throw response.serviceException
 			}
 		}
-
+	
 	override suspend fun toggleSettings(type: String, isOn: Boolean): CurrentUser =
 		safeApiCall {
 			userService.toggleSettings(ToggleSettingsRequest(type, isOn))
@@ -94,7 +94,7 @@ class UserRepositoryImpl(
 				is Resource.Failure -> throw response.serviceException
 			}
 		}
-
+	
 	override suspend fun setFcmToken(): Boolean =
 		safeApiCall {
 			accountStorage.fcmToken?.let {
@@ -106,8 +106,29 @@ class UserRepositoryImpl(
 				is Resource.Failure -> throw response.serviceException
 			}
 		}
-
-
+	
+	override suspend fun checkPin(pinCode: String): Boolean =
+		safeApiCall {
+			userService.checkPin(CheckPinRequest(pinCode))
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> response.value.isMatch
+				is Resource.Failure -> throw response.serviceException
+			}
+		}
+	
+	override suspend fun setPin(currentPinCode: String?, newPinCode: String): CurrentUser =
+		safeApiCall {
+			userService.setPin(SetPinRequest(currentPinCode, newPinCode))
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> userMapper.mapData(response.value)
+					.also { accountStorage.updateUser(it) }
+				is Resource.Failure -> throw response.serviceException
+			}
+		}
+	
+	
 	//    override fun getUserEmail(): Pair<String, Boolean> =
 //        accountStorage.getUserEmail()
 //
@@ -133,7 +154,7 @@ class UserRepositoryImpl(
 				}
 			}
 		}
-
+	
 	override suspend fun changePassword(currentPassword: String, newPassword: String): Boolean =
 		safeApiCall {
 			userService.changePassword(ChangePasswordRequest(currentPassword, newPassword))
@@ -146,7 +167,7 @@ class UserRepositoryImpl(
 				}
 			}
 		}
-
+	
 	override suspend fun setUserLanguage(languageType: LanguageType): CurrentUser =
 		safeApiCall {
 			userService.setUserLanguage(SetUserLanguageRequest(languageType))
@@ -159,7 +180,7 @@ class UserRepositoryImpl(
 				}
 			}
 		}
-
+	
 	override suspend fun changeEmail(currentEmail: String, newEmail: String): Boolean =
 		safeApiCall {
 			userService.changeEmail(ChangeEmailRequest(currentEmail, newEmail))
