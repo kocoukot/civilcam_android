@@ -36,9 +36,9 @@ import org.koin.dsl.module
 val baseModule = module {
 	
 	single<KoinInjector> { GlobalKoinInjector(getKoin()) }
-
-    single { Places.createClient(get()) }
-
+	
+	single { Places.createClient(get()) }
+	
 }
 
 val authModule = module {
@@ -71,7 +71,7 @@ val authModule = module {
 	
 	viewModel { (token: String) -> CreatePasswordViewModel(token, get()) }
 	
-	viewModel { (pinCodeFlow: PinCodeFlow) -> PinCodeViewModel(pinCodeFlow) }
+	viewModel { (pinCodeFlow: PinCodeFlow) -> PinCodeViewModel(pinCodeFlow, get(), get()) }
 	
 	viewModel { (isReselect: Boolean) -> SubscriptionViewModel(isReselect, get()) }
 }
@@ -98,7 +98,7 @@ val alertsRootModule = module {
 }
 
 val profileModule = module {
-
+	
 	viewModel {
 		SettingsViewModel(
 			get(),
@@ -112,7 +112,7 @@ val profileModule = module {
 			get()
 		)
 	}
-
+	
 	viewModel { (credentialType: UserProfileType, credential: String) ->
 		ChangeCredentialsViewModel(
 			credentialType,
