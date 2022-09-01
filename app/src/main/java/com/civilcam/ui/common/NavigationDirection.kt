@@ -12,6 +12,9 @@ sealed class NavigationDirection : Parcelable {
 	object ProfileSetup : NavigationDirection()
 	
 	@Parcelize
+	object PinCodeSetup : NavigationDirection()
+	
+	@Parcelize
 	object TermsAndPolicyAccept : NavigationDirection()
 	
 	@Parcelize
@@ -26,8 +29,8 @@ sealed class NavigationDirection : Parcelable {
 				!user.sessionUser.isEmailVerified -> EmailVerification(user.sessionUser.email)
 				!user.sessionUser.isTermsAndPolicyAccepted -> TermsAndPolicyAccept //&& it.sessionUser.authType == AuthType.email
 				user.sessionUser.isUserProfileSetupRequired -> ProfileSetup
+				!user.sessionUser.isPinCodeSet -> PinCodeSetup
 				//				!user.userBaseInfo.isPhoneVerified -> PhoneVerification(user.userBaseInfo.phone)
-
 				else -> SignInSuccess
 			}
 		}
