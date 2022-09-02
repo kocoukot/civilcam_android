@@ -84,7 +84,7 @@ class PinCodeViewModel(
 			}
 			PinCodeFlow.SOS_PIN_CODE -> {
 				_state.value = _state.value.copy(currentPinCode = pinCode)
-				if (_state.value.pinCode.length == PIN_SIZE) {
+				if (_state.value.currentPinCode.length == PIN_SIZE) {
 					checkPin(PinCodeFlow.SOS_PIN_CODE)
 				} else {
 					_state.value = _state.value.copy(currentNoMatch = false)
@@ -180,7 +180,6 @@ class PinCodeViewModel(
 	}
 	
 	private fun goEmergency() {
-		_state.value = _state.value.copy(currentNoMatch = false)
 		navigateRoute(PinCodeRoute.GoEmergency)
 	}
 	
