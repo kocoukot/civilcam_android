@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
+import com.civilcam.common.ext.clearPhone
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.common.compose.inputs.SearchInputField
@@ -86,7 +87,7 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
                                         )
                                     },
                                     trailingIcon = {
-                                        if (isInvited) {
+                                        if (isInvited || contact.phoneNumber.clearPhone() in state.value.invitesList.map { it.phone.clearPhone() }) {
                                             Text(
                                                 stringResource(id = R.string.invite_sent_text),
                                                 textAlign = TextAlign.End,

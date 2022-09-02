@@ -189,9 +189,6 @@ class NetworkMainViewModel(
         Timber.tag("networkSearch").i("searchString $searchString")
         _state.update { it.copy(data = _state.value.data.copy(searchText = searchString)) }
         mTextSearch.value = searchString
-//        if (searchString.isEmpty()) searchList = emptyList<PagingData<PersonModel>>().asFlow()
-//            else
-//            _state.update { it.copy(refreshList = Unit) }
     }
 
     private fun addUser(user: PersonModel) {

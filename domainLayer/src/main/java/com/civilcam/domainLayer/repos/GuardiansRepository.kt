@@ -3,6 +3,7 @@ package com.civilcam.domainLayer.repos
 import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.model.PaginationRequest
 import com.civilcam.domainLayer.model.guard.PersonModel
+import com.civilcam.domainLayer.model.guard.UserInviteModel
 
 interface GuardiansRepository {
 
@@ -17,5 +18,7 @@ interface GuardiansRepository {
     suspend fun getPersonDetail(personId: Int): PersonModel
 
     suspend fun setRequestReaction(reaction: ButtonAnswer, personId: Int): Boolean
+
+    suspend fun getInvitesList(): List<UserInviteModel>
 
 }

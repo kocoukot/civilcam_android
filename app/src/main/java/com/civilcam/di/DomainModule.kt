@@ -83,9 +83,9 @@ val domainModule = module {
 	factory { GoogleSignInUseCase(get(), get()) }
 
 	factory { ResetPasswordUseCase(get()) }
-	
+
 	factory { VerifyResetPasswordOtpUseCase(get()) }
-	
+
 	factory { RecoverPasswordUseCase(get()) }
 
 	factory { SaveFcmTokenUseCase(get()) }
@@ -110,6 +110,7 @@ val domainModule = module {
 
     factory { SetRequestReactionUseCase(get()) }
 
+	factory { GetPhoneInvitesUseCase(get()) }
 
 	factory { CheckPinUseCase(get()) }
 
