@@ -10,6 +10,8 @@ data class GuardianModel(
     val guardianName: String,
     val guardianAvatar: ImageInfo?,
     var guardianStatus: GuardianStatus,
+    val isOnGuard: Boolean?,
+    val isGuardian: Boolean?,
 ) : Parcelable {
     fun mapToItem() = GuardianItem(
         guardianId = guardianId,

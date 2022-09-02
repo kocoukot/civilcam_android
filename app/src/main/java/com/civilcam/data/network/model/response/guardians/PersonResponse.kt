@@ -5,7 +5,7 @@ import com.civilcam.domainLayer.model.user.LanguageType
 import com.google.gson.annotations.SerializedName
 
 class PersonResponse(
-    @SerializedName("id") val id: String,
+    @SerializedName("id") val id: Int,
     @SerializedName("language") val language: LanguageType,
     @SerializedName("fullName") val fullName: String,
     @SerializedName("dob") val dob: String,
