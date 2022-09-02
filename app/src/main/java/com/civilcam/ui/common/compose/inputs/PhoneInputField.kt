@@ -47,6 +47,11 @@ fun PhoneInputField(
 	var hasFocus by remember { mutableStateOf(false) }
 	var inputText by remember { mutableStateOf(text) }
 	if (text.isNotEmpty()) inputText = text
+	else {
+		LaunchedEffect(key1 = Unit) {
+			inputText = ""
+		}
+	}
 	
 	
 	val titleColorState by
@@ -56,17 +61,17 @@ fun PhoneInputField(
  
 	Column(
 		modifier = Modifier
-            .fillMaxWidth()
-            .background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
-            .onFocusEvent {
-                hasFocus = it.isFocused
-                if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(400)
-                        isInFocus.invoke()
-                    }
-                }
-            }
+			.fillMaxWidth()
+			.background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
+			.onFocusEvent {
+				hasFocus = it.isFocused
+				if (it.isFocused) {
+					coroutineScope.launch {
+						delay(400)
+						isInFocus.invoke()
+					}
+				}
+			}
 	) {
 		
 		Text(
@@ -74,8 +79,8 @@ fun PhoneInputField(
 			color = titleColorState,
 			style = CCTheme.typography.common_text_small_regular,
 			modifier = Modifier
-                .padding(bottom = 8.dp)
-                .fillMaxWidth()
+				.padding(bottom = 8.dp)
+				.fillMaxWidth()
 		)
 		
 		MaterialTheme(
@@ -86,14 +91,14 @@ fun PhoneInputField(
 				visualTransformation = PhoneNumberTransformation(),
 				textStyle = if (hasError && inputText.isNotEmpty()) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
 				modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 5.dp)
-                    .border(
-                        1.dp,
-                        errorBorderState,
-                        RoundedCornerShape(4.dp)
-                    )
-                    .clip(RoundedCornerShape(4.dp)),
+					.fillMaxWidth()
+					.padding(bottom = 5.dp)
+					.border(
+						1.dp,
+						errorBorderState,
+						RoundedCornerShape(4.dp)
+					)
+					.clip(RoundedCornerShape(4.dp)),
 				singleLine = true,
 				value = inputText,
 				onValueChange = { value ->

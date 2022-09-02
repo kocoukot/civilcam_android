@@ -48,3 +48,20 @@ fun CircleUserAvatar(avatar: Uri, avatarSize: Int) {
         )
     }
 }
+
+
+@Composable
+fun CircleUserAvatar(avatar: String, avatarSize: Int) {
+    Box(
+        modifier = Modifier
+            .size(avatarSize.dp)
+            .border(1.dp, CCTheme.colors.white, CircleShape),
+    ) {
+        Image(
+            painter = rememberImagePainter(data = avatar), contentDescription = null,
+            modifier = Modifier
+                .size(avatarSize.dp)
+                .clip(CircleShape)
+        )
+    }
+}

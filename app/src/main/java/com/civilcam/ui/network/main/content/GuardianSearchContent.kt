@@ -1,11 +1,11 @@
 package com.civilcam.ui.network.main.content
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
@@ -15,29 +15,35 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemsIndexed
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.guard.GuardianModel
 import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.ui.common.compose.*
+import com.civilcam.ui.network.main.model.NetworkMainActions
 import timber.log.Timber
 
 @Composable
 fun GuardianSearchContent(
-    data: List<GuardianModel>,
+    lazyData: LazyPagingItems<GuardianModel>?,
+    pendingList: List<Int>,
     searchPart: String,
-    clickAddNew: (GuardianModel) -> Unit
-
+    onSearchAction: (NetworkMainActions) -> Unit,
 ) {
-    Timber.d("addUser ${data}")
+    Timber.tag("networkSearch").i("lazyList ${lazyData?.itemSnapshotList}")
 
-    if (data.isEmpty()) {
-        EmptySearchScreenState()
-    } else {
-        SearchResults(data, searchPart,
-            clickAddNew = {
-                clickAddNew.invoke(it)
-            })
+    Crossfade(targetState = (lazyData?.itemCount ?: 0) > 0) { targetState ->
+        when (targetState) {
+            false -> EmptySearchScreenState()
+            true -> SearchResults(
+                lazyData,
+                pendingList,
+                searchPart,
+                onRowAction = onSearchAction::invoke
+            )
+        }
     }
 }
 
@@ -65,53 +71,63 @@ private fun EmptySearchScreenState() {
 
 @Composable
 private fun SearchResults(
-    results: List<GuardianModel>,
+    results: LazyPagingItems<GuardianModel>?,
+    pendingList: List<Int>,
     searchPart: String,
-    clickAddNew: (GuardianModel) -> Unit
+    onRowAction: (NetworkMainActions) -> Unit,
 ) {
+    Timber.tag("networkSearch").i("lazyList ${results?.itemCount}")
+
     LazyColumn {
         item {
             HeaderTitleText(
                 stringResource(id = R.string.add_guardian_header_title),
-                needTop = results.isEmpty()
+                needTop = results?.itemCount == 0
             )
 
         }
+        results?.let {
+            itemsIndexed(results, key = { _, item -> item.guardianId }) { index, item ->
+                Timber.tag("networkSearch").i("lazyList ${results.itemCount}")
 
-        itemsIndexed(results, key = { _, item -> item.guardianId }) { index, item ->
-            var userStatus by remember { mutableStateOf(item.guardianStatus) }
-            userStatus = item.guardianStatus
-            SearchRow(
-                title = item.guardianName,
-                searchPart = searchPart,
-                needDivider = index < results.lastIndex,
-                leadingIcon = {
-                    CircleUserAvatar(
-                        avatar = item.guardianAvatar,
-                        avatarSize = 36
-                    )
-                },
-                trailingIcon = {
-                    when (userStatus) {
-                        GuardianStatus.PENDING -> {
-                            Text(
-                                text = stringResource(id = R.string.pending_text),
-                                style = CCTheme.typography.common_text_medium,
-                                modifier = Modifier.padding(end = 16.dp),
-                                color = CCTheme.colors.grayOne,
-                            )
-                        }
-                        GuardianStatus.NEW -> {
-                            TextActionButton(actionTitle = stringResource(id = R.string.add_text)) {
-                                userStatus = GuardianStatus.PENDING
-                                clickAddNew.invoke(item)
+                item?.let {
+                    var userStatus by remember { mutableStateOf(item.guardianStatus) }
+                    userStatus = item.guardianStatus
+                    SearchRow(
+                        title = item.guardianName,
+                        searchPart = searchPart,
+                        needDivider = index < results.itemCount - 1,
+                        leadingIcon = {
+                            item.guardianAvatar?.imageUrl?.let {
+                                CircleUserAvatar(
+                                    avatar = it,
+                                    avatarSize = 36
+                                )
                             }
+                        },
+                        trailingIcon = {
+                            when {
+                                userStatus == GuardianStatus.PENDING || item.guardianId in pendingList -> {
+                                    Text(
+                                        text = stringResource(id = R.string.pending_text),
+                                        style = CCTheme.typography.common_text_medium,
+                                        modifier = Modifier.padding(end = 16.dp),
+                                        color = CCTheme.colors.grayOne,
+                                    )
+                                }
+                                else -> {
+                                    TextActionButton(actionTitle = stringResource(id = R.string.add_text)) {
+                                        userStatus = GuardianStatus.PENDING
+                                        onRowAction.invoke(NetworkMainActions.ClickAddUser(item))
+                                    }
+                                }
+                            }
+                        },
+                        rowClick = {
+                            onRowAction.invoke(NetworkMainActions.ClickUser(item.mapToItem()))
                         }
-                        else -> {}
-                    }
-
-                },
-            ) {
+                    )
+                }
 
             }
         }

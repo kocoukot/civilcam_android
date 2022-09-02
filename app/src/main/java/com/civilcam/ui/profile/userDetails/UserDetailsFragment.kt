@@ -35,9 +35,7 @@ class UserDetailsFragment : Fragment() {
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(
-                    viewLifecycleOwner
-                )
+                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
 
             setContent {

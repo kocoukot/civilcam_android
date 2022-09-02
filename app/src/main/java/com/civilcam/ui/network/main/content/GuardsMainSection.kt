@@ -76,10 +76,12 @@ fun GuardsMainSection(
                                 }),
                                 title = contact.guardianName,
                                 leadingIcon = {
-                                    CircleUserAvatar(
-                                        avatar = contact.guardianAvatar,
-                                        avatarSize = 36
-                                    )
+                                    contact.guardianAvatar?.imageUrl?.let {
+                                        CircleUserAvatar(
+                                            avatar = it,
+                                            avatarSize = 36
+                                        )
+                                    }
                                 },
                                 trailingIcon = {
                                     getUserStatus(contact.guardianStatus)

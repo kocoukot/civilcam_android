@@ -21,16 +21,13 @@ class VerificationRepositoryImpl(
     override suspend fun verifyOtpCode(verifyFlow: VerificationFlow, code: String): CurrentUser =
         safeApiCall {
             verificationService.verifyOtpCode(
-                VerifyCodeRequest(
-                    otpType = verifyFlow.rawValue,
-                    code = code
-                )
+                VerifyCodeRequest(otpType = verifyFlow.rawValue, code = code)
             )
         }.let { response ->
             when (response) {
                 is Resource.Success -> sessionUserMapper.mapData(response.value)
                 is Resource.Failure -> {
-                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
                 }
             }
@@ -43,11 +40,9 @@ class VerificationRepositoryImpl(
             )
         }.let { response ->
             when (response) {
-                is Resource.Success -> {
-                    response.value.timeout.toLong()
-                }
+                is Resource.Success -> response.value.timeout.toLong()
                 is Resource.Failure -> {
-                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
                 }
             }

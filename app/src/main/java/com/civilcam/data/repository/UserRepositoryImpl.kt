@@ -26,7 +26,7 @@ class UserRepositoryImpl(
 			when (response) {
 				is Resource.Success -> response.value
 				is Resource.Failure -> {
-					if (response.serviceException.isForceLogout) accountStorage.logOut()
+					response.checkIfLogOut { accountStorage.logOut() }
 					throw response.serviceException
 				}
 			}
@@ -39,7 +39,7 @@ class UserRepositoryImpl(
 			when (response) {
 				is Resource.Success -> userMapper.mapData(response.value)
 				is Resource.Failure -> {
-					if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    response.checkIfLogOut { accountStorage.logOut() }
 					throw response.serviceException
 				}
 			}

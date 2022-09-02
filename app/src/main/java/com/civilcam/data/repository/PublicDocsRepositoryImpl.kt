@@ -18,14 +18,12 @@ class PublicDocsRepositoryImpl(
             publicService.legalDocs()
         }.let { response ->
             when (response) {
-                is Resource.Success -> {
-                    LegalDocs(
-                        response.value.termsAndConditions,
-                        response.value.privacyPolicy
-                    )
-                }
+                is Resource.Success -> LegalDocs(
+                    response.value.termsAndConditions,
+                    response.value.privacyPolicy
+                )
                 is Resource.Failure -> {
-                    if (response.serviceException.isForceLogout) accountStorage.logOut()
+                    response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
                 }
             }

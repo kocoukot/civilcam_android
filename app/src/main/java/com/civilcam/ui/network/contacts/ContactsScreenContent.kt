@@ -24,6 +24,7 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
 
     val state = viewModel.state.collectAsState()
 
+    state.value.checkIsLoading()
 
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
@@ -68,8 +69,6 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
                             is LetterContactItem -> Column {
                                 HeaderTitleText(contact.letter)
                             }
-
-
                             is PersonContactItem -> {
                                 var isInvited by remember { mutableStateOf(contact.isInvited) }
                                 isInvited = contact.isInvited

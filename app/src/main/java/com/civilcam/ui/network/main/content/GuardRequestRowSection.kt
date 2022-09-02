@@ -48,7 +48,9 @@ fun GuardRequestRowSection(
 
             when (requestList.size) {
                 1 -> {
-                    CircleUserAvatar(avatar = requestList.first().guardianAvatar, avatarSize = 36)
+                    requestList.first().guardianAvatar?.imageUrl?.let {
+                        CircleUserAvatar(avatar = it, avatarSize = 36)
+                    }
                 }
                 else -> {
                     Box(modifier = Modifier.size(36.dp), contentAlignment = Alignment.Center) {
@@ -57,10 +59,12 @@ fun GuardRequestRowSection(
                                 modifier = Modifier.size(36.dp),
                                 contentAlignment = Alignment.TopEnd
                             ) {
-                                CircleUserAvatar(
-                                    avatar = requestList[2].guardianAvatar,
-                                    avatarSize = 24
-                                )
+                                requestList[2].guardianAvatar?.imageUrl?.let {
+                                    CircleUserAvatar(
+                                        avatar = it,
+                                        avatarSize = 24
+                                    )
+                                }
 
                             }
                         }
@@ -68,20 +72,24 @@ fun GuardRequestRowSection(
                             modifier = Modifier.size(36.dp),
                             contentAlignment = Alignment.BottomCenter
                         ) {
-                            CircleUserAvatar(
-                                avatar = requestList[1].guardianAvatar,
-                                avatarSize = 24
-                            )
+                            requestList[1].guardianAvatar?.imageUrl?.let {
+                                CircleUserAvatar(
+                                    avatar = it,
+                                    avatarSize = 24
+                                )
+                            }
 
                         }
                         Box(
                             modifier = Modifier.size(36.dp),
                             contentAlignment = Alignment.TopStart
                         ) {
-                            CircleUserAvatar(
-                                avatar = requestList[0].guardianAvatar,
-                                avatarSize = 24
-                            )
+                            requestList[0].guardianAvatar?.imageUrl?.let {
+                                CircleUserAvatar(
+                                    avatar = it,
+                                    avatarSize = 24
+                                )
+                            }
 
                         }
                     }

@@ -43,13 +43,11 @@ class AuthRepositoryImpl(
 			)
 		}.let { response ->
 			when (response) {
-				is Resource.Success -> {
-					response.value.exists
-				}
-				is Resource.Failure -> {
-					if (response.serviceException.isForceLogout) accountStorage.logOut()
-					throw response.serviceException
-				}
+				is Resource.Success -> response.value.exists
+                is Resource.Failure -> {
+                    response.checkIfLogOut { accountStorage.logOut() }
+                    throw response.serviceException
+                }
 			}
 		}
 
@@ -61,13 +59,11 @@ class AuthRepositoryImpl(
 			)
 		}.let { response ->
 			when (response) {
-				is Resource.Success -> {
-					sessionUserMapper.mapData(response.value)
-				}
-				is Resource.Failure -> {
-					if (response.serviceException.isForceLogout) accountStorage.logOut()
-					throw response.serviceException
-				}
+                is Resource.Success -> sessionUserMapper.mapData(response.value)
+                is Resource.Failure -> {
+                    response.checkIfLogOut { accountStorage.logOut() }
+                    throw response.serviceException
+                }
 			}
 		}
 
@@ -83,13 +79,11 @@ class AuthRepositoryImpl(
 			)
 		}.let { response ->
 			when (response) {
-				is Resource.Success -> {
-					sessionUserMapper.mapData(response.value)
-				}
-				is Resource.Failure -> {
-					if (response.serviceException.isForceLogout) accountStorage.logOut()
-					throw response.serviceException
-				}
+                is Resource.Success -> sessionUserMapper.mapData(response.value)
+                is Resource.Failure -> {
+                    response.checkIfLogOut { accountStorage.logOut() }
+                    throw response.serviceException
+                }
 			}
 		}
 
@@ -102,12 +96,10 @@ class AuthRepositoryImpl(
 			)
 		}.let { response ->
 			when (response) {
-				is Resource.Success -> {
-					response.value.timeout.toLong()
-				}
-				is Resource.Failure -> {
-					throw response.serviceException
-				}
+                is Resource.Success -> response.value.timeout.toLong()
+                is Resource.Failure -> {
+                    throw response.serviceException
+                }
 			}
 		}
 
@@ -121,12 +113,10 @@ class AuthRepositoryImpl(
 			)
 		}.let { response ->
 			when (response) {
-				is Resource.Success -> {
-					response.value.ok
-				}
-				is Resource.Failure -> {
-					throw response.serviceException
-				}
+                is Resource.Success -> response.value.ok
+                is Resource.Failure -> {
+                    throw response.serviceException
+                }
 			}
 		}
 
@@ -174,14 +164,11 @@ class AuthRepositoryImpl(
 				VerifyResetPasswordRequest(email, code)
 			)
 		}.let { response ->
-			when (response) {
-				is Resource.Success -> {
-					response.value.recoveryToken
-				}
-				is Resource.Failure -> {
-					throw response.serviceException
-				}
-			}
+            when (response) {
+                is Resource.Success -> response.value.recoveryToken
+                is Resource.Failure -> throw response.serviceException
+
+            }
 		}
 
 

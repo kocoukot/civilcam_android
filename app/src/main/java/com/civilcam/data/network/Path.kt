@@ -6,11 +6,7 @@ object Path {
     const val USER = "user"
     const val PROFILE = "profile"
     const val SUBSCRIPTIONS = "subscriptions"
+    const val GUARDIANS = "guardians"
+
     const val PUBLIC = "content"
 }
-
-
-
-
-
-
