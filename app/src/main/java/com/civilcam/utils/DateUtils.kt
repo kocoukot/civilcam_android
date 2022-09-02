@@ -25,6 +25,7 @@ object DateUtils {
             .toLocalDate()
     )
 
+
     fun dateOfBirthMockFormat(date: Long): String = dateOfBirthTimeFormatter.format(
         Instant.ofEpochMilli(date)
             .atZone(ZoneId.systemDefault())

@@ -3,10 +3,10 @@ package com.civilcam.ui.network.contacts
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
+import com.civilcam.common.ext.serviceCast
 import com.civilcam.data.local.ContactsStorage
 import com.civilcam.data.local.model.Contact
 import com.civilcam.data.local.model.PersonContactFilter
-import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.usecase.guardians.InviteByNumberUseCase
 import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.network.contacts.model.*
@@ -71,7 +71,9 @@ class ContactsViewModel(
                 _state.update { it.copy(data = ContactsModel(contactsModel)) }
             },
             onFailure = { error ->
-                error as ServiceException
+                error.serviceCast { errorMessage, _, isForceLogout ->
+                    _state.update { it.copy(errorText = errorMessage) }
+                }
             },
             onComplete = { _state.update { it.copy(isLoading = false) } }
         )

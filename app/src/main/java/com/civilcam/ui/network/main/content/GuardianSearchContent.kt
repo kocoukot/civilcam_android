@@ -19,15 +19,15 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domainLayer.model.guard.GuardianModel
 import com.civilcam.domainLayer.model.guard.GuardianStatus
+import com.civilcam.domainLayer.model.guard.PersonModel
 import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.network.main.model.NetworkMainActions
 import timber.log.Timber
 
 @Composable
 fun GuardianSearchContent(
-    lazyData: LazyPagingItems<GuardianModel>?,
+    lazyData: LazyPagingItems<PersonModel>?,
     pendingList: List<Int>,
     searchPart: String,
     onSearchAction: (NetworkMainActions) -> Unit,
@@ -71,7 +71,7 @@ private fun EmptySearchScreenState() {
 
 @Composable
 private fun SearchResults(
-    results: LazyPagingItems<GuardianModel>?,
+    results: LazyPagingItems<PersonModel>?,
     pendingList: List<Int>,
     searchPart: String,
     onRowAction: (NetworkMainActions) -> Unit,
@@ -87,18 +87,18 @@ private fun SearchResults(
 
         }
         results?.let {
-            itemsIndexed(results, key = { _, item -> item.guardianId }) { index, item ->
+            itemsIndexed(results, key = { _, item -> item.personId }) { index, item ->
                 Timber.tag("networkSearch").i("lazyList ${results.itemCount}")
 
                 item?.let {
-                    var userStatus by remember { mutableStateOf(item.guardianStatus) }
-                    userStatus = item.guardianStatus
+                    var userStatus by remember { mutableStateOf(item.personStatus) }
+                    userStatus = item.personStatus
                     SearchRow(
-                        title = item.guardianName,
+                        title = item.personFullName,
                         searchPart = searchPart,
                         needDivider = index < results.itemCount - 1,
                         leadingIcon = {
-                            item.guardianAvatar?.imageUrl?.let {
+                            item.personAvatar?.imageUrl?.let {
                                 CircleUserAvatar(
                                     avatar = it,
                                     avatarSize = 36
@@ -107,7 +107,7 @@ private fun SearchResults(
                         },
                         trailingIcon = {
                             when {
-                                userStatus == GuardianStatus.PENDING || item.guardianId in pendingList -> {
+                                userStatus == GuardianStatus.PENDING || item.personId in pendingList -> {
                                     Text(
                                         text = stringResource(id = R.string.pending_text),
                                         style = CCTheme.typography.common_text_medium,

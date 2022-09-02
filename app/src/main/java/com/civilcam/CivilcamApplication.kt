@@ -4,7 +4,7 @@ import android.app.Application
 import com.civilcam.di.*
 import com.civilcam.di.source.sourceModule
 import com.civilcam.domainLayer.model.user.NotificationType
-import com.civilcam.domainLayer.usecase.auth.SetFcmTokenUseCase
+import com.civilcam.domainLayer.usecase.auth.SaveFcmTokenUseCase
 import com.civilcam.service.notifications.NotificationHelper
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -17,7 +17,7 @@ import timber.log.Timber
 
 class CivilcamApplication : Application() {
 
-    private val setFcmTokenUseCase: SetFcmTokenUseCase by inject()
+    private val saveFcmTokenUseCase: SaveFcmTokenUseCase by inject()
 
 
     override fun onCreate() {
@@ -54,7 +54,7 @@ class CivilcamApplication : Application() {
                 }
 
                 val token = task.result
-                setFcmTokenUseCase(token)
+                saveFcmTokenUseCase(token)
 
                 Timber.d("FCM TOKEN $token")
 

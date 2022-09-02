@@ -8,6 +8,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.civilcam.common.ext.compose.ComposeViewModel
+import com.civilcam.common.ext.serviceCast
 import com.civilcam.data.network.support.ServiceException
 import com.civilcam.di.source.KoinInjector
 import com.civilcam.domainLayer.model.guard.*
@@ -21,7 +22,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
@@ -189,18 +189,20 @@ class NetworkMainViewModel(
         Timber.tag("networkSearch").i("searchString $searchString")
         _state.update { it.copy(data = _state.value.data.copy(searchText = searchString)) }
         mTextSearch.value = searchString
-        if (searchString.isEmpty()) searchList = emptyList<PagingData<GuardianModel>>().asFlow()
+//        if (searchString.isEmpty()) searchList = emptyList<PagingData<PersonModel>>().asFlow()
+//            else
+//            _state.update { it.copy(refreshList = Unit) }
     }
 
-    private fun addUser(user: GuardianModel) {
+    private fun addUser(user: PersonModel) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            kotlin.runCatching { askToGuardUseCase(user.guardianId) }
+            kotlin.runCatching { askToGuardUseCase(user.personId) }
                 .onSuccess {
                     var contactsModel =
                         _state.value.data.searchScreenSectionModel
                     contactsModel =
-                        contactsModel.copy(pendingList = contactsModel.pendingList + listOf(user.guardianId))
+                        contactsModel.copy(pendingList = contactsModel.pendingList + listOf(user.personId))
                     _state.update {
                         it.copy(
                             data = _state.value.data.copy(searchScreenSectionModel = contactsModel)
@@ -208,8 +210,7 @@ class NetworkMainViewModel(
                     }
                 }
                 .onFailure { error ->
-                    error as ServiceException
-                    _state.update { it.copy(errorText = error.errorMessage) }
+                    error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
                 }
                 .also {
                     _state.update { it.copy(isLoading = false) }
@@ -226,7 +227,7 @@ class NetworkMainViewModel(
 
     }
 
-    private fun loadRPlacesList(): Flow<PagingData<GuardianModel>> {
+    private fun loadRPlacesList(): Flow<PagingData<PersonModel>> {
         return Pager(
             config = PagingConfig(pageSize = 40, initialLoadSize = 20, prefetchDistance = 6),
             pagingSourceFactory = {

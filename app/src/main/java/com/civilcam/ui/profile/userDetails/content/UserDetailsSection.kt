@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
-import com.civilcam.domainLayer.model.UserDetailsModel
+import com.civilcam.domainLayer.model.guard.PersonModel
 import com.civilcam.ui.common.compose.CircleUserAvatar
 import com.civilcam.ui.common.compose.ComposeButton
 import com.civilcam.ui.common.compose.RowDivider
@@ -29,7 +29,7 @@ import com.civilcam.utils.DateUtils
 
 @Composable
 fun UserDetailsSection(
-    userData: UserDetailsModel,
+    userData: PersonModel,
     myGuardenceChange: (UserDetailsActions) -> Unit,
 ) {
 
@@ -40,25 +40,32 @@ fun UserDetailsSection(
             .padding(top = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CircleUserAvatar(
-            avatar = R.drawable.img_avatar,
-            avatarSize = 120,
-        )
+        userData.personAvatar?.imageUrl?.let { avatar ->
+            CircleUserAvatar(
+                avatar = avatar,
+                avatarSize = 120,
+            )
+        }
 
         Text(
-            text = userData.userInfoSection.userName,
+            text = userData.personFullName,
             style = CCTheme.typography.button_text,
             color = CCTheme.colors.black,
             modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
         )
-        AdditionalInfo(DateUtils.dateOfBirthMockFormat(userData.userInfoSection.dateOfBirth))
-
-        if (userData.isMyGuard || userData.guardRequest?.isGuarding == true) {
+        userData.personBirth?.let { dob ->
             AdditionalInfo(
-                userData.userInfoSection.address,
-                Modifier.padding(top = 4.dp, bottom = 16.dp)
+                DateUtils.dateOfBirthFormat(dob)
             )
+        }
 
+        if (userData.isOnGuard == true) {
+            userData.personAddress?.let { address ->
+                AdditionalInfo(
+                    address,
+                    Modifier.padding(top = 4.dp, bottom = 16.dp)
+                )
+            }
             Row(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
@@ -66,12 +73,14 @@ fun UserDetailsSection(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                InformationBoxContent(
-                    text = userData.userInfoSection.phoneNumber,
-                    modifier = Modifier.weight(1f),
-                )
+                userData.personPhone?.let { phone ->
+                    InformationBoxContent(
+                        text = phone,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
 
-                if (userData.guardRequest?.isGuarding == true) {
+                if (userData.isOnGuard == true) {
                     InformationBoxContent(
                         text = stringResource(id = R.string.user_details_stop_guarding),
                         modifier = Modifier.weight(1f)
@@ -92,9 +101,10 @@ fun UserDetailsSection(
 
 
         val buttonTitle =
-            if (userData.isMyGuard) stringResource(id = R.string.user_details_remove_gaurdian) else stringResource(
-                id = R.string.user_details_ask_to_guard
-            )
+            if (userData.isGuardian)
+                stringResource(id = R.string.user_details_remove_gaurdian)
+            else
+                stringResource(id = R.string.user_details_ask_to_guard)
         ComposeButton(
             title = buttonTitle,
             modifier = Modifier.padding(horizontal = 16.dp),

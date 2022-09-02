@@ -4,7 +4,7 @@ import android.os.CountDownTimer
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.formatTime
-import com.civilcam.data.network.support.ServiceException
+import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.domainLayer.usecase.auth.VerifyResetPasswordOtpUseCase
 import com.civilcam.domainLayer.usecase.verify.SendOtpCodeUseCase
@@ -26,9 +26,9 @@ class VerificationViewModel(
 ) :
 	ComposeViewModel<VerificationState, VerificationRoute, VerificationActions>() {
 	override var _state: MutableStateFlow<VerificationState> = MutableStateFlow(VerificationState())
-	
+
 	private var timer: CountDownTimer? = null
-	
+
 	init {
 		_state.update {
 			it.copy(
@@ -39,7 +39,7 @@ class VerificationViewModel(
 		}
 		startTimer()
 	}
-	
+
 	override fun setInputActions(action: VerificationActions) {
 		when (action) {
 			is VerificationActions.EnterCodeData -> otpCodeEntered(action.data)
@@ -47,7 +47,7 @@ class VerificationViewModel(
 			VerificationActions.ClickGoBack -> goBack()
 		}
 	}
-	
+
 	private fun otpCodeEntered(code: String) {
 		code.takeIf { code.length == 6 }
 			?.let {
@@ -68,44 +68,46 @@ class VerificationViewModel(
 								_state.value = _state.value.copy(token = it.toString())
 							}
 							goToNextPage()
-							
+
 						}
 						.onFailure { error ->
-							error as ServiceException
-							_state.update { it.copy(errorText = error.errorMessage) }
+							error.serviceCast { msg, _, isForceLogout ->
+								_state.update { it.copy(errorText = msg) }
+							}
 						}
 					_state.update { it.copy(isLoading = false) }
-					
+
 				}
 			}
 		if (code.length < 6) _state.update { it.copy(hasError = false) }
 	}
-	
+
 	private fun resendClick() {
 		viewModelScope.launch {
 			kotlin.runCatching { sendOtpCodeUseCase.invoke(verificationFlow) }
 				.onSuccess { startTimer() }
 				.onFailure { error ->
-					error as ServiceException
-					_state.update { it.copy(errorText = error.errorMessage) }
+					error.serviceCast { msg, _, isForceLogout ->
+						_state.update { it.copy(errorText = msg) }
+					}
 				}
 		}
 	}
-	
+
 	private fun startTimer() {
 		viewModelScope.launch {
 			timer = object : CountDownTimer(60000, 1000) {
 				override fun onTick(millisUntilFinished: Long) {
 					_state.update { it.copy(timeOut = millisUntilFinished.formatTime()) }
 				}
-				
+
 				override fun onFinish() {
 					_state.update { it.copy(timeOut = "") }
 				}
 			}.start()
 		}
 	}
-	
+
 	private fun goToNextPage() {
 		timer?.cancel()
 		if (verificationFlow == VerificationFlow.RESET_PASSWORD) {
@@ -114,7 +116,7 @@ class VerificationViewModel(
 			navigateRoute(VerificationRoute.ToNextScreen)
 		}
 	}
-	
+
 	private fun goBack() {
 		navigateRoute(VerificationRoute.GoBack)
 	}

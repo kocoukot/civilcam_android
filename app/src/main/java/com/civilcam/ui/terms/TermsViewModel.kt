@@ -2,7 +2,7 @@ package com.civilcam.ui.terms
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.data.network.support.ServiceException
+import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.model.docs.TermsType
 import com.civilcam.domainLayer.usecase.docs.GetTermsLinksUseCase
 import com.civilcam.domainLayer.usecase.user.AcceptLegalDocsUseCase
@@ -29,8 +29,9 @@ class TermsViewModel(
                     _state.update { it.copy(isSettings = isSettings, legalDocs = docs) }
                 }
                 .onFailure { error ->
-                    error as ServiceException
-                    _state.update { it.copy(errorText = error.errorMessage) }
+                    error.serviceCast { msg, _, isForceLogout ->
+                        _state.update { it.copy(errorText = msg) }
+                    }
                 }
             _state.update { it.copy(isLoading = false) }
         }
@@ -53,8 +54,9 @@ class TermsViewModel(
             kotlin.runCatching { acceptLegalDocsUseCase.invoke() }
                 .onSuccess { navigateRoute(TermsRoute.GoSubscription) }
                 .onFailure { error ->
-                    error as ServiceException
-                    _state.update { it.copy(errorText = error.errorMessage) }
+                    error.serviceCast { msg, _, isForceLogout ->
+                        _state.update { it.copy(errorText = msg) }
+                    }
                 }
         }
     }

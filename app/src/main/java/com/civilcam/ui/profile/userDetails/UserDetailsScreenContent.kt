@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.AlertDialogTypes
+import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.TopAppBarContent
@@ -35,6 +36,10 @@ fun UserDetailsScreenContent(viewModel: UserDetailsViewModel) {
 
     if (state.value.isLoading) {
         DialogLoadingContent()
+    }
+
+    state.value.showAlert {
+        viewModel.setInputActions(UserDetailsActions.ClickCloseErrorAlert)
     }
 
     if (state.value.alertType != null) {
@@ -82,13 +87,13 @@ fun UserDetailsScreenContent(viewModel: UserDetailsViewModel) {
                     myGuardenceChange = viewModel::setInputActions
                 )
 
-                if (data.guardRequest != null && data.guardRequest?.isGuarding != true) {
+                if (data.personStatus == GuardianStatus.PENDING) {
                     Divider(
                         color = CCTheme.colors.lightGray, modifier = Modifier
                             .height(20.dp)
                     )
                     UserRequestSection(
-                        data.userInfoSection.userName,
+                        data.personFullName,
                         stringResource(id = R.string.user_details_request_text)
                     ) {
                         viewModel.setInputActions(UserDetailsActions.ClickRequestAnswer(it))

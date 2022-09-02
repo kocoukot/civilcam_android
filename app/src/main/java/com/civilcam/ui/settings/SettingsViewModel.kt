@@ -2,7 +2,7 @@ package com.civilcam.ui.settings
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.data.network.support.ServiceException
+import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.model.AuthType
 import com.civilcam.domainLayer.model.ScreenAlert
 import com.civilcam.domainLayer.model.user.LanguageType
@@ -74,8 +74,7 @@ class SettingsViewModel(
             action = { setUserLanguageUseCase(languageType) },
             onSuccess = { goBack() },
             onFailure = { error ->
-                error as ServiceException
-                _state.update { it.copy(errorText = error.errorMessage) }
+                error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
             },
             onComplete = { _state.update { it.copy(isLoading = false) } }
         )
@@ -95,9 +94,10 @@ class SettingsViewModel(
             kotlin.runCatching { if (isLogOut) logoutUseCase() else deleteAccountUseCase() }
                 .onSuccess { navigateRoute(SettingsRoute.GoLanguageSelect) }
                 .onFailure { error ->
-                    error as ServiceException
-                    if (error.isForceLogout) navigateRoute(SettingsRoute.ForceLogout)
-                    else _state.update { it.copy(errorText = error.errorMessage) }
+                    error.serviceCast { msg, _, isForceLogout ->
+                        if (isForceLogout) navigateRoute(SettingsRoute.ForceLogout)
+                        _state.update { it.copy(errorText = msg) }
+                    }
                 }
             _state.update { it.copy(isLoading = false) }
         }
@@ -196,9 +196,10 @@ class SettingsViewModel(
                     }
                 }
                 .onFailure { error ->
-                    error as ServiceException
-                    if (error.isForceLogout) navigateRoute(SettingsRoute.ForceLogout)
-                    else _state.update { it.copy(errorText = error.errorMessage) }
+                    error.serviceCast { msg, _, isForceLogout ->
+                        if (isForceLogout) navigateRoute(SettingsRoute.ForceLogout)
+                        _state.update { it.copy(errorText = msg) }
+                    }
                 }
             _state.update { it.copy(isLoading = false) }
         }
@@ -238,9 +239,10 @@ class SettingsViewModel(
                 }
                     .onSuccess { goBack(ScreenAlert.ReportSentAlert) }
                     .onFailure { error ->
-                        error as ServiceException
-                        if (error.isForceLogout) navigateRoute(SettingsRoute.ForceLogout)
-                        else _state.update { it.copy(errorText = error.errorMessage) }
+                        error.serviceCast { msg, _, isForceLogout ->
+                            if (isForceLogout) navigateRoute(SettingsRoute.ForceLogout)
+                            _state.update { it.copy(errorText = msg) }
+                        }
                     }
                 _state.update { it.copy(isLoading = false) }
             }
@@ -281,8 +283,9 @@ class SettingsViewModel(
                         }
                     }
                     .onFailure { error ->
-                        error as ServiceException
-                        _state.update { it.copy(errorText = error.errorMessage) }
+                        error.serviceCast { msg, _, isForceLogout ->
+                            _state.update { it.copy(errorText = msg) }
+                        }
                     }
                 _state.update { it.copy(isLoading = false) }
 
@@ -322,8 +325,9 @@ class SettingsViewModel(
                         _state.value = SettingsState(screenAlert = ScreenAlert.PasswordChangedAlert)
                     }
                     .onFailure { error ->
-                        error as ServiceException
-                        _state.update { it.copy(errorText = error.errorMessage) }
+                        error.serviceCast { msg, _, isForceLogout ->
+                            _state.update { it.copy(errorText = msg) }
+                        }
                     }
                 _state.update { it.copy(isLoading = false) }
             }

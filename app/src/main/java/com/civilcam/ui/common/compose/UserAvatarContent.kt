@@ -9,13 +9,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.civilcam.common.theme.CCTheme
 
 
-//todo fix after api
 @Composable
 fun CircleUserAvatar(avatar: Int, avatarSize: Int) {
     Box(
@@ -25,6 +25,7 @@ fun CircleUserAvatar(avatar: Int, avatarSize: Int) {
     ) {
         Image(
             painter = painterResource(id = avatar), contentDescription = null,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(avatarSize.dp)
                 .clip(CircleShape)
@@ -42,6 +43,7 @@ fun CircleUserAvatar(avatar: Uri, avatarSize: Int) {
     ) {
         Image(
             painter = rememberImagePainter(data = avatar), contentDescription = null,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(avatarSize.dp)
                 .clip(CircleShape)
@@ -58,7 +60,9 @@ fun CircleUserAvatar(avatar: String, avatarSize: Int) {
             .border(1.dp, CCTheme.colors.white, CircleShape),
     ) {
         Image(
-            painter = rememberImagePainter(data = avatar), contentDescription = null,
+            painter = rememberImagePainter(data = avatar),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(avatarSize.dp)
                 .clip(CircleShape)

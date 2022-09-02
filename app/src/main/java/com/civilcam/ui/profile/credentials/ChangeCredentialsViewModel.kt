@@ -3,7 +3,7 @@ package com.civilcam.ui.profile.credentials
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail
-import com.civilcam.data.network.support.ServiceException
+import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.usecase.profile.ChangePhoneNumberUseCase
 import com.civilcam.domainLayer.usecase.user.ChangeEmailUseCase
 import com.civilcam.ui.profile.credentials.model.ChangeCredentialsActions
@@ -65,14 +65,15 @@ class ChangeCredentialsViewModel(
 				)
 			}
 				.onFailure { error ->
-					error as ServiceException
-					if (error.isForceLogout) navigateRoute(ChangeCredentialsRoute.ForceLogout)
-					_state.update {
-						it.copy(
-							errorText = error.errorMessage,
-							phoneError = true,
-							emailError = true
-						)
+					error.serviceCast { errorMessage, _, isForceLogout ->
+						if (isForceLogout) navigateRoute(ChangeCredentialsRoute.ForceLogout)
+						_state.update {
+							it.copy(
+								errorText = errorMessage,
+								phoneError = true,
+								emailError = true
+							)
+						}
 					}
 				}
 		}

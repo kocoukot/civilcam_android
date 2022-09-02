@@ -8,13 +8,12 @@ class PersonResponse(
     @SerializedName("id") val id: Int,
     @SerializedName("language") val language: LanguageType,
     @SerializedName("fullName") val fullName: String,
-    @SerializedName("dob") val dob: String,
+    @SerializedName("dob") val dob: String?,
     @SerializedName("avatar") val avatar: ImageInfoResponse?,
-    @SerializedName("phone") val phone: String,
-    @SerializedName("address") val address: String,
-
-    @SerializedName("isOnGuard") val isOnGuard: Boolean?,
-    @SerializedName("isGuardian") val isGuardian: Boolean?,
+    @SerializedName("phone") val phone: String?,
+    @SerializedName("address") val address: String?,
+    @SerializedName("isOnGuard") val isOnGuard: Boolean? = false,
+    @SerializedName("isGuardian") val isGuardian: Boolean? = false,
     @SerializedName("request") val request: RequestModelResponse?,
 ) {
 

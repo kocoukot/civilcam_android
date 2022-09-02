@@ -2,7 +2,7 @@ package com.civilcam.ui.alerts.history
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.data.network.support.ServiceException
+import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.model.alerts.AlertType
 import com.civilcam.domainLayer.usecase.alerts.GetHistoryAlertListUseCase
 import com.civilcam.ui.alerts.history.model.AlertHistoryActions
@@ -40,8 +40,7 @@ class AlertsHistoryViewModel(
             kotlin.runCatching { getHistoryAlertListUseCase.getAlerts(_state.value.alertType) }
                 .onSuccess { user -> _state.update { it.copy(data = user) } }
                 .onFailure { error ->
-                    error as ServiceException
-                    _state.update { it.copy(errorText = error.errorMessage) }
+                    error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
                 }
             _state.update { it.copy(isLoading = false) }
         }

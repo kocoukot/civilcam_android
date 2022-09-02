@@ -3,7 +3,7 @@ package com.civilcam.ui.auth.password.reset
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.isEmail
-import com.civilcam.data.network.support.ServiceException
+import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.usecase.auth.ResetPasswordUseCase
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.password.reset.model.ResetActions
@@ -48,8 +48,9 @@ class ResetPasswordViewModel(
 					}
 				}
 				.onFailure { error ->
-					error as ServiceException
-					_state.update { it.copy(errorText = error.errorMessage, emailError = true) }
+					error.serviceCast { errorMessage, _, isForceLogout ->
+						_state.update { it.copy(errorText = errorMessage, emailError = true) }
+					}
 				}
 			_state.update { it.copy(isLoading = false) }
 		}
