@@ -14,6 +14,7 @@ data class SessionUser(
     val isEmailVerified: Boolean = false,
     val isTermsAndPolicyAccepted: Boolean = false,
     val isUserProfileSetupRequired: Boolean = false,
+    val isPinCodeSet: Boolean = false,
     val canChangeEmail: Boolean = false,
     val canChangePassword: Boolean = false
 ) : Parcelable

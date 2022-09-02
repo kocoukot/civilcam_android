@@ -13,6 +13,7 @@ class SessionUserResponse(
     @SerializedName("isEmailVerified") val isEmailVerified: Boolean = false,
     @SerializedName("isTermsAndPolicyAccepted") val isTermsAndPolicyAccepted: Boolean = false,
     @SerializedName("isUserProfileSetupRequired") val isUserProfileSetupRequired: Boolean = true,
+    @SerializedName("isPinCodeSet") val isPinCodeSet: Boolean,
     @SerializedName("canChangeEmail") val canChangeEmail: Boolean,
     @SerializedName("canChangePassword") val canChangePassword: Boolean
 )

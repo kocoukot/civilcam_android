@@ -5,6 +5,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import com.civilcam.R
 import com.civilcam.domainLayer.model.VerificationFlow
+import com.civilcam.ui.auth.pincode.PinCodeFragment
+import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.common.NavigationDirection
 import com.civilcam.ui.terms.TermsFragment
 import com.civilcam.ui.verification.VerificationFragment
@@ -57,6 +59,12 @@ fun NavController.navigateByDirection(
 		is NavigationDirection.ProfileSetup -> {
 			navigate(
 				R.id.profileSetupFragment,
+			)
+		}
+		is NavigationDirection.PinCodeSetup -> {
+			navigate(
+				R.id.pinCodeFragment,
+				PinCodeFragment.createArgs(PinCodeFlow.CREATE_PIN_CODE)
 			)
 		}
 		is NavigationDirection.TermsAndPolicyAccept -> {

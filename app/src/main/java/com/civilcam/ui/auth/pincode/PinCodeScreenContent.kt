@@ -1,5 +1,7 @@
 package com.civilcam.ui.auth.pincode
 
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
@@ -14,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.postDelayed
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.pincode.content.PinCodeErrorBlock
@@ -23,6 +26,7 @@ import com.civilcam.ui.common.compose.BackButton
 import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.PinCodeInputField
+import com.civilcam.ui.common.loading.DialogLoadingContent
 
 @Composable
 fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
@@ -33,6 +37,10 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 		viewModel.setInputActions(
 			PinCodeActions.GoBack
 		)
+	}
+	
+	if (state.value.isLoading) {
+		DialogLoadingContent()
 	}
 	
 	Scaffold(
@@ -97,8 +105,7 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 								state.value.screenState
 							)
 						)
-					},
-					noMatchState = state.value.currentNoMatch || state.value.newPinNoMatch || state.value.noMatch
+					}, noMatchState = state.value.currentNoMatch || state.value.newPinNoMatch || state.value.noMatch
 				)
 				
 				AnimatedVisibility(
@@ -122,7 +129,7 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 			Spacer(modifier = Modifier.weight(1f))
 			
 			AnimatedVisibility(
-				visible = (state.value.currentNoMatch && state.value.pinCode.isEmpty()) ||
+				visible = (state.value.currentNoMatch && state.value.currentPinCode.isEmpty()) ||
 						(state.value.newPinNoMatch && state.value.confirmPinCode.isEmpty()) ||
 						(state.value.noMatch && state.value.confirmPinCode.isEmpty())
 			) {

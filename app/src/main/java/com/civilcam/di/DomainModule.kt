@@ -71,17 +71,17 @@ val domainModule = module {
 	factory { GetLastKnownLocationUseCase(get()) }
 	
 	factory { ChangeEmailUseCase(get()) }
-
-    factory { CheckCurrentPasswordUseCase(get()) }
-
-    factory { ChangePasswordUseCase(get()) }
-
-    factory { SetUserLanguageUseCase(get()) }
-
-    factory { GetMapAlertUserDataUseCase(get()) }
-
+	
+	factory { CheckCurrentPasswordUseCase(get()) }
+	
+	factory { ChangePasswordUseCase(get()) }
+	
+	factory { SetUserLanguageUseCase(get()) }
+	
+	factory { GetMapAlertUserDataUseCase(get()) }
+	
 	factory { GoogleSignInUseCase(get(), get()) }
-
+	
 	factory { ResetPasswordUseCase(get()) }
 	
 	factory { VerifyResetPasswordOtpUseCase(get()) }
@@ -93,14 +93,20 @@ val domainModule = module {
 	factory { DeleteAccountUseCase(get()) }
 
 	factory { GetLocalCurrentUserUseCase(get()) }
-
-    factory { IsUserLoggedInUseCase(get()) }
-
-    factory { ContactSupportUseCase(get()) }
-
-    factory { ToggleSettingsUseCase(get()) }
-
-    factory { GetSubscriptionsUseCase(get()) }
+	
+	factory { IsUserLoggedInUseCase(get()) }
+	
+	factory { ContactSupportUseCase(get()) }
+	
+	factory { ToggleSettingsUseCase(get()) }
+	
+	factory { GetSubscriptionsUseCase(get()) }
+	
+	factory { SetFCMTokenUseCase(get()) }
+	
+	factory { CheckPinUseCase(get()) }
+	
+	factory { SetPinUseCase(get()) }
 
     factory { InviteByNumberUseCase(get()) }
 

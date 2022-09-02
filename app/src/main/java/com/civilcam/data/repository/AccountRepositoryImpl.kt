@@ -30,5 +30,4 @@ class AccountRepositoryImpl(
     }
 
     override fun getUser(): CurrentUser = accountStorage.getUser()
-
 }
