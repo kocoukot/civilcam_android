@@ -47,8 +47,10 @@ class PinCodeViewModel(
 					setPin(PinCodeFlow.CONFIRM_PIN_CODE)
 				} else {
 					if (_state.value.confirmPinCode.length == PIN_SIZE) {
-						_state.value = _state.value.copy(confirmPinCode = "")
-						_state.value = _state.value.copy(noMatch = true)
+						_state.value = _state.value.copy(
+							confirmPinCode = "",
+							noMatch = true
+						)
 					}
 				}
 			}
@@ -65,18 +67,28 @@ class PinCodeViewModel(
 					setPin(PinCodeFlow.CONFIRM_NEW_PIN_CODE)
 				} else {
 					if (_state.value.confirmPinCode.length == PIN_SIZE) {
-						_state.value = _state.value.copy(confirmPinCode = "")
-						_state.value = _state.value.copy(newPinNoMatch = true)
+						_state.value = _state.value.copy(
+							confirmPinCode = "",
+							newPinNoMatch = true
+						)
 					}
 				}
 			}
 			PinCodeFlow.CURRENT_PIN_CODE -> {
 				_state.value = _state.value.copy(currentPinCode = pinCode)
-				checkPin(PinCodeFlow.CURRENT_PIN_CODE)
+				if (_state.value.currentPinCode.length == PIN_SIZE) {
+					checkPin(PinCodeFlow.CURRENT_PIN_CODE)
+				} else {
+					_state.value = _state.value.copy(currentNoMatch = false)
+				}
 			}
 			PinCodeFlow.SOS_PIN_CODE -> {
-				_state.value = _state.value.copy(pinCode = pinCode)
-				checkPin(PinCodeFlow.SOS_PIN_CODE)
+				_state.value = _state.value.copy(currentPinCode = pinCode)
+				if (_state.value.pinCode.length == PIN_SIZE) {
+					checkPin(PinCodeFlow.SOS_PIN_CODE)
+				} else {
+					_state.value = _state.value.copy(currentNoMatch = false)
+				}
 			}
 		}
 	}
@@ -84,35 +96,35 @@ class PinCodeViewModel(
 	private fun checkPin(pinCodeFlow: PinCodeFlow) {
 		viewModelScope.launch {
 			kotlin.runCatching {
-				if (pinCodeFlow == PinCodeFlow.SOS_PIN_CODE)
-					checkPinUseCase.checkPin(_state.value.pinCode)
-				else
-					checkPinUseCase.checkPin(_state.value.currentPinCode)
+				checkPinUseCase.checkPin(_state.value.currentPinCode)
 			}.onSuccess { response ->
 				when (pinCodeFlow) {
 					PinCodeFlow.CURRENT_PIN_CODE -> {
 						if (response) {
-							_state.value = _state.value.copy(currentNoMatch = false)
-							_state.value = _state.value.copy(currentPinCode = "")
+							_state.value = _state.value.copy(
+								currentNoMatch = false
+							)
 							goNewPinCode()
 						} else {
-							if (_state.value.pinCode.length == PIN_SIZE) {
-								_state.value = _state.value.copy(currentPinCode = "")
-							}
-							_state.value = _state.value.copy(currentNoMatch = true)
+							_state.value =
+								_state.value.copy(
+									currentPinCode = "",
+									currentNoMatch = true
+								)
 						}
 					}
 					PinCodeFlow.SOS_PIN_CODE -> {
 						if (response) {
-							_state.value = _state.value.copy(currentNoMatch = false)
-							if (_state.value.pinCode.length == PIN_SIZE) {
-								goEmergency()
-							}
+							_state.value = _state.value.copy(
+								currentNoMatch = false
+							)
+							goEmergency()
 						} else {
-							if (_state.value.pinCode.length == PIN_SIZE) {
-								_state.value = _state.value.copy(pinCode = "")
-							}
-							_state.value = _state.value.copy(currentNoMatch = true)
+							_state.value =
+								_state.value.copy(
+									currentPinCode = "",
+									currentNoMatch = true
+								)
 						}
 					}
 					else -> {}
