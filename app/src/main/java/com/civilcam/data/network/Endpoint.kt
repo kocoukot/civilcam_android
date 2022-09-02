@@ -41,9 +41,18 @@ object Endpoint {
     }
 
     object Guardians {
+        const val NETWORK = "network"
         const val SEARCH = "search"
+        const val INVITES = "invites"
         const val INVITE_BY_PHONE = "invite-by-phone"
+        const val REQUESTS = "requests"
+        const val PERSON = "person"
         const val ASK_TO_GUARD = "ask-to-guard"
+        const val SET_REQUEST_REACTION = "set-request-reaction"
+        const val ON_GUARD = "on-guard"
+        const val GUARDIANS = "guardians"
+        const val GUARDIAN = "guardian"
+        const val STOP_GUARDING = "stop-guarding"
     }
 
     object Subscriptions {
@@ -58,17 +67,3 @@ object Endpoint {
         const val OAUTH_V4_TOKEN = "oauth2/v4/token"
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
