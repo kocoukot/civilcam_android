@@ -72,7 +72,7 @@ class GuardiansRepositoryImpl(
 
     override suspend fun getPersonDetail(personId: Int): PersonModel =
         safeApiCall {
-            guardiansService.getPersonDetail(PersonDetailRequest(personId = personId))
+            guardiansService.getPersonDetail(PersonIdRequest(personId = personId))
         }.let { response ->
             when (response) {
                 is Resource.Success -> personMapper.mapData(response.value.person)

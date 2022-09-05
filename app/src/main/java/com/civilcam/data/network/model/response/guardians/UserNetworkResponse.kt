@@ -17,8 +17,8 @@ class UserNetworkResponse(
 
     class OnGuardResponse(
         @SerializedName("id") val id: String,
-        @SerializedName("person") val person: PersonResponse,
         @SerializedName("status") val status: String,
+        @SerializedName("person") val person: PersonResponse,
     )
 
     class GuardiansResponse(
