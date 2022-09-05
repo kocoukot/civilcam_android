@@ -47,7 +47,13 @@ class PinCodeFragment : Fragment() {
 	): View {
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
-				PinCodeRoute.GoBack -> navController.popBackStack()
+				PinCodeRoute.GoBack -> {
+					setFragmentResult(
+						RESULT_SAVED_NEW_PIN,
+						bundleOf(RESULT_SAVED_NEW_PIN to false)
+					)
+					navController.popBackStack()
+				}
 				PinCodeRoute.GoUserProfile -> {
 					setFragmentResult(
 						RESULT_SAVED_NEW_PIN,

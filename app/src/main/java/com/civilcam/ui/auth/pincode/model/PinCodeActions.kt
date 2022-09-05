@@ -4,5 +4,5 @@ import com.civilcam.common.ext.compose.ComposeFragmentActions
 
 sealed class PinCodeActions : ComposeFragmentActions {
 	object GoBack : PinCodeActions()
-	data class EnterPinCode(val pinCode: String,  val pinCodeFlow: PinCodeFlow) : PinCodeActions()
+	data class EnterPinCode(val pinCode: String) : PinCodeActions()
 }

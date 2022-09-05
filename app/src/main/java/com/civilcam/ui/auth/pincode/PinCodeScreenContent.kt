@@ -1,5 +1,7 @@
 package com.civilcam.ui.auth.pincode
 
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
@@ -98,12 +100,18 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 					pinCodeValue = {
 						viewModel.setInputActions(
 							PinCodeActions.EnterPinCode(
-								it,
-								state.value.screenState
+								it
 							)
 						)
 					},
-					noMatchState = state.value.currentNoMatch || state.value.newPinNoMatch || state.value.noMatch
+					noMatchState = when (state.value.screenState) {
+						PinCodeFlow.CURRENT_PIN_CODE, PinCodeFlow.SOS_PIN_CODE -> {
+							Handler(Looper.getMainLooper()).postDelayed({
+								state.value.currentNoMatch
+							}, 1000)
+						}
+						else -> state.value.noMatch || state.value.newPinNoMatch
+					}
 				)
 				
 				AnimatedVisibility(

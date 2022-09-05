@@ -64,8 +64,10 @@ class UserProfileFragment : Fragment() {
 			showAlert(resources.getString(R.string.user_profile_phone_change_desc))
 		}
 
-		setFragmentResultListener(PinCodeFragment.RESULT_SAVED_NEW_PIN) { _, _ ->
-			showAlert(resources.getString(R.string.pincode_changed_alert_text))
+		setFragmentResultListener(PinCodeFragment.RESULT_SAVED_NEW_PIN) { key, bundle ->
+			if (bundle.getBoolean(key)) {
+				showAlert(resources.getString(R.string.pincode_changed_alert_text))
+			}
 		}
 
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
