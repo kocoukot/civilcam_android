@@ -26,11 +26,15 @@ class ContactsViewModel(
 
     init {
         viewModelScope.launch {
-            kotlin.runCatching { getPhoneInvitesUseCase() }
-                .onSuccess { list -> _state.update { it.copy(invitesList = list) } }
-                .onFailure { error ->
+            _state.update { it.copy(isLoading = true) }
+            networkRequest(
+                action = { getPhoneInvitesUseCase() },
+                onSuccess = { list -> _state.update { it.copy(invitesList = list) } },
+                onFailure = { error ->
                     error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
-                }
+                },
+                onComplete = { _state.update { it.copy(isLoading = false) } },
+            )
         }
         query(viewModelScope) { query ->
             viewModelScope.launch {
@@ -52,7 +56,12 @@ class ContactsViewModel(
             ContactsActions.ClickGoInviteByNumber -> moveToInvite()
             is ContactsActions.ClickInvite -> inviteContact(action.contact)
             is ContactsActions.ClickSearch -> searchContact(action.searchString)
+            ContactsActions.ClearErrorText -> clearErrorText()
         }
+    }
+
+    private fun clearErrorText() {
+        _state.update { it.copy(errorText = "") }
     }
 
     private fun goBack() {

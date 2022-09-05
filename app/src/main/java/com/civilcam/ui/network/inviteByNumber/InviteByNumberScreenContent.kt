@@ -116,7 +116,6 @@ fun InviteByNumberScreenContent(viewModel: InviteByNumberViewModel) {
 
 @Composable
 private fun InvitationRow(number: String, context: Context) {
-
     Text(
         text = buildAnnotatedString {
             withStyle(
