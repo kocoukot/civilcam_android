@@ -1,6 +1,6 @@
 package com.civilcam.di
 
-import com.civilcam.domainLayer.usecase.GetUserInformationUseCase
+import com.civilcam.domainLayer.usecase.GetUserDetailUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetAlertsListUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetHistoryAlertListUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetHistoryDetailUseCase
@@ -41,8 +41,8 @@ val domainModule = module {
 	factory { GetUserProfileUseCase(get()) }
 	
 	factory { LogoutUseCase(get()) }
-	
-	factory { GetUserInformationUseCase(get()) }
+
+    factory { GetUserDetailUseCase(get()) }
 	
 	factory { GetCurrentUserUseCase(get()) }
 	
@@ -71,46 +71,50 @@ val domainModule = module {
 	factory { GetLastKnownLocationUseCase(get()) }
 	
 	factory { ChangeEmailUseCase(get()) }
-	
-	factory { CheckCurrentPasswordUseCase(get()) }
-	
-	factory { ChangePasswordUseCase(get()) }
-	
-	factory { SetUserLanguageUseCase(get()) }
-	
-	factory { GetMapAlertUserDataUseCase(get()) }
-	
+
+    factory { CheckCurrentPasswordUseCase(get()) }
+
+    factory { ChangePasswordUseCase(get()) }
+
+    factory { SetUserLanguageUseCase(get()) }
+
+    factory { GetMapAlertUserDataUseCase(get()) }
+
 	factory { GoogleSignInUseCase(get(), get()) }
-	
+
 	factory { ResetPasswordUseCase(get()) }
-	
+
 	factory { VerifyResetPasswordOtpUseCase(get()) }
-	
+
 	factory { RecoverPasswordUseCase(get()) }
-	
-	factory { SetFcmTokenUseCase(get()) }
-	
+
+	factory { SaveFcmTokenUseCase(get()) }
+
+	factory { SetFCMTokenUseCase(get()) }
+
 	factory { DeleteAccountUseCase(get()) }
 
 	factory { GetLocalCurrentUserUseCase(get()) }
-	
-	factory { IsUserLoggedInUseCase(get()) }
-	
-	factory { ContactSupportUseCase(get()) }
-	
-	factory { ToggleSettingsUseCase(get()) }
-	
-	factory { GetSubscriptionsUseCase(get()) }
-	
-	factory { SetFCMTokenUseCase(get()) }
-	
-	factory { CheckPinUseCase(get()) }
-	
-	factory { SetPinUseCase(get()) }
+
+    factory { IsUserLoggedInUseCase(get()) }
+
+    factory { ContactSupportUseCase(get()) }
+
+    factory { ToggleSettingsUseCase(get()) }
+
+    factory { GetSubscriptionsUseCase(get()) }
 
     factory { InviteByNumberUseCase(get()) }
 
     factory { AskToGuardUseCase(get()) }
+
+    factory { SetRequestReactionUseCase(get()) }
+
+	factory { GetPhoneInvitesUseCase(get()) }
+
+	factory { CheckPinUseCase(get()) }
+
+	factory { SetPinUseCase(get()) }
 
 }
 

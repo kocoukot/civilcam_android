@@ -2,7 +2,7 @@ package com.civilcam.ui.alerts.list
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.data.network.support.ServiceException
+import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.GetAlertsListUseCase
 import com.civilcam.ui.alerts.list.model.AlertListActions
 import com.civilcam.ui.alerts.list.model.AlertListRoute
@@ -27,8 +27,7 @@ class AlertsListViewModel(
             kotlin.runCatching { getAlertsListUseCase.getAlerts() }
                 .onSuccess { user -> _state.update { it.copy(data = user) } }
                 .onFailure { error ->
-                    error as ServiceException
-                    _state.update { it.copy(errorText = it.errorText) }
+                    error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
                 }
             _state.update { it.copy(isLoading = false) }
         }

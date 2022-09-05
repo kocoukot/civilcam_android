@@ -3,10 +3,11 @@ package com.civilcam.ui.network.contacts
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
+import com.civilcam.common.ext.serviceCast
 import com.civilcam.data.local.ContactsStorage
 import com.civilcam.data.local.model.Contact
 import com.civilcam.data.local.model.PersonContactFilter
-import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.usecase.guardians.GetPhoneInvitesUseCase
 import com.civilcam.domainLayer.usecase.guardians.InviteByNumberUseCase
 import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.network.contacts.model.*
@@ -17,12 +18,24 @@ import java.util.*
 
 class ContactsViewModel(
     private val contactsStorage: ContactsStorage,
-    private val inviteByNumberUseCase: InviteByNumberUseCase
+    private val inviteByNumberUseCase: InviteByNumberUseCase,
+    private val getPhoneInvitesUseCase: GetPhoneInvitesUseCase
 ) : ComposeViewModel<ContactsState, ContactsRoute, ContactsActions>(), SearchQuery {
     override var _state: MutableStateFlow<ContactsState> = MutableStateFlow(ContactsState())
     override val mTextSearch = MutableStateFlow("")
 
     init {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            networkRequest(
+                action = { getPhoneInvitesUseCase() },
+                onSuccess = { list -> _state.update { it.copy(invitesList = list) } },
+                onFailure = { error ->
+                    error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
+                },
+                onComplete = { _state.update { it.copy(isLoading = false) } },
+            )
+        }
         query(viewModelScope) { query ->
             viewModelScope.launch {
                 val contactList =
@@ -43,7 +56,12 @@ class ContactsViewModel(
             ContactsActions.ClickGoInviteByNumber -> moveToInvite()
             is ContactsActions.ClickInvite -> inviteContact(action.contact)
             is ContactsActions.ClickSearch -> searchContact(action.searchString)
+            ContactsActions.ClearErrorText -> clearErrorText()
         }
+    }
+
+    private fun clearErrorText() {
+        _state.update { it.copy(errorText = "") }
     }
 
     private fun goBack() {
@@ -71,7 +89,9 @@ class ContactsViewModel(
                 _state.update { it.copy(data = ContactsModel(contactsModel)) }
             },
             onFailure = { error ->
-                error as ServiceException
+                error.serviceCast { errorMessage, _, isForceLogout ->
+                    _state.update { it.copy(errorText = errorMessage) }
+                }
             },
             onComplete = { _state.update { it.copy(isLoading = false) } }
         )

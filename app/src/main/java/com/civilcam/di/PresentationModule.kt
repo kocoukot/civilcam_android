@@ -79,11 +79,11 @@ val authModule = module {
 
 val networkRootModule = module {
 	
-	viewModel { (userId: Int) -> UserDetailsViewModel(userId, get(), get()) }
+	viewModel { (userId: Int) -> UserDetailsViewModel(userId, get(), get(), get()) }
 	
-	viewModel { ContactsViewModel(get(), get()) }
-	
-	viewModel { InviteByNumberViewModel(get()) }
+	viewModel { ContactsViewModel(get(), get(), get()) }
+
+	viewModel { InviteByNumberViewModel(get(), get()) }
 
     viewModel { (screen: NetworkScreen) ->
         NetworkMainViewModel(

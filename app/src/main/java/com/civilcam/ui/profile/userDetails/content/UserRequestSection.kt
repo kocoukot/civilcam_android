@@ -27,7 +27,7 @@ import com.civilcam.ui.common.compose.RowDivider
 fun UserRequestSection(
     userName: String,
     requestText: String,
-    requestAnswer: (Boolean) -> Unit,
+    requestAnswer: (ButtonAnswer) -> Unit,
 ) {
 
     Column(
@@ -75,15 +75,15 @@ fun UserRequestSection(
         ) {
             AnswerButton(
                 text = stringResource(id = R.string.decline_text),
-                type = ButtonAnswer.DECLINE,
+                buttonType = ButtonAnswer.DECLINE,
                 modifier = Modifier.weight(1f),
-                onButtonClick = requestAnswer
+                onButtonClick = requestAnswer::invoke
             )
             AnswerButton(
                 text = stringResource(id = R.string.accept_text),
                 modifier = Modifier.weight(1f),
-                type = ButtonAnswer.ACCEPT,
-                onButtonClick = requestAnswer
+                buttonType = ButtonAnswer.ACCEPT,
+                onButtonClick = requestAnswer::invoke
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
@@ -96,12 +96,12 @@ fun UserRequestSection(
 @Composable
 private fun AnswerButton(
     text: String,
-    type: ButtonAnswer,
+    buttonType: ButtonAnswer,
     modifier: Modifier = Modifier,
-    onButtonClick: ((Boolean) -> Unit)
+    onButtonClick: (ButtonAnswer) -> Unit
 ) {
     Button(
-        onClick = { onButtonClick.invoke(type.answer) },
+        onClick = { onButtonClick.invoke(buttonType) },
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(backgroundColor = CCTheme.colors.white),
         shape = CircleShape,
@@ -111,7 +111,7 @@ private fun AnswerButton(
         Text(
             text = text,
             style = CCTheme.typography.common_text_small_medium,
-            color = if (type.answer) CCTheme.colors.primaryRed else CCTheme.colors.black,
+            color = if (buttonType.answer) CCTheme.colors.primaryRed else CCTheme.colors.black,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
     }

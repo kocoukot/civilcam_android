@@ -3,21 +3,24 @@ package com.civilcam.data.mapper.guardian
 import com.civilcam.data.mapper.ImageInfoMapper
 import com.civilcam.data.mapper.Mapper
 import com.civilcam.data.network.model.response.guardians.PersonResponse
-import com.civilcam.domainLayer.model.guard.GuardianModel
 import com.civilcam.domainLayer.model.guard.GuardianStatus
+import com.civilcam.domainLayer.model.guard.PersonModel
 
 class SearchGuardianMapper(
     private val imageInfoMapper: ImageInfoMapper = ImageInfoMapper()
-) : Mapper<PersonResponse, GuardianModel>(
+) : Mapper<PersonResponse, PersonModel>(
     fromData = {
-        GuardianModel(
-            guardianId = it.id,
-            guardianName = it.fullName,
-            guardianAvatar = it.avatar?.let { avatar -> imageInfoMapper.mapData(avatar) },
-            guardianStatus = it.request?.status?.let { domain -> GuardianStatus.byDomain(domain) }
+        PersonModel(
+            personId = it.id,
+            personFullName = it.fullName,
+            personBirth = it.dob,
+            personAvatar = it.avatar?.let { avatar -> imageInfoMapper.mapData(avatar) },
+            personPhone = it.phone,
+            personAddress = it.address,
+            personStatus = it.request?.status?.let { domain -> GuardianStatus.byDomain(domain) }
                 ?: GuardianStatus.NEW,
-            isOnGuard = it.isOnGuard,
-            isGuardian = it.isGuardian,
+            isOnGuard = it.isOnGuard ?: false,
+            isGuardian = it.isGuardian ?: false,
         )
     }
 )

@@ -7,7 +7,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.civilcam.R
-import com.civilcam.domainLayer.usecase.auth.SetFcmTokenUseCase
+import com.civilcam.domainLayer.usecase.auth.SaveFcmTokenUseCase
 import com.civilcam.ui.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -17,7 +17,7 @@ import timber.log.Timber
 
 class CCFireBaseMessagingService : FirebaseMessagingService() {
 
-    private val setFcmTokenUseCase: SetFcmTokenUseCase by inject()
+    private val saveFcmTokenUseCase: SaveFcmTokenUseCase by inject()
 
     private val notificationManager by lazy {
         getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -27,7 +27,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService() {
         super.onNewToken(token)
         Timber.d("create a new FCM Token $token")
         // Need to safe token in preference to take it when make log in or sinUP
-        setFcmTokenUseCase(token)
+        saveFcmTokenUseCase(token)
     }
 
     // To show Notification in Foreground

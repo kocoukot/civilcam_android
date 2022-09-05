@@ -26,7 +26,12 @@ interface GuardiansService {
     suspend fun userGuardRequests(): UserGuardRequestListResponse
 
     @POST(Endpoint.Guardians.PERSON)
-    suspend fun getPersonDetail(@Body request: PersonDetailRequest): PersonResponse
+    suspend fun getPersonDetail(@Body request: PersonDetailRequest): PersonDetailResponse
+
+
+    @POST(Endpoint.Guardians.SET_REQUEST_REACTION)
+    suspend fun setRequestReaction(@Body request: RequestReactionRequest): GuardRequestResponse
+
 
     @POST(Endpoint.Guardians.ASK_TO_GUARD)
     suspend fun askToGuard(@Body request: AskToGuardRequest): SuccessResponse

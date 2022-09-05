@@ -12,9 +12,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
+import com.civilcam.common.ext.clearPhone
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.AlertDialogTypes
+import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.common.compose.inputs.SearchInputField
+import com.civilcam.ui.common.loading.DialogLoadingContent
 import com.civilcam.ui.network.contacts.model.ContactsActions
 import com.civilcam.ui.network.contacts.model.LetterContactItem
 import com.civilcam.ui.network.contacts.model.PersonContactItem
@@ -24,7 +28,15 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
 
     val state = viewModel.state.collectAsState()
 
-    state.value.checkIsLoading()
+    if (state.value.isLoading) DialogLoadingContent()
+
+    if (state.value.errorText.isNotEmpty()) {
+        AlertDialogComp(
+            dialogText = state.value.errorText,
+            alertType = AlertDialogTypes.OK,
+            onOptionSelected = { viewModel.setInputActions(ContactsActions.ClearErrorText) }
+        )
+    }
 
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
@@ -71,7 +83,8 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
                             }
                             is PersonContactItem -> {
                                 var isInvited by remember { mutableStateOf(contact.isInvited) }
-                                isInvited = contact.isInvited
+                                isInvited =
+                                    contact.isInvited || contact.phoneNumber.clearPhone() in state.value.invitesList.map { it.phone.clearPhone() }
                                 InformationRow(
                                     needDivider = (if (index == data.lastIndex) {
                                         false
@@ -112,30 +125,3 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
         }
     }
 }
-//
-//
-//@Composable
-//fun SearchFieldContent() {
-//    val value by remember { mutableStateOf("") }
-//    Row(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .height(36.dp),
-//        horizontalArrangement = Arrangement.Center
-//    ) {
-//        TextField(
-//            colors = TextFieldDefaults.textFieldColors(
-//                textColor = CCTheme.colors.black,
-//                backgroundColor = CCTheme.colors.white,
-//                cursorColor = CCTheme.colors.black,
-//                focusedIndicatorColor = Color.Transparent,
-//                unfocusedIndicatorColor = Color.Transparent,
-//            ),
-//            shape = CircleShape,
-//            value = value,
-//            onValueChange = {
-//
-//            })
-//    }
-//}
- 

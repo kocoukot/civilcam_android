@@ -1,8 +1,11 @@
 package com.civilcam.ui.network.inviteByNumber
 
 import androidx.lifecycle.viewModelScope
+import com.civilcam.common.ext.clearPhone
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.data.network.support.ServiceException
+import com.civilcam.common.ext.serviceCast
+import com.civilcam.domainLayer.model.guard.GuardianStatus
+import com.civilcam.domainLayer.usecase.guardians.GetPhoneInvitesUseCase
 import com.civilcam.domainLayer.usecase.guardians.InviteByNumberUseCase
 import com.civilcam.ui.network.inviteByNumber.model.InviteByNumberActions
 import com.civilcam.ui.network.inviteByNumber.model.InviteByNumberModel
@@ -14,10 +17,32 @@ import kotlinx.coroutines.launch
 
 
 class InviteByNumberViewModel(
-    private val inviteByNumberUseCase: InviteByNumberUseCase
+    private val inviteByNumberUseCase: InviteByNumberUseCase,
+    private val getPhoneInvitesUseCase: GetPhoneInvitesUseCase
 ) : ComposeViewModel<InviteByNumberState, InviteByNumberRoute, InviteByNumberActions>() {
     override var _state: MutableStateFlow<InviteByNumberState> =
         MutableStateFlow(InviteByNumberState())
+
+    init {
+        _state.update { it.copy(isLoading = true) }
+        networkRequest(
+            action = { getPhoneInvitesUseCase() },
+            onSuccess = { list ->
+                _state.update {
+                    it.copy(data =
+                    InviteByNumberModel(
+                        list.filter { contact -> contact.status == GuardianStatus.PENDING }
+                            .map { contact -> "+${contact.phone.clearPhone()}" })
+                    )
+                }
+            },
+            onFailure = { error ->
+                error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
+            },
+            onComplete = { _state.update { it.copy(isLoading = false) } },
+        )
+    }
+
 
     override fun setInputActions(action: InviteByNumberActions) {
         when (action) {
@@ -62,8 +87,7 @@ class InviteByNumberViewModel(
                     }
                 }
                 .onFailure { error ->
-                    error as ServiceException
-                    _state.update { it.copy(errorText = error.errorMessage) }
+                    error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
                 }
                 .also {
                     _state.update { it.copy(isLoading = false) }

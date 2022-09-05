@@ -2,13 +2,12 @@ package com.civilcam.ui.auth.password.create
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.data.network.support.ServiceException
+import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.usecase.auth.RecoverPasswordUseCase
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.password.create.model.CreatePasswordActions
 import com.civilcam.ui.auth.password.create.model.CreatePasswordRoute
 import com.civilcam.ui.auth.password.create.model.CreatePasswordState
-import com.civilcam.ui.auth.password.reset.model.ResetRoute
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -58,8 +57,7 @@ class CreatePasswordViewModel(
 					}
 				}
 				.onFailure { error ->
-					error as ServiceException
-					_state.update { it.copy(errorText = error.errorMessage) }
+					error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
 				}
 			_state.update { it.copy(isLoading = false) }
 		}

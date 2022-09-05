@@ -1,15 +1,17 @@
 package com.civilcam.data.repository
 
 import com.civilcam.data.local.AccountStorage
+import com.civilcam.data.mapper.guardian.InviteMapper
 import com.civilcam.data.mapper.guardian.SearchGuardianListMapper
-import com.civilcam.data.network.model.request.guardians.AskToGuardRequest
-import com.civilcam.data.network.model.request.guardians.InviteByPhoneRequest
-import com.civilcam.data.network.model.request.guardians.SearchGuardiansRequest
+import com.civilcam.data.mapper.guardian.SearchGuardianMapper
+import com.civilcam.data.network.model.request.guardians.*
 import com.civilcam.data.network.service.GuardiansService
 import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
+import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.model.PaginationRequest
-import com.civilcam.domainLayer.model.guard.GuardianModel
+import com.civilcam.domainLayer.model.guard.PersonModel
+import com.civilcam.domainLayer.model.guard.UserInviteModel
 import com.civilcam.domainLayer.repos.GuardiansRepository
 
 class GuardiansRepositoryImpl(
@@ -18,11 +20,13 @@ class GuardiansRepositoryImpl(
 ) : GuardiansRepository, BaseRepository() {
 
     private val guardianSearchMapper = SearchGuardianListMapper()
+    private val personMapper = SearchGuardianMapper()
+    private val inviteMapper = InviteMapper()
 
     override suspend fun searchGuardian(
         query: String,
         page: PaginationRequest.Pagination
-    ): List<GuardianModel> =
+    ): List<PersonModel> =
         safeApiCall {
             guardiansService.searchGuardians(
                 SearchGuardiansRequest(
@@ -59,6 +63,47 @@ class GuardiansRepositoryImpl(
         }.let { response ->
             when (response) {
                 is Resource.Success -> response.value.ok
+                is Resource.Failure -> {
+                    response.checkIfLogOut { accountStorage.logOut() }
+                    throw response.serviceException
+                }
+            }
+        }
+
+    override suspend fun getPersonDetail(personId: Int): PersonModel =
+        safeApiCall {
+            guardiansService.getPersonDetail(PersonDetailRequest(personId = personId))
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> personMapper.mapData(response.value.person)
+                is Resource.Failure -> {
+                    response.checkIfLogOut { accountStorage.logOut() }
+                    throw response.serviceException
+                }
+            }
+        }
+
+    override suspend fun setRequestReaction(reaction: ButtonAnswer, personId: Int): Boolean =
+        safeApiCall {
+            guardiansService.setRequestReaction(
+                RequestReactionRequest(reaction = reaction.domain, id = personId)
+            )
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> true
+                is Resource.Failure -> {
+                    response.checkIfLogOut { accountStorage.logOut() }
+                    throw response.serviceException
+                }
+            }
+        }
+
+    override suspend fun getInvitesList(): List<UserInviteModel> =
+        safeApiCall {
+            guardiansService.invitesList()
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> response.value.list.map { inviteMapper.mapData(it) }
                 is Resource.Failure -> {
                     response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
