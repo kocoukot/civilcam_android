@@ -29,7 +29,7 @@ class UserDetailsViewModel(
         Timber.i("userDetail id $userId")
         _state.update { it.copy(isLoading = true) }
         networkRequest(
-            action = { getUserInformationUseCase.getUser(userId) },
+            action = { getUserInformationUseCase(userId) },
             onSuccess = { user -> _state.update { it.copy(data = user) } },
             onFailure = { error ->
                 error.serviceCast { msg, _, isForceLogout ->
@@ -102,7 +102,7 @@ class UserDetailsViewModel(
             action = { setRequestReactionUseCase(isAccepted, userId) },
             onSuccess = {
                 updateInfo {
-                    copy(personStatus = if (isAccepted.answer) GuardianStatus.ACCEPTED else GuardianStatus.DECLINED)
+                    copy(personStatus = personStatus?.copy(status = if (isAccepted.answer) GuardianStatus.ACCEPTED else GuardianStatus.DECLINED))
                 }
             },
             onFailure = { error ->

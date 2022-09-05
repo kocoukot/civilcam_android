@@ -17,8 +17,12 @@ class SearchGuardianMapper(
             personAvatar = it.avatar?.let { avatar -> imageInfoMapper.mapData(avatar) },
             personPhone = it.phone,
             personAddress = it.address,
-            personStatus = it.request?.status?.let { domain -> GuardianStatus.byDomain(domain) }
-                ?: GuardianStatus.NEW,
+            personStatus = it.request?.let { userStatus ->
+                PersonModel.PersonStatus(
+                    statusId = userStatus.id,
+                    status = GuardianStatus.byDomain(userStatus.status)
+                )
+            },
             isOnGuard = it.isOnGuard ?: false,
             isGuardian = it.isGuardian ?: false,
         )

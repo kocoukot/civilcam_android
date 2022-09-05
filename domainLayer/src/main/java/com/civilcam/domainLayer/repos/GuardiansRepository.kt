@@ -17,7 +17,7 @@ interface GuardiansRepository {
 
     suspend fun getPersonDetail(personId: Int): PersonModel
 
-    suspend fun setRequestReaction(reaction: ButtonAnswer, personId: Int): Boolean
+    suspend fun setRequestReaction(reaction: ButtonAnswer, requestId: Int): Boolean
 
     suspend fun getInvitesList(): List<UserInviteModel>
 

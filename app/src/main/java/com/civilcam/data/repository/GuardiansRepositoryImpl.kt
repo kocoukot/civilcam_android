@@ -83,10 +83,10 @@ class GuardiansRepositoryImpl(
             }
         }
 
-    override suspend fun setRequestReaction(reaction: ButtonAnswer, personId: Int): Boolean =
+    override suspend fun setRequestReaction(reaction: ButtonAnswer, requestId: Int): Boolean =
         safeApiCall {
             guardiansService.setRequestReaction(
-                RequestReactionRequest(reaction = reaction.domain, id = personId)
+                RequestReactionRequest(reaction = reaction.domain, id = requestId)
             )
         }.let { response ->
             when (response) {

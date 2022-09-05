@@ -87,7 +87,7 @@ fun UserDetailsScreenContent(viewModel: UserDetailsViewModel) {
                     myGuardenceChange = viewModel::setInputActions
                 )
 
-                if (data.personStatus == GuardianStatus.PENDING) {
+                if (data.personStatus?.status == GuardianStatus.PENDING) {
                     Divider(
                         color = CCTheme.colors.lightGray, modifier = Modifier
                             .height(20.dp)
