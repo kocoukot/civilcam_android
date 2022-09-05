@@ -1,4 +1,4 @@
-package com.civilcam.domainLayer
+package com.civilcam.domainLayer.model
 
 import android.net.Uri
 

@@ -21,4 +21,8 @@ interface GuardiansRepository {
 
     suspend fun getInvitesList(): List<UserInviteModel>
 
+    suspend fun deleteGuardian(personId: Int): Boolean
+
+    suspend fun stopGuarding(personId: Int): Boolean
+
 }

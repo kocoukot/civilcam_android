@@ -7,7 +7,7 @@ import com.civilcam.domainLayer.model.AuthType
 import com.civilcam.domainLayer.model.ScreenAlert
 import com.civilcam.domainLayer.model.user.LanguageType
 import com.civilcam.domainLayer.model.user.SettingsNotificationType
-import com.civilcam.domainLayer.usecase.settings.GetCurrentSubscriptionPlanUseCase
+import com.civilcam.domainLayer.usecase.subscriptions.GetCurrentSubscriptionPlanUseCase
 import com.civilcam.domainLayer.usecase.user.*
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.settings.model.*

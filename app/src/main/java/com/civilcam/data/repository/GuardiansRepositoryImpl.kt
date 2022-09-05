@@ -110,4 +110,30 @@ class GuardiansRepositoryImpl(
                 }
             }
         }
+
+    override suspend fun deleteGuardian(personId: Int): Boolean =
+        safeApiCall {
+            guardiansService.deleteGuardian(PersonIdRequest(personId))
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> true
+                is Resource.Failure -> {
+                    response.checkIfLogOut { accountStorage.logOut() }
+                    throw response.serviceException
+                }
+            }
+        }
+
+    override suspend fun stopGuarding(personId: Int): Boolean =
+        safeApiCall {
+            guardiansService.stopGuarding(PersonIdRequest(personId))
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> true
+                is Resource.Failure -> {
+                    response.checkIfLogOut { accountStorage.logOut() }
+                    throw response.serviceException
+                }
+            }
+        }
 }
