@@ -10,6 +10,8 @@ data class PinCodeState(
 	val confirmPinCode: String = "",
 	val currentPinCode: String = "",
 	
+	var isDataLoaded: Boolean = false,
+	
 	val noMatch: Boolean = false,
 	val currentNoMatch: Boolean = false,
 	val newPinNoMatch: Boolean = false,

@@ -16,7 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.os.postDelayed
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.ui.auth.pincode.content.PinCodeErrorBlock
@@ -101,11 +100,18 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 					pinCodeValue = {
 						viewModel.setInputActions(
 							PinCodeActions.EnterPinCode(
-								it,
-								state.value.screenState
+								it
 							)
 						)
-					}, noMatchState = state.value.currentNoMatch || state.value.newPinNoMatch || state.value.noMatch
+					},
+					noMatchState = when (state.value.screenState) {
+						PinCodeFlow.CURRENT_PIN_CODE, PinCodeFlow.SOS_PIN_CODE -> {
+							Handler(Looper.getMainLooper()).postDelayed({
+								state.value.currentNoMatch
+							}, 1000)
+						}
+						else -> state.value.noMatch || state.value.newPinNoMatch
+					}
 				)
 				
 				AnimatedVisibility(

@@ -84,7 +84,7 @@ class PinCodeViewModel(
 			}
 			PinCodeFlow.SOS_PIN_CODE -> {
 				_state.value = _state.value.copy(currentPinCode = pinCode)
-				if (_state.value.pinCode.length == PIN_SIZE) {
+				if (_state.value.currentPinCode.length == PIN_SIZE) {
 					checkPin(PinCodeFlow.SOS_PIN_CODE)
 				} else {
 					_state.value = _state.value.copy(currentNoMatch = false)
@@ -139,6 +139,7 @@ class PinCodeViewModel(
 	}
 	
 	private fun setPin(pinCodeFlow: PinCodeFlow) {
+		_state.value = _state.value.copy(isLoading = true)
 		viewModelScope.launch {
 			kotlin.runCatching {
 				if (pinCodeFlow == PinCodeFlow.CONFIRM_NEW_PIN_CODE)
@@ -157,6 +158,7 @@ class PinCodeViewModel(
 						_state.update { it.copy(errorText = it.errorText) }
 					}
 				}
+			_state.value = _state.value.copy(isLoading = false)
 		}
 	}
 	
@@ -171,7 +173,7 @@ class PinCodeViewModel(
 			PinCodeFlow.CREATE_PIN_CODE -> navigateRoute(PinCodeRoute.GoBack)
 			PinCodeFlow.CONFIRM_PIN_CODE -> _state.value =
 				_state.value.copy(screenState = PinCodeFlow.CREATE_PIN_CODE, confirmPinCode = "")
-			PinCodeFlow.CURRENT_PIN_CODE -> goUserProfile()
+			PinCodeFlow.CURRENT_PIN_CODE -> navigateRoute(PinCodeRoute.GoBack)
 			PinCodeFlow.NEW_PIN_CODE -> _state.value =
 				_state.value.copy(screenState = PinCodeFlow.CURRENT_PIN_CODE)
 			PinCodeFlow.CONFIRM_NEW_PIN_CODE -> _state.value =
@@ -180,7 +182,6 @@ class PinCodeViewModel(
 	}
 	
 	private fun goEmergency() {
-		_state.value = _state.value.copy(currentNoMatch = false)
 		navigateRoute(PinCodeRoute.GoEmergency)
 	}
 	
