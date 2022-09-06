@@ -107,6 +107,7 @@ private fun SearchResults(
                         },
                         trailingIcon = {
                             when {
+                                it.isGuardian -> {}
                                 userStatus == GuardianStatus.PENDING || item.personId in pendingList -> {
                                     Text(
                                         text = stringResource(id = R.string.pending_text),

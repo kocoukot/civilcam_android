@@ -7,7 +7,9 @@ import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.domainLayer.model.guard.PersonModel
 import com.civilcam.domainLayer.usecase.GetUserDetailUseCase
 import com.civilcam.domainLayer.usecase.guardians.AskToGuardUseCase
+import com.civilcam.domainLayer.usecase.guardians.DeleteGuardianUseCase
 import com.civilcam.domainLayer.usecase.guardians.SetRequestReactionUseCase
+import com.civilcam.domainLayer.usecase.guardians.StopGuardingUseCase
 import com.civilcam.ui.profile.userDetails.model.StopGuardAlertType
 import com.civilcam.ui.profile.userDetails.model.UserDetailsActions
 import com.civilcam.ui.profile.userDetails.model.UserDetailsRoute
@@ -20,7 +22,9 @@ class UserDetailsViewModel(
     private val userId: Int,
     private val getUserInformationUseCase: GetUserDetailUseCase,
     private val askToGuardUseCase: AskToGuardUseCase,
-    private val setRequestReactionUseCase: SetRequestReactionUseCase
+    private val setRequestReactionUseCase: SetRequestReactionUseCase,
+    private val stopGuardingUseCase: StopGuardingUseCase,
+    private val deleteGuardianUseCase: DeleteGuardianUseCase,
 ) : ComposeViewModel<UserDetailsState, UserDetailsRoute, UserDetailsActions>() {
 
     override var _state: MutableStateFlow<UserDetailsState> = MutableStateFlow(UserDetailsState())
@@ -38,18 +42,6 @@ class UserDetailsViewModel(
             },
             onComplete = { _state.update { it.copy(isLoading = false) } }
         )
-
-//        viewModelScope.launch {
-//            kotlin.runCatching { getUserInformationUseCase.getUser(userId) }
-//                .onSuccess { user ->
-//                    _state.update { it.copy(data = user) }
-//                }
-//                .onFailure { error ->
-//                    _state.update { it.copy(errorText = error.localizedMessage) }
-//                }
-//            _state.update { it.copy(isLoading = false) }
-//
-//        }
     }
 
     private fun updateInfo(info: (PersonModel.() -> PersonModel)) {
@@ -80,7 +72,12 @@ class UserDetailsViewModel(
     private fun changeGuardence() {
         _state.update { it.copy(isLoading = true) }
         networkRequest(
-            action = { askToGuardUseCase(userId) },
+            action = {
+                if (_state.value.data?.isGuardian == true)
+                    deleteGuardianUseCase(userId)
+                else
+                    askToGuardUseCase(userId)
+            },
             onSuccess = { updateInfo { copy(isGuardian = !isGuardian) } },
             onFailure = { error ->
                 error.serviceCast { msg, _, isForceLogout ->
@@ -92,28 +89,43 @@ class UserDetailsViewModel(
     }
 
 
-    private fun stopGuarding() = updateInfo {
-        copy(isOnGuard = null)
-    }
-
-    private fun requestAnswer(isAccepted: ButtonAnswer) {
+    private fun stopGuarding() {
         _state.update { it.copy(isLoading = true) }
         networkRequest(
-            action = { setRequestReactionUseCase(isAccepted, userId) },
-            onSuccess = {
-                updateInfo {
-                    copy(personStatus = personStatus?.copy(status = if (isAccepted.answer) GuardianStatus.ACCEPTED else GuardianStatus.DECLINED))
-                }
-            },
+            action = { stopGuardingUseCase(userId) },
+            onSuccess = { updateInfo { copy(isOnGuard = null) } },
             onFailure = { error ->
                 error.serviceCast { msg, _, isForceLogout ->
                     _state.update { it.copy(errorText = msg) }
                 }
             },
-            onComplete = {
-                _state.update { it.copy(isLoading = false) }
-            },
+            onComplete = { _state.update { it.copy(isLoading = false) } },
         )
+    }
+
+    private fun requestAnswer(isAccepted: ButtonAnswer) {
+        _state.value.data?.personStatus?.let { status ->
+            _state.update { it.copy(isLoading = true) }
+            networkRequest(
+                action = { setRequestReactionUseCase(isAccepted, status.statusId) },
+                onSuccess = {
+                    updateInfo {
+                        copy(
+                            personStatus = personStatus?.copy(status = if (isAccepted.answer) GuardianStatus.ACCEPTED else GuardianStatus.DECLINED),
+                            isOnGuard = if (isAccepted.answer) true else isOnGuard
+                        )
+                    }
+                },
+                onFailure = { error ->
+                    error.serviceCast { msg, _, isForceLogout ->
+                        _state.update { it.copy(errorText = msg) }
+                    }
+                },
+                onComplete = {
+                    _state.update { it.copy(isLoading = false) }
+                },
+            )
+        }
     }
 
     private fun showAlert(alertType: StopGuardAlertType) {

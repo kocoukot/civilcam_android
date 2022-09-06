@@ -21,7 +21,7 @@ data class PersonModel(
 
     @Parcelize
     data class PersonStatus(
-        val statusId: Int? = null,
+        val statusId: Int = 0,
         val status: GuardianStatus = GuardianStatus.NEW,
     ) : Parcelable
 

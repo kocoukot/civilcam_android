@@ -5,8 +5,8 @@ import com.civilcam.data.network.model.request.guardians.*
 import com.civilcam.data.network.model.response.SuccessResponse
 import com.civilcam.data.network.model.response.guardians.*
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 
 interface GuardiansService {
@@ -36,9 +36,9 @@ interface GuardiansService {
     suspend fun setRequestReaction(@Body request: RequestReactionRequest): GuardRequestResponse
 
 
-    @DELETE(Endpoint.Guardians.DELETE_GUARDIAN)
+    @HTTP(method = "DELETE", path = Endpoint.Guardians.DELETE_GUARDIAN, hasBody = true)
     suspend fun deleteGuardian(@Body request: PersonIdRequest): PersonDetailResponse
 
-    @DELETE(Endpoint.Guardians.STOP_GUARDING)
+    @HTTP(method = "DELETE", path = Endpoint.Guardians.STOP_GUARDING, hasBody = true)
     suspend fun stopGuarding(@Body request: PersonIdRequest): PersonDetailResponse
 }
