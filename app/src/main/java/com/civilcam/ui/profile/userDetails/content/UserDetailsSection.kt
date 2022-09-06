@@ -74,7 +74,6 @@ fun UserDetailsSection(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 userData.personPhone?.let { phone ->
-                    val formattedPhone =
                         InformationBoxContent(
                             text = phone,
                             modifier = Modifier.weight(1f),
