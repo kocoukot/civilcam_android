@@ -68,7 +68,7 @@ fun UserDetailsScreenContent(viewModel: UserDetailsViewModel) {
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBarContent(
-                title = stringResource(id = R.string.user_details_title),
+                title = "",
                 navigationItem = {
                     BackButton {
                         viewModel.setInputActions(UserDetailsActions.ClickGoBack)

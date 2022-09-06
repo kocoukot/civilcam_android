@@ -19,8 +19,10 @@ import com.civilcam.R
 import com.civilcam.common.ext.castSafe
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.model.AlertDialogTypes
 import com.civilcam.domainLayer.model.guard.GuardianItem
 import com.civilcam.domainLayer.model.guard.NetworkType
+import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.common.compose.inputs.SearchInputField
 import com.civilcam.ui.common.loading.DialogLoadingContent
@@ -55,6 +57,14 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
         DialogLoadingContent()
     }
 
+    if (state.value.errorText.isNotEmpty()) {
+        AlertDialogComp(
+            dialogText = state.value.errorText,
+            alertType = AlertDialogTypes.OK,
+            onOptionSelected = { viewModel.setInputActions(NetworkMainActions.ClearErrorText) }
+        )
+    }
+
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
         modifier = Modifier
@@ -73,8 +83,10 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                             navigationItem = {
                                 when (screenState) {
                                     NetworkScreen.MAIN ->
-                                        AvatarButton {
-                                            viewModel.setInputActions(NetworkMainActions.ClickGoMyProfile)
+                                        state.value.userAvatar?.imageUrl?.let { url ->
+                                            AvatarButton(url) {
+                                                viewModel.setInputActions(NetworkMainActions.ClickGoMyProfile)
+                                            }
                                         }
                                     NetworkScreen.REQUESTS, NetworkScreen.SEARCH_GUARD, NetworkScreen.ADD_GUARD ->
                                         BackButton {

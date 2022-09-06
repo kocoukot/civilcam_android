@@ -5,5 +5,5 @@ import com.civilcam.domainLayer.repos.GuardiansRepository
 class GetUserNetworkUseCase(
     private val guardiansRepository: GuardiansRepository
 ) {
-    suspend operator fun invoke(personId: Int) = guardiansRepository.askToGuard(personId)
+    suspend operator fun invoke() = guardiansRepository.getUserNetwork()
 }

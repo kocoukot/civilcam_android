@@ -16,13 +16,13 @@ class UserNetworkResponse(
     )
 
     class OnGuardResponse(
-        @SerializedName("id") val id: String,
+        @SerializedName("id") val id: Int,
         @SerializedName("status") val status: String,
         @SerializedName("person") val person: PersonResponse,
     )
 
     class GuardiansResponse(
-        @SerializedName("id") val id: String,
+        @SerializedName("id") val id: Int,
         @SerializedName("guardian") val guardian: PersonResponse,
         @SerializedName("status") val status: String,
     )

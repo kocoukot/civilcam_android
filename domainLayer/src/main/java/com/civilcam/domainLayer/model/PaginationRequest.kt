@@ -6,7 +6,7 @@ class PaginationRequest(
     @SerializedName("pageInfo") val pageInfo: Pagination = Pagination(),
 ) {
     class Pagination(
-        @SerializedName("pageIndex") val pageIndex: Int = 0, // min 1
+        @SerializedName("pageIndex") val pageIndex: Int = 1,
         @SerializedName("itemsPerPage") val itemsPerPage: Int = 40,
     )
 }

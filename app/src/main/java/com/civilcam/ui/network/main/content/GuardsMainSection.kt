@@ -29,7 +29,9 @@ fun GuardsMainSection(
     clickGoUser: (GuardianItem) -> Unit
 ) {
 
-    if (screenData.guardiansList.isEmpty() && screenData.requestsList.isEmpty()) {
+    if ((tabPage == NetworkType.ON_GUARD && screenData.onGuardList.isEmpty() && screenData.requestsList.isEmpty()) ||
+        (tabPage == NetworkType.GUARDIANS && screenData.guardiansList.isEmpty())
+    ) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -58,21 +60,25 @@ fun GuardsMainSection(
             }
 
             LazyColumn {
-                itemsIndexed(screenData.guardiansList) { index, contact ->
+                val screenList = when (tabPage) {
+                    NetworkType.ON_GUARD -> screenData.onGuardList
+                    NetworkType.GUARDIANS -> screenData.guardiansList
+                }
+                itemsIndexed(screenList) { index, contact ->
                     when (contact) {
                         is LetterGuardItem -> Box {
                             Column {
-                                HeaderTitleText(contact.letter)
+                                HeaderTitleText(contact.letter, index != 0)
                             }
                         }
 
 
                         is GuardianItem -> {
                             InformationRow(
-                                needDivider = (if (index == screenData.guardiansList.lastIndex) {
+                                needDivider = (if (index == screenList.lastIndex) {
                                     false
                                 } else {
-                                    screenData.guardiansList[index + 1] is GuardianItem
+                                    screenList[index + 1] is GuardianItem
                                 }),
                                 title = contact.guardianName,
                                 leadingIcon = {

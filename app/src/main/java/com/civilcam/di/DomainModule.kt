@@ -120,6 +120,8 @@ val domainModule = module {
 
     factory { DeleteGuardianUseCase(get()) }
 
+    factory { GetUserNetworkUseCase(get()) }
+
 }
 
 
