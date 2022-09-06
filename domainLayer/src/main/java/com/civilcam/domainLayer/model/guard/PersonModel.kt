@@ -14,14 +14,21 @@ data class PersonModel(
     val personAvatar: ImageInfo? = null,
     val personPhone: String? = "",
     val personAddress: String? = "",
-    var personStatus: GuardianStatus = GuardianStatus.NEW,
+    var personStatus: PersonStatus? = PersonStatus(),
     val isOnGuard: Boolean? = false,
     val isGuardian: Boolean = false,
 ) : Parcelable {
+
+    @Parcelize
+    data class PersonStatus(
+        val statusId: Int = 0,
+        val status: GuardianStatus = GuardianStatus.NEW,
+    ) : Parcelable
+
     fun mapToItem() = GuardianItem(
         guardianId = personId,
         guardianName = personFullName,
         guardianAvatar = personAvatar,
-        guardianStatus = personStatus,
+        guardianStatus = personStatus?.status ?: GuardianStatus.NEW,
     )
 }

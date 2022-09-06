@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.local.MediaStorage
 import com.civilcam.data.network.support.ServiceException
-import com.civilcam.domainLayer.PictureModel
 import com.civilcam.domainLayer.model.AutocompletePlace
+import com.civilcam.domainLayer.model.PictureModel
 import com.civilcam.domainLayer.model.SearchModel
 import com.civilcam.domainLayer.model.profile.UserSetupModel
 import com.civilcam.domainLayer.usecase.places.GetPlacesAutocompleteUseCase

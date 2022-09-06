@@ -6,6 +6,6 @@ import com.civilcam.domainLayer.repos.GuardiansRepository
 class SetRequestReactionUseCase(
     private val guardiansRepository: GuardiansRepository
 ) {
-    suspend operator fun invoke(reaction: ButtonAnswer, personId: Int) =
-        guardiansRepository.setRequestReaction(reaction, personId)
+    suspend operator fun invoke(reaction: ButtonAnswer, requestId: Int) =
+        guardiansRepository.setRequestReaction(reaction, requestId)
 }

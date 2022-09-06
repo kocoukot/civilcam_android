@@ -72,7 +72,7 @@ class GuardiansRepositoryImpl(
 
     override suspend fun getPersonDetail(personId: Int): PersonModel =
         safeApiCall {
-            guardiansService.getPersonDetail(PersonDetailRequest(personId = personId))
+            guardiansService.getPersonDetail(PersonIdRequest(personId = personId))
         }.let { response ->
             when (response) {
                 is Resource.Success -> personMapper.mapData(response.value.person)
@@ -83,10 +83,10 @@ class GuardiansRepositoryImpl(
             }
         }
 
-    override suspend fun setRequestReaction(reaction: ButtonAnswer, personId: Int): Boolean =
+    override suspend fun setRequestReaction(reaction: ButtonAnswer, requestId: Int): Boolean =
         safeApiCall {
             guardiansService.setRequestReaction(
-                RequestReactionRequest(reaction = reaction.domain, id = personId)
+                RequestReactionRequest(reaction = reaction.domain, id = requestId)
             )
         }.let { response ->
             when (response) {
@@ -104,6 +104,32 @@ class GuardiansRepositoryImpl(
         }.let { response ->
             when (response) {
                 is Resource.Success -> response.value.list.map { inviteMapper.mapData(it) }
+                is Resource.Failure -> {
+                    response.checkIfLogOut { accountStorage.logOut() }
+                    throw response.serviceException
+                }
+            }
+        }
+
+    override suspend fun deleteGuardian(personId: Int): Boolean =
+        safeApiCall {
+            guardiansService.deleteGuardian(PersonIdRequest(personId))
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> true
+                is Resource.Failure -> {
+                    response.checkIfLogOut { accountStorage.logOut() }
+                    throw response.serviceException
+                }
+            }
+        }
+
+    override suspend fun stopGuarding(personId: Int): Boolean =
+        safeApiCall {
+            guardiansService.stopGuarding(PersonIdRequest(personId))
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> true
                 is Resource.Failure -> {
                     response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException

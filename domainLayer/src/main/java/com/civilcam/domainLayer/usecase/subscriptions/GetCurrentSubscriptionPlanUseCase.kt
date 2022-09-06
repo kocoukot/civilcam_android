@@ -1,4 +1,4 @@
-package com.civilcam.domainLayer.usecase.settings
+package com.civilcam.domainLayer.usecase.subscriptions
 
 import com.civilcam.domainLayer.repos.MockRepository
 

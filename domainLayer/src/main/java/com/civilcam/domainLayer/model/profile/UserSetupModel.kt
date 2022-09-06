@@ -1,6 +1,6 @@
 package com.civilcam.domainLayer.model.profile
 
-import com.civilcam.domainLayer.PictureModel
+import com.civilcam.domainLayer.model.PictureModel
 
 data class UserSetupModel(
     var firstName: String? = null,

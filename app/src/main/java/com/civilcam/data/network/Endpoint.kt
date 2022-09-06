@@ -53,7 +53,7 @@ object Endpoint {
         const val SET_REQUEST_REACTION = "set-request-reaction"
         const val ON_GUARD = "on-guard"
         const val GUARDIANS = "guardians"
-        const val GUARDIAN = "guardian"
+        const val DELETE_GUARDIAN = "guardian"
         const val STOP_GUARDING = "stop-guarding"
     }
 

@@ -59,7 +59,7 @@ fun UserDetailsSection(
             )
         }
 
-        if (userData.isOnGuard == true) {
+        if (userData.isOnGuard == true || userData.isGuardian) {
             userData.personAddress?.let { address ->
                 AdditionalInfo(
                     address,
@@ -74,10 +74,10 @@ fun UserDetailsSection(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 userData.personPhone?.let { phone ->
-                    InformationBoxContent(
-                        text = phone,
-                        modifier = Modifier.weight(1f),
-                    )
+                        InformationBoxContent(
+                            text = phone,
+                            modifier = Modifier.weight(1f),
+                        )
                 }
 
                 if (userData.isOnGuard == true) {
@@ -96,7 +96,6 @@ fun UserDetailsSection(
             }
         } else {
             Spacer(modifier = Modifier.height(16.dp))
-
         }
 
 
