@@ -1,5 +1,6 @@
 package com.civilcam.ui.network.main
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -34,6 +35,7 @@ import com.civilcam.ui.network.main.model.NetworkMainActions
 import com.civilcam.ui.network.main.model.NetworkScreen
 import timber.log.Timber
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
@@ -139,8 +141,7 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                     }
                 }
 
-                if (!(state.value.data.guardiansList.isNotEmpty() == true ||
-                            state.value.data.requestsList.isNotEmpty() == true) ||
+                if (!(state.value.data.onGuardList.isNotEmpty() || state.value.data.requestsList.isNotEmpty() || state.value.data.guardiansList.isNotEmpty()) ||
                     state.value.screenState == NetworkScreen.SEARCH_GUARD ||
                     state.value.screenState == NetworkScreen.ADD_GUARD
                 ) RowDivider()
@@ -178,12 +179,8 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                         GuardsMainSection(
                             screenData,
                             tabPage = tabPage,
-                            clickGoRequests = {
-                                viewModel.setInputActions(NetworkMainActions.ClickGoRequests)
-                            },
-                            clickGoUser = {
-                                viewModel.setInputActions(NetworkMainActions.ClickUser(it))
-                            })
+                            onAction = viewModel::setInputActions
+                        )
                     }
 
 

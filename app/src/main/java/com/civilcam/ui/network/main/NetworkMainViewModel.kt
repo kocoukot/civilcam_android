@@ -47,7 +47,6 @@ class NetworkMainViewModel(
         _state.update { it.copy(screenState = screen) }
         Timber.i("Screen type $screen")
         checkNavBarStatus()
-        _state.update { it.copy(isLoading = true) }
         getLocalCurrentUserUseCase().let { user ->
             _state.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
         }
@@ -62,9 +61,13 @@ class NetworkMainViewModel(
                 }
             }
         }
+        fetchGuardsList()
+    }
 
+    private fun fetchGuardsList() {
+        _state.update { it.copy(isLoading = true) }
         networkRequest(
-            action = { getUserNetworkUseCase.invoke() },
+            action = { getUserNetworkUseCase(_state.value.networkType) },
             onSuccess = { data ->
                 Timber.i("userdata $data")
                 _state.update {
@@ -122,6 +125,7 @@ class NetworkMainViewModel(
             }
         }
         checkNavBarStatus()
+        fetchGuardsList()
     }
 
     private fun addGuardian() {
@@ -160,6 +164,7 @@ class NetworkMainViewModel(
 
     private fun changeAlertType(networkType: NetworkType) {
         _state.update { it.copy(networkType = networkType) }
+        fetchGuardsList()
     }
 
     private fun mapToItems(contacts: List<GuardianItem>): MutableList<GuardItem> {

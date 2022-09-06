@@ -11,6 +11,7 @@ import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
 import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.model.PaginationRequest
+import com.civilcam.domainLayer.model.guard.NetworkType
 import com.civilcam.domainLayer.model.guard.PersonModel
 import com.civilcam.domainLayer.model.guard.UserInviteModel
 import com.civilcam.domainLayer.model.guard.UserNetworkModel
@@ -26,10 +27,13 @@ class GuardiansRepositoryImpl(
     private val inviteMapper = InviteMapper()
     private val userNetworkMapper = UserNetworkMapper()
 
-    override suspend fun getUserNetwork(): UserNetworkModel =
+    override suspend fun getUserNetwork(networkType: NetworkType): UserNetworkModel =
         safeApiCall {
             guardiansService.userNetwork(
-                UserNetworkRequest(pageInfo = PaginationRequest.Pagination(1, 40))
+                UserNetworkRequest(
+                    pageInfo = PaginationRequest.Pagination(1, 40),
+                    networkType = networkType.domain
+                )
             )
         }.let { response ->
             when (response) {

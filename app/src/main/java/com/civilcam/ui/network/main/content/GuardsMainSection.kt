@@ -19,14 +19,14 @@ import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.domainLayer.model.guard.LetterGuardItem
 import com.civilcam.domainLayer.model.guard.NetworkType
 import com.civilcam.ui.common.compose.*
+import com.civilcam.ui.network.main.model.NetworkMainActions
 import com.civilcam.ui.network.main.model.NetworkMainModel
 
 @Composable
 fun GuardsMainSection(
     screenData: NetworkMainModel,
     tabPage: NetworkType,
-    clickGoRequests: () -> Unit,
-    clickGoUser: (GuardianItem) -> Unit
+    onAction: (NetworkMainActions) -> Unit,
 ) {
 
     if ((tabPage == NetworkType.ON_GUARD && screenData.onGuardList.isEmpty() && screenData.requestsList.isEmpty()) ||
@@ -51,12 +51,11 @@ fun GuardsMainSection(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            if (screenData.requestsList.isNotEmpty()) {
+
+            if (screenData.requestsList.isNotEmpty() && tabPage == NetworkType.ON_GUARD) {
                 GuardRequestRowSection(
                     screenData.requestsList as List<GuardianItem>
-                ) {
-                    clickGoRequests.invoke()
-                }
+                ) { onAction.invoke(NetworkMainActions.ClickGoRequests) }
             }
 
             LazyColumn {
@@ -68,7 +67,7 @@ fun GuardsMainSection(
                     when (contact) {
                         is LetterGuardItem -> Box {
                             Column {
-                                HeaderTitleText(contact.letter, index != 0)
+                                HeaderTitleText(contact.letter)
                             }
                         }
 
@@ -93,7 +92,7 @@ fun GuardsMainSection(
                                     getUserStatus(contact.guardianStatus)
                                 }
                             ) {
-                                clickGoUser.invoke(contact)
+                                onAction.invoke(NetworkMainActions.ClickUser(contact))
                             }
                         }
                     }
