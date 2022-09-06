@@ -95,9 +95,11 @@ val networkRootModule = module {
 			get(),
 			screen,
 			get(),
-            get(),
-            get()
-        )
+			get(),
+			get(),
+			get(),
+			get()
+		)
     }
 }
 

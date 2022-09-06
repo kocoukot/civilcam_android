@@ -15,11 +15,11 @@ import com.civilcam.domainLayer.model.guard.*
 import com.civilcam.domainLayer.usecase.guardians.AskToGuardUseCase
 import com.civilcam.domainLayer.usecase.guardians.GetGuardsListUseCase
 import com.civilcam.domainLayer.usecase.guardians.GetGuardsRequestsUseCase
+import com.civilcam.domainLayer.usecase.guardians.GetUserNetworkUseCase
+import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.network.main.model.*
 import com.civilcam.ui.network.source.SearchGuardiansDataSource
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -34,7 +34,9 @@ class NetworkMainViewModel(
     private val screen: NetworkScreen = NetworkScreen.MAIN,
     private val getGuardsListUseCase: GetGuardsListUseCase,
     private val getGuardsRequestsUseCase: GetGuardsRequestsUseCase,
-    private val askToGuardUseCase: AskToGuardUseCase
+    private val askToGuardUseCase: AskToGuardUseCase,
+    private val getUserNetworkUseCase: GetUserNetworkUseCase,
+    private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
 ) : ComposeViewModel<NetworkMainState, NetworkMainRoute, NetworkMainActions>(), SearchQuery,
     KoinInjector by injector {
     override var _state: MutableStateFlow<NetworkMainState> = MutableStateFlow(NetworkMainState())
@@ -45,8 +47,9 @@ class NetworkMainViewModel(
         _state.update { it.copy(screenState = screen) }
         Timber.i("Screen type $screen")
         checkNavBarStatus()
-        getMockInfo()
-        _state.update { it.copy(data = NetworkMainModel()) }
+        getLocalCurrentUserUseCase().let { user ->
+            _state.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
+        }
         query(viewModelScope) { query ->
             query.let {
                 viewModelScope.launch {
@@ -58,6 +61,30 @@ class NetworkMainViewModel(
                 }
             }
         }
+        fetchGuardsList()
+    }
+
+    private fun fetchGuardsList() {
+        _state.update { it.copy(isLoading = true) }
+        networkRequest(
+            action = { getUserNetworkUseCase(_state.value.networkType) },
+            onSuccess = { data ->
+                Timber.i("userdata $data")
+                _state.update {
+                    it.copy(
+                        data = NetworkMainModel(
+                            requestsList = data.requestsList,
+                            guardiansList = mapToItems(data.guardiansList),
+                            onGuardList = mapToItems(data.onGuardList)
+                        )
+                    )
+                }
+            },
+            onFailure = { error ->
+                error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
+            },
+            onComplete = { _state.update { it.copy(isLoading = false) } },
+        )
     }
 
     fun stopRefresh() {
@@ -78,7 +105,12 @@ class NetworkMainViewModel(
 
             is NetworkMainActions.EnteredSearchString -> searchContact(action.searchQuery)
             is NetworkMainActions.ClickAddUser -> addUser(action.user)
+            NetworkMainActions.ClearErrorText -> clearErrorText()
         }
+    }
+
+    private fun clearErrorText() {
+        _state.update { it.copy(errorText = "") }
     }
 
     private fun goBack() {
@@ -93,6 +125,7 @@ class NetworkMainViewModel(
             }
         }
         checkNavBarStatus()
+        fetchGuardsList()
     }
 
     private fun addGuardian() {
@@ -131,32 +164,7 @@ class NetworkMainViewModel(
 
     private fun changeAlertType(networkType: NetworkType) {
         _state.update { it.copy(networkType = networkType) }
-        getMockInfo()
-    }
-
-    private fun getMockInfo() {
-        Timber.d("getMockInfo")
-        _state.update { it.copy(isLoading = true) }
-        viewModelScope.launch {
-            delay(2000)
-            try {
-                val guardsList = async { getGuardsListUseCase.getGuards(_state.value.networkType) }
-                val requestsList =
-                    async { if (_state.value.networkType == NetworkType.ON_GUARD) getGuardsRequestsUseCase.getGuardRequests() else emptyList() }
-                _state.update {
-                    it.copy(
-                        data = NetworkMainModel(
-                            requestsList = requestsList.await(),
-                            guardiansList = mapToItems(guardsList.await()),
-                        )
-                    )
-                }
-            } catch (e: Exception) {
-                _state.update { it.copy(errorText = e.localizedMessage) }
-            }.also {
-                _state.update { it.copy(isLoading = false) }
-            }
-        }
+        fetchGuardsList()
     }
 
     private fun mapToItems(contacts: List<GuardianItem>): MutableList<GuardItem> {

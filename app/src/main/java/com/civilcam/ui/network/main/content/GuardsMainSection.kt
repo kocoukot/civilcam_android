@@ -19,17 +19,19 @@ import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.domainLayer.model.guard.LetterGuardItem
 import com.civilcam.domainLayer.model.guard.NetworkType
 import com.civilcam.ui.common.compose.*
+import com.civilcam.ui.network.main.model.NetworkMainActions
 import com.civilcam.ui.network.main.model.NetworkMainModel
 
 @Composable
 fun GuardsMainSection(
     screenData: NetworkMainModel,
     tabPage: NetworkType,
-    clickGoRequests: () -> Unit,
-    clickGoUser: (GuardianItem) -> Unit
+    onAction: (NetworkMainActions) -> Unit,
 ) {
 
-    if (screenData.guardiansList.isEmpty() && screenData.requestsList.isEmpty()) {
+    if ((tabPage == NetworkType.ON_GUARD && screenData.onGuardList.isEmpty() && screenData.requestsList.isEmpty()) ||
+        (tabPage == NetworkType.GUARDIANS && screenData.guardiansList.isEmpty())
+    ) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -49,16 +51,19 @@ fun GuardsMainSection(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            if (screenData.requestsList.isNotEmpty()) {
+
+            if (screenData.requestsList.isNotEmpty() && tabPage == NetworkType.ON_GUARD) {
                 GuardRequestRowSection(
                     screenData.requestsList as List<GuardianItem>
-                ) {
-                    clickGoRequests.invoke()
-                }
+                ) { onAction.invoke(NetworkMainActions.ClickGoRequests) }
             }
 
             LazyColumn {
-                itemsIndexed(screenData.guardiansList) { index, contact ->
+                val screenList = when (tabPage) {
+                    NetworkType.ON_GUARD -> screenData.onGuardList
+                    NetworkType.GUARDIANS -> screenData.guardiansList
+                }
+                itemsIndexed(screenList) { index, contact ->
                     when (contact) {
                         is LetterGuardItem -> Box {
                             Column {
@@ -69,10 +74,10 @@ fun GuardsMainSection(
 
                         is GuardianItem -> {
                             InformationRow(
-                                needDivider = (if (index == screenData.guardiansList.lastIndex) {
+                                needDivider = (if (index == screenList.lastIndex) {
                                     false
                                 } else {
-                                    screenData.guardiansList[index + 1] is GuardianItem
+                                    screenList[index + 1] is GuardianItem
                                 }),
                                 title = contact.guardianName,
                                 leadingIcon = {
@@ -87,7 +92,7 @@ fun GuardsMainSection(
                                     getUserStatus(contact.guardianStatus)
                                 }
                             ) {
-                                clickGoUser.invoke(contact)
+                                onAction.invoke(NetworkMainActions.ClickUser(contact))
                             }
                         }
                     }

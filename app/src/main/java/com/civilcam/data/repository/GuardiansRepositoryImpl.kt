@@ -4,14 +4,17 @@ import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.mapper.guardian.InviteMapper
 import com.civilcam.data.mapper.guardian.SearchGuardianListMapper
 import com.civilcam.data.mapper.guardian.SearchGuardianMapper
+import com.civilcam.data.mapper.guardian.UserNetworkMapper
 import com.civilcam.data.network.model.request.guardians.*
 import com.civilcam.data.network.service.GuardiansService
 import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
 import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.model.PaginationRequest
+import com.civilcam.domainLayer.model.guard.NetworkType
 import com.civilcam.domainLayer.model.guard.PersonModel
 import com.civilcam.domainLayer.model.guard.UserInviteModel
+import com.civilcam.domainLayer.model.guard.UserNetworkModel
 import com.civilcam.domainLayer.repos.GuardiansRepository
 
 class GuardiansRepositoryImpl(
@@ -22,6 +25,25 @@ class GuardiansRepositoryImpl(
     private val guardianSearchMapper = SearchGuardianListMapper()
     private val personMapper = SearchGuardianMapper()
     private val inviteMapper = InviteMapper()
+    private val userNetworkMapper = UserNetworkMapper()
+
+    override suspend fun getUserNetwork(networkType: NetworkType): UserNetworkModel =
+        safeApiCall {
+            guardiansService.userNetwork(
+                UserNetworkRequest(
+                    pageInfo = PaginationRequest.Pagination(1, 40),
+                    networkType = networkType.domain
+                )
+            )
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> userNetworkMapper.mapData(response.value)
+                is Resource.Failure -> {
+                    response.checkIfLogOut { accountStorage.logOut() }
+                    throw response.serviceException
+                }
+            }
+        }
 
     override suspend fun searchGuardian(
         query: String,

@@ -1,5 +1,6 @@
 package com.civilcam.ui.network.main
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,8 +20,10 @@ import com.civilcam.R
 import com.civilcam.common.ext.castSafe
 import com.civilcam.common.theme.CCTheme
 import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.model.AlertDialogTypes
 import com.civilcam.domainLayer.model.guard.GuardianItem
 import com.civilcam.domainLayer.model.guard.NetworkType
+import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.common.compose.inputs.SearchInputField
 import com.civilcam.ui.common.loading.DialogLoadingContent
@@ -32,6 +35,7 @@ import com.civilcam.ui.network.main.model.NetworkMainActions
 import com.civilcam.ui.network.main.model.NetworkScreen
 import timber.log.Timber
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
@@ -55,6 +59,14 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
         DialogLoadingContent()
     }
 
+    if (state.value.errorText.isNotEmpty()) {
+        AlertDialogComp(
+            dialogText = state.value.errorText,
+            alertType = AlertDialogTypes.OK,
+            onOptionSelected = { viewModel.setInputActions(NetworkMainActions.ClearErrorText) }
+        )
+    }
+
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
         modifier = Modifier
@@ -73,8 +85,10 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                             navigationItem = {
                                 when (screenState) {
                                     NetworkScreen.MAIN ->
-                                        AvatarButton {
-                                            viewModel.setInputActions(NetworkMainActions.ClickGoMyProfile)
+                                        state.value.userAvatar?.imageUrl?.let { url ->
+                                            AvatarButton(url) {
+                                                viewModel.setInputActions(NetworkMainActions.ClickGoMyProfile)
+                                            }
                                         }
                                     NetworkScreen.REQUESTS, NetworkScreen.SEARCH_GUARD, NetworkScreen.ADD_GUARD ->
                                         BackButton {
@@ -127,8 +141,7 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                     }
                 }
 
-                if (!(state.value.data.guardiansList.isNotEmpty() == true ||
-                            state.value.data.requestsList.isNotEmpty() == true) ||
+                if (!(state.value.data.onGuardList.isNotEmpty() || state.value.data.requestsList.isNotEmpty() || state.value.data.guardiansList.isNotEmpty()) ||
                     state.value.screenState == NetworkScreen.SEARCH_GUARD ||
                     state.value.screenState == NetworkScreen.ADD_GUARD
                 ) RowDivider()
@@ -166,12 +179,8 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                         GuardsMainSection(
                             screenData,
                             tabPage = tabPage,
-                            clickGoRequests = {
-                                viewModel.setInputActions(NetworkMainActions.ClickGoRequests)
-                            },
-                            clickGoUser = {
-                                viewModel.setInputActions(NetworkMainActions.ClickUser(it))
-                            })
+                            onAction = viewModel::setInputActions
+                        )
                     }
 
 
