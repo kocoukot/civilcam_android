@@ -11,16 +11,18 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.model.guard.GuardianItem
 import com.civilcam.ui.common.compose.CircleUserAvatar
 import com.civilcam.ui.common.compose.IconActionButton
 import com.civilcam.ui.common.compose.InformationRow
 import com.civilcam.ui.common.compose.RowDivider
+import com.civilcam.ui.network.main.model.NetworkMainActions
 
 @Composable
 fun RequestsScreenSection(
     guardRequestsList: List<GuardianItem>,
-    clickRequest: (GuardianItem, Boolean) -> Unit
+    clickRequest: (NetworkMainActions) -> Unit
 ) {
 
     Column {
@@ -45,19 +47,19 @@ fun RequestsScreenSection(
                 },
                 trailingIcon = {
                     RequestAnswers {
-                        clickRequest.invoke(guard, it)
+                        clickRequest.invoke(NetworkMainActions.SetRequestReaction(guard, it))
                     }
                 },
             ) {}
         }
-        RowDivider()
+        if (guardRequestsList.isNotEmpty()) RowDivider()
 
     }
 }
 
 @Composable
 private fun RequestAnswers(
-    isAccepted: (Boolean) -> Unit
+    isAccepted: (ButtonAnswer) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -72,7 +74,7 @@ private fun RequestAnswers(
                 .size(24.dp),
             tint = CCTheme.colors.primaryRed,
         ) {
-            isAccepted.invoke(false)
+            isAccepted.invoke(ButtonAnswer.DECLINE)
         }
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -83,7 +85,7 @@ private fun RequestAnswers(
                 .size(24.dp),
             tint = CCTheme.colors.primaryGreen,
         ) {
-            isAccepted.invoke(true)
+            isAccepted.invoke(ButtonAnswer.ACCEPT)
         }
     }
 

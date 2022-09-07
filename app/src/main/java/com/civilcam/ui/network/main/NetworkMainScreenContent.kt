@@ -185,9 +185,10 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
 
 
                     NetworkScreen.REQUESTS -> {
-                        RequestsScreenSection(screenData.requestsList as List<GuardianItem>) { request, isAccepted ->
-
-                        }
+                        RequestsScreenSection(
+                            guardRequestsList = screenData.requestsList as List<GuardianItem>,
+                            clickRequest = viewModel::setInputActions,
+                        )
                     }
                     NetworkScreen.SEARCH_GUARD, NetworkScreen.ADD_GUARD -> {
                         state.value.data.let { data ->

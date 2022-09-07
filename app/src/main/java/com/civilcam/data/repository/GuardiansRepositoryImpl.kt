@@ -1,20 +1,14 @@
 package com.civilcam.data.repository
 
 import com.civilcam.data.local.AccountStorage
-import com.civilcam.data.mapper.guardian.InviteMapper
-import com.civilcam.data.mapper.guardian.SearchGuardianListMapper
-import com.civilcam.data.mapper.guardian.SearchGuardianMapper
-import com.civilcam.data.mapper.guardian.UserNetworkMapper
+import com.civilcam.data.mapper.guardian.*
 import com.civilcam.data.network.model.request.guardians.*
 import com.civilcam.data.network.service.GuardiansService
 import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
 import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.model.PaginationRequest
-import com.civilcam.domainLayer.model.guard.NetworkType
-import com.civilcam.domainLayer.model.guard.PersonModel
-import com.civilcam.domainLayer.model.guard.UserInviteModel
-import com.civilcam.domainLayer.model.guard.UserNetworkModel
+import com.civilcam.domainLayer.model.guard.*
 import com.civilcam.domainLayer.repos.GuardiansRepository
 
 class GuardiansRepositoryImpl(
@@ -26,6 +20,7 @@ class GuardiansRepositoryImpl(
     private val personMapper = SearchGuardianMapper()
     private val inviteMapper = InviteMapper()
     private val userNetworkMapper = UserNetworkMapper()
+    private val requestsListMapper = RequestsListMapper()
 
     override suspend fun getUserNetwork(networkType: NetworkType): UserNetworkModel =
         safeApiCall {
@@ -59,6 +54,19 @@ class GuardiansRepositoryImpl(
         }.let { response ->
             when (response) {
                 is Resource.Success -> guardianSearchMapper.mapData(response.value.list)
+                is Resource.Failure -> {
+                    response.checkIfLogOut { accountStorage.logOut() }
+                    throw response.serviceException
+                }
+            }
+        }
+
+    override suspend fun getUserRequest(): List<GuardianItem> =
+        safeApiCall {
+            guardiansService.userGuardRequests()
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> response.value.list.map { requestsListMapper.mapData(it) }
                 is Resource.Failure -> {
                     response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
@@ -105,14 +113,14 @@ class GuardiansRepositoryImpl(
             }
         }
 
-    override suspend fun setRequestReaction(reaction: ButtonAnswer, requestId: Int): Boolean =
+    override suspend fun setRequestReaction(reaction: ButtonAnswer, requestId: Int): PersonModel =
         safeApiCall {
             guardiansService.setRequestReaction(
                 RequestReactionRequest(reaction = reaction.domain, id = requestId)
             )
         }.let { response ->
             when (response) {
-                is Resource.Success -> true
+                is Resource.Success -> personMapper.mapData(response.value.request.person)
                 is Resource.Failure -> {
                     response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
