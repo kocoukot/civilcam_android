@@ -56,10 +56,6 @@ val domainModule = module {
 
     factory { GetHistoryDetailUseCase(get()) }
 
-    factory { GetGuardsListUseCase(get()) }
-
-    factory { GetGuardsRequestsUseCase(get()) }
-
     factory { SearchGuardsResultUseCase(get()) }
 
     factory { GetCurrentSubscriptionPlanUseCase(get()) }

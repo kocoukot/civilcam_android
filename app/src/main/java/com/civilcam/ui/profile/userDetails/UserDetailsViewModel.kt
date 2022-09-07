@@ -34,7 +34,11 @@ class UserDetailsViewModel(
         _state.update { it.copy(isLoading = true) }
         networkRequest(
             action = { getUserInformationUseCase(userId) },
-            onSuccess = { user -> _state.update { it.copy(data = user) } },
+            onSuccess = { user ->
+                Timber.i("userDetail id $user")
+
+                _state.update { it.copy(data = user) }
+            },
             onFailure = { error ->
                 error.serviceCast { msg, _, isForceLogout ->
                     _state.update { it.copy(errorText = msg) }
@@ -73,12 +77,24 @@ class UserDetailsViewModel(
         _state.update { it.copy(isLoading = true) }
         networkRequest(
             action = {
-                if (_state.value.data?.isGuardian == true)
+                if (_state.value.data?.outputRequest?.status == GuardianStatus.ACCEPTED)
                     deleteGuardianUseCase(userId)
                 else
                     askToGuardUseCase(userId)
             },
-            onSuccess = { updateInfo { copy(isGuardian = !isGuardian) } },
+            onSuccess = { response ->
+                response.outputRequest?.let { outputRequest ->
+                    updateInfo {
+                        copy(
+                            isGuardian = response.isGuardian,
+                            outputRequest = PersonModel.PersonStatus(
+                                outputRequest.statusId,
+                                outputRequest.status
+                            )
+                        )
+                    }
+                }
+            },
             onFailure = { error ->
                 error.serviceCast { msg, _, isForceLogout ->
                     _state.update { it.copy(errorText = msg) }
@@ -104,7 +120,7 @@ class UserDetailsViewModel(
     }
 
     private fun requestAnswer(isAccepted: ButtonAnswer) {
-        _state.value.data?.personStatus?.let { status ->
+        _state.value.data?.inputRequest?.let { status ->
             _state.update { it.copy(isLoading = true) }
             networkRequest(
                 action = { setRequestReactionUseCase(isAccepted, status.statusId) },
@@ -113,7 +129,7 @@ class UserDetailsViewModel(
                         copy(
                             personPhone = response.personPhone,
                             personAddress = response.personAddress,
-                            personStatus = personStatus?.copy(status = if (isAccepted.answer) GuardianStatus.ACCEPTED else GuardianStatus.DECLINED),
+                            inputRequest = inputRequest?.copy(status = if (isAccepted.answer) GuardianStatus.ACCEPTED else GuardianStatus.DECLINED),
                             isOnGuard = if (isAccepted.answer) true else isOnGuard
                         )
                     }

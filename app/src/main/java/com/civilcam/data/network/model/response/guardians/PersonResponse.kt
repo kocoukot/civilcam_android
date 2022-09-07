@@ -14,8 +14,10 @@ class PersonResponse(
     @SerializedName("address") val address: String?,
     @SerializedName("isOnGuard") val isOnGuard: Boolean? = false,
     @SerializedName("isGuardian") val isGuardian: Boolean? = false,
-    @SerializedName("request") val request: RequestModelResponse?,
-) {
+    @SerializedName("inputRequest") val inputRequest: RequestModelResponse?,
+    @SerializedName("outputRequest") val outputRequest: RequestModelResponse?,
+
+    ) {
 
     class RequestModelResponse(
         @SerializedName("id") val id: Int,

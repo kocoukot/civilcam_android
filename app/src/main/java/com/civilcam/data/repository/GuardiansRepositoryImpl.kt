@@ -17,7 +17,8 @@ class GuardiansRepositoryImpl(
 ) : GuardiansRepository, BaseRepository() {
 
     private val guardianSearchMapper = SearchGuardianListMapper()
-    private val personMapper = SearchGuardianMapper()
+    private val personMapper = PersonMapper()
+
     private val inviteMapper = InviteMapper()
     private val userNetworkMapper = UserNetworkMapper()
     private val requestsListMapper = RequestsListMapper()
@@ -87,12 +88,17 @@ class GuardiansRepositoryImpl(
             }
         }
 
-    override suspend fun askToGuard(personId: Int): Boolean =
+    override suspend fun askToGuard(personId: Int): PersonModel =
         safeApiCall {
             guardiansService.askToGuard(AskToGuardRequest(personId = personId))
         }.let { response ->
             when (response) {
-                is Resource.Success -> response.value.ok
+                is Resource.Success -> personMapper.mapData(response.value.request.person).apply {
+                    outputRequest = PersonModel.PersonStatus(
+                        statusId = response.value.request.id,
+                        status = GuardianStatus.byDomain(response.value.request.status),
+                    )
+                }
                 is Resource.Failure -> {
                     response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
@@ -120,7 +126,12 @@ class GuardiansRepositoryImpl(
             )
         }.let { response ->
             when (response) {
-                is Resource.Success -> personMapper.mapData(response.value.request.person)
+                is Resource.Success -> personMapper.mapData(response.value.request.person).apply {
+                    inputRequest = PersonModel.PersonStatus(
+                        statusId = response.value.request.id,
+                        status = GuardianStatus.byDomain(response.value.request.status),
+                    )
+                }
                 is Resource.Failure -> {
                     response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
@@ -141,12 +152,12 @@ class GuardiansRepositoryImpl(
             }
         }
 
-    override suspend fun deleteGuardian(personId: Int): Boolean =
+    override suspend fun deleteGuardian(personId: Int): PersonModel =
         safeApiCall {
             guardiansService.deleteGuardian(PersonIdRequest(personId))
         }.let { response ->
             when (response) {
-                is Resource.Success -> true
+                is Resource.Success -> personMapper.mapData(response.value.person)
                 is Resource.Failure -> {
                     response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
@@ -154,12 +165,12 @@ class GuardiansRepositoryImpl(
             }
         }
 
-    override suspend fun stopGuarding(personId: Int): Boolean =
+    override suspend fun stopGuarding(personId: Int): PersonModel =
         safeApiCall {
             guardiansService.stopGuarding(PersonIdRequest(personId))
         }.let { response ->
             when (response) {
-                is Resource.Success -> true
+                is Resource.Success -> personMapper.mapData(response.value.person)
                 is Resource.Failure -> {
                     response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException

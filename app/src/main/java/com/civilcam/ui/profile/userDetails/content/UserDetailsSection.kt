@@ -18,7 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
+import com.civilcam.common.ext.phoneNumberFormat
 import com.civilcam.common.theme.CCTheme
+import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.domainLayer.model.guard.PersonModel
 import com.civilcam.ui.common.compose.CircleUserAvatar
 import com.civilcam.ui.common.compose.ComposeButton
@@ -26,6 +28,7 @@ import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.profile.userDetails.model.StopGuardAlertType
 import com.civilcam.ui.profile.userDetails.model.UserDetailsActions
 import com.civilcam.utils.DateUtils
+import timber.log.Timber
 
 @Composable
 fun UserDetailsSection(
@@ -75,7 +78,7 @@ fun UserDetailsSection(
             ) {
                 userData.personPhone?.let { phone ->
                         InformationBoxContent(
-                            text = phone,
+                            text = phone.phoneNumberFormat(),
                             modifier = Modifier.weight(1f),
                         )
                 }
@@ -98,21 +101,25 @@ fun UserDetailsSection(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
+        Timber.i("buttonTitle ${userData.outputRequest}")
 
         val buttonTitle =
-            if (userData.isGuardian)
-                stringResource(id = R.string.user_details_remove_gaurdian)
-            else
-                stringResource(id = R.string.user_details_ask_to_guard)
+            when (userData.outputRequest?.status) {
+                GuardianStatus.PENDING -> stringResource(id = R.string.pending_text)
+                GuardianStatus.ACCEPTED -> stringResource(id = R.string.user_details_remove_gaurdian)
+                else -> stringResource(id = R.string.user_details_ask_to_guard)
+            }
+
+
+
         ComposeButton(
             title = buttonTitle,
             modifier = Modifier.padding(horizontal = 16.dp),
             textFontWeight = FontWeight.W500,
+            isActivated = userData.outputRequest?.status != GuardianStatus.PENDING,
             buttonClick = {
                 myGuardenceChange.invoke(
-                    UserDetailsActions.ClickShowAlert(
-                        StopGuardAlertType.REMOVE_GUARDIAN
-                    )
+                    UserDetailsActions.ClickShowAlert(StopGuardAlertType.REMOVE_GUARDIAN)
                 )
             }
         )

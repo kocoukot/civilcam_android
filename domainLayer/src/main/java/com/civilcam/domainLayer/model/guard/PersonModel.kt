@@ -14,7 +14,8 @@ data class PersonModel(
     val personAvatar: ImageInfo? = null,
     val personPhone: String? = "",
     val personAddress: String? = "",
-    var personStatus: PersonStatus? = PersonStatus(),
+    var inputRequest: PersonStatus? = PersonStatus(),
+    var outputRequest: PersonStatus? = PersonStatus(),
     val isOnGuard: Boolean? = false,
     val isGuardian: Boolean = false,
 ) : Parcelable {
@@ -29,7 +30,7 @@ data class PersonModel(
         guardianId = personId,
         guardianName = personFullName,
         guardianAvatar = personAvatar,
-        guardianStatus = personStatus?.status ?: GuardianStatus.NEW,
-        statusId = personStatus?.statusId ?: 0
+        guardianStatus = outputRequest?.status ?: GuardianStatus.NEW,
+        statusId = outputRequest?.statusId ?: 0
     )
 }
