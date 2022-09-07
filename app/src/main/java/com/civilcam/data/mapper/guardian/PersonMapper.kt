@@ -6,7 +6,7 @@ import com.civilcam.data.network.model.response.guardians.PersonResponse
 import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.domainLayer.model.guard.PersonModel
 
-class SearchGuardianMapper(
+class PersonMapper(
     private val imageInfoMapper: ImageInfoMapper = ImageInfoMapper()
 ) : Mapper<PersonResponse, PersonModel>(
     fromData = {
@@ -17,10 +17,16 @@ class SearchGuardianMapper(
             personAvatar = it.avatar?.let { avatar -> imageInfoMapper.mapData(avatar) },
             personPhone = it.phone,
             personAddress = it.address,
-            personStatus = it.request?.let { userStatus ->
+            inputRequest = it.inputRequest?.let { userInputStatus ->
                 PersonModel.PersonStatus(
-                    statusId = userStatus.id,
-                    status = GuardianStatus.byDomain(userStatus.status)
+                    statusId = userInputStatus.id,
+                    status = GuardianStatus.byDomain(userInputStatus.status)
+                )
+            },
+            outputRequest = it.outputRequest?.let { userOutputStatus ->
+                PersonModel.PersonStatus(
+                    statusId = userOutputStatus.id,
+                    status = GuardianStatus.byDomain(userOutputStatus.status)
                 )
             },
             isOnGuard = it.isOnGuard ?: false,

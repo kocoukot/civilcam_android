@@ -16,7 +16,7 @@ interface GuardiansRepository {
 
     suspend fun inviteByNumber(phoneNumber: String): Boolean
 
-    suspend fun askToGuard(personId: Int): Boolean
+    suspend fun askToGuard(personId: Int): PersonModel
 
     suspend fun getPersonDetail(personId: Int): PersonModel
 
@@ -24,8 +24,8 @@ interface GuardiansRepository {
 
     suspend fun getInvitesList(): List<UserInviteModel>
 
-    suspend fun stopGuarding(personId: Int): Boolean
+    suspend fun stopGuarding(personId: Int): PersonModel
 
-    suspend fun deleteGuardian(personId: Int): Boolean
+    suspend fun deleteGuardian(personId: Int): PersonModel
 
 }

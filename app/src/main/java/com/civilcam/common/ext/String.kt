@@ -27,3 +27,12 @@ fun String.formatPhoneNumber(): String = String.format(
     "+1 (%s) %s %s", this.substring(0, 3), this.substring(3, 6),
     this.substring(6, 10)
 )
+
+fun String.phoneNumberFormat() =
+    this.clearPhone()
+        .let {
+            if (this.length == 10)
+                this.formatPhoneNumber()
+            else
+                this.formatToPhoneNumber()
+        }

@@ -13,7 +13,10 @@ import com.civilcam.data.network.support.ServiceException
 import com.civilcam.di.source.KoinInjector
 import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.model.guard.*
-import com.civilcam.domainLayer.usecase.guardians.*
+import com.civilcam.domainLayer.usecase.guardians.AskToGuardUseCase
+import com.civilcam.domainLayer.usecase.guardians.GetNetworkRequestsUseCase
+import com.civilcam.domainLayer.usecase.guardians.GetUserNetworkUseCase
+import com.civilcam.domainLayer.usecase.guardians.SetRequestReactionUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.network.main.model.*
@@ -30,8 +33,6 @@ import java.util.*
 class NetworkMainViewModel(
     injector: KoinInjector,
     private val screen: NetworkScreen = NetworkScreen.MAIN,
-    private val getGuardsListUseCase: GetGuardsListUseCase,
-    private val getGuardsRequestsUseCase: GetGuardsRequestsUseCase,
     private val askToGuardUseCase: AskToGuardUseCase,
     private val getUserNetworkUseCase: GetUserNetworkUseCase,
     private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,

@@ -91,8 +91,8 @@ private fun SearchResults(
                 Timber.tag("networkSearch").i("lazyList ${results.itemCount}")
 
                 item?.let {
-                    var userStatus by remember { mutableStateOf(item.personStatus?.status) }
-                    userStatus = item.personStatus?.status ?: GuardianStatus.NEW
+                    var userStatus by remember { mutableStateOf(item.outputRequest?.status) }
+                    userStatus = item.outputRequest?.status ?: GuardianStatus.NEW
                     SearchRow(
                         title = item.personFullName,
                         searchPart = searchPart,
