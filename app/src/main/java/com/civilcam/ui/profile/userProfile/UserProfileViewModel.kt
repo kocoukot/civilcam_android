@@ -85,7 +85,6 @@ class UserProfileViewModel(
 			UserProfileActions.ClickAvatarSelect -> goAvatarSelect()
 			UserProfileActions.ClickDateSelect -> openDatePicker()
 			UserProfileActions.ClickLocationSelect -> openLocationSelect()
-			is UserProfileActions.ClickCloseDatePicker -> closeDatePicker()
 			is UserProfileActions.ClickSelectDate -> getDateFromCalendar(action.date)
 			is UserProfileActions.LocationSearchQuery -> searchAddress(action.searchQuery)
 			is UserProfileActions.ClickAddressSelect -> addressSelected(action.address)
@@ -145,9 +144,19 @@ class UserProfileViewModel(
 		copy(userBaseInfo = userBaseInfo.copy(lastName = lastName))
 	}
 
-	private fun getDateFromCalendar(birthDate: Long) = updateInfo {
+	private fun getDateFromCalendar(birthDate: Long?) {
 		closeDatePicker()
-		copy(userBaseInfo = userBaseInfo.copy(dob = DateUtils.dateOfBirthDomainFormat(birthDate)))
+		birthDate?.let {
+			updateInfo {
+				copy(
+					userBaseInfo = userBaseInfo.copy(
+						dob = DateUtils.dateOfBirthDomainFormat(
+							birthDate
+						)
+					)
+				)
+			}
+		}
 	}
 
 	private fun updateInfo(info: (CurrentUser.() -> CurrentUser?)) {

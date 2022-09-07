@@ -75,6 +75,7 @@ class NetworkMainFragment : Fragment(), SupportBottomBar {
 	override fun onResume() {
 		super.onResume()
 		viewModel.checkNavBarStatus()
+		viewModel.loadRequestsList()
 		setPan()
 	}
 	

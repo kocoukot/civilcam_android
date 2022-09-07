@@ -18,6 +18,7 @@ data class GuardianItem(
     val guardianName: String,
     val guardianAvatar: ImageInfo?,
     val guardianStatus: GuardianStatus,
+    val statusId: Int
 ) : GuardItem(ITEM_TYPE_PERSON), Parcelable
 //
 //@Parcelize

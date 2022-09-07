@@ -8,8 +8,7 @@ sealed class ProfileSetupActions : ComposeFragmentActions {
     object ClickSave : ProfileSetupActions()
     object ClickAvatarSelect : ProfileSetupActions()
     object ClickDateSelect : ProfileSetupActions()
-    object ClickCloseDatePicker : ProfileSetupActions()
-    data class ClickSelectDate(val date: Long) : ProfileSetupActions()
+    data class ClickSelectDate(val date: Long? = null) : ProfileSetupActions()
 
     object ClickGoLocationPicker : ProfileSetupActions()
 

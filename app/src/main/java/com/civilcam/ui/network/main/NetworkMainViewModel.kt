@@ -11,11 +11,9 @@ import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.serviceCast
 import com.civilcam.data.network.support.ServiceException
 import com.civilcam.di.source.KoinInjector
+import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.model.guard.*
-import com.civilcam.domainLayer.usecase.guardians.AskToGuardUseCase
-import com.civilcam.domainLayer.usecase.guardians.GetGuardsListUseCase
-import com.civilcam.domainLayer.usecase.guardians.GetGuardsRequestsUseCase
-import com.civilcam.domainLayer.usecase.guardians.GetUserNetworkUseCase
+import com.civilcam.domainLayer.usecase.guardians.*
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.network.main.model.*
@@ -37,6 +35,8 @@ class NetworkMainViewModel(
     private val askToGuardUseCase: AskToGuardUseCase,
     private val getUserNetworkUseCase: GetUserNetworkUseCase,
     private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
+    private val setRequestReactionUseCase: SetRequestReactionUseCase,
+    private val getNetworkRequestsUseCase: GetNetworkRequestsUseCase
 ) : ComposeViewModel<NetworkMainState, NetworkMainRoute, NetworkMainActions>(), SearchQuery,
     KoinInjector by injector {
     override var _state: MutableStateFlow<NetworkMainState> = MutableStateFlow(NetworkMainState())
@@ -106,6 +106,45 @@ class NetworkMainViewModel(
             is NetworkMainActions.EnteredSearchString -> searchContact(action.searchQuery)
             is NetworkMainActions.ClickAddUser -> addUser(action.user)
             NetworkMainActions.ClearErrorText -> clearErrorText()
+            is NetworkMainActions.SetRequestReaction -> setUserReaction(
+                action.user,
+                action.reaction
+            )
+        }
+    }
+
+    private fun setUserReaction(user: GuardianItem, reaction: ButtonAnswer) {
+        _state.update { it.copy(isLoading = true) }
+        networkRequest(
+            action = {
+                setRequestReactionUseCase(reaction, user.statusId)
+            },
+            onSuccess = { loadRequestsList() },
+            onFailure = { error ->
+                error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
+            },
+            onComplete = {
+                _state.update { it.copy(isLoading = false) }
+            },
+        )
+    }
+
+    fun loadRequestsList() {
+        if (_state.value.screenState == NetworkScreen.REQUESTS) {
+            _state.update { it.copy(isLoading = true) }
+            networkRequest(
+                action = { getNetworkRequestsUseCase() },
+                onSuccess = { response ->
+                    _state.update { it.copy(data = it.data.copy(requestsList = response)) }
+                    if (response.isEmpty()) goBack()
+                },
+                onFailure = { error ->
+                    error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
+                },
+                onComplete = {
+                _state.update { it.copy(isLoading = false) }
+            },
+        )
         }
     }
 
@@ -181,6 +220,7 @@ class NetworkMainViewModel(
                         guardianName = it.guardianName,
                         guardianAvatar = it.guardianAvatar,
                         guardianStatus = it.guardianStatus,
+                        statusId = it.statusId
                     )
                 )
         }

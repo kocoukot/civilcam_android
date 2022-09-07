@@ -15,6 +15,7 @@ class GuardiansListMapper(
             guardianName = it.guardian.fullName,
             guardianAvatar = it.guardian.avatar?.let { avatar -> imageInfoMapper.mapData(avatar) },
             guardianStatus = GuardianStatus.byDomain(it.status),
+            statusId = it.id
         )
     }
 )

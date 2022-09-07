@@ -122,6 +122,8 @@ val domainModule = module {
 
     factory { GetUserNetworkUseCase(get()) }
 
+    factory { GetNetworkRequestsUseCase(get()) }
+
 }
 
 

@@ -1,5 +1,6 @@
 package com.civilcam.ui.profile.userProfile
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
@@ -33,15 +34,16 @@ import com.civilcam.ui.profile.userProfile.content.UserProfileSection
 import com.civilcam.ui.profile.userProfile.model.UserProfileActions
 import com.civilcam.ui.profile.userProfile.model.UserProfileScreen
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 	val state = viewModel.state.collectAsState()
-	
-	
+
+
 	if (state.value.isLoading) {
 		DialogLoadingContent()
 	}
-	
+
 	if (state.value.errorText.isNotEmpty()) {
 		AlertDialogComp(
 			dialogText = state.value.errorText,
@@ -49,27 +51,23 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 			onOptionSelected = { state.value.errorText = "" }
 		)
 	}
-	
+
 	if (state.value.showDatePicker) {
 		Dialog(
 			properties = DialogProperties(
 				dismissOnBackPress = true,
 				dismissOnClickOutside = false
 			), onDismissRequest = {
-				viewModel.setInputActions(UserProfileActions.ClickCloseDatePicker)
+				viewModel.setInputActions(UserProfileActions.ClickSelectDate())
 			}) {
 			DatePickerContent(
 				onPickerAction = { dateInMillis ->
-					dateInMillis?.let {
-						viewModel.setInputActions(UserProfileActions.ClickSelectDate(it))
-					} ?: run {
-						viewModel.setInputActions(UserProfileActions.ClickCloseDatePicker)
-					}
+					viewModel.setInputActions(UserProfileActions.ClickSelectDate(dateInMillis))
 				}
 			)
 		}
 	}
-	
+
 	Scaffold(
 		backgroundColor = CCTheme.colors.lightGray,
 		modifier = Modifier.fillMaxSize(),
@@ -77,8 +75,7 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 			AnimatedVisibility(visible = state.value.screenState == UserProfileScreen.LOCATION) {
 				Column {
 					TopAppBarContent(
-						title = stringResource(id = R.string.profile_setup_address_select_title)
-						,
+						title = stringResource(id = R.string.profile_setup_address_select_title),
 						navigationItem = {
 							BackButton {
 								viewModel.setInputActions(UserProfileActions.GoBack)
@@ -89,7 +86,7 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 				}
 			}
 		}
-	
+
 	) {
 		state.value.data?.let { data ->
 			Column(
@@ -110,7 +107,7 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 						isSaveEnabled = state.value.isFilled
 					)
 				}
-				
+
 				AnimatedVisibility(
 					visible = state.value.screenState == UserProfileScreen.PROFILE ||
 							state.value.screenState == UserProfileScreen.EDIT
@@ -120,14 +117,14 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 							.height(32.dp)
 					)
 				}
-				
+
 				Crossfade(targetState = state.value.screenState) { screenType ->
 					when (screenType) {
 						UserProfileScreen.PROFILE -> {
 							MainProfileContent(
-                                data = data,
-                                onRowClicked = viewModel::setInputActions
-                            )
+								data = data,
+								onRowClicked = viewModel::setInputActions
+							)
 						}
 						UserProfileScreen.EDIT -> {
 							UserProfileEditContent(
@@ -145,18 +142,18 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 						}
 						UserProfileScreen.LOCATION -> {
 							LocationSelectContent(
-                                searchData = state.value.searchLocationModel,
-                                onAction = { result ->
-                                    when (result) {
-                                        is String -> viewModel.setInputActions(
-                                            UserProfileActions.LocationSearchQuery(result)
-                                        )
-                                        is AutocompletePlace -> viewModel.setInputActions(
-                                            UserProfileActions.ClickAddressSelect(result)
-                                        )
-                                    }
-                                }
-                            )
+								searchData = state.value.searchLocationModel,
+								onAction = { result ->
+									when (result) {
+										is String -> viewModel.setInputActions(
+											UserProfileActions.LocationSearchQuery(result)
+										)
+										is AutocompletePlace -> viewModel.setInputActions(
+											UserProfileActions.ClickAddressSelect(result)
+										)
+									}
+								}
+							)
 						}
 					}
 				}

@@ -30,5 +30,6 @@ data class PersonModel(
         guardianName = personFullName,
         guardianAvatar = personAvatar,
         guardianStatus = personStatus?.status ?: GuardianStatus.NEW,
+        statusId = personStatus?.statusId ?: 0
     )
 }

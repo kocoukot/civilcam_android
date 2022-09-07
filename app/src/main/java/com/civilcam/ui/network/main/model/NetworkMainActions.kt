@@ -1,6 +1,7 @@
 package com.civilcam.ui.network.main.model
 
 import com.civilcam.common.ext.compose.ComposeFragmentActions
+import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.model.guard.GuardianItem
 import com.civilcam.domainLayer.model.guard.NetworkType
 import com.civilcam.domainLayer.model.guard.PersonModel
@@ -18,4 +19,8 @@ sealed class NetworkMainActions : ComposeFragmentActions {
     data class EnteredSearchString(val searchQuery: String) : NetworkMainActions()
     data class ClickAddUser(val user: PersonModel) : NetworkMainActions()
     object ClearErrorText : NetworkMainActions()
+
+    data class SetRequestReaction(val user: GuardianItem, val reaction: ButtonAnswer) :
+        NetworkMainActions()
+
 }

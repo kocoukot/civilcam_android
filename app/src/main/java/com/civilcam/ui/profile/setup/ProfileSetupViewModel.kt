@@ -78,7 +78,6 @@ class ProfileSetupViewModel(
                 }
             }
             ProfileSetupActions.ClickAvatarSelect -> goAvatarSelect()
-            is ProfileSetupActions.ClickCloseDatePicker -> closeDatePicker()
             is ProfileSetupActions.ClickSelectDate -> getDateFromCalendar(action.date)
             ProfileSetupActions.ClickGoLocationPicker -> goLocationPicker()
 
@@ -127,8 +126,11 @@ class ProfileSetupViewModel(
         _state.update { it.copy(showDatePicker = false) }
     }
 
-    private fun getDateFromCalendar(birthDate: Long) = updateInfo {
-        copy(dateBirth = dateOfBirthFormat(birthDate))
+    private fun getDateFromCalendar(birthDate: Long?) {
+        closeDatePicker()
+        birthDate?.let {
+            updateInfo { copy(dateBirth = dateOfBirthFormat(birthDate)) }
+        }
     }
 
     private fun firstNameEntered(firstName: String) = updateInfo {

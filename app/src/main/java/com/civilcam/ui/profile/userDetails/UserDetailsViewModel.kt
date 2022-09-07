@@ -108,9 +108,11 @@ class UserDetailsViewModel(
             _state.update { it.copy(isLoading = true) }
             networkRequest(
                 action = { setRequestReactionUseCase(isAccepted, status.statusId) },
-                onSuccess = {
+                onSuccess = { response ->
                     updateInfo {
                         copy(
+                            personPhone = response.personPhone,
+                            personAddress = response.personAddress,
                             personStatus = personStatus?.copy(status = if (isAccepted.answer) GuardianStatus.ACCEPTED else GuardianStatus.DECLINED),
                             isOnGuard = if (isAccepted.answer) true else isOnGuard
                         )
