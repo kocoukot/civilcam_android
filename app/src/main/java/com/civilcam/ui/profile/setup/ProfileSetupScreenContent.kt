@@ -1,5 +1,6 @@
 package com.civilcam.ui.profile.setup
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
@@ -26,12 +27,13 @@ import com.civilcam.ui.profile.setup.content.ProfileSetupContent
 import com.civilcam.ui.profile.setup.model.ProfileSetupActions
 import com.civilcam.ui.profile.setup.model.ProfileSetupScreen
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
-	
+
 	val state = viewModel.state.collectAsState()
-	
+
 	if (state.value.isLoading) {
 		DialogLoadingContent()
 	}
@@ -42,33 +44,29 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
 			onOptionSelected = { state.value.errorText = "" }
 		)
 	}
-	
+
 	if (state.value.showDatePicker) {
 		Dialog(
 			properties = DialogProperties(
 				dismissOnBackPress = true,
 				dismissOnClickOutside = false
 			), onDismissRequest = {
-				viewModel.setInputActions(ProfileSetupActions.ClickCloseDatePicker)
+				viewModel.setInputActions(ProfileSetupActions.ClickSelectDate())
 			}) {
 			DatePickerContent(
-                onPickerAction = { dateInMillis ->
-                    dateInMillis?.let {
-                        viewModel.setInputActions(ProfileSetupActions.ClickSelectDate(it))
-                    } ?: run {
-                        viewModel.setInputActions(ProfileSetupActions.ClickCloseDatePicker)
-                    }
-                }
-            )
+				onPickerAction = { dateInMillis ->
+					viewModel.setInputActions(ProfileSetupActions.ClickSelectDate(dateInMillis))
+				}
+			)
 		}
 	}
-	
+
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
 		modifier = Modifier.fillMaxSize(),
 		topBar = {
 			Column {
-				
+
 				TopAppBarContent(
 					title = if (state.value.profileSetupScreen == ProfileSetupScreen.LOCATION)
 						stringResource(id = R.string.profile_setup_address_select_title)
@@ -83,9 +81,9 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
 				RowDivider()
 			}
 		}
-	
+
 	) {
-		
+
 		AnimatedContent(targetState = state.value.profileSetupScreen) { screenState ->
 			when (screenState) {
 				ProfileSetupScreen.SETUP -> {
@@ -100,18 +98,18 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
 				}
 				ProfileSetupScreen.LOCATION -> {
 					LocationSelectContent(
-                        searchData = state.value.searchLocationModel,
-                        onAction = { result ->
-                            when (result) {
-                                is String -> viewModel.setInputActions(
-                                    ProfileSetupActions.LocationSearchQuery(result)
-                                )
-                                is AutocompletePlace -> viewModel.setInputActions(
-                                    ProfileSetupActions.ClickAddressSelect(result)
-                                )
-                            }
-                        },
-                    )
+						searchData = state.value.searchLocationModel,
+						onAction = { result ->
+							when (result) {
+								is String -> viewModel.setInputActions(
+									ProfileSetupActions.LocationSearchQuery(result)
+								)
+								is AutocompletePlace -> viewModel.setInputActions(
+									ProfileSetupActions.ClickAddressSelect(result)
+								)
+							}
+						},
+					)
 				}
 			}
 		}
