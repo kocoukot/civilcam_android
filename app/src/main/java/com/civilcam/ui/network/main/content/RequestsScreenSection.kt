@@ -36,7 +36,6 @@ fun RequestsScreenSection(
                 title = guard.guardianName,
                 titleFont = FontFamily(Font(R.font.roboto_regular)),
                 needDivider = index < guardRequestsList.lastIndex,
-                isClickable = false,
                 leadingIcon = {
                     guard.guardianAvatar?.imageUrl?.let {
                         CircleUserAvatar(
@@ -50,7 +49,8 @@ fun RequestsScreenSection(
                         clickRequest.invoke(NetworkMainActions.SetRequestReaction(guard, it))
                     }
                 },
-            ) {}
+                rowClick = { clickRequest.invoke(NetworkMainActions.ClickUser(guard)) }
+            )
         }
         if (guardRequestsList.isNotEmpty()) RowDivider()
 

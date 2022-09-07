@@ -129,20 +129,23 @@ class NetworkMainViewModel(
         )
     }
 
-    private fun loadRequestsList() {
-        networkRequest(
-            action = { getNetworkRequestsUseCase() },
-            onSuccess = { response ->
-                _state.update { it.copy(data = it.data.copy(requestsList = response)) }
-                if (response.isEmpty()) goBack()
-            },
-            onFailure = { error ->
-                error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
-            },
-            onComplete = {
+    fun loadRequestsList() {
+        if (_state.value.screenState == NetworkScreen.REQUESTS) {
+            _state.update { it.copy(isLoading = true) }
+            networkRequest(
+                action = { getNetworkRequestsUseCase() },
+                onSuccess = { response ->
+                    _state.update { it.copy(data = it.data.copy(requestsList = response)) }
+                    if (response.isEmpty()) goBack()
+                },
+                onFailure = { error ->
+                    error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
+                },
+                onComplete = {
                 _state.update { it.copy(isLoading = false) }
             },
         )
+        }
     }
 
     private fun clearErrorText() {
