@@ -64,7 +64,7 @@ fun NavController.navigateByDirection(
 		is NavigationDirection.PinCodeSetup -> {
 			navigate(
 				R.id.pinCodeFragment,
-				PinCodeFragment.createArgs(PinCodeFlow.CREATE_PIN_CODE)
+				PinCodeFragment.createArgs(PinCodeFlow.CREATE_PIN_CODE, true)
 			)
 		}
 		is NavigationDirection.TermsAndPolicyAccept -> {

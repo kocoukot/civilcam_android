@@ -12,8 +12,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.civilcam.BuildConfig
 import com.civilcam.R
+import com.civilcam.common.ext.hideKeyboard
 import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.common.ext.showAlertDialogFragment
+import com.civilcam.common.ext.showKeyboard
 import com.civilcam.domainLayer.model.AlertDialogTypes
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
@@ -84,7 +86,7 @@ class UserProfileFragment : Fragment() {
 				UserProfileRoute.GoGalleryOpen -> onChooseFromGalleryCaseClicked()
 				UserProfileRoute.GoPinCode -> navController.navigate(
 					R.id.pinCodeFragment,
-					PinCodeFragment.createArgs(PinCodeFlow.CURRENT_PIN_CODE)
+					PinCodeFragment.createArgs(PinCodeFlow.CURRENT_PIN_CODE, false)
 				)
 			}
 		}

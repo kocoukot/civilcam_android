@@ -25,11 +25,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class PinCodeFragment : Fragment() {
-	private val viewModel: PinCodeViewModel by viewModel{
+	private val viewModel: PinCodeViewModel by viewModel {
 		parametersOf(pinCodeFlow)
 	}
 	
 	private val pinCodeFlow: PinCodeFlow by requireArg(ARG_FLOW)
+	private val isLogin: Boolean by requireArg(ARG_IS_LOGIN)
 	
 	private val permissionsDelegate = registerForPermissionsResult(
 		Manifest.permission.ACCESS_FINE_LOCATION,
@@ -86,43 +87,51 @@ class PinCodeFragment : Fragment() {
 	
 	private fun checkPermissions() {
 		if (permissionsDelegate.checkSelfPermissions()) {
-			navController.navigate(
-				R.id.network_root,
-				NetworkMainFragment.createArgs(NetworkScreen.ADD_GUARD)
-			)
-		} else {
-			pendingAction = {
+			if (isLogin)
+				navController.navigate(R.id.emergency_root)
+			else
 				navController.navigate(
 					R.id.network_root,
 					NetworkMainFragment.createArgs(NetworkScreen.ADD_GUARD)
-                )
-            }
-            permissionsDelegate.requestPermissions()
-        }
-    }
-
-    private fun onPermissionsGranted(isGranted: Boolean) {
-        pendingAction?.invoke()
-        pendingAction = null
-    }
-
-    override fun onStart() {
-        super.onStart()
-        showKeyboard()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        hideKeyboard()
-    }
-
-    companion object {
-        private const val ARG_FLOW = "pin_code_flow"
+				)
+		} else {
+			pendingAction = {
+				if (isLogin)
+					navController.navigate(R.id.emergency_root)
+				else
+					navController.navigate(
+						R.id.network_root,
+						NetworkMainFragment.createArgs(NetworkScreen.ADD_GUARD)
+					)
+			}
+			permissionsDelegate.requestPermissions()
+		}
+	}
+	
+	private fun onPermissionsGranted(isGranted: Boolean) {
+		pendingAction?.invoke()
+		pendingAction = null
+	}
+	
+	override fun onStart() {
+		super.onStart()
+		showKeyboard()
+	}
+	
+	override fun onPause() {
+		super.onPause()
+		hideKeyboard()
+	}
+	
+	companion object {
+		private const val ARG_FLOW = "pin_code_flow"
+		private const val ARG_IS_LOGIN = "is_login"
 		const val RESULT_BACK_STACK = "back_stack"
 		const val RESULT_SAVED_NEW_PIN = "saved_new_pin"
-
-        fun createArgs(flow: PinCodeFlow) = bundleOf(
-            ARG_FLOW to flow
-        )
-    }
+		
+		fun createArgs(flow: PinCodeFlow, isLogin: Boolean) = bundleOf(
+			ARG_FLOW to flow,
+			ARG_IS_LOGIN to isLogin
+		)
+	}
 }

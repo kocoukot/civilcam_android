@@ -55,7 +55,7 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 				EmergencyRoute.GoSettings -> navController.navigate(R.id.settingsFragment)
 				EmergencyRoute.GoPinCode -> navController.navigate(
                     R.id.pinCodeFragment,
-                    PinCodeFragment.createArgs(PinCodeFlow.SOS_PIN_CODE)
+                    PinCodeFragment.createArgs(PinCodeFlow.SOS_PIN_CODE, false)
                 )
                 is EmergencyRoute.CheckPermission -> checkPermissions(route.isSos)
                 is EmergencyRoute.ControlFlash -> controlFlashLight(
