@@ -63,29 +63,27 @@ class PinCodeViewModel(
 			PinCodeFlow.CONFIRM_NEW_PIN_CODE -> {
 				_state.value = _state.value.copy(confirmPinCode = pinCode)
 				if (_state.value.isMatch) {
-					_state.value = _state.value.copy(newPinNoMatch = false)
+					_state.value = _state.value.copy(noMatch = false)
 					setPin(PinCodeFlow.CONFIRM_NEW_PIN_CODE)
 				} else {
 					if (_state.value.confirmPinCode.length == PIN_SIZE) {
 						_state.value = _state.value.copy(
 							confirmPinCode = "",
-							newPinNoMatch = true
+							noMatch = true
 						)
 					}
 				}
 			}
 			PinCodeFlow.CURRENT_PIN_CODE -> {
-				_state.value = _state.value.copy(currentPinCode = pinCode)
-				if (_state.value.currentPinCode.length == PIN_SIZE) {
-					checkPin(PinCodeFlow.CURRENT_PIN_CODE)
+				if (pinCode.length == PIN_SIZE) {
+					checkPin(PinCodeFlow.CURRENT_PIN_CODE, pinCode)
 				} else {
 					_state.value = _state.value.copy(currentNoMatch = false)
 				}
 			}
 			PinCodeFlow.SOS_PIN_CODE -> {
-				_state.value = _state.value.copy(currentPinCode = pinCode)
-				if (_state.value.currentPinCode.length == PIN_SIZE) {
-					checkPin(PinCodeFlow.SOS_PIN_CODE)
+				if (pinCode.length == PIN_SIZE) {
+					checkPin(PinCodeFlow.SOS_PIN_CODE, pinCode)
 				} else {
 					_state.value = _state.value.copy(currentNoMatch = false)
 				}
@@ -93,11 +91,12 @@ class PinCodeViewModel(
 		}
 	}
 	
-	private fun checkPin(pinCodeFlow: PinCodeFlow) {
+	private fun checkPin(pinCodeFlow: PinCodeFlow, pinCode: String) {
 		viewModelScope.launch {
 			kotlin.runCatching {
-				checkPinUseCase.checkPin(_state.value.currentPinCode)
+				checkPinUseCase.checkPin(pinCode)
 			}.onSuccess { response ->
+				_state.value = _state.value.copy(currentPinCode = pinCode)
 				when (pinCodeFlow) {
 					PinCodeFlow.CURRENT_PIN_CODE -> {
 						if (response) {
@@ -167,7 +166,7 @@ class PinCodeViewModel(
 	}
 	
 	private fun goBack() {
-		_state.value = _state.value.copy(currentNoMatch = false, newPinNoMatch = false)
+		_state.value = _state.value.copy(currentNoMatch = false, noMatch = false)
 		when (_state.value.screenState) {
 			PinCodeFlow.SOS_PIN_CODE -> navigateRoute(PinCodeRoute.GoBack)
 			PinCodeFlow.CREATE_PIN_CODE -> navigateRoute(PinCodeRoute.GoBack)

@@ -108,9 +108,9 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 						PinCodeFlow.CURRENT_PIN_CODE, PinCodeFlow.SOS_PIN_CODE -> {
 							Handler(Looper.getMainLooper()).postDelayed({
 								state.value.currentNoMatch
-							}, 1000)
+							}, 0)
 						}
-						else -> state.value.noMatch || state.value.newPinNoMatch
+						else -> state.value.noMatch
 					}
 				)
 				
@@ -136,7 +136,6 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 			
 			AnimatedVisibility(
 				visible = (state.value.currentNoMatch && state.value.currentPinCode.isEmpty()) ||
-						(state.value.newPinNoMatch && state.value.confirmPinCode.isEmpty()) ||
 						(state.value.noMatch && state.value.confirmPinCode.isEmpty())
 			) {
 				Box(

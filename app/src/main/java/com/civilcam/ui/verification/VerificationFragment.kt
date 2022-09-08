@@ -64,7 +64,7 @@ class VerificationFragment : Fragment() {
                                 )
                             VerificationFlow.NEW_PHONE -> navController.navigate(
                                 R.id.pinCodeFragment,
-                                PinCodeFragment.createArgs(PinCodeFlow.CREATE_PIN_CODE)
+                                PinCodeFragment.createArgs(PinCodeFlow.CREATE_PIN_CODE, false)
                             )
 							VerificationFlow.CHANGE_PHONE -> {
 								setFragmentResult(
