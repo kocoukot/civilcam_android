@@ -44,7 +44,7 @@ fun NavController.navigateByDirection(
 ) {
 	when (direction) {
 		is NavigationDirection.SignInSuccess -> {
-			navigate(R.id.emergency_root)
+			navigateToRoot(R.id.emergency_root)
 		}
 		is NavigationDirection.EmailVerification -> {
 			navigate(

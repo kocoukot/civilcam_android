@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun EmergencyMapContent(
     modifier: Modifier = Modifier,
+    avatarUrl: String?,
     screenState: EmergencyScreen,
     isLocationAllowed: Boolean,
     userLocationData: EmergencyUserModel?,
@@ -94,6 +95,7 @@ fun EmergencyMapContent(
 
         EmergencyTopBarContent(
             modifier = tobBarModifier,
+            avatarUrl = avatarUrl,
             locationDetectContent = {
                 LocationDetectButton(
                     isAllowed = isLocationAllowed,

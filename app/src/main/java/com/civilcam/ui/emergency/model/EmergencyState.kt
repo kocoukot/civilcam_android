@@ -4,6 +4,7 @@ import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.TorchState
 import com.civilcam.common.ext.compose.ComposeFragmentState
+import com.civilcam.domainLayer.model.user.ImageInfo
 
 data class EmergencyState(
     val isLoading: Boolean = false,
@@ -17,5 +18,7 @@ data class EmergencyState(
     val lens: Int? = CameraSelector.LENS_FACING_BACK,
     val lensInfo: MutableMap<Int, CameraInfo> = mutableMapOf(),
     @TorchState.State val torchState: Int = TorchState.OFF,
-    val emergencyUserModel: EmergencyUserModel? = null
-) : ComposeFragmentState
+    val emergencyUserModel: EmergencyUserModel? = null,
+    val userAvatar: ImageInfo? = null,
+
+    ) : ComposeFragmentState

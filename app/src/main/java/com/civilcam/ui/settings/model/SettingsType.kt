@@ -3,7 +3,7 @@ package com.civilcam.ui.settings.model
 import androidx.annotation.StringRes
 import com.civilcam.R
 
-enum class SettingsType(@StringRes val title: Int, @StringRes val actionBtnTitle: Int) {
+enum class SettingsType(@StringRes val rowTitle: Int, @StringRes val actionBtnTitle: Int) {
     MAIN(R.string.settings_title, R.string.empty_string),
 
     ALERTS(R.string.settings_alerts, R.string.empty_string),
@@ -21,9 +21,6 @@ enum class SettingsType(@StringRes val title: Int, @StringRes val actionBtnTitle
 
     companion object {
         fun SettingsType.hasActionButton() =
-            this == LANGUAGE ||
-                    this == CREATE_PASSWORD ||
-                    this == CONTACT_SUPPORT ||
-                    this == CHANGE_PASSWORD
+            this == LANGUAGE || this == CREATE_PASSWORD || this == CONTACT_SUPPORT || this == CHANGE_PASSWORD
     }
 }

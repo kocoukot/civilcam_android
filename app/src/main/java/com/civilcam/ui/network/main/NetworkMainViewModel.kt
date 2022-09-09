@@ -35,7 +35,7 @@ class NetworkMainViewModel(
     private val screen: NetworkScreen = NetworkScreen.MAIN,
     private val askToGuardUseCase: AskToGuardUseCase,
     private val getUserNetworkUseCase: GetUserNetworkUseCase,
-    private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
+    getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
     private val setRequestReactionUseCase: SetRequestReactionUseCase,
     private val getNetworkRequestsUseCase: GetNetworkRequestsUseCase
 ) : ComposeViewModel<NetworkMainState, NetworkMainRoute, NetworkMainActions>(), SearchQuery,
@@ -46,6 +46,7 @@ class NetworkMainViewModel(
 
     init {
         _state.update { it.copy(screenState = screen) }
+//        if (screen ==NetworkScreen.ADD_GUARD ) searchList = loadRPlacesList()
         Timber.i("Screen type $screen")
         checkNavBarStatus()
         getLocalCurrentUserUseCase().let { user ->

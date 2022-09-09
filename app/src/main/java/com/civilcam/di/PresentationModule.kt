@@ -141,7 +141,7 @@ val profileModule = module {
 }
 
 val emergencyModule = module {
-	viewModel { EmergencyViewModel(get()) }
+	viewModel { EmergencyViewModel(get(), get()) }
 }
 
 

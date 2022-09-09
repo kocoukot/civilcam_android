@@ -12,12 +12,14 @@ import com.civilcam.common.ext.castSafe
 import com.civilcam.common.ext.navigateByDirection
 import com.civilcam.databinding.ActivityMainBinding
 import com.civilcam.service.notifications.NotificationHelper
+import com.civilcam.service.notifications.NotificationRequestButtonListener.Companion.ARG_MAP_ALERT_ID
 import com.civilcam.ui.common.NavigationDirection
 import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.setupWithNavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 
 class MainActivity : AppCompatActivity() {
@@ -48,11 +50,11 @@ class MainActivity : AppCompatActivity() {
                 navController = nav.navController
             ) {}
         }
-    
+
         intent?.extras?.getParcelable<NavigationDirection>(EXTRA_DIRECTION)
             ?.let(::navigateByDirection)
     }
-    
+
     private fun navigateByDirection(direction: NavigationDirection) {
         navHost?.navController?.navigateByDirection(direction)
     }
@@ -69,6 +71,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        intent?.extras?.let { extras ->
+            val userId = extras.getInt(ARG_MAP_ALERT_ID)
+            Timber.i("onNewIntent user id $userId")
+//            navHost?.navController?.navigate(R.id.liveMapFragment, LiveMapFragment.createArgs(userId))
+        }
     }
 
 
@@ -97,7 +104,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     companion object {
         const val FROM_NOTIFICATION = "fromNotification"
         const val EXTRA_DIRECTION = "extra_nav_direction"

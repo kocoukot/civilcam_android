@@ -1,5 +1,6 @@
 package com.civilcam.ui.settings
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
@@ -27,6 +28,7 @@ import com.civilcam.ui.settings.model.SettingsType.Companion.hasActionButton
 import com.civilcam.utils.LocaleHelper
 import com.civilcam.utils.LocaleHelper.SetLanguageCompose
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SettingsScreenContent(viewModel: SettingsViewModel) {
 
@@ -90,7 +92,7 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 									viewModel.setInputActions(setAction(settingsType))
 								}
 							}
-                        }
+						}
 					)
 				}
 				RowDivider()
@@ -122,7 +124,7 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 					}
 				}
 
-                SettingsType.CREATE_PASSWORD -> {
+				SettingsType.CREATE_PASSWORD -> {
 					state.value.data.createPasswordSectionData.let { data ->
 						isActionActive = data.isFilled
 						CreatePasswordSettingsContent(
@@ -130,7 +132,7 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 						) { type, meetCriteria, password ->
 							isActionActive = data.isFilled
 
-                            viewModel.setInputActions(
+							viewModel.setInputActions(
 								SettingsActions.NewPasswordEntered(
 									type,
 									meetCriteria,
@@ -140,19 +142,19 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 						}
 					}
 
-                }
+				}
 
-                SettingsType.CHANGE_PASSWORD -> {
+				SettingsType.CHANGE_PASSWORD -> {
 					state.value.data.changePasswordSectionData?.let { data ->
-                        isActionActive = !data.hasError && data.currentPassword.isNotEmpty()
-                        ChangePasswordSettingsContent(data) {
-                            viewModel.setInputActions(SettingsActions.EnterCurrentPassword(it))
-                        }
-                    }
+						isActionActive = !data.hasError && data.currentPassword.isNotEmpty()
+						ChangePasswordSettingsContent(data) {
+							viewModel.setInputActions(SettingsActions.EnterCurrentPassword(it))
+						}
+					}
 				}
 
 
-                SettingsType.LANGUAGE -> {
+				SettingsType.LANGUAGE -> {
 					LanguageSettingsContent(
 						selectedLanguage
 					) {
@@ -218,7 +220,7 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 					)
 				}
 
-                else -> {}
+				else -> {}
 			}
 		}
 	}
@@ -237,6 +239,6 @@ private fun setAction(settingsType: SettingsType): SettingsActions =
 private fun screenTitle(settingsType: SettingsType) = when (settingsType) {
 	SettingsType.MAIN, SettingsType.LOG_OUT, SettingsType.TERMS_AND_POLICY, SettingsType.DELETE_ACCOUNT -> R.string.settings_title
 	SettingsType.CHANGE_PASSWORD -> R.string.settings_password_title
-	else -> settingsType.title
+	else -> settingsType.rowTitle
 }
 
