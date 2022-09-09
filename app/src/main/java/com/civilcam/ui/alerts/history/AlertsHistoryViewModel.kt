@@ -63,4 +63,8 @@ class AlertsHistoryViewModel(
         _state.update { it.copy(alertType = alertType) }
         if (_state.value.mockNeedToLoad) getAlertHistoryList()
     }
+
+    override fun clearErrorText() {
+
+    }
 }

@@ -11,4 +11,5 @@ sealed class EmergencyRoute : ComposeFragmentRoute {
     object ShowSystemUI : EmergencyRoute()
     object HideSystemUI : EmergencyRoute()
     data class IsNavBarVisible(val isVisible: Boolean) : EmergencyRoute()
+
 }

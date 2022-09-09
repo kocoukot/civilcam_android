@@ -36,7 +36,6 @@ class UserDetailsViewModel(
             action = { getUserInformationUseCase(userId) },
             onSuccess = { user ->
                 Timber.i("userDetail id $user")
-
                 _state.update { it.copy(data = user) }
             },
             onFailure = { error ->
@@ -61,11 +60,11 @@ class UserDetailsViewModel(
             is UserDetailsActions.ClickRequestAnswer -> requestAnswer(action.isAccepted)
             is UserDetailsActions.ClickShowAlert -> showAlert(action.alertType)
             UserDetailsActions.ClickCloseAlert -> closeAlert()
-            UserDetailsActions.ClickCloseErrorAlert -> closeErrorAlert()
+            UserDetailsActions.ClickCloseErrorAlert -> clearErrorText()
         }
     }
 
-    private fun closeErrorAlert() {
+    override fun clearErrorText() {
         _state.update { it.copy(errorText = "") }
     }
 
@@ -165,4 +164,5 @@ class UserDetailsViewModel(
     }
 
     private fun getData() = _state.value.data?.copy() ?: PersonModel()
+
 }

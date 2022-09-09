@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import com.civilcam.R
 import com.civilcam.common.ext.hideKeyboard
+import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.common.ext.showKeyboard
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.auth.pincode.model.PinCodeRoute
@@ -88,7 +89,7 @@ class PinCodeFragment : Fragment() {
 	private fun checkPermissions() {
 		if (permissionsDelegate.checkSelfPermissions()) {
 			if (isLogin)
-				navController.navigate(R.id.emergency_root)
+				navController.navigateToRoot(R.id.emergency_root)
 			else
 				navController.navigate(
 					R.id.network_root,

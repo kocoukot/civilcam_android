@@ -42,6 +42,7 @@ class TermsViewModel(
             TermsActions.ClickGoBack -> goBack()
             TermsActions.ClickContinue -> goNext()
             is TermsActions.ClickDocument -> goWebView(action.webLink)
+            TermsActions.ClickCloseAlert -> clearErrorText()
         }
     }
 
@@ -74,5 +75,7 @@ class TermsViewModel(
         }
     }
 
-
+    override fun clearErrorText() {
+        _state.update { it.copy(errorText = "") }
+    }
 }

@@ -1,5 +1,6 @@
 package com.civilcam.ui.network.contacts
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,6 +24,7 @@ import com.civilcam.ui.network.contacts.model.ContactsActions
 import com.civilcam.ui.network.contacts.model.LetterContactItem
 import com.civilcam.ui.network.contacts.model.PersonContactItem
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ContactsScreenContent(viewModel: ContactsViewModel) {
 
@@ -65,15 +67,13 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
                     isFocused = {},
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-               if (state.value.data?.contactsList.isNullOrEmpty()) RowDivider()
+                if (state.value.data?.contactsList.isNullOrEmpty()) RowDivider()
             }
         }) {
 
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-
-
             state.value.data?.contactsList?.let { data ->
                 LazyColumn {
                     itemsIndexed(data) { index, contact ->

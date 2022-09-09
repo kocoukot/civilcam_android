@@ -18,7 +18,6 @@ import com.civilcam.common.ext.showSystemUI
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
-import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
@@ -28,16 +27,16 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 
-class EmergencyFragment : Fragment(), SupportBottomBar {
+class EmergencyFragment : Fragment() {
 	private val viewModel: EmergencyViewModel by viewModel()
-	
+
 	private val permissionsDelegate = registerForPermissionsResult(
 		Manifest.permission.ACCESS_FINE_LOCATION,
 		Manifest.permission.ACCESS_COARSE_LOCATION,
 		Manifest.permission.CAMERA,
 		Manifest.permission.RECORD_AUDIO
 	) { onPermissionsGranted(it) }
-	
+
 	private var pendingAction: (() -> Unit)? = null
 	
 	override fun onCreateView(
@@ -54,19 +53,18 @@ class EmergencyFragment : Fragment(), SupportBottomBar {
 				EmergencyRoute.GoUserProfile -> navController.navigate(R.id.userProfileFragment)
 				EmergencyRoute.GoSettings -> navController.navigate(R.id.settingsFragment)
 				EmergencyRoute.GoPinCode -> navController.navigate(
-                    R.id.pinCodeFragment,
-                    PinCodeFragment.createArgs(PinCodeFlow.SOS_PIN_CODE, false)
-                )
-                is EmergencyRoute.CheckPermission -> checkPermissions(route.isSos)
-                is EmergencyRoute.ControlFlash -> controlFlashLight(
-                    route.enabled,
-                    route.cameraState
-                )
+					R.id.pinCodeFragment,
+					PinCodeFragment.createArgs(PinCodeFlow.SOS_PIN_CODE, false)
+				)
+				is EmergencyRoute.CheckPermission -> checkPermissions(route.isSos)
+				is EmergencyRoute.ControlFlash -> controlFlashLight(
+					route.enabled,
+					route.cameraState
+				)
 				EmergencyRoute.HideSystemUI -> hideSystemUI()
-                EmergencyRoute.ShowSystemUI -> showSystemUI()
-                is EmergencyRoute.IsNavBarVisible -> (activity as MainActivity).showBottomNavBar(
-                    route.isVisible
-                )
+				EmergencyRoute.ShowSystemUI -> showSystemUI()
+				is EmergencyRoute.IsNavBarVisible ->
+					(activity as MainActivity).showBottomNavBar(route.isVisible)
 				else -> {}
 			}
 		}

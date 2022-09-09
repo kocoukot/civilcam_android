@@ -193,14 +193,18 @@ class PinCodeViewModel(
 	}
 	
 	private fun goNewPinCode() {
-		_state.value = _state.value.copy(screenState = PinCodeFlow.NEW_PIN_CODE)
-	}
-	
-	private fun goConfirm() {
-		_state.value = _state.value.copy(screenState = PinCodeFlow.CONFIRM_PIN_CODE)
-	}
-	
-	companion object {
-		const val PIN_SIZE = 4
-	}
+        _state.value = _state.value.copy(screenState = PinCodeFlow.NEW_PIN_CODE)
+    }
+
+    private fun goConfirm() {
+        _state.value = _state.value.copy(screenState = PinCodeFlow.CONFIRM_PIN_CODE)
+    }
+
+    companion object {
+        const val PIN_SIZE = 4
+    }
+
+    override fun clearErrorText() {
+
+    }
 }

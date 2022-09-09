@@ -7,4 +7,6 @@ sealed class TermsActions : ComposeFragmentActions {
     object ClickGoBack : TermsActions()
     object ClickContinue : TermsActions()
     data class ClickDocument(val webLink: TermsType) : TermsActions()
+    object ClickCloseAlert : TermsActions()
+
 }

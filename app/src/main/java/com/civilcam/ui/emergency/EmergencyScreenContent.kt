@@ -1,5 +1,6 @@
 package com.civilcam.ui.emergency
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.camera.core.TorchState
 import androidx.compose.animation.*
@@ -27,6 +28,7 @@ import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyScreen
 import com.civilcam.utils.Constant.ANIMATION_DURATION
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 
@@ -116,6 +118,7 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
                     modifier = Modifier
                         .height(mapHeight)
                         .fillMaxWidth(),
+                    avatarUrl = state.userAvatar?.imageUrl,
                     isLocationAllowed = state.isLocationAllowed,
                     screenState = state.emergencyScreen,
                     userLocationData = state.emergencyUserModel,

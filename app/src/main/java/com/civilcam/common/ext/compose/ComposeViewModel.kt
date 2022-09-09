@@ -24,6 +24,8 @@ abstract class ComposeViewModel<A : ComposeFragmentState, R : ComposeFragmentRou
 
     abstract fun setInputActions(action: T)
 
+    protected abstract fun clearErrorText()
+
     protected fun <Response> networkRequest(
         action: suspend () -> Response,
         onSuccess: (Response) -> Unit,

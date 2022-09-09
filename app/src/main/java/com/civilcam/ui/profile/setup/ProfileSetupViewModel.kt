@@ -83,6 +83,7 @@ class ProfileSetupViewModel(
 
             is ProfileSetupActions.LocationSearchQuery -> searchAddress(action.searchQuery)
             is ProfileSetupActions.ClickAddressSelect -> addressSelected(action.address)
+            ProfileSetupActions.ClickCloseAlert -> clearErrorText()
         }
     }
 
@@ -95,6 +96,10 @@ class ProfileSetupViewModel(
                     searchLocationModel = SearchModel(),
                 )
         }
+    }
+
+    override fun clearErrorText() {
+        _state.update { it.copy(errorText = "") }
     }
 
     private fun goNext() {

@@ -1,6 +1,7 @@
 package com.civilcam.ui.network.main
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -43,6 +44,10 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
     val state = viewModel.state.collectAsState()
     var tabPage by remember { mutableStateOf(NetworkType.ON_GUARD) }
     tabPage = state.value.networkType
+
+    BackHandler(false) {
+
+    }
 
     val searchList = if (state.value.screenState == NetworkScreen.SEARCH_GUARD)
         viewModel.searchList.collectAsLazyPagingItems()

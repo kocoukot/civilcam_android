@@ -146,14 +146,19 @@ class LoginViewModel(
 //					saveFcmUseCase.saveFcmToken()
 					navigateRoute(LoginRoute.GoLogin(it))
 				}
-				.onFailure { error ->
-					error.castSafe<ServiceException>()?.let { castedError ->
-						_state.update { it.copy(alertError = castedError.errorMessage) }
-					} ?: run {
-						_state.update { it.copy(alertError = error.localizedMessage) }
-					}
-				}
+                .onFailure { error ->
+                    error.castSafe<ServiceException>()?.let { castedError ->
+                        _state.update { it.copy(alertError = castedError.errorMessage) }
+                    } ?: run {
+                        _state.update { it.copy(alertError = error.localizedMessage) }
+                    }
+                }
 
-			_state.update { it.copy(isLoading = false) }
-		}
+            _state.update { it.copy(isLoading = false) }
+        }
+
+    override fun clearErrorText() {
+
+
+    }
 }

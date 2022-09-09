@@ -111,6 +111,10 @@ class LiveMapViewModel(
     private fun goBack() {
         navigateRoute(LiveMapRoute.GoBack)
     }
+
+    override fun clearErrorText() {
+
+    }
 }
 
 

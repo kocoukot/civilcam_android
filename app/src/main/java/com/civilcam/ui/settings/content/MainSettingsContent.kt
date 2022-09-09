@@ -36,7 +36,7 @@ fun MainSettingsContent(
                 }
                 SettingsType.CONTACT_SUPPORT, SettingsType.TERMS_AND_POLICY -> {
                     SettingsRow(
-                        title = stringResource(id = type.title),
+                        title = stringResource(id = type.rowTitle),
                         needDivider = false,
                         rowClick = { onRowClicked.invoke(type) })
                     RowDivider()
@@ -45,7 +45,7 @@ fun MainSettingsContent(
                 }
                 SettingsType.DELETE_ACCOUNT -> {
                     SettingsRow(
-                        title = stringResource(id = type.title),
+                        title = stringResource(id = type.rowTitle),
                         titleColor = CCTheme.colors.primaryRed,
                         needDivider = false,
                         rowClick = { onRowClicked.invoke(type) })
@@ -54,7 +54,7 @@ fun MainSettingsContent(
                 else -> {
                     if (type != SettingsType.CREATE_PASSWORD) {
                         SettingsRow(
-                            title = stringResource(id = type.title),
+                            title = stringResource(id = type.rowTitle),
                             rowClick = { onRowClicked.invoke(type) })
                     }
                 }

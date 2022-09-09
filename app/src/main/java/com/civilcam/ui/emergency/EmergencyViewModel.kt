@@ -2,6 +2,8 @@ package com.civilcam.ui.emergency
 
 import android.location.Address
 import android.location.Geocoder
+import android.os.Handler
+import android.os.Looper
 import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.TorchState
@@ -9,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
+import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.ui.emergency.model.*
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.CoroutineScope
@@ -22,7 +25,8 @@ import timber.log.Timber
 import java.util.*
 
 class EmergencyViewModel(
-	private val fetchUserLocationUseCase: FetchUserLocationUseCase
+	private val fetchUserLocationUseCase: FetchUserLocationUseCase,
+	getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
 ) : ComposeViewModel<EmergencyState, EmergencyRoute, EmergencyActions>() {
 	override var _state: MutableStateFlow<EmergencyState> = MutableStateFlow(EmergencyState())
 	private var geocoder = Geocoder(instance, Locale.US)
@@ -32,6 +36,9 @@ class EmergencyViewModel(
 	private val locationScope = CoroutineScope(Dispatchers.IO)
 
 	init {
+		getLocalCurrentUserUseCase().let { user ->
+			_state.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
+		}
 		fetchUserLocation()
 	}
 
@@ -227,14 +234,24 @@ class EmergencyViewModel(
 				else -> it.copy(torchState = TorchState.OFF)
 			}
 		}
-	}
+    }
 
-	fun screenStateCheck() {
+    fun screenStateCheck() {
+
 		when (_state.value.emergencyScreen) {
 			EmergencyScreen.NORMAL, EmergencyScreen.COUPLED -> navigateRoute(EmergencyRoute.HideSystemUI)
 			EmergencyScreen.MAP_EXTENDED, EmergencyScreen.LIVE_EXTENDED -> navigateRoute(
 				EmergencyRoute.ShowSystemUI
 			)
 		}
+		Handler(Looper.getMainLooper()).postDelayed({
+			navigateRoute(
+				EmergencyRoute.IsNavBarVisible(_state.value.emergencyButton == EmergencyButton.InSafeButton)
+			)
+		}, 100)
 	}
+
+    override fun clearErrorText() {
+
+    }
 }

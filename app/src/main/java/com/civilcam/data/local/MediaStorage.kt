@@ -5,10 +5,10 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import com.civilcam.data.local.model.ImageData
 import com.civilcam.data.local.model.ImageMetadata
 import com.civilcam.utils.Constant
 import com.civilcam.utils.FileUtils
-import com.standartmedia.data.local.model.ImageData
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.quality
 import io.reactivex.Maybe

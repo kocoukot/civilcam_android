@@ -24,6 +24,7 @@ import com.civilcam.ui.emergency.model.EmergencyScreen
 @Composable
 fun EmergencyTopBarContent(
     modifier: Modifier = Modifier,
+    avatarUrl: String?,
     onClick: (EmergencyActions) -> Unit,
     locationDetectContent: (@Composable () -> Unit),
     locationDataContent: (@Composable () -> Unit),
@@ -40,7 +41,7 @@ fun EmergencyTopBarContent(
             verticalArrangement = Arrangement.spacedBy(88.dp)
         ) {
             AnimatedVisibility(visible = screen == EmergencyScreen.NORMAL) {
-                AvatarButton {
+                AvatarButton(avatarUrl) {
                     onClick.invoke(EmergencyActions.GoUserProfile)
                 }
             }

@@ -161,4 +161,8 @@ class CreateAccountViewModel(
                     _state.update { it.copy(isLoading = false) }
                 }
         }
+
+    override fun clearErrorText() {
+
+    }
 }

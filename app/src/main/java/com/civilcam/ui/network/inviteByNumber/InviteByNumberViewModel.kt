@@ -94,4 +94,8 @@ class InviteByNumberViewModel(
                 }
         }
     }
+
+    override fun clearErrorText() {
+
+    }
 }

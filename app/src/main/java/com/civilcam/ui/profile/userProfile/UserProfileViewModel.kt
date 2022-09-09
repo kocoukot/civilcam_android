@@ -262,14 +262,18 @@ class UserProfileViewModel(
 		_state.update {
 			it.copy(
 				screenState = UserProfileScreen.EDIT,
-				searchLocationModel = SearchModel(),
-				data = getUserInfo().copy(
-					userBaseInfo = it.data?.userBaseInfo?.copy(address = result.address)
-						?: UserBaseInfo()
-				),
-			)
-		}
-	}
+                searchLocationModel = SearchModel(),
+                data = getUserInfo().copy(
+                    userBaseInfo = it.data?.userBaseInfo?.copy(address = result.address)
+                        ?: UserBaseInfo()
+                ),
+            )
+        }
+    }
 
-	private fun getUserInfo() = _state.value.data?.copy() ?: CurrentUser()
+    private fun getUserInfo() = _state.value.data?.copy() ?: CurrentUser()
+
+    override fun clearErrorText() {
+
+    }
 }

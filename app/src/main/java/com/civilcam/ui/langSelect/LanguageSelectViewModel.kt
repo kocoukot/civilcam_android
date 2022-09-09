@@ -36,4 +36,8 @@ class LanguageSelectViewModel :
     private fun toOnBoarding() {
         navigateRoute(LangSelectRoute.ToOnBoarding)
     }
+
+    override fun clearErrorText() {
+
+    }
 }

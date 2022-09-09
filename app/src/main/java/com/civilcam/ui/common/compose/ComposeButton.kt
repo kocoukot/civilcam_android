@@ -148,18 +148,20 @@ fun AvatarButton(buttonClick: () -> Unit) {
 }
 
 @Composable
-fun AvatarButton(url: String, buttonClick: () -> Unit) {
-    Image(
-        painter = rememberImagePainter(data = url),
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .size(28.dp)
-            .clip(CircleShape)
-            .clickable {
-                buttonClick.invoke()
-            }
-    )
+fun AvatarButton(url: String?, buttonClick: () -> Unit) {
+    url?.let {
+        Image(
+            painter = rememberImagePainter(data = url),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(28.dp)
+                .clip(CircleShape)
+                .clickable {
+                    buttonClick.invoke()
+                }
+        )
+    }
 }
 
 @Preview
