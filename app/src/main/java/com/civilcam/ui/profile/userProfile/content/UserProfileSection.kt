@@ -44,7 +44,6 @@ fun UserProfileSection(
     screenType: UserProfileScreen,
     isSaveEnabled: Boolean,
     onActionClick: (UserProfileActions) -> Unit,
-    mockAction: () -> Unit
 ) {
 
     Timber.i("userData ${userData.userBaseInfo}")
@@ -61,16 +60,14 @@ fun UserProfileSection(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             BackButton(modifier = Modifier.padding(start = 8.dp)) {
-                onActionClick.invoke(
-                    UserProfileActions.GoBack
-                )
+                onActionClick.invoke(UserProfileActions.GoBack)
             }
             Box(
                 modifier = Modifier
                     .size(120.dp)
                     .clip(CircleShape)
                     .clickable(enabled = screenType == UserProfileScreen.EDIT) {
-                        mockAction.invoke()
+                        onActionClick.invoke(UserProfileActions.ClickAvatarSelect)
                     },
                 contentAlignment = Alignment.Center
             ) {
@@ -135,7 +132,7 @@ fun UserProfileSection(
                 color = CCTheme.colors.primaryRed,
                 modifier = Modifier
                     .padding(top = 16.dp)
-                    .clickable { mockAction.invoke() },
+                    .clickable { onActionClick.invoke(UserProfileActions.ClickAvatarSelect) },
                 fontWeight = FontWeight.W500,
                 fontSize = 15.sp
             )
