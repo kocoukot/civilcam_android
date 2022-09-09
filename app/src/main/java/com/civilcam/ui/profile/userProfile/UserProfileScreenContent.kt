@@ -98,12 +98,7 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 					UserProfileSection(
 						userData = data,
 						screenType = state.value.screenState,
-						mockAction = {
-							viewModel.setInputActions(UserProfileActions.ClickAvatarSelect)
-						},
-						onActionClick = { action ->
-							viewModel.setInputActions(action)
-						},
+						onActionClick = viewModel::setInputActions,
 						isSaveEnabled = state.value.isFilled
 					)
 				}
