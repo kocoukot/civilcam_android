@@ -7,7 +7,7 @@ import com.civilcam.domainLayer.model.user.CurrentUser
 
 data class UserProfileState(
     val isLoading: Boolean = false,
-    var errorText: String = "",
+    val errorText: String = "",
     var data: CurrentUser? = null,
     var profileImage: String? = null,
     val showDatePicker: Boolean = false,

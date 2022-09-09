@@ -36,7 +36,7 @@ class LoginViewModel(
 					else -> {}
 				}
 			}
-			LoginActions.ClearErrorText -> hideAlert()
+			LoginActions.ClearErrorText -> clearErrorText()
 			LoginActions.FBLogin -> onFacebookSignIn()
 			LoginActions.GoogleLogin -> onGoogleSignIn()
 		}
@@ -107,7 +107,7 @@ class LoginViewModel(
 		navigateRoute(LoginRoute.GoRegister)
 	}
 
-	private fun hideAlert() {
+	override fun clearErrorText() {
 		_state.update { it.copy(errorText = "") }
 	}
 
@@ -157,8 +157,4 @@ class LoginViewModel(
             _state.update { it.copy(isLoading = false) }
         }
 
-    override fun clearErrorText() {
-
-
-    }
 }

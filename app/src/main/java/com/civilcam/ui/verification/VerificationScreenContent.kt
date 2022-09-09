@@ -1,5 +1,6 @@
 package com.civilcam.ui.verification
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,13 +37,14 @@ import com.civilcam.ui.common.compose.inputs.OtpCodeInputField
 import com.civilcam.ui.common.loading.DialogLoadingContent
 import com.civilcam.ui.verification.model.VerificationActions
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun VerificationScreenContent(
 	viewModel: VerificationViewModel
 ) {
 	val state = viewModel.state.collectAsState()
 	val context = LocalContext.current
-	
+
 	val timer = remember {
 		derivedStateOf {
 			state.value.timeOut
@@ -55,10 +57,10 @@ fun VerificationScreenContent(
 		AlertDialogComp(
 			dialogText = state.value.errorText,
 			alertType = AlertDialogTypes.OK,
-			onOptionSelected = { state.value.errorText = "" }
+			onOptionSelected = { viewModel.setInputActions(VerificationActions.ClickCloseAlert) }
 		)
 	}
-	
+
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
 		modifier = Modifier.fillMaxSize(),
@@ -85,9 +87,9 @@ fun VerificationScreenContent(
 				RowDivider()
 			}
 		}
-	
+
 	) {
-		
+
 		Column(
 			modifier = Modifier
 				.fillMaxSize(),
@@ -100,14 +102,14 @@ fun VerificationScreenContent(
 					.weight(1f)
 			) {
 				Spacer(modifier = Modifier.height(32.dp))
-				
+
 				OtpCodeInputField(
 					onValueChanged = {
 						viewModel.setInputActions(VerificationActions.EnterCodeData(it))
 					},
 					hasError = state.value.hasError
 				)
-				
+
 				Text(modifier = Modifier
 					.padding(end = 12.dp, top = 8.dp),
 					text = buildAnnotatedString {
@@ -146,14 +148,14 @@ fun VerificationScreenContent(
 						}
 					})
 			}
-			
+
 			Column(
 				modifier = Modifier
 					.fillMaxWidth()
 					.padding(horizontal = 16.dp),
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
-				
+
 				Crossfade(
 					targetState = state.value.timeOut != "",
 					modifier = Modifier
@@ -186,7 +188,7 @@ fun VerificationScreenContent(
 				Spacer(modifier = Modifier.height(20.dp))
 			}
 		}
-		
+
 	}
 }
 

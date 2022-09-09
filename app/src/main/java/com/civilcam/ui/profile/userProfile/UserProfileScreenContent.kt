@@ -48,7 +48,7 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 		AlertDialogComp(
 			dialogText = state.value.errorText,
 			alertType = AlertDialogTypes.OK,
-			onOptionSelected = { state.value.errorText = "" }
+			onOptionSelected = { viewModel.setInputActions(UserProfileActions.ClickCloseAlert) }
 		)
 	}
 
