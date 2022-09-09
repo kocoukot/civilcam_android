@@ -88,6 +88,7 @@ class UserProfileViewModel(
 			is UserProfileActions.ClickSelectDate -> getDateFromCalendar(action.date)
 			is UserProfileActions.LocationSearchQuery -> searchAddress(action.searchQuery)
 			is UserProfileActions.ClickAddressSelect -> addressSelected(action.address)
+			UserProfileActions.ClickCloseAlert -> clearErrorText()
 		}
 	}
 
@@ -274,6 +275,6 @@ class UserProfileViewModel(
     private fun getUserInfo() = _state.value.data?.copy() ?: CurrentUser()
 
     override fun clearErrorText() {
-
+		_state.update { it.copy(errorText = "") }
     }
 }

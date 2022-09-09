@@ -44,13 +44,13 @@ class CreateAccountViewModel(
                     }
                 }
             }
-            CreateAccountActions.ClickOkAlert -> closeAlert()
+            CreateAccountActions.ClickOkAlert -> clearErrorText()
             CreateAccountActions.FBLogin -> onFacebookSignIn()
             CreateAccountActions.GoogleLogin -> onGoogleSignIn()
         }
     }
 
-    private fun closeAlert() {
+    override fun clearErrorText() {
         _state.update { it.copy(alertErrorText = "") }
     }
 
@@ -161,8 +161,4 @@ class CreateAccountViewModel(
                     _state.update { it.copy(isLoading = false) }
                 }
         }
-
-    override fun clearErrorText() {
-
-    }
 }

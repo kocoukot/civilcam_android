@@ -5,7 +5,7 @@ import com.civilcam.domainLayer.model.VerificationFlow
 
 data class VerificationState(
     val isLoading: Boolean = false,
-    var errorText: String = "",
+    val errorText: String = "",
     val hasError: Boolean = false,
     val timeOut: String = "",
     val verificationFlow: VerificationFlow = VerificationFlow.CURRENT_EMAIL,

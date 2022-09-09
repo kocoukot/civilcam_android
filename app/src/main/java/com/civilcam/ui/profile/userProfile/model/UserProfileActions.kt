@@ -15,6 +15,9 @@ sealed class UserProfileActions : ComposeFragmentActions {
 	object ClickSave : UserProfileActions()
 	data class EnterInputData(val dataType: UserInfoDataType, val data: String) :
 		UserProfileActions()
+
 	data class LocationSearchQuery(val searchQuery: String) : UserProfileActions()
 	data class ClickAddressSelect(val address: AutocompletePlace) : UserProfileActions()
+
+	object ClickCloseAlert : UserProfileActions()
 }

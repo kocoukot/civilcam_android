@@ -49,7 +49,7 @@ class InviteByNumberViewModel(
             InviteByNumberActions.ClickGoBack -> goBack()
             is InviteByNumberActions.SendInvite -> sendInvite()
             InviteByNumberActions.PhoneCleared -> phoneCleared()
-            InviteByNumberActions.ClickCloseScreenAlert -> closeScreenAlert()
+            InviteByNumberActions.ClickCloseScreenAlert -> clearErrorText()
             is InviteByNumberActions.PhoneEntered -> phoneEntered(action.phoneNumber)
         }
     }
@@ -66,7 +66,7 @@ class InviteByNumberViewModel(
         _state.update { it.copy(phoneNumber = phone) }
     }
 
-    private fun closeScreenAlert() {
+    override fun clearErrorText() {
         _state.update { it.copy(errorText = "") }
     }
 
@@ -93,9 +93,5 @@ class InviteByNumberViewModel(
                     _state.update { it.copy(isLoading = false) }
                 }
         }
-    }
-
-    override fun clearErrorText() {
-
     }
 }

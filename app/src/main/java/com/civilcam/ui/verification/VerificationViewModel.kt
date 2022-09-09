@@ -45,6 +45,7 @@ class VerificationViewModel(
 			is VerificationActions.EnterCodeData -> otpCodeEntered(action.data)
 			VerificationActions.ResendClick -> resendClick()
 			VerificationActions.ClickGoBack -> goBack()
+			VerificationActions.ClickCloseAlert -> clearErrorText()
 		}
 	}
 
@@ -111,17 +112,17 @@ class VerificationViewModel(
 	private fun goToNextPage() {
 		timer?.cancel()
         if (verificationFlow == VerificationFlow.RESET_PASSWORD) {
-            navigateRoute(VerificationRoute.GoPasswordCreate(_state.value.token))
-        } else {
-            navigateRoute(VerificationRoute.ToNextScreen)
-        }
-    }
+			navigateRoute(VerificationRoute.GoPasswordCreate(_state.value.token))
+		} else {
+			navigateRoute(VerificationRoute.ToNextScreen)
+		}
+	}
 
-    private fun goBack() {
-        navigateRoute(VerificationRoute.GoBack)
-    }
+	private fun goBack() {
+		navigateRoute(VerificationRoute.GoBack)
+	}
 
-    override fun clearErrorText() {
-
-    }
+	override fun clearErrorText() {
+		_state.update { it.copy(errorText = "") }
+	}
 }
