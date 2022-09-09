@@ -108,7 +108,7 @@ class SettingsViewModel(
             kotlin.runCatching { getCurrentSubscriptionPlan.getCurrentSubscriptionPlan() }
                 .onSuccess {
                     val response = getCurrentSubscriptionPlan.getCurrentSubscriptionPlan()
-                    _state.value.data = _state.value.data.copy(subscriptionData = response)
+                    _state.update { it.copy(data = it.data.copy(subscriptionData = response)) }
                 }
                 .onFailure {
 

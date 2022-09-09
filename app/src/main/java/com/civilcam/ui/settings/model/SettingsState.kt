@@ -8,5 +8,5 @@ data class SettingsState(
     val errorText: String = "",
     val screenAlert: ScreenAlert? = null,
     val settingsType: SettingsType = SettingsType.MAIN,
-    var data: SettingsModel = SettingsModel(),
+    val data: SettingsModel = SettingsModel(),
 ) : ComposeFragmentState
