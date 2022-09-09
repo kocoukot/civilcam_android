@@ -168,11 +168,6 @@ class NetworkMainViewModel(
         fetchGuardsList()
     }
 
-    private fun addGuardian() {
-        _state.update { it.copy(screenState = NetworkScreen.ADD_GUARD) }
-        checkNavBarStatus()
-    }
-
     private fun goContacts() {
         navigateRoute(NetworkMainRoute.GoContacts)
     }
@@ -191,6 +186,12 @@ class NetworkMainViewModel(
             _state.update { it.copy(screenState = NetworkScreen.SEARCH_GUARD) }
             checkNavBarStatus()
         }
+    }
+
+    private fun addGuardian() {
+        searchList = loadRPlacesList()
+        _state.update { it.copy(screenState = NetworkScreen.ADD_GUARD) }
+        checkNavBarStatus()
     }
 
     private fun goSettings() {
