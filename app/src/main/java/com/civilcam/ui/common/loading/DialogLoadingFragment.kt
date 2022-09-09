@@ -1,4 +1,4 @@
-package com.standartmedia.ui.common.loading
+package com.civilcam.ui.common.loading
 
 
 import android.graphics.Color
@@ -12,7 +12,6 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.civilcam.common.ext.castSafe
-import com.civilcam.ui.common.loading.DialogLoadingContent
 
 
 class DialogLoadingFragment :

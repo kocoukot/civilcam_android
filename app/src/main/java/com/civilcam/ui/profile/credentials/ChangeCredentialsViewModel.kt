@@ -80,14 +80,18 @@ class ChangeCredentialsViewModel(
 	}
 	
 	private fun emailEntered(email: String) {
-		_state.update { it.copy(email = email, isEmail = true, emailError = false) }
-	}
-	
-	private fun phoneEntered(phone: String) {
-		_state.update { it.copy(phone = phone, phoneError = false) }
-	}
-	
-	private fun goBack() {
-		navigateRoute(ChangeCredentialsRoute.GoBack)
-	}
+        _state.update { it.copy(email = email, isEmail = true, emailError = false) }
+    }
+
+    private fun phoneEntered(phone: String) {
+        _state.update { it.copy(phone = phone, phoneError = false) }
+    }
+
+    private fun goBack() {
+        navigateRoute(ChangeCredentialsRoute.GoBack)
+    }
+
+    override fun clearErrorText() {
+
+    }
 }

@@ -1,4 +1,4 @@
-package com.standartmedia.data.local.model
+package com.civilcam.data.local.model
 
 class ImageData(
     val name: String,

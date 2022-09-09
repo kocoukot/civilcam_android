@@ -60,15 +60,19 @@ class CreatePasswordViewModel(
 					error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
 				}
 			_state.update { it.copy(isLoading = false) }
-		}
-	}
-	
-	private fun confirmPasswordEntered(password: String) {
-		_state.value = _state.value.copy(confirmPassword = password)
-	}
-	
-	private fun passwordEntered(password: String) {
-		_state.value = _state.value.copy(password = password)
-	}
-	
+        }
+    }
+
+    private fun confirmPasswordEntered(password: String) {
+        _state.value = _state.value.copy(confirmPassword = password)
+    }
+
+    private fun passwordEntered(password: String) {
+        _state.value = _state.value.copy(password = password)
+    }
+
+    override fun clearErrorText() {
+
+    }
+
 }

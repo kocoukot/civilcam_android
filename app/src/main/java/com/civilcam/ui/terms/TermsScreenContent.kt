@@ -31,9 +31,10 @@ fun TermsScreenContent(viewModel: TermsViewModel) {
         AlertDialogComp(
             dialogText = state.errorText,
             alertType = AlertDialogTypes.OK,
-            onOptionSelected = { state.errorText = "" }
+            onOptionSelected = { viewModel.setInputActions(TermsActions.ClickCloseAlert) }
         )
     }
+
     Scaffold(
         backgroundColor = if (state.isSettings) CCTheme.colors.lightGray else CCTheme.colors.white,
         modifier = Modifier.fillMaxSize(),

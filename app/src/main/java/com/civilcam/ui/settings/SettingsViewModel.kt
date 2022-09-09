@@ -59,7 +59,7 @@ class SettingsViewModel(
             SettingsActions.SaveNewPassword -> savePassword()
             SettingsActions.ClickGoSubscription -> fetchSubscriptionPlan()
             SettingsActions.GoSubscriptionManage -> goSubManage()
-            SettingsActions.ClearErrorText -> hideAlert()
+            SettingsActions.ClearErrorText -> clearErrorText()
             SettingsActions.ClickCloseScreenAlert -> closeScreenAlert()
         }
     }
@@ -80,7 +80,7 @@ class SettingsViewModel(
         )
     }
 
-    private fun hideAlert() {
+    override fun clearErrorText() {
         _state.update { it.copy(errorText = "") }
     }
 

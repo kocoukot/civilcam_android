@@ -14,7 +14,7 @@ import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.R
 import com.civilcam.domainLayer.model.AlertDialogTypes
 import com.civilcam.ui.common.alert.DialogAlertFragment
-import com.standartmedia.ui.common.loading.DialogLoadingFragment
+import com.civilcam.ui.common.loading.DialogLoadingFragment
 
 
 fun Fragment.showToast(text: String = "") {

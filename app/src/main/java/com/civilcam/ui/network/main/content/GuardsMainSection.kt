@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
@@ -89,7 +90,7 @@ fun GuardsMainSection(
                                     }
                                 },
                                 trailingIcon = {
-                                    getUserStatus(contact.guardianStatus)
+                                    UserStatusText(contact.guardianStatus)
                                 }
                             ) {
                                 onAction.invoke(NetworkMainActions.ClickUser(contact))
@@ -107,28 +108,29 @@ fun GuardsMainSection(
 }
 
 @Composable
-private fun getUserStatus(guardianStatus: GuardianStatus) {
-    var text = ""
-    var textColor = CCTheme.colors.black
-
-    when (guardianStatus) {
-        GuardianStatus.PENDING -> {
-            text = stringResource(id = R.string.pending_text)
-            textColor = CCTheme.colors.grayOne
-        }
+private fun UserStatusText(guardianStatus: GuardianStatus) {
+    val textColor: Color
+    val text = when (guardianStatus) {
         GuardianStatus.DECLINED -> {
-            text = stringResource(id = R.string.decline_text)
             textColor = CCTheme.colors.primaryRed
+            stringResource(id = R.string.decline_text)
         }
         GuardianStatus.NEED_HELP -> {
-            text = stringResource(id = R.string.network_main_help_me)
             textColor = CCTheme.colors.black
+            stringResource(id = R.string.network_main_help_me)
         }
         GuardianStatus.SAFE -> {
-            text = stringResource(id = R.string.network_main_safe)
             textColor = CCTheme.colors.grayOne
+            stringResource(id = R.string.network_main_safe)
         }
-        else -> {}
+        GuardianStatus.PENDING -> {
+            textColor = CCTheme.colors.grayOne
+            stringResource(id = R.string.pending_text)
+        }
+        else -> {
+            textColor = CCTheme.colors.grayOne
+            ""
+        }
     }
 
     Text(

@@ -18,4 +18,6 @@ sealed class ProfileSetupActions : ComposeFragmentActions {
 
     data class LocationSearchQuery(val searchQuery: String) : ProfileSetupActions()
     data class ClickAddressSelect(val address: AutocompletePlace) : ProfileSetupActions()
+    object ClickCloseAlert : ProfileSetupActions()
+
 }

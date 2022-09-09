@@ -81,4 +81,8 @@ class AlertsListViewModel(
             _state.update { it.copy(resolveId = null) }
         }
     }
+
+    override fun clearErrorText() {
+
+    }
 }

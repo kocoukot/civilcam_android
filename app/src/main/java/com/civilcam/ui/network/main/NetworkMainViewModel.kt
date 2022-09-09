@@ -149,7 +149,7 @@ class NetworkMainViewModel(
         }
     }
 
-    private fun clearErrorText() {
+    override fun clearErrorText() {
         _state.update { it.copy(errorText = "") }
     }
 

@@ -227,14 +227,18 @@ class EmergencyViewModel(
 				else -> it.copy(torchState = TorchState.OFF)
 			}
 		}
-	}
+    }
 
-	fun screenStateCheck() {
-		when (_state.value.emergencyScreen) {
-			EmergencyScreen.NORMAL, EmergencyScreen.COUPLED -> navigateRoute(EmergencyRoute.HideSystemUI)
-			EmergencyScreen.MAP_EXTENDED, EmergencyScreen.LIVE_EXTENDED -> navigateRoute(
-				EmergencyRoute.ShowSystemUI
-			)
-		}
-	}
+    fun screenStateCheck() {
+        when (_state.value.emergencyScreen) {
+            EmergencyScreen.NORMAL, EmergencyScreen.COUPLED -> navigateRoute(EmergencyRoute.HideSystemUI)
+            EmergencyScreen.MAP_EXTENDED, EmergencyScreen.LIVE_EXTENDED -> navigateRoute(
+                EmergencyRoute.ShowSystemUI
+            )
+        }
+    }
+
+    override fun clearErrorText() {
+
+    }
 }

@@ -53,14 +53,18 @@ class ResetPasswordViewModel(
 					}
 				}
 			_state.update { it.copy(isLoading = false) }
-		}
-	}
-	
-	private fun emailEntered(email: String) {
-		_state.value = _state.value.copy(email = email, isEmail = true, emailError = false)
-	}
-	
-	private fun goBack() {
-		navigateRoute(ResetRoute.GoBack)
-	}
+        }
+    }
+
+    private fun emailEntered(email: String) {
+        _state.value = _state.value.copy(email = email, isEmail = true, emailError = false)
+    }
+
+    private fun goBack() {
+        navigateRoute(ResetRoute.GoBack)
+    }
+
+    override fun clearErrorText() {
+
+    }
 }
