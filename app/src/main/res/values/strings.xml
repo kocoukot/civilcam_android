@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">CivilCam</string>
 
-    <string name="language_select_hello">Hello, welcome to CivilCam!</string>
-    <string name="language_select_settings">You can always change it in settings</string>
+
     <string name="continue_text">Continue</string>
     <string name="get_start_text">Get started</string>
     <string name="back_text">Back</string>

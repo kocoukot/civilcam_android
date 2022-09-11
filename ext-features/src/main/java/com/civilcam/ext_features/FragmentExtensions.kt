@@ -1,12 +1,17 @@
 package com.civilcam.ext_features
 
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 
 
 fun Fragment.showToast(text: String = "") {
@@ -66,4 +71,42 @@ fun Fragment.showSystemUI() {
         WindowCompat.setDecorFitsSystemWindows(this, true)
 //            }
     }
+}
+
+val Fragment.navController
+    get() = findNavController()
+
+fun Fragment.registerForPermissionsResult(
+    vararg permissions: String,
+    onGranted: (Boolean) -> Unit
+): FragmentPermissionsDelegate =
+    registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { perms ->
+        val grantedPermissions = permissions
+            .takeWhile { perms[it] ?: false }
+        onGranted.invoke(grantedPermissions.size == permissions.size)
+    }
+        .let {
+            FragmentPermissionsDelegate(it, permissions.toList().toTypedArray(), this)
+        }
+
+class FragmentPermissionsDelegate(
+    private val activityResultLauncher: ActivityResultLauncher<Array<String>>,
+    private val permissions: Array<String>,
+    private val fragment: Fragment
+) {
+
+    fun checkSelfPermissions(): Boolean {
+        val grantedPermissions = permissions
+            .takeWhile {
+                ActivityCompat.checkSelfPermission(
+                    fragment.requireContext(),
+                    it
+                ) == PackageManager.PERMISSION_GRANTED
+            }
+        return grantedPermissions.size == permissions.size
+    }
+
+    fun requestPermissions() = activityResultLauncher.launch(permissions)
 }

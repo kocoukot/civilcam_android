@@ -3,6 +3,8 @@ package com.civilcam.di
 import com.civilcam.di.source.GlobalKoinInjector
 import com.civilcam.di.source.KoinInjector
 import com.civilcam.domainLayer.model.VerificationFlow
+import com.civilcam.langselect.langSelect.LanguageSelectViewModel
+import com.civilcam.onboarding_feature.onboarding.OnBoardingViewModel
 import com.civilcam.ui.alerts.history.AlertsHistoryViewModel
 import com.civilcam.ui.alerts.list.AlertsListViewModel
 import com.civilcam.ui.alerts.map.LiveMapViewModel
@@ -13,12 +15,10 @@ import com.civilcam.ui.auth.password.reset.ResetPasswordViewModel
 import com.civilcam.ui.auth.pincode.PinCodeViewModel
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.emergency.EmergencyViewModel
-import com.civilcam.ui.langSelect.LanguageSelectViewModel
 import com.civilcam.ui.network.contacts.ContactsViewModel
 import com.civilcam.ui.network.inviteByNumber.InviteByNumberViewModel
 import com.civilcam.ui.network.main.NetworkMainViewModel
 import com.civilcam.ui.network.main.model.NetworkScreen
-import com.civilcam.ui.onboarding.OnBoardingViewModel
 import com.civilcam.ui.profile.credentials.ChangeCredentialsViewModel
 import com.civilcam.ui.profile.setup.ProfileSetupViewModel
 import com.civilcam.ui.profile.userDetails.UserDetailsViewModel

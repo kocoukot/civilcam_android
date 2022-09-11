@@ -4,28 +4,19 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk rootProject.target_sdk
 
     defaultConfig {
         minSdk 27
-        targetSdk 32
+        targetSdk rootProject.target_sdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
-        debug {
+        release {
             minifyEnabled false
-        }
-
-        sandbox {
-            minifyEnabled false
-        }
-
-        production {
-            minifyEnabled true
-            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -46,10 +37,9 @@ android {
 }
 apply from: '../dependencies.gradle'
 
-
 dependencies {
-    androidX()
     jetpackCompose()
+    koin()
     nav()
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.0'
@@ -57,7 +47,9 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-
     //Timber
     implementation 'com.jakewharton.timber:timber:5.0.1'
+    implementation project(path: ':domainLayer')
+    implementation project(path: ':ext-features')
+
 }

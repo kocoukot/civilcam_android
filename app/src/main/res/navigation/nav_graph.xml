@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/languageSelectFragment"
-        android:name="com.civilcam.ui.langSelect.LanguageSelectFragment"
+        android:name="com.civilcam.langselect.langSelect.LanguageSelectFragment"
         android:label="LanguageSelectFragment">
         <action
             android:id="@+id/action_languageSelectFragment_to_onBoardingFragment"
@@ -14,8 +14,10 @@
     </fragment>
     <fragment
         android:id="@+id/onBoardingFragment"
-        android:name="com.civilcam.ui.onboarding.OnBoardingFragment"
-        android:label="OnBoardingFragment" />
+        android:name="com.civilcam.onboarding_feature.onboarding.OnBoardingFragment"
+        android:label="OnBoardingFragment">
+        <deepLink app:uri="civilcam://onBoardingFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/termsFragment"
@@ -92,7 +94,9 @@
     <fragment
         android:id="@+id/createAccountFragment"
         android:name="com.civilcam.ui.auth.create.CreateAccountFragment"
-        android:label="CreateAccountFragment" />
+        android:label="CreateAccountFragment">
+        <deepLink app:uri="civilcam://createAccountFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/verificationFragment"
