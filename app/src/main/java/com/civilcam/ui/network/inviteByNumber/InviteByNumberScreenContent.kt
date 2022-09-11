@@ -18,16 +18,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
-import com.civilcam.common.ext.formatToPhoneNumber
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.AlertDialogTypes
+import com.civilcam.ext_features.compose.elements.*
+import com.civilcam.ext_features.formatToPhoneNumber
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.common.alert.AlertDialogComp
-import com.civilcam.ui.common.compose.BackButton
-import com.civilcam.ui.common.compose.RowDivider
-import com.civilcam.ui.common.compose.TextActionButton
-import com.civilcam.ui.common.compose.TopAppBarContent
-import com.civilcam.ui.common.compose.inputs.PhoneInputField
-import com.civilcam.ui.common.loading.DialogLoadingContent
 import com.civilcam.ui.network.inviteByNumber.model.InviteByNumberActions
 
 @Composable

@@ -1,6 +1,6 @@
 package com.civilcam.ui.network.inviteByNumber.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentActions
+import com.civilcam.ext_features.compose.ComposeFragmentActions
 
 sealed class InviteByNumberActions : ComposeFragmentActions {
     object ClickGoBack : InviteByNumberActions()

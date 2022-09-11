@@ -13,13 +13,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.ext.clearPhone
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.AlertDialogTypes
+import com.civilcam.ext_features.clearPhone
+import com.civilcam.ext_features.compose.elements.*
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.common.alert.AlertDialogComp
-import com.civilcam.ui.common.compose.*
 import com.civilcam.ui.common.compose.inputs.SearchInputField
-import com.civilcam.ui.common.loading.DialogLoadingContent
 import com.civilcam.ui.network.contacts.model.ContactsActions
 import com.civilcam.ui.network.contacts.model.LetterContactItem
 import com.civilcam.ui.network.contacts.model.PersonContactItem

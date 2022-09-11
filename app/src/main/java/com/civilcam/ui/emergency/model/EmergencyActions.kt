@@ -1,7 +1,7 @@
 package com.civilcam.ui.emergency.model
 
 import androidx.camera.core.CameraInfo
-import com.civilcam.common.ext.compose.ComposeFragmentActions
+import com.civilcam.ext_features.compose.ComposeFragmentActions
 
 sealed class EmergencyActions : ComposeFragmentActions {
 	object DoubleClickSos : EmergencyActions()

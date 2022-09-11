@@ -1,6 +1,6 @@
 package com.civilcam.ui.emergency.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentRoute
+import com.civilcam.ext_features.compose.ComposeFragmentRoute
 
 sealed class EmergencyRoute : ComposeFragmentRoute {
     object GoUserProfile : EmergencyRoute()

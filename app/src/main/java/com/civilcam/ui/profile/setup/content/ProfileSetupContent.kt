@@ -10,12 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.PictureModel
 import com.civilcam.domainLayer.model.profile.UserSetupModel
-import com.civilcam.ui.common.compose.ComposeButton
-import com.civilcam.ui.common.compose.inputs.InputField
-import com.civilcam.ui.common.compose.inputs.PhoneInputField
+import com.civilcam.ext_features.compose.elements.ComposeButton
+import com.civilcam.ext_features.compose.elements.InputField
+import com.civilcam.ext_features.compose.elements.PhoneInputField
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.profile.setup.model.ProfileSetupActions
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
 import com.civilcam.utils.DateUtils.dateOfBirthFormat

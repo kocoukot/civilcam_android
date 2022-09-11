@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.auth.LengthCheckStrategy
 import com.civilcam.ui.auth.OneDigitCheckStrategy
 import com.civilcam.ui.auth.SpecialSymbolCheckStrategy

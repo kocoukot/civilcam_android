@@ -1,6 +1,6 @@
 package com.civilcam.ui.subscription.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentState
+import com.civilcam.ext_features.compose.ComposeFragmentState
 import com.civilcam.domainLayer.model.SubscriptionType
 import com.civilcam.domainLayer.model.subscription.SubscriptionsList
 

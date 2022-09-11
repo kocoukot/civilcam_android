@@ -13,7 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 
 @Composable

@@ -15,12 +15,12 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.AlertDialogTypes
+import com.civilcam.ext_features.compose.elements.*
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.alerts.list.content.AlertHistoryRowSection
 import com.civilcam.ui.alerts.list.model.AlertListActions
 import com.civilcam.ui.common.alert.AlertDialogComp
-import com.civilcam.ui.common.compose.*
 import com.civilcam.utils.DateUtils
 
 @Composable

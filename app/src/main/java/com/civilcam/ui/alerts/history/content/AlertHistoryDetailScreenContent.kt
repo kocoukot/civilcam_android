@@ -19,13 +19,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.alerts.AlertType
+import com.civilcam.ext_features.compose.elements.CircleUserAvatar
+import com.civilcam.ext_features.compose.elements.InformationRow
+import com.civilcam.ext_features.compose.elements.RowDivider
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.alerts.history.model.AlertHistoryActions
 import com.civilcam.ui.alerts.history.model.ResolvedUsers
-import com.civilcam.ui.common.compose.CircleUserAvatar
-import com.civilcam.ui.common.compose.InformationRow
-import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.ui.profile.userDetails.content.InformationBoxContent
 
 @Composable

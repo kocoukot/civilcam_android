@@ -1,11 +1,11 @@
 package com.civilcam.ui.profile.credentials
 
 import androidx.lifecycle.viewModelScope
-import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.common.ext.isEmail
 import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.usecase.profile.ChangePhoneNumberUseCase
 import com.civilcam.domainLayer.usecase.user.ChangeEmailUseCase
+import com.civilcam.ext_features.compose.ComposeViewModel
+import com.civilcam.ext_features.isEmail
 import com.civilcam.ui.profile.credentials.model.ChangeCredentialsActions
 import com.civilcam.ui.profile.credentials.model.ChangeCredentialsRoute
 import com.civilcam.ui.profile.credentials.model.ChangeCredentialsState

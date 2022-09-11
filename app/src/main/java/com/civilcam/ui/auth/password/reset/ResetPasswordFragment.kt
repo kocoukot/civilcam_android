@@ -9,9 +9,9 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.domainLayer.model.VerificationFlow
+import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ui.auth.password.reset.model.ResetRoute
 import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.verification.VerificationFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

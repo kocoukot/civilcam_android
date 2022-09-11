@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.ui.common.compose.inputs.EmailInputField
+import com.civilcam.ext_features.compose.elements.EmailInputField
 import timber.log.Timber
 
 @Composable

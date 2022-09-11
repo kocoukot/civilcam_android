@@ -8,11 +8,10 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.civilcam.R
-import com.civilcam.common.ext.hideSystemUI
-import com.civilcam.common.ext.showSystemUI
-import com.civilcam.ui.MainActivity
+import com.civilcam.ext_features.hideSystemUI
+import com.civilcam.ext_features.live_data.observeNonNull
+import com.civilcam.ext_features.showSystemUI
 import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.onboarding.model.OnboardingRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -46,7 +45,6 @@ class OnBoardingFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as MainActivity).hideNotificationBtn()
         hideSystemUI()
     }
 

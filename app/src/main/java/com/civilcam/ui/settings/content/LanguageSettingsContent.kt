@@ -17,8 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.user.LanguageType
+import com.civilcam.ext_features.theme.CCTheme
 
 @Composable
 fun LanguageSettingsContent(

@@ -3,8 +3,8 @@ package com.civilcam.ui.emergency.model
 import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.TorchState
-import com.civilcam.common.ext.compose.ComposeFragmentState
 import com.civilcam.domainLayer.model.user.ImageInfo
+import com.civilcam.ext_features.compose.ComposeFragmentState
 
 data class EmergencyState(
     val isLoading: Boolean = false,

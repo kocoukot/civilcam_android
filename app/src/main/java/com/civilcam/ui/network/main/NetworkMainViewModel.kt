@@ -7,7 +7,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.serviceCast
 import com.civilcam.data.network.support.ServiceException
 import com.civilcam.di.source.KoinInjector
@@ -18,6 +17,7 @@ import com.civilcam.domainLayer.usecase.guardians.GetNetworkRequestsUseCase
 import com.civilcam.domainLayer.usecase.guardians.GetUserNetworkUseCase
 import com.civilcam.domainLayer.usecase.guardians.SetRequestReactionUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
+import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.network.main.model.*
 import com.civilcam.ui.network.source.SearchGuardiansDataSource

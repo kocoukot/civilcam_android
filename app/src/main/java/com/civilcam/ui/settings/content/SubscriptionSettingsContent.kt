@@ -11,9 +11,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.SubscriptionPlan
-import com.civilcam.ui.common.compose.RowDivider
+import com.civilcam.ext_features.compose.elements.RowDivider
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.profile.userProfile.content.ProfileRow
 
 @Composable

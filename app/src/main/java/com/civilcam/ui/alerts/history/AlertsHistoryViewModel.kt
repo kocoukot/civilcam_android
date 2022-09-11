@@ -1,10 +1,10 @@
 package com.civilcam.ui.alerts.history
 
 import androidx.lifecycle.viewModelScope
-import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.model.alerts.AlertType
 import com.civilcam.domainLayer.usecase.alerts.GetHistoryAlertListUseCase
+import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ui.alerts.history.model.AlertHistoryActions
 import com.civilcam.ui.alerts.history.model.AlertHistoryRoute
 import com.civilcam.ui.alerts.history.model.AlertHistoryScreen

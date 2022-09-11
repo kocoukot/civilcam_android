@@ -14,5 +14,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "CivilCam"
 include ':app'
-include ':app:arch'
 include ':domainLayer'
+include ':onboarding-feature'
+include ':ext-features'

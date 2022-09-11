@@ -1,7 +1,7 @@
 package com.civilcam.ui.onboarding
 
 import androidx.lifecycle.ViewModel
-import com.civilcam.arch.common.livedata.SingleLiveEvent
+import com.civilcam.ext_features.live_data.SingleLiveEvent
 import com.civilcam.ui.onboarding.model.OnboardingActions
 import com.civilcam.ui.onboarding.model.OnboardingRoute
 

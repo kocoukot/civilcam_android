@@ -4,12 +4,12 @@ import androidx.lifecycle.viewModelScope
 import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.R
 import com.civilcam.common.ext.castSafe
-import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.common.ext.isEmail
 import com.civilcam.data.network.support.ServerErrors
 import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.usecase.auth.GoogleSignInUseCase
 import com.civilcam.domainLayer.usecase.auth.SingUpUseCase
+import com.civilcam.ext_features.compose.ComposeViewModel
+import com.civilcam.ext_features.isEmail
 import com.civilcam.ui.auth.create.model.CreateAccountActions
 import com.civilcam.ui.auth.create.model.CreateAccountRoute
 import com.civilcam.ui.auth.create.model.CreateAccountState

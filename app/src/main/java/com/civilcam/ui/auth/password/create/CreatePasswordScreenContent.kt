@@ -9,17 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
+import com.civilcam.ext_features.compose.elements.*
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.create.model.PasswordStrategyState
 import com.civilcam.ui.auth.password.create.model.CreatePasswordActions
-import com.civilcam.ui.common.compose.BackButton
-import com.civilcam.ui.common.compose.ComposeButton
-import com.civilcam.ui.common.compose.RowDivider
-import com.civilcam.ui.common.compose.TopAppBarContent
-import com.civilcam.ui.common.compose.inputs.PasswordField
 import com.civilcam.ui.common.compose.inputs.PasswordStrategyBlocks
-import com.civilcam.ui.common.loading.DialogLoadingContent
 
 @Composable
 fun CreatePasswordScreenContent(viewModel: CreatePasswordViewModel) {

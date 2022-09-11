@@ -9,7 +9,7 @@ import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.civilcam.common.theme.CCTheme
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.auth.create.content.PasswordCreateContent
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.create.model.PasswordModel

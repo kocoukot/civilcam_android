@@ -13,13 +13,13 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.civilcam.R
-import com.civilcam.common.ext.hideSystemUI
-import com.civilcam.common.ext.showSystemUI
+import com.civilcam.ext_features.hideSystemUI
+import com.civilcam.ext_features.live_data.observeNonNull
+import com.civilcam.ext_features.showSystemUI
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyRoute

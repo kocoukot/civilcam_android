@@ -1,6 +1,6 @@
 package com.civilcam.ui.verification.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentActions
+import com.civilcam.ext_features.compose.ComposeFragmentActions
 
 sealed class VerificationActions : ComposeFragmentActions {
 	object ClickGoBack : VerificationActions()

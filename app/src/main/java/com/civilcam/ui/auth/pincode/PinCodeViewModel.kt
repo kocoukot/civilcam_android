@@ -2,10 +2,10 @@ package com.civilcam.ui.auth.pincode
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.castSafe
-import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.usecase.user.CheckPinUseCase
 import com.civilcam.domainLayer.usecase.user.SetPinUseCase
+import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ui.auth.pincode.model.PinCodeActions
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.auth.pincode.model.PinCodeRoute

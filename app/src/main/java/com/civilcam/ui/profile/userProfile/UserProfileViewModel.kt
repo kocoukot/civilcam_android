@@ -3,7 +3,6 @@ package com.civilcam.ui.profile.userProfile
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.civilcam.common.ext.castSafe
-import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.data.local.MediaStorage
 import com.civilcam.data.network.support.ServiceException
 import com.civilcam.domainLayer.model.AutocompletePlace
@@ -16,6 +15,7 @@ import com.civilcam.domainLayer.usecase.places.GetPlacesAutocompleteUseCase
 import com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase
 import com.civilcam.domainLayer.usecase.profile.UpdateUserProfileUseCase
 import com.civilcam.domainLayer.usecase.user.GetCurrentUserUseCase
+import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
 import com.civilcam.ui.profile.userProfile.model.*

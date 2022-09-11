@@ -14,11 +14,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.ext.formatPhoneNumber
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.user.CurrentUser
-import com.civilcam.ui.common.compose.RowDivider
-import com.civilcam.ui.common.compose.RowDividerGrayThree
+import com.civilcam.ext_features.compose.elements.RowDivider
+import com.civilcam.ext_features.compose.elements.RowDividerGrayThree
+import com.civilcam.ext_features.formatPhoneNumber
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.profile.userProfile.model.UserProfileActions
 import com.civilcam.ui.profile.userProfile.model.UserProfileType
 

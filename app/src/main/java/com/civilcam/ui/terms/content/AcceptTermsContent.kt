@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
+import com.civilcam.ext_features.theme.CCTheme
 
 @Composable
 fun AcceptTermsContent(isAccepted: Boolean, acceptTerms: () -> Unit) {

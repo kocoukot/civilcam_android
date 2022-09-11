@@ -8,12 +8,12 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.civilcam.R
+import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.alerts.list.model.AlertListRoute
 import com.civilcam.ui.alerts.map.LiveMapFragment
 import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.observeNonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AlertsListFragment : Fragment(R.layout.fragment_alerts),

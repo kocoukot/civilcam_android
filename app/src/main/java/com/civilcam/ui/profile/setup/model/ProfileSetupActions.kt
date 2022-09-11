@@ -1,7 +1,7 @@
 package com.civilcam.ui.profile.setup.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentActions
 import com.civilcam.domainLayer.model.AutocompletePlace
+import com.civilcam.ext_features.compose.ComposeFragmentActions
 
 sealed class ProfileSetupActions : ComposeFragmentActions {
     object ClickGoBack : ProfileSetupActions()

@@ -1,9 +1,9 @@
 package com.civilcam.ui.profile.userDetails.model
 
 import androidx.compose.runtime.Composable
-import com.civilcam.common.ext.compose.ComposeFragmentState
 import com.civilcam.domainLayer.model.AlertDialogTypes
 import com.civilcam.domainLayer.model.guard.PersonModel
+import com.civilcam.ext_features.compose.ComposeFragmentState
 import com.civilcam.ui.common.alert.AlertDialogComp
 
 data class UserDetailsState(

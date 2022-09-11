@@ -30,9 +30,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.ext.letters
-import com.civilcam.common.theme.CCTheme
-import com.civilcam.common.theme.MaterialSelectionColor
+import com.civilcam.ext_features.letters
+import com.civilcam.ext_features.theme.CCTheme
+import com.civilcam.ext_features.theme.MaterialSelectionColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

@@ -1,7 +1,7 @@
 package com.civilcam.ui.alerts.history.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentActions
 import com.civilcam.domainLayer.model.alerts.AlertType
+import com.civilcam.ext_features.compose.ComposeFragmentActions
 
 sealed class AlertHistoryActions : ComposeFragmentActions {
     object ClickGoBack : AlertHistoryActions()

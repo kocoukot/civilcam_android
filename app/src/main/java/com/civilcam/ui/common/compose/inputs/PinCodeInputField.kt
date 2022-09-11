@@ -2,7 +2,6 @@ package com.civilcam.ui.common.compose.inputs
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.keyframes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -30,9 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
-import com.civilcam.common.ext.digits
-import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.auth.pincode.model.PinCodeFlow
+import com.civilcam.ext_features.digits
+import com.civilcam.ext_features.theme.CCTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

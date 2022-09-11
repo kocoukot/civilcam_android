@@ -1,6 +1,5 @@
 package com.civilcam.ui.profile.userDetails
 
-import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.model.guard.GuardianStatus
@@ -10,6 +9,7 @@ import com.civilcam.domainLayer.usecase.guardians.AskToGuardUseCase
 import com.civilcam.domainLayer.usecase.guardians.DeleteGuardianUseCase
 import com.civilcam.domainLayer.usecase.guardians.SetRequestReactionUseCase
 import com.civilcam.domainLayer.usecase.guardians.StopGuardingUseCase
+import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ui.profile.userDetails.model.StopGuardAlertType
 import com.civilcam.ui.profile.userDetails.model.UserDetailsActions
 import com.civilcam.ui.profile.userDetails.model.UserDetailsRoute

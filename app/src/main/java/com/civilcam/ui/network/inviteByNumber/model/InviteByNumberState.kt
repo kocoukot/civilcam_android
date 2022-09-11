@@ -1,6 +1,6 @@
 package com.civilcam.ui.network.inviteByNumber.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentState
+import com.civilcam.ext_features.compose.ComposeFragmentState
 
 data class InviteByNumberState(
     val isLoading: Boolean = false,

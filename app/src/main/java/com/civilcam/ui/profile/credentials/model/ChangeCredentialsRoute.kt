@@ -1,6 +1,6 @@
 package com.civilcam.ui.profile.credentials.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentRoute
+import com.civilcam.ext_features.compose.ComposeFragmentRoute
 import com.civilcam.ui.profile.userProfile.model.UserProfileType
 
 sealed class ChangeCredentialsRoute : ComposeFragmentRoute {

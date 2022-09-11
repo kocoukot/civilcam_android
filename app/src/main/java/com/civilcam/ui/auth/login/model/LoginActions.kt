@@ -1,6 +1,6 @@
 package com.civilcam.ui.auth.login.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentActions
+import com.civilcam.ext_features.compose.ComposeFragmentActions
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 
 sealed class LoginActions : ComposeFragmentActions {

@@ -16,17 +16,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.AlertDialogTypes
+import com.civilcam.ext_features.compose.elements.BackButton
+import com.civilcam.ext_features.compose.elements.ComposeButton
+import com.civilcam.ext_features.compose.elements.TextActionButton
+import com.civilcam.ext_features.compose.elements.TopAppBarContent
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.alerts.map.content.AlertMapScreenContent
 import com.civilcam.ui.alerts.map.content.AlertStreamScreenContent
 import com.civilcam.ui.alerts.map.content.UserInformationContent
 import com.civilcam.ui.alerts.map.model.LiveMapActions
 import com.civilcam.ui.common.alert.AlertDialogComp
-import com.civilcam.ui.common.compose.BackButton
-import com.civilcam.ui.common.compose.ComposeButton
-import com.civilcam.ui.common.compose.TextActionButton
-import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.emergency.model.EmergencyScreen
 import com.civilcam.utils.Constant.ANIMATION_DURATION
 

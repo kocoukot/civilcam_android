@@ -1,8 +1,8 @@
 package com.civilcam.ui.alerts.map.model
 
 import androidx.camera.core.CameraSelector
-import com.civilcam.common.ext.compose.ComposeFragmentState
 import com.civilcam.domainLayer.model.alerts.GuardianAlertInformation
+import com.civilcam.ext_features.compose.ComposeFragmentState
 import com.civilcam.ui.emergency.model.EmergencyScreen
 
 data class LiveMapState(

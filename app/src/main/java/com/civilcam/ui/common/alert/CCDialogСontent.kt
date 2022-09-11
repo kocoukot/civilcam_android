@@ -11,8 +11,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.AlertDialogTypes
+import com.civilcam.ext_features.theme.CCTheme
 
 @Composable
 fun AlertDialogComp(

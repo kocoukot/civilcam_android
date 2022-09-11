@@ -1,6 +1,6 @@
 package com.civilcam.ui.alerts.map.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentActions
+import com.civilcam.ext_features.compose.ComposeFragmentActions
 import com.civilcam.ui.emergency.model.EmergencyScreen
 
 sealed class LiveMapActions : ComposeFragmentActions {

@@ -12,8 +12,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.common.compose.RowDivider
+import com.civilcam.ext_features.compose.elements.RowDivider
+import com.civilcam.ext_features.theme.CCTheme
 
 @Composable
 fun AlertHistoryRowSection(rowClicked: () -> Unit) {

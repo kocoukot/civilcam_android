@@ -12,12 +12,11 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.domainLayer.model.alerts.AlertModel
 import com.civilcam.domainLayer.model.alerts.AlertType
-
+import com.civilcam.ext_features.compose.elements.CircleUserAvatar
+import com.civilcam.ext_features.compose.elements.EmptyListText
+import com.civilcam.ext_features.compose.elements.InformationRow
+import com.civilcam.ext_features.compose.elements.RowDivider
 import com.civilcam.ui.alerts.history.model.AlertHistoryActions
-import com.civilcam.ui.common.compose.CircleUserAvatar
-import com.civilcam.ui.common.compose.EmptyListText
-import com.civilcam.ui.common.compose.InformationRow
-import com.civilcam.ui.common.compose.RowDivider
 import com.civilcam.utils.DateUtils
 
 @Composable

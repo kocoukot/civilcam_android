@@ -1,8 +1,8 @@
 package com.civilcam.ui.settings.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentActions
 import com.civilcam.domainLayer.model.user.LanguageType
 import com.civilcam.domainLayer.model.user.SettingsNotificationType
+import com.civilcam.ext_features.compose.ComposeFragmentActions
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 
 sealed class SettingsActions : ComposeFragmentActions {

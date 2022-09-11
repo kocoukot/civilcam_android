@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ui.alerts.history.model.AlertHistoryRoute
 import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.observeNonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AlertsHistoryFragment : Fragment() {

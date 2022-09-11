@@ -10,7 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.civilcam.R
-import com.civilcam.common.ext.toDp
+import com.civilcam.ext_features.toDp
 import com.civilcam.ui.common.compose.LocationData
 import com.civilcam.ui.common.compose.LocationDetectButton
 import com.civilcam.ui.emergency.model.EmergencyActions

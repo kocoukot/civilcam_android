@@ -1,6 +1,6 @@
 package com.civilcam.ui.alerts.list.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentActions
+import com.civilcam.ext_features.compose.ComposeFragmentActions
 
 sealed class AlertListActions : ComposeFragmentActions {
     object ClickGoMyProfile : AlertListActions()

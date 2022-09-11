@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.civilcam.common.ext.castSafe
+import com.civilcam.ext_features.compose.elements.DialogLoadingContent
 
 
 class DialogLoadingFragment :

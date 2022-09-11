@@ -1,8 +1,8 @@
 package com.civilcam.ui.alerts.history.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentState
 import com.civilcam.domainLayer.model.alerts.AlertModel
 import com.civilcam.domainLayer.model.alerts.AlertType
+import com.civilcam.ext_features.compose.ComposeFragmentState
 
 data class AlertHistoryState(
     val isLoading: Boolean = false,

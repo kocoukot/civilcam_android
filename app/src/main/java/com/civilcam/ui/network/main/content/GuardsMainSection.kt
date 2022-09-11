@@ -14,12 +14,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.guard.GuardianItem
 import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.domainLayer.model.guard.LetterGuardItem
 import com.civilcam.domainLayer.model.guard.NetworkType
-import com.civilcam.ui.common.compose.*
+import com.civilcam.ext_features.compose.elements.*
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.network.main.model.NetworkMainActions
 import com.civilcam.ui.network.main.model.NetworkMainModel
 

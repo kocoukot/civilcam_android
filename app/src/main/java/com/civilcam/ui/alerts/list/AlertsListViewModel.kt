@@ -1,9 +1,9 @@
 package com.civilcam.ui.alerts.list
 
 import androidx.lifecycle.viewModelScope
-import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.GetAlertsListUseCase
+import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ui.alerts.list.model.AlertListActions
 import com.civilcam.ui.alerts.list.model.AlertListRoute
 import com.civilcam.ui.alerts.list.model.AlertListState

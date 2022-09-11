@@ -9,9 +9,9 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.TorchState
 import androidx.lifecycle.viewModelScope
 import com.civilcam.CivilcamApplication.Companion.instance
-import com.civilcam.common.ext.compose.ComposeViewModel
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
+import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ui.emergency.model.*
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.CoroutineScope

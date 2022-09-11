@@ -1,6 +1,6 @@
 package com.civilcam.ui.auth.create.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentActions
+import com.civilcam.ext_features.compose.ComposeFragmentActions
 
 sealed class CreateAccountActions : ComposeFragmentActions {
 	object ClickGoBack : CreateAccountActions()

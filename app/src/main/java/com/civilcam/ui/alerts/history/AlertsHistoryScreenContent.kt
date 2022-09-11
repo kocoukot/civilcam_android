@@ -10,13 +10,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.civilcam.common.theme.CCTheme
+import com.civilcam.ext_features.compose.elements.BackButton
+import com.civilcam.ext_features.compose.elements.TopAppBarContent
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.alerts.history.content.AlertHistoryDetailScreenContent
 import com.civilcam.ui.alerts.history.content.AlertHistoryListScreenContent
 import com.civilcam.ui.alerts.history.model.AlertHistoryActions
 import com.civilcam.ui.alerts.history.model.AlertHistoryScreen
-import com.civilcam.ui.common.compose.BackButton
-import com.civilcam.ui.common.compose.TopAppBarContent
 
 @Composable
 fun AlertsListScreenContent(viewModel: AlertsHistoryViewModel) {

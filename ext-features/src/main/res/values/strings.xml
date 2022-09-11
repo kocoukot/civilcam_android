@@ -1,0 +1,263 @@
+<resources>
+    <string name="verification_code">Verification code</string>
+    <string name="verification_code_placeholder">000 000</string>
+    <string name="otp_error_code">OTP code is incorrect or has expired. Please try to retype or resend the code</string>
+    <string name="show_title">Show</string>
+    <string name="hide">Hide</string>
+    <string name="create_password">Create password</string>
+    <string name="password">Password</string>
+    <string name="invalid_email">Invalid email. Please try again. (eg:email@gmail.com)</string>
+    <string name="profile_setup_phone_number_label">Phone number</string>
+    <string name="profile_setup_phone_number_placeholder">(123) 456 7890</string>
+    <string name="profile_setup_phone_error">Please, enter a valid phone number</string>
+
+    <!--    <string name="language_select_hello">Hello, welcome to CivilCam!</string>-->
+    <!--    <string name="language_select_settings">You can always change it in settings</string>-->
+    <!--    <string name="continue_text">Continue</string>-->
+    <!--    <string name="get_start_text">Get started</string>-->
+    <!--    <string name="back_text">Back</string>-->
+    <!--    <string name="and_text">and</string>-->
+    <!--    <string name="save_text">Save</string>-->
+    <!--    <string name="empty_string"></string>-->
+
+    <!--    <string name="decline_text">Decline</string>-->
+    <!--    <string name="accept_text">Accept</string>-->
+    <!--    <string name="cancel_text_caps">CANCEL</string>-->
+    <!--    <string name="ok_text_caps">OK</string>-->
+    <!--    <string name="send_text">Send</string>-->
+
+    <!--    <string name="yes_text_caps">YES</string>-->
+    <!--    <string name="confirm_text_caps">CONFIRM</string>-->
+
+    <!--    <string name="search_text">Search</string>-->
+    <!--    <string name="add_text">Add</string>-->
+    <!--    <string name="pending_text">Pending</string>-->
+    <!--    <string name="invite_text">Invite</string>-->
+    <!--    <string name="invite_sent_text">Invite sent</string>-->
+
+    <!--    <string name="phone_number_text">Phone number</string>-->
+    <!--    <string name="phone_number_placeholder">(123) 456 7890</string>-->
+
+
+    <!--    <string name="onboarding_page_one_title">Safety network</string>-->
+    <!--    <string name="onboarding_page_one_text">If you are worried about someone, become his guardian and be sure that if something happens - you can always help</string>-->
+    <!--    <string name="onboarding_page_two_title">Emergency situations</string>-->
+    <!--    <string name="onboarding_page_two_text">Wherever and whenever your loved ones need help, you’ll be able to know their location and how to help them.</string>-->
+    <!--    <string name="onboarding_page_three_title">Stay safe</string>-->
+    <!--    <string name="onboarding_page_three_text">It\'s never too safe, take care of yourself and your loved ones with CivilCam\n</string>-->
+
+
+    <!--    <string name="terms_conditions_title"><![CDATA[Terms & Conditions]]>\nand Privacy Policy</string>-->
+    <!--    <string name="terms_conditions_subtitle">It\'s never too safe, take care of yourself and your loved ones with CivilCam\n</string>-->
+    <!--    <string name="terms_conditions_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem sit lacus nisl donec egestas amet id consequat. Ut velit accumsan in lorem lectus et quis.</string>-->
+    <!--    <string name="terms_conditions_i_agree">I agree to the</string>-->
+
+
+    <!--    <string name="navigation_bar_network">Network</string>-->
+    <!--    <string name="navigation_bar_emergency">Emergency</string>-->
+    <!--    <string name="navigation_bar_alerts">Alerts</string>-->
+
+
+    <!--    <string name="profile_setup_title">Set up your account</string>-->
+    <!--    <string name="profile_setup_upload_photo">Upload photo</string>-->
+    <!--    <string name="profile_setup_change_photo">Change photo</string>-->
+    <!--    <string name="profile_setup_first_name_label">First name</string>-->
+    <!--    <string name="profile_setup_first_name_placeholder">Enter your first name</string>-->
+    <!--    <string name="profile_setup_last_name_label">Last name</string>-->
+    <!--    <string name="profile_setup_last_name_placeholder">Enter your last name</string>-->
+    <!--    <string name="profile_setup_date_of_birth_label">Date of birth</string>-->
+    <!--    <string name="profile_setup_date_of_birth_placeholder">MM.DD.YYYY</string>-->
+    <!--    <string name="profile_setup_address_label">Address (Street, City, State, Zip)</string>-->
+    <!--    <string name="profile_setup_address_placeholder">eg: 1456 Broadway, New York, NY, 10023</string>-->
+    <!--    <string name="profile_setup_date_of_birth">Date of birth</string>-->
+
+    <!--    <string name="profile_setup_address_select_title">Address</string>-->
+
+
+    <!--    <string name="user_details_title">Add guardians</string>-->
+
+    <!--    <string name="user_details_ask_to_guard">Ask to guard</string>-->
+    <!--    <string name="user_details_stop_guarding">Stop guarding</string>-->
+    <!--    <string name="user_details_remove_gaurdian">Remove guardian</string>-->
+    <!--    <string name="user_details_request_text"> needs you as a guardian</string>-->
+
+    <!--    <string name="user_details_alert_remove_guard">This person will no longer receive your alerts.</string>-->
+    <!--    <string name="user_details_alert_stop_guarding">You will no longer receive alerts from this user</string>-->
+
+
+    <!--    <string name="alerts_root_list_title">Alerts</string>-->
+    <!--    <string name="alerts_history_title">Alerts history</string>-->
+    <!--    <string name="resolve_text">Resolve</string>-->
+
+    <!--    <string name="alerts_list_empty_state">No alerts</string>-->
+    <!--    <string name="alerts_list_received_empty_state">Your haven’t received alerts yet</string>-->
+    <!--    <string name="alerts_list_sent_empty_state">Your haven’t sent alerts yet</string>-->
+
+    <!--    <string name="resolve_alert_title">Resolve alert</string>-->
+    <!--    <string name="resolve_alert_text">Are you sure that you want to resolve this alert?</string>-->
+
+    <!--    <string name="alerts_history_received_tab">Received</string>-->
+    <!--    <string name="alerts_history_sent_tab">Sent</string>-->
+    <!--    <string name="alerts_history_sent_alert">You sent an emergency alert</string>-->
+    <!--    <string name="create_account">Create account</string>-->
+    <!--    <string name="create_account_email_label">Email</string>-->
+    <!--    <string name="create_account_email_placeholder">Your email</string>-->
+    <!--    <string name="already_have_account">Already have an account?</string>-->
+    <!--    <string name="log_in">Log in</string>-->
+
+
+    <!--    <string name="confirm_password">Confirm password</string>-->
+    <!--    <string name="re_enter_password">Re-enter password</string>-->
+    <!--    <string name="password_should_contain">Password should contain:</string>-->
+    <!--    <string name="password_should_contain_number">• 1 number</string>-->
+    <!--    <string name="password_should_contain_letter">• 1 capital letter</string>-->
+    <!--    <string name="password_should_contain_lowercase">• 1 lowercase letter</string>-->
+    <!--    <string name="password_should_contain_char">• 8 characters</string>-->
+    <!--    <string name="email_verification">Email verification</string>-->
+    <!--    <string name="phone_verification">Phone verification</string>-->
+    <!--    <string name="reset_password">Reset password</string>-->
+    <!--    <string name="code_sent_title">The code was sent to</string>-->
+    <!--    <string name="code_arrive">It should arrive within one minute</string>-->
+    <!--    <string name="resend_code">Resend code</string>-->
+    <!--    <string name="otp_code_timer">Resend code in %s seconds</string>-->
+    <!--    <string name="password_no_match">Passwords don’t match, please check and try again</string>-->
+    <!--    <string name="dont_have_account">Don’t have an account?</string>-->
+    <!--    <string name="register">Register</string>-->
+    <!--    <string name="your_password">Your password</string>-->
+    <!--    <string name="digit_verification_code">We’ll send a 6 digit verification code</string>-->
+    <!--    <string name="save_password">Save password</string>-->
+    <!--    <string name="create_new_password">Create new password</string>-->
+    <!--    <string name="verification_phone_mask">+1%s</string>-->
+
+    <!--    <string name="add_from_contacts_title">Contacts</string>-->
+    <!--    <string name="add_from_contacts_invite_by">Invite by number</string>-->
+
+    <!--    <string name="invite_by_number_title">Invite by number</string>-->
+    <!--    <string name="invite_by_number_hint">Send an invite to the number that is not on your contact list</string>-->
+    <!--    <string name="invite_by_number_sent">Invite has been sent to</string>-->
+
+    <!--    <string name="network_main_on_guard">On guard</string>-->
+    <!--    <string name="network_main_guardians">Guardians</string>-->
+    <!--    <string name="network_main_on_guard_list_is_empty">Your “On guard” list is empty</string>-->
+    <!--    <string name="network_main_guardians_list_is_empty">Your “Guardians” list is empty</string>-->
+    <!--    <string name="network_main_requests">Requests</string>-->
+    <!--    <string name="network_main_new_requests">You have new requests</string>-->
+    <!--    <string name="network_main_declined">Declined</string>-->
+    <!--    <string name="network_main_help_me">Help me!</string>-->
+    <!--    <string name="network_main_safe">Safe</string>-->
+    <!--    <string name="pin_code_confirm_title">Confirm your pin-code</string>-->
+    <!--    <string name="pin_code_create_title">Create your pin-code</string>-->
+    <!--    <string name="password_should_contain_special_char">• 1 special character</string>-->
+
+
+    <!--    <string name="settings_title">Settings</string>-->
+
+    <!--    <string name="settings_alerts">Alerts</string>-->
+    <!--    <string name="settings_subscription">Subscription</string>-->
+    <!--    <string name="settings_change_password">Change password</string>-->
+    <!--    <string name="settings_language">Language</string>-->
+    <!--    <string name="settings_contact_support">Contact support</string>-->
+    <!--    <string name="settings_terms"><![CDATA[Terms & Conditions]]> and Privacy Policy</string>-->
+    <!--    <string name="settings_log_out">Log out</string>-->
+    <!--    <string name="settings_delete_account">Delete account</string>-->
+
+    <!--    <string name="settings_alerts_sms">SMS notifications</string>-->
+    <!--    <string name="settings_alerts_email">Email notifications</string>-->
+
+    <!--    <string name="settings_delete_account_alert_title">Delete account</string>-->
+    <!--    <string name="settings_delete_account_alert_text">Are you sure you want to delete your account?</string>-->
+
+    <!--    <string name="settings_log_out_alert_title">Log out</string>-->
+    <!--    <string name="settings_log_out_alert_text">Are you sure you want to log out from your account?</string>-->
+
+    <!--    <string name="settings_contact_issue_title">Issue</string>-->
+    <!--    <string name="settings_contact_issue_enter">Enter issue</string>-->
+    <!--    <string name="settings_contact_issue_description">Enter an issue description</string>-->
+    <!--    <string name="settings_contact_reply_title">The reply will be sent to:</string>-->
+    <!--    <string name="settings_contact_reply_placeholder">example@mail.net</string>-->
+    <!--    <string name="settings_contact_error_text">Invalid email. Please try again. (eg:email@gmail.com)</string>-->
+
+    <!--    <string name="settings_password_title">Password</string>-->
+    <!--    <string name="settings_password_label">Current password</string>-->
+    <!--    <string name="settings_password_placeholder">Enter your current password</string>-->
+    <!--    <string name="settings_password_error_text">The password is incorrect. Please try one more time</string>-->
+
+    <!--    <string name="settings_create_passoword_title">Create password</string>-->
+
+
+    <!--    <string name="add_guardian_title">Add guardians</string>-->
+    <!--    <string name="add_guardian_search_title">Find your friends</string>-->
+    <!--    <string name="add_guardian_search_text">See which of your contacts are on CivilCam</string>-->
+    <!--    <string name="add_guardian_header_title">Global search</string>-->
+    <!--    <string name="pin_code_re_enter_title">Re-enter your pin-code</string>-->
+    <!--    <string name="pin_code_description">This code will be used to disable emergency state. Please memorize this pin.</string>-->
+    <!--    <string name="verification_title">Verification</string>-->
+    <!--    <string name="pin_code_no_match_title">Pin-codes do not match. Try again or go back and enter a different pin</string>-->
+    <!--    <string name="user_profile_change_image">Change profile image</string>-->
+    <!--    <string name="user_profile_pin_code_title">Pin-code</string>-->
+    <!--    <string name="user_profile_edit_title">Edit</string>-->
+    <!--    <string name="change_credentials_pin_code_title">Pin-code</string>-->
+    <!--    <string name="change_credentials_pin_code_confirm_title">Confirm Pin-code</string>-->
+    <!--    <string name="user_profile_change_profile_image_title">Change profile image</string>-->
+    <!--    <string name="pin_code_new_title">New Pin-code</string>-->
+    <!--    <string name="pin_code_confirm_new_title">Confirm Pin-code</string>-->
+    <!--    <string name="pin_code_current_title">Enter your current Pin-code</string>-->
+    <!--    <string name="pin_code_enter_new_title">Enter your new Pin-code</string>-->
+    <!--    <string name="pin_code_re_enter_new_title">Re-enter your new Pin-code</string>-->
+    <!--    <string name="pin_code_is_incorrect_title">Pin-code is incorrect</string>-->
+    <!--    <string name="pin_code_new_no_match_title">Pin-codes don’t match</string>-->
+    <!--    <string name="manage_subscription_plan">Manage subscription plan</string>-->
+    <!--    <string name="restore_purchase">Restore purchase</string>-->
+    <!--    <string name="start_text">Start!</string>-->
+    <!--    <string name="subscription_options_title">Subscription options</string>-->
+    <!--    <string name="subscription_no_commitment_title">No commitment. Cancel anytime.</string>-->
+    <!--    <string name="subscription_safety_network">"Safety network "</string>-->
+    <!--    <string name="subscription_emergency_alert">Emergency alert</string>-->
+    <!--    <string name="subscription_live_stream">Emergency live stream</string>-->
+    <!--    <string name="subscription_safety_map">Safety map</string>-->
+    <!--    <string name="subscription_detailed_alert">Alert detailed data</string>-->
+    <!--    <string name="subscription_purchase_fail_title">Purchase failed</string>-->
+    <!--    <string name="subscription_purchase_fail_description">There was an error while making this purchase. Please try again.</string>-->
+    <!--    <string name="subscription_purchase_success_title">Welcome to CivilCam family!</string>-->
+    <!--    <string name="subscription_purchase_success_description">Your purchase was successful.</string>-->
+    <!--    <string name="subscriptions_change_plan">Change plan</string>-->
+
+
+    <!--    <string name="emergency_screen_sos">SOS</string>-->
+    <!--    <string name="emergency_screen_safe">I’m safe</string>-->
+    <!--    <string name="pin_code_enter_title">Enter pin-code</string>-->
+
+    <!--    <string name="notification_request_title">You received a request</string>-->
+    <!--    <string name="notification_request_text">needs you as a guardian</string>-->
+
+    <!--    <string name="notification_alert_title">Emergency alert</string>-->
+    <!--    <string name="notification_alert_text">is in emergency and needs your help!</string>-->
+    <!--    <string name="notification_alert_details">Details</string>-->
+    <!--    <string name="emergency_live_title">Live</string>-->
+    <!--    <string name="emergency_map_title">Map</string>-->
+    <!--    <string name="emergency_live_stream_title">Live stream</string>-->
+
+    <!--    <string name="history_detail_title">Alert details</string>-->
+    <!--    <string name="history_detail_download_video">Download video</string>-->
+
+    <!--    <string name="alert_user_detail_title">User in danger</string>-->
+    <!--    <string name="alert_user_detail_call">Call 911</string>-->
+    <!--    <string name="alert_user_detail_request_sent">Request sent %s</string>-->
+
+    <!--    <string name="resolve_text_caps">RESOLVE</string>-->
+
+    <!--    <string name="something_went_wrong">Something went wrong!</string>-->
+    <!--    <string name="terms_button"><![CDATA[Terms & Conditions]]></string>-->
+
+    <!--    <string name="privacy_button">Privacy Policy</string>-->
+    <!--    <string name="change_credentials_current_email_title">Current email</string>-->
+    <!--    <string name="change_credentials_new_email_placeholder">Enter your new email</string>-->
+    <!--    <string name="change_credentials_new_email_title">New email</string>-->
+    <!--    <string name="user_profile_email_change_desc">Your email has been successfully changed. Now you can log in with new email </string>-->
+    <!--    <string name="user_profile_phone_change_desc">Your phone number has been changed. Now it will be displayed in your profile</string>-->
+    <!--    <string name="pincode_changed_alert_text">Your pin-code has been successfully changed. Please remember it.</string>-->
+    <!--    <string name="change_credentials_email_title">Change email</string>-->
+    <!--    <string name="verification_current_email_title">Current email verification</string>-->
+    <!--    <string name="verification_new_email_title">New email verification</string>-->
+
+</resources>

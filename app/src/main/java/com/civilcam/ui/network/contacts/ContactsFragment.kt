@@ -9,8 +9,8 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.civilcam.R
+import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.network.contacts.model.ContactsRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel

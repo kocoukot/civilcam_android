@@ -1,6 +1,6 @@
 package com.civilcam.ui.onboarding.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentRoute
+import com.civilcam.ext_features.compose.ComposeFragmentRoute
 
 sealed class OnboardingRoute: ComposeFragmentRoute {
     object GoBack : OnboardingRoute()

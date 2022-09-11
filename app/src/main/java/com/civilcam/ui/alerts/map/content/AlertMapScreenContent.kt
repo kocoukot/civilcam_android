@@ -16,12 +16,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.civilcam.R
-import com.civilcam.common.ext.toDp
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.alerts.GuardianAlertInformation
+import com.civilcam.ext_features.compose.elements.IconActionButton
+import com.civilcam.ext_features.theme.CCTheme
+import com.civilcam.ext_features.toDp
 import com.civilcam.ui.alerts.map.model.LiveMapActions
 import com.civilcam.ui.alerts.map.model.UserAlertLocationData
-import com.civilcam.ui.common.compose.IconActionButton
 import com.civilcam.ui.common.compose.LocationData
 import com.civilcam.ui.common.compose.LocationDetectButton
 import com.civilcam.ui.emergency.model.EmergencyScreen

@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.OnboardingPage
-import com.civilcam.ui.common.compose.ComposeButton
-import com.civilcam.ui.common.compose.IconActionButton
+import com.civilcam.ext_features.compose.elements.ComposeButton
+import com.civilcam.ext_features.compose.elements.IconActionButton
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.onboarding.content.PageCardUI
 import com.civilcam.ui.onboarding.content.PageUI
 import com.civilcam.ui.onboarding.model.OnboardingActions

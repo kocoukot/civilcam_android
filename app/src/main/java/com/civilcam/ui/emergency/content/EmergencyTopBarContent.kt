@@ -14,9 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.common.compose.AvatarButton
-import com.civilcam.ui.common.compose.IconActionButton
+import com.civilcam.ext_features.compose.elements.AvatarButton
+import com.civilcam.ext_features.compose.elements.IconActionButton
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyScreen
 

@@ -30,13 +30,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.AlertDialogTypes
 import com.civilcam.domainLayer.model.SubscriptionType
+import com.civilcam.ext_features.compose.elements.ComposeButton
+import com.civilcam.ext_features.compose.elements.DialogLoadingContent
+import com.civilcam.ext_features.compose.elements.IconActionButton
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.common.alert.AlertDialogComp
-import com.civilcam.ui.common.compose.ComposeButton
-import com.civilcam.ui.common.compose.IconActionButton
-import com.civilcam.ui.common.loading.DialogLoadingContent
 import com.civilcam.ui.subscription.model.SubscriptionActions
 
 @Composable
