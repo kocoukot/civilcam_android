@@ -1,12 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CivilCam</string>
 
     <string name="continue_text">Continue</string>
     <string name="back_text">Back</string>
-    <string name="and_text">and</string>
     <string name="save_text">Save</string>
     <string name="empty_string"></string>
 
+    <string name="and_text">and</string>
     <string name="decline_text">Decline</string>
     <string name="accept_text">Accept</string>
     <string name="cancel_text_caps">CANCEL</string>
@@ -20,6 +21,8 @@
     <string name="add_text">Add</string>
     <string name="pending_text">Pending</string>
     <string name="invite_text">Invite</string>
+
+
     <string name="invite_sent_text">Invite sent</string>
 
     <string name="phone_number_text">Phone number</string>
@@ -30,11 +33,9 @@
     <string name="terms_conditions_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem sit lacus nisl donec egestas amet id consequat. Ut velit accumsan in lorem lectus et quis.</string>
     <string name="terms_conditions_i_agree">I agree to the</string>
 
-
     <string name="navigation_bar_network">Network</string>
     <string name="navigation_bar_emergency">Emergency</string>
     <string name="navigation_bar_alerts">Alerts</string>
-
 
     <string name="profile_setup_title">Set up your account</string>
     <string name="profile_setup_upload_photo">Upload photo</string>
@@ -54,9 +55,7 @@
 
     <string name="profile_setup_address_select_title">Address</string>
 
-
     <string name="user_details_title">Add guardians</string>
-
     <string name="user_details_ask_to_guard">Ask to guard</string>
     <string name="user_details_stop_guarding">Stop guarding</string>
     <string name="user_details_remove_gaurdian">Remove guardian</string>
@@ -121,8 +120,6 @@
     <string name="pin_code_create_title">Create your pin-code</string>
     <string name="password_should_contain_special_char">• 1 special character</string>
 
-
-
     <string name="settings_title">Settings</string>
 
     <string name="settings_alerts">Alerts</string>
@@ -157,6 +154,8 @@
 
     <string name="settings_create_passoword_title">Create password</string>
 
+    <string name="emergency_screen_sos">SOS</string>
+    <string name="emergency_screen_safe">I’m safe</string>
 
     <string name="add_guardian_title">Add guardians</string>
     <string name="add_guardian_search_title">Find your friends</string>
@@ -179,6 +178,7 @@
     <string name="pin_code_re_enter_new_title">Re-enter your new Pin-code</string>
     <string name="pin_code_is_incorrect_title">Pin-code is incorrect</string>
     <string name="pin_code_new_no_match_title">Pin-codes don’t match</string>
+
     <string name="manage_subscription_plan">Manage subscription plan</string>
     <string name="restore_purchase">Restore purchase</string>
     <string name="start_text">Start!</string>
@@ -189,15 +189,12 @@
     <string name="subscription_live_stream">Emergency live stream</string>
     <string name="subscription_safety_map">Safety map</string>
     <string name="subscription_detailed_alert">Alert detailed data</string>
+
     <string name="subscription_purchase_fail_title">Purchase failed</string>
     <string name="subscription_purchase_fail_description">There was an error while making this purchase. Please try again.</string>
     <string name="subscription_purchase_success_title">Welcome to CivilCam family!</string>
     <string name="subscription_purchase_success_description">Your purchase was successful.</string>
     <string name="subscriptions_change_plan">Change plan</string>
-
-
-    <string name="emergency_screen_sos">SOS</string>
-    <string name="emergency_screen_safe">I’m safe</string>
     <string name="pin_code_enter_title">Enter pin-code</string>
 
     <string name="notification_request_title">You received a request</string>
@@ -213,9 +210,8 @@
     <string name="resolve_text_caps">RESOLVE</string>
 
     <string name="something_went_wrong">Something went wrong!</string>
-    <string name="terms_button"><![CDATA[Terms & Conditions]]></string>
-
     <string name="privacy_button">Privacy Policy</string>
+    <string name="terms_button"><![CDATA[Terms & Conditions]]></string>
     <string name="change_credentials_current_email_title">Current email</string>
     <string name="change_credentials_new_email_placeholder">Enter your new email</string>
     <string name="change_credentials_new_email_title">New email</string>

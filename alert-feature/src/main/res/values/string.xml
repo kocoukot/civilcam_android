@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="alerts_history_received_tab">Received</string>
     <string name="alerts_history_sent_tab">Sent</string>
     <string name="alerts_history_sent_alert">You sent an emergency alert</string>
