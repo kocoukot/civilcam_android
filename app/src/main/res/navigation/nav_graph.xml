@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/languageSelectFragment"
-        android:name="com.civilcam.langselect.langSelect.LanguageSelectFragment"
+        android:name="com.civilcam.langselect.LanguageSelectFragment"
         android:label="LanguageSelectFragment">
         <action
             android:id="@+id/action_languageSelectFragment_to_onBoardingFragment"
@@ -14,7 +14,7 @@
     </fragment>
     <fragment
         android:id="@+id/onBoardingFragment"
-        android:name="com.civilcam.onboarding_feature.onboarding.OnBoardingFragment"
+        android:name="com.civilcam.onboarding_feature.OnBoardingFragment"
         android:label="OnBoardingFragment">
         <deepLink app:uri="@string/direction_onBoardingFragment" />
 

@@ -1,11 +1,11 @@
-package com.civilcam.langselect.langSelect
+package com.civilcam.langselect
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.domainLayer.model.user.LanguageType
 import com.civilcam.ext_features.compose.ComposeViewModel
-import com.civilcam.langselect.langSelect.model.LangSelectActions
-import com.civilcam.langselect.langSelect.model.LangSelectRoute
-import com.civilcam.langselect.langSelect.model.LangSelectState
+import com.civilcam.langselect.model.LangSelectActions
+import com.civilcam.langselect.model.LangSelectRoute
+import com.civilcam.langselect.model.LangSelectState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch

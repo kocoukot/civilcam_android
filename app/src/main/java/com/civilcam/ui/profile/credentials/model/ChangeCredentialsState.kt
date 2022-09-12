@@ -1,7 +1,7 @@
 package com.civilcam.ui.profile.credentials.model
 
 import com.civilcam.ext_features.compose.ComposeFragmentState
-import com.civilcam.ext_features.isEmail
+import com.civilcam.ext_features.ext.isEmail
 import com.civilcam.ui.profile.userProfile.model.UserProfileType
 
 data class ChangeCredentialsState(

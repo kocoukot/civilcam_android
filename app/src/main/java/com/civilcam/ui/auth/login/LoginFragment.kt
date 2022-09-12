@@ -9,8 +9,8 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.common.ext.navigateByDirection
+import com.civilcam.ext_features.ext.showToast
 import com.civilcam.ext_features.live_data.observeNonNull
-import com.civilcam.ext_features.showToast
 import com.civilcam.ui.auth.GoogleFragmentAuthHandler
 import com.civilcam.ui.auth.login.model.LoginRoute
 import com.civilcam.ui.common.NavigationDirection

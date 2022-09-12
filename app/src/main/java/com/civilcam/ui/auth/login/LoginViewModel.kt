@@ -7,7 +7,7 @@ import com.civilcam.domainLayer.castSafe
 import com.civilcam.domainLayer.usecase.auth.GoogleSignInUseCase
 import com.civilcam.domainLayer.usecase.auth.SignInUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
-import com.civilcam.ext_features.isEmail
+import com.civilcam.ext_features.ext.isEmail
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.login.model.LoginActions
 import com.civilcam.ui.auth.login.model.LoginRoute

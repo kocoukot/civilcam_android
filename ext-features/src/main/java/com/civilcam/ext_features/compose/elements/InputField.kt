@@ -30,8 +30,8 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.civilcam.ext_features.R
-import com.civilcam.ext_features.digits
-import com.civilcam.ext_features.letters
+import com.civilcam.ext_features.ext.digits
+import com.civilcam.ext_features.ext.letters
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ext_features.theme.MaterialSelectionColor
 import kotlinx.coroutines.delay
@@ -129,12 +129,12 @@ fun InputField(
 				decorationBox = { innerTextField ->
 					Row(
 						modifier = Modifier
-                            .background(
-                                if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
-                                RoundedCornerShape(4.dp)
-                            )
-                            .padding(vertical = 14.dp)
-                            .padding(start = 12.dp, end = 12.dp),
+							.background(
+								if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
+								RoundedCornerShape(4.dp)
+							)
+							.padding(vertical = 14.dp)
+							.padding(start = 12.dp, end = 12.dp),
 						verticalAlignment = Alignment.CenterVertically
 					) {
 						Box(
@@ -183,24 +183,24 @@ fun EmailInputField(
 	
 	Column(
 		modifier = Modifier
-            .fillMaxWidth()
-            .onFocusChanged { focusState ->
-                when {
-                    focusState.hasFocus -> hasFocus = true
-                    !focusState.isFocused -> hasFocus = false
-                }
-                onFocusChanged.invoke(focusState.hasFocus)
-            }
-            .background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
-            .bringIntoViewRequester(viewRequester)
-            .onFocusEvent {
-                if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(400)
-                        viewRequester.bringIntoView()
-                    }
-                }
-            }
+			.fillMaxWidth()
+			.onFocusChanged { focusState ->
+				when {
+					focusState.hasFocus -> hasFocus = true
+					!focusState.isFocused -> hasFocus = false
+				}
+				onFocusChanged.invoke(focusState.hasFocus)
+			}
+			.background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
+			.bringIntoViewRequester(viewRequester)
+			.onFocusEvent {
+				if (it.isFocused) {
+					coroutineScope.launch {
+						delay(400)
+						viewRequester.bringIntoView()
+					}
+				}
+			}
 	) {
 		
 		Text(
@@ -208,8 +208,8 @@ fun EmailInputField(
 			style = CCTheme.typography.common_text_small_regular,
 			color = titleColorState,
 			modifier = Modifier
-                .padding(bottom = 8.dp)
-                .fillMaxWidth()
+				.padding(bottom = 8.dp)
+				.fillMaxWidth()
 		)
 		
 		MaterialTheme(
@@ -219,16 +219,16 @@ fun EmailInputField(
 				enabled = isEnable,
 				textStyle = if (hasError && inputText.isNotEmpty()) CCTheme.typography.common_text_regular_error else CCTheme.typography.common_text_regular,
 				modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(4.dp))
-                    .border(
-                        1.dp,
-                        errorBorderState,
-                        RoundedCornerShape(4.dp)
-                    )
-                    .clickable {
-                        if (!isEnable) onTextClicked?.invoke()
-                    },
+					.fillMaxWidth()
+					.clip(RoundedCornerShape(4.dp))
+					.border(
+						1.dp,
+						errorBorderState,
+						RoundedCornerShape(4.dp)
+					)
+					.clickable {
+						if (!isEnable) onTextClicked?.invoke()
+					},
 				singleLine = true,
 				value = if (isEnable) inputText else text,
 				onValueChange = {
@@ -243,12 +243,12 @@ fun EmailInputField(
 				decorationBox = { innerTextField ->
 					Row(
 						modifier = Modifier
-                            .background(
-                                if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
-                                RoundedCornerShape(4.dp)
-                            )
-                            .padding(vertical = 14.dp)
-                            .padding(start = 12.dp, end = 12.dp),
+							.background(
+								if (isReversed) CCTheme.colors.white else CCTheme.colors.lightGray,
+								RoundedCornerShape(4.dp)
+							)
+							.padding(vertical = 14.dp)
+							.padding(start = 12.dp, end = 12.dp),
 						verticalAlignment = Alignment.CenterVertically
 					) {
 						Box(
@@ -295,17 +295,17 @@ fun OtpCodeInputField(
 	if (text.isNotEmpty()) inputText = text
 	Column(
 		modifier = Modifier
-            .fillMaxWidth()
-            .background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
-            .bringIntoViewRequester(viewRequester)
-            .onFocusEvent {
-                if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(400)
-                        viewRequester.bringIntoView()
-                    }
-                }
-            }
+			.fillMaxWidth()
+			.background(if (isReversed) CCTheme.colors.lightGray else CCTheme.colors.white)
+			.bringIntoViewRequester(viewRequester)
+			.onFocusEvent {
+				if (it.isFocused) {
+					coroutineScope.launch {
+						delay(400)
+						viewRequester.bringIntoView()
+					}
+				}
+			}
 	) {
 		
 		Text(

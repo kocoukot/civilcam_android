@@ -1,4 +1,4 @@
-package com.civilcam.onboarding_feature.onboarding.content
+package com.civilcam.onboarding_feature.content
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

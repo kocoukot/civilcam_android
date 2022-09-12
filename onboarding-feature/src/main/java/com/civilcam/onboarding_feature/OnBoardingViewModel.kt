@@ -1,9 +1,9 @@
-package com.civilcam.onboarding_feature.onboarding
+package com.civilcam.onboarding_feature
 
 import androidx.lifecycle.ViewModel
 import com.civilcam.ext_features.live_data.SingleLiveEvent
-import com.civilcam.onboarding_feature.onboarding.model.OnboardingActions
-import com.civilcam.onboarding_feature.onboarding.model.OnboardingRoute
+import com.civilcam.onboarding_feature.model.OnboardingActions
+import com.civilcam.onboarding_feature.model.OnboardingRoute
 
 class OnBoardingViewModel : ViewModel() {
 

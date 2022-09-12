@@ -26,7 +26,7 @@ import com.civilcam.ext_features.Constant.ISSUE_DESCRIPTION_LIMIT
 import com.civilcam.ext_features.Constant.ISSUE_LIMIT
 import com.civilcam.ext_features.compose.elements.EmailInputField
 import com.civilcam.ext_features.compose.elements.PlaceholderText
-import com.civilcam.ext_features.isEmail
+import com.civilcam.ext_features.ext.isEmail
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.settings.model.ContactSupportSectionData
 

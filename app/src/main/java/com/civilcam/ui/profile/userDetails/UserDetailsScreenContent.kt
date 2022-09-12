@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.domainLayer.model.guard.GuardianStatus
-import com.civilcam.ext_features.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogTypes
 import com.civilcam.ext_features.compose.elements.AlertDialogComp
 import com.civilcam.ext_features.compose.elements.BackButton
 import com.civilcam.ext_features.compose.elements.DialogLoadingContent

@@ -16,9 +16,9 @@ import androidx.compose.ui.res.stringResource
 import com.civilcam.R
 import com.civilcam.domainLayer.ext.LocaleHelper
 import com.civilcam.domainLayer.ext.LocaleHelper.SetLanguageCompose
-import com.civilcam.ext_features.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogTypes
 import com.civilcam.ext_features.compose.elements.*
-import com.civilcam.ext_features.isEmail
+import com.civilcam.ext_features.ext.isEmail
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.settings.content.*
 import com.civilcam.ui.settings.model.SettingsActions

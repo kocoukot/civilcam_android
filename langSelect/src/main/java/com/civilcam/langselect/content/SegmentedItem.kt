@@ -1,4 +1,4 @@
-package com.civilcam.langselect.langSelect.content
+package com.civilcam.langselect.content
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateDpAsState

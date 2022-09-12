@@ -9,7 +9,7 @@ import com.civilcam.domainLayer.castSafe
 import com.civilcam.domainLayer.usecase.auth.GoogleSignInUseCase
 import com.civilcam.domainLayer.usecase.auth.SingUpUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
-import com.civilcam.ext_features.isEmail
+import com.civilcam.ext_features.ext.isEmail
 import com.civilcam.ui.auth.create.model.CreateAccountActions
 import com.civilcam.ui.auth.create.model.CreateAccountRoute
 import com.civilcam.ui.auth.create.model.CreateAccountState

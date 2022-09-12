@@ -6,8 +6,8 @@ import com.civilcam.alert_feature.map.LiveMapViewModel
 import com.civilcam.di.source.GlobalKoinInjector
 import com.civilcam.di.source.KoinInjector
 import com.civilcam.domainLayer.model.VerificationFlow
-import com.civilcam.langselect.langSelect.LanguageSelectViewModel
-import com.civilcam.onboarding_feature.onboarding.OnBoardingViewModel
+import com.civilcam.langselect.LanguageSelectViewModel
+import com.civilcam.onboarding_feature.OnBoardingViewModel
 import com.civilcam.ui.auth.create.CreateAccountViewModel
 import com.civilcam.ui.auth.login.LoginViewModel
 import com.civilcam.ui.auth.password.create.CreatePasswordViewModel
@@ -104,8 +104,8 @@ val networkRootModule = module {
 }
 
 val alertsRootModule = module {
-	
-	viewModel { AlertsListViewModel(get()) }
+
+	viewModel { AlertsListViewModel(get(), get()) }
 	
 	viewModel { AlertsHistoryViewModel(get()) }
 	

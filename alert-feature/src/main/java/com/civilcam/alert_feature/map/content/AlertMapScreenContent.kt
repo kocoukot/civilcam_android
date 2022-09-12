@@ -23,8 +23,8 @@ import com.civilcam.domainLayer.model.alerts.GuardianAlertInformation
 import com.civilcam.ext_features.compose.elements.IconActionButton
 import com.civilcam.ext_features.compose.elements.LocationData
 import com.civilcam.ext_features.compose.elements.LocationDetectButton
+import com.civilcam.ext_features.ext.toDp
 import com.civilcam.ext_features.theme.CCTheme
-import com.civilcam.ext_features.toDp
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory

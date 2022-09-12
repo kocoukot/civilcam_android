@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.domainLayer.model.SubscriptionType
-import com.civilcam.ext_features.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogTypes
 import com.civilcam.ext_features.compose.elements.AlertDialogComp
 import com.civilcam.ext_features.compose.elements.ComposeButton
 import com.civilcam.ext_features.compose.elements.DialogLoadingContent

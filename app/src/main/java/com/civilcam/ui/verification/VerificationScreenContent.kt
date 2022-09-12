@@ -26,9 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.domainLayer.model.VerificationFlow
-import com.civilcam.ext_features.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogTypes
 import com.civilcam.ext_features.compose.elements.*
-import com.civilcam.ext_features.formatToPhoneNumber
+import com.civilcam.ext_features.ext.formatToPhoneNumber
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.verification.model.VerificationActions
 
@@ -92,9 +92,9 @@ fun VerificationScreenContent(
 		) {
 			Column(
 				modifier = Modifier
-					.fillMaxWidth()
-					.padding(horizontal = 16.dp)
-					.weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .weight(1f)
 			) {
 				Spacer(modifier = Modifier.height(32.dp))
 
@@ -146,8 +146,8 @@ fun VerificationScreenContent(
 
 			Column(
 				modifier = Modifier
-					.fillMaxWidth()
-					.padding(horizontal = 16.dp),
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
 
@@ -171,10 +171,10 @@ fun VerificationScreenContent(
 							color = CCTheme.colors.primaryRed,
 							fontSize = 17.sp,
 							modifier = Modifier
-								.clickable {
-									viewModel.setInputActions(VerificationActions.ResendClick)
-								}
-								.background(Color.Transparent, RectangleShape),
+                                .clickable {
+                                    viewModel.setInputActions(VerificationActions.ResendClick)
+                                }
+                                .background(Color.Transparent, RectangleShape),
 							fontWeight = FontWeight.SemiBold,
 							textAlign = TextAlign.Center
 						)

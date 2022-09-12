@@ -6,17 +6,24 @@ import com.civilcam.alert_feature.list.model.AlertListRoute
 import com.civilcam.alert_feature.list.model.AlertListState
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.GetAlertsListUseCase
+import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AlertsListViewModel(
-    private val getAlertsListUseCase: GetAlertsListUseCase
+    private val getAlertsListUseCase: GetAlertsListUseCase,
+    getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
 ) : ComposeViewModel<AlertListState, AlertListRoute, AlertListActions>() {
 
     override var _state: MutableStateFlow<AlertListState> = MutableStateFlow(AlertListState())
 
+    init {
+        getLocalCurrentUserUseCase().let { user ->
+            _state.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
+        }
+    }
 
     private fun getAlertsList() {
         _state.update { it.copy(isLoading = true) }

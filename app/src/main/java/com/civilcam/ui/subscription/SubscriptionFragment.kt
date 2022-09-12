@@ -9,9 +9,9 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.R
-import com.civilcam.ext_features.hideSystemUI
+import com.civilcam.ext_features.ext.hideSystemUI
+import com.civilcam.ext_features.ext.showSystemUI
 import com.civilcam.ext_features.live_data.observeNonNull
-import com.civilcam.ext_features.showSystemUI
 import com.civilcam.ui.common.ext.navController
 import com.civilcam.ui.common.ext.requireArg
 import com.civilcam.ui.subscription.model.SubscriptionRoute

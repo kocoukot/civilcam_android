@@ -1,4 +1,4 @@
-package com.civilcam.langselect.langSelect
+package com.civilcam.langselect
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -13,9 +13,9 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.civilcam.ext_features.ext.registerForPermissionsResult
 import com.civilcam.ext_features.live_data.observeNonNull
-import com.civilcam.ext_features.registerForPermissionsResult
-import com.civilcam.langselect.langSelect.model.LangSelectRoute
+import com.civilcam.langselect.model.LangSelectRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -58,10 +58,10 @@ class LanguageSelectFragment : Fragment() {
     }
 
     private fun checkPermissions() {
-//        if (!permissionsDelegate.checkSelfPermissions()) {
-//            pendingAction = { checkPermissions() }
-//            permissionsDelegate.requestPermissions()
-//        }
+        if (!permissionsDelegate.checkSelfPermissions()) {
+            pendingAction = { checkPermissions() }
+            permissionsDelegate.requestPermissions()
+        }
     }
 
     override fun onStart() {

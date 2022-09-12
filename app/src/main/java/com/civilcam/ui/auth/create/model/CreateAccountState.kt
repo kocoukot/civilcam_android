@@ -1,7 +1,7 @@
 package com.civilcam.ui.auth.create.model
 
 import com.civilcam.ext_features.compose.ComposeFragmentState
-import com.civilcam.ext_features.isEmail
+import com.civilcam.ext_features.ext.isEmail
 
 data class CreateAccountState(
     val isLoading: Boolean = false,

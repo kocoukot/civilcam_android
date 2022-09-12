@@ -18,9 +18,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
-import com.civilcam.ext_features.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogTypes
 import com.civilcam.ext_features.compose.elements.*
-import com.civilcam.ext_features.formatToPhoneNumber
+import com.civilcam.ext_features.ext.formatToPhoneNumber
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.network.inviteByNumber.model.InviteByNumberActions
 

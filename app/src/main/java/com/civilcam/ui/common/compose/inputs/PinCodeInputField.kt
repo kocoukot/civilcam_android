@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
-import com.civilcam.ext_features.digits
+import com.civilcam.ext_features.ext.digits
 import com.civilcam.ext_features.theme.CCTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

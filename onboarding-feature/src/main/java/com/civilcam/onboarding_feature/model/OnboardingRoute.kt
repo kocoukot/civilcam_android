@@ -1,4 +1,4 @@
-package com.civilcam.onboarding_feature.onboarding.model
+package com.civilcam.onboarding_feature.model
 
 import com.civilcam.ext_features.compose.ComposeFragmentRoute
 

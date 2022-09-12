@@ -13,7 +13,7 @@ import com.civilcam.R
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.compose.elements.LocationData
 import com.civilcam.ext_features.compose.elements.LocationDetectButton
-import com.civilcam.ext_features.toDp
+import com.civilcam.ext_features.ext.toDp
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyUserModel
 import com.google.android.gms.maps.CameraUpdateFactory

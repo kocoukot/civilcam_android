@@ -12,9 +12,9 @@ import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.ext_features.SupportBottomBar
+import com.civilcam.ext_features.ext.setPan
+import com.civilcam.ext_features.ext.setResize
 import com.civilcam.ext_features.live_data.observeNonNull
-import com.civilcam.ext_features.setPan
-import com.civilcam.ext_features.setResize
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.common.ext.arg
 import com.civilcam.ui.common.ext.navController

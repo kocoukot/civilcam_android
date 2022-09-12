@@ -12,9 +12,9 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.alert_feature.map.model.LiveMapRoute
+import com.civilcam.ext_features.ext.navController
+import com.civilcam.ext_features.ext.registerForPermissionsResult
 import com.civilcam.ext_features.live_data.observeNonNull
-import com.civilcam.ext_features.navController
-import com.civilcam.ext_features.registerForPermissionsResult
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber

@@ -17,7 +17,7 @@ import com.civilcam.R
 import com.civilcam.domainLayer.model.user.CurrentUser
 import com.civilcam.ext_features.compose.elements.RowDivider
 import com.civilcam.ext_features.compose.elements.RowDividerGrayThree
-import com.civilcam.ext_features.formatPhoneNumber
+import com.civilcam.ext_features.ext.formatPhoneNumber
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.profile.userProfile.model.UserProfileActions
 import com.civilcam.ui.profile.userProfile.model.UserProfileType

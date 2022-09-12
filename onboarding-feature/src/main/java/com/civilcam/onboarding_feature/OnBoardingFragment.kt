@@ -1,4 +1,4 @@
-package com.civilcam.onboarding_feature.onboarding
+package com.civilcam.onboarding_feature
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,11 +8,11 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import com.civilcam.ext_features.hideSystemUI
+import com.civilcam.ext_features.ext.hideSystemUI
+import com.civilcam.ext_features.ext.navController
+import com.civilcam.ext_features.ext.showSystemUI
 import com.civilcam.ext_features.live_data.observeNonNull
-import com.civilcam.ext_features.navController
-import com.civilcam.ext_features.showSystemUI
-import com.civilcam.onboarding_feature.onboarding.model.OnboardingRoute
+import com.civilcam.onboarding_feature.model.OnboardingRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 

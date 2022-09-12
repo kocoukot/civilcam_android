@@ -1,7 +1,7 @@
 package com.civilcam.ui.auth.password.reset.model
 
 import com.civilcam.ext_features.compose.ComposeFragmentState
-import com.civilcam.ext_features.isEmail
+import com.civilcam.ext_features.ext.isEmail
 
 data class ResetState(
 	val errorText: String = "Invalid email. Please try again. (eg:email@gmail.com)",

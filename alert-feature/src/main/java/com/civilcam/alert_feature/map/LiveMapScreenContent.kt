@@ -21,8 +21,8 @@ import com.civilcam.alert_feature.map.content.AlertStreamScreenContent
 import com.civilcam.alert_feature.map.content.UserInformationContent
 import com.civilcam.alert_feature.map.model.LiveMapActions
 import com.civilcam.domainLayer.EmergencyScreen
-import com.civilcam.ext_features.AlertDialogTypes
 import com.civilcam.ext_features.Constant.ANIMATION_DURATION
+import com.civilcam.ext_features.alert.AlertDialogTypes
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
 

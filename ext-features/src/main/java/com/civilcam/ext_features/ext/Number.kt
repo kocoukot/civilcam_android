@@ -1,4 +1,4 @@
-package com.civilcam.ext_features
+package com.civilcam.ext_features.ext
 
 import android.content.res.Resources
 import java.util.concurrent.TimeUnit

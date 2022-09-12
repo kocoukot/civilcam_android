@@ -1,4 +1,4 @@
-package com.civilcam.ext_features
+package com.civilcam.ext_features.ext
 
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.civilcam.ext_features.R
 
 
 fun Fragment.showToast(text: String = "") {

@@ -1,4 +1,4 @@
-package com.civilcam.onboarding_feature.onboarding
+package com.civilcam.onboarding_feature
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,10 +13,9 @@ import com.civilcam.domainLayer.model.OnboardingPage
 import com.civilcam.ext_features.compose.elements.BackButton
 import com.civilcam.ext_features.compose.elements.ComposeButton
 import com.civilcam.ext_features.theme.CCTheme
-import com.civilcam.onboarding_feature.R
-import com.civilcam.onboarding_feature.onboarding.content.PageCardUI
-import com.civilcam.onboarding_feature.onboarding.content.PageUI
-import com.civilcam.onboarding_feature.onboarding.model.OnboardingActions
+import com.civilcam.onboarding_feature.content.PageCardUI
+import com.civilcam.onboarding_feature.content.PageUI
+import com.civilcam.onboarding_feature.model.OnboardingActions
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator

@@ -12,8 +12,8 @@ import com.civilcam.alert_feature.R
 import com.civilcam.alert_feature.list.model.AlertListRoute
 import com.civilcam.alert_feature.map.LiveMapFragment
 import com.civilcam.ext_features.SupportBottomBar
+import com.civilcam.ext_features.ext.navController
 import com.civilcam.ext_features.live_data.observeNonNull
-import com.civilcam.ext_features.navController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AlertsListFragment : Fragment(), SupportBottomBar {

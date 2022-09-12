@@ -5,7 +5,7 @@ import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.profile.ChangePhoneNumberUseCase
 import com.civilcam.domainLayer.usecase.user.ChangeEmailUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
-import com.civilcam.ext_features.isEmail
+import com.civilcam.ext_features.ext.isEmail
 import com.civilcam.ui.profile.credentials.model.ChangeCredentialsActions
 import com.civilcam.ui.profile.credentials.model.ChangeCredentialsRoute
 import com.civilcam.ui.profile.credentials.model.ChangeCredentialsState

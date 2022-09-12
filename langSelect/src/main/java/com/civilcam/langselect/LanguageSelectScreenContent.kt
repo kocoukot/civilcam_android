@@ -1,4 +1,4 @@
-package com.civilcam.langselect.langSelect
+package com.civilcam.langselect
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.Crossfade
@@ -21,9 +21,8 @@ import com.civilcam.domainLayer.ext.LocaleHelper
 import com.civilcam.domainLayer.model.user.LanguageType
 import com.civilcam.ext_features.compose.elements.ComposeButton
 import com.civilcam.ext_features.theme.CCTheme
-import com.civilcam.langselect.R
-import com.civilcam.langselect.langSelect.content.SegmentedItem
-import com.civilcam.langselect.langSelect.model.LangSelectActions
+import com.civilcam.langselect.content.SegmentedItem
+import com.civilcam.langselect.model.LangSelectActions
 import timber.log.Timber
 
 @Composable

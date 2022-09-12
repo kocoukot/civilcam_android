@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.alert_feature.R
 import com.civilcam.alert_feature.list.content.AlertHistoryRowSection
 import com.civilcam.alert_feature.list.model.AlertListActions
-import com.civilcam.ext_features.AlertDialogTypes
 import com.civilcam.ext_features.DateUtils
+import com.civilcam.ext_features.alert.AlertDialogTypes
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
 
@@ -51,8 +51,10 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                 TopAppBarContent(
                     title = stringResource(id = R.string.alerts_root_list_title),
                     navigationItem = {
-                        AvatarButton { //todo fix image pass
-                            viewModel.setInputActions(AlertListActions.ClickGoMyProfile)
+                        state.value.userAvatar?.imageUrl?.let { url ->
+                            AvatarButton(url) {
+                                viewModel.setInputActions(AlertListActions.ClickGoMyProfile)
+                            }
                         }
                     },
                     actionItem = {
