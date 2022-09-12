@@ -13,8 +13,8 @@ import com.civilcam.BuildConfig
 import com.civilcam.R
 import com.civilcam.common.ext.showAlertDialogFragment
 import com.civilcam.domainLayer.model.VerificationFlow
+import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.profile.setup.model.ProfileSetupRoute
 import com.civilcam.ui.verification.VerificationFragment

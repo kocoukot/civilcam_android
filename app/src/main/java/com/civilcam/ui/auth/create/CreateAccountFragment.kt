@@ -11,13 +11,13 @@ import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.common.ext.navigateByDirection
 import com.civilcam.common.ext.showLoadingFragment
-import com.civilcam.common.ext.showToast
 import com.civilcam.domainLayer.model.VerificationFlow
+import com.civilcam.ext_features.live_data.observeNonNull
+import com.civilcam.ext_features.showToast
 import com.civilcam.ui.auth.GoogleFragmentAuthHandler
 import com.civilcam.ui.auth.create.model.CreateAccountRoute
 import com.civilcam.ui.common.NavigationDirection
 import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.verification.VerificationFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber

@@ -16,10 +16,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.guard.GuardianItem
-import com.civilcam.ui.common.compose.CircleUserAvatar
-import com.civilcam.ui.common.compose.HeaderTitleText
+import com.civilcam.ext_features.compose.elements.CircleUserAvatar
+import com.civilcam.ext_features.compose.elements.HeaderTitleText
+import com.civilcam.ext_features.theme.CCTheme
 
 
 @Composable

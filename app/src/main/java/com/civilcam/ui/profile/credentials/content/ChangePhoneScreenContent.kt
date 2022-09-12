@@ -3,7 +3,7 @@ package com.civilcam.ui.profile.credentials.content
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import com.civilcam.ui.common.compose.inputs.PhoneInputField
+import com.civilcam.ext_features.compose.elements.PhoneInputField
 import kotlinx.coroutines.launch
 
 @Composable

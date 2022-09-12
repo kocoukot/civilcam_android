@@ -1,10 +1,10 @@
 package com.civilcam.ui.network.main.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentActions
 import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.model.guard.GuardianItem
 import com.civilcam.domainLayer.model.guard.NetworkType
 import com.civilcam.domainLayer.model.guard.PersonModel
+import com.civilcam.ext_features.compose.ComposeFragmentActions
 
 sealed class NetworkMainActions : ComposeFragmentActions {
     object ClickGoMyProfile : NetworkMainActions()

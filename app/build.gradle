@@ -153,7 +153,10 @@ dependencies {
     //Timber
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
-    api project(":app:arch")
     implementation project(path: ':domainLayer')
+    implementation project(path: ':langSelect')
+    implementation project(path: ':onboarding-feature')
+    implementation project(path: ':ext-features')
+    implementation project(path: ':alert-feature')
 
 }

@@ -1,7 +1,7 @@
 package com.civilcam.ui.verification.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentState
 import com.civilcam.domainLayer.model.VerificationFlow
+import com.civilcam.ext_features.compose.ComposeFragmentState
 
 data class VerificationState(
     val isLoading: Boolean = false,

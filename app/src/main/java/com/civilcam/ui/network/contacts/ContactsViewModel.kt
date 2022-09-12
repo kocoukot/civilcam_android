@@ -2,13 +2,13 @@ package com.civilcam.ui.network.contacts
 
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
-import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.common.ext.serviceCast
 import com.civilcam.data.local.ContactsStorage
 import com.civilcam.data.local.model.Contact
 import com.civilcam.data.local.model.PersonContactFilter
+import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.guardians.GetPhoneInvitesUseCase
 import com.civilcam.domainLayer.usecase.guardians.InviteByNumberUseCase
+import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.network.contacts.model.*
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,14 +1,14 @@
 package com.civilcam.ui.settings
 
 import androidx.lifecycle.viewModelScope
-import com.civilcam.common.ext.compose.ComposeViewModel
-import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.model.AuthType
-import com.civilcam.domainLayer.model.ScreenAlert
 import com.civilcam.domainLayer.model.user.LanguageType
 import com.civilcam.domainLayer.model.user.SettingsNotificationType
+import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.subscriptions.GetCurrentSubscriptionPlanUseCase
 import com.civilcam.domainLayer.usecase.user.*
+import com.civilcam.ext_features.ScreenAlert
+import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.settings.model.*
 import kotlinx.coroutines.flow.MutableStateFlow

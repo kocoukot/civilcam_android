@@ -26,8 +26,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.common.compose.PlaceholderText
+import com.civilcam.ext_features.compose.elements.PlaceholderText
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.settings.model.ChangePasswordSectionData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

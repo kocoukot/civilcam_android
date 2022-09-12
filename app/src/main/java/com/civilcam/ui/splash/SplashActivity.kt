@@ -7,9 +7,9 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.civilcam.databinding.ActivitySplashBinding
+import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.common.NavigationDirection
-import com.civilcam.ui.common.ext.observeNonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @SuppressLint("CustomSplashScreen")

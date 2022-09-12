@@ -9,13 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.user.CurrentUser
-import com.civilcam.ui.common.compose.inputs.InputField
+import com.civilcam.ext_features.DateUtils
+import com.civilcam.ext_features.compose.elements.InputField
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.profile.setup.content.CalendarIcon
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
 import com.civilcam.ui.profile.userProfile.model.UserProfileActions
-import com.civilcam.utils.DateUtils
 
 @Composable
 fun UserProfileEditContent(

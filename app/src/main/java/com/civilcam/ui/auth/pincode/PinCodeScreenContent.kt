@@ -17,15 +17,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
+import com.civilcam.ext_features.compose.elements.BackButton
+import com.civilcam.ext_features.compose.elements.DialogLoadingContent
+import com.civilcam.ext_features.compose.elements.RowDivider
+import com.civilcam.ext_features.compose.elements.TopAppBarContent
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.auth.pincode.content.PinCodeErrorBlock
 import com.civilcam.ui.auth.pincode.model.PinCodeActions
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
-import com.civilcam.ui.common.compose.BackButton
-import com.civilcam.ui.common.compose.RowDivider
-import com.civilcam.ui.common.compose.TopAppBarContent
 import com.civilcam.ui.common.compose.inputs.PinCodeInputField
-import com.civilcam.ui.common.loading.DialogLoadingContent
 
 @Composable
 fun PinCodeScreenContent(viewModel: PinCodeViewModel) {

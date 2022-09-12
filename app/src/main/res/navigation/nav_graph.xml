@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/languageSelectFragment"
-        android:name="com.civilcam.ui.langSelect.LanguageSelectFragment"
+        android:name="com.civilcam.langselect.langSelect.LanguageSelectFragment"
         android:label="LanguageSelectFragment">
         <action
             android:id="@+id/action_languageSelectFragment_to_onBoardingFragment"
@@ -14,8 +14,11 @@
     </fragment>
     <fragment
         android:id="@+id/onBoardingFragment"
-        android:name="com.civilcam.ui.onboarding.OnBoardingFragment"
-        android:label="OnBoardingFragment" />
+        android:name="com.civilcam.onboarding_feature.onboarding.OnBoardingFragment"
+        android:label="OnBoardingFragment">
+        <deepLink app:uri="@string/direction_onBoardingFragment" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/termsFragment"
@@ -38,17 +41,10 @@
         android:id="@+id/emergency_root"
         android:name="com.civilcam.ui.emergency.EmergencyFragment"
         android:label="EmergencyFragment" />
-    <fragment
-        android:id="@+id/alerts_root"
-        android:name="com.civilcam.ui.alerts.list.AlertsListFragment"
-        android:label="AlertsFragment">
-        <action
-            android:id="@+id/action_alerts_root_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/action_alerts_root_to_alertsHistoryFragment"
-            app:destination="@id/alertsHistoryFragment" />
-    </fragment>
+
+    <include
+        app:graph="@navigation/alerts_graph" />
+
     <fragment
         android:id="@+id/userDetailsFragment"
         android:name="com.civilcam.ui.profile.userDetails.UserDetailsFragment"
@@ -57,6 +53,7 @@
         android:id="@+id/settingsFragment"
         android:name="com.civilcam.ui.settings.SettingsFragment"
         android:label="SettingsFragment">
+        <deepLink app:uri="@string/direction_settingsFragment" />
 
         <action
             android:id="@+id/action_settingsFragment_to_languageSelectFragment"
@@ -64,11 +61,7 @@
             app:popUpTo="@id/settingsFragment"
             app:popUpToInclusive="true" />
     </fragment>
-    <fragment
-        android:id="@+id/alertsHistoryFragment"
-        android:name="com.civilcam.ui.alerts.history.AlertsHistoryFragment"
-        android:label="AlertsHistoryFragment">
-    </fragment>
+
 
     <fragment
         android:id="@+id/contactsFragment"
@@ -92,7 +85,9 @@
     <fragment
         android:id="@+id/createAccountFragment"
         android:name="com.civilcam.ui.auth.create.CreateAccountFragment"
-        android:label="CreateAccountFragment" />
+        android:label="CreateAccountFragment">
+        <deepLink app:uri="@string/direction_createAccountFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/verificationFragment"
@@ -136,15 +131,12 @@
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.civilcam.ui.profile.userProfile.UserProfileFragment"
-        android:label="UserProfileFragment" />
+        android:label="UserProfileFragment" >
+        <deepLink app:uri="@string/direction_userProfileFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/subscriptionFragment"
         android:name="com.civilcam.ui.subscription.SubscriptionFragment"
         android:label="SubscriptionFragment" />
-    <fragment
-        android:id="@+id/liveMapFragment"
-        android:name="com.civilcam.ui.alerts.map.LiveMapFragment"
-        android:label="LiveMapFragment" />
-
 </navigation>

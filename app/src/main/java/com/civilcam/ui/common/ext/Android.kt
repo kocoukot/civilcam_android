@@ -31,8 +31,9 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.viewbinding.ViewBinding
-import com.civilcam.common.ext.cast
-import com.civilcam.common.ext.toDp
+import com.civilcam.domainLayer.cast
+import com.civilcam.ext_features.live_data.observeNonNull
+import com.civilcam.ext_features.toDp
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.lang.ref.WeakReference
 import kotlin.properties.ReadOnlyProperty

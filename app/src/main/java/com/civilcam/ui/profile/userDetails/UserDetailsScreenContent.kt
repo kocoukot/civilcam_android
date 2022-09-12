@@ -14,12 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
-import com.civilcam.domainLayer.model.AlertDialogTypes
 import com.civilcam.domainLayer.model.guard.GuardianStatus
-import com.civilcam.ui.common.alert.AlertDialogComp
-import com.civilcam.ui.common.compose.BackButton
-import com.civilcam.ui.common.loading.DialogLoadingContent
+import com.civilcam.ext_features.AlertDialogTypes
+import com.civilcam.ext_features.compose.elements.AlertDialogComp
+import com.civilcam.ext_features.compose.elements.BackButton
+import com.civilcam.ext_features.compose.elements.DialogLoadingContent
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.profile.userDetails.content.UserDetailsSection
 import com.civilcam.ui.profile.userDetails.content.UserRequestSection
 import com.civilcam.ui.profile.userDetails.model.StopGuardAlertType

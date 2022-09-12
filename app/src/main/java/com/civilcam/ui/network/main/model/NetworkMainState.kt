@@ -1,8 +1,8 @@
 package com.civilcam.ui.network.main.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentState
 import com.civilcam.domainLayer.model.guard.NetworkType
 import com.civilcam.domainLayer.model.user.ImageInfo
+import com.civilcam.ext_features.compose.ComposeFragmentState
 
 data class NetworkMainState(
     var isLoading: Boolean = false,

@@ -1,7 +1,8 @@
 package com.civilcam.data.network.support
 
+import com.civilcam.CivilcamApplication.Companion.instance
+import com.civilcam.domainLayer.ext.LocaleHelper
 import com.civilcam.domainLayer.repos.AccountRepository
-import com.civilcam.utils.LocaleHelper
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -12,7 +13,7 @@ class UserLanguageInterceptor(
     override fun intercept(chain: Interceptor.Chain): Response {
         return chain.request()
             .newBuilder()
-            .addHeader(HEADER_LANGUAGE, LocaleHelper.getSelectedLanguage().langValue)
+            .addHeader(HEADER_LANGUAGE, LocaleHelper.getSelectedLanguage(instance).langValue)
             .addHeader(HEADER_DEVICE, "android")
             .addHeader(HEADER_SESSION_ID, accountRepository.deviceIdToken)
             .build()

@@ -16,17 +16,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.common.compose.BackButton
-import com.civilcam.ui.common.compose.DividerLightGray
-import com.civilcam.ui.common.compose.TopAppBarContent
-import com.civilcam.ui.common.loading.DialogLoadingContent
+import com.civilcam.domainLayer.EmergencyScreen
+import com.civilcam.ext_features.Constant.ANIMATION_DURATION
+import com.civilcam.ext_features.compose.elements.BackButton
+import com.civilcam.ext_features.compose.elements.DialogLoadingContent
+import com.civilcam.ext_features.compose.elements.DividerLightGray
+import com.civilcam.ext_features.compose.elements.TopAppBarContent
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.emergency.content.EmergencyButtonContent
 import com.civilcam.ui.emergency.content.EmergencyLiveContent
 import com.civilcam.ui.emergency.content.EmergencyMapContent
 import com.civilcam.ui.emergency.model.EmergencyActions
-import com.civilcam.ui.emergency.model.EmergencyScreen
-import com.civilcam.utils.Constant.ANIMATION_DURATION
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -55,7 +55,7 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
         animationSpec = tween(ANIMATION_DURATION)
     )
 
-    var screenModifier = Modifier.fillMaxSize()
+    val screenModifier = Modifier.fillMaxSize()
 
     if (state.isLoading) {
         DialogLoadingContent()

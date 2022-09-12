@@ -18,10 +18,10 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
 import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.domainLayer.model.guard.PersonModel
-import com.civilcam.ui.common.compose.*
+import com.civilcam.ext_features.compose.elements.*
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.network.main.model.NetworkMainActions
 import timber.log.Timber
 

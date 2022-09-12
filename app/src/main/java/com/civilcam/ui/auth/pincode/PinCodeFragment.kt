@@ -11,13 +11,13 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import com.civilcam.R
-import com.civilcam.common.ext.hideKeyboard
 import com.civilcam.common.ext.navigateToRoot
-import com.civilcam.common.ext.showKeyboard
+import com.civilcam.ext_features.hideKeyboard
+import com.civilcam.ext_features.live_data.observeNonNull
+import com.civilcam.ext_features.showKeyboard
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.auth.pincode.model.PinCodeRoute
 import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.common.ext.requireArg
 import com.civilcam.ui.network.main.NetworkMainFragment

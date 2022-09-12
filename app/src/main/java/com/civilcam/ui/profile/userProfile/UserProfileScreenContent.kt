@@ -18,14 +18,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
-import com.civilcam.domainLayer.model.AlertDialogTypes
 import com.civilcam.domainLayer.model.AutocompletePlace
-import com.civilcam.ui.common.alert.AlertDialogComp
-import com.civilcam.ui.common.compose.BackButton
-import com.civilcam.ui.common.compose.RowDivider
-import com.civilcam.ui.common.compose.TopAppBarContent
-import com.civilcam.ui.common.loading.DialogLoadingContent
+import com.civilcam.ext_features.AlertDialogTypes
+import com.civilcam.ext_features.compose.elements.*
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.profile.setup.content.DatePickerContent
 import com.civilcam.ui.profile.setup.content.LocationSelectContent
 import com.civilcam.ui.profile.userProfile.content.MainProfileContent

@@ -12,10 +12,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
+import com.civilcam.alert_feature.history.content.TabCell
+import com.civilcam.alert_feature.history.content.customTabIndicatorOffset
 import com.civilcam.domainLayer.model.guard.NetworkType
-import com.civilcam.ui.alerts.history.content.TabCell
-import com.civilcam.ui.alerts.history.content.customTabIndicatorOffset
+import com.civilcam.ext_features.theme.CCTheme
 
 
 @Composable

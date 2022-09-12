@@ -1,6 +1,6 @@
 package com.civilcam.ui.auth.password.create.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentState
+import com.civilcam.ext_features.compose.ComposeFragmentState
 
 data class CreatePasswordState(
 	val isLoading: Boolean = false,

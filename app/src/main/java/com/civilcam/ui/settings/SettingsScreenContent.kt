@@ -1,6 +1,7 @@
 package com.civilcam.ui.settings
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
@@ -10,32 +11,28 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.civilcam.R
-import com.civilcam.common.ext.isEmail
-import com.civilcam.common.theme.CCTheme
-import com.civilcam.domainLayer.model.AlertDialogTypes
-import com.civilcam.ui.common.alert.AlertDialogComp
-import com.civilcam.ui.common.compose.BackButton
-import com.civilcam.ui.common.compose.RowDivider
-import com.civilcam.ui.common.compose.TextActionButton
-import com.civilcam.ui.common.compose.TopAppBarContent
-import com.civilcam.ui.common.loading.DialogLoadingContent
+import com.civilcam.domainLayer.ext.LocaleHelper
+import com.civilcam.domainLayer.ext.LocaleHelper.SetLanguageCompose
+import com.civilcam.ext_features.AlertDialogTypes
+import com.civilcam.ext_features.compose.elements.*
+import com.civilcam.ext_features.isEmail
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.settings.content.*
 import com.civilcam.ui.settings.model.SettingsActions
 import com.civilcam.ui.settings.model.SettingsType
 import com.civilcam.ui.settings.model.SettingsType.Companion.hasActionButton
-import com.civilcam.utils.LocaleHelper
-import com.civilcam.utils.LocaleHelper.SetLanguageCompose
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SettingsScreenContent(viewModel: SettingsViewModel) {
 
 	val state = viewModel.state.collectAsState()
-
-	var currentLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
-	var selectedLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage()) }
+	val context = LocalContext.current
+	var currentLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage(context)) }
+	var selectedLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage(context)) }
 	var isActionActive by remember { mutableStateOf(false) }
 	SetLanguageCompose(selectedLanguage)
 
@@ -89,7 +86,7 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 									isEnabled = isActionEnabled,
 									actionTitle = stringResource(id = settingsType.actionBtnTitle)
 								) {
-									viewModel.setInputActions(setAction(settingsType))
+									viewModel.setInputActions(setAction(settingsType, context))
 								}
 							}
 						}
@@ -106,8 +103,8 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 				SettingsType.MAIN ->
 					MainSettingsContent {
 						viewModel.setInputActions(SettingsActions.ClickSection(it))
-						currentLanguage = LocaleHelper.getSelectedLanguage()
-						selectedLanguage = LocaleHelper.getSelectedLanguage()
+						currentLanguage = LocaleHelper.getSelectedLanguage(context)
+						selectedLanguage = LocaleHelper.getSelectedLanguage(context)
 						isActionActive = false
 					}
 
@@ -226,9 +223,13 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 	}
 }
 
-private fun setAction(settingsType: SettingsType): SettingsActions =
+private fun setAction(settingsType: SettingsType, context: Context): SettingsActions =
 	when (settingsType) {
-		SettingsType.LANGUAGE -> SettingsActions.ClickSaveLanguage(LocaleHelper.getSelectedLanguage())
+		SettingsType.LANGUAGE -> SettingsActions.ClickSaveLanguage(
+			LocaleHelper.getSelectedLanguage(
+				context
+			)
+		)
 		SettingsType.CONTACT_SUPPORT -> SettingsActions.ClickSendToSupport
 		SettingsType.CHANGE_PASSWORD -> SettingsActions.CheckCurrentPassword
 		SettingsType.CREATE_PASSWORD -> SettingsActions.SaveNewPassword

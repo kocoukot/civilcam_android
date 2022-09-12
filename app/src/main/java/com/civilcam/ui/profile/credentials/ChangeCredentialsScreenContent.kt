@@ -15,11 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.common.theme.CCTheme
-import com.civilcam.ui.common.compose.BackButton
-import com.civilcam.ui.common.compose.RowDivider
-import com.civilcam.ui.common.compose.TextActionButton
-import com.civilcam.ui.common.compose.TopAppBarContent
+import com.civilcam.ext_features.compose.elements.BackButton
+import com.civilcam.ext_features.compose.elements.RowDivider
+import com.civilcam.ext_features.compose.elements.TextActionButton
+import com.civilcam.ext_features.compose.elements.TopAppBarContent
+import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.profile.credentials.content.ChangeEmailScreenContent
 import com.civilcam.ui.profile.credentials.content.ChangePhoneScreenContent
 import com.civilcam.ui.profile.credentials.model.ChangeCredentialsActions

@@ -1,0 +1,18 @@
+package com.civilcam.alert_feature.list.model
+
+import com.civilcam.ext_features.compose.ComposeFragmentActions
+
+sealed class AlertListActions : ComposeFragmentActions {
+    object ClickGoMyProfile : AlertListActions()
+    object ClickGoSettings : AlertListActions()
+
+    data class ClickResolveAlert(val userId: Int) : AlertListActions()
+    data class ClickConfirmResolve(val result: Boolean) : AlertListActions()
+
+    data class ClickGoUserProfile(val userId: Int) : AlertListActions()
+
+    object ClickGoAlertsHistory : AlertListActions()
+
+    object ClickGetMockLis : AlertListActions()
+
+}

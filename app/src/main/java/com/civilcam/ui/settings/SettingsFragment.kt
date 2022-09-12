@@ -9,9 +9,9 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.common.ext.navigateToRoot
+import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.observeNonNull
 import com.civilcam.ui.settings.model.SettingsRoute
 import com.civilcam.ui.subscription.SubscriptionFragment
 import com.civilcam.ui.terms.TermsFragment

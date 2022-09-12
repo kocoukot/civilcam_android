@@ -1,6 +1,6 @@
 package com.civilcam.ui.auth.pincode.model
 
-import com.civilcam.common.ext.compose.ComposeFragmentState
+import com.civilcam.ext_features.compose.ComposeFragmentState
 
 data class PinCodeState(
 	val isLoading: Boolean = false,
