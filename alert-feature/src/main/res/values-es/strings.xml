@@ -17,4 +17,9 @@
     <string name="resolve_text">Resolve</string>
     <string name="resolve_alert_title">Resolve alert</string>
     <string name="resolve_alert_text">Are you sure that you want to resolve this alert?</string>
+
+    <string name="alert_user_detail_title">User in danger</string>
+    <string name="alert_user_detail_call">Call 911</string>
+
+    <string name="alert_user_detail_request_sent">Request sent %s</string>
 </resources>

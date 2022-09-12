@@ -1,7 +1,6 @@
-package com.civilcam.ui.emergency.model
+package com.civilcam.domainLayer
 
 import androidx.annotation.StringRes
-import com.civilcam.R
 
 enum class EmergencyScreen(@StringRes val title: Int = 0) {
     NORMAL(R.string.emergency_map_title),

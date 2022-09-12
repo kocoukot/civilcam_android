@@ -18,4 +18,10 @@
         android:id="@+id/alertsHistoryFragment"
         android:name="com.civilcam.alert_feature.history.AlertsHistoryFragment"
         android:label="AlertsHistoryFragment" />
+
+    <fragment
+        android:id="@+id/liveMapFragment"
+        android:name="com.civilcam.alert_feature.map.LiveMapFragment"
+        android:label="LiveMapFragment" />
+
 </navigation>

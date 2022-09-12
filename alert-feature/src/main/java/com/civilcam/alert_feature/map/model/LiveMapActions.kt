@@ -1,7 +1,7 @@
-package com.civilcam.ui.alerts.map.model
+package com.civilcam.alert_feature.map.model
 
+import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.compose.ComposeFragmentActions
-import com.civilcam.ui.emergency.model.EmergencyScreen
 
 sealed class LiveMapActions : ComposeFragmentActions {
     object ClickGoBack : LiveMapActions()

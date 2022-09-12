@@ -216,10 +216,8 @@
     <string name="emergency_live_stream_title">Live stream</string>
 
 
-    <string name="alert_user_detail_title">User in danger</string>
-    <string name="alert_user_detail_call">Call 911</string>
     <string name="resolve_text_caps">RESOLVE</string>
-    <string name="alert_user_detail_request_sent">Request sent %s</string>
+
 
     <string name="something_went_wrong">Something went wrong!</string>
     <string name="privacy_button">Privacy Policy</string>

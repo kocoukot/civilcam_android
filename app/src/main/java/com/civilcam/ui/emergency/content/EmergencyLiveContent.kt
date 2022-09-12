@@ -2,7 +2,6 @@ package com.civilcam.ui.emergency.content
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -11,18 +10,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
+import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.DateUtils.getFullDateAndTimeString
 import com.civilcam.ext_features.compose.elements.IconActionButton
+import com.civilcam.ext_features.compose.elements.LiveAnimation
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.emergency.EmergencyViewModel
 import com.civilcam.ui.emergency.model.EmergencyActions
-import com.civilcam.ui.emergency.model.EmergencyScreen
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
@@ -145,36 +142,3 @@ fun LiveBottomBar(
     }
 }
 
-@Composable
-fun LiveAnimation() {
-    val infiniteTransition = rememberInfiniteTransition()
-
-    val scale by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 0f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(500),
-            repeatMode = RepeatMode.Reverse
-        )
-    )
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = stringResource(id = R.string.emergency_live_title),
-            style = CCTheme.typography.common_medium_text_regular,
-            color = CCTheme.colors.white,
-            modifier = Modifier.padding(end = 4.dp),
-            fontSize = 13.sp,
-            fontWeight = FontWeight.W500
-        )
-
-
-        Box(
-            modifier = Modifier
-                .size(6.dp)
-                .scale(scale)
-                .background(CCTheme.colors.primaryRed, CircleShape),
-        )
-    }
-}

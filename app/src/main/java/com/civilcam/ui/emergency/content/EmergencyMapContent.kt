@@ -10,11 +10,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.civilcam.R
+import com.civilcam.domainLayer.EmergencyScreen
+import com.civilcam.ext_features.compose.elements.LocationData
+import com.civilcam.ext_features.compose.elements.LocationDetectButton
 import com.civilcam.ext_features.toDp
-import com.civilcam.ui.common.compose.LocationData
-import com.civilcam.ui.common.compose.LocationDetectButton
 import com.civilcam.ui.emergency.model.EmergencyActions
-import com.civilcam.ui.emergency.model.EmergencyScreen
 import com.civilcam.ui.emergency.model.EmergencyUserModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptor

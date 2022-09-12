@@ -1,4 +1,4 @@
-package com.civilcam.ui.alerts.map.content
+package com.civilcam.alert_feature.map.content
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,12 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.civilcam.R
+import com.civilcam.alert_feature.R
+import com.civilcam.alert_feature.map.model.LiveMapActions
 import com.civilcam.domainLayer.model.alerts.GuardianAlertInformation
 import com.civilcam.ext_features.compose.elements.CircleUserAvatar
 import com.civilcam.ext_features.compose.elements.IconActionButton
 import com.civilcam.ext_features.theme.CCTheme
-import com.civilcam.ui.alerts.map.model.LiveMapActions
 
 @Composable
 fun UserInformationContent(

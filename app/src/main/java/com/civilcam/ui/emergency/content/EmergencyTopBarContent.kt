@@ -14,11 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
+import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.compose.elements.AvatarButton
 import com.civilcam.ext_features.compose.elements.IconActionButton
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.emergency.model.EmergencyActions
-import com.civilcam.ui.emergency.model.EmergencyScreen
 
 
 @Composable

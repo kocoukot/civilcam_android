@@ -12,10 +12,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.civilcam.R
+import com.civilcam.ext_features.Constant.MINIMUM_AGE
 import com.civilcam.ext_features.compose.elements.TextActionButton
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.common.compose.ListItemPicker
-import com.civilcam.utils.Constant.MINIMUM_AGE
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.Month

@@ -1,4 +1,4 @@
-package com.civilcam.ui.alerts.map
+package com.civilcam.alert_feature.map
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -15,16 +15,16 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.civilcam.R
+import com.civilcam.alert_feature.R
+import com.civilcam.alert_feature.map.content.AlertMapScreenContent
+import com.civilcam.alert_feature.map.content.AlertStreamScreenContent
+import com.civilcam.alert_feature.map.content.UserInformationContent
+import com.civilcam.alert_feature.map.model.LiveMapActions
+import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.AlertDialogTypes
+import com.civilcam.ext_features.Constant.ANIMATION_DURATION
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
-import com.civilcam.ui.alerts.map.content.AlertMapScreenContent
-import com.civilcam.ui.alerts.map.content.AlertStreamScreenContent
-import com.civilcam.ui.alerts.map.content.UserInformationContent
-import com.civilcam.ui.alerts.map.model.LiveMapActions
-import com.civilcam.ui.emergency.model.EmergencyScreen
-import com.civilcam.utils.Constant.ANIMATION_DURATION
 
 @Composable
 fun LiveMapScreenContent(viewModel: LiveMapViewModel) {

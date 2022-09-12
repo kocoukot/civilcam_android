@@ -3,6 +3,7 @@ package com.civilcam.ui.emergency.model
 import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.TorchState
+import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.domainLayer.model.user.ImageInfo
 import com.civilcam.ext_features.compose.ComposeFragmentState
 

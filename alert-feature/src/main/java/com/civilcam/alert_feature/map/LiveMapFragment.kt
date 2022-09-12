@@ -1,4 +1,4 @@
-package com.civilcam.ui.alerts.map
+package com.civilcam.alert_feature.map
 
 import android.Manifest
 import android.content.Intent
@@ -11,10 +11,10 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import com.civilcam.alert_feature.map.model.LiveMapRoute
 import com.civilcam.ext_features.live_data.observeNonNull
-import com.civilcam.ui.alerts.map.model.LiveMapRoute
-import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.registerForPermissionsResult
+import com.civilcam.ext_features.navController
+import com.civilcam.ext_features.registerForPermissionsResult
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber

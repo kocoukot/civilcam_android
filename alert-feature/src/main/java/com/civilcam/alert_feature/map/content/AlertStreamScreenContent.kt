@@ -1,5 +1,9 @@
-package com.civilcam.ui.alerts.map.content
+package com.civilcam.alert_feature.map.content
 
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -11,16 +15,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.civilcam.R
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
+import com.civilcam.alert_feature.R
+import com.civilcam.alert_feature.map.model.LiveMapActions
+import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.DateUtils
 import com.civilcam.ext_features.compose.elements.IconActionButton
+import com.civilcam.ext_features.compose.elements.LiveAnimation
 import com.civilcam.ext_features.theme.CCTheme
-import com.civilcam.ui.alerts.map.model.LiveMapActions
-import com.civilcam.ui.emergency.content.EmergencyCameraPreview
-import com.civilcam.ui.emergency.content.LiveAnimation
-import com.civilcam.ui.emergency.model.EmergencyScreen
 import kotlinx.coroutines.delay
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
@@ -107,4 +114,50 @@ private fun LiveVideoBottomBar(
         }
 
     }
+}
+
+
+@Composable
+fun EmergencyCameraPreview(
+    modifier: Modifier = Modifier,
+    cameraState: Int
+) {
+    Crossfade(targetState = cameraState, modifier = modifier) { state ->
+        CreateCameraPreview(cameraState = state)
+    }
+}
+
+@Composable
+fun CreateCameraPreview(
+    cameraState: Int
+) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+    val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
+
+    AndroidView(
+        factory = { ctx ->
+            val previewView = PreviewView(ctx)
+            val executor = ContextCompat.getMainExecutor(ctx)
+            cameraProviderFuture.addListener({
+                val cameraProvider = cameraProviderFuture.get()
+                val preview = Preview.Builder().build().also {
+                    it.setSurfaceProvider(previewView.surfaceProvider)
+                }
+
+                val cameraSelector = CameraSelector.Builder()
+                    .requireLensFacing(cameraState)
+                    .build()
+
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(
+                    lifecycleOwner,
+                    cameraSelector,
+                    preview
+                )
+            }, executor)
+            previewView
+        },
+        modifier = Modifier.fillMaxSize(),
+    )
 }

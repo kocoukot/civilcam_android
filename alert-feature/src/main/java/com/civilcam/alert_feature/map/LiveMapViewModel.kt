@@ -1,15 +1,15 @@
-package com.civilcam.ui.alerts.map
+package com.civilcam.alert_feature.map
 
 import androidx.lifecycle.viewModelScope
+import com.civilcam.alert_feature.map.model.LiveMapActions
+import com.civilcam.alert_feature.map.model.LiveMapRoute
+import com.civilcam.alert_feature.map.model.LiveMapState
+import com.civilcam.alert_feature.map.model.UserAlertLocationData
+import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.usecase.alerts.GetMapAlertUserDataUseCase
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
-import com.civilcam.ui.alerts.map.model.LiveMapActions
-import com.civilcam.ui.alerts.map.model.LiveMapRoute
-import com.civilcam.ui.alerts.map.model.LiveMapState
-import com.civilcam.ui.alerts.map.model.UserAlertLocationData
-import com.civilcam.ui.emergency.model.EmergencyScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

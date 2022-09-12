@@ -139,9 +139,4 @@
         android:id="@+id/subscriptionFragment"
         android:name="com.civilcam.ui.subscription.SubscriptionFragment"
         android:label="SubscriptionFragment" />
-    <fragment
-        android:id="@+id/liveMapFragment"
-        android:name="com.civilcam.ui.alerts.map.LiveMapFragment"
-        android:label="LiveMapFragment" />
-
 </navigation>

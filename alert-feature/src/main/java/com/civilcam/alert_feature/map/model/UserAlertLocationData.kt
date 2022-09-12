@@ -1,4 +1,4 @@
-package com.civilcam.ui.alerts.map.model
+package com.civilcam.alert_feature.map.model
 
 import com.google.android.gms.maps.model.LatLng
 

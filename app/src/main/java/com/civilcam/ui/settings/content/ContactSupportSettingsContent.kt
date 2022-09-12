@@ -22,13 +22,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
+import com.civilcam.ext_features.Constant.ISSUE_DESCRIPTION_LIMIT
+import com.civilcam.ext_features.Constant.ISSUE_LIMIT
 import com.civilcam.ext_features.compose.elements.EmailInputField
 import com.civilcam.ext_features.compose.elements.PlaceholderText
 import com.civilcam.ext_features.isEmail
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.settings.model.ContactSupportSectionData
-import com.civilcam.utils.Constant.ISSUE_DESCRIPTION_LIMIT
-import com.civilcam.utils.Constant.ISSUE_LIMIT
 
 @Composable
 fun ContactSupportContent(

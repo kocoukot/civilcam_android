@@ -1,9 +1,9 @@
-package com.civilcam.ui.alerts.map.model
+package com.civilcam.alert_feature.map.model
 
 import androidx.camera.core.CameraSelector
+import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.domainLayer.model.alerts.GuardianAlertInformation
 import com.civilcam.ext_features.compose.ComposeFragmentState
-import com.civilcam.ui.emergency.model.EmergencyScreen
 
 data class LiveMapState(
     val isLoading: Boolean = false,

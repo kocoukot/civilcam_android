@@ -21,5 +21,7 @@
     <string name="yes_text_caps">YES</string>
     <string name="confirm_text_caps">CONFIRM</string>
     <string name="resolve_text_caps">RESOLVE</string>
-
+    <string name="emergency_live_title">Live</string>
+    <string name="emergency_map_title">Map</string>
+    <string name="emergency_live_stream_title">Live stream</string>
 </resources>

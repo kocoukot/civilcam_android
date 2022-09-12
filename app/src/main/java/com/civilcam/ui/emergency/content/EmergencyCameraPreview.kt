@@ -20,15 +20,7 @@ fun EmergencyCameraPreview(
 	cameraState: Int
 ) {
 	Crossfade(targetState = cameraState, modifier = modifier) { state ->
-		if (state == CameraSelector.LENS_FACING_BACK) {
-			CreateCameraPreview(
-				cameraState = cameraState
-			)
-		} else {
-			CreateCameraPreview(
-				cameraState = cameraState
-			)
-		}
+		CreateCameraPreview(cameraState = state)
 	}
 }
 
