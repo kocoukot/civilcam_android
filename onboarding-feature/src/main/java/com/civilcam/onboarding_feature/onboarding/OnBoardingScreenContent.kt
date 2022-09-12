@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.domainLayer.model.OnboardingPage
+import com.civilcam.ext_features.compose.elements.BackButton
 import com.civilcam.ext_features.compose.elements.ComposeButton
-import com.civilcam.ext_features.compose.elements.IconActionButton
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.onboarding_feature.R
 import com.civilcam.onboarding_feature.onboarding.content.PageCardUI
@@ -76,16 +76,12 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .padding(top = 24.dp, start = 16.dp)
+                    .padding(top = 28.dp, start = 12.dp)
             ) {
-                IconActionButton(
-                    buttonIcon = R.drawable.ic_back_navigation,
-                    tint = CCTheme.colors.white
-                ) {
+                BackButton(tint = CCTheme.colors.white) {
                     viewModel.setInputActions(OnboardingActions.ClickGoBack)
                 }
             }
-
         }
 
         Column(

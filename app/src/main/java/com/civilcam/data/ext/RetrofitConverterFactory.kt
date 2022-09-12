@@ -1,6 +1,6 @@
 package com.civilcam.data.ext
 
-import com.civilcam.common.ext.castSafe
+import com.civilcam.domainLayer.castSafe
 import com.google.gson.Gson
 import com.google.gson.JsonIOException
 import com.google.gson.TypeAdapter

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/alerts_graph"
+    app:startDestination="@id/alerts_root">
+
+
+    <fragment
+        android:id="@+id/alerts_root"
+        android:name="com.civilcam.alert_feature.list.AlertsListFragment"
+        android:label="AlertsFragment">
+        <action
+            android:id="@+id/action_alerts_root_to_alertsHistoryFragment"
+            app:destination="@id/alertsHistoryFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/alertsHistoryFragment"
+        android:name="com.civilcam.alert_feature.history.AlertsHistoryFragment"
+        android:label="AlertsHistoryFragment" />
+</navigation>

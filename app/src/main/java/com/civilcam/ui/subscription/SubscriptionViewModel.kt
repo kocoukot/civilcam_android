@@ -1,11 +1,11 @@
 package com.civilcam.ui.subscription
 
 import androidx.lifecycle.viewModelScope
-import com.civilcam.common.ext.castSafe
-import com.civilcam.ext_features.compose.ComposeViewModel
-import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.ServiceException
+import com.civilcam.domainLayer.castSafe
 import com.civilcam.domainLayer.model.SubscriptionType
 import com.civilcam.domainLayer.usecase.subscriptions.GetSubscriptionsUseCase
+import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ui.subscription.model.SubscriptionActions
 import com.civilcam.ui.subscription.model.SubscriptionRoute
 import com.civilcam.ui.subscription.model.SubscriptionState

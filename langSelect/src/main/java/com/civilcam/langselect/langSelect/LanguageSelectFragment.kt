@@ -39,9 +39,8 @@ class LanguageSelectFragment : Fragment() {
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
                 LangSelectRoute.ToOnBoarding -> {
-                    val uri = Uri.parse("civilcam://onBoardingFragment")
+                    val uri = Uri.parse(getString(com.civilcam.ext_features.R.string.direction_onBoardingFragment))
                     findNavController().navigate(uri)
-//                    findNavController().navigate(R.id.action_languageSelectFragment_to_onBoardingFragment)
                 }
             }
         }

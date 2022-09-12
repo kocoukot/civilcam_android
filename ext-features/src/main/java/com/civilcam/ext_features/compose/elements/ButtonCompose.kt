@@ -119,7 +119,11 @@ fun IconActionButton(
 
 
 @Composable
-fun BackButton(modifier: Modifier = Modifier, navigationAction: () -> Unit) {
+fun BackButton(
+    modifier: Modifier = Modifier,
+    tint: Color = CCTheme.colors.black,
+    navigationAction: () -> Unit
+) {
     IconButton(
         modifier = modifier,
         onClick = navigationAction
@@ -127,7 +131,7 @@ fun BackButton(modifier: Modifier = Modifier, navigationAction: () -> Unit) {
         Icon(
             painter = painterResource(id = R.drawable.ic_back_navigation),
             contentDescription = null,
-            tint = CCTheme.colors.black
+            tint = tint
         )
     }
 }

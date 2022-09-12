@@ -2,8 +2,8 @@ package com.civilcam.ui.verification
 
 import android.os.CountDownTimer
 import androidx.lifecycle.viewModelScope
-import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.model.VerificationFlow
+import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.auth.VerifyResetPasswordOtpUseCase
 import com.civilcam.domainLayer.usecase.verify.SendOtpCodeUseCase
 import com.civilcam.domainLayer.usecase.verify.VerifyEmailOtpUseCase

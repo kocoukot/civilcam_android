@@ -2,9 +2,9 @@ package com.civilcam.ui.profile.userProfile
 
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
-import com.civilcam.common.ext.castSafe
 import com.civilcam.data.local.MediaStorage
-import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.ServiceException
+import com.civilcam.domainLayer.castSafe
 import com.civilcam.domainLayer.model.AutocompletePlace
 import com.civilcam.domainLayer.model.SearchModel
 import com.civilcam.domainLayer.model.profile.UserSetupModel
@@ -15,11 +15,11 @@ import com.civilcam.domainLayer.usecase.places.GetPlacesAutocompleteUseCase
 import com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase
 import com.civilcam.domainLayer.usecase.profile.UpdateUserProfileUseCase
 import com.civilcam.domainLayer.usecase.user.GetCurrentUserUseCase
+import com.civilcam.ext_features.DateUtils
 import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
 import com.civilcam.ui.profile.userProfile.model.*
-import com.civilcam.utils.DateUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo

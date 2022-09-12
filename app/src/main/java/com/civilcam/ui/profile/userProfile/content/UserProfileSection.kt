@@ -28,13 +28,13 @@ import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
 import com.civilcam.R
 import com.civilcam.domainLayer.model.user.CurrentUser
+import com.civilcam.ext_features.DateUtils
 import com.civilcam.ext_features.compose.elements.BackButton
 import com.civilcam.ext_features.compose.elements.RowDivider
 import com.civilcam.ext_features.compose.elements.TextActionButton
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.profile.userProfile.model.UserProfileActions
 import com.civilcam.ui.profile.userProfile.model.UserProfileScreen
-import com.civilcam.utils.DateUtils
 import timber.log.Timber
 
 @OptIn(ExperimentalCoilApi::class)

@@ -17,13 +17,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.domainLayer.model.AlertDialogTypes
+import com.civilcam.ext_features.AlertDialogTypes
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.auth.create.SocialImage
 import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.login.model.LoginActions
-import com.civilcam.ui.common.alert.AlertDialogComp
 
 
 @Composable

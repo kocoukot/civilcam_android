@@ -1,9 +1,9 @@
 package com.civilcam.ui.auth.login
 
 import androidx.lifecycle.viewModelScope
-import com.civilcam.common.ext.castSafe
-import com.civilcam.data.network.support.ServerErrors
-import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.ServerErrors
+import com.civilcam.domainLayer.ServiceException
+import com.civilcam.domainLayer.castSafe
 import com.civilcam.domainLayer.usecase.auth.GoogleSignInUseCase
 import com.civilcam.domainLayer.usecase.auth.SignInUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel

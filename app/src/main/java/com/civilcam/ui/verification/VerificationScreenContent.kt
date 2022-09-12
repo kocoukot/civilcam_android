@@ -25,12 +25,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
-import com.civilcam.domainLayer.model.AlertDialogTypes
 import com.civilcam.domainLayer.model.VerificationFlow
+import com.civilcam.ext_features.AlertDialogTypes
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.formatToPhoneNumber
 import com.civilcam.ext_features.theme.CCTheme
-import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.verification.model.VerificationActions
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")

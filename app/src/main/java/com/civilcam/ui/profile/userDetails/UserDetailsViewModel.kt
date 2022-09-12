@@ -1,9 +1,9 @@
 package com.civilcam.ui.profile.userDetails
 
-import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.domainLayer.model.guard.PersonModel
+import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.GetUserDetailUseCase
 import com.civilcam.domainLayer.usecase.guardians.AskToGuardUseCase
 import com.civilcam.domainLayer.usecase.guardians.DeleteGuardianUseCase

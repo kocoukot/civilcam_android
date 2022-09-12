@@ -27,7 +27,7 @@ class OnBoardingFragment : Fragment() {
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
                 OnboardingRoute.GoBack -> navController.popBackStack()
-                OnboardingRoute.ToCreateAccount -> navController.navigate("civilcam://createAccountFragment".toUri())
+                OnboardingRoute.ToCreateAccount -> navController.navigate(getString(com.civilcam.ext_features.R.string.direction_createAccountFragment).toUri())
             }
         }
 

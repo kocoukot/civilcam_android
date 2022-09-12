@@ -6,19 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
-import com.civilcam.common.ext.castSafe
 import com.civilcam.common.ext.navigateByDirection
 import com.civilcam.databinding.ActivityMainBinding
-import com.civilcam.service.notifications.NotificationHelper
+import com.civilcam.domainLayer.castSafe
+import com.civilcam.ext_features.SupportBottomBar
 import com.civilcam.service.notifications.NotificationRequestButtonListener.Companion.ARG_MAP_ALERT_ID
 import com.civilcam.ui.common.NavigationDirection
-import com.civilcam.ui.common.SupportBottomBar
 import com.civilcam.ui.common.ext.setupWithNavController
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 
@@ -78,32 +73,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    fun hideNotificationBtn() {
-        binding.showNotification.isVisible = false
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.showNotification.apply {
-            setOnClickListener {
-                lifecycleScope.launch {
-                    withContext(Dispatchers.IO) {
-                        NotificationHelper().showRequestNotification(this@MainActivity)
-                    }
-                }
-            }
-
-            setOnLongClickListener {
-                lifecycleScope.launch {
-                    withContext(Dispatchers.IO) {
-                        NotificationHelper().showAlertNotification(this@MainActivity)
-                    }
-                }
-                true
-            }
-        }
-    }
 
     companion object {
         const val FROM_NOTIFICATION = "fromNotification"

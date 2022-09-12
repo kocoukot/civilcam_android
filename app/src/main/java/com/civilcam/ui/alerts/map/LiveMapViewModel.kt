@@ -1,7 +1,7 @@
 package com.civilcam.ui.alerts.map
 
 import androidx.lifecycle.viewModelScope
-import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.usecase.alerts.GetMapAlertUserDataUseCase
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel

@@ -7,7 +7,7 @@ import com.civilcam.data.network.service.AuthService
 import com.civilcam.data.network.service.GoogleOAuthService
 import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
-import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.model.user.CurrentUser
 import com.civilcam.domainLayer.repos.AuthRepository
 import timber.log.Timber

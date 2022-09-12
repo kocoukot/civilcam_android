@@ -16,17 +16,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.domainLayer.model.AlertDialogTypes
-import com.civilcam.ext_features.compose.elements.BackButton
-import com.civilcam.ext_features.compose.elements.ComposeButton
-import com.civilcam.ext_features.compose.elements.TextActionButton
-import com.civilcam.ext_features.compose.elements.TopAppBarContent
+import com.civilcam.ext_features.AlertDialogTypes
+import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.alerts.map.content.AlertMapScreenContent
 import com.civilcam.ui.alerts.map.content.AlertStreamScreenContent
 import com.civilcam.ui.alerts.map.content.UserInformationContent
 import com.civilcam.ui.alerts.map.model.LiveMapActions
-import com.civilcam.ui.common.alert.AlertDialogComp
 import com.civilcam.ui.emergency.model.EmergencyScreen
 import com.civilcam.utils.Constant.ANIMATION_DURATION
 
@@ -58,8 +54,8 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
 
     if (state.isResolveAlertVisible) {
         AlertDialogComp(
-            dialogTitle = stringResource(id = R.string.resolve_alert_title),
-            dialogText = stringResource(id = R.string.resolve_alert_text),
+            dialogTitle = stringResource(id = com.civilcam.alert_feature.R.string.resolve_alert_title),
+            dialogText = stringResource(id = com.civilcam.alert_feature.R.string.resolve_alert_text),
             alertType = AlertDialogTypes.CANCEL_RESOLVE,
             onOptionSelected = {
                 viewModel.setInputActions(LiveMapActions.ClickResolveAlertAnswer(it))
@@ -78,7 +74,7 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                 },
                 actionItem = {
                     TextActionButton(
-                        actionTitle = stringResource(id = R.string.resolve_text),
+                        actionTitle = stringResource(id = com.civilcam.alert_feature.R.string.resolve_text),
                         modifier = Modifier,
                         isEnabled = !state.isResolved,
                         actionAction = {

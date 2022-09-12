@@ -1,7 +1,7 @@
 package com.civilcam.ui.auth.password.create
 
 import androidx.lifecycle.viewModelScope
-import com.civilcam.common.ext.serviceCast
+import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.auth.RecoverPasswordUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ui.auth.create.model.PasswordInputDataType

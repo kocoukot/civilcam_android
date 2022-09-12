@@ -157,5 +157,6 @@ dependencies {
     implementation project(path: ':langSelect')
     implementation project(path: ':onboarding-feature')
     implementation project(path: ':ext-features')
+    implementation project(path: ':alert-feature')
 
 }

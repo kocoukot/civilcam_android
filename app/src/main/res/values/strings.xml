@@ -1,9 +1,7 @@
 <resources>
     <string name="app_name">CivilCam</string>
 
-
     <string name="continue_text">Continue</string>
-    <string name="get_start_text">Get started</string>
     <string name="back_text">Back</string>
     <string name="and_text">and</string>
     <string name="save_text">Save</string>
@@ -26,15 +24,6 @@
 
     <string name="phone_number_text">Phone number</string>
     <string name="phone_number_placeholder">(123) 456 7890</string>
-
-
-    <string name="onboarding_page_one_title">Safety network</string>
-    <string name="onboarding_page_one_text">If you are worried about someone, become his guardian and be sure that if something happens - you can always help</string>
-    <string name="onboarding_page_two_title">Emergency situations</string>
-    <string name="onboarding_page_two_text">Wherever and whenever your loved ones need help, you’ll be able to know their location and how to help them.</string>
-    <string name="onboarding_page_three_title">Stay safe</string>
-    <string name="onboarding_page_three_text">It\'s never too safe, take care of yourself and your loved ones with CivilCam\n</string>
-
 
     <string name="terms_conditions_title"><![CDATA[Terms & Conditions]]>\nand Privacy Policy</string>
     <string name="terms_conditions_subtitle">It\'s never too safe, take care of yourself and your loved ones with CivilCam\n</string>
@@ -76,21 +65,6 @@
     <string name="user_details_alert_remove_guard">This person will no longer receive your alerts.</string>
     <string name="user_details_alert_stop_guarding">You will no longer receive alerts from this user</string>
 
-
-    <string name="alerts_root_list_title">Alerts</string>
-    <string name="alerts_history_title">Alerts history</string>
-    <string name="resolve_text">Resolve</string>
-
-    <string name="alerts_list_empty_state">No alerts</string>
-    <string name="alerts_list_received_empty_state">Your haven’t received alerts yet</string>
-    <string name="alerts_list_sent_empty_state">Your haven’t sent alerts yet</string>
-
-    <string name="resolve_alert_title">Resolve alert</string>
-    <string name="resolve_alert_text">Are you sure that you want to resolve this alert?</string>
-
-    <string name="alerts_history_received_tab">Received</string>
-    <string name="alerts_history_sent_tab">Sent</string>
-    <string name="alerts_history_sent_alert">You sent an emergency alert</string>
     <string name="create_account">Create account</string>
     <string name="create_account_email_label">Email</string>
     <string name="create_account_email_placeholder">Your email</string>
@@ -236,8 +210,7 @@
     <string name="emergency_map_title">Map</string>
     <string name="emergency_live_stream_title">Live stream</string>
 
-    <string name="history_detail_title">Alert details</string>
-    <string name="history_detail_download_video">Download video</string>
+
 
     <string name="alert_user_detail_title">User in danger</string>
     <string name="alert_user_detail_call">Call 911</string>

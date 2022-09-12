@@ -1,6 +1,8 @@
 package com.civilcam.data.network.support
 
 import com.civilcam.common.ext.isMobileOnline
+import com.civilcam.domainLayer.ServerErrors
+import com.civilcam.domainLayer.ServiceException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject

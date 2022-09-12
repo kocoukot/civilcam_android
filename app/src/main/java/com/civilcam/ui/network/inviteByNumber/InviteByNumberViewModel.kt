@@ -1,8 +1,8 @@
 package com.civilcam.ui.network.inviteByNumber
 
 import androidx.lifecycle.viewModelScope
-import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.model.guard.GuardianStatus
+import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.guardians.GetPhoneInvitesUseCase
 import com.civilcam.domainLayer.usecase.guardians.InviteByNumberUseCase
 import com.civilcam.ext_features.clearPhone

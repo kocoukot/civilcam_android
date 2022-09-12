@@ -1,7 +1,7 @@
 package com.civilcam.ui.profile.credentials
 
 import androidx.lifecycle.viewModelScope
-import com.civilcam.common.ext.serviceCast
+import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.profile.ChangePhoneNumberUseCase
 import com.civilcam.domainLayer.usecase.user.ChangeEmailUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel

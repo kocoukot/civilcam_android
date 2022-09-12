@@ -1,6 +1,6 @@
 package com.civilcam.ui.settings.model
 
-import com.civilcam.domainLayer.model.ScreenAlert
+import com.civilcam.ext_features.ScreenAlert
 import com.civilcam.ext_features.compose.ComposeFragmentState
 
 data class SettingsState(

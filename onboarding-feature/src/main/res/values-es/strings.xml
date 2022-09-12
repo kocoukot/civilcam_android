@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding_page_one_title">Safety network</string>
+    <string name="onboarding_page_one_text">If you are worried about someone, become his guardian and be sure that if something happens - you can always help</string>
+    <string name="onboarding_page_two_title">Emergency situations</string>
+    <string name="onboarding_page_two_text">Wherever and whenever your loved ones need help, you’ll be able to know their location and how to help them.</string>
+    <string name="onboarding_page_three_title">Stay safe</string>
+    <string name="onboarding_page_three_text">It\'s never too safe, take care of yourself and your loved ones with CivilCam\n</string>
+    <string name="get_start_text">Empezar</string>
+
+</resources>

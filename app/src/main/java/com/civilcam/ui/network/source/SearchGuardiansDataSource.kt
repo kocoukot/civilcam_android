@@ -2,7 +2,7 @@ package com.civilcam.ui.network.source
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.civilcam.data.network.support.ServiceException
+import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.model.PaginationRequest
 import com.civilcam.domainLayer.model.guard.PersonModel
 import com.civilcam.domainLayer.repos.GuardiansRepository

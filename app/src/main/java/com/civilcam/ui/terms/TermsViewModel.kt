@@ -1,8 +1,8 @@
 package com.civilcam.ui.terms
 
 import androidx.lifecycle.viewModelScope
-import com.civilcam.common.ext.serviceCast
 import com.civilcam.domainLayer.model.docs.TermsType
+import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.docs.GetTermsLinksUseCase
 import com.civilcam.domainLayer.usecase.user.AcceptLegalDocsUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel

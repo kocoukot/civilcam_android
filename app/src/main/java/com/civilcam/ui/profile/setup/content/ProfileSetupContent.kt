@@ -12,13 +12,13 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.domainLayer.model.PictureModel
 import com.civilcam.domainLayer.model.profile.UserSetupModel
+import com.civilcam.ext_features.DateUtils.dateOfBirthFormat
 import com.civilcam.ext_features.compose.elements.ComposeButton
 import com.civilcam.ext_features.compose.elements.InputField
 import com.civilcam.ext_features.compose.elements.PhoneInputField
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.profile.setup.model.ProfileSetupActions
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
-import com.civilcam.utils.DateUtils.dateOfBirthFormat
 import kotlinx.coroutines.launch
 import timber.log.Timber
 

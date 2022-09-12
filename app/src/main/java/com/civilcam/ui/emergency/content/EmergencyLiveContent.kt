@@ -17,12 +17,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
+import com.civilcam.ext_features.DateUtils.getFullDateAndTimeString
 import com.civilcam.ext_features.compose.elements.IconActionButton
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.emergency.EmergencyViewModel
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyScreen
-import com.civilcam.utils.DateUtils.getFullDateAndTimeString
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 

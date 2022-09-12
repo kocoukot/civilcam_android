@@ -7,11 +7,11 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.civilcam.common.ext.serviceCast
-import com.civilcam.data.network.support.ServiceException
 import com.civilcam.di.source.KoinInjector
+import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.model.guard.*
+import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.guardians.AskToGuardUseCase
 import com.civilcam.domainLayer.usecase.guardians.GetNetworkRequestsUseCase
 import com.civilcam.domainLayer.usecase.guardians.GetUserNetworkUseCase
