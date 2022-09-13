@@ -17,9 +17,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
+import com.civilcam.domainLayer.model.profile.PasswordInputDataType
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
-import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.password.reset.model.ResetActions
 import timber.log.Timber
 

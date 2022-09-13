@@ -6,6 +6,7 @@ import com.civilcam.R
 import com.civilcam.domainLayer.ServerErrors
 import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.castSafe
+import com.civilcam.domainLayer.model.profile.PasswordInputDataType
 import com.civilcam.domainLayer.usecase.auth.GoogleSignInUseCase
 import com.civilcam.domainLayer.usecase.auth.SingUpUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
@@ -13,7 +14,6 @@ import com.civilcam.ext_features.ext.isEmail
 import com.civilcam.ui.auth.create.model.CreateAccountActions
 import com.civilcam.ui.auth.create.model.CreateAccountRoute
 import com.civilcam.ui.auth.create.model.CreateAccountState
-import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
