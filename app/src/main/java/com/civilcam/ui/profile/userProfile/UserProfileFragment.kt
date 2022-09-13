@@ -1,11 +1,13 @@
 package com.civilcam.ui.profile.userProfile
 
 import android.Manifest
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
@@ -15,6 +17,9 @@ import com.civilcam.R
 import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.common.ext.showAlertDialogFragment
 import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.ext.hideSystemUI
+import com.civilcam.ext_features.ext.showSystemUI
+import com.civilcam.ext_features.hideKeyboard
 import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
@@ -128,6 +133,11 @@ class UserProfileFragment : Fragment() {
 		} else {
 			showAlertDialogFragment(title = "Sorry, we need permission!")
 		}
+	}
+	
+	override fun onResume() {
+		super.onResume()
+		
 	}
 
 	private fun showAlert(text: String) {
