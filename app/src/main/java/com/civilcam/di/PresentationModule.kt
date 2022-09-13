@@ -24,7 +24,6 @@ import com.civilcam.ui.profile.setup.ProfileSetupViewModel
 import com.civilcam.ui.profile.userDetails.UserDetailsViewModel
 import com.civilcam.ui.profile.userProfile.UserProfileViewModel
 import com.civilcam.ui.profile.userProfile.model.UserProfileType
-import com.civilcam.ui.settings.SettingsViewModel
 import com.civilcam.ui.splash.SplashViewModel
 import com.civilcam.ui.subscription.SubscriptionViewModel
 import com.civilcam.ui.terms.TermsViewModel
@@ -115,7 +114,7 @@ val alertsRootModule = module {
 val profileModule = module {
 	
 	viewModel {
-		SettingsViewModel(
+		com.civilcam.settings_feature.SettingsViewModel(
 			get(),
 			get(),
 			get(),

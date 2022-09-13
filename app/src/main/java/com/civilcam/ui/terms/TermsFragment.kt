@@ -30,6 +30,7 @@ class TermsFragment : Fragment() {
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
+		arguments
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
 				TermsRoute.GoBack -> navController.popBackStack()

@@ -1,7 +1,7 @@
 package com.civilcam.ui.auth.password.create.model
 
+import com.civilcam.domainLayer.model.profile.PasswordInputDataType
 import com.civilcam.ext_features.compose.ComposeFragmentActions
-import com.civilcam.ui.auth.create.model.PasswordInputDataType
 
 sealed class CreatePasswordActions : ComposeFragmentActions {
 	object ClickGoBack : CreatePasswordActions()

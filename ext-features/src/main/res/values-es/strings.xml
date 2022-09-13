@@ -25,4 +25,11 @@
     <string name="pincode_changed_alert_text">Your pin-code has been successfully changed. Please remember it.</string>
     <string name="emergency_live_title">Live</string>
 
+    <string name="password_should_contain">Password should contain:</string>
+    <string name="password_should_contain_number">• 1 number</string>
+    <string name="password_should_contain_letter">• 1 capital letter</string>
+    <string name="password_should_contain_lowercase">• 1 lowercase letter</string>
+    <string name="password_should_contain_char">• 8 characters</string>
+    <string name="password_should_contain_special_char">• 1 special character</string>
+
 </resources>

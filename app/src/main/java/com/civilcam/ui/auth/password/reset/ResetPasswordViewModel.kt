@@ -1,11 +1,11 @@
 package com.civilcam.ui.auth.password.reset
 
 import androidx.lifecycle.viewModelScope
+import com.civilcam.domainLayer.model.profile.PasswordInputDataType
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.auth.ResetPasswordUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ext_features.ext.isEmail
-import com.civilcam.ui.auth.create.model.PasswordInputDataType
 import com.civilcam.ui.auth.password.reset.model.ResetActions
 import com.civilcam.ui.auth.password.reset.model.ResetRoute
 import com.civilcam.ui.auth.password.reset.model.ResetState

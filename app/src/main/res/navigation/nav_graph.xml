@@ -3,11 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
     app:startDestination="@id/languageSelectFragment">
+    <deepLink app:uri="@string/direction_startScreen" />
 
     <fragment
         android:id="@+id/languageSelectFragment"
         android:name="com.civilcam.langselect.LanguageSelectFragment"
         android:label="LanguageSelectFragment">
+        <deepLink app:uri="@string/direction_languageSelectFragment" />
         <action
             android:id="@+id/action_languageSelectFragment_to_onBoardingFragment"
             app:destination="@id/onBoardingFragment" />
@@ -24,6 +26,12 @@
         android:id="@+id/termsFragment"
         android:name="com.civilcam.ui.terms.TermsFragment"
         android:label="TermsFragment">
+        <argument
+            android:name="is_settings"
+            android:defaultValue="true"
+            app:argType="boolean" />
+        <deepLink app:uri="civilcam://termsFragment/{is_settings}" />
+
         <action
             android:id="@+id/action_termsFragment_to_webViewFragment"
             app:destination="@id/webViewFragment" />
@@ -51,7 +59,7 @@
         android:label="UserDetailsFragment" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.civilcam.ui.settings.SettingsFragment"
+        android:name="com.civilcam.settings_feature.SettingsFragment"
         android:label="SettingsFragment">
         <deepLink app:uri="@string/direction_settingsFragment" />
 
@@ -138,5 +146,12 @@
     <fragment
         android:id="@+id/subscriptionFragment"
         android:name="com.civilcam.ui.subscription.SubscriptionFragment"
-        android:label="SubscriptionFragment" />
+        android:label="SubscriptionFragment">
+        <argument
+            android:name="subscription_flow"
+            android:defaultValue="true"
+            app:argType="boolean" />
+        <deepLink app:uri="civilcam://subscriptionFragment/{subscription_flow}" />
+
+    </fragment>
 </navigation>

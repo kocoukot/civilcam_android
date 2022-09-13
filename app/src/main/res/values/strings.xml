@@ -76,11 +76,7 @@
     <string name="hide">Hide</string>
     <string name="confirm_password">Confirm password</string>
     <string name="re_enter_password">Re-enter password</string>
-    <string name="password_should_contain">Password should contain:</string>
-    <string name="password_should_contain_number">• 1 number</string>
-    <string name="password_should_contain_letter">• 1 capital letter</string>
-    <string name="password_should_contain_lowercase">• 1 lowercase letter</string>
-    <string name="password_should_contain_char">• 8 characters</string>
+
     <string name="verification_code">Verification code</string>
     <string name="verification_code_placeholder">000 000</string>
     <string name="email_verification">Email verification</string>
@@ -118,41 +114,6 @@
     <string name="network_main_safe">Safe</string>
     <string name="pin_code_confirm_title">Confirm your pin-code</string>
     <string name="pin_code_create_title">Create your pin-code</string>
-    <string name="password_should_contain_special_char">• 1 special character</string>
-
-    <string name="settings_title">Settings</string>
-
-    <string name="settings_alerts">Alerts</string>
-    <string name="settings_subscription">Subscription</string>
-    <string name="settings_change_password">Change password</string>
-    <string name="settings_language">Language</string>
-    <string name="settings_contact_support">Contact support</string>
-    <string name="settings_terms"><![CDATA[Terms & Conditions]]> and Privacy Policy</string>
-    <string name="settings_log_out">Log out</string>
-    <string name="settings_delete_account">Delete account</string>
-
-    <string name="settings_alerts_sms">SMS notifications</string>
-    <string name="settings_alerts_email">Email notifications</string>
-
-    <string name="settings_delete_account_alert_title">Delete account</string>
-    <string name="settings_delete_account_alert_text">Are you sure you want to delete your account?</string>
-
-    <string name="settings_log_out_alert_title">Log out</string>
-    <string name="settings_log_out_alert_text">Are you sure you want to log out from your account?</string>
-
-    <string name="settings_contact_issue_title">Issue</string>
-    <string name="settings_contact_issue_enter">Enter issue</string>
-    <string name="settings_contact_issue_description">Enter an issue description</string>
-    <string name="settings_contact_reply_title">The reply will be sent to:</string>
-    <string name="settings_contact_reply_placeholder">example@mail.net</string>
-    <string name="settings_contact_error_text">Invalid email. Please try again. (eg:email@gmail.com)</string>
-
-    <string name="settings_password_title">Password</string>
-    <string name="settings_password_label">Current password</string>
-    <string name="settings_password_placeholder">Enter your current password</string>
-    <string name="settings_password_error_text">The password is incorrect. Please try one more time</string>
-
-    <string name="settings_create_passoword_title">Create password</string>
 
     <string name="emergency_screen_sos">SOS</string>
     <string name="emergency_screen_safe">I’m safe</string>
@@ -179,8 +140,6 @@
     <string name="pin_code_is_incorrect_title">Pin-code is incorrect</string>
     <string name="pin_code_new_no_match_title">Pin-codes don’t match</string>
 
-    <string name="manage_subscription_plan">Manage subscription plan</string>
-    <string name="restore_purchase">Restore purchase</string>
     <string name="start_text">Start!</string>
     <string name="subscription_options_title">Subscription options</string>
     <string name="subscription_no_commitment_title">No commitment. Cancel anytime.</string>
