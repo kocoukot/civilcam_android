@@ -10,6 +10,7 @@ object Endpoint {
         const val VERIFY_RESET_PASSWORD_OTP = "verify-reset-password-otp"
         const val RECOVER_PASSWORD = "recover-password"
         const val GOOGLE_SIGN_IN = "google-sign-in"
+        const val FACEBOOK_SIGN_IN = "facebook-sign-in"
     }
 
     object Verification {

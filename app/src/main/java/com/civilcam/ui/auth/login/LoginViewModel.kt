@@ -5,8 +5,11 @@ import com.civilcam.domainLayer.ServerErrors
 import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.castSafe
 import com.civilcam.domainLayer.model.profile.PasswordInputDataType
+import com.civilcam.domainLayer.serviceCast
+import com.civilcam.domainLayer.usecase.auth.FacebookSignInUseCase
 import com.civilcam.domainLayer.usecase.auth.GoogleSignInUseCase
 import com.civilcam.domainLayer.usecase.auth.SignInUseCase
+import com.civilcam.domainLayer.usecase.user.SetFCMTokenUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ext_features.ext.isEmail
 import com.civilcam.ui.auth.login.model.LoginActions
@@ -19,6 +22,8 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
 	private val signInUseCase: SignInUseCase,
 	private val googleSignInUseCase: GoogleSignInUseCase,
+	private val facebookSignInUseCase: FacebookSignInUseCase,
+	private val setFCMTokenUseCase: SetFCMTokenUseCase
 ) : ComposeViewModel<LoginState, LoginRoute, LoginActions>() {
 
 	override var _state: MutableStateFlow<LoginState> = MutableStateFlow(LoginState())
@@ -41,7 +46,7 @@ class LoginViewModel(
 			LoginActions.GoogleLogin -> onGoogleSignIn()
 		}
 	}
-	
+
 	private fun goLogin() {
 		_state.update { it.copy(isLoading = true) }
 		viewModelScope.launch {
@@ -73,12 +78,12 @@ class LoginViewModel(
 						}
 					} ?: run {
 					}
-					
+
 				}
 			_state.update { it.copy(isLoading = false) }
 		}
 	}
-	
+
 	private fun emailEntered(email: String) {
 		_state.value = _state.value.copy(
 			email = email,
@@ -90,11 +95,11 @@ class LoginViewModel(
 			_state.value = _state.value.copy(errorText = "Invalid email. Please try again. (eg:email@gmail.com)")
 		}
 	}
-	
+
 	private fun passwordEntered(password: String) {
 		_state.value = _state.value.copy(password = password, credError = false)
 	}
-	
+
 	private fun goBack() {
 		navigateRoute(LoginRoute.GoBack)
 	}
@@ -115,46 +120,42 @@ class LoginViewModel(
 		navigateRoute(LoginRoute.OnFacebookSignIn)
 	}
 
-	fun onFacebookSignedIn(accessToken: String) =
-		viewModelScope.launch {
-			_state.update { it.copy(isLoading = true) }
-			kotlin.runCatching { googleSignInUseCase.invoke(accessToken) }
-				.onSuccess {
-//					saveFcmUseCase.saveFcmToken()
-					navigateRoute(LoginRoute.GoLogin(it))
+	fun onFacebookSignedIn(accessToken: String) {
+		networkRequest(
+			action = {
+				val user = facebookSignInUseCase.invoke(accessToken)
+				if (!user.sessionUser.isUserProfileSetupRequired) setFCMTokenUseCase()
+				user
+			},
+			onSuccess = { navigateRoute(LoginRoute.GoLogin(it)) },
+			onFailure = { error ->
+				error.serviceCast { msg, _, _ ->
+					_state.update { it.copy(alertError = msg) }
 				}
-				.onFailure { error ->
-					error.castSafe<ServiceException>()?.let { castedError ->
-						_state.update { it.copy(alertError = castedError.errorMessage) }
-					} ?: run {
-						_state.update { it.copy(alertError = error.localizedMessage) }
-					}
-				}
+			},
+			onComplete = { _state.update { it.copy(isLoading = false) } },
+		)
+	}
 
-			_state.update { it.copy(isLoading = false) }
-		}
 
 	private fun onGoogleSignIn() {
 		navigateRoute(LoginRoute.OnGoogleSignIn)
 	}
 
-	fun onGoogleSignedIn(accessToken: String) =
-		viewModelScope.launch {
-			_state.update { it.copy(isLoading = true) }
-			kotlin.runCatching { googleSignInUseCase.invoke(accessToken) }
-				.onSuccess {
-//					saveFcmUseCase.saveFcmToken()
-					navigateRoute(LoginRoute.GoLogin(it))
+	fun onGoogleSignedIn(accessToken: String) {
+		networkRequest(
+			action = {
+				val user = googleSignInUseCase.invoke(accessToken)
+				if (!user.sessionUser.isUserProfileSetupRequired) setFCMTokenUseCase()
+				user
+			},
+			onSuccess = { navigateRoute(LoginRoute.GoLogin(it)) },
+			onFailure = { error ->
+				error.serviceCast { msg, _, _ ->
+					_state.update { it.copy(alertError = msg) }
 				}
-                .onFailure { error ->
-                    error.castSafe<ServiceException>()?.let { castedError ->
-                        _state.update { it.copy(alertError = castedError.errorMessage) }
-                    } ?: run {
-                        _state.update { it.copy(alertError = error.localizedMessage) }
-                    }
-                }
-
-            _state.update { it.copy(isLoading = false) }
-        }
-
+			},
+			onComplete = { _state.update { it.copy(isLoading = false) } },
+		)
+	}
 }

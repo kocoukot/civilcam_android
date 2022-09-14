@@ -45,7 +45,8 @@ android {
         buildConfigField "String", "GOOGLE_CLIENT_SECRET", '"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"'
         buildConfigField "String", "GOOGLE_API_GATEWAY", '"https://www.googleapis.com\"'
 
-//        https://api.staging.civilcam.cloud/api
+        resValue "string", "facebook_app_id", "829010731804918"
+        resValue "string", "fb_login_protocol_scheme", "fb829010731804918"
     }
     signingConfigs {
         debug_config {
@@ -135,6 +136,7 @@ dependencies {
 //    testImplementation 'junit:junit:4.13.2'
 //    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
 //    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    facebook()
 
     jetpackCompose()
     google()

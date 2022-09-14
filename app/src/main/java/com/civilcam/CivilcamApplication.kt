@@ -6,6 +6,7 @@ import com.civilcam.di.source.sourceModule
 import com.civilcam.domainLayer.model.user.NotificationType
 import com.civilcam.domainLayer.usecase.auth.SaveFcmTokenUseCase
 import com.civilcam.service.notifications.NotificationHelper
+import com.facebook.appevents.AppEventsLogger
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import io.gleap.Gleap
@@ -26,7 +27,7 @@ class CivilcamApplication : Application() {
         startTimber()
         gleapInit()
         createNotificationChannels()
-
+        startFacebookSDK()
         startKoin {
             androidLogger()
             androidContext(this@CivilcamApplication)
@@ -41,6 +42,10 @@ class CivilcamApplication : Application() {
         if (BuildConfig.DEBUG) {
             Gleap.initialize(BuildConfig.GLEAP_KEY, this)
         }
+    }
+
+    private fun startFacebookSDK() {
+        AppEventsLogger.activateApp(this)
     }
 
     private fun startFireBaseNotification() {

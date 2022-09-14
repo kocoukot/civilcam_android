@@ -133,37 +133,33 @@ class AuthRepositoryImpl(
 				}
 				.blockingGet()
 
-			Timber.i("gAccessToken gAccessToken $gAccessToken \n authToken $authToken")
+            Timber.i("gAccessToken gAccessToken $gAccessToken \n authToken $authToken")
 
-			authService.googleSignIn(SocialLoginRequest(gAccessToken))
-		}.let { response ->
-			when (response) {
-				is Resource.Success -> sessionUserMapper.mapData(response.value)
-				is Resource.Failure -> throw response.serviceException
-			}
-		}
-//
-//
-//	override suspend fun facebookSignIn(accessToken: String): CurrentUser =
-//		safeApiCall {
-//			authService.facebookSignIn(SocialLoginRequest(accessToken))
-//		}.let { response ->
-//			when (response) {
-//				is Resource.Success -> {
-//					sessionUserMapper.mapData(response.value)
-//				}
-//				is Resource.Failure -> {
-//					throw exceptionErrorMapper.mapData(response)
-//				}
-//			}
-//		}
+            authService.googleSignIn(SocialLoginRequest(gAccessToken))
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> sessionUserMapper.mapData(response.value)
+                is Resource.Failure -> throw response.serviceException
+            }
+        }
 
-	override suspend fun verifyResetPasswordOtpCode(email: String, code: String): String =
-		safeApiCall {
-			authService.verifyResetPasswordOtp(
-				VerifyResetPasswordRequest(email, code)
-			)
-		}.let { response ->
+
+    override suspend fun facebookSignIn(accessToken: String): CurrentUser =
+        safeApiCall {
+            authService.facebookSignIn(SocialLoginRequest(accessToken))
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> sessionUserMapper.mapData(response.value)
+                is Resource.Failure -> throw response.serviceException
+            }
+        }
+
+    override suspend fun verifyResetPasswordOtpCode(email: String, code: String): String =
+        safeApiCall {
+            authService.verifyResetPasswordOtp(
+                VerifyResetPasswordRequest(email, code)
+            )
+        }.let { response ->
             when (response) {
                 is Resource.Success -> response.value.recoveryToken
                 is Resource.Failure -> throw response.serviceException
