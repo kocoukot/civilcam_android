@@ -38,19 +38,24 @@ class PinCodeViewModel(
 				_state.value = _state.value.copy(pinCode = pinCode)
 				if (_state.value.pinCode.length == PIN_SIZE) {
 					goConfirm()
+				} else {
+					_state.value = _state.value.copy(isDataLoaded = false)
 				}
 			}
 			PinCodeFlow.CONFIRM_PIN_CODE -> {
 				_state.value = _state.value.copy(confirmPinCode = pinCode)
 				if (_state.value.isMatch) {
-					_state.value = _state.value.copy(noMatch = false)
+					_state.value = _state.value.copy(noMatch = false, isDataLoaded = true)
 					setPin(PinCodeFlow.CONFIRM_PIN_CODE)
 				} else {
 					if (_state.value.confirmPinCode.length == PIN_SIZE) {
 						_state.value = _state.value.copy(
 							confirmPinCode = "",
-							noMatch = true
+							noMatch = true,
+							isDataLoaded = true
 						)
+					} else {
+						_state.value = _state.value.copy(isDataLoaded = false)
 					}
 				}
 			}
@@ -58,19 +63,24 @@ class PinCodeViewModel(
 				_state.value = _state.value.copy(pinCode = pinCode)
 				if (_state.value.pinCode.length == PIN_SIZE) {
 					goNewPinCodeConfirm()
+				} else {
+					_state.value = _state.value.copy(isDataLoaded = false)
 				}
 			}
 			PinCodeFlow.CONFIRM_NEW_PIN_CODE -> {
 				_state.value = _state.value.copy(confirmPinCode = pinCode)
 				if (_state.value.isMatch) {
-					_state.value = _state.value.copy(noMatch = false)
+					_state.value = _state.value.copy(noMatch = false, isDataLoaded = true)
 					setPin(PinCodeFlow.CONFIRM_NEW_PIN_CODE)
 				} else {
 					if (_state.value.confirmPinCode.length == PIN_SIZE) {
 						_state.value = _state.value.copy(
 							confirmPinCode = "",
-							noMatch = true
+							noMatch = true,
+							isDataLoaded = true
 						)
+					} else {
+						_state.value = _state.value.copy(isDataLoaded = false)
 					}
 				}
 			}
@@ -78,14 +88,14 @@ class PinCodeViewModel(
 				if (pinCode.length == PIN_SIZE) {
 					checkPin(PinCodeFlow.CURRENT_PIN_CODE, pinCode)
 				} else {
-					_state.value = _state.value.copy(currentNoMatch = false)
+					_state.value = _state.value.copy(currentNoMatch = false, isDataLoaded = false)
 				}
 			}
 			PinCodeFlow.SOS_PIN_CODE -> {
 				if (pinCode.length == PIN_SIZE) {
 					checkPin(PinCodeFlow.SOS_PIN_CODE, pinCode)
 				} else {
-					_state.value = _state.value.copy(currentNoMatch = false)
+					_state.value = _state.value.copy(currentNoMatch = false, isDataLoaded = false)
 				}
 			}
 		}
@@ -96,33 +106,38 @@ class PinCodeViewModel(
 			kotlin.runCatching {
 				checkPinUseCase.checkPin(pinCode)
 			}.onSuccess { response ->
-				_state.value = _state.value.copy(currentPinCode = pinCode)
 				when (pinCodeFlow) {
 					PinCodeFlow.CURRENT_PIN_CODE -> {
 						if (response) {
 							_state.value = _state.value.copy(
-								currentNoMatch = false
+								currentNoMatch = false,
+								currentPinCode = pinCode,
+								isDataLoaded = true
 							)
 							goNewPinCode()
 						} else {
 							_state.value =
 								_state.value.copy(
 									currentPinCode = "",
-									currentNoMatch = true
+									currentNoMatch = true,
+									isDataLoaded = true
 								)
 						}
 					}
 					PinCodeFlow.SOS_PIN_CODE -> {
 						if (response) {
 							_state.value = _state.value.copy(
-								currentNoMatch = false
+								currentNoMatch = false,
+								currentPinCode = pinCode,
+								isDataLoaded = true
 							)
 							goEmergency()
 						} else {
 							_state.value =
 								_state.value.copy(
 									currentPinCode = "",
-									currentNoMatch = true
+									currentNoMatch = true,
+									isDataLoaded = true
 								)
 						}
 					}
@@ -189,22 +204,22 @@ class PinCodeViewModel(
 	}
 	
 	private fun goNewPinCodeConfirm() {
-		_state.value = _state.value.copy(screenState = PinCodeFlow.CONFIRM_NEW_PIN_CODE)
+		_state.value = _state.value.copy(screenState = PinCodeFlow.CONFIRM_NEW_PIN_CODE, isDataLoaded = true)
 	}
 	
 	private fun goNewPinCode() {
-        _state.value = _state.value.copy(screenState = PinCodeFlow.NEW_PIN_CODE)
-    }
-
-    private fun goConfirm() {
-        _state.value = _state.value.copy(screenState = PinCodeFlow.CONFIRM_PIN_CODE)
-    }
-
-    companion object {
-        const val PIN_SIZE = 4
-    }
-
-    override fun clearErrorText() {
-
-    }
+		_state.value = _state.value.copy(screenState = PinCodeFlow.NEW_PIN_CODE, isDataLoaded = true)
+	}
+	
+	private fun goConfirm() {
+		_state.value = _state.value.copy(screenState = PinCodeFlow.CONFIRM_PIN_CODE, isDataLoaded = true)
+	}
+	
+	companion object {
+		const val PIN_SIZE = 4
+	}
+	
+	override fun clearErrorText() {
+		TODO("Not yet implemented")
+	}
 }

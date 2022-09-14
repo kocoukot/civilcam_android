@@ -15,6 +15,7 @@ import androidx.fragment.app.setFragmentResultListener
 import com.civilcam.R
 import com.civilcam.ext_features.ext.hideSystemUI
 import com.civilcam.ext_features.ext.showSystemUI
+import com.civilcam.ext_features.hideKeyboard
 import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.auth.pincode.PinCodeFragment
