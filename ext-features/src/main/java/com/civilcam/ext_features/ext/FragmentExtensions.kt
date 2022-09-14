@@ -9,8 +9,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.civilcam.ext_features.R
 
@@ -19,6 +21,14 @@ fun Fragment.showToast(text: String = "") {
     Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
 }
 
+fun Fragment.navigateToStart() {
+    navController.navigate(
+        getString(R.string.direction_startScreen).toUri(),
+        NavOptions.Builder()
+            .setPopUpTo(navController.backStack.first.destination.id, false)
+            .build()
+    )
+}
 
 //fun Fragment.showLoadingFragment(isShow: Boolean) {
 //    try {

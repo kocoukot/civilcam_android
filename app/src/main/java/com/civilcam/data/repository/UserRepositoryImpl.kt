@@ -50,11 +50,11 @@ class UserRepositoryImpl(
 			userService.logout()
 		}.let { response ->
 			accountStorage.logOut()
+
 			when (response) {
 				is Resource.Success -> response.value.ok
 				is Resource.Failure -> throw response.serviceException
 			}
-			
 		}
 	
 	override suspend fun deleteAccount(): Boolean =
