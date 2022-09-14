@@ -9,6 +9,7 @@ import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.auth.FacebookSignInUseCase
 import com.civilcam.domainLayer.usecase.auth.GoogleSignInUseCase
 import com.civilcam.domainLayer.usecase.auth.SignInUseCase
+import com.civilcam.domainLayer.usecase.user.SetFCMTokenUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ext_features.ext.isEmail
 import com.civilcam.ui.auth.login.model.LoginActions
@@ -22,6 +23,7 @@ class LoginViewModel(
 	private val signInUseCase: SignInUseCase,
 	private val googleSignInUseCase: GoogleSignInUseCase,
 	private val facebookSignInUseCase: FacebookSignInUseCase,
+	private val setFCMTokenUseCase: SetFCMTokenUseCase
 ) : ComposeViewModel<LoginState, LoginRoute, LoginActions>() {
 
 	override var _state: MutableStateFlow<LoginState> = MutableStateFlow(LoginState())
@@ -121,8 +123,9 @@ class LoginViewModel(
 	fun onFacebookSignedIn(accessToken: String) {
 		networkRequest(
 			action = {
-				facebookSignInUseCase.invoke(accessToken)
-				// saveFcmUseCase.saveFcmToken()
+				val user = facebookSignInUseCase.invoke(accessToken)
+				if (!user.sessionUser.isUserProfileSetupRequired) setFCMTokenUseCase()
+				user
 			},
 			onSuccess = { navigateRoute(LoginRoute.GoLogin(it)) },
 			onFailure = { error ->
@@ -142,8 +145,9 @@ class LoginViewModel(
 	fun onGoogleSignedIn(accessToken: String) {
 		networkRequest(
 			action = {
-				googleSignInUseCase.invoke(accessToken)
-				// saveFcmUseCase.saveFcmToken()
+				val user = googleSignInUseCase.invoke(accessToken)
+				if (!user.sessionUser.isUserProfileSetupRequired) setFCMTokenUseCase()
+				user
 			},
 			onSuccess = { navigateRoute(LoginRoute.GoLogin(it)) },
 			onFailure = { error ->

@@ -11,6 +11,7 @@ import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.auth.FacebookSignInUseCase
 import com.civilcam.domainLayer.usecase.auth.GoogleSignInUseCase
 import com.civilcam.domainLayer.usecase.auth.SingUpUseCase
+import com.civilcam.domainLayer.usecase.user.SetFCMTokenUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ext_features.ext.isEmail
 import com.civilcam.ui.auth.create.model.CreateAccountActions
@@ -24,6 +25,7 @@ class CreateAccountViewModel(
     private val singUpUseCase: SingUpUseCase,
     private val googleSignInUseCase: GoogleSignInUseCase,
     private val facebookSignInUseCase: FacebookSignInUseCase,
+    private val setFCMTokenUseCase: SetFCMTokenUseCase
 ) : ComposeViewModel<CreateAccountState, CreateAccountRoute, CreateAccountActions>() {
 
     override var _state: MutableStateFlow<CreateAccountState> =
@@ -127,8 +129,9 @@ class CreateAccountViewModel(
         _state.update { it.copy(isLoading = true) }
         networkRequest(
             action = {
-                facebookSignInUseCase.invoke(accessToken)
-                // saveFcmUseCase.saveFcmToken()
+                val user = facebookSignInUseCase.invoke(accessToken)
+                if (!user.sessionUser.isUserProfileSetupRequired) setFCMTokenUseCase()
+                user
             },
             onSuccess = { navigateRoute(CreateAccountRoute.GoSocialsLogin(it)) },
             onFailure = { error ->
@@ -148,8 +151,9 @@ class CreateAccountViewModel(
         _state.update { it.copy(isLoading = true) }
         networkRequest(
             action = {
-                googleSignInUseCase.invoke(accessToken)
-                // saveFcmUseCase.saveFcmToken()
+                val user = googleSignInUseCase.invoke(accessToken)
+                if (!user.sessionUser.isUserProfileSetupRequired) setFCMTokenUseCase()
+                user
             },
             onSuccess = { navigateRoute(CreateAccountRoute.GoSocialsLogin(it)) },
             onFailure = { error ->
