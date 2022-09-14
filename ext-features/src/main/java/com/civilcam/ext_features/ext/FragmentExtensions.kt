@@ -2,6 +2,7 @@ package com.civilcam.ext_features.ext
 
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
@@ -28,6 +29,10 @@ fun Fragment.navigateToStart() {
             .setPopUpTo(navController.backStack.first.destination.id, false)
             .build()
     )
+}
+
+fun Fragment.navigateTo(string: String) {
+    findNavController().navigate(Uri.parse(string))
 }
 
 //fun Fragment.showLoadingFragment(isShow: Boolean) {

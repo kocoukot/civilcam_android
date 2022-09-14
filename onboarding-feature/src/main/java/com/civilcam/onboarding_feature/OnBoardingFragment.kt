@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.civilcam.ext_features.ext.hideSystemUI
 import com.civilcam.ext_features.ext.navController
+import com.civilcam.ext_features.ext.navigateTo
 import com.civilcam.ext_features.ext.showSystemUI
 import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.onboarding_feature.model.OnboardingRoute
@@ -27,7 +27,7 @@ class OnBoardingFragment : Fragment() {
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
                 OnboardingRoute.GoBack -> navController.popBackStack()
-                OnboardingRoute.ToCreateAccount -> navController.navigate(getString(com.civilcam.ext_features.R.string.direction_createAccountFragment).toUri())
+                OnboardingRoute.ToCreateAccount -> navigateTo(getString(com.civilcam.ext_features.R.string.direction_createAccountFragment))
             }
         }
 
