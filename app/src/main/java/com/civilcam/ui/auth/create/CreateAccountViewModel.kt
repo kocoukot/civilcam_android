@@ -7,6 +7,8 @@ import com.civilcam.domainLayer.ServerErrors
 import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.castSafe
 import com.civilcam.domainLayer.model.profile.PasswordInputDataType
+import com.civilcam.domainLayer.serviceCast
+import com.civilcam.domainLayer.usecase.auth.FacebookSignInUseCase
 import com.civilcam.domainLayer.usecase.auth.GoogleSignInUseCase
 import com.civilcam.domainLayer.usecase.auth.SingUpUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
@@ -21,6 +23,7 @@ import kotlinx.coroutines.launch
 class CreateAccountViewModel(
     private val singUpUseCase: SingUpUseCase,
     private val googleSignInUseCase: GoogleSignInUseCase,
+    private val facebookSignInUseCase: FacebookSignInUseCase,
 ) : ComposeViewModel<CreateAccountState, CreateAccountRoute, CreateAccountActions>() {
 
     override var _state: MutableStateFlow<CreateAccountState> =
@@ -120,45 +123,41 @@ class CreateAccountViewModel(
         navigateRoute(CreateAccountRoute.OnFacebookSignIn)
     }
 
-//    fun onFacebookSignedIn(accessToken: String) =
-//        viewModelScope.launch {
-//            _state.update { it.copy(isLoading = true) }
-//            kotlin.runCatching { googleSignInUseCase.invoke(accessToken) }
-//                .onSuccess {
-////					saveFcmUseCase.saveFcmToken()
-//    navigateRoute(CreateAccountRoute.GoSocialsLogin(it))
-//                }
-//                .onFailure { error ->
-//                    error.castSafe<ServiceException>()?.let { castedError ->
-//                        _state.update { it.copy(alertError = castedError.errorMessage) }
-//                    } ?: run {
-//                        _state.update { it.copy(alertError = error.localizedMessage) }
-//                    }
-//                }
-//
-//            _state.update { it.copy(isLoading = false) }
-//        }
+    fun onFacebookSignedIn(accessToken: String) {
+        _state.update { it.copy(isLoading = true) }
+        networkRequest(
+            action = {
+                facebookSignInUseCase.invoke(accessToken)
+                // saveFcmUseCase.saveFcmToken()
+            },
+            onSuccess = { navigateRoute(CreateAccountRoute.GoSocialsLogin(it)) },
+            onFailure = { error ->
+                error.serviceCast { msg, _, _ ->
+                    _state.update { it.copy(alertErrorText = msg) }
+                }
+            },
+            onComplete = { _state.update { it.copy(isLoading = false) } },
+        )
+    }
 
     private fun onGoogleSignIn() {
         navigateRoute(CreateAccountRoute.OnGoogleSignIn)
     }
 
-    fun onGoogleSignedIn(accessToken: String) =
-        viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
-            kotlin.runCatching { googleSignInUseCase.invoke(accessToken) }
-                .onSuccess {
-//					saveFcmUseCase.saveFcmToken()
-                    navigateRoute(CreateAccountRoute.GoSocialsLogin(it))
-                    _state.update { it.copy(isLoading = false) }
+    fun onGoogleSignedIn(accessToken: String) {
+        _state.update { it.copy(isLoading = true) }
+        networkRequest(
+            action = {
+                googleSignInUseCase.invoke(accessToken)
+                // saveFcmUseCase.saveFcmToken()
+            },
+            onSuccess = { navigateRoute(CreateAccountRoute.GoSocialsLogin(it)) },
+            onFailure = { error ->
+                error.serviceCast { msg, _, _ ->
+                    _state.update { it.copy(alertErrorText = msg) }
                 }
-                .onFailure { error ->
-                    error.castSafe<ServiceException>()?.let { castedError ->
-                        _state.update { it.copy(alertErrorText = castedError.errorMessage) }
-                    } ?: run {
-                        _state.update { it.copy(alertErrorText = error.localizedMessage) }
-                    }
-                    _state.update { it.copy(isLoading = false) }
-                }
-        }
+            },
+            onComplete = { _state.update { it.copy(isLoading = false) } },
+        )
+    }
 }

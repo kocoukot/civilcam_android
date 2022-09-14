@@ -120,6 +120,8 @@ val domainModule = module {
 
     factory { GetNetworkRequestsUseCase(get()) }
 
+    factory { FacebookSignInUseCase(get(), get()) }
+
 }
 
 

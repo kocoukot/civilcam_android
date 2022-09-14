@@ -4,6 +4,12 @@ import android.content.Intent
 import androidx.fragment.app.Fragment
 import com.civilcam.BuildConfig
 import com.civilcam.ui.auth.contract.GoogleAuthResultContract
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
@@ -67,52 +73,51 @@ class GoogleFragmentAuthHandler(
     }
 }
 
-//
-//class FacebookFragmentAuthHandler(
-//    onSuccess: (String) -> Unit,
-//    onError: (Throwable) -> Unit
-//) : FragmentAuthHandler(onSuccess, onError) {
-//    private val facebookCallbackManager = CallbackManager.Factory.create()
-//
-//    override fun auth(fragment: Fragment) {
-//        AccessToken.getCurrentAccessToken()
-//            ?.takeIf { !it.isExpired }
-//            ?.let { it.token.let(onSuccess::invoke) }
-//            ?: run {
-//                with(LoginManager.getInstance()) {
-//                    registerCallback(
-//                        facebookCallbackManager,
-//                        object : FacebookCallback<LoginResult> {
-//
-//                            override fun onSuccess(result: LoginResult) {
-//                                result.accessToken.token.let(onSuccess::invoke)
-//                                unregisterCallback(facebookCallbackManager)
-//                            }
-//
-//                            override fun onCancel() {}
-//
-//                            override fun onError(error: FacebookException) = onError.invoke(error)
-//                        })
-//                    logInWithReadPermissions(
-//                        fragment,
-//                        listOf(PERMISSION_PUBLIC_PROFILE, PERMISSION_EMAIL)
-//                    )
-//                }
-//            }
-//    }
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        facebookCallbackManager.onActivityResult(
-//            requestCode,
-//            resultCode,
-//            data
-//        )
-//    }
 
-//    companion object {
-//        private const val PERMISSION_PUBLIC_PROFILE = "public_profile"
-//        private const val PERMISSION_EMAIL = "email"
-//        private const val PERMISSION_USER_FRIENDS = "user_friends"
-//    }
-//}
+class FacebookFragmentAuthHandler(
+    onSuccess: (String) -> Unit,
+    onError: (Throwable) -> Unit
+) : FragmentAuthHandler(onSuccess, onError) {
+    private val facebookCallbackManager = CallbackManager.Factory.create()
+
+    override fun auth(fragment: Fragment) {
+        AccessToken.getCurrentAccessToken()
+            ?.takeIf { !it.isExpired }
+            ?.let { it.token.let(onSuccess::invoke) }
+            ?: run {
+                with(LoginManager.getInstance()) {
+                    registerCallback(
+                        facebookCallbackManager,
+                        object : FacebookCallback<LoginResult> {
+
+                            override fun onSuccess(result: LoginResult) {
+                                result.accessToken.token.let(onSuccess::invoke)
+                                unregisterCallback(facebookCallbackManager)
+                            }
+
+                            override fun onCancel() {}
+
+                            override fun onError(error: FacebookException) = onError.invoke(error)
+                        })
+                    logInWithReadPermissions(
+                        fragment,
+                        listOf(PERMISSION_PUBLIC_PROFILE, PERMISSION_EMAIL)
+                    )
+                }
+            }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        facebookCallbackManager.onActivityResult(
+            requestCode,
+            resultCode,
+            data
+        )
+    }
+
+    companion object {
+        private const val PERMISSION_PUBLIC_PROFILE = "public_profile"
+        private const val PERMISSION_EMAIL = "email"
+    }
+}
 

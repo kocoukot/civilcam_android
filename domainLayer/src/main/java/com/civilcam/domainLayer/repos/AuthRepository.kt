@@ -20,12 +20,12 @@ interface AuthRepository {
     suspend fun resetPassword(email: String): Long
 
     suspend fun recoverPassword(recoveryToken: String, newPassword: String): Boolean
-//
-suspend fun googleSignIn(authToken: String): CurrentUser
-//
-//    suspend fun facebookSignIn(accessToken: String): CurrentUser
-//
-////	fun sendPasswordOtpCode(email: String): Single<Long>
-//
+
+    suspend fun googleSignIn(authToken: String): CurrentUser
+
+    suspend fun facebookSignIn(accessToken: String): CurrentUser
+
+//	fun sendPasswordOtpCode(email: String): Single<Long>
+
     suspend fun verifyResetPasswordOtpCode(email: String, code: String): String
 }

@@ -1,5 +1,6 @@
 package com.civilcam.ui.auth.create
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.civilcam.common.ext.showLoadingFragment
 import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ext_features.ext.showToast
 import com.civilcam.ext_features.live_data.observeNonNull
+import com.civilcam.ui.auth.FacebookFragmentAuthHandler
 import com.civilcam.ui.auth.GoogleFragmentAuthHandler
 import com.civilcam.ui.auth.create.model.CreateAccountRoute
 import com.civilcam.ui.common.NavigationDirection
@@ -25,15 +27,15 @@ import timber.log.Timber
 class CreateAccountFragment : Fragment() {
 	private val viewModel: CreateAccountViewModel by viewModel()
 
-	//	private val facebookAuthHandler =
-//		FacebookFragmentAuthHandler({
-//			if (it.isNotEmpty()) {
-//				showLoadingFragment(true)
-//				viewModel.onFacebookSignedIn(it)
-//			} else {
-//				showToast("Unfortunately we couldn't get your profile information")
-//			}
-//		}, Timber::e)
+	private val facebookAuthHandler =
+		FacebookFragmentAuthHandler({
+			if (it.isNotEmpty()) {
+				showLoadingFragment(true)
+				viewModel.onFacebookSignedIn(it)
+			} else {
+				showToast("Unfortunately we couldn't get your profile information")
+			}
+		}, Timber::e)
 	private val googleAuthHandler =
 		GoogleFragmentAuthHandler(this, {
 			if (it.isNotEmpty()) {
@@ -72,9 +74,8 @@ class CreateAccountFragment : Fragment() {
 				is CreateAccountRoute.GoSocialsLogin -> navController.navigateByDirection(
 					NavigationDirection.resolveDirectionFor(route.user)
 				)
-				CreateAccountRoute.OnFacebookSignIn -> {}//facebookAuthHandler.auth(this)
+				CreateAccountRoute.OnFacebookSignIn -> facebookAuthHandler.auth(this)
 				CreateAccountRoute.OnGoogleSignIn -> googleAuthHandler.auth(this)
-
 			}
 		}
 		
@@ -91,7 +92,7 @@ class CreateAccountFragment : Fragment() {
 		}
 	}
 
-//	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//		facebookAuthHandler.onActivityResult(requestCode, resultCode, data)
-//	}
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		facebookAuthHandler.onActivityResult(requestCode, resultCode, data)
+	}
 }
