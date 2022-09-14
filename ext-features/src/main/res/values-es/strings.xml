@@ -10,7 +10,6 @@
     <string name="yes_text_caps">YES</string>
     <string name="confirm_text_caps">CONFIRM</string>
     <string name="resolve_text_caps">RESOLVE</string>
-
     <string name="create_password">Create password</string>
     <string name="password">Password</string>
 
@@ -22,7 +21,6 @@
     <string name="profile_setup_phone_number_label">Phone number</string>
     <string name="profile_setup_phone_number_placeholder">(123) 456 7890</string>
     <string name="profile_setup_phone_error">Please, enter a valid phone number</string>
-
 
     <string name="contact_support_alert_sent_text">Your message has been sent. Our support team will answer your ASAP</string>
     <string name="password_changed_alert_text">Your password has been changed successfully! Now you can log in with your new password</string>

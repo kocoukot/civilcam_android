@@ -2,7 +2,6 @@ package com.civilcam.langselect
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +11,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import com.civilcam.ext_features.ext.navigateTo
 import com.civilcam.ext_features.ext.registerForPermissionsResult
 import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.langselect.model.LangSelectRoute
@@ -38,10 +37,7 @@ class LanguageSelectFragment : Fragment() {
 
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
-                LangSelectRoute.ToOnBoarding -> {
-                    val uri = Uri.parse(getString(com.civilcam.ext_features.R.string.direction_onBoardingFragment))
-                    findNavController().navigate(uri)
-                }
+                LangSelectRoute.ToOnBoarding -> navigateTo(getString(com.civilcam.ext_features.R.string.direction_onBoardingFragment))
             }
         }
         return ComposeView(requireContext()).apply {

@@ -39,8 +39,6 @@
     <string name="settings_manage_subscription_plan">Manage subscription plan</string>
     <string name="settings_restore_purchase">Restore purchase</string>
 
-    <string name="confirm_password">Confirm password</string>
-    <string name="re_enter_password">Re-enter password</string>
     <string name="send_text">Send</string>
 
 </resources>

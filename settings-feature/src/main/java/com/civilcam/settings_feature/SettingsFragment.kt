@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.civilcam.ext_features.ext.navController
+import com.civilcam.ext_features.ext.navigateTo
 import com.civilcam.ext_features.ext.navigateToStart
 import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.settings_feature.model.SettingsRoute
@@ -26,13 +26,9 @@ class SettingsFragment : Fragment() {
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
                 SettingsRoute.GoBack -> navController.popBackStack()
-                SettingsRoute.GoTerms -> navController.navigate(
-                    "${getString(com.civilcam.ext_features.R.string.direction_termsFragment)}/${true}".toUri(),
-                )
+                SettingsRoute.GoTerms -> navigateTo("${getString(com.civilcam.ext_features.R.string.direction_termsFragment)}/${true}")
                 SettingsRoute.ForceLogout, SettingsRoute.GoStartScreen -> navigateToStart()
-                SettingsRoute.GoSubManage -> navController.navigate(
-                    "${getString(com.civilcam.ext_features.R.string.direction_subscriptionFragment)}/${true}".toUri(),
-                )
+                SettingsRoute.GoSubManage -> navigateTo("${getString(com.civilcam.ext_features.R.string.direction_subscriptionFragment)}/${true}")
             }
         }
         return ComposeView(requireContext()).apply {

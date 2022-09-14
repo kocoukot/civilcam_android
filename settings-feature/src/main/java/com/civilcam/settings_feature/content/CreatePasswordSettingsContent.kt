@@ -9,10 +9,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.domainLayer.model.profile.PasswordInputDataType
 import com.civilcam.domainLayer.model.profile.PasswordModel
+import com.civilcam.ext_features.R
+import com.civilcam.ext_features.compose.elements.PasswordField
 import com.civilcam.ext_features.compose.elements.passwordCheck.PasswordStrategyBlocks
 import com.civilcam.ext_features.compose.elements.passwordCheck.PasswordStrategyState
 import com.civilcam.ext_features.theme.CCTheme
-import com.civilcam.settings_feature.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -56,12 +57,11 @@ fun PasswordCreateContent(
         modifier = Modifier
             .background((if (isBackgroundReversed) CCTheme.colors.lightGray else CCTheme.colors.white))
     ) {
-        com.civilcam.ext_features.compose.elements.PasswordField(
-            name = stringResource(id = com.civilcam.ext_features.R.string.password),
+        PasswordField(
+            name = stringResource(id = R.string.password),
             text = passwordInput,
             isReversed = isBackgroundReversed,
-            placeholder = stringResource(id = com.civilcam.ext_features.R.string.create_password),
-            //hasError = checkedStrategies.value != 4,
+            placeholder = stringResource(id = R.string.create_password),
             noMatch = model.noMatch,
             onValueChanged = {
                 passwordInput = it
@@ -95,7 +95,7 @@ fun PasswordCreateContent(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        com.civilcam.ext_features.compose.elements.PasswordField(
+        PasswordField(
             isReversed = isBackgroundReversed,
             name = stringResource(id = R.string.confirm_password),
             text = model.confirmPassword,
