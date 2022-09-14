@@ -46,7 +46,7 @@ android {
         buildConfigField "String", "GOOGLE_API_GATEWAY", '"https://www.googleapis.com\"'
 
         resValue "string", "facebook_app_id", "829010731804918"
-        resValue "string", "fb_login_protocol_scheme", "fb 829010731804918"
+        resValue "string", "fb_login_protocol_scheme", "fb829010731804918"
     }
     signingConfigs {
         debug_config {

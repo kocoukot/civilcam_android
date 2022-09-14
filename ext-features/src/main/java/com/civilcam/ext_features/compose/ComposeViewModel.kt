@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 abstract class ComposeViewModel<A : ComposeFragmentState, R : ComposeFragmentRoute, T : ComposeFragmentActions> :
     ViewModel() {
@@ -34,7 +35,11 @@ abstract class ComposeViewModel<A : ComposeFragmentState, R : ComposeFragmentRou
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             kotlin.runCatching { action.invoke() }
-                .onSuccess { onSuccess.invoke(it) }
+                .onSuccess {
+                    withContext(Dispatchers.Main) {
+                        onSuccess.invoke(it)
+                    }
+                }
                 .onFailure { error ->
                     onFailure.invoke(error)
                 }.also { onComplete?.invoke() }

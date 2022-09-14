@@ -11,7 +11,6 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.common.ext.navigateByDirection
-import com.civilcam.common.ext.showLoadingFragment
 import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ext_features.ext.showToast
 import com.civilcam.ext_features.live_data.observeNonNull
@@ -30,7 +29,6 @@ class CreateAccountFragment : Fragment() {
 	private val facebookAuthHandler =
 		FacebookFragmentAuthHandler({
 			if (it.isNotEmpty()) {
-				showLoadingFragment(true)
 				viewModel.onFacebookSignedIn(it)
 			} else {
 				showToast("Unfortunately we couldn't get your profile information")
@@ -39,13 +37,11 @@ class CreateAccountFragment : Fragment() {
 	private val googleAuthHandler =
 		GoogleFragmentAuthHandler(this, {
 			if (it.isNotEmpty()) {
-				showLoadingFragment(true)
 				viewModel.onGoogleSignedIn(it)
 			} else {
 				showToast("Unfortunately we couldn't get your profile information")
 			}
 		}, Timber::e)
-
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
