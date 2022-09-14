@@ -59,9 +59,9 @@ fun CreatePasswordScreenContent(viewModel: CreatePasswordViewModel) {
 			Spacer(modifier = Modifier.height(32.dp))
 			
 			PasswordField(
-				name = stringResource(id = R.string.password),
+				name = stringResource(id = com.civilcam.ext_features.R.string.password),
 				text = state.value.password,
-				placeholder = stringResource(id = R.string.create_password),
+				placeholder = stringResource(id = com.civilcam.ext_features.R.string.create_password),
 				onValueChanged = {
 					viewModel.setInputActions(
 						CreatePasswordActions.EnterInputData(
@@ -94,9 +94,9 @@ fun CreatePasswordScreenContent(viewModel: CreatePasswordViewModel) {
 			Spacer(modifier = Modifier.height(8.dp))
 			
 			PasswordField(
-				name = stringResource(id = R.string.confirm_password),
+				name = stringResource(id = com.civilcam.ext_features.R.string.confirm_password),
 				text = state.value.confirmPassword,
-				placeholder = stringResource(id = R.string.re_enter_password),
+				placeholder = stringResource(id = com.civilcam.ext_features.R.string.re_enter_password),
 				onValueChanged = {
 					viewModel.setInputActions(
 						CreatePasswordActions.EnterInputData(

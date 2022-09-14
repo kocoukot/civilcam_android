@@ -134,7 +134,7 @@ fun ProfileSetupContent(
             contentAlignment = Alignment.BottomCenter,
         ) {
             ComposeButton(
-                title = stringResource(id = R.string.save_text),
+                title = stringResource(id = com.civilcam.ext_features.R.string.save_text),
                 Modifier.padding(horizontal = 8.dp),
                 isActivated = data?.isFilled ?: false,
                 buttonClick = {

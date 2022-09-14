@@ -95,17 +95,17 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 			Spacer(modifier = Modifier.height(16.dp))
 			
 			PasswordField(
-				name = stringResource(id = R.string.password),
-				text = state.value.password,
-				placeholder = stringResource(id = R.string.your_password),
-				onValueChanged = {
-					viewModel.setInputActions(
-						LoginActions.EnterInputData(
-							PasswordInputDataType.PASSWORD,
-							it
-						)
-					)
-				},
+                name = stringResource(id = com.civilcam.ext_features.R.string.password),
+                text = state.value.password,
+                placeholder = stringResource(id = R.string.your_password),
+                onValueChanged = {
+                    viewModel.setInputActions(
+                        LoginActions.EnterInputData(
+                            PasswordInputDataType.PASSWORD,
+                            it
+                        )
+                    )
+                },
 				onFocusChanged = {},
 				hasError = state.value.credError,
 				error = state.value.errorText,

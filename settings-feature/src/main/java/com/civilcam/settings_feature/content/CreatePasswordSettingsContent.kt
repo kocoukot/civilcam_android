@@ -57,10 +57,10 @@ fun PasswordCreateContent(
             .background((if (isBackgroundReversed) CCTheme.colors.lightGray else CCTheme.colors.white))
     ) {
         com.civilcam.ext_features.compose.elements.PasswordField(
-            name = stringResource(id = R.string.password),
+            name = stringResource(id = com.civilcam.ext_features.R.string.password),
             text = passwordInput,
             isReversed = isBackgroundReversed,
-            placeholder = stringResource(id = R.string.create_password),
+            placeholder = stringResource(id = com.civilcam.ext_features.R.string.create_password),
             //hasError = checkedStrategies.value != 4,
             noMatch = model.noMatch,
             onValueChanged = {

@@ -92,8 +92,8 @@ fun UserProfileSection(
                 isEnabled = if (screenType == UserProfileScreen.PROFILE) true else isSaveEnabled,
                 actionTitle = when (screenType) {
                     UserProfileScreen.PROFILE -> stringResource(id = R.string.user_profile_edit_title)
-                    UserProfileScreen.EDIT -> stringResource(id = R.string.save_text)
-                    UserProfileScreen.LOCATION -> stringResource(id = R.string.save_text)
+                    UserProfileScreen.EDIT -> stringResource(id = com.civilcam.ext_features.R.string.save_text)
+                    UserProfileScreen.LOCATION -> stringResource(id = com.civilcam.ext_features.R.string.save_text)
                 }
             ) {
                 onActionClick.invoke(if (screenType == UserProfileScreen.EDIT) UserProfileActions.ClickSave else UserProfileActions.ClickEdit)

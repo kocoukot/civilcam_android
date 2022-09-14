@@ -103,7 +103,7 @@ fun ResetPasswordScreenContent(viewModel: ResetPasswordViewModel) {
 			Spacer(modifier = Modifier.weight(1f))
 			
 			ComposeButton(
-				title = stringResource(id = R.string.continue_text),
+				title = stringResource(id = com.civilcam.ext_features.R.string.continue_text),
 				Modifier
 					.padding(horizontal = 8.dp)
 					.padding(top = 40.dp),

@@ -100,7 +100,7 @@ fun TermsScreenContent(viewModel: TermsViewModel) {
 
             if (!state.isSettings) {
                 ComposeButton(
-                    title = stringResource(id = R.string.continue_text),
+                    title = stringResource(id = com.civilcam.ext_features.R.string.continue_text),
                     Modifier.padding(horizontal = 8.dp),
                     isActivated = isAccepted,
                     buttonClick = {

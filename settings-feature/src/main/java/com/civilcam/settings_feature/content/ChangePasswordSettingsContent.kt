@@ -135,7 +135,7 @@ private fun PasswordField(
                     if (inputText.isNotEmpty()) {
                         AnimatedContent(targetState = visibility.value) { state ->
                             Text(
-                                stringResource(id = if (state) R.string.hide else R.string.show_title),
+                                stringResource(id = if (state) com.civilcam.ext_features.R.string.hide else com.civilcam.ext_features.R.string.show_title),
                                 modifier = Modifier.clickable {
                                     visibility.value = !visibility.value
                                 },

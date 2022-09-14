@@ -8,7 +8,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.civilcam.R
 import com.civilcam.domainLayer.model.profile.PasswordInputDataType
 import com.civilcam.domainLayer.model.profile.PasswordModel
 import com.civilcam.ext_features.compose.elements.PasswordField
@@ -35,10 +34,10 @@ fun PasswordCreateContent(
             .background((if (isBackgroundReversed) CCTheme.colors.lightGray else CCTheme.colors.white))
     ) {
         PasswordField(
-            name = stringResource(id = R.string.password),
+            name = stringResource(id = com.civilcam.ext_features.R.string.password),
             text = passwordInput,
             isReversed = isBackgroundReversed,
-            placeholder = stringResource(id = R.string.create_password),
+            placeholder = stringResource(id = com.civilcam.ext_features.R.string.create_password),
             //hasError = checkedStrategies.value != 4,
             noMatch = model.noMatch,
             onValueChanged = {
@@ -75,9 +74,9 @@ fun PasswordCreateContent(
 
         PasswordField(
             isReversed = isBackgroundReversed,
-            name = stringResource(id = R.string.confirm_password),
+            name = stringResource(id = com.civilcam.ext_features.R.string.confirm_password),
             text = model.confirmPassword,
-            placeholder = stringResource(id = R.string.re_enter_password),
+            placeholder = stringResource(id = com.civilcam.ext_features.R.string.re_enter_password),
             onValueChanged = {
                 passwordEntered.invoke(PasswordInputDataType.PASSWORD_REPEAT, true, it)
             },

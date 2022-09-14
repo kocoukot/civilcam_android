@@ -8,7 +8,10 @@ enum class SettingsType(@StringRes val rowTitle: Int, @StringRes val actionBtnTi
 
     ALERTS(R.string.settings_alerts, R.string.empty_string),
     SUBSCRIPTION(R.string.settings_subscription, R.string.empty_string),
-    CHANGE_PASSWORD(R.string.settings_change_password, R.string.continue_text),
+    CHANGE_PASSWORD(
+        R.string.settings_change_password,
+        com.civilcam.ext_features.R.string.continue_text
+    ),
     CREATE_PASSWORD(R.string.settings_change_password, R.string.save_text),
 
     LANGUAGE(R.string.settings_language, R.string.save_text),

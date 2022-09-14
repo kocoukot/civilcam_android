@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="empty_string" translatable="false"></string>
-    <string name="continue_text">Continue</string>
 
     <string name="save_text">Save</string>
-    <string name="send_text">Send</string>
 
     <string name="settings_title">Settings</string>
 
@@ -42,14 +40,9 @@
     <string name="settings_manage_subscription_plan">Manage subscription plan</string>
     <string name="settings_restore_purchase">Restore purchase</string>
 
-    <string name="hide">Hide</string>
-    <string name="show_title">Show</string>
-
-    <string name="create_password">Create password</string>
-    <string name="password">Password</string>
-
     <string name="confirm_password">Confirm password</string>
     <string name="re_enter_password">Re-enter password</string>
+    <string name="send_text">Send</string>
 
 
 </resources>

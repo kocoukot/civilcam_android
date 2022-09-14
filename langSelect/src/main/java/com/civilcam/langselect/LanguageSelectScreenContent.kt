@@ -112,7 +112,7 @@ fun BottomCard(
                 }
             }
             ComposeButton(
-                title = stringResource(id = R.string.continue_text),
+                title = stringResource(id = com.civilcam.ext_features.R.string.continue_text),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp),
