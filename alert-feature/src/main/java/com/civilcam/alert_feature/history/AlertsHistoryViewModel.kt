@@ -40,7 +40,10 @@ class AlertsHistoryViewModel(
             kotlin.runCatching { getHistoryAlertListUseCase.getAlerts(_state.value.alertType) }
                 .onSuccess { user -> _state.update { it.copy(data = user) } }
                 .onFailure { error ->
-                    error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
+                    error.serviceCast { msg, _, isForceLogout ->
+                        if (isForceLogout) navigateRoute(AlertHistoryRoute.ForceLogout)
+                        _state.update { it.copy(errorText = msg) }
+                    }
                 }
             _state.update { it.copy(isLoading = false) }
         }

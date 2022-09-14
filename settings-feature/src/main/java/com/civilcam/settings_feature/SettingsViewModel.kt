@@ -89,7 +89,6 @@ class SettingsViewModel(
     }
 
     private fun doActionOnAccount(isLogOut: Boolean) {
-        navigateRoute(SettingsRoute.GoStartScreen)
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             kotlin.runCatching { if (isLogOut) logoutUseCase() else deleteAccountUseCase() }
