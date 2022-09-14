@@ -1,7 +1,9 @@
 package com.civilcam.ui.common.compose.inputs
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.keyframes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -31,13 +33,20 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import com.civilcam.ext_features.ext.digits
 import com.civilcam.ext_features.theme.CCTheme
+import com.civilcam.ui.auth.pincode.model.PinCodeFlow
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@SuppressLint("CoroutineCreationDuringComposition")
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun PinCodeInputField(
 	pinCodeValue: (String) -> Unit,
-	noMatchState: Boolean
+	noMatchState: Boolean = false,
+	currentNoMatch: Boolean = false,
+	isDataLoaded: Boolean = false,
+	screenState: PinCodeFlow
 ) {
 	
 	var inputSize by remember { mutableStateOf(0) }
@@ -46,40 +55,23 @@ fun PinCodeInputField(
 	
 	val pinColorState by
 	animateColorAsState(
-		targetValue =
-		if (noMatchState) {
-			if (inputSize == PIN_SIZE) {
-				CCTheme.colors.primaryRed
-			} else {
-				CCTheme.colors.black
-			}
+		targetValue = if ((noMatchState || currentNoMatch) && inputSize == PIN_SIZE) {
+			CCTheme.colors.primaryRed
 		} else {
 			CCTheme.colors.black
 		}
 	)
 	
-	if (inputSize == PIN_SIZE) {
-		LaunchedEffect(key1 = Unit) {
-			if (noMatchState) {
-				xShake.animateTo(
-					targetValue = 0.dp.value,
-					animationSpec = keyframes {
-						0.0F at 0
-						20.0F at 80
-						-20.0F at 120
-						10.0F at 160
-						-10.0F at 200
-						5.0F at 240
-						0.0F at 280
-					}
-				)
+	LaunchedEffect(key1 = isDataLoaded) {
+		if (inputSize == PIN_SIZE) {
+			if (currentNoMatch || noMatchState) {
+				shakeAnimation(xShake)
 				delay(1000)
 			}
 			inputSize = 0
 			pinValue = ""
 		}
 	}
-	
 	
 	Column(
 		modifier = Modifier.fillMaxWidth(),
@@ -114,6 +106,21 @@ fun PinCodeInputField(
 			}
 		}
 	}
+}
+
+suspend fun shakeAnimation(xShake: Animatable<Float, AnimationVector1D>) {
+	xShake.animateTo(
+		targetValue = 0.dp.value,
+		animationSpec = keyframes {
+			0.0F at 0
+			20.0F at 80
+			-20.0F at 120
+			10.0F at 160
+			-10.0F at 200
+			5.0F at 240
+			0.0F at 280
+		}
+	)
 }
 
 @OptIn(ExperimentalFoundationApi::class)

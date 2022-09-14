@@ -26,6 +26,7 @@ import com.civilcam.ui.auth.pincode.content.PinCodeErrorBlock
 import com.civilcam.ui.auth.pincode.model.PinCodeActions
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.common.compose.inputs.PinCodeInputField
+import java.util.*
 
 @Composable
 fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
@@ -104,14 +105,10 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 							)
 						)
 					},
-					noMatchState = when (state.value.screenState) {
-						PinCodeFlow.CURRENT_PIN_CODE, PinCodeFlow.SOS_PIN_CODE -> {
-							Handler(Looper.getMainLooper()).postDelayed({
-								state.value.currentNoMatch
-							}, 0)
-						}
-						else -> state.value.noMatch
-					}
+					noMatchState = state.value.noMatch,
+					currentNoMatch = state.value.currentNoMatch,
+					screenState = state.value.screenState,
+					isDataLoaded = state.value.isDataLoaded
 				)
 				
 				AnimatedVisibility(
