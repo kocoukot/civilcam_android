@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.civilcam.alert_feature.R
 import com.civilcam.alert_feature.list.model.AlertListRoute
 import com.civilcam.alert_feature.map.LiveMapFragment
 import com.civilcam.ext_features.SupportBottomBar
 import com.civilcam.ext_features.ext.navController
+import com.civilcam.ext_features.ext.navigateTo
 import com.civilcam.ext_features.live_data.observeNonNull
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -26,8 +26,8 @@ class AlertsListFragment : Fragment(), SupportBottomBar {
     ): View {
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
-                AlertListRoute.GoMyProfile -> navController.navigate(getString(com.civilcam.ext_features.R.string.direction_userProfileFragment).toUri())
-                AlertListRoute.GoSettings -> navController.navigate(getString(com.civilcam.ext_features.R.string.direction_settingsFragment).toUri())
+                AlertListRoute.GoMyProfile -> navigateTo(getString(com.civilcam.ext_features.R.string.direction_userProfileFragment))
+                AlertListRoute.GoSettings -> navigateTo(getString(com.civilcam.ext_features.R.string.direction_settingsFragment))
                 is AlertListRoute.GoUserAlert ->
                     navController.navigate(
                         R.id.liveMapFragment,
