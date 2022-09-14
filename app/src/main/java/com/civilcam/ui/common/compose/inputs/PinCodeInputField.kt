@@ -45,8 +45,7 @@ fun PinCodeInputField(
 	pinCodeValue: (String) -> Unit,
 	noMatchState: Boolean = false,
 	currentNoMatch: Boolean = false,
-	isDataLoaded: Boolean = false,
-	screenState: PinCodeFlow
+	isDataLoaded: Boolean = false
 ) {
 	
 	var inputSize by remember { mutableStateOf(0) }

@@ -107,7 +107,6 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 					},
 					noMatchState = state.value.noMatch,
 					currentNoMatch = state.value.currentNoMatch,
-					screenState = state.value.screenState,
 					isDataLoaded = state.value.isDataLoaded
 				)
 				
