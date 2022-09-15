@@ -24,18 +24,21 @@ class AlertsListViewModel(
         getLocalCurrentUserUseCase().let { user ->
             _state.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
         }
+        getAlertsList()
     }
 
     private fun getAlertsList() {
         _state.update { it.copy(isLoading = true) }
-        viewModelScope.launch {
-            kotlin.runCatching { getAlertsListUseCase() }
-                .onSuccess { user -> _state.update { it.copy(data = user) } }
-                .onFailure { error ->
-                    error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
-                }
-            _state.update { it.copy(isLoading = false) }
-        }
+        networkRequest(
+            action = { getAlertsListUseCase() },
+            onSuccess = { user ->
+                _state.update { it.copy(data = user) }
+            },
+            onFailure = { error ->
+                error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
+            },
+            onComplete = { _state.update { it.copy(isLoading = false) } },
+        )
     }
 
     override fun setInputActions(action: AlertListActions) {
@@ -46,7 +49,6 @@ class AlertsListViewModel(
             is AlertListActions.ClickGoUserProfile -> goUserProfile(action.alertId)
             AlertListActions.ClickGoAlertsHistory -> goAlertHistory()
             is AlertListActions.ClickConfirmResolve -> alertResult(action.result)
-            AlertListActions.ClickGetMockLis -> getAlertsList()
         }
     }
 

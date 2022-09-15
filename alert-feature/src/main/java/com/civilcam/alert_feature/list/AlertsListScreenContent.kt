@@ -1,7 +1,6 @@
 package com.civilcam.alert_feature.list
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -125,8 +124,7 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
             } ?: kotlin.run {
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .clickable { viewModel.setInputActions(AlertListActions.ClickGetMockLis) },
+                        .fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     EmptyListText(

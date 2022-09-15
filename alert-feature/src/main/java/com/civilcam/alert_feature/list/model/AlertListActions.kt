@@ -12,7 +12,4 @@ sealed class AlertListActions : ComposeFragmentActions {
     data class ClickGoUserProfile(val alertId: Int) : AlertListActions()
 
     object ClickGoAlertsHistory : AlertListActions()
-
-    object ClickGetMockLis : AlertListActions()
-
 }
