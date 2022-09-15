@@ -37,7 +37,7 @@ class AlertsHistoryViewModel(
     private fun getAlertHistoryList() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            kotlin.runCatching { getHistoryAlertListUseCase.getAlerts(_state.value.alertType) }
+            kotlin.runCatching { getHistoryAlertListUseCase(_state.value.alertType.domain) }
                 .onSuccess { user -> _state.update { it.copy(data = user) } }
                 .onFailure { error ->
                     error.serviceCast { msg, _, isForceLogout ->

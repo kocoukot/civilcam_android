@@ -6,10 +6,10 @@ sealed class AlertListActions : ComposeFragmentActions {
     object ClickGoMyProfile : AlertListActions()
     object ClickGoSettings : AlertListActions()
 
-    data class ClickResolveAlert(val userId: Int) : AlertListActions()
+    data class ClickResolveAlert(val alertId: Int) : AlertListActions()
     data class ClickConfirmResolve(val result: Boolean) : AlertListActions()
 
-    data class ClickGoUserProfile(val userId: Int) : AlertListActions()
+    data class ClickGoUserProfile(val alertId: Int) : AlertListActions()
 
     object ClickGoAlertsHistory : AlertListActions()
 

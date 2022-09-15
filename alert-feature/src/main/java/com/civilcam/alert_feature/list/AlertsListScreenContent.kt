@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.alert_feature.R
 import com.civilcam.alert_feature.list.content.AlertHistoryRowSection
 import com.civilcam.alert_feature.list.model.AlertListActions
-import com.civilcam.ext_features.DateUtils
+import com.civilcam.domainLayer.model.alerts.AlertStatus
 import com.civilcam.ext_features.alert.AlertDialogTypes
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
@@ -90,30 +90,30 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
 
                     itemsIndexed(data, key = { _, item -> item.alertId }) { index, item ->
                         InformationRow(
-                            title = item.userInfo.userName,
-                            text = DateUtils.getFullDateAndTimeString(item.alertDate),
+                            title = item.userInfo.personFullName,
+                            text = item.alertDate,//DateUtils.getFullDateAndTimeString(),
                             needDivider = index < data.lastIndex,
-                            leadingIcon = { CircleUserAvatar(item.userInfo.avatar, 36) },
+                            leadingIcon = {
+                                item.userInfo.personAvatar?.imageUrl?.let { avatar ->
+                                    CircleUserAvatar(avatar, 36)
+                                }
+                            },
                             trailingIcon = {
-                                if (!item.isResolved) {
+                                if (item.alertStatus == AlertStatus.ACTIVE) {
                                     TextActionButton(
                                         modifier = Modifier.padding(end = 8.dp),
                                         actionTitle = stringResource(id = R.string.resolve_text),
                                         textFont = FontFamily(Font(com.civilcam.ext_features.R.font.roboto_regular)),
                                     ) {
                                         viewModel.setInputActions(
-                                            AlertListActions.ClickResolveAlert(
-                                                item.alertId
-                                            )
+                                            AlertListActions.ClickResolveAlert(item.alertId)
                                         )
                                     }
                                 }
                             },
                             rowClick = {
                                 viewModel.setInputActions(
-                                    AlertListActions.ClickGoUserProfile(
-                                        item.userInfo.userId
-                                    )
+                                    AlertListActions.ClickGoUserProfile(item.alertId)
                                 )
                             },
                         )

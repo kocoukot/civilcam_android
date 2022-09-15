@@ -62,6 +62,14 @@ object Endpoint {
         const val GET_SUBSCRIPTIONS_LIST = "get-subscriptions-list"
     }
 
+    object Alerts {
+        const val SOS_COORDINATES = "sos"
+        const val ALERTS_LIST = "list"
+        const val ALERTS_HISTORY = "history"
+        const val ALERT_DETAILS = "details"
+        const val ALERT_RESOLVE = "resolve"
+    }
+
     object Public {
         const val LEGAL_DOCS = "legal-docs"
     }

@@ -1,10 +1,10 @@
 package com.civilcam.domainLayer.usecase.alerts
 
-import com.civilcam.domainLayer.model.alerts.AlertType
-import com.civilcam.domainLayer.repos.MockRepository
+import com.civilcam.domainLayer.repos.AlertsRepository
 
 class GetHistoryAlertListUseCase(
-    private val mockRepository: MockRepository
+    private val alertsRepository: AlertsRepository
 ) {
-    suspend fun getAlerts(alertType: AlertType) = mockRepository.getHistoryAlert(alertType)
+    suspend operator fun invoke(historyType: String) =
+        alertsRepository.getAlertsHistory(historyType)
 }

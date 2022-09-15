@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.civilcam.alert_feature.list.model.AlertListActions
 import com.civilcam.alert_feature.list.model.AlertListRoute
 import com.civilcam.alert_feature.list.model.AlertListState
+import com.civilcam.domainLayer.model.alerts.AlertStatus
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.GetAlertsListUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
@@ -28,7 +29,7 @@ class AlertsListViewModel(
     private fun getAlertsList() {
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            kotlin.runCatching { getAlertsListUseCase.getAlerts() }
+            kotlin.runCatching { getAlertsListUseCase() }
                 .onSuccess { user -> _state.update { it.copy(data = user) } }
                 .onFailure { error ->
                     error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
@@ -41,8 +42,8 @@ class AlertsListViewModel(
         when (action) {
             AlertListActions.ClickGoMyProfile -> goMyProfile()
             AlertListActions.ClickGoSettings -> goSettings()
-            is AlertListActions.ClickResolveAlert -> showResolveAlert(action.userId)
-            is AlertListActions.ClickGoUserProfile -> goUserProfile(action.userId)
+            is AlertListActions.ClickResolveAlert -> showResolveAlert(action.alertId)
+            is AlertListActions.ClickGoUserProfile -> goUserProfile(action.alertId)
             AlertListActions.ClickGoAlertsHistory -> goAlertHistory()
             is AlertListActions.ClickConfirmResolve -> alertResult(action.result)
             AlertListActions.ClickGetMockLis -> getAlertsList()
@@ -77,7 +78,7 @@ class AlertsListViewModel(
                 data.let { list ->
                     list.find {
                         it.alertId == _state.value.resolveId
-                    }?.isResolved = true
+                    }?.alertStatus = AlertStatus.RESOLVED
                 }
                 _state.update { it.copy(data = data.toList(), resolveId = null) }
             }
