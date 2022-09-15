@@ -8,4 +8,5 @@ data class AlertListState(
     val errorText: String = "",
     val resolveId: Int? = null,
     val userAvatar: ImageInfo? = null,
+    val refreshList: Unit? = null
 ) : ComposeFragmentState

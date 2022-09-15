@@ -104,7 +104,7 @@ val networkRootModule = module {
 
 val alertsRootModule = module {
 
-	viewModel { AlertsListViewModel(get(), get()) }
+	viewModel { AlertsListViewModel(get(), get(), get()) }
 	
 	viewModel { AlertsHistoryViewModel(get()) }
 	

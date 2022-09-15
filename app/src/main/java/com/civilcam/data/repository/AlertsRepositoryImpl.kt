@@ -2,6 +2,7 @@ package com.civilcam.data.repository
 
 import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.mapper.alerts.AlertListMapper
+import com.civilcam.data.network.model.request.alert.AlertResolveRequest
 import com.civilcam.data.network.service.AlertService
 import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
@@ -21,18 +22,6 @@ class AlertsRepositoryImpl(
     override suspend fun updateSosCoords(location: String, coords: LatLng): Boolean {
         return true
     }
-//	: Boolean =
-//		safeApiCall {
-//			alertService.postSosCoordinates(
-//				VerifyResetPasswordRequest(email, code)
-//			)
-//		}.let { response ->
-//			when (response) {
-//				is Resource.Success -> response.value.recoveryToken
-//				is Resource.Failure -> throw response.serviceException
-//
-//			}
-//		}
 
     override suspend fun getAlertsList(page: PaginationRequest.Pagination): List<AlertModel> =
         safeApiCall {
@@ -52,9 +41,13 @@ class AlertsRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun resolveAlert(alertId: Int): Boolean {
-        TODO("Not yet implemented")
-    }
-
-
+    override suspend fun resolveAlert(alertId: Int): Boolean =
+        safeApiCall {
+            alertService.resolveAlert(AlertResolveRequest(id = alertId))
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> response.value.ok
+                is Resource.Failure -> throw response.serviceException
+            }
+        }
 }

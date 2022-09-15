@@ -35,6 +35,11 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
 
     val alertList = viewModel.searchList.collectAsLazyPagingItems()
 
+    if (state.value.refreshList == Unit) {
+        alertList.refresh()
+        viewModel.stopRefresh()
+    }
+
     if (state.value.resolveId != null) {
         AlertDialogComp(
             dialogTitle = stringResource(id = R.string.resolve_alert_title),
