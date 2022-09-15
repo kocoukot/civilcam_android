@@ -31,7 +31,7 @@ class AlertsListFragment : Fragment(), SupportBottomBar {
                 is AlertListRoute.GoUserAlert ->
                     navController.navigate(
                         R.id.liveMapFragment,
-                        LiveMapFragment.createArgs(route.userId)
+                        LiveMapFragment.createArgs(route.alertId)
                     )
                 AlertListRoute.GoAlertHistory -> navController.navigate(R.id.action_alerts_root_to_alertsHistoryFragment)
             }

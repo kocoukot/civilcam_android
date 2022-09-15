@@ -13,7 +13,6 @@ import com.civilcam.alert_feature.R
 import com.civilcam.alert_feature.history.model.AlertHistoryActions
 import com.civilcam.domainLayer.model.alerts.AlertModel
 import com.civilcam.domainLayer.model.alerts.AlertType
-import com.civilcam.ext_features.DateUtils
 import com.civilcam.ext_features.compose.elements.CircleUserAvatar
 import com.civilcam.ext_features.compose.elements.EmptyListText
 import com.civilcam.ext_features.compose.elements.InformationRow
@@ -47,14 +46,16 @@ fun AlertHistoryListScreenContent(
 
                 itemsIndexed(data, key = { _, item -> item.alertId }) { index, item ->
                     InformationRow(
-                        title = if (alertType == AlertType.RECEIVED) item.userInfo.userName else stringResource(
+                        title = if (alertType == AlertType.RECEIVED) item.userInfo.personFullName else stringResource(
                             id = R.string.alerts_history_sent_alert
                         ),
-                        text = DateUtils.getFullDateAndTimeString(item.alertDate),
+                        text = item.alertDate,
                         needDivider = index < data.lastIndex,
                         leadingIcon = {
                             if (alertType == AlertType.RECEIVED)
-                                CircleUserAvatar(item.userInfo.avatar, 36)
+                                item.userInfo.personAvatar?.imageUrl?.let { avatar ->
+                                    CircleUserAvatar(avatar, 36)
+                                }
                         },
                         rowClick = {
                             onScreenAction.invoke(AlertHistoryActions.ClickGoAlertDetails(item.alertId))

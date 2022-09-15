@@ -97,6 +97,11 @@ val networkModule = module {
     }
 
     single {
+        get<Retrofit> { parametersOf(Path.ALERTS) }
+            .create(AlertService::class.java)
+    }
+
+    single {
         get<Retrofit>(GoogleRetrofit)
             .create(GoogleOAuthService::class.java)
     }

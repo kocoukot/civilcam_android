@@ -18,8 +18,6 @@ import com.civilcam.ext_features.theme.CCTheme
 @Composable
 fun AlertHistoryRowSection(rowClicked: () -> Unit) {
     Column {
-
-
         Spacer(modifier = Modifier.height(32.dp))
         RowDivider()
         Row(

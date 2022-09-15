@@ -1,10 +1,10 @@
 package com.civilcam.domainLayer.usecase.alerts
 
-import com.civilcam.domainLayer.repos.MockRepository
+import com.civilcam.domainLayer.repos.AlertsRepository
 
 
 class GetAlertsListUseCase(
-    private val mockRepository: MockRepository
+    private val alertsRepository: AlertsRepository
 ) {
-    suspend fun getAlerts() = mockRepository.getAlerts()
+//    suspend operator fun invoke() = alertsRepository.getAlertsList()
 }

@@ -28,4 +28,6 @@ val repositoryModule = module {
 
     factory<GuardiansRepository> { GuardiansRepositoryImpl(get(), get()) }
 
+    factory<AlertsRepository> { AlertsRepositoryImpl(get(), get()) }
+
 }

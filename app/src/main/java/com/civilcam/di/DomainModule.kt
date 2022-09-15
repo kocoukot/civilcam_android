@@ -1,10 +1,7 @@
 package com.civilcam.di
 
 import com.civilcam.domainLayer.usecase.GetUserDetailUseCase
-import com.civilcam.domainLayer.usecase.alerts.GetAlertsListUseCase
-import com.civilcam.domainLayer.usecase.alerts.GetHistoryAlertListUseCase
-import com.civilcam.domainLayer.usecase.alerts.GetHistoryDetailUseCase
-import com.civilcam.domainLayer.usecase.alerts.GetMapAlertUserDataUseCase
+import com.civilcam.domainLayer.usecase.alerts.*
 import com.civilcam.domainLayer.usecase.auth.*
 import com.civilcam.domainLayer.usecase.docs.GetTermsLinksUseCase
 import com.civilcam.domainLayer.usecase.guardians.*
@@ -54,7 +51,7 @@ val domainModule = module {
 
     factory { GetHistoryAlertListUseCase(get()) }
 
-    factory { GetHistoryDetailUseCase(get()) }
+    factory { GetAlertDetailUseCase(get()) }
 
     factory { SearchGuardsResultUseCase(get()) }
 
@@ -121,6 +118,9 @@ val domainModule = module {
     factory { GetNetworkRequestsUseCase(get()) }
 
     factory { FacebookSignInUseCase(get(), get()) }
+
+    factory { ResolveAlertUseCase(get()) }
+
 
 }
 
