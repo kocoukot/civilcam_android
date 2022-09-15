@@ -12,4 +12,9 @@ sealed class AlertListActions : ComposeFragmentActions {
     data class ClickGoUserProfile(val alertId: Int) : AlertListActions()
 
     object ClickGoAlertsHistory : AlertListActions()
+    object ClearErrorText : AlertListActions()
+    object StopRefresh : AlertListActions()
+    data class SetErrorText(val error: String) : AlertListActions()
+
+
 }

@@ -18,9 +18,8 @@ import androidx.paging.compose.itemsIndexed
 import com.civilcam.alert_feature.R
 import com.civilcam.alert_feature.list.content.AlertHistoryRowSection
 import com.civilcam.alert_feature.list.model.AlertListActions
-import com.civilcam.domainLayer.ServiceException
-import com.civilcam.domainLayer.castSafe
 import com.civilcam.domainLayer.model.alerts.AlertStatus
+import com.civilcam.domainLayer.serviceCast
 import com.civilcam.ext_features.DateUtils.alertDateFormat
 import com.civilcam.ext_features.alert.AlertDialogTypes
 import com.civilcam.ext_features.compose.elements.*
@@ -37,7 +36,7 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
 
     if (state.value.refreshList == Unit) {
         alertList.refresh()
-        viewModel.stopRefresh()
+        viewModel.setInputActions(AlertListActions.StopRefresh)
     }
 
     if (state.value.resolveId != null) {
@@ -49,6 +48,15 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                 viewModel.setInputActions(AlertListActions.ClickConfirmResolve(it))
             })
     }
+
+    if (state.value.errorText.isNotEmpty()) {
+        AlertDialogComp(
+            dialogText = state.value.errorText,
+            alertType = AlertDialogTypes.OK,
+            onOptionSelected = { viewModel.setInputActions(AlertListActions.ClearErrorText) }
+        )
+    }
+
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
         topBar = {
@@ -155,9 +163,9 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                     }
                 }
                 loadState.refresh is LoadState.Error -> {
-                    (loadState.refresh as LoadState.Error).error.castSafe<ServiceException>()
-                        ?.let { error ->
-                        }
+                    (loadState.refresh as LoadState.Error).error.serviceCast { error, _, _ ->
+                        viewModel.setInputActions(AlertListActions.SetErrorText(error))
+                    }
                 }
                 else -> {}
             }

@@ -42,7 +42,10 @@ class AlertsListViewModel(
             is AlertListActions.ClickResolveAlert -> showResolveAlert(action.alertId)
             is AlertListActions.ClickGoUserProfile -> goUserProfile(action.alertId)
             AlertListActions.ClickGoAlertsHistory -> goAlertHistory()
-            is AlertListActions.ClickConfirmResolve -> alertResult()
+            is AlertListActions.ClickConfirmResolve -> resolveAlertResult()
+            AlertListActions.ClearErrorText -> clearErrorText()
+            AlertListActions.StopRefresh -> stopRefresh()
+            is AlertListActions.SetErrorText -> _state.update { it.copy(errorText = action.error) }
         }
     }
 
@@ -67,13 +70,11 @@ class AlertsListViewModel(
         _state.update { it.copy(resolveId = userId) }
     }
 
-    private fun alertResult() {
+    private fun resolveAlertResult() {
         _state.value.resolveId?.let { alertId ->
             _state.update { it.copy(isLoading = true) }
             networkRequest(
-                action = {
-                    resolveAlertUseCase(alertId)
-                },
+                action = { resolveAlertUseCase(alertId) },
                 onSuccess = {
                     _state.update { it.copy(refreshList = Unit, resolveId = null) }
                 },
@@ -89,9 +90,7 @@ class AlertsListViewModel(
     private fun loadAlertsList(): Flow<PagingData<AlertModel>> {
         return Pager(
             config = PagingConfig(pageSize = 40, initialLoadSize = 20, prefetchDistance = 6),
-            pagingSourceFactory = {
-                koin.get<AlertListDataSource>()
-            }
+            pagingSourceFactory = { koin.get<AlertListDataSource>() }
         ).flow
             .cachedIn(viewModelScope)
     }
@@ -100,7 +99,7 @@ class AlertsListViewModel(
         _state.update { it.copy(errorText = "") }
     }
 
-    fun stopRefresh() {
+    private fun stopRefresh() {
         _state.update { it.copy(refreshList = null) }
     }
 }
