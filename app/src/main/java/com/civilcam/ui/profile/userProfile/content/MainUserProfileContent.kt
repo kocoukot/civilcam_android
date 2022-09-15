@@ -27,13 +27,15 @@ fun MainProfileContent(
 				UserProfileType.EMAIL -> data.sessionUser.email
 				UserProfileType.PIN_CODE -> "••••"
 			}
-			if (type != UserProfileType.EMAIL && !data.sessionUser.canChangeEmail)
+			if (type == UserProfileType.EMAIL && !data.sessionUser.canChangeEmail) {
+			} else {
 				ProfileRow(
 					title = stringResource(id = type.title),
 					value = rowValue,
 					needDivider = type != UserProfileType.PIN_CODE,
 					rowClick = { onRowClicked.invoke(UserProfileActions.GoCredentials(type)) }
 				)
+			}
 		}
         RowDivider()
 	}
