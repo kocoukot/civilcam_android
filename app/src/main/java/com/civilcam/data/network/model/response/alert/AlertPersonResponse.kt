@@ -8,6 +8,6 @@ class AlertPersonResponse(
     @SerializedName("date") val date: String,
     @SerializedName("location") val location: String,
     @SerializedName("person") val person: PersonResponse,
-    @SerializedName("url") val url: String,
+    @SerializedName("url") val url: String?,
     @SerializedName("status") val status: String,
 )

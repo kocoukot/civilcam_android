@@ -34,14 +34,13 @@ class AlertsRepositoryImpl(
 //			}
 //		}
 
-    override suspend fun getAlertsList(): List<AlertModel> =
+    override suspend fun getAlertsList(page: PaginationRequest.Pagination): List<AlertModel> =
         safeApiCall {
-            alertService.getAlertsList(PaginationRequest())
+            alertService.getAlertsList(PaginationRequest(page))
         }.let { response ->
             when (response) {
                 is Resource.Success -> response.value.list.map { alertListMapper.mapData(it) }
                 is Resource.Failure -> throw response.serviceException
-
             }
         }
 

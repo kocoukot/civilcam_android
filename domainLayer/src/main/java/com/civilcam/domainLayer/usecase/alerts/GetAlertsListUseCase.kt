@@ -6,5 +6,5 @@ import com.civilcam.domainLayer.repos.AlertsRepository
 class GetAlertsListUseCase(
     private val alertsRepository: AlertsRepository
 ) {
-    suspend operator fun invoke() = alertsRepository.getAlertsList()
+//    suspend operator fun invoke() = alertsRepository.getAlertsList()
 }

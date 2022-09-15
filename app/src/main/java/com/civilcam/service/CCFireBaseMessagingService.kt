@@ -43,7 +43,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService() {
                 this,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE
             )
 
 

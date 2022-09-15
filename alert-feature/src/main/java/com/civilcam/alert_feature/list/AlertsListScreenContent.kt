@@ -3,7 +3,6 @@ package com.civilcam.alert_feature.list
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -13,13 +12,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemsIndexed
 import com.civilcam.alert_feature.R
 import com.civilcam.alert_feature.list.content.AlertHistoryRowSection
 import com.civilcam.alert_feature.list.model.AlertListActions
+import com.civilcam.domainLayer.ServiceException
+import com.civilcam.domainLayer.castSafe
 import com.civilcam.domainLayer.model.alerts.AlertStatus
+import com.civilcam.ext_features.DateUtils.alertDateFormat
 import com.civilcam.ext_features.alert.AlertDialogTypes
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
+import timber.log.Timber
 
 
 @Composable
@@ -27,6 +33,7 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
 
     val state = viewModel.state.collectAsState()
 
+    val alertList = viewModel.searchList.collectAsLazyPagingItems()
 
     if (state.value.resolveId != null) {
         AlertDialogComp(
@@ -77,21 +84,21 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                 viewModel.setInputActions(AlertListActions.ClickGoAlertsHistory)
             }
 
-            state.value.data?.takeIf { it.isNotEmpty() }?.let { data ->
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    item {
-                        Spacer(modifier = Modifier.height(32.dp))
-                        RowDivider()
-                    }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                item {
+                    Spacer(modifier = Modifier.height(32.dp))
+                    if (alertList.itemCount > 0) RowDivider()
+                }
 
-                    itemsIndexed(data, key = { _, item -> item.alertId }) { index, item ->
+                itemsIndexed(alertList, key = { _, item -> item.alertId }) { index, item ->
+                    item?.let {
                         InformationRow(
                             title = item.userInfo.personFullName,
-                            text = item.alertDate,//DateUtils.getFullDateAndTimeString(),
-                            needDivider = index < data.lastIndex,
+                            text = alertDateFormat(item.alertDate),
+                            needDivider = index < alertList.itemCount - 1,
                             leadingIcon = {
                                 item.userInfo.personAvatar?.imageUrl?.let { avatar ->
                                     CircleUserAvatar(avatar, 36)
@@ -117,20 +124,37 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                             },
                         )
                     }
-                    item {
-                        RowDivider()
+
+                }
+                if (alertList.itemCount > 0) item {
+                    RowDivider()
+                }
+            }
+        }
+
+        alertList.apply {
+            Timber.d("lazyPlace loadState $loadState")
+            when {
+                loadState.source.refresh is LoadState.Loading -> DialogLoadingContent()
+                loadState.source.refresh is LoadState.NotLoading &&
+                        loadState.append.endOfPaginationReached &&
+                        itemCount < 1 -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        EmptyListText(
+                            stringResource(id = R.string.alerts_list_empty_state)
+                        )
                     }
                 }
-            } ?: kotlin.run {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    EmptyListText(
-                        stringResource(id = R.string.alerts_list_empty_state)
-                    )
+                loadState.refresh is LoadState.Error -> {
+                    (loadState.refresh as LoadState.Error).error.castSafe<ServiceException>()
+                        ?.let { error ->
+                        }
                 }
+                else -> {}
             }
         }
     }

@@ -3,9 +3,9 @@ package com.civilcam.di
 import com.civilcam.alert_feature.history.AlertsHistoryViewModel
 import com.civilcam.alert_feature.list.AlertsListViewModel
 import com.civilcam.alert_feature.map.LiveMapViewModel
-import com.civilcam.di.source.GlobalKoinInjector
-import com.civilcam.di.source.KoinInjector
 import com.civilcam.domainLayer.model.VerificationFlow
+import com.civilcam.ext_features.GlobalKoinInjector
+import com.civilcam.ext_features.KoinInjector
 import com.civilcam.langselect.LanguageSelectViewModel
 import com.civilcam.onboarding_feature.OnBoardingViewModel
 import com.civilcam.ui.auth.create.CreateAccountViewModel

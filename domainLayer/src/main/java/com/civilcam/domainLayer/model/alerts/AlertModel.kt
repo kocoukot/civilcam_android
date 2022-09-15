@@ -6,7 +6,7 @@ data class AlertModel(
     val alertId: Int,
     val alertDate: String,
     val alertLocation: String,
-    val alertUrl: String,
+    val alertUrl: String?,
     var alertStatus: AlertStatus,
     val userInfo: PersonModel,
 )
