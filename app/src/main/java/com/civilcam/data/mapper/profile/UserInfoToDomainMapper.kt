@@ -7,7 +7,6 @@ import com.civilcam.domainLayer.model.profile.UserSetupModel
 
 class UserInfoToDomainMapper : Mapper<UserSetupModel, UserProfileRequest>(
     fromData = {
-        System.currentTimeMillis()
         UserProfileRequest(
             firstName = it.firstName,
             lastName = it.lastName,

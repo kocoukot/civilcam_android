@@ -30,6 +30,12 @@ class SettingsViewModel(
 
     override var _state = MutableStateFlow(SettingsState())
 
+    init {
+        getLocalCurrentUserUseCase().let { user ->
+            _state.update { it.copy(canChangePassword = user.sessionUser.canChangePassword) }
+        }
+    }
+
     override fun setInputActions(action: SettingsActions) {
         when (action) {
             SettingsActions.ClickGoBack -> goBack()
