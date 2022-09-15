@@ -1,7 +1,6 @@
 package com.civilcam.settings_feature
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
@@ -15,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.civilcam.domainLayer.ext.LocaleHelper
 import com.civilcam.domainLayer.ext.LocaleHelper.SetLanguageCompose
+import com.civilcam.domainLayer.model.user.LanguageType
 import com.civilcam.ext_features.alert.AlertDialogTypes
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.ext.isEmail
@@ -85,7 +85,12 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 									isEnabled = isActionEnabled,
 									actionTitle = stringResource(id = settingsType.actionBtnTitle)
 								) {
-									viewModel.setInputActions(setAction(settingsType, context))
+									viewModel.setInputActions(
+										setAction(
+											settingsType,
+											selectedLanguage
+										)
+									)
 								}
 							}
 						}
@@ -100,7 +105,7 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 		) { settingsState ->
 			when (settingsState) {
 				SettingsType.MAIN ->
-					MainSettingsContent {
+					MainSettingsContent(state.value.canChangePassword) {
 						viewModel.setInputActions(SettingsActions.ClickSection(it))
 						currentLanguage = LocaleHelper.getSelectedLanguage(context)
 						selectedLanguage = LocaleHelper.getSelectedLanguage(context)
@@ -174,33 +179,23 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 						}
 					)
 				}
-				SettingsType.LOG_OUT -> {
-					MainSettingsContent {}
+				SettingsType.LOG_OUT, SettingsType.DELETE_ACCOUNT -> {
+					MainSettingsContent(state.value.canChangePassword) {}
 					AlertDialogComp(
-						dialogTitle = stringResource(id = R.string.settings_log_out_alert_title),
-						dialogText = stringResource(id = R.string.settings_log_out_alert_text),
+						dialogTitle = if (settingsState == SettingsType.LOG_OUT)
+							stringResource(id = R.string.settings_log_out_alert_title)
+						else
+							stringResource(id = R.string.settings_delete_account_alert_title),
+						dialogText = if (settingsState == SettingsType.LOG_OUT)
+							stringResource(id = R.string.settings_log_out_alert_text)
+						else
+							stringResource(id = R.string.settings_delete_account_alert_text),
 						alertType = AlertDialogTypes.YES_CANCEL,
 						onOptionSelected = {
 							viewModel.setInputActions(
 								SettingsActions.ClickCloseAlertDialog(
 									it,
-									true
-								)
-							)
-						},
-					)
-				}
-				SettingsType.DELETE_ACCOUNT -> {
-					MainSettingsContent {}
-					AlertDialogComp(
-						dialogTitle = stringResource(id = R.string.settings_delete_account_alert_title),
-						dialogText = stringResource(id = R.string.settings_delete_account_alert_text),
-						alertType = AlertDialogTypes.YES_CANCEL,
-						onOptionSelected = {
-							viewModel.setInputActions(
-								SettingsActions.ClickCloseAlertDialog(
-									it,
-									false
+									settingsState == SettingsType.LOG_OUT
 								)
 							)
 						},
@@ -222,18 +217,13 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 	}
 }
 
-private fun setAction(settingsType: SettingsType, context: Context): SettingsActions =
+private fun setAction(settingsType: SettingsType, selectedLang: LanguageType): SettingsActions =
 	when (settingsType) {
-		SettingsType.LANGUAGE -> SettingsActions.ClickSaveLanguage(
-			LocaleHelper.getSelectedLanguage(
-				context
-			)
-		)
+		SettingsType.LANGUAGE -> SettingsActions.ClickSaveLanguage(selectedLang)
 		SettingsType.CONTACT_SUPPORT -> SettingsActions.ClickSendToSupport
 		SettingsType.CHANGE_PASSWORD -> SettingsActions.CheckCurrentPassword
 		SettingsType.CREATE_PASSWORD -> SettingsActions.SaveNewPassword
 		else -> SettingsActions.ClickGoBack
-
 	}
 
 private fun screenTitle(settingsType: SettingsType) = when (settingsType) {

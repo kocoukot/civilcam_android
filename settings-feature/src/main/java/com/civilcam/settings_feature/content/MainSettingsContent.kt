@@ -23,6 +23,7 @@ import com.civilcam.settings_feature.model.SettingsType
 
 @Composable
 fun MainSettingsContent(
+    canChangePassword: Boolean,
     onRowClicked: (SettingsType) -> Unit
 ) {
     Column(
@@ -50,6 +51,12 @@ fun MainSettingsContent(
                         needDivider = false,
                         rowClick = { onRowClicked.invoke(type) })
                     RowDivider()
+                }
+                SettingsType.CHANGE_PASSWORD -> {
+                    if (canChangePassword)
+                        SettingsRow(
+                            title = stringResource(id = type.rowTitle),
+                            rowClick = { onRowClicked.invoke(type) })
                 }
                 else -> {
                     if (type != SettingsType.CREATE_PASSWORD) {
