@@ -1,4 +1,4 @@
-package com.civilcam.ui.common.ext
+package com.civilcam.ext_features
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview

@@ -12,13 +12,13 @@ import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.ext_features.SupportBottomBar
+import com.civilcam.ext_features.arg
 import com.civilcam.ext_features.ext.setPan
 import com.civilcam.ext_features.ext.setResize
 import com.civilcam.ext_features.live_data.observeNonNull
+import com.civilcam.ext_features.navController
+import com.civilcam.ext_features.registerForPermissionsResult
 import com.civilcam.ui.MainActivity
-import com.civilcam.ui.common.ext.arg
-import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.network.main.model.NetworkMainRoute
 import com.civilcam.ui.network.main.model.NetworkScreen
 import com.civilcam.ui.profile.userDetails.UserDetailsFragment

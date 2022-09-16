@@ -15,13 +15,12 @@ import androidx.fragment.app.setFragmentResultListener
 import com.civilcam.R
 import com.civilcam.ext_features.ext.hideSystemUI
 import com.civilcam.ext_features.ext.showSystemUI
-import com.civilcam.ext_features.hideKeyboard
 import com.civilcam.ext_features.live_data.observeNonNull
+import com.civilcam.ext_features.navController
+import com.civilcam.ext_features.registerForPermissionsResult
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
-import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.registerForPermissionsResult
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel

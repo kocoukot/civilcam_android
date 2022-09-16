@@ -15,6 +15,7 @@ import com.civilcam.alert_feature.map.model.LiveMapRoute
 import com.civilcam.ext_features.ext.navController
 import com.civilcam.ext_features.ext.registerForPermissionsResult
 import com.civilcam.ext_features.live_data.observeNonNull
+import com.civilcam.ext_features.requireArg
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -32,13 +33,15 @@ class LiveMapFragment : Fragment() {
     ) { onPermissionsGranted(it) }
 
     private var pendingAction: (() -> Unit)? = null
-    private val userId = 1//by requireArg<Int>(ARG_ALERT_USER_ID)
+    private val userId by requireArg<Int>(ARG_ALERT_USER_ID)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        Timber.tag("alert notif ID").i("userId $userId")
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
                 LiveMapRoute.GoBack -> navController.popBackStack()

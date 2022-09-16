@@ -17,8 +17,8 @@ import com.civilcam.domainLayer.usecase.guardians.GetUserNetworkUseCase
 import com.civilcam.domainLayer.usecase.guardians.SetRequestReactionUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.ext_features.KoinInjector
+import com.civilcam.ext_features.SearchQuery
 import com.civilcam.ext_features.compose.ComposeViewModel
-import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.network.main.model.*
 import com.civilcam.ui.network.source.SearchGuardiansDataSource
 import kotlinx.coroutines.flow.Flow

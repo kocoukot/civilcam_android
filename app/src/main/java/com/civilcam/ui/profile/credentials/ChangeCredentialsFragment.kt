@@ -12,8 +12,8 @@ import com.civilcam.R
 import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ext_features.live_data.observeNonNull
-import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.requireArg
+import com.civilcam.ext_features.navController
+import com.civilcam.ext_features.requireArg
 import com.civilcam.ui.profile.credentials.model.ChangeCredentialsRoute
 import com.civilcam.ui.profile.userProfile.model.UserProfileType
 import com.civilcam.ui.verification.VerificationFragment

@@ -13,8 +13,8 @@ import com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase
 import com.civilcam.domainLayer.usecase.profile.SetPersonalInfoUseCase
 import com.civilcam.domainLayer.usecase.user.SetFCMTokenUseCase
 import com.civilcam.ext_features.DateUtils.dateOfBirthFormat
+import com.civilcam.ext_features.SearchQuery
 import com.civilcam.ext_features.compose.ComposeViewModel
-import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.profile.setup.model.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

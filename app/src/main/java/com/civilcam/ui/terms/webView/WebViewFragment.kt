@@ -6,9 +6,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.databinding.FragmentWebviewBinding
-import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.requireArg
-import com.civilcam.ui.common.ext.viewBinding
+import com.civilcam.ext_features.navController
+import com.civilcam.ext_features.requireArg
+import com.civilcam.ext_features.viewBinding
 
 class WebViewFragment : Fragment(R.layout.fragment_webview) {
     private val binding by viewBinding(FragmentWebviewBinding::bind)

@@ -5,7 +5,7 @@ import com.civilcam.di.*
 import com.civilcam.di.source.sourceModule
 import com.civilcam.domainLayer.model.user.NotificationType
 import com.civilcam.domainLayer.usecase.auth.SaveFcmTokenUseCase
-import com.civilcam.service.notifications.NotificationHelper
+import com.civilcam.service.CCFireBaseMessagingService
 import com.facebook.appevents.AppEventsLogger
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -67,12 +67,12 @@ class CivilcamApplication : Application() {
     }
 
     private fun createNotificationChannels() {
-        NotificationHelper.createNotificationChannel(
+        CCFireBaseMessagingService.createNotificationChannel(
             this,
             NotificationType.REQUESTS.notifyName,
             "Notification channel for requests."
         )
-        NotificationHelper.createNotificationChannel(
+        CCFireBaseMessagingService.createNotificationChannel(
             this,
             NotificationType.ALERTS.notifyName,
             "Notification channel for alerts"

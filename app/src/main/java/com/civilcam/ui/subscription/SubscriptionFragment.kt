@@ -12,8 +12,8 @@ import com.civilcam.R
 import com.civilcam.ext_features.ext.hideSystemUI
 import com.civilcam.ext_features.ext.showSystemUI
 import com.civilcam.ext_features.live_data.observeNonNull
-import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.requireArg
+import com.civilcam.ext_features.navController
+import com.civilcam.ext_features.requireArg
 import com.civilcam.ui.subscription.model.SubscriptionRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf

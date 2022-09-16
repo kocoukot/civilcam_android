@@ -8,8 +8,8 @@ import com.civilcam.data.local.model.PersonContactFilter
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.guardians.GetPhoneInvitesUseCase
 import com.civilcam.domainLayer.usecase.guardians.InviteByNumberUseCase
+import com.civilcam.ext_features.SearchQuery
 import com.civilcam.ext_features.compose.ComposeViewModel
-import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.network.contacts.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update

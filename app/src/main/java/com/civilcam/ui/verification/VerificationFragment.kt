@@ -17,12 +17,12 @@ import com.civilcam.R
 import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ext_features.hideKeyboard
 import com.civilcam.ext_features.live_data.observeNonNull
+import com.civilcam.ext_features.navController
+import com.civilcam.ext_features.requireArg
 import com.civilcam.ext_features.showKeyboard
 import com.civilcam.ui.auth.password.create.CreatePasswordFragment
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
-import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.requireArg
 import com.civilcam.ui.terms.TermsFragment
 import com.civilcam.ui.verification.model.VerificationRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel
