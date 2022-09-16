@@ -11,5 +11,8 @@ sealed class AlertHistoryActions : ComposeFragmentActions {
     object CLickUploadVideo : AlertHistoryActions()
 
     object StopRefresh : AlertHistoryActions()
+
+    object ClearErrorText : AlertHistoryActions()
+
     data class SetErrorText(val error: String) : AlertHistoryActions()
 }

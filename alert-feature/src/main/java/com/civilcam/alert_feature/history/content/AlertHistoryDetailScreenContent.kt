@@ -20,147 +20,154 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.alert_feature.R
 import com.civilcam.alert_feature.history.model.AlertHistoryActions
-import com.civilcam.alert_feature.history.model.ResolvedUsers
+import com.civilcam.domainLayer.model.alerts.AlertDetailModel
 import com.civilcam.domainLayer.model.alerts.AlertType
+import com.civilcam.ext_features.DateUtils.alertDateFormat
 import com.civilcam.ext_features.compose.elements.CircleUserAvatar
 import com.civilcam.ext_features.compose.elements.InformationBoxContent
 import com.civilcam.ext_features.compose.elements.InformationRow
 import com.civilcam.ext_features.compose.elements.RowDivider
+import com.civilcam.ext_features.ext.phoneNumberFormat
 import com.civilcam.ext_features.theme.CCTheme
 
 @Composable
 fun AlertHistoryDetailScreenContent(
+    alertDetail: AlertDetailModel?,
     onScreenAction: (AlertHistoryActions) -> Unit,
     alertType: AlertType
 ) {
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(CCTheme.colors.white),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Spacer(modifier = Modifier.height(16.dp))
-        CircleUserAvatar(
-            avatar = com.civilcam.ext_features.R.drawable.img_avatar,
-            avatarSize = 120,
-        )
-
-        Text(
-            text = "Sylvanas Windrunner",
-            style = CCTheme.typography.button_text,
-            color = CCTheme.colors.black,
-            modifier = Modifier.padding(vertical = 16.dp)
-        )
-
-
-        Row(
+    alertDetail?.let {
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 12.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+                .background(CCTheme.colors.white),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            if (alertType == AlertType.RECEIVED) {
+            Spacer(modifier = Modifier.height(16.dp))
+            alertDetail.alertModel.userInfo.personAvatar?.imageUrl?.let { avatar ->
+                CircleUserAvatar(
+                    avatar = avatar,
+                    avatarSize = 120,
+                )
+            }
+
+            Text(
+                text = alertDetail.alertModel.userInfo.personFullName,
+                style = CCTheme.typography.button_text,
+                color = CCTheme.colors.black,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 12.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (alertType == AlertType.RECEIVED) {
+                    alertDetail.alertModel.userInfo.personPhone?.let {
+                        InformationBoxContent(
+                            text = it.phoneNumberFormat(),
+                            modifier = Modifier.weight(1f),
+                            onButtonClick = {
+                                onScreenAction.invoke(AlertHistoryActions.CLickCallUser)
+                            }
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
+                }
+
+                val buttonModifier = if (alertType == AlertType.RECEIVED) {
+                    Modifier.weight(1f)
+                } else {
+                    Modifier
+                }
                 InformationBoxContent(
-                    text = "+1 (123) 456 7890",
-                    modifier = Modifier.weight(1f),
+                    text = stringResource(id = R.string.history_detail_download_video),
+                    modifier = buttonModifier,
+                    textModifier = Modifier.padding(horizontal = if (alertType == AlertType.RECEIVED) 0.dp else 34.dp),
                     onButtonClick = {
-                        onScreenAction.invoke(AlertHistoryActions.CLickCallUser)
+                        onScreenAction.invoke(AlertHistoryActions.CLickUploadVideo)
                     }
                 )
-                Spacer(modifier = Modifier.width(8.dp))
             }
-
-            val buttonModifier = if (alertType == AlertType.RECEIVED) {
-                Modifier.weight(1f)
-            } else {
-                Modifier
-            }
-            InformationBoxContent(
-                text = stringResource(id = R.string.history_detail_download_video),
-                modifier = buttonModifier,
-                textModifier = Modifier.padding(horizontal = if (alertType == AlertType.RECEIVED) 0.dp else 34.dp),
-                onButtonClick = {
-                    onScreenAction.invoke(AlertHistoryActions.CLickUploadVideo)
-                }
+            RowDivider()
+            Divider(
+                color = CCTheme.colors.lightGray, modifier = Modifier
+                    .height(32.dp)
             )
-        }
-        RowDivider()
-        Divider(
-            color = CCTheme.colors.lightGray, modifier = Modifier
-                .height(32.dp)
-        )
-        RowDivider()
+            RowDivider()
 
-        InformationRow(
-            title = "Alert initiated",
-            titleFont = FontFamily(Font(com.civilcam.ext_features.R.font.roboto_regular)),
-            needDivider = true,
-            isClickable = false,
-            trailingIcon = {
-                DetailInformationText("02.02.2022, 1:41 PM")
-            }) {}
+            InformationRow(
+                title = stringResource(id = R.string.alert_user_detail_initiated_title),
+                titleFont = FontFamily(Font(com.civilcam.ext_features.R.font.roboto_regular)),
+                needDivider = true,
+                isClickable = false,
+                trailingIcon = {
+                    DetailInformationText(alertDateFormat(alertDetail.alertModel.alertDate))
+                }) {}
 
-        InformationRow(
-            title = "Location",
-            titleFont = FontFamily(Font(com.civilcam.ext_features.R.font.roboto_regular)),
-            needDivider = true,
-            isClickable = false,
-            trailingIcon = {
-                DetailInformationText("1456 Broadway, New York, NY, 10023")
-            }) {}
+            InformationRow(
+                title = stringResource(id = R.string.alert_user_detail_location_title),
+                titleFont = FontFamily(Font(com.civilcam.ext_features.R.font.roboto_regular)),
+                needDivider = true,
+                isClickable = false,
+                trailingIcon = {
+                    DetailInformationText(alertDetail.alertModel.alertLocation)
+                }) {}
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "Resolved by",
-                style = CCTheme.typography.common_text_regular,
-                color = CCTheme.colors.black,
-                modifier = Modifier.padding(start = 16.dp)
-            )
-
-            LazyColumn(
+            Row(
                 modifier = Modifier
-                    .padding(end = 16.dp)
-
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                items(if (alertType == AlertType.RECEIVED) resolvedDataList.take(1) else resolvedDataList) { item ->
+                Text(
+                    text = stringResource(id = R.string.alert_user_detail_resolved_by_title),
+                    style = CCTheme.typography.common_text_regular,
+                    color = CCTheme.colors.black,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
 
-                    Text(
-                        buildAnnotatedString {
-                            withStyle(
-                                style = SpanStyle(
-                                    color = CCTheme.colors.primaryRed,
-                                    fontWeight = FontWeight.W400,
-                                    fontSize = 13.sp
-                                ),
-                            ) {
-                                append("${item.resolverName} ")
-                            }
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(end = 16.dp)
 
-                            withStyle(
-                                style = SpanStyle(
-                                    color = CCTheme.colors.grayOne,
-                                    fontWeight = FontWeight.W400,
-                                    fontSize = 13.sp
-                                ),
-                            ) {
-                                append(item.resolverDate)
-                            }
-                        },
-                        modifier = Modifier.padding(vertical = 2.dp)
-                    )
+                ) {
+                    items(if (alertType == AlertType.RECEIVED) alertDetail.alertResolvers.take(1) else alertDetail.alertResolvers) { item ->
+                        Text(
+                            buildAnnotatedString {
+                                withStyle(
+                                    style = SpanStyle(
+                                        color = CCTheme.colors.primaryRed,
+                                        fontWeight = FontWeight.W400,
+                                        fontSize = 13.sp
+                                    ),
+                                ) {
+                                    append("${item.userInfo.personFullName} ")
+                                }
+
+                                withStyle(
+                                    style = SpanStyle(
+                                        color = CCTheme.colors.grayOne,
+                                        fontWeight = FontWeight.W400,
+                                        fontSize = 13.sp
+                                    ),
+                                ) {
+                                    append(alertDateFormat(item.resolveDate))
+                                }
+                            },
+                            modifier = Modifier.padding(vertical = 2.dp)
+                        )
+                    }
                 }
             }
-        }
 
-        RowDivider()
+            RowDivider()
+        }
     }
 }
 
@@ -175,22 +182,3 @@ private fun DetailInformationText(
         modifier = Modifier.padding(end = 16.dp)
     )
 }
-
-private val resolvedDataList = listOf(
-    ResolvedUsers(
-        "Arthas Menethil",
-        "02.02.2022, 2:43 PM"
-    ),
-    ResolvedUsers(
-        "Arthas Menethil",
-        "02.02.2022, 2:43 PM"
-    ),
-    ResolvedUsers(
-        "Arthas Menethil",
-        "02.02.2022, 2:43 PM"
-    ),
-    ResolvedUsers(
-        "Arthas Menethil",
-        "02.02.2022, 2:43 PM"
-    ),
-)

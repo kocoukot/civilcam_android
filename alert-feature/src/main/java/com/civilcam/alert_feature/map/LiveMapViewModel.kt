@@ -8,6 +8,7 @@ import com.civilcam.alert_feature.map.model.UserAlertLocationData
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.usecase.alerts.GetMapAlertUserDataUseCase
+import com.civilcam.domainLayer.usecase.alerts.ResolveAlertUseCase
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -21,7 +22,8 @@ import timber.log.Timber
 class LiveMapViewModel(
     userId: Int,
     private val fetchUserLocationUseCase: FetchUserLocationUseCase,
-    private val getAlertUserDataUseCase: GetMapAlertUserDataUseCase
+    private val getAlertUserDataUseCase: GetMapAlertUserDataUseCase,
+    private val resolveAlertUseCase: ResolveAlertUseCase,
 ) : ComposeViewModel<LiveMapState, LiveMapRoute, LiveMapActions>() {
     override var _state: MutableStateFlow<LiveMapState> = MutableStateFlow(LiveMapState())
     private val locationScope = CoroutineScope(Dispatchers.IO)

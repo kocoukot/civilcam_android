@@ -15,7 +15,10 @@ import com.civilcam.alert_feature.history.content.AlertHistoryDetailScreenConten
 import com.civilcam.alert_feature.history.content.AlertHistoryListScreenContent
 import com.civilcam.alert_feature.history.model.AlertHistoryActions
 import com.civilcam.alert_feature.history.model.AlertHistoryScreen
+import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.compose.elements.AlertDialogComp
 import com.civilcam.ext_features.compose.elements.BackButton
+import com.civilcam.ext_features.compose.elements.DialogLoadingContent
 import com.civilcam.ext_features.compose.elements.TopAppBarContent
 import com.civilcam.ext_features.theme.CCTheme
 
@@ -28,6 +31,18 @@ fun AlertsListScreenContent(viewModel: AlertsHistoryViewModel) {
     if (state.refreshList == Unit) {
         alertList.refresh()
         viewModel.setInputActions(AlertHistoryActions.StopRefresh)
+    }
+
+    if (state.isLoading) {
+        DialogLoadingContent()
+    }
+
+    if (state.errorText.isNotEmpty()) {
+        AlertDialogComp(
+            dialogText = state.errorText,
+            alertType = AlertDialogTypes.OK,
+            onOptionSelected = { viewModel.setInputActions(AlertHistoryActions.ClearErrorText) }
+        )
     }
 
     Scaffold(
@@ -58,6 +73,7 @@ fun AlertsListScreenContent(viewModel: AlertsHistoryViewModel) {
                     }
                     AlertHistoryScreen.HISTORY_DETAIL -> {
                         AlertHistoryDetailScreenContent(
+                            alertDetail = state.alertDetailModel,
                             onScreenAction = viewModel::setInputActions,
                             alertType = state.alertType
                         )

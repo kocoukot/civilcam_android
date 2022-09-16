@@ -12,6 +12,8 @@ import com.civilcam.alert_feature.history.model.AlertHistoryState
 import com.civilcam.alert_feature.history.source.AlertHistoryListDataSource
 import com.civilcam.domainLayer.model.alerts.AlertModel
 import com.civilcam.domainLayer.model.alerts.AlertType
+import com.civilcam.domainLayer.serviceCast
+import com.civilcam.domainLayer.usecase.alerts.GetAlertDetailUseCase
 import com.civilcam.ext_features.KoinInjector
 import com.civilcam.ext_features.compose.ComposeViewModel
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +24,7 @@ import org.koin.core.parameter.parametersOf
 
 class AlertsHistoryViewModel(
     injector: KoinInjector,
-//    private val getAlertDetailUseCase: GetAlertDetailUseCase
+    private val getAlertDetailUseCase: GetAlertDetailUseCase
 ) : ComposeViewModel<AlertHistoryState, AlertHistoryRoute, AlertHistoryActions>(),
     KoinInjector by injector {
 
@@ -38,6 +40,7 @@ class AlertsHistoryViewModel(
             AlertHistoryActions.CLickUploadVideo -> {}
             is AlertHistoryActions.SetErrorText -> TODO()
             AlertHistoryActions.StopRefresh -> stopRefresh()
+            AlertHistoryActions.ClearErrorText -> clearErrorText()
         }
     }
 
@@ -52,7 +55,24 @@ class AlertsHistoryViewModel(
     }
 
     private fun goAlertDetails(alertId: Int) {
-        _state.update { it.copy(alertHistoryScreen = AlertHistoryScreen.HISTORY_DETAIL) }
+        _state.update { it.copy(isLoading = true) }
+        networkRequest(
+            action = { getAlertDetailUseCase(alertId) },
+            onSuccess = { detail ->
+                _state.update {
+                    it.copy(
+                        alertHistoryScreen = AlertHistoryScreen.HISTORY_DETAIL,
+                        alertDetailModel = detail
+                    )
+                }
+            },
+            onFailure = { error ->
+                error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
+            },
+            onComplete = {
+                _state.update { it.copy(isLoading = false) }
+            },
+        )
     }
 
     private fun changeAlertType(alertType: AlertType) {
