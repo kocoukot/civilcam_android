@@ -1,7 +1,10 @@
 package com.civilcam.di
 
 import com.civilcam.domainLayer.usecase.GetUserDetailUseCase
-import com.civilcam.domainLayer.usecase.alerts.*
+import com.civilcam.domainLayer.usecase.alerts.GetAlertDetailUseCase
+import com.civilcam.domainLayer.usecase.alerts.GetAlertsListUseCase
+import com.civilcam.domainLayer.usecase.alerts.GetMapAlertUserDataUseCase
+import com.civilcam.domainLayer.usecase.alerts.ResolveAlertUseCase
 import com.civilcam.domainLayer.usecase.auth.*
 import com.civilcam.domainLayer.usecase.docs.GetTermsLinksUseCase
 import com.civilcam.domainLayer.usecase.guardians.*
@@ -48,8 +51,6 @@ val domainModule = module {
     factory { UpdateUserProfileUseCase(get()) }
 
     factory { GetAlertsListUseCase(get()) }
-
-    factory { GetHistoryAlertListUseCase(get()) }
 
     factory { GetAlertDetailUseCase(get()) }
 

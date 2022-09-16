@@ -1,7 +1,10 @@
 package com.civilcam.data.repository
 
 import com.civilcam.data.local.AccountStorage
+import com.civilcam.data.mapper.alerts.AlertDetailMapper
 import com.civilcam.data.mapper.alerts.AlertListMapper
+import com.civilcam.data.network.model.request.alert.AlertDetailRequest
+import com.civilcam.data.network.model.request.alert.AlertHistoryRequest
 import com.civilcam.data.network.model.request.alert.AlertResolveRequest
 import com.civilcam.data.network.service.AlertService
 import com.civilcam.data.network.support.BaseRepository
@@ -19,6 +22,8 @@ class AlertsRepositoryImpl(
 ) : AlertsRepository, BaseRepository() {
 
     private val alertListMapper = AlertListMapper()
+    private val alertDetailMapper = AlertDetailMapper()
+
     override suspend fun updateSosCoords(location: String, coords: LatLng): Boolean {
         return true
     }
@@ -33,13 +38,35 @@ class AlertsRepositoryImpl(
             }
         }
 
-    override suspend fun getAlertsHistory(historyType: String): List<AlertModel> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getAlertsHistory(
+        historyType: String,
+        page: PaginationRequest.Pagination
+    ): List<AlertModel> =
+        safeApiCall {
+            alertService.getAlertsHistory(
+                AlertHistoryRequest(
+                    pageInfo = page,
+                    alertsType = historyType
+                )
+            )
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> response.value.list.map { alertListMapper.mapData(it) }
+                is Resource.Failure -> throw response.serviceException
+            }
+        }
 
-    override suspend fun getAlertDetail(alertId: Int): AlertDetailModel {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getAlertDetail(alertId: Int): AlertDetailModel =
+        safeApiCall {
+            alertService.getAlertDetails(
+                AlertDetailRequest(id = alertId)
+            )
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> alertDetailMapper.mapData(response.value)
+                is Resource.Failure -> throw response.serviceException
+            }
+        }
 
     override suspend fun resolveAlert(alertId: Int): Boolean =
         safeApiCall {
