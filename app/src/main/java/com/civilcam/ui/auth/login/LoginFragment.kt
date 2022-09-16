@@ -12,11 +12,11 @@ import com.civilcam.R
 import com.civilcam.common.ext.navigateByDirection
 import com.civilcam.ext_features.ext.showToast
 import com.civilcam.ext_features.live_data.observeNonNull
+import com.civilcam.ext_features.navController
 import com.civilcam.ui.auth.FacebookFragmentAuthHandler
 import com.civilcam.ui.auth.GoogleFragmentAuthHandler
 import com.civilcam.ui.auth.login.model.LoginRoute
 import com.civilcam.ui.common.NavigationDirection
-import com.civilcam.ui.common.ext.navController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 

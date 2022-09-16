@@ -4,13 +4,15 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.usecase.guardians.SetRequestReactionUseCase
-import com.civilcam.service.notifications.NotificationHelper.Companion.EXTRAS_NOTIFICATION_KEY
-import com.civilcam.service.notifications.NotificationHelper.Companion.NOTIFICATION_REQUESTS_ID
+import com.civilcam.service.CCFireBaseMessagingService
+import com.civilcam.service.CCFireBaseMessagingService.Companion.EXTRAS_NOTIFICATION_ALERT_ID
+import com.civilcam.service.CCFireBaseMessagingService.Companion.EXTRAS_NOTIFICATION_KEY
+import com.civilcam.service.CCFireBaseMessagingService.Companion.NOTIFICATION_REQUESTS_ID
 import com.civilcam.ui.MainActivity
+import com.civilcam.ui.MainActivity.Companion.ARG_MAP_ALERT_ID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -26,35 +28,38 @@ class NotificationRequestButtonListener : KoinComponent, BroadcastReceiver() {
     private val setRequestReactionUseCase: SetRequestReactionUseCase by inject()
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        val pendingResult: PendingResult = goAsync()
+        // val pendingResult: PendingResult = goAsync()
+
 
         Timber.i("onNewIntent notify close ${intent?.extras?.getString(EXTRAS_NOTIFICATION_KEY)}")
         intent?.extras?.getString(EXTRAS_NOTIFICATION_KEY)?.let { type ->
             when (NotificationAction.byDescription(type)) {
                 NotificationAction.CLOSE_ALERT -> {
-                    NotificationHelper.cancelAlertProgress()
+                    CCFireBaseMessagingService.cancelAlertProgress()
                     (context?.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
-                        NotificationHelper.NOTIFICATION_ALERT_ID
+                        CCFireBaseMessagingService.NOTIFICATION_ALERT_ID
                     )
                 }
 
                 NotificationAction.DETAIL -> {
                     context?.let {
+                        val alertId = intent.extras?.getInt(EXTRAS_NOTIFICATION_ALERT_ID)
+                        Timber.tag("alert notif ID").i("broadcast userId $alertId")
+
                         val activityIntent = Intent(context, MainActivity::class.java)
-                        activityIntent.putExtra(ARG_MAP_ALERT_ID, 999)
+                        activityIntent.putExtra(ARG_MAP_ALERT_ID, alertId)
                         activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         context.startActivity(activityIntent)
 
-                        Toast.makeText(it, "Alert Detail Redirect", Toast.LENGTH_SHORT).show()
-                        NotificationHelper.cancelAlertProgress()
+                        CCFireBaseMessagingService.cancelAlertProgress()
                         (it.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
-                            NotificationHelper.NOTIFICATION_ALERT_ID
+                            CCFireBaseMessagingService.NOTIFICATION_ALERT_ID
                         )
                     }
                 }
 
                 NotificationAction.CLOSE_REQUEST -> {
-                    NotificationHelper.cancelRequestProgress()
+                    CCFireBaseMessagingService.cancelRequestProgress()
                     (context?.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
                         NOTIFICATION_REQUESTS_ID
                     )
@@ -64,12 +69,11 @@ class NotificationRequestButtonListener : KoinComponent, BroadcastReceiver() {
                         try {
                             setRequestReactionUseCase(ButtonAnswer.DECLINE, 1)
                         } finally {
-                            pendingResult.finish()
+                            //    pendingResult.finish()
                         }
                     }
                     context?.let {
-                        Toast.makeText(it, "Request was denied", Toast.LENGTH_SHORT).show()
-                        NotificationHelper.cancelRequestProgress()
+                        CCFireBaseMessagingService.cancelRequestProgress()
                         (it.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
                             NOTIFICATION_REQUESTS_ID
                         )
@@ -80,12 +84,11 @@ class NotificationRequestButtonListener : KoinComponent, BroadcastReceiver() {
                         try {
                             setRequestReactionUseCase(ButtonAnswer.ACCEPT, 1)
                         } finally {
-                            pendingResult.finish()
+                            //    pendingResult.finish()
                         }
                     }
                     context?.let {
-                        Toast.makeText(it, "Request was accepted", Toast.LENGTH_SHORT).show()
-                        NotificationHelper.cancelRequestProgress()
+                        CCFireBaseMessagingService.cancelRequestProgress()
                         (it.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
                             NOTIFICATION_REQUESTS_ID
                         )
@@ -94,9 +97,5 @@ class NotificationRequestButtonListener : KoinComponent, BroadcastReceiver() {
                 else -> {}
             }
         }
-    }
-
-    companion object {
-        const val ARG_MAP_ALERT_ID = "map_alert_id"
     }
 }

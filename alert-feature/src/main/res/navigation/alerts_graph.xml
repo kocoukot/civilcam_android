@@ -22,6 +22,11 @@
     <fragment
         android:id="@+id/liveMapFragment"
         android:name="com.civilcam.alert_feature.map.LiveMapFragment"
-        android:label="LiveMapFragment" />
+        android:label="LiveMapFragment">
+        <argument
+            android:name="alert_user_id"
+            app:argType="integer" />
+        <deepLink app:uri="civilcam://liveMapFragment/{alert_user_id}" />
+    </fragment>
 
 </navigation>

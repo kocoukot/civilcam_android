@@ -12,7 +12,10 @@ interface AlertsRepository {
 
     suspend fun getAlertsList(page: PaginationRequest.Pagination): List<AlertModel>
 
-    suspend fun getAlertsHistory(historyType: String): List<AlertModel>
+    suspend fun getAlertsHistory(
+        historyType: String,
+        page: PaginationRequest.Pagination
+    ): List<AlertModel>
 
     suspend fun getAlertDetail(alertId: Int): AlertDetailModel
 

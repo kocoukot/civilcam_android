@@ -40,6 +40,7 @@ object DateUtils {
             .withZoneSameInstant(ZoneId.systemDefault())
     }
 
-    fun alertDateFormat(date: String) = dateDeadlineFormatter.format(localDateToIsoFormat(date))
+    fun alertDateFormat(date: String): String =
+        dateDeadlineFormatter.format(localDateToIsoFormat(date))
 
 }

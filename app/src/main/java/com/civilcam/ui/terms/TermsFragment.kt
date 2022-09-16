@@ -10,8 +10,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.ext_features.live_data.observeNonNull
-import com.civilcam.ui.common.ext.navController
-import com.civilcam.ui.common.ext.requireArg
+import com.civilcam.ext_features.navController
+import com.civilcam.ext_features.requireArg
 import com.civilcam.ui.subscription.SubscriptionFragment
 import com.civilcam.ui.terms.model.TermsRoute
 import com.civilcam.ui.terms.webView.WebViewFragment

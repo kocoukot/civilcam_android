@@ -1,4 +1,4 @@
-package com.civilcam.ui.common.ext
+package com.civilcam.ext_features
 
 import android.content.pm.PackageManager
 import android.graphics.Rect
@@ -19,7 +19,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -31,13 +30,13 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.viewbinding.ViewBinding
-import com.civilcam.domainLayer.cast
 import com.civilcam.ext_features.ext.toDp
 import com.civilcam.ext_features.live_data.observeNonNull
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.lang.ref.WeakReference
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
+
 
 @MainThread
 fun <T : ViewBinding> Fragment.viewBinding(
@@ -183,15 +182,6 @@ val Fragment.navController
 
 fun Rect.setBounds(left: Int = 0, top: Int = 0, right: Int = 0, bottom: Int = 0) =
     set(left, top, right, bottom)
-
-var ViewBinding.isRootVisible: Boolean
-    get() = root.isVisible
-    set(value) {
-        root.isVisible = value
-    }
-
-inline fun <reified T : ViewGroup.LayoutParams> View.layoutParams() = layoutParams
-    .cast<T>()
 
 fun BottomNavigationView.setupWithNavController(
     navController: NavController,

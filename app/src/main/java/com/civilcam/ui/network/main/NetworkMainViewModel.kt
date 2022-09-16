@@ -17,8 +17,8 @@ import com.civilcam.domainLayer.usecase.guardians.GetUserNetworkUseCase
 import com.civilcam.domainLayer.usecase.guardians.SetRequestReactionUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.ext_features.KoinInjector
+import com.civilcam.ext_features.SearchQuery
 import com.civilcam.ext_features.compose.ComposeViewModel
-import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.network.main.model.*
 import com.civilcam.ui.network.source.SearchGuardiansDataSource
 import kotlinx.coroutines.flow.Flow
@@ -42,7 +42,7 @@ class NetworkMainViewModel(
     KoinInjector by injector {
     override var _state: MutableStateFlow<NetworkMainState> = MutableStateFlow(NetworkMainState())
     override val mTextSearch = MutableStateFlow("")
-    var searchList = loadRPlacesList()
+    var searchList = loadGuardsList()
 
     init {
         _state.update { it.copy(screenState = screen) }
@@ -83,7 +83,7 @@ class NetworkMainViewModel(
                 }
             },
             onFailure = { error ->
-                error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
+                error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
             },
             onComplete = { _state.update { it.copy(isLoading = false) } },
         )
@@ -123,7 +123,7 @@ class NetworkMainViewModel(
             },
             onSuccess = { loadRequestsList() },
             onFailure = { error ->
-                error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
+                error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
             },
             onComplete = {
                 _state.update { it.copy(isLoading = false) }
@@ -141,7 +141,7 @@ class NetworkMainViewModel(
                     if (response.isEmpty()) goBack()
                 },
                 onFailure = { error ->
-                    error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
+                    error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
                 },
                 onComplete = {
                 _state.update { it.copy(isLoading = false) }
@@ -182,7 +182,7 @@ class NetworkMainViewModel(
     }
 
     private fun goSearchGuard() {
-        searchList = loadRPlacesList()
+        searchList = loadGuardsList()
         if (_state.value.screenState == NetworkScreen.MAIN) {
             _state.update { it.copy(screenState = NetworkScreen.SEARCH_GUARD) }
             checkNavBarStatus()
@@ -190,7 +190,7 @@ class NetworkMainViewModel(
     }
 
     private fun addGuardian() {
-        searchList = loadRPlacesList()
+        searchList = loadGuardsList()
         _state.update { it.copy(screenState = NetworkScreen.ADD_GUARD) }
         checkNavBarStatus()
     }
@@ -258,7 +258,7 @@ class NetworkMainViewModel(
                     }
                 }
                 .onFailure { error ->
-                    error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
+                    error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
                 }
                 .also {
                     _state.update { it.copy(isLoading = false) }
@@ -275,7 +275,7 @@ class NetworkMainViewModel(
 
     }
 
-    private fun loadRPlacesList(): Flow<PagingData<PersonModel>> {
+    private fun loadGuardsList(): Flow<PagingData<PersonModel>> {
         return Pager(
             config = PagingConfig(pageSize = 40, initialLoadSize = 20, prefetchDistance = 6),
             pagingSourceFactory = {

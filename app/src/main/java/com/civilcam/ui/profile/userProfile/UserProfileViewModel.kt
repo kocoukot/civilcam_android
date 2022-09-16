@@ -16,8 +16,8 @@ import com.civilcam.domainLayer.usecase.profile.SetAvatarUseCase
 import com.civilcam.domainLayer.usecase.profile.UpdateUserProfileUseCase
 import com.civilcam.domainLayer.usecase.user.GetCurrentUserUseCase
 import com.civilcam.ext_features.DateUtils
+import com.civilcam.ext_features.SearchQuery
 import com.civilcam.ext_features.compose.ComposeViewModel
-import com.civilcam.ui.common.ext.SearchQuery
 import com.civilcam.ui.profile.setup.model.UserInfoDataType
 import com.civilcam.ui.profile.userProfile.model.*
 import io.reactivex.android.schedulers.AndroidSchedulers
