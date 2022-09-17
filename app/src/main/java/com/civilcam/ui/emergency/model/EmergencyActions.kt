@@ -14,10 +14,11 @@ sealed class EmergencyActions : ComposeFragmentActions {
 	object DetectLocation : EmergencyActions()
 	object ControlFlash : EmergencyActions()
 	object ChangeCamera : EmergencyActions()
-	
+
 	data class CameraInitialized(val cameraLensInfo: HashMap<Int, CameraInfo>) :
 		EmergencyActions()
-	
+
 	data class ClickChangeScreen(val screenState: EmergencyScreen) : EmergencyActions()
-	
+
+	object ClickCloseAlert : EmergencyActions()
 }

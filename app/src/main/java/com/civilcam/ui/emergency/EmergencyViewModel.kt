@@ -10,6 +10,8 @@ import androidx.camera.core.TorchState
 import androidx.lifecycle.viewModelScope
 import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.domainLayer.EmergencyScreen
+import com.civilcam.domainLayer.serviceCast
+import com.civilcam.domainLayer.usecase.alerts.SendEmergencySosUseCase
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
@@ -28,6 +30,7 @@ import java.util.*
 class EmergencyViewModel(
 	private val fetchUserLocationUseCase: FetchUserLocationUseCase,
 	getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
+	private val sendEmergencySosUseCase: SendEmergencySosUseCase,
 ) : ComposeViewModel<EmergencyState, EmergencyRoute, EmergencyActions>() {
 	override var _state: MutableStateFlow<EmergencyState> = MutableStateFlow(EmergencyState())
 	private var geocoder = Geocoder(instance, Locale.US)
@@ -39,6 +42,13 @@ class EmergencyViewModel(
 	init {
 		getLocalCurrentUserUseCase().let { user ->
 			_state.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
+//			when (user.sessionUser.userState) {
+//				UserState.ALERT -> {
+//					navigateRoute(EmergencyRoute.CheckPermission(true))
+//				}
+//				UserState.SAFE -> {
+//				}
+//			}
 		}
 		fetchUserLocation()
 	}
@@ -102,6 +112,7 @@ class EmergencyViewModel(
 			is EmergencyActions.ClickChangeScreen -> screenChange(action.screenState)
 			is EmergencyActions.CameraInitialized -> onCameraInitialized(action.cameraLensInfo)
 			EmergencyActions.DetectLocation -> checkPermission()
+			EmergencyActions.ClickCloseAlert -> clearErrorText()
 		}
 	}
 
@@ -150,19 +161,37 @@ class EmergencyViewModel(
 	}
 
 	fun launchSos() {
-		steps.value = EmergencyRoute.IsNavBarVisible(false)
 		if (state.value.emergencyButton == EmergencyButton.InSafeButton) {
-			_state.update {
-				it.copy(
-					emergencyScreen = EmergencyScreen.COUPLED,
-					emergencyButton = EmergencyButton.InDangerButton,
-					emergencyUserModel = it.emergencyUserModel?.copy(
-						guardsLocation = listOf(
-							LatLng(41.950188, -87.780036),
-							LatLng(41.852063, -87.679099),
-							LatLng(41.737393, -87.772483),
+			_state.value.emergencyUserModel?.let { user ->
+				networkRequest(
+					action = {
+						sendEmergencySosUseCase(
+							location = user.locationData,
+							coords = user.userLocation,
 						)
-					)
+					},
+					onSuccess = {
+						navigateRoute(EmergencyRoute.IsNavBarVisible(false))
+						_state.update {
+							it.copy(
+								emergencyScreen = EmergencyScreen.COUPLED,
+								emergencyButton = EmergencyButton.InDangerButton,
+								emergencyUserModel = it.emergencyUserModel?.copy(
+									guardsLocation = listOf(
+										LatLng(41.950188, -87.780036),
+										LatLng(41.852063, -87.679099),
+										LatLng(41.737393, -87.772483),
+									)
+								)
+							)
+						}
+					},
+					onFailure = { error ->
+						error.serviceCast { msg, _, isForceLogout ->
+							_state.update { it.copy(errorText = msg) }
+						}
+					},
+					onComplete = {},
 				)
 			}
 		}
@@ -238,7 +267,6 @@ class EmergencyViewModel(
     }
 
     fun screenStateCheck() {
-
 		when (_state.value.emergencyScreen) {
 			EmergencyScreen.NORMAL, EmergencyScreen.COUPLED -> navigateRoute(EmergencyRoute.HideSystemUI)
 			EmergencyScreen.MAP_EXTENDED, EmergencyScreen.LIVE_EXTENDED -> navigateRoute(
@@ -252,7 +280,7 @@ class EmergencyViewModel(
 		}, 100)
 	}
 
-    override fun clearErrorText() {
-
-    }
+	override fun clearErrorText() {
+		_state.update { it.copy(errorText = "") }
+	}
 }

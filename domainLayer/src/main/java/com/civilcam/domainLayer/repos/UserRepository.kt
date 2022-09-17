@@ -21,15 +21,17 @@ interface UserRepository {
 	suspend fun setUserLanguage(languageType: LanguageType): CurrentUser
 	
 	suspend fun deleteAccount(): Boolean
-	
-	suspend fun contactSupport(issue: String, text: String, email: String): Boolean
-	
-	suspend fun toggleSettings(type: String, isOn: Boolean): CurrentUser
-	
-	suspend fun setFcmToken(): Boolean
-	
-	suspend fun checkPin(pinCode: String): Boolean
-	
-	suspend fun setPin(currentPinCode: String?, newPinCode: String): CurrentUser
-	
+
+    suspend fun contactSupport(issue: String, text: String, email: String): Boolean
+
+    suspend fun toggleSettings(type: String, isOn: Boolean): CurrentUser
+
+    suspend fun setFcmToken(): Boolean
+
+    suspend fun checkPin(pinCode: String): Boolean
+
+    suspend fun setPin(currentPinCode: String?, newPinCode: String): CurrentUser
+
+    suspend fun setSafeState(pinCode: String): Boolean
+
 }

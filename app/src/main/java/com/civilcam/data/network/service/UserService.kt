@@ -40,14 +40,17 @@ interface UserService {
 	suspend fun contactSupport(@Body request: ContactSupportRequest): SuccessResponse
 	
 	@POST(Endpoint.User.TOGGLE_SETTINGS)
-	suspend fun toggleSettings(@Body request: ToggleSettingsRequest): UserResponse
-	
-	@DELETE(Endpoint.User.DELETE_ACCOUNT)
-	suspend fun deleteAccount(): SuccessResponse
-	
-	@POST(Endpoint.User.CHECK_PIN)
-	suspend fun checkPin(@Body request: CheckPinRequest): CheckPasswordResponse
-	
-	@POST(Endpoint.User.SET_PIN)
-	suspend fun setPin(@Body request: SetPinRequest): UserResponse
+    suspend fun toggleSettings(@Body request: ToggleSettingsRequest): UserResponse
+
+    @DELETE(Endpoint.User.DELETE_ACCOUNT)
+    suspend fun deleteAccount(): SuccessResponse
+
+    @POST(Endpoint.User.CHECK_PIN)
+    suspend fun checkPin(@Body request: CheckPinRequest): CheckPasswordResponse
+
+    @POST(Endpoint.User.SET_PIN)
+    suspend fun setPin(@Body request: SetPinRequest): UserResponse
+
+    @POST(Endpoint.User.SET_SAFE_STATE)
+    suspend fun setSafeState(@Body request: CheckPinRequest): UserResponse
 }

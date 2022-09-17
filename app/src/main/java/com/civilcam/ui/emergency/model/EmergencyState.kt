@@ -10,7 +10,6 @@ import com.civilcam.ext_features.compose.ComposeFragmentState
 data class EmergencyState(
     val isLoading: Boolean = false,
     val errorText: String = "",
-    val location: String = "",
     val cameraFlash: Boolean = false,
     val isLocationAllowed: Boolean = false,
     val cameraState: Int = CameraSelector.LENS_FACING_BACK,

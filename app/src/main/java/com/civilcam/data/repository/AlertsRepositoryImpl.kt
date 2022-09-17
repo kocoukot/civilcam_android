@@ -3,9 +3,7 @@ package com.civilcam.data.repository
 import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.mapper.alerts.AlertDetailMapper
 import com.civilcam.data.mapper.alerts.AlertListMapper
-import com.civilcam.data.network.model.request.alert.AlertDetailRequest
-import com.civilcam.data.network.model.request.alert.AlertHistoryRequest
-import com.civilcam.data.network.model.request.alert.AlertResolveRequest
+import com.civilcam.data.network.model.request.alert.*
 import com.civilcam.data.network.service.AlertService
 import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
@@ -24,9 +22,23 @@ class AlertsRepositoryImpl(
     private val alertListMapper = AlertListMapper()
     private val alertDetailMapper = AlertDetailMapper()
 
-    override suspend fun updateSosCoords(location: String, coords: LatLng): Boolean {
-        return true
-    }
+    override suspend fun updateSosCoords(location: String, coords: LatLng): Boolean =
+        safeApiCall {
+            alertService.postSosCoordinates(
+                SosCoordsRequest(
+                    location = location,
+                    coords = CoordsRequest(
+                        latitude = coords.latitude,
+                        longitude = coords.longitude
+                    ),
+                )
+            )
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> true
+                is Resource.Failure -> throw response.serviceException
+            }
+        }
 
     override suspend fun getAlertsList(page: PaginationRequest.Pagination): List<AlertModel> =
         safeApiCall {
