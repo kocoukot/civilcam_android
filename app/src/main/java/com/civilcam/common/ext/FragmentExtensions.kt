@@ -7,16 +7,7 @@ import androidx.fragment.app.Fragment
 import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.ext_features.alert.AlertDialogTypes
 import com.civilcam.ui.common.alert.DialogAlertFragment
-import com.civilcam.ui.common.loading.DialogLoadingFragment
 
-
-fun Fragment.showLoadingFragment(isShow: Boolean) {
-    try {
-        DialogLoadingFragment.create(childFragmentManager, isShow)
-    } catch (e: Exception) {
-        println(e.localizedMessage)
-    }
-}
 
 fun Fragment.showAlertDialogFragment(
     title: String = "Something went wrong",

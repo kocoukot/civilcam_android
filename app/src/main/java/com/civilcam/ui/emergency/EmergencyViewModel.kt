@@ -42,6 +42,13 @@ class EmergencyViewModel(
 	init {
 		getLocalCurrentUserUseCase().let { user ->
 			_state.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
+//			when (user.sessionUser.userState) {
+//				UserState.ALERT -> {
+//					navigateRoute(EmergencyRoute.CheckPermission(true))
+//				}
+//				UserState.SAFE -> {
+//				}
+//			}
 		}
 		fetchUserLocation()
 	}

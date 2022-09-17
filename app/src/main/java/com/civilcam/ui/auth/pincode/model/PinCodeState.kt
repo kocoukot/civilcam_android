@@ -4,14 +4,14 @@ import com.civilcam.ext_features.compose.ComposeFragmentState
 
 data class PinCodeState(
 	val isLoading: Boolean = false,
-	val errorText: String = "Invalid email. Please try again. (eg:email@gmail.com)",
-	
+	val errorText: String = "",
+
 	val pinCode: String = "",
 	val confirmPinCode: String = "",
 	val currentPinCode: String = "",
-	
+
 	val isDataLoaded: Boolean = false,
-	
+
 	val noMatch: Boolean = false,
 	val currentNoMatch: Boolean = false,
 	

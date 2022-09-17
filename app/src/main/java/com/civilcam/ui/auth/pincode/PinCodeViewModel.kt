@@ -31,6 +31,7 @@ class PinCodeViewModel(
 		when (action) {
 			PinCodeActions.GoBack -> goBack()
 			is PinCodeActions.EnterPinCode -> pinEntered(action.pinCode)
+			PinCodeActions.ClickCloseAlert -> clearErrorText()
 		}
 	}
 	
@@ -223,8 +224,8 @@ class PinCodeViewModel(
 	companion object {
 		const val PIN_SIZE = 4
 	}
-	
+
 	override fun clearErrorText() {
-		TODO("Not yet implemented")
+		_state.update { it.copy(errorText = "") }
 	}
 }
