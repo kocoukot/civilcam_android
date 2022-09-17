@@ -32,6 +32,7 @@ object Endpoint {
         const val SET_FCM_TOKEN = "set-fcm-token"
         const val CHECK_PIN = "check-pin"
         const val SET_PIN = "set-pin"
+        const val SET_SAFE_STATE = "set-safe-state"
     }
 
     object Profile {

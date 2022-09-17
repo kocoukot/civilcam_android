@@ -16,5 +16,6 @@ data class SessionUser(
     val isUserProfileSetupRequired: Boolean = false,
     val isPinCodeSet: Boolean = false,
     val canChangeEmail: Boolean = false,
-    val canChangePassword: Boolean = false
+    val canChangePassword: Boolean = false,
+    val userState: UserState = UserState.SAFE
 ) : Parcelable

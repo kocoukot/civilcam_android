@@ -70,7 +70,7 @@ val authModule = module {
 	
 	viewModel { (token: String) -> CreatePasswordViewModel(token, get()) }
 	
-	viewModel { (pinCodeFlow: PinCodeFlow) -> PinCodeViewModel(pinCodeFlow, get(), get()) }
+	viewModel { (pinCodeFlow: PinCodeFlow) -> PinCodeViewModel(pinCodeFlow, get(), get(), get()) }
 	
 	viewModel { (isReselect: Boolean) -> SubscriptionViewModel(isReselect, get()) }
 }
@@ -140,7 +140,7 @@ val profileModule = module {
 }
 
 val emergencyModule = module {
-	viewModel { EmergencyViewModel(get(), get()) }
+	viewModel { EmergencyViewModel(get(), get(), get()) }
 }
 
 

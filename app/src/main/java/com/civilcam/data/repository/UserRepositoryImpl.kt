@@ -116,20 +116,30 @@ class UserRepositoryImpl(
 				is Resource.Failure -> throw response.serviceException
 			}
 		}
-	
-	override suspend fun setPin(currentPinCode: String?, newPinCode: String): CurrentUser =
-		safeApiCall {
-			userService.setPin(SetPinRequest(currentPinCode, newPinCode))
-		}.let { response ->
-			when (response) {
-				is Resource.Success -> userMapper.mapData(response.value)
-					.also { accountStorage.updateUser(it) }
-				is Resource.Failure -> throw response.serviceException
-			}
-		}
-	
-	
-	//    override fun getUserEmail(): Pair<String, Boolean> =
+
+    override suspend fun setPin(currentPinCode: String?, newPinCode: String): CurrentUser =
+        safeApiCall {
+            userService.setPin(SetPinRequest(currentPinCode, newPinCode))
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> userMapper.mapData(response.value)
+                    .also { accountStorage.updateUser(it) }
+                is Resource.Failure -> throw response.serviceException
+            }
+        }
+
+    override suspend fun setSafeState(pinCode: String): Boolean =
+        safeApiCall {
+            userService.setSafeState(CheckPinRequest(pinCode))
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> true
+                is Resource.Failure -> throw response.serviceException
+            }
+        }
+
+
+    //    override fun getUserEmail(): Pair<String, Boolean> =
 //        accountStorage.getUserEmail()
 //
 //    override suspend fun contactSupport(message: String, email: String): Boolean =

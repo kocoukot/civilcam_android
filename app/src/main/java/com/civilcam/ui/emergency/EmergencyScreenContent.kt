@@ -18,10 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.Constant.ANIMATION_DURATION
-import com.civilcam.ext_features.compose.elements.BackButton
-import com.civilcam.ext_features.compose.elements.DialogLoadingContent
-import com.civilcam.ext_features.compose.elements.DividerLightGray
-import com.civilcam.ext_features.compose.elements.TopAppBarContent
+import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.emergency.content.EmergencyButtonContent
 import com.civilcam.ui.emergency.content.EmergencyLiveContent
@@ -57,8 +55,15 @@ fun EmergencyScreenContent(viewModel: EmergencyViewModel) {
 
     val screenModifier = Modifier.fillMaxSize()
 
-    if (state.isLoading) {
-        DialogLoadingContent()
+    if (state.isLoading) DialogLoadingContent()
+
+
+    if (state.errorText.isNotEmpty()) {
+        AlertDialogComp(
+            dialogText = state.errorText,
+            alertType = AlertDialogTypes.OK,
+            onOptionSelected = { viewModel.setInputActions(EmergencyActions.ClickCloseAlert) }
+        )
     }
 
 

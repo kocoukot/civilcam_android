@@ -5,6 +5,7 @@ import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.castSafe
 import com.civilcam.domainLayer.usecase.user.CheckPinUseCase
 import com.civilcam.domainLayer.usecase.user.SetPinUseCase
+import com.civilcam.domainLayer.usecase.user.SetSafeStateUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.ui.auth.pincode.model.PinCodeActions
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 class PinCodeViewModel(
 	pinCodeFlow: PinCodeFlow,
 	private val checkPinUseCase: CheckPinUseCase,
-	private val setPinUseCase: SetPinUseCase
+	private val setPinUseCase: SetPinUseCase,
+	private val setSafeStateUseCase: SetSafeStateUseCase,
 ) : ComposeViewModel<PinCodeState, PinCodeRoute, PinCodeActions>() {
 	override var _state: MutableStateFlow<PinCodeState> = MutableStateFlow(PinCodeState())
 	
@@ -104,7 +106,10 @@ class PinCodeViewModel(
 	private fun checkPin(pinCodeFlow: PinCodeFlow, pinCode: String) {
 		viewModelScope.launch {
 			kotlin.runCatching {
-				checkPinUseCase.checkPin(pinCode)
+				if (pinCodeFlow == PinCodeFlow.SOS_PIN_CODE)
+					setSafeStateUseCase(pinCode)
+				else
+					checkPinUseCase.checkPin(pinCode)
 			}.onSuccess { response ->
 				when (pinCodeFlow) {
 					PinCodeFlow.CURRENT_PIN_CODE -> {

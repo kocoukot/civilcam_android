@@ -3,6 +3,7 @@ package com.civilcam.data.mapper.auth
 import com.civilcam.data.mapper.Mapper
 import com.civilcam.data.network.model.response.auth.SessionUserResponse
 import com.civilcam.domainLayer.model.user.SessionUser
+import com.civilcam.domainLayer.model.user.UserState
 
 class SessionUserMapper : Mapper<SessionUserResponse, SessionUser>(
 	fromData = {
@@ -18,7 +19,7 @@ class SessionUserMapper : Mapper<SessionUserResponse, SessionUser>(
 			isPinCodeSet = it.isPinCodeSet,
             canChangeEmail = it.canChangeEmail,
             canChangePassword = it.canChangePassword,
+            userState = UserState.byDomain(it.state)
         )
-
 	}
 )
