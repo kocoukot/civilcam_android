@@ -45,7 +45,10 @@ class ProfileRepositoryImpl(
             profileService.setUserProfile(userInfoToDomainMapper.mapData(userProfile))
         }.let { response ->
             when (response) {
-                is Resource.Success -> true
+                is Resource.Success -> {
+                    accountStorage.isUserLoggedIn = true
+                    true
+                }
                 is Resource.Failure -> {
                     response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException

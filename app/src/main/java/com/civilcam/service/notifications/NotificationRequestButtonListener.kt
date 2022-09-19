@@ -10,6 +10,7 @@ import com.civilcam.domainLayer.usecase.guardians.SetRequestReactionUseCase
 import com.civilcam.service.CCFireBaseMessagingService
 import com.civilcam.service.CCFireBaseMessagingService.Companion.EXTRAS_NOTIFICATION_ALERT_ID
 import com.civilcam.service.CCFireBaseMessagingService.Companion.EXTRAS_NOTIFICATION_KEY
+import com.civilcam.service.CCFireBaseMessagingService.Companion.EXTRAS_NOTIFICATION_REQUEST_ID_KEY
 import com.civilcam.service.CCFireBaseMessagingService.Companion.NOTIFICATION_REQUESTS_ID
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.MainActivity.Companion.ARG_MAP_ALERT_ID
@@ -65,13 +66,11 @@ class NotificationRequestButtonListener : KoinComponent, BroadcastReceiver() {
                     )
                 }
                 NotificationAction.DENY -> {
-                    scope.launch(Dispatchers.IO) {
-                        try {
-                            setRequestReactionUseCase(ButtonAnswer.DECLINE, 1)
-                        } finally {
-                            //    pendingResult.finish()
-                        }
+                    intent.extras?.getInt(EXTRAS_NOTIFICATION_REQUEST_ID_KEY)?.let { requestId ->
+                        Timber.tag("alert notif ID").i("broadcast userId deny  $requestId")
+                        answerRequest(requestId, ButtonAnswer.DECLINE)
                     }
+
                     context?.let {
                         CCFireBaseMessagingService.cancelRequestProgress()
                         (it.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
@@ -80,13 +79,12 @@ class NotificationRequestButtonListener : KoinComponent, BroadcastReceiver() {
                     }
                 }
                 NotificationAction.ACCEPT -> {
-                    scope.launch(Dispatchers.IO) {
-                        try {
-                            setRequestReactionUseCase(ButtonAnswer.ACCEPT, 1)
-                        } finally {
-                            //    pendingResult.finish()
-                        }
+
+                    intent.extras?.getInt(EXTRAS_NOTIFICATION_REQUEST_ID_KEY)?.let { requestId ->
+                        Timber.tag("alert notif ID").i("broadcast userId accept $requestId")
+                        answerRequest(requestId, ButtonAnswer.ACCEPT)
                     }
+
                     context?.let {
                         CCFireBaseMessagingService.cancelRequestProgress()
                         (it.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
@@ -95,6 +93,16 @@ class NotificationRequestButtonListener : KoinComponent, BroadcastReceiver() {
                     }
                 }
                 else -> {}
+            }
+        }
+    }
+
+    private fun answerRequest(requestId: Int, answerType: ButtonAnswer) {
+        scope.launch(Dispatchers.IO) {
+            try {
+                setRequestReactionUseCase(answerType, requestId)
+            } finally {
+                //    pendingResult.finish()
             }
         }
     }

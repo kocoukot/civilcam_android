@@ -66,9 +66,11 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
         super.onMessageReceived(message)
 
         message.notification?.body?.let { body ->
+            Timber.d("onNewIntent user id body $body data ${message.data}")
+
             when {
                 body.contains(ALERT_NOTIFICATION_TEXT, true) -> {
-                    message.data[ARG_ALERT_ID]?.toInt()?.let { alertId ->
+                    message.data[ARG_ALERT_ID_KEY]?.toInt()?.let { alertId ->
                         Timber.d("onNewIntent user id body $body data $alertId")
                         showAlertNotification(
                             context = applicationContext,
@@ -78,130 +80,142 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                     }
                 }
                 body.contains(REQUEST_NOTIFICATION_TEXT, true) -> {
+                    message.data[ARG_REQUEST_ID_KEY]?.toInt()?.let { requestId ->
+                        Timber.d("onNewIntent user id body $body data $requestId")
+                        showRequestNotification(
+                            context = applicationContext,
+                            requestId,
+                            body.substringBefore(REQUEST_NOTIFICATION_TEXT)
+                        )
+                    }
                 }
                 else -> {}
             }
         }
     }
 
-//    @SuppressLint("RestrictedApi")
-//    fun showRequestNotification(context: Context) {
-//        val name = "Alleria Windrunner"
-//        val maxProgress = 5
-//        var mProgressStatus = 0
-//        showRequestProgress = true
-//        val channelId = "${context.packageName}-${NotificationType.REQUESTS.notifyName}"
-//        val notificationTitle = context.getString(R.string.notification_request_title)
-//        val notificationText = alertNotificationText(
-//            userName = name,
-//            msgText = context.getString(R.string.notification_request_text),
-//            context = context,
-//        )
-//
-//        val notificationLayout =
-//            RemoteViews(context.packageName, R.layout.view_notification_request_small)
-//        notificationLayout.setTextViewText(R.id.notification_title, notificationTitle)
-//        notificationLayout.setTextViewText(R.id.notification_content, notificationText)
-//
-//        val notificationLayoutExpanded =
-//            RemoteViews(context.packageName, R.layout.view_notification_request_small)
-//
-//        notificationLayoutExpanded.setTextViewText(R.id.notification_title, notificationTitle)
-//        notificationLayoutExpanded.setTextViewText(R.id.notification_content, notificationText)
-//
-//        val notificationBuilder = NotificationCompat.Builder(context, channelId)
-//
-//        val broadcastIntentClose = Intent(context, NotificationRequestButtonListener::class.java)
-//
-//        val broadcastPendingIntentClose =
-//            PendingIntent.getBroadcast(context, 0, broadcastIntentClose.apply {
-//                putExtra(EXTRAS_NOTIFICATION_KEY, "close_request")
-//            }, 0)
-//
-//        val broadcastPendingIntentDeny =
-//            PendingIntent.getBroadcast(context, 1, broadcastIntentClose.apply {
-//                putExtra(EXTRAS_NOTIFICATION_KEY, "deny")
-//            }, 0)
-//
-//        val broadcastPendingIntentAccept =
-//            PendingIntent.getBroadcast(context, 2, broadcastIntentClose.apply {
-//                putExtra(EXTRAS_NOTIFICATION_KEY, "accept")
-//            }, 0)
-//
-//
-//
-//        notificationBuilder.apply {
-//            setOnlyAlertOnce(true)
-//            setCustomContentView(notificationLayout)
-//            setCustomBigContentView(notificationLayoutExpanded)
-//            contentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
-//            bigContentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
-//            setProgress(maxProgress, 0, false)
-//            setSmallIcon(R.mipmap.ic_launcher)
-//            setLargeIcon(
-//                BitmapFactory.decodeResource(
-//                    context.resources,
-//                    R.mipmap.ic_launcher
-//                )
-//            )
-//            setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-//            setOngoing(false)
-//
-//            setAutoCancel(true)
-//            setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
-//            priority = NotificationCompat.PRIORITY_MAX
-//
-//
-//            notificationBuilder.contentView.apply {
-//                setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
-//
-//                setOnClickPendingIntent(R.id.button_notification_deny, broadcastPendingIntentDeny)
-//
-//                setOnClickPendingIntent(
-//                    R.id.button_notification_accept,
-//                    broadcastPendingIntentAccept
-//                )
-//            }
-//
-//
-//            notificationBuilder.bigContentView.apply {
-//                setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
-//                setOnClickPendingIntent(R.id.button_notification_deny, broadcastPendingIntentDeny)
-//                setOnClickPendingIntent(
-//                    R.id.button_notification_accept,
-//                    broadcastPendingIntentAccept
-//                )
-//            }
-//        }
-//
-//        NotificationManagerCompat.from(context).apply {
-//            while (mProgressStatus <= maxProgress && showRequestProgress) {
-//                Timber.i("mProgressStatus $mProgressStatus")
-//                notificationBuilder.setProgress(
-//                    maxProgress,
-//                    mProgressStatus,
-//                    false
-//                )
-//                notificationBuilder.bigContentView.setProgressBar(
-//                    R.id.progressBar,
-//                    maxProgress,
-//                    mProgressStatus,
-//                    false
-//                )
-//
-//                notificationBuilder.contentView.setProgressBar(
-//                    R.id.progressBar,
-//                    maxProgress,
-//                    mProgressStatus,
-//                    false
-//                )
-//
-//                notify(NOTIFICATION_REQUESTS_ID, notificationBuilder.build())
-//                Thread.sleep(1000)
-//                mProgressStatus++
-//            }
-//        }
-//    }
+    @SuppressLint("RestrictedApi")
+    fun showRequestNotification(context: Context, requestId: Int, userName: String) {
+        val maxProgress = 5
+        var mProgressStatus = 0
+        showRequestProgress = true
+        val channelId = "${context.packageName}-${NotificationType.REQUESTS.notifyName}"
+        val notificationTitle = context.getString(R.string.notification_request_title)
+        val notificationText = alertNotificationText(
+            userName = userName,
+            msgText = context.getString(R.string.notification_request_text),
+            context = context,
+        )
+
+        val notificationLayout =
+            RemoteViews(context.packageName, R.layout.view_notification_request_small)
+        notificationLayout.setTextViewText(R.id.notification_title, notificationTitle)
+        notificationLayout.setTextViewText(R.id.notification_content, notificationText)
+
+        val notificationLayoutExpanded =
+            RemoteViews(context.packageName, R.layout.view_notification_request_small)
+
+        notificationLayoutExpanded.setTextViewText(R.id.notification_title, notificationTitle)
+        notificationLayoutExpanded.setTextViewText(R.id.notification_content, notificationText)
+
+        val notificationBuilder = NotificationCompat.Builder(context, channelId)
+
+        val broadcastIntentClose = Intent(context, NotificationRequestButtonListener::class.java)
+
+        val broadcastPendingIntentClose =
+            PendingIntent.getBroadcast(context, 0, broadcastIntentClose.apply {
+                putExtra(EXTRAS_NOTIFICATION_KEY, "close_request")
+                EXTRAS_NOTIFICATION_REQUEST_ID_KEY
+            }, 0)
+
+        val broadcastPendingIntentDeny =
+            PendingIntent.getBroadcast(context, 1, broadcastIntentClose.apply {
+                putExtra(EXTRAS_NOTIFICATION_KEY, "deny")
+                putExtra(EXTRAS_NOTIFICATION_REQUEST_ID_KEY, requestId)
+
+            }, 0)
+
+        val broadcastPendingIntentAccept =
+            PendingIntent.getBroadcast(context, 2, broadcastIntentClose.apply {
+                putExtra(EXTRAS_NOTIFICATION_KEY, "accept")
+                putExtra(EXTRAS_NOTIFICATION_REQUEST_ID_KEY, requestId)
+
+            }, 0)
+
+
+
+        notificationBuilder.apply {
+            setOnlyAlertOnce(true)
+            setCustomContentView(notificationLayout)
+            setCustomBigContentView(notificationLayoutExpanded)
+            contentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
+            bigContentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
+            setProgress(maxProgress, 0, false)
+            setSmallIcon(R.mipmap.ic_launcher)
+            setLargeIcon(
+                BitmapFactory.decodeResource(
+                    context.resources,
+                    R.mipmap.ic_launcher
+                )
+            )
+            setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            setOngoing(false)
+
+            setAutoCancel(true)
+            setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
+            priority = NotificationCompat.PRIORITY_MAX
+
+
+            notificationBuilder.contentView.apply {
+                setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
+
+                setOnClickPendingIntent(R.id.button_notification_deny, broadcastPendingIntentDeny)
+
+                setOnClickPendingIntent(
+                    R.id.button_notification_accept,
+                    broadcastPendingIntentAccept
+                )
+            }
+
+
+            notificationBuilder.bigContentView.apply {
+                setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
+                setOnClickPendingIntent(R.id.button_notification_deny, broadcastPendingIntentDeny)
+                setOnClickPendingIntent(
+                    R.id.button_notification_accept,
+                    broadcastPendingIntentAccept
+                )
+            }
+        }
+
+        NotificationManagerCompat.from(context).apply {
+            while (mProgressStatus <= maxProgress && showRequestProgress) {
+                Timber.i("mProgressStatus $mProgressStatus")
+                notificationBuilder.setProgress(
+                    maxProgress,
+                    mProgressStatus,
+                    false
+                )
+                notificationBuilder.bigContentView.setProgressBar(
+                    R.id.progressBar,
+                    maxProgress,
+                    mProgressStatus,
+                    false
+                )
+
+                notificationBuilder.contentView.setProgressBar(
+                    R.id.progressBar,
+                    maxProgress,
+                    mProgressStatus,
+                    false
+                )
+
+                notify(NOTIFICATION_REQUESTS_ID, notificationBuilder.build())
+                Thread.sleep(1000)
+                mProgressStatus++
+            }
+        }
+    }
 
 
     @SuppressLint("RestrictedApi")
@@ -372,7 +386,9 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
 
 
     companion object {
-        const val ARG_ALERT_ID = "alertId"
+        const val ARG_ALERT_ID_KEY = "alertId"
+        const val ARG_REQUEST_ID_KEY = "requestId"
+
         const val ALERT_NOTIFICATION_TEXT = "is in emergency"
         const val REQUEST_NOTIFICATION_TEXT = "needs you as a guardian"
 
@@ -382,6 +398,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
         private var showAlertProgress = true
         var EXTRAS_NOTIFICATION_KEY = "notification_type"
         var EXTRAS_NOTIFICATION_ALERT_ID = "notification_alert_id"
+        var EXTRAS_NOTIFICATION_REQUEST_ID_KEY = "notification_request_id"
 
 
         fun cancelRequestProgress() {
