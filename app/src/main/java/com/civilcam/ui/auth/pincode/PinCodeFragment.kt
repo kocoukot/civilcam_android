@@ -120,6 +120,11 @@ class PinCodeFragment : Fragment() {
 		hideKeyboard()
 	}
 	
+	override fun onStop() {
+		super.onStop()
+		hideKeyboard()
+	}
+	
 	companion object {
 		private const val ARG_FLOW = "pin_code_flow"
 		private const val ARG_IS_LOGIN = "is_login"
