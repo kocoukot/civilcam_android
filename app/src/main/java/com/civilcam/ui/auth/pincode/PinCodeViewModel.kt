@@ -1,6 +1,7 @@
 package com.civilcam.ui.auth.pincode
 
 import androidx.lifecycle.viewModelScope
+import com.civilcam.domainLayer.ServerErrors
 import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.castSafe
 import com.civilcam.domainLayer.usecase.user.CheckPinUseCase
@@ -14,6 +15,7 @@ import com.civilcam.ui.auth.pincode.model.PinCodeState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class PinCodeViewModel(
 	pinCodeFlow: PinCodeFlow,
@@ -139,6 +141,16 @@ class PinCodeViewModel(
 							)
 							goEmergency()
 						} else {
+
+						}
+					}
+					else -> {}
+				}
+			}
+				.onFailure { error ->
+					error.castSafe<ServiceException>()?.let { castedError ->
+						Timber.d("error $castedError")
+						if (castedError.errorCode == ServerErrors.PIN_CODE_NOT_MATCH) {
 							_state.value =
 								_state.value.copy(
 									currentPinCode = "",
@@ -146,12 +158,6 @@ class PinCodeViewModel(
 									isDataLoaded = true
 								)
 						}
-					}
-					else -> {}
-				}
-			}
-				.onFailure { error ->
-					error.castSafe<ServiceException>()?.let {
 						_state.update { it.copy(errorText = it.errorText) }
 					}
 				}
