@@ -57,10 +57,6 @@ class EmergencyFragment : Fragment() {
 					PinCodeFragment.createArgs(PinCodeFlow.SOS_PIN_CODE, false)
 				)
 				is EmergencyRoute.CheckPermission -> checkPermissions(route.isSos)
-				is EmergencyRoute.ControlFlash -> controlFlashLight(
-					route.enabled,
-					route.cameraState
-				)
 				EmergencyRoute.HideSystemUI -> hideSystemUI()
 				EmergencyRoute.ShowSystemUI -> showSystemUI()
 				is EmergencyRoute.IsNavBarVisible ->
@@ -78,17 +74,6 @@ class EmergencyFragment : Fragment() {
 			setContent {
 				EmergencyScreenContent(viewModel)
 			}
-		}
-	}
-	
-	private fun controlFlashLight(enabled: Boolean, cameraState: Int) {
-		val camManager = activity?.getSystemService(CAMERA_SERVICE) as CameraManager
-		try {
-			if (cameraState == CameraSelector.LENS_FACING_BACK) {
-				val cameraId = camManager.cameraIdList[0]
-				camManager.setTorchMode(cameraId, enabled)
-			}
-		} catch (e: Exception) {
 		}
 	}
 	
