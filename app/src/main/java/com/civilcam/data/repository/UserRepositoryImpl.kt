@@ -1,5 +1,7 @@
 package com.civilcam.data.repository
 
+import com.civilcam.BuildConfig
+import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.local.SharedPreferencesStorage
 import com.civilcam.data.mapper.auth.UserMapper
@@ -10,6 +12,9 @@ import com.civilcam.data.network.support.Resource
 import com.civilcam.domainLayer.model.user.CurrentUser
 import com.civilcam.domainLayer.model.user.LanguageType
 import com.civilcam.domainLayer.repos.UserRepository
+import com.facebook.login.LoginManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 class UserRepositoryImpl(
 	private val sharedPreferencesStorage: SharedPreferencesStorage,
@@ -50,7 +55,7 @@ class UserRepositoryImpl(
 			userService.logout()
 		}.let { response ->
 			accountStorage.logOut()
-
+			socialsClear()
 			when (response) {
 				is Resource.Success -> response.value.ok
 				is Resource.Failure -> throw response.serviceException
@@ -62,6 +67,7 @@ class UserRepositoryImpl(
 			userService.deleteAccount()
 		}.let { response ->
 			accountStorage.logOut()
+			socialsClear()
 			when (response) {
 				is Resource.Success -> response.value.ok
 				is Resource.Failure -> throw response.serviceException
@@ -204,6 +210,17 @@ class UserRepositoryImpl(
 			}
 		}
 
+	private fun socialsClear() {
+		val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+			.requestServerAuthCode(BuildConfig.GOOGLE_WEB_CLIENT_ID)
+			.requestEmail()
+			.build()
+
+		with(GoogleSignIn.getClient(instance, gso)) {
+			signOut()
+		}
+		LoginManager.getInstance().logOut()
+	}
 //    override suspend fun setFcmToken(): Boolean =
 //        safeApiCall {
 //            val token = accountStorage.fcmToken ?: ""
