@@ -18,6 +18,11 @@ ext {
         implementation 'id.zelory:compressor:3.0.1'
     }
 
+    socket = dependencyGroup {
+        implementation('io.socket:socket.io-client:2.0.0') {
+            exclude group: 'org.json', module: 'json'
+        }
+    }
 
     datePicker = dependencyGroup {
         implementation "com.chargemap.compose:numberpicker:1.0.3"

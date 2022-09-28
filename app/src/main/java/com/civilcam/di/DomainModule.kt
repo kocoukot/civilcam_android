@@ -1,6 +1,7 @@
 package com.civilcam.di
 
 import com.civilcam.domainLayer.usecase.GetUserDetailUseCase
+import com.civilcam.domainLayer.usecase.GetUserSessionTokenUseCase
 import com.civilcam.domainLayer.usecase.alerts.*
 import com.civilcam.domainLayer.usecase.auth.*
 import com.civilcam.domainLayer.usecase.docs.GetTermsLinksUseCase
@@ -123,4 +124,7 @@ val domainModule = module {
 
     factory { SetSafeStateUseCase(get()) }
 
+    factory { GetUserSessionTokenUseCase(get()) }
+
+    factory { SetUserCoordsUseCase(get()) }
 }

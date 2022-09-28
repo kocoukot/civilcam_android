@@ -83,7 +83,7 @@ fun EmergencyMapContent(
             userLocationData?.guardsLocation?.takeIf { it.isNotEmpty() }?.let {
                 for (user in userLocationData.guardsLocation) {
                     Marker(
-                        state = MarkerState(position = user),
+                        state = MarkerState(position = LatLng(user.latitude, user.longitude)),
                         icon = bitmapDescriptorFromVector(
                             LocalContext.current,
                             R.drawable.img_guard

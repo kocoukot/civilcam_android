@@ -10,13 +10,15 @@ import androidx.camera.core.TorchState
 import androidx.lifecycle.viewModelScope
 import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.domainLayer.EmergencyScreen
+import com.civilcam.domainLayer.model.alerts.AlertGuardianModel
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.SendEmergencySosUseCase
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
+import com.civilcam.service.socket.SocketHandler
 import com.civilcam.ui.emergency.model.*
-import com.google.android.gms.maps.model.LatLng
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,6 +26,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
 import timber.log.Timber
 import java.util.*
 
@@ -31,15 +35,21 @@ class EmergencyViewModel(
 	private val fetchUserLocationUseCase: FetchUserLocationUseCase,
 	getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
 	private val sendEmergencySosUseCase: SendEmergencySosUseCase,
+//	private val setUserCoordsUseCase: SetUserCoordsUseCase
 ) : ComposeViewModel<EmergencyState, EmergencyRoute, EmergencyActions>() {
 	override var _state: MutableStateFlow<EmergencyState> = MutableStateFlow(EmergencyState())
 	private var geocoder = Geocoder(instance, Locale.US)
 	private val _effect = MutableSharedFlow<CameraEffect>()
 	val effect: SharedFlow<CameraEffect> = _effect
 
+	private val mSocket = SocketHandler.getSocket()
+
+	private val gson = Gson()
+
 	private val locationScope = CoroutineScope(Dispatchers.IO)
 
 	init {
+		addListeners()
 		getLocalCurrentUserUseCase().let { user ->
 			_state.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
 //			when (user.sessionUser.userState) {
@@ -50,7 +60,6 @@ class EmergencyViewModel(
 //				}
 //			}
 		}
-		fetchUserLocation()
 	}
 
 	fun fetchUserLocation() {
@@ -58,17 +67,30 @@ class EmergencyViewModel(
 			locationScope.launch {
 				fetchUserLocationUseCase()
 					.collect { location ->
-						_state.update {
-							it.copy(
-								emergencyUserModel = it.emergencyUserModel?.copy(
-									userLocation = location.first,
-									userBearing = location.second
-								) ?: EmergencyUserModel(
-									userLocation = location.first,
-									userBearing = location.second,
-								),
-								isLoading = false
-							)
+						when (_state.value.emergencyButton) {
+							EmergencyButton.InSafeButton -> {
+								_state.update {
+									it.copy(
+										emergencyUserModel = it.emergencyUserModel?.copy(
+											userLocation = location.first,
+											userBearing = location.second
+										) ?: EmergencyUserModel(
+											userLocation = location.first,
+											userBearing = location.second,
+										),
+										isLoading = false
+									)
+								}
+							}
+							EmergencyButton.InDangerButton -> {
+								val msg = mapOf(
+									"latitude" to location.first.latitude,
+									"longitude" to location.first.longitude,
+								)
+								val jsonMsg = JSONObject(msg)
+
+								emitMsg(jsonMsg)
+							}
 						}
 
 						Timber.i("fetchUserLocationUseCase latlng ${location.first} bearing ${location.second}")
@@ -76,9 +98,9 @@ class EmergencyViewModel(
 						var address = ""
 						try {
 							addressList = geocoder.getFromLocation(
-                                location.first.latitude,
-                                location.first.longitude,
-                                1
+								location.first.latitude,
+								location.first.longitude,
+								1
                             )?.toMutableList() ?: mutableListOf()
 							if (addressList.isNotEmpty())
 								address =
@@ -157,6 +179,8 @@ class EmergencyViewModel(
 	private fun oneClickSafe() {
 		if (state.value.emergencyButton == EmergencyButton.InDangerButton) {
 			goPinCode()
+		} else {
+
 		}
 	}
 
@@ -176,13 +200,6 @@ class EmergencyViewModel(
 							it.copy(
 								emergencyScreen = EmergencyScreen.COUPLED,
 								emergencyButton = EmergencyButton.InDangerButton,
-								emergencyUserModel = it.emergencyUserModel?.copy(
-									guardsLocation = listOf(
-										LatLng(41.950188, -87.780036),
-										LatLng(41.852063, -87.679099),
-										LatLng(41.737393, -87.772483),
-									)
-								)
 							)
 						}
 					},
@@ -282,5 +299,35 @@ class EmergencyViewModel(
 
 	override fun clearErrorText() {
 		_state.update { it.copy(errorText = "") }
+	}
+
+	private fun addListeners() {
+		mSocket.on("guardians") { args ->
+			val data: JSONArray = args[0] as JSONArray
+			Timber.d("socket args $data")
+			val mutableGuardList = mutableListOf<AlertGuardianModel>()
+			for (i in 0 until data.length()) {
+				val item = (data[i] as JSONObject)["person"].toString()
+				mutableGuardList.add(
+					gson.fromJson(
+						item,
+						AlertGuardianModel::class.java
+					)
+				)
+				Timber.d("socket casted ${data[i] as JSONObject}")
+			}
+
+			_state.update { it.copy(emergencyUserModel = it.emergencyUserModel?.copy(guardsLocation = mutableGuardList.toList())) }
+		}
+	}
+
+	private fun emitMsg(msg: JSONObject) {
+		if (mSocket.connected()) {
+			Timber.d("socket msg out $msg")
+			mSocket.emit("coords", msg, false)
+		} else {
+			Timber.d("socket clicked connected")
+			mSocket.connect()
+		}
 	}
 }

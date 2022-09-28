@@ -33,6 +33,7 @@ object Endpoint {
         const val CHECK_PIN = "check-pin"
         const val SET_PIN = "set-pin"
         const val SET_SAFE_STATE = "set-safe-state"
+        const val SET_USER_COORDS = "set-user-coords"
     }
 
     object Profile {

@@ -6,5 +6,5 @@ import com.civilcam.domainLayer.repos.LocationRepository
 class FetchUserLocationUseCase(
     private val locationRepository: LocationRepository
 ) {
-    suspend operator fun invoke() = locationRepository.fetchLocation()
+    suspend operator fun invoke() = locationRepository.fetchLocation(10000L)
 }
