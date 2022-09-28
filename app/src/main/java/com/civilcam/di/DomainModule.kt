@@ -126,4 +126,5 @@ val domainModule = module {
 
     factory { GetUserSessionTokenUseCase(get()) }
 
+    factory { SetUserCoordsUseCase(get()) }
 }

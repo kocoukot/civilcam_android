@@ -2,6 +2,7 @@ package com.civilcam.domainLayer.repos
 
 import com.civilcam.domainLayer.model.user.CurrentUser
 import com.civilcam.domainLayer.model.user.LanguageType
+import com.google.android.gms.maps.model.LatLng
 
 
 interface UserRepository {
@@ -34,4 +35,5 @@ interface UserRepository {
 
     suspend fun setSafeState(pinCode: String): Boolean
 
+	suspend fun setUserCoords(coords: LatLng): Boolean
 }

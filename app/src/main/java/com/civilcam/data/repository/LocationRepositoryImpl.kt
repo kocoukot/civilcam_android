@@ -2,10 +2,10 @@ package com.civilcam.data.repository
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.location.LocationManager
 import android.os.Looper
 import com.civilcam.common.ext.awaitResult
 import com.civilcam.domainLayer.repos.LocationRepository
-import com.civilcam.ext_features.Constant
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
@@ -38,20 +39,36 @@ class LocationRepositoryImpl(
     }
 
     @SuppressLint("MissingPermission")
-    override suspend fun fetchLocation(): Flow<Pair<LatLng, Float>> = callbackFlow {
-        val locationRequest = LocationRequest.create().apply {
-            interval = Constant.LOCATION_REQUEST_INTERVAL_IN_MILLIS
-            fastestInterval = Constant.LOCATION_REQUEST_FASTEST_INTERVAL_IN_MILLIS
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
+    override suspend fun fetchLocation(updateInterval: Long): Flow<Pair<LatLng, Float>> =
+        callbackFlow {
 
+            val locationManager =
+                context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+            val isNetworkEnabled =
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
-        val callBack = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-                val location = locationResult.lastLocation
-                trySend(LatLng(location.latitude, location.longitude) to location.bearing)
+            if (!isGpsEnabled && !isNetworkEnabled) {
+                throw Throwable("GPS is disabled")
             }
+
+
+            val locationRequest = LocationRequest.create().apply {
+                interval = updateInterval
+                fastestInterval = updateInterval
+                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            }
+
+
+            val callBack = object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    super.onLocationResult(locationResult)
+                    locationResult.locations.lastOrNull()?.let { location ->
+                        launch {
+                            send(LatLng(location.latitude, location.longitude) to location.bearing)
+                        }
+                    }
+                }
         }
 
         locationClient.requestLocationUpdates(locationRequest, callBack, Looper.getMainLooper())

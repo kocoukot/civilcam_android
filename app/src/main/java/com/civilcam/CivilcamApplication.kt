@@ -1,6 +1,9 @@
 package com.civilcam
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import com.civilcam.di.*
 import com.civilcam.di.source.sourceModule
 import com.civilcam.domainLayer.model.user.NotificationType
@@ -77,6 +80,18 @@ class CivilcamApplication : Application() {
             NotificationType.ALERTS.notifyName,
             "Notification channel for alerts"
         )
+
+        CCFireBaseMessagingService.createNotificationChannel(
+            this,
+            NotificationType.ALERTS.notifyName,
+            "Notification channel for location"
+        )
+
+        val channel =
+            NotificationChannel("location", "Location", NotificationManager.IMPORTANCE_LOW)
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
 

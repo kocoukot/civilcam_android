@@ -10,7 +10,7 @@ object Constant {
     const val MAX_TEXt_LENGTH = 280
     const val LETTERS_PATTERN = "[!@#$%^&*()|?0123456789.,/_]*"
     const val MAX_PICTURE_SIZE_MB = 5f
-    const val LOCATION_REQUEST_INTERVAL_IN_MILLIS = 15000L
+    const val LOCATION_REQUEST_INTERVAL_IN_MILLIS = 10000L
     const val LOCATION_REQUEST_FASTEST_INTERVAL_IN_MILLIS = 10000L
 
     const val ANIMATION_DURATION = 1000

@@ -7,5 +7,5 @@ interface LocationRepository {
 
     suspend fun fetchLastKnownLocation(): LatLng
 
-    suspend fun fetchLocation(): Flow<Pair<LatLng, Float>>
+    suspend fun fetchLocation(updateInterval: Long): Flow<Pair<LatLng, Float>>
 }

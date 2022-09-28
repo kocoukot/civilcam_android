@@ -5,6 +5,7 @@ import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.local.SharedPreferencesStorage
 import com.civilcam.data.mapper.auth.UserMapper
+import com.civilcam.data.network.model.request.alert.CoordsRequest
 import com.civilcam.data.network.model.request.user.*
 import com.civilcam.data.network.service.UserService
 import com.civilcam.data.network.support.BaseRepository
@@ -15,6 +16,7 @@ import com.civilcam.domainLayer.repos.UserRepository
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.maps.model.LatLng
 
 class UserRepositoryImpl(
 	private val sharedPreferencesStorage: SharedPreferencesStorage,
@@ -134,18 +136,35 @@ class UserRepositoryImpl(
             }
         }
 
-    override suspend fun setSafeState(pinCode: String): Boolean =
-        safeApiCall {
-            userService.setSafeState(CheckPinRequest(pinCode))
-        }.let { response ->
-            when (response) {
-                is Resource.Success -> true
-                is Resource.Failure -> throw response.serviceException
-            }
-        }
+	override suspend fun setSafeState(pinCode: String): Boolean =
+		safeApiCall {
+			userService.setSafeState(CheckPinRequest(pinCode))
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> true
+				is Resource.Failure -> throw response.serviceException
+			}
+		}
+
+	override suspend fun setUserCoords(coords: LatLng): Boolean =
+		safeApiCall {
+			userService.setUserCoords(
+				SetUserCoordsRequest(
+					coords = CoordsRequest(
+						latitude = coords.latitude,
+						longitude = coords.longitude
+					)
+				)
+			)
+		}.let { response ->
+			when (response) {
+				is Resource.Success -> true
+				is Resource.Failure -> throw response.serviceException
+			}
+		}
 
 
-    //    override fun getUserEmail(): Pair<String, Boolean> =
+	//    override fun getUserEmail(): Pair<String, Boolean> =
 //        accountStorage.getUserEmail()
 //
 //    override suspend fun contactSupport(message: String, email: String): Boolean =

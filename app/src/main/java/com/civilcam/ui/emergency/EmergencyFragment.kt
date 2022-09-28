@@ -1,13 +1,10 @@
 package com.civilcam.ui.emergency
 
 import android.Manifest
-import android.content.Context.CAMERA_SERVICE
-import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.camera.core.CameraSelector
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
@@ -90,7 +87,10 @@ class EmergencyFragment : Fragment() {
 	
 	private fun checkPermissions(launchSos: Boolean = false) {
 		if (permissionsDelegate.checkSelfPermissions()) {
-            if (launchSos) viewModel.launchSos() else viewModel.fetchUserLocation()
+			if (launchSos) viewModel.launchSos() else {
+				viewModel.fetchUserLocation()
+				(activity as MainActivity).startLocationService()
+			}
 		} else {
 			pendingAction = { checkPermissions() }
 			permissionsDelegate.requestPermissions()

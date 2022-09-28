@@ -14,20 +14,27 @@ import androidx.navigation.fragment.NavHostFragment
 import com.civilcam.common.ext.navigateByDirection
 import com.civilcam.databinding.ActivityMainBinding
 import com.civilcam.domainLayer.castSafe
+import com.civilcam.domainLayer.usecase.user.IsUserLoggedInUseCase
 import com.civilcam.ext_features.SupportBottomBar
 import com.civilcam.ext_features.setupWithNavController
+import com.civilcam.langselect.LanguageSelectFragment
 import com.civilcam.service.CCFireBaseMessagingService
+import com.civilcam.service.location.LocationService
+import com.civilcam.service.location.LocationService.Companion.ACTION_START
+import com.civilcam.service.location.LocationService.Companion.ACTION_STOP
 import com.civilcam.service.socket.SocketHandler
 import com.civilcam.ui.common.NavigationDirection
 import com.civilcam.utils.AndroidLoggingHandler
 import io.socket.client.Manager
 import io.socket.client.Socket
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.util.logging.Level
 import java.util.logging.Logger
 
 
 class MainActivity : AppCompatActivity() {
+    private val isUserLoggedInUseCase: IsUserLoggedInUseCase by inject()
 
     private lateinit var binding: ActivityMainBinding
     private var navHost: NavHostFragment? = null
@@ -67,6 +74,26 @@ class MainActivity : AppCompatActivity() {
         Logger.getLogger(Socket::class.java.name).level = Level.ALL
         Logger.getLogger(SocketHandler::class.java.name).level = Level.ALL
         Logger.getLogger(Manager::class.java.name).level = Level.ALL
+        if (isUserLoggedInUseCase()) startLocationService()
+    }
+
+    fun startLocationService() {
+        if (isUserLoggedInUseCase()) {
+            Intent(applicationContext, LocationService::class.java).apply {
+                action = ACTION_START
+                startService(this)
+            }
+        }
+    }
+
+    fun stopLocationService() {
+        val service = getSystemService(LocationService::class.java)
+        if (isUserLoggedInUseCase()) {
+            Intent(applicationContext, LocationService::class.java).apply {
+                action = ACTION_STOP
+                startService(this)
+            }
+        }
     }
 
     private fun navigateByDirection(direction: NavigationDirection) {
@@ -76,6 +103,7 @@ class MainActivity : AppCompatActivity() {
     private val onBackStackChangedListener by lazy {
         FragmentManager.OnBackStackChangedListener {
             binding.navBarGroup.isVisible = currentVisibleFragment is SupportBottomBar
+            if (currentVisibleFragment is LanguageSelectFragment) stopLocationService()
         }
     }
 

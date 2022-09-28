@@ -20,6 +20,7 @@ import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ext_features.navController
 import com.civilcam.ext_features.requireArg
 import com.civilcam.ext_features.showKeyboard
+import com.civilcam.ui.MainActivity
 import com.civilcam.ui.auth.password.create.CreatePasswordFragment
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
@@ -57,15 +58,18 @@ class VerificationFragment : Fragment() {
 				VerificationRoute.ToNextScreen -> {
 					Handler(Looper.getMainLooper()).postDelayed(300) {
 						when (verificationFlow) {
-                            VerificationFlow.CURRENT_EMAIL ->
-                                navController.navigate(
-                                    R.id.termsFragment,
-                                    TermsFragment.createArgs()
-                                )
-                            VerificationFlow.NEW_PHONE -> navController.navigate(
-                                R.id.pinCodeFragment,
-                                PinCodeFragment.createArgs(PinCodeFlow.CREATE_PIN_CODE, false)
-                            )
+							VerificationFlow.CURRENT_EMAIL ->
+								navController.navigate(
+									R.id.termsFragment,
+									TermsFragment.createArgs()
+								)
+							VerificationFlow.NEW_PHONE -> {
+								(activity as MainActivity).startLocationService()
+								navController.navigate(
+									R.id.pinCodeFragment,
+									PinCodeFragment.createArgs(PinCodeFlow.CREATE_PIN_CODE, false)
+								)
+							}
 							VerificationFlow.CHANGE_PHONE -> {
 								setFragmentResult(
 									RESULT_BACK_PHONE,
