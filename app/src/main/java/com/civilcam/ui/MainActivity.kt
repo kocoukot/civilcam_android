@@ -17,8 +17,14 @@ import com.civilcam.domainLayer.castSafe
 import com.civilcam.ext_features.SupportBottomBar
 import com.civilcam.ext_features.setupWithNavController
 import com.civilcam.service.CCFireBaseMessagingService
+import com.civilcam.service.socket.SocketHandler
 import com.civilcam.ui.common.NavigationDirection
+import com.civilcam.utils.AndroidLoggingHandler
+import io.socket.client.Manager
+import io.socket.client.Socket
 import timber.log.Timber
+import java.util.logging.Level
+import java.util.logging.Logger
 
 
 class MainActivity : AppCompatActivity() {
@@ -56,6 +62,11 @@ class MainActivity : AppCompatActivity() {
         intent?.extras?.getParcelable<NavigationDirection>(EXTRA_DIRECTION)
             ?.let(::navigateByDirection)
         getNewIntentLogic(intent = intent)
+
+        AndroidLoggingHandler.reset(AndroidLoggingHandler())
+        Logger.getLogger(Socket::class.java.name).level = Level.ALL
+        Logger.getLogger(SocketHandler::class.java.name).level = Level.ALL
+        Logger.getLogger(Manager::class.java.name).level = Level.ALL
     }
 
     private fun navigateByDirection(direction: NavigationDirection) {

@@ -1,6 +1,6 @@
-package com.digi_crony.domain.usecase
+package com.civilcam.domainLayer.usecase
 
-import com.digi_crony.data.repository.AccountRepository
+import com.civilcam.domainLayer.repos.AccountRepository
 
 class GetUserSessionTokenUseCase(
     private val accountRepository: AccountRepository,

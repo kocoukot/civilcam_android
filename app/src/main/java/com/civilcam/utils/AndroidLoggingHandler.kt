@@ -1,4 +1,4 @@
-package com.digi_crony.utils
+package com.civilcam.utils
 
 import android.util.Log
 import java.util.logging.*

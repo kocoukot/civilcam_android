@@ -1,4 +1,4 @@
-package com.digi_crony.service.socket
+package com.civilcam.service.socket
 
 enum class ChatEvents(val msgType: String) {
     INCOME_MESSAGE("chatMessage"),

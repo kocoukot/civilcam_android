@@ -18,6 +18,7 @@ import com.civilcam.ext_features.ext.showSystemUI
 import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ext_features.navController
 import com.civilcam.ext_features.registerForPermissionsResult
+import com.civilcam.service.socket.SocketHandler
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
@@ -38,7 +39,17 @@ class EmergencyFragment : Fragment() {
 	) { onPermissionsGranted(it) }
 
 	private var pendingAction: (() -> Unit)? = null
-	
+
+	private val mSocket = SocketHandler
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		mSocket.setSocket()
+		mSocket.establishConnection()
+	}
+
+
+
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,

@@ -157,6 +157,8 @@ class EmergencyViewModel(
 	private fun oneClickSafe() {
 		if (state.value.emergencyButton == EmergencyButton.InDangerButton) {
 			goPinCode()
+		} else {
+
 		}
 	}
 

@@ -1,7 +1,8 @@
-package com.digi_crony.service.socket
+package com.civilcam.service.socket
 
-import com.digi_crony.BuildConfig
-import com.digi_crony.domain.usecase.GetUserSessionTokenUseCase
+
+import com.civilcam.BuildConfig
+import com.civilcam.domainLayer.usecase.GetUserSessionTokenUseCase
 import io.socket.client.IO
 import io.socket.client.Manager
 import io.socket.client.Socket
@@ -13,8 +14,8 @@ import java.net.URISyntaxException
 
 
 object SocketHandler : KoinComponent {
-    private const val DIGI_NAMESPACE = "/digicrony"
-    lateinit var mSocket: Socket
+    private const val DIGI_NAMESPACE = "/sos"
+    private lateinit var mSocket: Socket
     private val getUserSessionTokenUseCase: GetUserSessionTokenUseCase by inject()
 
     @Synchronized
@@ -25,11 +26,13 @@ object SocketHandler : KoinComponent {
             val options = IO.Options().apply {
                 timeout = 30000
                 reconnection = true
+                extraHeaders = mapOf("X-Session-Key" to listOf(getUserSessionTokenUseCase()))
             }
-            options.query = "X-Session-ID=${getUserSessionTokenUseCase.invoke()}"
 
             val manager = Manager(URI.create(address), options)
             mSocket = manager.socket(DIGI_NAMESPACE)
+
+            Timber.d("socket  try connect options $options key ${getUserSessionTokenUseCase()}")
 
         } catch (e: URISyntaxException) {
             Timber.d("socket error ${e.localizedMessage}")
@@ -47,7 +50,7 @@ object SocketHandler : KoinComponent {
 
         mSocket
             .on(Socket.EVENT_CONNECT) {
-                Timber.d("socket connect ${mSocket.id()} ${mSocket.connected()}")
+                Timber.d("socket connect ${mSocket.id()} isConnected ${mSocket.connected()}")
             }
             .on(Socket.EVENT_CONNECT_ERROR) { array ->
                 Timber.d("socket error ${array.map { it }}")
