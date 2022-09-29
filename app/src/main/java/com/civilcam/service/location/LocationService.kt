@@ -13,6 +13,7 @@ import com.civilcam.domainLayer.repos.LocationRepository
 import com.civilcam.domainLayer.usecase.user.SetUserCoordsUseCase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 
@@ -66,6 +67,7 @@ class LocationService : Service() {
                             }
                             notificationManager.notify(1, updateNotification.build())
                         }
+                        .launchIn(serviceScope)
                 } catch (e: Exception) {
                     Toast.makeText(this@LocationService, e.localizedMessage, Toast.LENGTH_SHORT)
                         .show()
