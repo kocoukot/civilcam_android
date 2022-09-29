@@ -39,7 +39,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
-@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun PinCodeInputField(
 	pinCodeValue: (String) -> Unit,
