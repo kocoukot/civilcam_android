@@ -151,11 +151,11 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
             contentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
             bigContentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
             setProgress(maxProgress, 0, false)
-            setSmallIcon(R.mipmap.ic_launcher)
+            setSmallIcon(R.drawable.ic_launcher_foreground)
             setLargeIcon(
                 BitmapFactory.decodeResource(
                     context.resources,
-                    R.mipmap.ic_launcher
+                    R.drawable.ic_launcher_foreground
                 )
             )
             setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -278,11 +278,11 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
             contentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
             bigContentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
             setProgress(maxProgress, 0, false)
-            setSmallIcon(R.mipmap.ic_launcher)
+            setSmallIcon(R.drawable.ic_launcher_foreground)
             setLargeIcon(
                 BitmapFactory.decodeResource(
                     context.resources,
-                    R.mipmap.ic_launcher
+                    R.drawable.ic_launcher_foreground
                 )
             )
             setContentIntent(
