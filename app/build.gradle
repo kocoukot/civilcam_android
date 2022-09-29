@@ -44,7 +44,6 @@ android {
         buildConfigField "String", "GOOGLE_WEB_CLIENT_ID", '"403034509114-i70e7lel3joqeuprgis5cuuu8anbm7ss.apps.googleusercontent.com"'
         buildConfigField "String", "GOOGLE_CLIENT_SECRET", '"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"'
         buildConfigField "String", "GOOGLE_API_GATEWAY", '"https://www.googleapis.com\"'
-        buildConfigField "String", "SOCKET_URL", '"https://api.staging.civilcam.cloud"'
 
 
 
@@ -166,5 +165,5 @@ dependencies {
     implementation project(path: ':onboarding-feature')
     implementation project(path: ':alert-feature')
     implementation project(path: ':settings-feature')
-
+    implementation project(path: ':socket-feature')
 }

@@ -76,7 +76,7 @@ class AlertsListViewModel(
             networkRequest(
                 action = { resolveAlertUseCase(alertId) },
                 onSuccess = {
-                    _state.update { it.copy(refreshList = Unit, resolveId = null) }
+                    refreshList()
                 },
                 onFailure = { error ->
                     error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
@@ -84,7 +84,10 @@ class AlertsListViewModel(
                 onComplete = { _state.update { it.copy(isLoading = false) } },
             )
         }
+    }
 
+    fun refreshList() {
+        _state.update { it.copy(refreshList = Unit, resolveId = null) }
     }
 
     private fun loadAlertsList(): Flow<PagingData<AlertModel>> {

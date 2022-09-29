@@ -57,6 +57,8 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
         )
     }
 
+    if (state.value.isLoading) DialogLoadingContent()
+
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
         topBar = {

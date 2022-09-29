@@ -7,48 +7,52 @@ import com.civilcam.alert_feature.map.model.LiveMapState
 import com.civilcam.alert_feature.map.model.UserAlertLocationData
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.domainLayer.ServiceException
+import com.civilcam.domainLayer.model.alerts.AlertGuardianModel
+import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.GetMapAlertUserDataUseCase
 import com.civilcam.domainLayer.usecase.alerts.ResolveAlertUseCase
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.google.gson.Gson
+import com.test.socket_feature.SocketHandler
+import com.test.socket_feature.SocketMapEvents
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import timber.log.Timber
 
 
 class LiveMapViewModel(
-    userId: Int,
+    private val alertId: Int,
     private val fetchUserLocationUseCase: FetchUserLocationUseCase,
     private val getAlertUserDataUseCase: GetMapAlertUserDataUseCase,
     private val resolveAlertUseCase: ResolveAlertUseCase,
 ) : ComposeViewModel<LiveMapState, LiveMapRoute, LiveMapActions>() {
     override var _state: MutableStateFlow<LiveMapState> = MutableStateFlow(LiveMapState())
-    private val locationScope = CoroutineScope(Dispatchers.IO)
-
-    init {
-        fetchUserLocation()
-        viewModelScope.launch {
-            kotlin.runCatching { getAlertUserDataUseCase(userId) }
-                .onSuccess { user ->
-                    _state.update { it.copy(userInformation = user) }
-                }
-                .onFailure { }
-        }
-    }
+    private val mSocket = SocketHandler.getSocket()
+    private val gson = Gson()
 
     fun fetchUserLocation() {
         if (!state.value.isLocationAllowed) {
-            locationScope.launch {
+            viewModelScope.launch {
                 try {
                     fetchUserLocationUseCase()
-                        .collect { location ->
+                        .onEach { location ->
+                            val msg = mapOf(
+                                "latitude" to location.first.latitude,
+                                "longitude" to location.first.longitude,
+                            )
+                            val jsonMsg = JSONObject(msg)
+
+                            emitMsg(jsonMsg)
+
                             Timber.i("fetchUserLocationUseCase $location")
                             _state.update {
                                 it.copy(
-                                    userAlertLocationData = it.userAlertLocationData?.copy(
+                                    currentUserLocationData = it.currentUserLocationData?.copy(
                                         userLocation = location.first,
                                         userBearing = location.second
                                     ) ?: UserAlertLocationData(
@@ -58,7 +62,7 @@ class LiveMapViewModel(
                                     isLoading = false
                                 )
                             }
-                        }
+                        }.launchIn(viewModelScope)
                 } catch (e: ServiceException) {
                 }
             }
@@ -88,8 +92,21 @@ class LiveMapViewModel(
     private fun resolverAlertAnswered(answer: Boolean) {
         _state.update { it.copy(isResolveAlertVisible = false) }
         if (answer) {
-            navigateRoute(LiveMapRoute.AlertResolved)
-            //todo API resolve add
+            networkRequest(
+                action = {
+                    _state.update { it.copy(isLoading = true) }
+                    resolveAlertUseCase(alertId = alertId)
+                },
+                onSuccess = {
+                    navigateRoute(LiveMapRoute.AlertResolved)
+                },
+                onFailure = { error ->
+                    error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
+                },
+                onComplete = {
+                    _state.update { it.copy(isLoading = false) }
+                },
+            )
         }
     }
 
@@ -99,7 +116,9 @@ class LiveMapViewModel(
 
 
     private fun callUserPhone() {
-        navigateRoute(LiveMapRoute.CallUserPhone("4334234234")) // todo fix
+        _state.value.onGuardUserInformation?.phone?.let { phone ->
+            navigateRoute(LiveMapRoute.CallUserPhone(phone))
+        }
     }
 
     private fun callPolice() {
@@ -116,6 +135,36 @@ class LiveMapViewModel(
 
     override fun clearErrorText() {
 
+    }
+
+    fun addListeners() {
+        mSocket.on(SocketMapEvents.INCOME_ALERT.msgType) { args ->
+            Timber.d("socket args $args")
+
+            val data: JSONObject = args[0] as JSONObject
+            Timber.d("socket data $data")
+            val person = gson.fromJson(
+                (data)["person"].toString(),
+                AlertGuardianModel::class.java
+            )
+            Timber.d("socket person ${person.fullName}")
+
+            _state.update { it.copy(onGuardUserInformation = person) }
+        }
+    }
+
+    private fun emitMsg(msg: JSONObject) {
+        if (mSocket.connected()) {
+            Timber.d("socket msg out $msg")
+            mSocket.emit(SocketMapEvents.OUTCOME_COORDS.msgType, msg, false)
+        } else {
+            Timber.d("socket clicked connected")
+            mSocket.connect()
+        }
+    }
+
+    fun removeSocketListeners() {
+        mSocket.off(SocketMapEvents.INCOME_ALERT.msgType)
     }
 }
 

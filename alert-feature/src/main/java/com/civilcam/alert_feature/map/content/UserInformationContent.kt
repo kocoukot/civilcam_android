@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.alert_feature.R
 import com.civilcam.alert_feature.map.model.LiveMapActions
-import com.civilcam.domainLayer.model.alerts.GuardianAlertInformation
+import com.civilcam.domainLayer.model.alerts.AlertGuardianModel
 import com.civilcam.ext_features.compose.elements.CircleUserAvatar
 import com.civilcam.ext_features.compose.elements.IconActionButton
 import com.civilcam.ext_features.theme.CCTheme
@@ -22,7 +22,7 @@ import com.civilcam.ext_features.theme.CCTheme
 @Composable
 fun UserInformationContent(
     modifier: Modifier = Modifier,
-    userInformation: GuardianAlertInformation,
+    userInformation: AlertGuardianModel,
     onAction: (LiveMapActions) -> Unit
 ) {
     Row(
@@ -30,18 +30,20 @@ fun UserInformationContent(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        CircleUserAvatar(avatar = R.drawable.img_avatar, avatarSize = 34)
+        userInformation.avatar.imageUrl?.let { avatar ->
+            CircleUserAvatar(avatar = avatar, avatarSize = 34)
+        }
 
         Column(
             modifier = Modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(userInformation.userName, style = CCTheme.typography.common_text_small_medium)
+            Text(userInformation.fullName, style = CCTheme.typography.common_text_small_medium)
             Text(
                 stringResource(
                     id = R.string.alert_user_detail_request_sent,
-                    userInformation.requestSent
+                    "" //todo fix add date after added to socket
                 ),
                 color = CCTheme.colors.grayOne,
                 style = CCTheme.typography.common_text_regular_12
