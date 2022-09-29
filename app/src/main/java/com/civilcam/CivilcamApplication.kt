@@ -9,6 +9,7 @@ import com.civilcam.di.source.sourceModule
 import com.civilcam.domainLayer.model.user.NotificationType
 import com.civilcam.domainLayer.usecase.auth.SaveFcmTokenUseCase
 import com.civilcam.service.CCFireBaseMessagingService
+import com.civilcam.service.location.LocationService.Companion.LOCATION_CHANNEL_ID
 import com.facebook.appevents.AppEventsLogger
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -88,9 +89,13 @@ class CivilcamApplication : Application() {
         )
 
         val channel =
-            NotificationChannel("location", "Location", NotificationManager.IMPORTANCE_LOW)
+            NotificationChannel(LOCATION_CHANNEL_ID, "Location", NotificationManager.IMPORTANCE_LOW)
+                .apply {
+                    setShowBadge(false)
+                }
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
         notificationManager.createNotificationChannel(channel)
     }
 

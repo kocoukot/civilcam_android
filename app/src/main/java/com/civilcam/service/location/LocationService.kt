@@ -42,7 +42,7 @@ class LocationService : Service() {
 
     private fun start() {
         if (!isFetching) {
-            val notification = NotificationCompat.Builder(this, "location")
+            val notification = NotificationCompat.Builder(this, LOCATION_CHANNEL_ID)
                 .setContentTitle("Tracking location")
                 .setContentText("Location tracking for your safe")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -89,5 +89,7 @@ class LocationService : Service() {
     companion object {
         const val ACTION_START = "ACTION_START"
         const val ACTION_STOP = "ACTION_STOP"
+        const val LOCATION_CHANNEL_ID = "location"
+
     }
 }
