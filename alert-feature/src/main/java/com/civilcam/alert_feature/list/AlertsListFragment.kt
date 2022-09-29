@@ -47,4 +47,9 @@ class AlertsListFragment : Fragment(), SupportBottomBar {
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshList()
+    }
 }

@@ -1,7 +1,6 @@
-package com.civilcam.service.socket
+package com.test.socket_feature
 
 
-import com.civilcam.BuildConfig
 import com.civilcam.domainLayer.usecase.GetUserSessionTokenUseCase
 import io.socket.client.IO
 import io.socket.client.Manager
@@ -26,13 +25,14 @@ object SocketHandler : KoinComponent {
             val options = IO.Options().apply {
                 timeout = 30000
                 reconnection = true
-                extraHeaders = mapOf("X-Session-Key" to listOf(getUserSessionTokenUseCase()))
+                extraHeaders =
+                    mapOf("X-Session-Key" to listOf(SocketHandler.getUserSessionTokenUseCase()))
             }
 
             val manager = Manager(URI.create(address), options)
             mSocket = manager.socket(DIGI_NAMESPACE)
 
-            Timber.d("socket  try connect options $options key ${getUserSessionTokenUseCase()}")
+            Timber.d("socket  try connect options $options key ${SocketHandler.getUserSessionTokenUseCase()}")
 
         } catch (e: URISyntaxException) {
             Timber.d("socket error ${e.localizedMessage}")

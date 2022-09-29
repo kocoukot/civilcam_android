@@ -61,6 +61,9 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                 viewModel.setInputActions(LiveMapActions.ClickResolveAlertAnswer(it))
             })
     }
+
+    if (state.isLoading) DialogLoadingContent()
+
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
         modifier = Modifier.fillMaxSize(),
@@ -108,13 +111,13 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                         .fillMaxWidth(),
                     isLocationAllowed = state.isLocationAllowed,
                     alertScreenState = state.emergencyScreen,
-                    guardianInformation = state.userInformation,
-                    userAlertLocationData = state.userAlertLocationData,
+                    guardianInformation = state.onGuardUserInformation,
+                    userAlertLocationData = state.currentUserLocationData,
                     onActionClick = viewModel::setInputActions
                 )
             }
 
-            state.userInformation?.let { userInfo ->
+            state.onGuardUserInformation?.let { userInfo ->
                 UserInformationContent(
                     modifier = Modifier
                         .padding(top = 12.dp)

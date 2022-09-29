@@ -13,6 +13,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.alert_feature.map.model.LiveMapRoute
 import com.civilcam.ext_features.ext.navController
+import com.civilcam.ext_features.ext.phoneNumberFormat
 import com.civilcam.ext_features.ext.registerForPermissionsResult
 import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ext_features.requireArg
@@ -45,7 +46,7 @@ class LiveMapFragment : Fragment() {
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
                 LiveMapRoute.GoBack -> navController.popBackStack()
-                is LiveMapRoute.CallUserPhone -> callPhone(route.userPhoneNumber)
+                is LiveMapRoute.CallUserPhone -> callPhone(route.userPhoneNumber.phoneNumberFormat())
                 LiveMapRoute.CallPolice -> callPhone("911")
                 LiveMapRoute.AlertResolved -> navController.popBackStack()
                 LiveMapRoute.CheckPermission -> checkPermissions()
@@ -95,6 +96,17 @@ class LiveMapFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         checkPermissions()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.addListeners()
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.removeSocketListeners()
     }
 
 

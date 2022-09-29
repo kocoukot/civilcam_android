@@ -16,15 +16,11 @@ import com.civilcam.domainLayer.usecase.alerts.SendEmergencySosUseCase
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
-import com.civilcam.service.socket.SocketHandler
 import com.civilcam.ui.emergency.model.*
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.update
+import com.test.socket_feature.SocketHandler
+import com.test.socket_feature.SocketMapEvents
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
@@ -46,10 +42,7 @@ class EmergencyViewModel(
 
 	private val gson = Gson()
 
-	private val locationScope = CoroutineScope(Dispatchers.IO)
-
 	init {
-		addListeners()
 		getLocalCurrentUserUseCase().let { user ->
 			_state.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
 //			when (user.sessionUser.userState) {
@@ -64,9 +57,9 @@ class EmergencyViewModel(
 
 	fun fetchUserLocation() {
 		if (!state.value.isLocationAllowed) {
-			locationScope.launch {
+			viewModelScope.launch {
 				fetchUserLocationUseCase()
-					.collect { location ->
+					.onEach { location ->
 						when (_state.value.emergencyButton) {
 							EmergencyButton.InSafeButton -> {
 								_state.update {
@@ -117,6 +110,7 @@ class EmergencyViewModel(
 						}
 						Timber.i("fetchUserLocationUseCase $address")
 					}
+					.launchIn(viewModelScope)
 			}
 		}
 	}
@@ -179,8 +173,6 @@ class EmergencyViewModel(
 	private fun oneClickSafe() {
 		if (state.value.emergencyButton == EmergencyButton.InDangerButton) {
 			goPinCode()
-		} else {
-
 		}
 	}
 
@@ -301,10 +293,12 @@ class EmergencyViewModel(
 		_state.update { it.copy(errorText = "") }
 	}
 
-	private fun addListeners() {
-		mSocket.on("guardians") { args ->
+	fun addListeners() {
+		mSocket.on(SocketMapEvents.INCOME_GUARDIANS.msgType) { args ->
+			Timber.d("socket args $args")
+
 			val data: JSONArray = args[0] as JSONArray
-			Timber.d("socket args $data")
+			Timber.d("socket data $data")
 			val mutableGuardList = mutableListOf<AlertGuardianModel>()
 			for (i in 0 until data.length()) {
 				val item = (data[i] as JSONObject)["person"].toString()
@@ -324,10 +318,14 @@ class EmergencyViewModel(
 	private fun emitMsg(msg: JSONObject) {
 		if (mSocket.connected()) {
 			Timber.d("socket msg out $msg")
-			mSocket.emit("coords", msg, false)
+			mSocket.emit(SocketMapEvents.OUTCOME_COORDS.msgType, msg, false)
 		} else {
 			Timber.d("socket clicked connected")
 			mSocket.connect()
 		}
+	}
+
+	fun removeSocketListeners() {
+		mSocket.off(SocketMapEvents.INCOME_GUARDIANS.msgType)
 	}
 }

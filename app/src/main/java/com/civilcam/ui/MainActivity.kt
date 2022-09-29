@@ -132,6 +132,5 @@ class MainActivity : AppCompatActivity() {
         const val ARG_MAP_ALERT_ID = "map_alert_id"
         const val FROM_NOTIFICATION = "fromNotification"
         const val EXTRA_DIRECTION = "extra_nav_direction"
-        const val SHARED_RATING = "sharedRating"
     }
 }
