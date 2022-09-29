@@ -146,7 +146,8 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
                 noMatch = state.value.passwordModel.noMatch,
                 isReEnter = state.value.passwordModel.noMatch,
                 onFocusChanged = {
-                }
+                },
+                error = stringResource(id = R.string.password_no_match)
             )
 
             Spacer(modifier = Modifier.weight(1f))
