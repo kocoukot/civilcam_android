@@ -141,9 +141,12 @@ class UserRepositoryImpl(
 			userService.setSafeState(CheckPinRequest(pinCode))
 		}.let { response ->
 			when (response) {
-				is Resource.Success -> true
-				is Resource.Failure -> throw response.serviceException
-			}
+                is Resource.Success -> {
+                    accountStorage.setSosState(false)
+                    true
+                }
+                is Resource.Failure -> throw response.serviceException
+            }
 		}
 
 	override suspend fun setUserCoords(coords: LatLng): Boolean =

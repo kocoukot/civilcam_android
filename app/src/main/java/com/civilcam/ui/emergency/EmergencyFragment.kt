@@ -99,12 +99,10 @@ class EmergencyFragment : Fragment() {
 	
 	private fun onPermissionsGranted(isGranted: Boolean) {
 		Timber.i("onPermissionsGranted $isGranted")
-        pendingAction = if (isGranted) {
-            pendingAction?.invoke()
-            null
-        } else {
-            null
-        }
+		if (isGranted) {
+			pendingAction?.invoke()
+			pendingAction = null
+		}
 	}
 	
 	override fun onStart() {
