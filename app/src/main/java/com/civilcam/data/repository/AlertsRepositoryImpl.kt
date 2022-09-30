@@ -22,7 +22,7 @@ class AlertsRepositoryImpl(
     private val alertListMapper = AlertListMapper()
     private val alertDetailMapper = AlertDetailMapper()
 
-    override suspend fun updateSosCoords(location: String, coords: LatLng): Boolean =
+    override suspend fun setSosCoords(location: String, coords: LatLng): Boolean =
         safeApiCall {
             alertService.postSosCoordinates(
                 SosCoordsRequest(
@@ -35,7 +35,10 @@ class AlertsRepositoryImpl(
             )
         }.let { response ->
             when (response) {
-                is Resource.Success -> true
+                is Resource.Success -> {
+                    accountStorage.setSosState(true)
+                    true
+                }
                 is Resource.Failure -> throw response.serviceException
             }
         }

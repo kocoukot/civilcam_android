@@ -12,6 +12,7 @@ import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.domainLayer.model.JsonDataParser
 import com.civilcam.domainLayer.model.alerts.AlertGuardianModel
+import com.civilcam.domainLayer.model.user.UserState
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.SendEmergencySosUseCase
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
@@ -46,13 +47,10 @@ class EmergencyViewModel(
 	init {
 		getLocalCurrentUserUseCase().let { user ->
 			_state.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
-//			when (user.sessionUser.userState) {
-//				UserState.ALERT -> {
-//					navigateRoute(EmergencyRoute.CheckPermission(true))
-//				}
-//				UserState.SAFE -> {
-//				}
-//			}
+			Timber.i("emergency ${user.sessionUser.userState}")
+			if (user.sessionUser.userState == UserState.alert) {
+				setSosState()
+			}
 		}
 	}
 
@@ -61,29 +59,25 @@ class EmergencyViewModel(
 			viewModelScope.launch {
 				fetchUserLocationUseCase()
 					.onEach { location ->
-						when (_state.value.emergencyButton) {
-							EmergencyButton.InSafeButton -> {
-								_state.update {
-									it.copy(
-										emergencyUserModel = it.emergencyUserModel?.copy(
-											userLocation = location.first,
-											userBearing = location.second
-										) ?: EmergencyUserModel(
-											userLocation = location.first,
-											userBearing = location.second,
-										),
-										isLoading = false
-									)
-								}
-							}
-							EmergencyButton.InDangerButton -> {
-								emitMsg(
-									JsonDataParser(
-										latitude = location.first.latitude,
-										longitude = location.first.longitude
-									)
+						if (_state.value.emergencyButton == EmergencyButton.InDangerButton) {
+							emitMsg(
+								JsonDataParser(
+									latitude = location.first.latitude,
+									longitude = location.first.longitude
 								)
-							}
+							)
+						}
+						_state.update {
+							it.copy(
+								emergencyUserModel = it.emergencyUserModel?.copy(
+									userLocation = location.first,
+									userBearing = location.second
+								) ?: EmergencyUserModel(
+									userLocation = location.first,
+									userBearing = location.second,
+								),
+								isLoading = false
+							)
 						}
 
 						Timber.i("fetchUserLocationUseCase latlng ${location.first} bearing ${location.second}")
@@ -174,6 +168,19 @@ class EmergencyViewModel(
 		if (state.value.emergencyButton == EmergencyButton.InDangerButton) {
 			goPinCode()
 		}
+	}
+
+	fun setSosState() {
+		navigateRoute(EmergencyRoute.IsNavBarVisible(false))
+		_state.update {
+			it.copy(
+				emergencyScreen = EmergencyScreen.COUPLED,
+				emergencyButton = EmergencyButton.InDangerButton,
+			)
+		}
+		Handler(Looper.getMainLooper()).postDelayed({
+			fetchUserLocation()
+		}, 400)
 	}
 
 	fun launchSos() {

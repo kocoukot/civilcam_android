@@ -3,6 +3,7 @@ package com.civilcam.data.local
 import android.accounts.Account
 import android.accounts.AccountManager
 import com.civilcam.domainLayer.model.user.CurrentUser
+import com.civilcam.domainLayer.model.user.UserState
 import com.google.gson.Gson
 import java.util.*
 
@@ -73,25 +74,39 @@ class AccountStorage(
                     (!user.sessionUser.isUserProfileSetupRequired).toString()
                 )
                 updateUser(it, user)
-            }
-    }
-
-    fun updateUser(user: CurrentUser) =
-        accountManager.setUserData(getOrCreateAccount(), USER, gson.toJson(user))
-
-
-    private fun updateUser(currentAccount: Account, user: CurrentUser) =
-        accountManager.setUserData(currentAccount, USER, gson.toJson(user))
-
-
-    private fun getOrCreateAccount(): Account {
-        return getAccount()
-            ?: run {
-                Account(ACCOUNT_NAME, ACCOUNT_TYPE)
-                    .also { accountManager.addAccountExplicitly(it, ACCOUNT_PASSWORD, null) }
 			}
 	}
-	
+
+	fun updateUser(user: CurrentUser) =
+		accountManager.setUserData(getOrCreateAccount(), USER, gson.toJson(user))
+
+
+	private fun updateUser(currentAccount: Account, user: CurrentUser) =
+		accountManager.setUserData(currentAccount, USER, gson.toJson(user))
+
+	fun setSosState(isSos: Boolean) = setSosState(getOrCreateAccount(), isSos)
+
+	private fun setSosState(
+		currentAccount: Account,
+		isSos: Boolean,
+	) {
+		var user = getUser()
+		user = user.copy(
+			sessionUser = user.sessionUser.copy(
+				userState = UserState.resolveState(isSos)
+			)
+		)
+		accountManager.setUserData(currentAccount, USER, gson.toJson(user))
+	}
+
+	private fun getOrCreateAccount(): Account {
+		return getAccount()
+			?: run {
+				Account(ACCOUNT_NAME, ACCOUNT_TYPE)
+					.also { accountManager.addAccountExplicitly(it, ACCOUNT_PASSWORD, null) }
+			}
+	}
+
 	private fun getAccount(): Account? =
 		accountManager.getAccountsByType(ACCOUNT_TYPE).singleOrNull()
 	
@@ -107,10 +122,11 @@ class AccountStorage(
 		private const val ACCOUNT_TYPE = "com.civilcam.civilcam"
 		private const val ACCOUNT_PASSWORD = "Password"
 		private const val USER = "$ACCOUNT_TYPE.user"
-		
+
 		private const val DEVICE_ID_TOKEN = "$ACCOUNT_TYPE.deviceid.token"
 		private const val SESSION_TOKEN = "$ACCOUNT_TYPE.session.token"
 		private const val IS_USER_LOGGED_IN = "$ACCOUNT_TYPE.user.isLoggedIn"
-		
+		private const val IS_SOS_STATE = "$ACCOUNT_TYPE.sos.state"
+
 	}
 }

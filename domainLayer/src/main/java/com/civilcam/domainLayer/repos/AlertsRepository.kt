@@ -8,7 +8,7 @@ import com.google.android.gms.maps.model.LatLng
 
 interface AlertsRepository {
 
-    suspend fun updateSosCoords(location: String, coords: LatLng): Boolean
+    suspend fun setSosCoords(location: String, coords: LatLng): Boolean
 
     suspend fun getAlertsList(page: PaginationRequest.Pagination): List<AlertModel>
 
