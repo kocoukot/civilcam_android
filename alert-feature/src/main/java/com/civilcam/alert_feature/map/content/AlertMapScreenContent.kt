@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.civilcam.alert_feature.R
 import com.civilcam.alert_feature.map.model.LiveMapActions
+import com.civilcam.alert_feature.map.model.OnGuardUserData
 import com.civilcam.alert_feature.map.model.UserAlertLocationData
 import com.civilcam.domainLayer.EmergencyScreen
-import com.civilcam.domainLayer.model.alerts.AlertGuardianModel
 import com.civilcam.ext_features.compose.elements.IconActionButton
 import com.civilcam.ext_features.compose.elements.LocationData
 import com.civilcam.ext_features.compose.elements.LocationDetectButton
@@ -38,8 +38,8 @@ fun AlertMapScreenContent(
     modifier: Modifier = Modifier,
     isLocationAllowed: Boolean,
     alertScreenState: EmergencyScreen,
-    guardianInformation: AlertGuardianModel?,
-    userAlertLocationData: UserAlertLocationData?,
+    guardianInformation: OnGuardUserData? = null,
+    userAlertLocationData: UserAlertLocationData? = null,
     onActionClick: (LiveMapActions) -> Unit
 ) {
 
@@ -66,7 +66,7 @@ fun AlertMapScreenContent(
     }
 
     var userLocationAddress by remember {
-        mutableStateOf(guardianInformation?.address)
+        mutableStateOf(guardianInformation?.person?.address)
     }
 
     val topBarPadding by animateDpAsState(
@@ -89,7 +89,7 @@ fun AlertMapScreenContent(
 
             guardianInformation?.let {
                 Marker(
-                    state = MarkerState(position = LatLng(it.latitude, it.longitude)),
+                    state = MarkerState(position = LatLng(it.person.latitude, it.person.longitude)),
                     icon = bitmapDescriptorFromVector(LocalContext.current, R.drawable.img_guard),
                 )
             }

@@ -14,7 +14,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.alert_feature.R
 import com.civilcam.alert_feature.map.model.LiveMapActions
-import com.civilcam.domainLayer.model.alerts.AlertGuardianModel
+import com.civilcam.alert_feature.map.model.OnGuardUserData
+import com.civilcam.ext_features.DateUtils.alertOnGuardDateFormat
 import com.civilcam.ext_features.compose.elements.CircleUserAvatar
 import com.civilcam.ext_features.compose.elements.IconActionButton
 import com.civilcam.ext_features.theme.CCTheme
@@ -22,7 +23,7 @@ import com.civilcam.ext_features.theme.CCTheme
 @Composable
 fun UserInformationContent(
     modifier: Modifier = Modifier,
-    userInformation: AlertGuardianModel,
+    userInformation: OnGuardUserData,
     onAction: (LiveMapActions) -> Unit
 ) {
     Row(
@@ -30,7 +31,7 @@ fun UserInformationContent(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        userInformation.avatar.imageUrl?.let { avatar ->
+        userInformation.person.avatar.imageUrl?.let { avatar ->
             CircleUserAvatar(avatar = avatar, avatarSize = 34)
         }
 
@@ -39,11 +40,14 @@ fun UserInformationContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(userInformation.fullName, style = CCTheme.typography.common_text_small_medium)
+            Text(
+                userInformation.person.fullName,
+                style = CCTheme.typography.common_text_small_medium
+            )
             Text(
                 stringResource(
                     id = R.string.alert_user_detail_request_sent,
-                    "" //todo fix add date after added to socket
+                    alertOnGuardDateFormat(userInformation.date)
                 ),
                 color = CCTheme.colors.grayOne,
                 style = CCTheme.typography.common_text_regular_12

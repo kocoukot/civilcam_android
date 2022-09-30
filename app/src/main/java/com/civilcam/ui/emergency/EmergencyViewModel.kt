@@ -301,7 +301,7 @@ class EmergencyViewModel(
 			Timber.d("socket data $data")
 			val mutableGuardList = mutableListOf<AlertGuardianModel>()
 			for (i in 0 until data.length()) {
-				val item = (data[i] as JSONObject)["person"].toString()
+				val item = (data[i] as JSONObject).toString()
 				mutableGuardList.add(
 					gson.fromJson(
 						item,
