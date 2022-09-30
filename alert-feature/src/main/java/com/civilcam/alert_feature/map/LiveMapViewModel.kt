@@ -1,13 +1,10 @@
 package com.civilcam.alert_feature.map
 
 import androidx.lifecycle.viewModelScope
-import com.civilcam.alert_feature.map.model.LiveMapActions
-import com.civilcam.alert_feature.map.model.LiveMapRoute
-import com.civilcam.alert_feature.map.model.LiveMapState
-import com.civilcam.alert_feature.map.model.UserAlertLocationData
+import com.civilcam.alert_feature.map.model.*
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.domainLayer.ServiceException
-import com.civilcam.domainLayer.model.alerts.AlertGuardianModel
+import com.civilcam.domainLayer.model.JsonDataParser
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.GetMapAlertUserDataUseCase
 import com.civilcam.domainLayer.usecase.alerts.ResolveAlertUseCase
@@ -41,13 +38,12 @@ class LiveMapViewModel(
                 try {
                     fetchUserLocationUseCase()
                         .onEach { location ->
-                            val msg = mapOf(
-                                "latitude" to location.first.latitude,
-                                "longitude" to location.first.longitude,
+                            emitMsg(
+                                JsonDataParser(
+                                    latitude = location.first.latitude,
+                                    longitude = location.first.longitude
+                                )
                             )
-                            val jsonMsg = JSONObject(msg)
-
-                            emitMsg(jsonMsg)
 
                             Timber.i("fetchUserLocationUseCase $location")
                             _state.update {
@@ -116,7 +112,7 @@ class LiveMapViewModel(
 
 
     private fun callUserPhone() {
-        _state.value.onGuardUserInformation?.phone?.let { phone ->
+        _state.value.onGuardUserInformation?.person?.phone?.let { phone ->
             navigateRoute(LiveMapRoute.CallUserPhone(phone))
         }
     }
@@ -138,25 +134,25 @@ class LiveMapViewModel(
     }
 
     fun addListeners() {
+
         mSocket.on(SocketMapEvents.INCOME_ALERT.msgType) { args ->
             Timber.d("socket args $args")
-
             val data: JSONObject = args[0] as JSONObject
             Timber.d("socket data $data")
             val person = gson.fromJson(
-                (data)["person"].toString(),
-                AlertGuardianModel::class.java
+                (data).toString(),
+                OnGuardUserData::class.java
             )
-            Timber.d("socket person ${person.fullName}")
+            Timber.d("socket person ${person}")
 
             _state.update { it.copy(onGuardUserInformation = person) }
         }
     }
 
-    private fun emitMsg(msg: JSONObject) {
+    private fun emitMsg(msg: JsonDataParser) {
         if (mSocket.connected()) {
-            Timber.d("socket msg out $msg")
-            mSocket.emit(SocketMapEvents.OUTCOME_COORDS.msgType, msg, false)
+            Timber.d("socket msg out ${msg}")
+            mSocket.emit(SocketMapEvents.OUTCOME_COORDS.msgType, JSONObject(gson.toJson(msg)))
         } else {
             Timber.d("socket clicked connected")
             mSocket.connect()
@@ -167,9 +163,3 @@ class LiveMapViewModel(
         mSocket.off(SocketMapEvents.INCOME_ALERT.msgType)
     }
 }
-
-
-    
-
-
-

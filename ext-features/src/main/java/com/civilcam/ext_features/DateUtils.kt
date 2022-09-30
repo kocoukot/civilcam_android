@@ -43,4 +43,7 @@ object DateUtils {
     fun alertDateFormat(date: String): String =
         dateDeadlineFormatter.format(localDateToIsoFormat(date))
 
+    fun alertOnGuardDateFormat(date: String): String =
+        dateOfBirthTimeFormatter.format(localDateToIsoFormat(date))
+
 }
