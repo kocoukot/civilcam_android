@@ -111,7 +111,7 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                         .fillMaxWidth(),
                     isLocationAllowed = state.isLocationAllowed,
                     alertScreenState = state.emergencyScreen,
-//                    guardianInformation = state.onGuardUserInformation,
+                    guardianInformation = state.onGuardUserInformation,
                     userAlertLocationData = state.currentUserLocationData,
                     onActionClick = viewModel::setInputActions
                 )

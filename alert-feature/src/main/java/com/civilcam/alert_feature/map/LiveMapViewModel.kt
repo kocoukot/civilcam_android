@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.civilcam.alert_feature.map.model.*
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.domainLayer.ServiceException
+import com.civilcam.domainLayer.model.JsonDataParser
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.GetMapAlertUserDataUseCase
 import com.civilcam.domainLayer.usecase.alerts.ResolveAlertUseCase
@@ -37,13 +38,12 @@ class LiveMapViewModel(
                 try {
                     fetchUserLocationUseCase()
                         .onEach { location ->
-                            val msg = mapOf(
-                                "latitude" to location.first.latitude,
-                                "longitude" to location.first.longitude,
+                            emitMsg(
+                                JsonDataParser(
+                                    latitude = location.first.latitude,
+                                    longitude = location.first.longitude
+                                )
                             )
-                            val jsonMsg = JSONObject(msg)
-
-                            emitMsg(jsonMsg)
 
                             Timber.i("fetchUserLocationUseCase $location")
                             _state.update {
@@ -149,10 +149,10 @@ class LiveMapViewModel(
         }
     }
 
-    private fun emitMsg(msg: JSONObject) {
+    private fun emitMsg(msg: JsonDataParser) {
         if (mSocket.connected()) {
-            Timber.d("socket msg out $msg")
-            mSocket.emit(SocketMapEvents.OUTCOME_COORDS.msgType, msg.toString(), false)
+            Timber.d("socket msg out ${msg}")
+            mSocket.emit(SocketMapEvents.OUTCOME_COORDS.msgType, JSONObject(gson.toJson(msg)))
         } else {
             Timber.d("socket clicked connected")
             mSocket.connect()

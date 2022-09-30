@@ -10,6 +10,7 @@ import androidx.camera.core.TorchState
 import androidx.lifecycle.viewModelScope
 import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.domainLayer.EmergencyScreen
+import com.civilcam.domainLayer.model.JsonDataParser
 import com.civilcam.domainLayer.model.alerts.AlertGuardianModel
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.SendEmergencySosUseCase
@@ -76,13 +77,12 @@ class EmergencyViewModel(
 								}
 							}
 							EmergencyButton.InDangerButton -> {
-								val msg = mapOf(
-									"latitude" to location.first.latitude,
-									"longitude" to location.first.longitude,
+								emitMsg(
+									JsonDataParser(
+										latitude = location.first.latitude,
+										longitude = location.first.longitude
+									)
 								)
-								val jsonMsg = JSONObject(msg)
-
-								emitMsg(jsonMsg)
 							}
 						}
 
@@ -310,15 +310,14 @@ class EmergencyViewModel(
 				)
 				Timber.d("socket casted ${data[i] as JSONObject}")
 			}
-
 			_state.update { it.copy(emergencyUserModel = it.emergencyUserModel?.copy(guardsLocation = mutableGuardList.toList())) }
 		}
 	}
 
-	private fun emitMsg(msg: JSONObject) {
+	private fun emitMsg(msg: JsonDataParser) {
 		if (mSocket.connected()) {
-			Timber.d("socket msg out $msg")
-			mSocket.emit(SocketMapEvents.OUTCOME_COORDS.msgType, msg, false)
+			Timber.d("socket out ${JSONObject(gson.toJson(msg))}")
+			mSocket.emit(SocketMapEvents.OUTCOME_COORDS.msgType, JSONObject(gson.toJson(msg)))
 		} else {
 			Timber.d("socket clicked connected")
 			mSocket.connect()
