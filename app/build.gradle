@@ -97,9 +97,9 @@ android {
         }
 
         production {
-            buildConfigField "String", "API_GATEWAY", '"https://api.staging.civilcam.cloud/api"'
-            buildConfigField "String", "BASE_URL", '"https://api.staging.civilcam.cloud"'
-            buildConfigField "String", "API_KEY", '"c&c753"'
+            buildConfigField "String", "API_GATEWAY", '"https://api.civilcam.cloud/api"'
+            buildConfigField "String", "BASE_URL", '"https://api.civilcam.cloud"'
+            buildConfigField "String", "API_KEY", '"6wp1oRKGv27Dw1YgkKkcee"'
             minifyEnabled true
             debuggable false
             signingConfig signingConfigs.default_config
