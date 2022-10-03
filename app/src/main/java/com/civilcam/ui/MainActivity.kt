@@ -14,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.civilcam.common.ext.navigateByDirection
 import com.civilcam.databinding.ActivityMainBinding
 import com.civilcam.domainLayer.castSafe
+import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.domainLayer.usecase.user.IsUserLoggedInUseCase
 import com.civilcam.ext_features.SupportBottomBar
 import com.civilcam.ext_features.setupWithNavController
@@ -29,6 +30,8 @@ import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
     private val isUserLoggedInUseCase: IsUserLoggedInUseCase by inject()
+    private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase by inject()
+
 
     private lateinit var binding: ActivityMainBinding
     private var navHost: NavHostFragment? = null
@@ -62,13 +65,24 @@ class MainActivity : AppCompatActivity() {
         }
         intent?.extras?.getParcelable<NavigationDirection>(EXTRA_DIRECTION)
             ?.let(::navigateByDirection)
-        getNewIntentLogic(intent = intent)
+            ?: run {
+                if (isUserLoggedInUseCase()) navigateByDirection(
+                    NavigationDirection.resolveDirectionFor(
+                        getLocalCurrentUserUseCase()
+                    )
+                )
+            }.also {
+                getNewIntentLogic(intent = intent)
+            }
+
 
 //        AndroidLoggingHandler.reset(AndroidLoggingHandler())
 //        Logger.getLogger(Socket::class.java.name).level = Level.ALL
 //        Logger.getLogger(SocketHandler::class.java.name).level = Level.ALL
 //        Logger.getLogger(Manager::class.java.name).level = Level.ALL
         if (isUserLoggedInUseCase()) startLocationService()
+        Timber.tag("alert notif ID").i("main activity on create")
+
     }
 
     fun startLocationService() {
@@ -90,6 +104,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        stopLocationService()
+    }
+
     private fun navigateByDirection(direction: NavigationDirection) {
         navHost?.navController?.navigateByDirection(direction)
     }
@@ -109,27 +128,32 @@ class MainActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         this.intent = intent
         getNewIntentLogic(intent)
+        Timber.tag("alert notif ID").i("main activity onNewIntent}")
     }
 
     private fun getNewIntentLogic(intent: Intent?) {
         // Timber.d("message received new logic intent ${intent}")
-        intent?.extras?.let { extras ->
-            extras.getInt(ARG_MAP_ALERT_ID).takeIf { it > 0 }?.let { alertId ->
-                Timber.tag("alert notif ID").i("main activity userId $alertId")
 
-                CCFireBaseMessagingService.cancelAlertProgress()
-                (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(
-                    CCFireBaseMessagingService.NOTIFICATION_ALERT_ID
-                )
-                Handler(Looper.getMainLooper()).postDelayed({
-                    navHost?.navController?.navigate("civilcam://liveMapFragment/$alertId".toUri())
-                }, 500)
-            }
+        intent?.extras?.let { extras ->
+            Timber.tag("alert notif ID")
+                .i("main activity userId ${extras.getInt(CCFireBaseMessagingService.EXTRAS_NOTIFICATION_ALERT_ID)}")
+
+            extras.getInt(CCFireBaseMessagingService.EXTRAS_NOTIFICATION_ALERT_ID).takeIf { it > 0 }
+                ?.let { alertId ->
+                    Timber.tag("alert notif ID").i("main activity userId $alertId")
+
+                    CCFireBaseMessagingService.cancelAlertProgress()
+                    (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(
+                        CCFireBaseMessagingService.NOTIFICATION_ALERT_ID
+                    )
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        navHost?.navController?.navigate("civilcam://liveMapFragment/$alertId".toUri())
+                    }, 500)
+                }
         }
     }
 
     companion object {
-        const val ARG_MAP_ALERT_ID = "map_alert_id"
         const val FROM_NOTIFICATION = "fromNotification"
         const val EXTRA_DIRECTION = "extra_nav_direction"
     }

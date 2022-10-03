@@ -1,10 +1,7 @@
 package com.civilcam.service
 
 import android.annotation.SuppressLint
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -21,7 +18,6 @@ import com.civilcam.domainLayer.model.user.NotificationType
 import com.civilcam.domainLayer.usecase.auth.SaveFcmTokenUseCase
 import com.civilcam.service.notifications.NotificationRequestButtonListener
 import com.civilcam.ui.MainActivity
-import com.civilcam.ui.MainActivity.Companion.ARG_MAP_ALERT_ID
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import org.koin.android.ext.android.inject
@@ -65,27 +61,27 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        message.notification?.body?.let { body ->
-            Timber.d("onNewIntent user id body $body data ${message.data}")
+        message.data.let { data ->
+            Timber.d("onNewIntent user id data ${message.data}")
 
             when {
-                body.contains(ALERT_NOTIFICATION_TEXT, true) -> {
-                    message.data[ARG_ALERT_ID_KEY]?.toInt()?.let { alertId ->
-                        Timber.d("onNewIntent user id body $body data $alertId")
+                data[ARG_NOTICE_TYPE_KEY] == ARG_NOTICE_TYPE_ALERT -> {
+                    data[ARG_ALERT_ID_KEY]?.toInt()?.let { alertId ->
+                        Timber.d("onNewIntent user id body  data $alertId")
                         showAlertNotification(
                             context = applicationContext,
                             alertId,
-                            body.substringBefore(ALERT_NOTIFICATION_TEXT)
+                            data[ARG_FULL_NAME_KEY] ?: ""
                         )
                     }
                 }
-                body.contains(REQUEST_NOTIFICATION_TEXT, true) -> {
-                    message.data[ARG_REQUEST_ID_KEY]?.toInt()?.let { requestId ->
-                        Timber.d("onNewIntent user id body $body data $requestId")
+                data[ARG_NOTICE_TYPE_KEY] == ARG_NOTICE_TYPE_REQUEST -> {
+                    data[ARG_REQUEST_ID_KEY]?.toInt()?.let { requestId ->
+                        Timber.d("onNewIntent user id data $requestId")
                         showRequestNotification(
                             context = applicationContext,
                             requestId,
-                            body.substringBefore(REQUEST_NOTIFICATION_TEXT)
+                            data[ARG_FULL_NAME_KEY] ?: ""
                         )
                     }
                 }
@@ -246,6 +242,12 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
 
         val broadcastIntent = Intent(context, NotificationRequestButtonListener::class.java)
+        val activityIntent = Intent(context, MainActivity::class.java).apply {
+            putExtra(EXTRAS_NOTIFICATION_KEY, "detail")
+            putExtra(EXTRAS_NOTIFICATION_ALERT_ID, alertId)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            addCategory(Intent.CATEGORY_LAUNCHER)
+        }
 
         val broadcastPendingIntentClose =
             PendingIntent.getBroadcast(
@@ -256,20 +258,24 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                 },
                 PendingIntent.FLAG_IMMUTABLE,
             )
-        val broadcastPendingIntentDetail =
-            PendingIntent.getBroadcast(context, 12, broadcastIntent.apply {
-                putExtra(EXTRAS_NOTIFICATION_KEY, "detail")
-                putExtra(EXTRAS_NOTIFICATION_ALERT_ID, alertId)
-                //  flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            }, PendingIntent.FLAG_IMMUTABLE)
 
-
-        val intent = Intent(this, MainActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            //   addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            putExtra(ARG_MAP_ALERT_ID, alertId)
-            addCategory(Intent.CATEGORY_LAUNCHER)
+        val activityPendingIntent: PendingIntent? = TaskStackBuilder.create(context).run {
+            // Add the intent, which inflates the back stack
+            addNextIntentWithParentStack(activityIntent)
+            // Get the PendingIntent containing the entire back stack
+            getPendingIntent(
+                0,
+                // mutability flag required when targeting Android12 or higher
+                PendingIntent.FLAG_IMMUTABLE
+            )
         }
+//            val broadcastPendingIntentDetail =
+//            PendingIntent.getBroadcast(context, 12, activityIntent.apply {
+//                putExtra(EXTRAS_NOTIFICATION_KEY, "detail")
+//                putExtra(EXTRAS_NOTIFICATION_ALERT_ID, alertId)
+//                //  flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+//            }, PendingIntent.FLAG_IMMUTABLE)
+
 
         notificationBuilder.apply {
             setOnlyAlertOnce(true)
@@ -290,7 +296,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                     .getActivity(
                         context,
                         88,
-                        intent,
+                        activityIntent,
                         PendingIntent.FLAG_IMMUTABLE
                     )
             )
@@ -308,7 +314,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
 
                 setOnClickPendingIntent(
                     R.id.button_notification_detail,
-                    broadcastPendingIntentDetail
+                    activityPendingIntent
                 )
             }
 
@@ -317,7 +323,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                 setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
                 setOnClickPendingIntent(
                     R.id.button_notification_detail,
-                    broadcastPendingIntentDetail
+                    activityPendingIntent
                 )
             }
         }
@@ -386,8 +392,14 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
 
 
     companion object {
-        const val ARG_ALERT_ID_KEY = "alertId"
-        const val ARG_REQUEST_ID_KEY = "requestId"
+        private const val ARG_NOTICE_TYPE_KEY = "noticeType"
+        private const val ARG_ALERT_ID_KEY = "alertId"
+        private const val ARG_FULL_NAME_KEY = "fullName"
+        private const val ARG_REQUEST_ID_KEY = "requestId"
+
+        private const val ARG_NOTICE_TYPE_ALERT = "alert"
+        private const val ARG_NOTICE_TYPE_REQUEST = "request"
+
 
         const val ALERT_NOTIFICATION_TEXT = "is in emergency"
         const val REQUEST_NOTIFICATION_TEXT = "needs you as a guardian"

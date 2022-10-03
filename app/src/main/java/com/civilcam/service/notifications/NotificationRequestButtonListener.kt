@@ -8,12 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.usecase.guardians.SetRequestReactionUseCase
 import com.civilcam.service.CCFireBaseMessagingService
-import com.civilcam.service.CCFireBaseMessagingService.Companion.EXTRAS_NOTIFICATION_ALERT_ID
 import com.civilcam.service.CCFireBaseMessagingService.Companion.EXTRAS_NOTIFICATION_KEY
 import com.civilcam.service.CCFireBaseMessagingService.Companion.EXTRAS_NOTIFICATION_REQUEST_ID_KEY
 import com.civilcam.service.CCFireBaseMessagingService.Companion.NOTIFICATION_REQUESTS_ID
-import com.civilcam.ui.MainActivity
-import com.civilcam.ui.MainActivity.Companion.ARG_MAP_ALERT_ID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -40,23 +37,6 @@ class NotificationRequestButtonListener : KoinComponent, BroadcastReceiver() {
                     (context?.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
                         CCFireBaseMessagingService.NOTIFICATION_ALERT_ID
                     )
-                }
-
-                NotificationAction.DETAIL -> {
-                    context?.let {
-                        val alertId = intent.extras?.getInt(EXTRAS_NOTIFICATION_ALERT_ID)
-                        Timber.tag("alert notif ID").i("broadcast userId $alertId")
-
-                        val activityIntent = Intent(context, MainActivity::class.java)
-                        activityIntent.putExtra(ARG_MAP_ALERT_ID, alertId)
-                        activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        context.startActivity(activityIntent)
-
-                        CCFireBaseMessagingService.cancelAlertProgress()
-                        (it.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
-                            CCFireBaseMessagingService.NOTIFICATION_ALERT_ID
-                        )
-                    }
                 }
 
                 NotificationAction.CLOSE_REQUEST -> {
