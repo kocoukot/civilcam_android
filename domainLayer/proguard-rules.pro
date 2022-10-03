@@ -20,4 +20,9 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+   -keepclassmembers,allowobfuscation class * {
+      @com.google.gson.annotations.SerializedName <fields>;
+    }
 -keepclassmembers class com.civilcam.domainLayer.** { <fields>; }
+
+        -keep class com.google.android.apps.authenticator.** {*;}

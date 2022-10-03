@@ -36,7 +36,7 @@ class EmergencyFragment : Fragment() {
 
 	private var pendingAction: (() -> Unit)? = null
 
-	private val mSocket = com.test.socket_feature.SocketHandler
+	private val mSocket = com.civilcam.socket_feature.SocketHandler
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)

@@ -1,4 +1,4 @@
-package com.test.socket_feature
+package com.civilcam.socket_feature
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

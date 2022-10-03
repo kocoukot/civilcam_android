@@ -1,4 +1,4 @@
-package com.test.socket_feature
+package com.civilcam.socket_feature
 
 enum class SocketMapEvents(val msgType: String) {
     INCOME_ALERT("alert"),

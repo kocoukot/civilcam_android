@@ -25,6 +25,8 @@
       @com.google.gson.annotations.SerializedName <fields>;
     }
 
+    -keepclassmembers class com.civilcam.domainLayer.** { <fields>; }
+
     -keepclassmembers class * implements java.io.Serializable {
             private static final java.io.ObjectStreamField[] serialPersistentFields;
             private void writeObject(java.io.ObjectOutputStream);
