@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.test.socket_feature'
+    namespace 'com.civilcam.socket_feature'
     compileSdk rootProject.target_sdk
 
     defaultConfig {
