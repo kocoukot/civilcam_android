@@ -6,12 +6,12 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SubscriptionBaseInfo(
-	val id: Int,
-	val productId: String?,
-	val title: String,
-	val cost: Int,
-	val term: Int,
-	val unitType: String,
-	val expiredAt: String,
-	val status: SubscriptionStatus
+	val id: Int = 0,
+	val productId: String? = "",
+	val title: String = "",
+	val cost: Int = 0,
+	val term: Int = 0,
+	val unitType: String = "",
+	val expiredAt: String = "",
+	val status: SubscriptionStatus = SubscriptionStatus.disabled
 ) : Parcelable
