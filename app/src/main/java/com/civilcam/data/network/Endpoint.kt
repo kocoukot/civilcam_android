@@ -62,6 +62,8 @@ object Endpoint {
 
     object Subscriptions {
         const val GET_SUBSCRIPTIONS_LIST = "get-subscriptions-list"
+        const val GET_USER_SUBSCRIPTION = "get-user-subscription"
+        const val SET_GOOGLE_SUBSCRIPTION = "set-google-subscription"
     }
 
     object Alerts {

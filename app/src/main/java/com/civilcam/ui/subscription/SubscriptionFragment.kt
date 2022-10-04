@@ -60,6 +60,7 @@ class SubscriptionFragment : Fragment() {
 	
 	companion object {
 		private const val ARG_FLOW = "subscription_flow"
+		const val IN_APP_TRIAL = "in_app_trial"
 		
 		fun createArgs(isReselect: Boolean) = bundleOf(
 			ARG_FLOW to isReselect

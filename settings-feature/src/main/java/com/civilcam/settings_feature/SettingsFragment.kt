@@ -42,5 +42,9 @@ class SettingsFragment : Fragment() {
             }
         }
     }
+    
+    companion object {
+        const val IN_APP_TRIAL = "in_app_trial"
+    }
 
 }

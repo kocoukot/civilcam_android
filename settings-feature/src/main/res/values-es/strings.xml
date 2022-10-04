@@ -41,4 +41,8 @@
 
     <string name="send_text">Send</string>
 
+    <string name="subscription_description">for $%.2f/%s</string>
+    <string name="subscription_trial_description">for 1 month</string>
+    <string name="subscription_renews_value">Renews: %s</string>
+
 </resources>
