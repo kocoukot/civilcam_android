@@ -103,7 +103,8 @@ class SettingsViewModel(
 	
 	private fun fetchSubscriptionPlan() {
 		viewModelScope.launch {
-			kotlin.runCatching { getUserSubscriptionUseCase.getUserSubscription() }.onSuccess {
+			kotlin.runCatching { getUserSubscriptionUseCase.getUserSubscription() }
+				.onSuccess {
 					val response = getUserSubscriptionUseCase.getUserSubscription()
 					_state.update {
 						it.copy(

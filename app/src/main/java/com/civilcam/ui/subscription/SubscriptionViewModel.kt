@@ -18,13 +18,14 @@ import kotlinx.coroutines.launch
 class SubscriptionViewModel(
 	private val isReselect: Boolean,
 	private val getSubscriptionsUseCase: GetSubscriptionsUseCase,
-	private val setUserSubscriptionUseCase: SetUserSubscriptionUseCase
+	private val setUserSubscriptionUseCase: SetUserSubscriptionUseCase,
+	private val getSubscriptionUseCase: GetUserSubscriptionUseCase
 ) : ComposeViewModel<SubscriptionState, SubscriptionRoute, SubscriptionActions>() {
 	override var _state: MutableStateFlow<SubscriptionState> = MutableStateFlow(SubscriptionState())
 	
 	init {
 		_state.update { it.copy(isReselect = isReselect) }
-		getSubscriptions()
+		getCurrentSubscription()
 	}
 	
 	override fun setInputActions(action: SubscriptionActions) {
@@ -37,15 +38,37 @@ class SubscriptionViewModel(
 	}
 	
 	private fun getSubscriptions() {
-		_state.value = _state.value.copy(isLoading = true)
 		viewModelScope.launch {
 			kotlin.runCatching { getSubscriptionsUseCase.getSubscriptions() }
 				.onSuccess { data ->
 					_state.update {
 						it.copy(
-							subscriptionsList = data
+							subscriptionsList = data,
+							isLoading = false
 						)
 					}
+				}
+				.onFailure { error ->
+					error.castSafe<ServiceException>()?.let {
+						_state.update { it.copy(errorText = it.errorText) }
+					}
+				}
+			_state.value = _state.value.copy(isLoading = false)
+		}
+	}
+	
+	private fun getCurrentSubscription() {
+		_state.value = _state.value.copy(isLoading = true)
+		viewModelScope.launch {
+			kotlin.runCatching { getSubscriptionUseCase.getUserSubscription() }
+				.onSuccess { data ->
+					_state.update {
+						it.copy(
+							subscription = data,
+							selectedSubscriptionType = data.title
+						)
+					}
+					getSubscriptions()
 				}
 				.onFailure { error ->
 					error.castSafe<ServiceException>()?.let {
