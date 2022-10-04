@@ -8,7 +8,7 @@ data class SubscriptionState(
 	val isLoading: Boolean = false,
 	val errorText: String = "",
 	val isReselect: Boolean = false,
-	val selectedSubscriptionType: SubscriptionType = SubscriptionType.TRIAL,
+	val selectedSubscriptionType: String = "Trial",
 	val subscriptionsList: SubscriptionsList = SubscriptionsList(list = listOf()),
 	val purchaseSuccess: Boolean = false,
 	val purchaseFail: Boolean = false
