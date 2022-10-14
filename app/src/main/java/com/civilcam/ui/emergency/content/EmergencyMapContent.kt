@@ -2,6 +2,7 @@ package com.civilcam.ui.emergency.content
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,7 +14,7 @@ import com.civilcam.R
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.compose.elements.LocationData
 import com.civilcam.ext_features.compose.elements.LocationDetectButton
-import com.civilcam.ext_features.ext.toDp
+import com.civilcam.ext_features.ext.loadIcon
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyUserModel
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import kotlinx.coroutines.launch
+
 
 @Composable
 fun EmergencyMapContent(
@@ -80,15 +82,25 @@ fun EmergencyMapContent(
                 )
             }
 
-            userLocationData?.guardsLocation?.takeIf { it.isNotEmpty() }?.let {
-                for (user in userLocationData.guardsLocation) {
-                    Marker(
-                        state = MarkerState(position = LatLng(user.latitude, user.longitude)),
-                        icon = bitmapDescriptorFromVector(
+            userLocationData?.guardsLocation?.takeIf { it.isNotEmpty() }?.let { guardsList ->
+                val guards by remember {
+                    derivedStateOf {
+                        guardsList
+                    }
+                }
+                for (user in guards) {
+                    user.avatar.imageUrl?.let { avatarUrl ->
+                        val bitmap = loadIcon(
                             LocalContext.current,
-                            R.drawable.img_guard
-                        ),
-                    )
+                            avatarUrl,
+                            R.drawable.img_avatar
+                        )
+
+                        Marker(
+                            state = MarkerState(position = LatLng(user.latitude, user.longitude)),
+                            icon = bitmap,
+                        )
+                    }
                 }
             }
         }
@@ -132,7 +144,6 @@ private fun bitmapUserAvatarFromVector(
     context: Context,
 ): BitmapDescriptor? {
 
-    // retrieve the actual drawable
     val drawable = ContextCompat.getDrawable(context, R.drawable.ic_user_location) ?: return null
     drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
 
@@ -142,44 +153,108 @@ private fun bitmapUserAvatarFromVector(
         Bitmap.Config.ARGB_8888
     )
 
-    // draw it onto the bitmap
-    val canvas = android.graphics.Canvas(bm)
+    val canvas = Canvas(bm)
     drawable.draw(canvas)
     return BitmapDescriptorFactory.fromBitmap(bm)
 }
 
-private fun bitmapDescriptorFromVector(
-    context: Context,
-    drawableInt: Int
-): BitmapDescriptor? {
-
-    // retrieve the actual drawable
-    val drawable = ContextCompat.getDrawable(context, drawableInt) ?: return null
-    drawable.setBounds(0, 0, 32.toDp(), 32.toDp())
-
-    val bm = Bitmap.createBitmap(
-        drawable.intrinsicWidth,
-        drawable.intrinsicHeight,
-        Bitmap.Config.ARGB_8888
-    )
-
-    // draw it onto the bitmap
-    val canvas = android.graphics.Canvas(bm)
-    drawable.draw(canvas)
-    return BitmapDescriptorFactory.fromBitmap(bm)
-}
-
-
-/*
-https://stackoverflow.com/a/48356646
-private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes  int vectorDrawableResourceId) {
-    Drawable background = ContextCompat.getDrawable(context, R.drawable.ic_map_pin_filled_blue_48dp);
-    background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
-    Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-    vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
-    Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-    Canvas canvas = new Canvas(bitmap);
-    background.draw(canvas);
-    vectorDrawable.draw(canvas);
-    return BitmapDescriptorFactory.fromBitmap(bitmap);
-}*/
+//fun loadIcon(
+//    context: Context,
+//    url: String?,
+//    placeHolder: Int,
+//): BitmapDescriptor? {
+//    try {
+//        var bitmap: Bitmap? = null
+//        Glide.with(context)
+//            .asBitmap()
+//            .load(url)
+//            .error(placeHolder)
+//            // to show a default icon in case of any errors
+//            .into(object : CustomTarget<Bitmap>() {
+//                override fun onResourceReady(
+//                    resource: Bitmap,
+//                    transition: Transition<in Bitmap>?
+//                ) {
+//
+//                    bitmap = getRoundedCornerBitmap(resource)
+//                }
+//
+//                override fun onLoadCleared(placeholder: Drawable?) {
+//
+//                }
+//            })
+//        return BitmapDescriptorFactory.fromBitmap(bitmap!!)
+//    } catch (e: Exception) {
+//        e.printStackTrace()
+//        return null
+//    }
+//
+//}
+//
+//fun getRoundedCornerBitmap(bitmap: Bitmap): Bitmap? {
+//    val bitMapSize = 40.toDp()
+//    val odds = 2.toDp()
+//
+//    val backgroundCircle = Bitmap.createBitmap(
+//        bitMapSize,
+//        bitMapSize, Bitmap.Config.ARGB_8888
+//    )
+//    backgroundCircle.eraseColor(Color.RED)
+//
+//    val outputBitmap = Bitmap.createBitmap(
+//        backgroundCircle.width,
+//        backgroundCircle.height,
+//        Bitmap.Config.ARGB_8888
+//    )
+//    val resizedAvatar = getRoundedBitmap(Bitmap.createScaledBitmap(bitmap, bitMapSize, bitMapSize, true))
+//    val resizedBackground =
+//        getRoundedBitmap(Bitmap.createScaledBitmap(backgroundCircle, bitMapSize, bitMapSize, true))
+//
+//    val outputCanvas = Canvas(outputBitmap);
+//
+//    val paint = Paint().apply {
+//        color = Color.RED
+//        isAntiAlias = true
+//    }
+//
+//
+//    val outerRect = Rect(0, 0, resizedBackground.height, resizedBackground.width)
+//    val innerRect = Rect(odds, odds, resizedBackground.height - odds, resizedBackground.width - odds)
+//
+//    paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.ADD)
+//
+//
+//    outputCanvas.drawBitmap(resizedBackground, outerRect, outerRect, paint)
+//    outputCanvas.drawBitmap(resizedAvatar, outerRect, innerRect, null)
+//    return outputBitmap
+//}
+//
+//fun getRoundedBitmap(bitmap: Bitmap): Bitmap {
+//    val resultBitmap: Bitmap
+//    val originalWidth = bitmap.width
+//    val originalHeight = bitmap.height
+//    val r: Float = (originalHeight).toFloat()
+//    resultBitmap = Bitmap.createBitmap(
+//        originalHeight, originalHeight,
+//        Bitmap.Config.ARGB_8888
+//    )
+//
+//    val canvas = Canvas(resultBitmap)
+//    val paint = Paint().apply {
+//    }
+//    val rect = Rect(
+//        0,
+//        0, originalWidth, originalHeight
+//    )
+//    paint.isAntiAlias = true
+//
+//    val rect1 = Rect(0, 0, resultBitmap.height, resultBitmap.width)
+//
+//    val rectF = RectF(rect1)
+//
+//
+//    canvas.drawRoundRect(rectF, r, r, paint)
+//    paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+//    canvas.drawBitmap(bitmap, rect, rect, paint)
+//    return resultBitmap
+//}

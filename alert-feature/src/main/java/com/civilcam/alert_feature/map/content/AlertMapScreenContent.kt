@@ -23,6 +23,7 @@ import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.compose.elements.IconActionButton
 import com.civilcam.ext_features.compose.elements.LocationData
 import com.civilcam.ext_features.compose.elements.LocationDetectButton
+import com.civilcam.ext_features.ext.loadIcon
 import com.civilcam.ext_features.ext.toDp
 import com.civilcam.ext_features.theme.CCTheme
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -88,9 +89,19 @@ fun AlertMapScreenContent(
             }
 
             guardianInformation?.let {
+                val onGuardUser by remember { derivedStateOf { it } }
                 Marker(
-                    state = MarkerState(position = LatLng(it.person.latitude, it.person.longitude)),
-                    icon = bitmapDescriptorFromVector(LocalContext.current, R.drawable.img_guard),
+                    state = MarkerState(
+                        position = LatLng(
+                            onGuardUser.person.latitude,
+                            onGuardUser.person.longitude
+                        )
+                    ),
+                    icon = loadIcon(
+                        LocalContext.current,
+                        onGuardUser.person.avatar.imageUrl,
+                        R.drawable.img_avatar
+                    ),
                 )
             }
 
