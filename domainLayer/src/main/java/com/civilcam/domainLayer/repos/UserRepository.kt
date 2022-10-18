@@ -33,7 +33,7 @@ interface UserRepository {
 
     suspend fun setPin(currentPinCode: String?, newPinCode: String): CurrentUser
 
-    suspend fun setSafeState(pinCode: String): Boolean
+    suspend fun setSafeState(pinCode: String, coords: LatLng): Boolean
 
 	suspend fun setUserCoords(coords: LatLng): Boolean
 }
