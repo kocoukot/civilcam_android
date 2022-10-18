@@ -275,7 +275,7 @@ fun OtpCodeInputField(
 	text: String = "",
 	isReversed: Boolean = false,
 	onValueChanged: (String) -> Unit,
-	hasError: Boolean
+	hasError: Boolean = false
 ) {
 	val coroutineScope = rememberCoroutineScope()
 	val viewRequester = BringIntoViewRequester()

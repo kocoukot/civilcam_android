@@ -48,13 +48,6 @@ fun VerificationScreenContent(
 	if (state.value.isLoading) {
 		DialogLoadingContent()
 	}
-	if (state.value.errorText.isNotEmpty()) {
-		AlertDialogComp(
-			dialogText = state.value.errorText,
-			alertType = AlertDialogTypes.OK,
-			onOptionSelected = { viewModel.setInputActions(VerificationActions.ClickCloseAlert) }
-		)
-	}
 
 	Scaffold(
 		backgroundColor = CCTheme.colors.white,
