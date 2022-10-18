@@ -174,7 +174,7 @@ class EmergencyViewModel(
 		navigateRoute(EmergencyRoute.IsNavBarVisible(false))
 		_state.update {
 			it.copy(
-				emergencyScreen = EmergencyScreen.MAP_EXTENDED, //todo fix
+				emergencyScreen = EmergencyScreen.COUPLED,
 				emergencyButton = EmergencyButton.InDangerButton,
 			)
 		}

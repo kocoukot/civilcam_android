@@ -136,13 +136,19 @@ class UserRepositoryImpl(
             }
         }
 
-	override suspend fun setSafeState(pinCode: String): Boolean =
+	override suspend fun setSafeState(pinCode: String, coords: LatLng): Boolean =
 		safeApiCall {
-			userService.setSafeState(CheckPinRequest(pinCode))
+			userService.setSafeState(
+				SetSafeStateRequest(
+					coords = CoordsRequest(coords.latitude, coords.longitude),
+					pinCode = pinCode
+
+				)
+			)
 		}.let { response ->
 			when (response) {
-                is Resource.Success -> {
-                    accountStorage.setSosState(false)
+				is Resource.Success -> {
+					accountStorage.setSosState(false)
                     true
                 }
                 is Resource.Failure -> throw response.serviceException

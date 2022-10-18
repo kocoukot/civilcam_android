@@ -52,7 +52,7 @@ interface UserService {
 	suspend fun setPin(@Body request: SetPinRequest): UserResponse
 
 	@POST(Endpoint.User.SET_SAFE_STATE)
-	suspend fun setSafeState(@Body request: CheckPinRequest): UserResponse
+	suspend fun setSafeState(@Body request: SetSafeStateRequest): UserResponse
 
 	@POST(Endpoint.User.SET_USER_COORDS)
 	suspend fun setUserCoords(@Body request: SetUserCoordsRequest): SuccessResponse
