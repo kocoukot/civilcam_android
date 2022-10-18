@@ -45,11 +45,12 @@ class LiveMapFragment : Fragment() {
         Timber.tag("alert notif ID").i("userId $userId")
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
-                LiveMapRoute.GoBack -> navController.popBackStack()
+                LiveMapRoute.CloseAlert, LiveMapRoute.GoBack -> navController.popBackStack()
                 is LiveMapRoute.CallUserPhone -> callPhone(route.userPhoneNumber.phoneNumberFormat())
                 LiveMapRoute.CallPolice -> callPhone("911")
                 LiveMapRoute.AlertResolved -> navController.popBackStack()
                 LiveMapRoute.CheckPermission -> checkPermissions()
+
             }
         }
         return ComposeView(requireContext()).apply {

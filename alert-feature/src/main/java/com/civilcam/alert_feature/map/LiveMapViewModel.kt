@@ -13,6 +13,7 @@ import com.civilcam.ext_features.compose.ComposeViewModel
 import com.civilcam.socket_feature.SocketHandler
 import com.civilcam.socket_feature.SocketMapEvents
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -134,7 +135,6 @@ class LiveMapViewModel(
     }
 
     fun addListeners() {
-
         mSocket.on(SocketMapEvents.INCOME_ALERT.msgType) { args ->
             Timber.d("socket args $args")
             val data: JSONObject = args[0] as JSONObject
@@ -143,9 +143,20 @@ class LiveMapViewModel(
                 (data).toString(),
                 OnGuardUserData::class.java
             )
-            Timber.d("socket person ${person}")
-
-            _state.update { it.copy(onGuardUserInformation = person) }
+            Timber.d("socket person ${person.status}")
+            when (person.status) {
+                OnGuardUserData.AlertSocketStatus.active -> _state.update {
+                    it.copy(
+                        onGuardUserInformation = person
+                    )
+                }
+                OnGuardUserData.AlertSocketStatus.resolved -> viewModelScope.launch(Dispatchers.Main) {
+                    navigateRoute(LiveMapRoute.CloseAlert)
+                }
+                OnGuardUserData.AlertSocketStatus.deleted -> {
+                    Timber.d("socket person ${person}")
+                }
+            }
         }
     }
 
