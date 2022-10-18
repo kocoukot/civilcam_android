@@ -10,4 +10,6 @@ sealed class LiveMapRoute : ComposeFragmentRoute {
 
     object AlertResolved : LiveMapRoute()
     object CheckPermission : LiveMapRoute()
+    object CloseAlert : LiveMapRoute()
+
 }

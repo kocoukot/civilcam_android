@@ -6,5 +6,10 @@ class OnGuardUserData(
     val id: Int,
     val date: String,
     val location: String,
-    val person: AlertGuardianModel
-)
+    val person: AlertGuardianModel,
+    val status: AlertSocketStatus
+) {
+    enum class AlertSocketStatus {
+        active, resolved, deleted,
+    }
+}
