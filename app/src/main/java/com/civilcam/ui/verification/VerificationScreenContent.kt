@@ -39,12 +39,7 @@ fun VerificationScreenContent(
 ) {
 	val state = viewModel.state.collectAsState()
 	val context = LocalContext.current
-
-	val timer = remember {
-		derivedStateOf {
-			state.value.timeOut
-		}
-	}
+	
 	if (state.value.isLoading) {
 		DialogLoadingContent()
 	}
@@ -152,7 +147,7 @@ fun VerificationScreenContent(
 						true -> Text(
 							text = stringResource(
 								id = R.string.otp_code_timer,
-								timer.value
+								state.value.timeOut
 							),
 							color = CCTheme.colors.grayOne,
 							fontSize = 17.sp,
