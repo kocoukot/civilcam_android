@@ -73,7 +73,7 @@ class VerificationViewModel(
 						}
 						.onFailure { error ->
 							error.serviceCast { msg, _, isForceLogout ->
-								_state.update { it.copy(errorText = msg) }
+								_state.update { it.copy(errorText = msg, hasError = true) }
 							}
 						}
 					_state.update { it.copy(isLoading = false) }
