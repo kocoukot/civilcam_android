@@ -15,6 +15,7 @@ import com.civilcam.ui.verification.model.VerificationState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class VerificationViewModel(
 	private val verificationFlow: VerificationFlow,
@@ -90,7 +91,7 @@ class VerificationViewModel(
 	}
 	
 	private fun startTimer() {
-		timer = object : CountDownTimer(60000, 1000) {
+		timer = object : CountDownTimer(59999, 1000) {
 			override fun onTick(millisUntilFinished: Long) {
 				_state.update { it.copy(timeOut = millisUntilFinished.formatTime()) }
 			}
