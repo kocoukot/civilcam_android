@@ -1,6 +1,8 @@
 package com.civilcam.ui.profile.setup
 
 import android.annotation.SuppressLint
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
@@ -29,6 +31,7 @@ import com.civilcam.ui.profile.setup.model.ProfileSetupScreen
 fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
 
 	val state = viewModel.state.collectAsState()
+	val contract = PhotoPickerContract(viewModel::onPictureUriReceived)
 
 	if (state.value.isLoading) {
 		DialogLoadingContent()
@@ -88,7 +91,11 @@ fun ProfileSetupScreenContent(viewModel: ProfileSetupViewModel) {
 						data = state.value.data,
 						birthDate = state.value.data?.dateBirth,
 						setupAction = {
-							viewModel.setInputActions(it)
+							if (it is ProfileSetupActions.ClickAvatarSelect) {
+								contract.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+							} else {
+								viewModel.setInputActions(it)
+							}
 						}
 					)
 				}
