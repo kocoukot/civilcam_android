@@ -3,6 +3,7 @@ package com.civilcam.data.local
 import android.accounts.Account
 import android.accounts.AccountManager
 import com.civilcam.domainLayer.model.user.CurrentUser
+import com.civilcam.domainLayer.model.user.UserBaseInfo
 import com.civilcam.domainLayer.model.user.UserState
 import com.google.gson.Gson
 import java.util.*
@@ -70,15 +71,18 @@ class AccountStorage(
                 accountManager.setAuthToken(it, SESSION_TOKEN, sessionToken)
                 accountManager.setUserData(
                     it,
-                    IS_USER_LOGGED_IN,
-                    (!user.sessionUser.isUserProfileSetupRequired).toString()
-                )
-                updateUser(it, user)
+					IS_USER_LOGGED_IN,
+					(!user.sessionUser.isUserProfileSetupRequired).toString()
+				)
+				updateUser(it, user)
 			}
 	}
 
 	fun updateUser(user: CurrentUser) =
 		accountManager.setUserData(getOrCreateAccount(), USER, gson.toJson(user))
+
+	fun updateUserBaseInfo(userBaseInfo: UserBaseInfo) =
+		updateUser(getUser().copy(userBaseInfo = userBaseInfo))
 
 
 	private fun updateUser(currentAccount: Account, user: CurrentUser) =
