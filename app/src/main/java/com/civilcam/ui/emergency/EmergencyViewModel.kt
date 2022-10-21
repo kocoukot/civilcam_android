@@ -31,7 +31,7 @@ import java.util.*
 
 class EmergencyViewModel(
 	private val fetchUserLocationUseCase: FetchUserLocationUseCase,
-	getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
+	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
 	private val sendEmergencySosUseCase: SendEmergencySosUseCase,
 //	private val setUserCoordsUseCase: SetUserCoordsUseCase
 ) : ComposeViewModel<EmergencyState, EmergencyRoute, EmergencyActions>() {
@@ -46,11 +46,15 @@ class EmergencyViewModel(
 
 	init {
 		getLocalCurrentUserUseCase().let { user ->
-			_state.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
-			Timber.i("emergency ${user.sessionUser.userState}")
 			if (user.sessionUser.userState == UserState.alert) {
 				setSosState()
 			}
+		}
+	}
+
+	fun loadAvatar() {
+		getLocalCurrentUserUseCase().let { user ->
+			_state.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
 		}
 	}
 
@@ -203,7 +207,7 @@ class EmergencyViewModel(
 						}
 					},
 					onFailure = { error ->
-						error.serviceCast { msg, _, isForceLogout ->
+						error.serviceCast { msg, _, _ ->
 							_state.update { it.copy(errorText = msg) }
 						}
 					},

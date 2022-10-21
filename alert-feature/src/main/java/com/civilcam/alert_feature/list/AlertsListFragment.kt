@@ -50,6 +50,7 @@ class AlertsListFragment : Fragment(), SupportBottomBar {
 
     override fun onResume() {
         super.onResume()
+        viewModel.loadAvatar()
         viewModel.refreshList()
     }
 }

@@ -119,6 +119,7 @@ class EmergencyFragment : Fragment() {
 
 	override fun onResume() {
 		super.onResume()
+		viewModel.loadAvatar()
 		viewModel.addListeners()
 	}
 }
