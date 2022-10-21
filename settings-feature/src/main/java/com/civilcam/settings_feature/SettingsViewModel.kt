@@ -74,7 +74,7 @@ class SettingsViewModel(
 		networkRequest(action = { setUserLanguageUseCase(languageType) },
 			onSuccess = { goBack() },
 			onFailure = { error ->
-				error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
+				error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
 			},
 			onComplete = { _state.update { it.copy(isLoading = false) } })
 	}
@@ -150,16 +150,17 @@ class SettingsViewModel(
 			}
 			
 			SettingsType.CONTACT_SUPPORT -> {
-				val user = getLocalCurrentUserUseCase()
-				_state.update {
-					it.copy(
-						settingsType = section, data = it.data.copy(
-							contactSupportSectionData = ContactSupportSectionData(
-								replyEmail = if (user.sessionUser.authType == AuthType.email) user.sessionUser.email else "",
-								canChangeEmail = getLocalCurrentUserUseCase().sessionUser.canChangeEmail
+				getLocalCurrentUserUseCase().let { user ->
+					_state.update {
+						it.copy(
+							settingsType = section, data = it.data.copy(
+								contactSupportSectionData = ContactSupportSectionData(
+									replyEmail = if (user.sessionUser.authType == AuthType.email) user.sessionUser.email else "",
+									canChangeEmail = user.sessionUser.canChangeEmail
+								)
 							)
 						)
-					)
+					}
 				}
 			}
 			SettingsType.CHANGE_PASSWORD -> {
@@ -276,7 +277,7 @@ class SettingsViewModel(
 							}
 						}
 					}.onFailure { error ->
-						error.serviceCast { msg, _, isForceLogout ->
+						error.serviceCast { msg, _, _ ->
 							_state.update { it.copy(errorText = msg) }
 						}
 					}

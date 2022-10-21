@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.update
 
 class AlertsListViewModel(
     injector: KoinInjector,
-    getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
+    private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
     private val resolveAlertUseCase: ResolveAlertUseCase,
 ) : ComposeViewModel<AlertListState, AlertListRoute, AlertListActions>(),
     KoinInjector by injector {
@@ -29,7 +29,7 @@ class AlertsListViewModel(
     override var _state: MutableStateFlow<AlertListState> = MutableStateFlow(AlertListState())
     var searchList = loadAlertsList()
 
-    init {
+    fun loadAvatar() {
         getLocalCurrentUserUseCase().let { user ->
             _state.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
         }
