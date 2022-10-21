@@ -90,6 +90,7 @@ class ProfileRepositoryImpl(
         }.let { response ->
             when (response) {
                 is Resource.Success -> userBaseInfoMapper.mapData(response.value.profile)
+                    .also { accountStorage.updateUserBaseInfo(it) }
                 is Resource.Failure -> {
                     response.checkIfLogOut { accountStorage.logOut() }
                     throw response.serviceException
