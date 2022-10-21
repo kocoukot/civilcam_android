@@ -1,6 +1,8 @@
 package com.civilcam.ui.profile.userProfile
 
 import android.annotation.SuppressLint
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
@@ -34,6 +36,7 @@ import com.civilcam.ui.profile.userProfile.model.UserProfileScreen
 @Composable
 fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 	val state = viewModel.state.collectAsState()
+	val contract = PhotoPickerContract(viewModel::onPictureUriReceived)
 
 
 	if (state.value.isLoading) {
@@ -87,14 +90,20 @@ fun UserProfileScreenContent(viewModel: UserProfileViewModel) {
 		state.value.data?.let { data ->
 			Column(
 				modifier = Modifier
-                    .fillMaxWidth()
-                    .background(CCTheme.colors.white),
+					.fillMaxWidth()
+					.background(CCTheme.colors.white),
 			) {
 				AnimatedVisibility(visible = state.value.screenState != UserProfileScreen.LOCATION) {
 					UserProfileSection(
 						userData = data,
 						screenType = state.value.screenState,
-						onActionClick = viewModel::setInputActions,
+						onActionClick = {
+							if (it is UserProfileActions.ClickAvatarSelect) {
+								contract.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+							} else {
+								viewModel.setInputActions(it)
+							}
+						},
 						isSaveEnabled = state.value.isFilled
 					)
 				}
