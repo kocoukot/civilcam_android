@@ -1,0 +1,105 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/dim_0">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_rounded"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/notification_title"
+                style="@style/TextAppearance.Compat.Notification.Title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fadingEdge="horizontal"
+                android:fontFamily="@font/roboto_bold"
+                android:lineSpacingExtra="@dimen/dim_6"
+                android:paddingHorizontal="@dimen/dim_12"
+                android:paddingTop="@dimen/dim_12"
+                android:paddingBottom="@dimen/dim_8"
+                android:singleLine="true"
+                android:textFontWeight="600"
+                android:textSize="17sp"
+                tools:targetApi="p"
+                tools:text="You received a request" />
+
+            <ImageView
+                android:id="@+id/button_close_notification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dim_8"
+                android:src="@drawable/ic_notification_close" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|bottom"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/dim_16">
+
+            <TextView
+                android:id="@+id/notification_content"
+                style="@style/TextAppearance.Compat.Notification.Info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dim_8"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fadingEdge="horizontal"
+                android:letterSpacing="-0.02"
+                android:lineSpacingExtra="@dimen/dim_2"
+                android:maxLines="2"
+                android:paddingHorizontal="@dimen/dim_12"
+                android:singleLine="false"
+                android:textColor="@color/grayText"
+                android:textSize="@dimen/text_dim15"
+                tools:text="Alleria Windrunner needs you as a guardian" />
+
+            <ImageView
+                android:id="@+id/button_notification_deny"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dim_8"
+                android:src="@drawable/ic_notification_deny"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/button_notification_accept"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dim_10"
+                android:src="@drawable/ic_notification_accept"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@drawable/bg_progress_rounded"
+            android:max="10"
+            android:progress="5"
+            android:progressBackgroundTint="@color/primaryRed"
+            android:progressTint="@color/primaryRed" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="settings_title">Settings</string>
+
+    <string name="save_text">Guardar</string>
+
+    <string name="settings_alerts">Alerts</string>
+    <string name="settings_subscription">Subscription</string>
+    <string name="settings_change_password">Change password</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_contact_support">Contact support</string>
+    <string name="settings_terms"><![CDATA[Terms & Conditions]]> and Privacy Policy</string>
+    <string name="settings_log_out">Log out</string>
+    <string name="settings_delete_account">Delete account</string>
+
+    <string name="settings_alerts_sms">SMS notifications</string>
+    <string name="settings_alerts_email">Email notifications</string>
+
+    <string name="settings_delete_account_alert_title">Delete account</string>
+    <string name="settings_delete_account_alert_text">Are you sure you want to delete your account?</string>
+
+    <string name="settings_log_out_alert_title">Log out</string>
+    <string name="settings_log_out_alert_text">Are you sure you want to log out from your account?</string>
+
+    <string name="settings_contact_issue_title">Issue</string>
+    <string name="settings_contact_issue_enter">Enter issue</string>
+    <string name="settings_contact_issue_description">Enter an issue description</string>
+    <string name="settings_contact_reply_title">The reply will be sent to:</string>
+    <string name="settings_contact_reply_placeholder">example@mail.net</string>
+    <string name="settings_contact_error_text">Invalid email. Please try again. (eg:email@gmail.com)</string>
+
+    <string name="settings_password_title">Password</string>
+    <string name="settings_password_label">Current password</string>
+    <string name="settings_password_placeholder">Enter your current password</string>
+    <string name="settings_password_error_text">The password is incorrect. Please try one more time</string>
+
+    <string name="settings_create_passoword_title">Create password</string>
+    <string name="settings_manage_subscription_plan">Manage subscription plan</string>
+    <string name="settings_restore_purchase">Restore purchase</string>
+
+    <string name="send_text">Send</string>
+
+    <string name="subscription_description">for $%.2f/%s</string>
+    <string name="subscription_trial_description">for 1 month</string>
+    <string name="subscription_renews_value">Renews: %s</string>
+
+</resources>

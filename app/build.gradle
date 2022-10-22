@@ -5,12 +5,15 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 static String getKeystorePath() {
     if (Os.isFamily(Os.FAMILY_WINDOWS)) return "c:/Keystore/civilcam"
     if (Os.isFamily(Os.FAMILY_MAC)) return "${System.properties['user.home']}/Keystore/civilcam"
-    return System.getenv("HEAVYE_KEYSTORE_PATH")
+    return System.getenv("CIVILCAM_KEYSTORE_PATH")
 }
 
 def computeVersionName() {
@@ -22,6 +25,8 @@ def computeVersionCode() {
 }
 
 android {
+    setProperty("archivesBaseName", getArtifactName(defaultConfig))
+
     compileSdk rootProject.compile_sdk
 
     defaultConfig {
@@ -32,8 +37,19 @@ android {
         versionName computeVersionName()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
 
+        buildConfigField "String", "GLEAP_KEY", '"6mCvq0I9X4vV8tascP6NIhmYKWztnr4u"'
+        buildConfigField "String", "GOOGLE_AUTOCOMPLETE_KEY", '"AIzaSyDuK_krNRNpPVB254Qux1OvAG2wqusmaY4"'
+
+        buildConfigField "String", "GOOGLE_WEB_CLIENT_ID", '"403034509114-i70e7lel3joqeuprgis5cuuu8anbm7ss.apps.googleusercontent.com"'
+        buildConfigField "String", "GOOGLE_CLIENT_SECRET", '"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"'
+        buildConfigField "String", "GOOGLE_API_GATEWAY", '"https://www.googleapis.com\"'
+
+
+
+        resValue "string", "facebook_app_id", "829010731804918"
+        resValue "string", "fb_login_protocol_scheme", "fb829010731804918"
+    }
     signingConfigs {
         debug_config {
             try {
@@ -60,13 +76,30 @@ android {
 
 
     buildTypes {
+
+        debug {
+            buildConfigField "String", "API_GATEWAY", '"https://api.staging.civilcam.cloud/api"'
+            buildConfigField "String", "BASE_URL", '"https://api.staging.civilcam.cloud"'
+            buildConfigField "String", "API_KEY", '"c&c753"'
+            minifyEnabled false
+            debuggable true
+            signingConfig signingConfigs.default_config
+        }
+
+
         sandbox {
+            buildConfigField "String", "API_GATEWAY", '"https://api.staging.civilcam.cloud/api"'
+            buildConfigField "String", "BASE_URL", '"https://api.staging.civilcam.cloud"'
+            buildConfigField "String", "API_KEY", '"c&c753"'
             minifyEnabled false
             debuggable true
             signingConfig signingConfigs.default_config
         }
 
         production {
+            buildConfigField "String", "API_GATEWAY", '"https://api.civilcam.cloud/api"'
+            buildConfigField "String", "BASE_URL", '"https://api.civilcam.cloud"'
+            buildConfigField "String", "API_KEY", '"6wp1oRKGv27Dw1YgkKkcee"'
             minifyEnabled true
             debuggable false
             signingConfig signingConfigs.default_config
@@ -75,11 +108,13 @@ android {
     }
 
     compileOptions {
+        "-Xuse-k2"
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
         jvmTarget = '11'
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
     buildFeatures {
         viewBinding true
@@ -87,18 +122,23 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0-beta03"
+        kotlinCompilerExtensionVersion = "1.3.0-rc02"
     }
 }
 
 apply from: '../dependencies.gradle'
 
 dependencies {
+    implementation 'androidx.core:core-animation:1.0.0-alpha02'
+    implementation 'androidx.camera:camera-view:1.0.0-alpha26'
+    implementation 'androidx.camera:camera-core:1.0.0'
+    testImplementation 'junit:junit:4.12'
     androidX()
 
 //    testImplementation 'junit:junit:4.13.2'
 //    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
 //    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    facebook()
 
     jetpackCompose()
     google()
@@ -109,4 +149,21 @@ dependencies {
     nav()
     adapterDelegates()
     glide()
+    rxJava()
+    compression()
+    gleap()
+    datePicker()
+    camera()
+    firebase()
+    socket()
+    //Timber
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
+    implementation project(path: ':domainLayer')
+    implementation project(path: ':ext-features')
+    implementation project(path: ':langSelect')
+    implementation project(path: ':onboarding-feature')
+    implementation project(path: ':alert-feature')
+    implementation project(path: ':settings-feature')
+    implementation project(path: ':socket-feature')
 }

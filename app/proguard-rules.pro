@@ -19,3 +19,25 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+   -keepclassmembers,allowobfuscation class * {
+      @com.google.gson.annotations.SerializedName <fields>;
+    }
+
+    -keepclassmembers class com.civilcam.domainLayer.** { <fields>; }
+
+    -keepclassmembers class * implements java.io.Serializable {
+            private static final java.io.ObjectStreamField[] serialPersistentFields;
+            private void writeObject(java.io.ObjectOutputStream);
+            private void readObject(java.io.ObjectInputStream);
+            java.lang.Object writeReplace();
+            java.lang.Object readResolve();
+    }
+
+        -keepnames class com.facebook.FacebookActivity
+        -keepnames class com.facebook.CustomTabActivity
+
+        -keep class com.facebook.login.Login
+
+        -keep class com.google.android.apps.authenticator.** {*;}

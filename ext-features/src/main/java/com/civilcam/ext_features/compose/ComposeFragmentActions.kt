@@ -1,0 +1,3 @@
+package com.civilcam.ext_features.compose
+
+interface ComposeFragmentActions

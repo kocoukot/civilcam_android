@@ -1,0 +1,3 @@
+package com.civilcam.ext_features
+
+interface SupportBottomBar

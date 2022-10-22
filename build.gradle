@@ -1,11 +1,15 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+    ext.getArtifactName = {
+        defaultConfig ->
+            return "CivilCam"
+    }
     buildscript {
         ext {
-            kotlin_version = "1.6.21"
-            compile_sdk = 32
+            kotlin_version = "1.7.10"
+            compile_sdk = 33
             min_sdk = 27
-            target_sdk = 32
+            target_sdk = 33
 
             // Build versions
             version_major = 0
@@ -20,9 +24,8 @@ buildscript {
         }
         dependencies {
             classpath "com.android.tools.build:gradle:7.0.4"
-            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-            classpath 'com.google.gms:google-services:4.3.10'
-//            classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
+            classpath 'com.google.gms:google-services:4.3.13'
+            classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.1'
 
             // NOTE: Do not place your application dependencies here; they belong
             // in the individual module build.gradle files
@@ -34,9 +37,12 @@ buildscript {
 }
 
 plugins {
-    id 'com.android.application' version '7.2.0' apply false
-    id 'com.android.library' version '7.2.0' apply false
-    id 'org.jetbrains.kotlin.android' version "$kotlin_version" apply false
+    id 'com.android.application' version '7.2.2' apply false
+    id 'com.android.library' version '7.2.2' apply false
+    id 'org.jetbrains.kotlin.android' version '1.7.10' apply false
+    id 'org.jetbrains.kotlin.jvm' version "$kotlin_version" apply false
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin' version '2.0.1' apply false
+
 }
 
 task clean(type: Delete) {
