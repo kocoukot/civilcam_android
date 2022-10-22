@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.civilcam.R
+import com.civilcam.ext_features.alert.AlertDialogTypes
 import com.civilcam.ext_features.ext.hideSystemUI
 import com.civilcam.ext_features.ext.showSystemUI
 import com.civilcam.ext_features.live_data.observeNonNull
@@ -18,6 +19,7 @@ import com.civilcam.ext_features.registerForPermissionsResult
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
+import com.civilcam.ui.common.alert.DialogAlertFragment
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -54,7 +56,7 @@ class EmergencyFragment : Fragment() {
 		setFragmentResultListener(PinCodeFragment.RESULT_BACK_STACK) { _, _ ->
 			viewModel.setInputActions(EmergencyActions.DisableSos)
 		}
-		
+
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
 				EmergencyRoute.GoUserProfile -> navController.navigate(R.id.userProfileFragment)
@@ -77,13 +79,13 @@ class EmergencyFragment : Fragment() {
 					viewLifecycleOwner
 				)
 			)
-			
+
 			setContent {
 				EmergencyScreenContent(viewModel)
 			}
 		}
 	}
-	
+
 	private fun checkPermissions(launchSos: Boolean = false) {
 		if (permissionsDelegate.checkSelfPermissions()) {
 			if (launchSos) viewModel.launchSos() else {
@@ -96,15 +98,23 @@ class EmergencyFragment : Fragment() {
 		}
 		viewModel.isLocationAllowed(permissionsDelegate.checkSelfPermissions())
 	}
-	
+
 	private fun onPermissionsGranted(isGranted: Boolean) {
 		Timber.i("onPermissionsGranted $isGranted")
 		if (isGranted) {
 			pendingAction?.invoke()
 			pendingAction = null
+		} else {
+			DialogAlertFragment.create(
+				fragmentManager = parentFragmentManager,
+				title = getString(R.string.location_alert_title),
+				text = getString(R.string.location_alert_text),
+				alertType = AlertDialogTypes.OK,
+				onOptionSelected = {}
+			)
 		}
 	}
-	
+
 	override fun onStart() {
 		super.onStart()
 		checkPermissions()
