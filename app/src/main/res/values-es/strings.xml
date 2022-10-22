@@ -170,4 +170,6 @@
     <string name="subscription_description">for $%.2f/%s</string>
     <string name="subscription_trial_description">for 1 month</string>
 
+    <string name="location_alert_title">Location permission</string>
+    <string name="location_alert_text">The app need your permission to track your location. Please go to settings and allow</string>
 </resources>
