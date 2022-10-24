@@ -1,5 +1,6 @@
 package com.civilcam.ext_features.ext
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
@@ -125,4 +126,10 @@ class FragmentPermissionsDelegate(
     }
 
     fun requestPermissions() = activityResultLauncher.launch(permissions)
+}
+
+fun Fragment.callPhone(phoneNumber: String) {
+    val intent = Intent(Intent.ACTION_DIAL)
+    intent.data = Uri.parse("tel:$phoneNumber")
+    startActivity(intent)
 }

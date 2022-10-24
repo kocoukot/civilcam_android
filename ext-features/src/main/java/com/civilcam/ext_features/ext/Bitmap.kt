@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.gms.maps.model.BitmapDescriptor
@@ -19,6 +20,7 @@ fun loadIcon(
         Glide.with(context)
             .asBitmap()
             .load(url)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
             .error(placeHolder)
             // to show a default icon in case of any errors
             .into(object : CustomTarget<Bitmap>() {

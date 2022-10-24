@@ -8,7 +8,7 @@ sealed class LiveMapActions : ComposeFragmentActions {
     object ClickResolveAlert : LiveMapActions()
     object ClickCallPolice : LiveMapActions()
     data class ClickScreenChange(val screenState: EmergencyScreen) : LiveMapActions()
-    object ClickDetectLocation : LiveMapActions()
     object ClickCallUserPhone : LiveMapActions()
     data class ClickResolveAlertAnswer(val answer: Boolean) : LiveMapActions()
+    data class SelectLocationPermission(val isAllowed: Boolean) : LiveMapActions()
 }
