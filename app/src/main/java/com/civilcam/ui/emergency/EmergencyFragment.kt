@@ -16,6 +16,7 @@ import com.civilcam.ext_features.ext.showSystemUI
 import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ext_features.navController
 import com.civilcam.ext_features.registerForPermissionsResult
+import com.civilcam.socket_feature.SocketHandler
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
@@ -38,7 +39,7 @@ class EmergencyFragment : Fragment() {
 
 	private var pendingAction: (() -> Unit)? = null
 
-	private val mSocket = com.civilcam.socket_feature.SocketHandler
+    private val mSocket = SocketHandler
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -70,8 +71,8 @@ class EmergencyFragment : Fragment() {
 				EmergencyRoute.ShowSystemUI -> showSystemUI()
 				is EmergencyRoute.IsNavBarVisible ->
 					(activity as MainActivity).showBottomNavBar(route.isVisible)
-				else -> {}
-			}
+
+            }
 		}
 		return ComposeView(requireContext()).apply {
 			setViewCompositionStrategy(

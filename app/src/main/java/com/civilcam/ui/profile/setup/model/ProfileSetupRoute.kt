@@ -5,6 +5,4 @@ import com.civilcam.ext_features.compose.ComposeFragmentRoute
 sealed class ProfileSetupRoute : ComposeFragmentRoute {
     data class GoVerification(val phoneNumber: String) : ProfileSetupRoute()
     object GoBack : ProfileSetupRoute()
-    object GoLocationSelect : ProfileSetupRoute()
-    object GoGalleryOpen : ProfileSetupRoute()
 }
