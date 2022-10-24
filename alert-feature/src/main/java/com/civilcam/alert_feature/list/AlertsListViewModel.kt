@@ -14,30 +14,29 @@ import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.ResolveAlertUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.ext_features.KoinInjector
-import com.civilcam.ext_features.compose.ComposeViewModel
+import com.civilcam.ext_features.arch.BaseViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 
 class AlertsListViewModel(
     injector: KoinInjector,
     private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
     private val resolveAlertUseCase: ResolveAlertUseCase,
-) : ComposeViewModel<AlertListState, AlertListRoute, AlertListActions>(),
-    KoinInjector by injector {
+) : BaseViewModel.Base<AlertListState, AlertListActions, AlertListRoute>(
+    mState = MutableStateFlow(AlertListState())
+), KoinInjector by injector {
 
-    override var _state: MutableStateFlow<AlertListState> = MutableStateFlow(AlertListState())
     var searchList = loadAlertsList()
 
     fun loadAvatar() {
         getLocalCurrentUserUseCase().let { user ->
-            _state.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
+            updateInfo { copy(userAvatar = user.userBaseInfo.avatar) }
         }
     }
 
     override fun setInputActions(action: AlertListActions) {
         when (action) {
-            AlertListActions.ClickGoMyProfile -> goMyProfile()
+            AlertListActions.ClickGoMyProfile -> sendEvent(AlertListRoute.GoMyProfile)
             AlertListActions.ClickGoSettings -> goSettings()
             is AlertListActions.ClickResolveAlert -> showResolveAlert(action.alertId)
             is AlertListActions.ClickGoUserProfile -> goUserProfile(action.alertId)
@@ -45,49 +44,44 @@ class AlertsListViewModel(
             is AlertListActions.ClickConfirmResolve -> resolveAlertResult()
             AlertListActions.ClearErrorText -> clearErrorText()
             AlertListActions.StopRefresh -> stopRefresh()
-            is AlertListActions.SetErrorText -> _state.update { it.copy(errorText = action.error) }
+            is AlertListActions.SetErrorText -> updateInfo { copy(errorText = action.error) }
         }
     }
 
-
-    private fun goMyProfile() {
-        navigateRoute(AlertListRoute.GoMyProfile)
-    }
-
     private fun goSettings() {
-        navigateRoute(AlertListRoute.GoSettings)
+        sendEvent(AlertListRoute.GoSettings)
     }
 
     private fun goAlertHistory() {
-        navigateRoute(AlertListRoute.GoAlertHistory)
+        sendEvent(AlertListRoute.GoAlertHistory)
     }
 
     private fun goUserProfile(userId: Int) {
-        navigateRoute(AlertListRoute.GoUserAlert(userId))
+        sendEvent(AlertListRoute.GoUserAlert(userId))
     }
 
     private fun showResolveAlert(userId: Int) {
-        _state.update { it.copy(resolveId = userId) }
+        updateInfo { copy(resolveId = userId) }
     }
 
     private fun resolveAlertResult() {
-        _state.value.resolveId?.let { alertId ->
-            _state.update { it.copy(isLoading = true) }
+        getState().resolveId?.let { alertId ->
+            updateInfo { copy(isLoading = true) }
             networkRequest(
                 action = { resolveAlertUseCase(alertId) },
                 onSuccess = {
                     refreshList()
                 },
                 onFailure = { error ->
-                    error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
+                    error.serviceCast { msg, _, _ -> updateInfo { copy(errorText = msg) } }
                 },
-                onComplete = { _state.update { it.copy(isLoading = false) } },
+                onComplete = { updateInfo { copy(isLoading = false) } },
             )
         }
     }
 
     fun refreshList() {
-        _state.update { it.copy(refreshList = Unit, resolveId = null) }
+        updateInfo { copy(refreshList = Unit, resolveId = null) }
     }
 
     private fun loadAlertsList(): Flow<PagingData<AlertModel>> {
@@ -99,10 +93,10 @@ class AlertsListViewModel(
     }
 
     override fun clearErrorText() {
-        _state.update { it.copy(errorText = "") }
+        updateInfo { copy(errorText = "") }
     }
 
     private fun stopRefresh() {
-        _state.update { it.copy(refreshList = null) }
+        updateInfo { copy(refreshList = null) }
     }
 }
