@@ -1,6 +1,9 @@
 package com.civilcam.ui.network.contacts
 
+import android.Manifest
 import android.annotation.SuppressLint
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -38,6 +41,14 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
         )
     }
 
+
+    val permissionRequest = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { if (it) viewModel.fetchContacts() })
+
+    LaunchedEffect(key1 = true) {
+        permissionRequest.launch(Manifest.permission.READ_CONTACTS)
+    }
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
         topBar = {

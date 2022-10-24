@@ -1,5 +1,6 @@
 package com.civilcam.alert_feature.map
 
+import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateDpAsState
@@ -53,8 +54,8 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
     LaunchedEffect(key1 = true) {
         permissionRequest.launch(
             arrayOf(
-                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
             )
         )
     }
