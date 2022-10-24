@@ -8,7 +8,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -23,15 +25,24 @@ import com.civilcam.ui.auth.pincode.model.PinCodeActions
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.common.compose.inputs.PinCodeInputField
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 
 	val state = viewModel.state.collectAsState()
-
+	
+	val keyboardController = LocalSoftwareKeyboardController.current
+	
 	BackHandler {
 		viewModel.setInputActions(
 			PinCodeActions.GoBack
 		)
+	}
+	
+	if (state.value.showKeyboard) {
+		keyboardController?.show()
+	} else {
+		keyboardController?.hide()
 	}
 
 	if (state.value.isLoading) DialogLoadingContent()

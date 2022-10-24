@@ -34,8 +34,9 @@ class PinCodeViewModel(
 	override fun setInputActions(action: PinCodeActions) {
 		when (action) {
 			PinCodeActions.GoBack -> goBack()
-			is PinCodeActions.EnterPinCode -> pinEntered(action.pinCode)
 			PinCodeActions.ClickCloseAlert -> clearErrorText()
+			is PinCodeActions.ShowKeyboard -> showKeyboard(action.show)
+			is PinCodeActions.EnterPinCode -> pinEntered(action.pinCode)
 		}
 	}
 	
@@ -217,6 +218,9 @@ class PinCodeViewModel(
 		navigateRoute(PinCodeRoute.GoGuardians)
 	}
 	
+	private fun showKeyboard(show: Boolean) {
+		_state.value = _state.value.copy(showKeyboard = show)
+	}
 	private fun goNewPinCodeConfirm() {
 		_state.value = _state.value.copy(screenState = PinCodeFlow.CONFIRM_NEW_PIN_CODE, isDataLoaded = true)
 	}

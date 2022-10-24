@@ -5,6 +5,7 @@ import com.civilcam.ext_features.compose.ComposeFragmentState
 data class PinCodeState(
 	val isLoading: Boolean = false,
 	val errorText: String = "",
+	val showKeyboard: Boolean = true,
 
 	val pinCode: String = "",
 	val confirmPinCode: String = "",
