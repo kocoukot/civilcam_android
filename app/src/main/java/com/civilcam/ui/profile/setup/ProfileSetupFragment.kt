@@ -20,26 +20,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class ProfileSetupFragment : Fragment() {
 	private val viewModel: ProfileSetupViewModel by viewModel()
 
-//	private val cameraPermissionsDelegate =
-//		if (Build.VERSION.SDK_INT >= 33)
-//			registerForPermissionsResult(Manifest.permission.READ_MEDIA_IMAGES) {
-//				onPermissionsGranted(it)
-//			}
-//		else {
-//			registerForPermissionsResult(Manifest.permission.READ_EXTERNAL_STORAGE) {
-//				onPermissionsGranted(it)
-//			}
-//		}
-//
-//	private val chooseFromGalleryActivityLauncher =
-//		registerForActivityResult(GalleryActivityResultContract()) { uri ->
-//			Timber.d("onPictureUriReceived $uri")
-//			uri?.let(viewModel::onPictureUriReceived)
-//		}
-
-
-//	private var pendingAction: (() -> Unit)? = null
-
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
@@ -57,8 +37,6 @@ class ProfileSetupFragment : Fragment() {
 						""
 					)
 				)
-				ProfileSetupRoute.GoLocationSelect -> {}
-				ProfileSetupRoute.GoGalleryOpen -> {}//onChooseFromGalleryCaseClicked()
 			}
 		}
 
@@ -85,22 +63,4 @@ class ProfileSetupFragment : Fragment() {
 		super.onDestroy()
 		Places.deinitialize()
 	}
-
-//    private fun onChooseFromGalleryCaseClicked() {
-//        if (cameraPermissionsDelegate.checkSelfPermissions()) {
-//            chooseFromGalleryActivityLauncher.launch(Unit)
-//        } else {
-//            pendingAction = { onChooseFromGalleryCaseClicked() }
-//            cameraPermissionsDelegate.requestPermissions()
-//        }
-//    }
-//
-//	private fun onPermissionsGranted(isGranted: Boolean) {
-//		if (isGranted) {
-//			pendingAction?.invoke()
-//			pendingAction = null
-//		} else {
-//			showAlertDialogFragment(title = "Sorry, we need permission!")
-//		}
-//	}
 }

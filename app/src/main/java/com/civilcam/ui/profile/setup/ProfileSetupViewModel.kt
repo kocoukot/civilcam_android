@@ -156,7 +156,7 @@ class ProfileSetupViewModel(
     }
 
     private fun goAvatarSelect() {
-        navigateRoute(ProfileSetupRoute.GoGalleryOpen)
+//        navigateRoute(ProfileSetupRoute.GoGalleryOpen)
     }
 
     fun onPictureUriReceived(uri: Uri) {

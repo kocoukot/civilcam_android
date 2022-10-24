@@ -16,7 +16,6 @@ import com.civilcam.ext_features.compose.elements.ProfileRow
 import com.civilcam.ext_features.compose.elements.RowDivider
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.settings_feature.R
-import com.civilcam.settings_feature.SettingsFragment.Companion.IN_APP_TRIAL
 
 @Composable
 fun SubscriptionSettingsContent(
@@ -112,3 +111,5 @@ fun SubscriptionStatus(
 		}
 	}
 }
+
+private const val IN_APP_TRIAL = "in_app_trial"

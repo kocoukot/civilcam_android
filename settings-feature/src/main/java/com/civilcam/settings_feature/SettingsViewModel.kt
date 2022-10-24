@@ -9,10 +9,9 @@ import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.subscriptions.GetUserSubscriptionUseCase
 import com.civilcam.domainLayer.usecase.user.*
 import com.civilcam.ext_features.alert.ScreenAlert
-import com.civilcam.ext_features.compose.ComposeViewModel
+import com.civilcam.ext_features.arch.BaseViewModel
 import com.civilcam.settings_feature.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -26,16 +25,17 @@ class SettingsViewModel(
 	private val contactSupportUseCase: ContactSupportUseCase,
 	private val toggleSettingsUseCase: ToggleSettingsUseCase,
 	private val getUserSubscriptionUseCase: GetUserSubscriptionUseCase
-) : ComposeViewModel<SettingsState, SettingsRoute, SettingsActions>() {
-	
-	override var _state = MutableStateFlow(SettingsState())
-	
+) : BaseViewModel.Base<SettingsState, SettingsActions, SettingsRoute>(
+	mState = MutableStateFlow(SettingsState())
+) {
+
+
 	init {
 		getLocalCurrentUserUseCase().let { user ->
-			_state.update { it.copy(canChangePassword = user.sessionUser.canChangePassword) }
+			updateInfo { copy(canChangePassword = user.sessionUser.canChangePassword) }
 		}
 	}
-	
+
 	override fun setInputActions(action: SettingsActions) {
 		when (action) {
 			SettingsActions.ClickGoBack -> goBack()
@@ -59,45 +59,42 @@ class SettingsViewModel(
 			)
 			SettingsActions.SaveNewPassword -> savePassword()
 			SettingsActions.ClickGoSubscription -> fetchSubscriptionPlan()
-			SettingsActions.GoSubscriptionManage -> goSubManage()
+			SettingsActions.GoSubscriptionManage -> sendEvent(SettingsRoute.GoSubManage)
 			SettingsActions.ClearErrorText -> clearErrorText()
 			SettingsActions.ClickCloseScreenAlert -> closeScreenAlert()
 		}
 	}
 	
 	private fun closeScreenAlert() {
-		_state.update { it.copy(screenAlert = null) }
+		updateInfo { copy(screenAlert = null) }
 	}
 	
 	private fun onLanguageChange(languageType: LanguageType) {
-		_state.update { it.copy(isLoading = true) }
+		updateInfo { copy(isLoading = true) }
 		networkRequest(action = { setUserLanguageUseCase(languageType) },
 			onSuccess = { goBack() },
 			onFailure = { error ->
-				error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
+				error.serviceCast { msg, _, _ -> updateInfo { copy(errorText = msg) } }
 			},
-			onComplete = { _state.update { it.copy(isLoading = false) } })
+			onComplete = { updateInfo { copy(isLoading = false) } })
 	}
 	
 	override fun clearErrorText() {
-		_state.update { it.copy(errorText = "") }
-	}
-	
-	private fun goSubManage() {
-		navigateRoute(SettingsRoute.GoSubManage)
+		updateInfo { copy(errorText = "") }
 	}
 	
 	private fun doActionOnAccount(isLogOut: Boolean) {
-		_state.update { it.copy(isLoading = true) }
+		updateInfo { copy(isLoading = true) }
 		viewModelScope.launch {
 			kotlin.runCatching { if (isLogOut) logoutUseCase() else deleteAccountUseCase() }
-				.onSuccess { navigateRoute(SettingsRoute.GoStartScreen) }.onFailure { error ->
+				.onSuccess { sendEvent(SettingsRoute.GoStartScreen) }
+				.onFailure { error ->
 					error.serviceCast { msg, _, isForceLogout ->
-						if (isForceLogout) navigateRoute(SettingsRoute.ForceLogout)
-						_state.update { it.copy(errorText = msg) }
+						if (isForceLogout) sendEvent(SettingsRoute.ForceLogout)
+						updateInfo { copy(errorText = msg) }
 					}
 				}
-			_state.update { it.copy(isLoading = false) }
+			updateInfo { copy(isLoading = false) }
 		}
 	}
 	
@@ -106,11 +103,7 @@ class SettingsViewModel(
 			kotlin.runCatching { getUserSubscriptionUseCase.getUserSubscription() }
 				.onSuccess {
 					val response = getUserSubscriptionUseCase.getUserSubscription()
-					_state.update {
-						it.copy(
-							data = it.data.copy(subscriptionData = response)
-						)
-					}
+					updateInfo { copy(data = data.copy(subscriptionData = response)) }
 				}.onFailure {
 				
 				}
@@ -119,14 +112,14 @@ class SettingsViewModel(
 	
 	
 	private fun goBack(screenAlert: ScreenAlert? = null) {
-		when (_state.value.settingsType) {
-			SettingsType.MAIN -> navigateRoute(SettingsRoute.GoBack)
+		when (getState().settingsType) {
+			SettingsType.MAIN -> sendEvent(SettingsRoute.GoBack)
 			SettingsType.CREATE_PASSWORD -> {
-				_state.value = _state.value.copy(settingsType = SettingsType.CHANGE_PASSWORD)
+				updateInfo { copy(settingsType = SettingsType.CHANGE_PASSWORD) }
 			}
-			else -> _state.value = SettingsState()
+			else -> updateInfo { SettingsState() }
 		}
-		_state.update { it.copy(screenAlert = screenAlert) }
+		updateInfo { copy(screenAlert = screenAlert) }
 	}
 	
 	private fun changeSection(section: SettingsType) {
@@ -135,9 +128,9 @@ class SettingsViewModel(
 				viewModelScope.launch {
 					getLocalCurrentUserUseCase().settings.let { settings ->
 						Timber.i("getLocalCurrentUserUseCase ${getLocalCurrentUserUseCase.invoke()}")
-						_state.update {
-							it.copy(
-								settingsType = section, data = it.data.copy(
+						updateInfo {
+							copy(
+								settingsType = section, data = data.copy(
 									alertsSectionData = SettingsAlertsSectionData(
 										isSMS = settings.smsNotifications,
 										isEmail = settings.emailNotification
@@ -151,9 +144,9 @@ class SettingsViewModel(
 			
 			SettingsType.CONTACT_SUPPORT -> {
 				getLocalCurrentUserUseCase().let { user ->
-					_state.update {
-						it.copy(
-							settingsType = section, data = it.data.copy(
+					updateInfo {
+						copy(
+							settingsType = section, data = data.copy(
 								contactSupportSectionData = ContactSupportSectionData(
 									replyEmail = if (user.sessionUser.authType == AuthType.email) user.sessionUser.email else "",
 									canChangeEmail = user.sessionUser.canChangeEmail
@@ -164,43 +157,42 @@ class SettingsViewModel(
 				}
 			}
 			SettingsType.CHANGE_PASSWORD -> {
-				_state.update {
-					it.copy(
+				updateInfo {
+					copy(
 						settingsType = section,
 						data = SettingsModel(changePasswordSectionData = ChangePasswordSectionData())
 					)
 				}
 			}
-			SettingsType.TERMS_AND_POLICY -> navigateRoute(SettingsRoute.GoTerms)
-			else -> _state.update { it.copy(settingsType = section) }
+			SettingsType.TERMS_AND_POLICY -> sendEvent(SettingsRoute.GoTerms)
+			else -> updateInfo { copy(settingsType = section) }
 		}
 	}
 	
 	private fun notificationChanged(status: Boolean, notifyType: SettingsNotificationType) {
-		Timber.d("updateSettingsModel ${_state.value}")
-		_state.update { it.copy(isLoading = true) }
+		updateInfo { copy(isLoading = true) }
 		viewModelScope.launch {
 			kotlin.runCatching { toggleSettingsUseCase(type = notifyType.domain, isOn = status) }
 				.onSuccess {
-					_state.update {
-						it.copy(
-							data = _state.value.data.copy(
+					updateInfo {
+						copy(
+							data = data.copy(
 								alertsSectionData = when (notifyType) {
-									SettingsNotificationType.SMS -> _state.value.data.alertsSectionData.copy(
+									SettingsNotificationType.SMS -> data.alertsSectionData.copy(
 										isSMS = status
 									)
-									else -> _state.value.data.alertsSectionData.copy(isEmail = status)
+									else -> data.alertsSectionData.copy(isEmail = status)
 								}
 							)
 						)
 					}
 				}.onFailure { error ->
 					error.serviceCast { msg, _, isForceLogout ->
-						if (isForceLogout) navigateRoute(SettingsRoute.ForceLogout)
-						_state.update { it.copy(errorText = msg) }
+						if (isForceLogout) sendEvent(SettingsRoute.ForceLogout)
+						updateInfo { copy(errorText = msg) }
 					}
 				}
-			_state.update { it.copy(isLoading = false) }
+			updateInfo { copy(isLoading = false) }
 		}
 	}
 	
@@ -209,10 +201,10 @@ class SettingsViewModel(
 		issueDescription: String,
 		replyEmail: String,
 	) {
-		_state.update {
-			it.copy(
-				data = _state.value.data.copy(
-					contactSupportSectionData = _state.value.data.contactSupportSectionData.copy(
+		updateInfo {
+			copy(
+				data = data.copy(
+					contactSupportSectionData = data.contactSupportSectionData.copy(
 						issueTheme = issueTheme,
 						issueDescription = issueDescription,
 						replyEmail = replyEmail
@@ -220,13 +212,13 @@ class SettingsViewModel(
 				)
 			)
 		}
-		Timber.i("setContactSupportInfo ${_state.value.data}  issueTheme $issueTheme")
+		Timber.i("setContactSupportInfo ${getState().data}  issueTheme $issueTheme")
 	}
 	
 	
 	private fun contactSupport() {
-		_state.update { it.copy(isLoading = true) }
-		_state.value.data.contactSupportSectionData.let {
+		updateInfo { copy(isLoading = true) }
+		getState().data.contactSupportSectionData.let {
 			viewModelScope.launch {
 				kotlin.runCatching {
 					contactSupportUseCase(
@@ -235,20 +227,20 @@ class SettingsViewModel(
 						email = it.replyEmail,
 					)
 				}.onSuccess { goBack(ScreenAlert.ReportSentAlert) }.onFailure { error ->
-						error.serviceCast { msg, _, isForceLogout ->
-							if (isForceLogout) navigateRoute(SettingsRoute.ForceLogout)
-							_state.update { it.copy(errorText = msg) }
-						}
+					error.serviceCast { msg, _, isForceLogout ->
+						if (isForceLogout) sendEvent(SettingsRoute.ForceLogout)
+						updateInfo { copy(errorText = msg) }
 					}
-				_state.update { it.copy(isLoading = false) }
+					}
+				updateInfo { copy(isLoading = false) }
 			}
 		}
 	}
 	
 	private fun enteredCurrentPassword(password: String) {
-		_state.update {
-			it.copy(
-				data = _state.value.data.copy(
+		updateInfo {
+			copy(
+				data = data.copy(
 					changePasswordSectionData = ChangePasswordSectionData(
 						currentPassword = password, hasError = false
 					)
@@ -258,18 +250,18 @@ class SettingsViewModel(
 	}
 	
 	private fun checkCurrentPassword() {
-		_state.value.data.changePasswordSectionData?.let { data ->
+		getState().data.changePasswordSectionData?.let { data ->
 			viewModelScope.launch {
-				_state.update { it.copy(isLoading = true) }
+				updateInfo { copy(isLoading = true) }
 				kotlin.runCatching { checkCurrentPasswordUseCase(data.currentPassword) }
 					.onSuccess { isCorrect ->
 						Timber.d("checkCurrentPassword $isCorrect")
-						if (isCorrect) _state.update { it.copy(settingsType = SettingsType.CREATE_PASSWORD) }
+						if (isCorrect) updateInfo { copy(settingsType = SettingsType.CREATE_PASSWORD) }
 						else {
-							_state.update {
-								it.copy(
-									data = _state.value.data.copy(
-										changePasswordSectionData = _state.value.data.changePasswordSectionData?.copy(
+							updateInfo {
+								copy(
+									data = this.data.copy(
+										changePasswordSectionData = this.data.changePasswordSectionData?.copy(
 											hasError = true
 										)
 									)
@@ -278,10 +270,10 @@ class SettingsViewModel(
 						}
 					}.onFailure { error ->
 						error.serviceCast { msg, _, _ ->
-							_state.update { it.copy(errorText = msg) }
+							updateInfo { copy(errorText = msg) }
 						}
 					}
-				_state.update { it.copy(isLoading = false) }
+				updateInfo { copy(isLoading = false) }
 				
 			}
 		}
@@ -290,7 +282,7 @@ class SettingsViewModel(
 	private fun passwordEntered(
 		type: PasswordInputDataType, meetCriteria: Boolean, password: String
 	) {
-		var passwordData = _state.value.data.createPasswordSectionData
+		var passwordData = getState().data.createPasswordSectionData
 		when (type) {
 			PasswordInputDataType.PASSWORD -> passwordData =
 				passwordData.copy(password = password, meetCriteria = meetCriteria)
@@ -298,28 +290,28 @@ class SettingsViewModel(
 				passwordData.copy(confirmPassword = password)
 			else -> {}
 		}
-		_state.update { it.copy(data = _state.value.data.copy(createPasswordSectionData = passwordData)) }
-		Timber.d("passwordEntered ${_state.value.data}")
+		updateInfo { copy(data = data.copy(createPasswordSectionData = passwordData)) }
+		Timber.d("passwordEntered ${getState().data}")
 	}
 	
 	
 	private fun savePassword() {
-		_state.value.data.changePasswordSectionData?.currentPassword?.let { currentPassword ->
+		getState().data.changePasswordSectionData?.currentPassword?.let { currentPassword ->
 			viewModelScope.launch {
-				_state.update { it.copy(isLoading = true) }
+				updateInfo { copy(isLoading = true) }
 				kotlin.runCatching {
 					changePasswordUseCase(
 						currentPassword = currentPassword,
-						newPassword = _state.value.data.createPasswordSectionData.password,
+						newPassword = getState().data.createPasswordSectionData.password,
 					)
 				}.onSuccess {
-						_state.value = SettingsState(screenAlert = ScreenAlert.PasswordChangedAlert)
-					}.onFailure { error ->
-						error.serviceCast { msg, _, isForceLogout ->
-							_state.update { it.copy(errorText = msg) }
-						}
+					updateInfo { SettingsState(screenAlert = ScreenAlert.PasswordChangedAlert) }
+				}.onFailure { error ->
+					error.serviceCast { msg, _, _ ->
+						updateInfo { copy(errorText = msg) }
 					}
-				_state.update { it.copy(isLoading = false) }
+				}
+				updateInfo { copy(isLoading = false) }
 			}
 		}
 	}
