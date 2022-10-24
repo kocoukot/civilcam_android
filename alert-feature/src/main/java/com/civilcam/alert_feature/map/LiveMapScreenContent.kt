@@ -1,5 +1,7 @@
 package com.civilcam.alert_feature.map
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -7,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,6 +36,28 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
+
+    val permissionRequest = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = {
+            viewModel.setInputActions(
+                LiveMapActions.SelectLocationPermission(
+                    it.values.contains(
+                        true
+                    )
+                )
+            )
+        }
+    )
+
+    LaunchedEffect(key1 = true) {
+        permissionRequest.launch(
+            arrayOf(
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            )
+        )
+    }
 
     val liveHeight by animateDpAsState(
         targetValue = when (state.emergencyScreen) {
@@ -113,6 +138,14 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                     alertScreenState = state.emergencyScreen,
                     guardianInformation = state.onGuardUserInformation,
                     userAlertLocationData = state.currentUserLocationData,
+                    detectLocation = {
+                        permissionRequest.launch(
+                            arrayOf(
+                                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                            )
+                        )
+                    },
                     onActionClick = viewModel::setInputActions
                 )
             }

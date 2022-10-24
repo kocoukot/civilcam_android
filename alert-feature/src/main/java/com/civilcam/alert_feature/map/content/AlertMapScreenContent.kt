@@ -41,7 +41,8 @@ fun AlertMapScreenContent(
     alertScreenState: EmergencyScreen,
     guardianInformation: OnGuardUserData? = null,
     userAlertLocationData: UserAlertLocationData? = null,
-    onActionClick: (LiveMapActions) -> Unit
+    onActionClick: (LiveMapActions) -> Unit,
+    detectLocation: () -> Unit
 ) {
 
 
@@ -120,7 +121,7 @@ fun AlertMapScreenContent(
             LocationDetectButton(
                 isAllowed = isLocationAllowed,
                 onDetectLocation = {
-                    onActionClick.invoke(LiveMapActions.ClickDetectLocation)
+                    detectLocation.invoke()
                     userAlertLocationData?.userLocation?.let { location ->
                         scope.launch {
                             cameraPositionState

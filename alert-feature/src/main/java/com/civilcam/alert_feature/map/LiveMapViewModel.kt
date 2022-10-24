@@ -74,12 +74,8 @@ class LiveMapViewModel(
             is LiveMapActions.ClickResolveAlertAnswer -> resolverAlertAnswered(action.answer)
             LiveMapActions.ClickCallPolice -> callPolice()
             is LiveMapActions.ClickScreenChange -> screenChange(action.screenState)
-            LiveMapActions.ClickDetectLocation -> checkPermission()
+            is LiveMapActions.SelectLocationPermission -> isLocationAllowed(action.isAllowed)
         }
-    }
-
-    private fun checkPermission() {
-        navigateRoute(LiveMapRoute.CheckPermission)
     }
 
     private fun screenChange(newScreenState: EmergencyScreen) {
@@ -107,7 +103,8 @@ class LiveMapViewModel(
         }
     }
 
-    fun isLocationAllowed(isAllowed: Boolean) {
+    private fun isLocationAllowed(isAllowed: Boolean) {
+        if (isAllowed) fetchUserLocation()
         _state.update { it.copy(isLocationAllowed = isAllowed) }
     }
 
@@ -131,6 +128,7 @@ class LiveMapViewModel(
     }
 
     override fun clearErrorText() {
+        _state.update { it.copy(errorText = "") }
 
     }
 
