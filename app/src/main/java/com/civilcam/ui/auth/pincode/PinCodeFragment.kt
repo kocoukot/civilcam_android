@@ -14,6 +14,7 @@ import com.civilcam.R
 import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.ext_features.*
 import com.civilcam.ext_features.live_data.observeNonNull
+import com.civilcam.ui.auth.pincode.model.PinCodeActions
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.auth.pincode.model.PinCodeRoute
 import com.civilcam.ui.network.main.NetworkMainFragment
@@ -112,17 +113,17 @@ class PinCodeFragment : Fragment() {
 	
 	override fun onStart() {
 		super.onStart()
-		showKeyboard()
+		viewModel.setInputActions(PinCodeActions.ShowKeyboard(true))
 	}
 	
 	override fun onPause() {
 		super.onPause()
-		hideKeyboard()
+		viewModel.setInputActions(PinCodeActions.ShowKeyboard(false))
 	}
 	
 	override fun onStop() {
 		super.onStop()
-		hideKeyboard()
+		viewModel.setInputActions(PinCodeActions.ShowKeyboard(false))
 	}
 	
 	companion object {
