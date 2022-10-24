@@ -15,6 +15,4 @@ sealed class AlertListActions : ComposeFragmentActions {
     object ClearErrorText : AlertListActions()
     object StopRefresh : AlertListActions()
     data class SetErrorText(val error: String) : AlertListActions()
-
-
 }
