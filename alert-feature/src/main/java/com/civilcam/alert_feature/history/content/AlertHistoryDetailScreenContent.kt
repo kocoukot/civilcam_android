@@ -15,6 +15,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -107,7 +108,10 @@ fun AlertHistoryDetailScreenContent(
                 needDivider = true,
                 isClickable = false,
                 trailingIcon = {
-                    DetailInformationText(alertDateFormat(alertDetail.alertModel.alertDate))
+                    DetailInformationText(
+                        modifier = Modifier.padding(end = 16.dp),
+                        alertDateFormat(alertDetail.alertModel.alertDate)
+                    )
                 }) {}
 
             InformationRow(
@@ -116,7 +120,10 @@ fun AlertHistoryDetailScreenContent(
                 needDivider = true,
                 isClickable = false,
                 trailingIcon = {
-                    DetailInformationText(alertDetail.alertModel.alertLocation)
+                    DetailInformationText(
+                        modifier = Modifier.padding(start = 64.dp, end = 16.dp),
+                        alertDetail.alertModel.alertLocation
+                    )
                 }) {}
 
             Row(
@@ -173,12 +180,14 @@ fun AlertHistoryDetailScreenContent(
 
 @Composable
 private fun DetailInformationText(
+    modifier: Modifier = Modifier,
     text: String
 ) {
     Text(
         text = text,
         style = CCTheme.typography.common_text_small_regular,
         color = CCTheme.colors.grayOne,
-        modifier = Modifier.padding(end = 16.dp)
+        modifier = modifier,
+        textAlign = TextAlign.End
     )
 }

@@ -73,9 +73,10 @@ fun InformationBoxContent(
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = CCTheme.colors.black),
-                enabled = !text.contains("+")
+//                enabled = !text.contains("+")
             ) {
-                if (!text.contains("+")) onButtonClick?.invoke()
+//                if (!text.contains("+"))
+                onButtonClick?.invoke()
             },
         contentAlignment = Alignment.Center
     ) {

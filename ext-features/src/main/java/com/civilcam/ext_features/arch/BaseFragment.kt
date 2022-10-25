@@ -11,15 +11,16 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.civilcam.ext_features.compose.ComposeFragmentRoute
 import com.civilcam.ext_features.ext.navigateToStart
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-abstract class BaseFragment<Steps, VM : BaseViewModel<Steps>> : Fragment() {
+abstract class BaseFragment<VM : BaseViewModel> : Fragment() {
     protected abstract val screenContent: @Composable ((VM) -> Unit)
     protected abstract val viewModel: VM
 
-    protected open fun observeData(composeRoute: ((Steps) -> Unit)? = null) {
+    protected open fun observeData(composeRoute: ((ComposeFragmentRoute) -> Unit)? = null) {
         viewModel.observeSteps().onEach { route ->
             when (route) {
                 is ComposeRouteFinishApp -> requireActivity().finish()

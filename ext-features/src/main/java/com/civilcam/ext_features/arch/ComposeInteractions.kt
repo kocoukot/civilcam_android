@@ -34,6 +34,10 @@ interface ComposeRouteFinishApp
 
 interface ComposeRoutePermission
 
+interface ComposeRouteCallNumber {
+    val phoneNumber: String
+}
+
 
 interface ComposeState
 

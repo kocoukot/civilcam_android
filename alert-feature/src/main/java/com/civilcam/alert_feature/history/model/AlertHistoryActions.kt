@@ -13,6 +13,4 @@ sealed class AlertHistoryActions : ComposeFragmentActions {
     object StopRefresh : AlertHistoryActions()
 
     object ClearErrorText : AlertHistoryActions()
-
-    data class SetErrorText(val error: String) : AlertHistoryActions()
 }
