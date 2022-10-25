@@ -5,10 +5,9 @@ import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.core.view.WindowCompat
 import com.civilcam.ext_features.arch.BaseFragment
-import com.civilcam.langselect.model.LangSelectRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class LanguageSelectFragment : BaseFragment<LangSelectRoute, LanguageSelectViewModel>() {
+class LanguageSelectFragment : BaseFragment<LanguageSelectViewModel>() {
     override val viewModel: LanguageSelectViewModel by viewModel()
     override val screenContent: @Composable (LanguageSelectViewModel) -> Unit =
         { LanguageSelectScreenContent(viewModel) }

@@ -15,30 +15,33 @@ import com.civilcam.domainLayer.model.alerts.AlertType
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.GetAlertDetailUseCase
 import com.civilcam.ext_features.KoinInjector
-import com.civilcam.ext_features.compose.ComposeViewModel
+import com.civilcam.ext_features.arch.BaseViewModel
+import com.civilcam.ext_features.compose.ComposeFragmentActions
+import com.civilcam.ext_features.ext.phoneNumberFormat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.update
 import org.koin.core.parameter.parametersOf
 
 class AlertsHistoryViewModel(
     injector: KoinInjector,
     private val getAlertDetailUseCase: GetAlertDetailUseCase
-) : ComposeViewModel<AlertHistoryState, AlertHistoryRoute, AlertHistoryActions>(),
-    KoinInjector by injector {
+) : BaseViewModel.Base<AlertHistoryState>(
+    mState = MutableStateFlow(AlertHistoryState())
+), KoinInjector by injector {
 
-    override var _state: MutableStateFlow<AlertHistoryState> = MutableStateFlow(AlertHistoryState())
     var searchList = loadAlertHistoryList()
 
-    override fun setInputActions(action: AlertHistoryActions) {
+    override fun setInputActions(action: ComposeFragmentActions) {
         when (action) {
             AlertHistoryActions.ClickGoBack -> goBack()
             is AlertHistoryActions.ClickGoAlertDetails -> goAlertDetails(action.alertId)
             is AlertHistoryActions.ClickAlertTypeChange -> changeAlertType(action.alertType)
-            AlertHistoryActions.CLickCallUser -> {}
-            AlertHistoryActions.CLickUploadVideo -> {}
-            is AlertHistoryActions.SetErrorText -> TODO()
+            AlertHistoryActions.CLickCallUser -> getState()
+                .alertDetailModel?.alertModel?.userInfo?.personPhone?.let { phoneNumber ->
+                    sendRoute(AlertHistoryRoute.CallUser(phoneNumber.phoneNumberFormat()))
+                }
+            AlertHistoryActions.CLickUploadVideo -> {} //todo
             AlertHistoryActions.StopRefresh -> stopRefresh()
             AlertHistoryActions.ClearErrorText -> clearErrorText()
         }
@@ -46,57 +49,59 @@ class AlertsHistoryViewModel(
 
 
     private fun goBack() {
-        when (_state.value.alertHistoryScreen) {
-            AlertHistoryScreen.HISTORY_LIST -> navigateRoute(AlertHistoryRoute.GoBack)
+        when (getState().alertHistoryScreen) {
+            AlertHistoryScreen.HISTORY_LIST -> sendRoute(AlertHistoryRoute.GoBack)
             AlertHistoryScreen.HISTORY_DETAIL -> {
-                _state.update { it.copy(alertHistoryScreen = AlertHistoryScreen.HISTORY_LIST) }
+                updateInfo { copy(alertHistoryScreen = AlertHistoryScreen.HISTORY_LIST) }
             }
         }
     }
 
     private fun goAlertDetails(alertId: Int) {
-        _state.update { it.copy(isLoading = true) }
+        updateInfo { copy(isLoading = true) }
         networkRequest(
             action = { getAlertDetailUseCase(alertId) },
             onSuccess = { detail ->
-                _state.update {
-                    it.copy(
+                updateInfo {
+                    copy(
                         alertHistoryScreen = AlertHistoryScreen.HISTORY_DETAIL,
                         alertDetailModel = detail
                     )
                 }
             },
             onFailure = { error ->
-                error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
+                error.serviceCast { msg, _, _ -> updateInfo { copy(errorText = msg) } }
             },
             onComplete = {
-                _state.update { it.copy(isLoading = false) }
+                updateInfo { copy(isLoading = false) }
             },
         )
     }
 
     private fun changeAlertType(alertType: AlertType) {
         searchList = emptyFlow()
-        _state.update { it.copy(alertType = alertType) }
+        updateInfo { copy(alertType = alertType) }
         searchList = loadAlertHistoryList()
-        _state.update { it.copy(refreshList = Unit) }
+        updateInfo { copy(refreshList = Unit) }
     }
 
     private fun loadAlertHistoryList(): Flow<PagingData<AlertModel>> {
         return Pager(
             config = PagingConfig(pageSize = 40, initialLoadSize = 20, prefetchDistance = 6),
             pagingSourceFactory = {
-                koin.get<AlertHistoryListDataSource> { parametersOf(_state.value.alertType.domain) }
+                koin.get<AlertHistoryListDataSource> { parametersOf(getState().alertType.domain) }
             }
         ).flow
             .cachedIn(viewModelScope)
     }
 
     override fun clearErrorText() {
-        _state.update { it.copy(errorText = "") }
+        updateInfo { copy(errorText = "") }
     }
 
     private fun stopRefresh() {
-        _state.update { it.copy(refreshList = null) }
+        updateInfo { copy(refreshList = null) }
     }
+
+
 }

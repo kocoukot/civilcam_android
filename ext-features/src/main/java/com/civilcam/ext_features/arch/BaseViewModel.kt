@@ -2,24 +2,27 @@ package com.civilcam.ext_features.arch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.civilcam.ext_features.compose.ComposeFragmentActions
+import com.civilcam.ext_features.compose.ComposeFragmentRoute
+import com.civilcam.ext_features.compose.ComposeFragmentState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-interface BaseViewModel<Route> : SendEvent<Route>, ObserveSteps<Route> {
+interface BaseViewModel : RouteCommunication {
 
 
-    open class Base<State, Action, Route>(
-        private val mSteps: Channel<Route> = Channel(),
+    abstract class Base<State : ComposeFragmentState>(
+        private val mSteps: Channel<ComposeFragmentRoute> = Channel(),
         private val mState: MutableStateFlow<State>,
-    ) : ViewModel(), BaseViewModel<Route>, StateCommunication<State>, ReceiveEvent<Action> {
+    ) : ViewModel(), BaseViewModel, StateCommunication<State> {
 
         override val state = mState.asStateFlow()
-        override fun observeSteps(): Flow<Route> = mSteps.receiveAsFlow()
+        override fun observeSteps(): Flow<ComposeFragmentRoute> = mSteps.receiveAsFlow()
 
-        override fun sendEvent(event: Route) {
+        override fun sendRoute(event: ComposeFragmentRoute) {
             viewModelScope.launch { mSteps.send(event) }
         }
 
@@ -29,7 +32,7 @@ interface BaseViewModel<Route> : SendEvent<Route>, ObserveSteps<Route> {
             }
         }
 
-        override fun setInputActions(action: Action) {}
+        abstract fun setInputActions(action: ComposeFragmentActions)
 
         protected open fun clearErrorText() {}
 
@@ -57,14 +60,8 @@ interface BaseViewModel<Route> : SendEvent<Route>, ObserveSteps<Route> {
 
 }
 
-interface ObserveSteps<T> {
-    fun observeSteps(): Flow<T>
-}
+interface RouteCommunication {
+    fun observeSteps(): Flow<ComposeFragmentRoute>
 
-interface SendEvent<R> {
-    fun sendEvent(event: R)
-}
-
-interface ReceiveEvent<A> {
-    fun setInputActions(action: A)
+    fun sendRoute(event: ComposeFragmentRoute)
 }

@@ -10,6 +10,7 @@ import com.civilcam.domainLayer.usecase.subscriptions.GetUserSubscriptionUseCase
 import com.civilcam.domainLayer.usecase.user.*
 import com.civilcam.ext_features.alert.ScreenAlert
 import com.civilcam.ext_features.arch.BaseViewModel
+import com.civilcam.ext_features.compose.ComposeFragmentActions
 import com.civilcam.settings_feature.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -25,7 +26,7 @@ class SettingsViewModel(
 	private val contactSupportUseCase: ContactSupportUseCase,
 	private val toggleSettingsUseCase: ToggleSettingsUseCase,
 	private val getUserSubscriptionUseCase: GetUserSubscriptionUseCase
-) : BaseViewModel.Base<SettingsState, SettingsActions, SettingsRoute>(
+) : BaseViewModel.Base<SettingsState>(
 	mState = MutableStateFlow(SettingsState())
 ) {
 
@@ -36,7 +37,7 @@ class SettingsViewModel(
 		}
 	}
 
-	override fun setInputActions(action: SettingsActions) {
+	override fun setInputActions(action: ComposeFragmentActions) {
 		when (action) {
 			SettingsActions.ClickGoBack -> goBack()
 			is SettingsActions.ClickSection -> changeSection(action.section)
@@ -59,7 +60,7 @@ class SettingsViewModel(
 			)
 			SettingsActions.SaveNewPassword -> savePassword()
 			SettingsActions.ClickGoSubscription -> fetchSubscriptionPlan()
-			SettingsActions.GoSubscriptionManage -> sendEvent(SettingsRoute.GoSubManage)
+			SettingsActions.GoSubscriptionManage -> sendRoute(SettingsRoute.GoSubManage)
 			SettingsActions.ClearErrorText -> clearErrorText()
 			SettingsActions.ClickCloseScreenAlert -> closeScreenAlert()
 		}
@@ -87,10 +88,10 @@ class SettingsViewModel(
 		updateInfo { copy(isLoading = true) }
 		viewModelScope.launch {
 			kotlin.runCatching { if (isLogOut) logoutUseCase() else deleteAccountUseCase() }
-				.onSuccess { sendEvent(SettingsRoute.GoStartScreen) }
+				.onSuccess { sendRoute(SettingsRoute.GoStartScreen) }
 				.onFailure { error ->
 					error.serviceCast { msg, _, isForceLogout ->
-						if (isForceLogout) sendEvent(SettingsRoute.ForceLogout)
+						if (isForceLogout) sendRoute(SettingsRoute.ForceLogout)
 						updateInfo { copy(errorText = msg) }
 					}
 				}
@@ -113,7 +114,7 @@ class SettingsViewModel(
 	
 	private fun goBack(screenAlert: ScreenAlert? = null) {
 		when (getState().settingsType) {
-			SettingsType.MAIN -> sendEvent(SettingsRoute.GoBack)
+			SettingsType.MAIN -> sendRoute(SettingsRoute.GoBack)
 			SettingsType.CREATE_PASSWORD -> {
 				updateInfo { copy(settingsType = SettingsType.CHANGE_PASSWORD) }
 			}
@@ -164,7 +165,7 @@ class SettingsViewModel(
 					)
 				}
 			}
-			SettingsType.TERMS_AND_POLICY -> sendEvent(SettingsRoute.GoTerms)
+			SettingsType.TERMS_AND_POLICY -> sendRoute(SettingsRoute.GoTerms)
 			else -> updateInfo { copy(settingsType = section) }
 		}
 	}
@@ -188,7 +189,7 @@ class SettingsViewModel(
 					}
 				}.onFailure { error ->
 					error.serviceCast { msg, _, isForceLogout ->
-						if (isForceLogout) sendEvent(SettingsRoute.ForceLogout)
+						if (isForceLogout) sendRoute(SettingsRoute.ForceLogout)
 						updateInfo { copy(errorText = msg) }
 					}
 				}
@@ -228,7 +229,7 @@ class SettingsViewModel(
 					)
 				}.onSuccess { goBack(ScreenAlert.ReportSentAlert) }.onFailure { error ->
 					error.serviceCast { msg, _, isForceLogout ->
-						if (isForceLogout) sendEvent(SettingsRoute.ForceLogout)
+						if (isForceLogout) sendRoute(SettingsRoute.ForceLogout)
 						updateInfo { copy(errorText = msg) }
 					}
 					}

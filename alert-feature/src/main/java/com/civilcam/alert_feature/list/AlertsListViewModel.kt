@@ -15,6 +15,7 @@ import com.civilcam.domainLayer.usecase.alerts.ResolveAlertUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.ext_features.KoinInjector
 import com.civilcam.ext_features.arch.BaseViewModel
+import com.civilcam.ext_features.compose.ComposeFragmentActions
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -22,7 +23,7 @@ class AlertsListViewModel(
     injector: KoinInjector,
     private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
     private val resolveAlertUseCase: ResolveAlertUseCase,
-) : BaseViewModel.Base<AlertListState, AlertListActions, AlertListRoute>(
+) : BaseViewModel.Base<AlertListState>(
     mState = MutableStateFlow(AlertListState())
 ), KoinInjector by injector {
 
@@ -34,9 +35,9 @@ class AlertsListViewModel(
         }
     }
 
-    override fun setInputActions(action: AlertListActions) {
+    override fun setInputActions(action: ComposeFragmentActions) {
         when (action) {
-            AlertListActions.ClickGoMyProfile -> sendEvent(AlertListRoute.GoMyProfile)
+            AlertListActions.ClickGoMyProfile -> sendRoute(AlertListRoute.GoMyProfile)
             AlertListActions.ClickGoSettings -> goSettings()
             is AlertListActions.ClickResolveAlert -> showResolveAlert(action.alertId)
             is AlertListActions.ClickGoUserProfile -> goUserProfile(action.alertId)
@@ -49,15 +50,15 @@ class AlertsListViewModel(
     }
 
     private fun goSettings() {
-        sendEvent(AlertListRoute.GoSettings)
+        sendRoute(AlertListRoute.GoSettings)
     }
 
     private fun goAlertHistory() {
-        sendEvent(AlertListRoute.GoAlertHistory)
+        sendRoute(AlertListRoute.GoAlertHistory)
     }
 
     private fun goUserProfile(userId: Int) {
-        sendEvent(AlertListRoute.GoUserAlert(userId))
+        sendRoute(AlertListRoute.GoUserAlert(userId))
     }
 
     private fun showResolveAlert(userId: Int) {

@@ -1,3 +1,7 @@
 package com.civilcam.ext_features.compose
 
+interface ComposeFragmentActions
+
+interface ComposeFragmentState
+
 interface ComposeFragmentRoute
