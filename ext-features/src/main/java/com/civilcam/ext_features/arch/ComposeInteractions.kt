@@ -6,10 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface ComposeActions
 
-
-interface ComposeRoute {
-    object OnBack : ComposeRoute
-}
+interface ComposeRoute
 
 interface ComposeRouteNavigation {
     interface DeepLinkNavigate : ComposeRouteNavigation {
@@ -32,14 +29,9 @@ interface ComposeRouteNavigation {
 
 interface ComposeRouteFinishApp
 
-interface ComposeRoutePermission
-
 interface ComposeRouteCallNumber {
     val phoneNumber: String
 }
-
-
-interface ComposeState
 
 interface StateCommunication<T> {
     val state: StateFlow<T>
