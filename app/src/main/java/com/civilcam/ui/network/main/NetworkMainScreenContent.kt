@@ -118,8 +118,7 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                     }
                 }
                 AnimatedVisibility(
-                    visible = state.value.screenState == NetworkScreen.MAIN ||
-                            state.value.screenState == NetworkScreen.SEARCH_GUARD ||
+                    visible = state.value.screenState == NetworkScreen.SEARCH_GUARD ||
                             state.value.screenState == NetworkScreen.ADD_GUARD
                 ) {
                     Column {
