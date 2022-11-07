@@ -9,6 +9,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LanguageSelectFragment : BaseFragment<LanguageSelectViewModel>() {
     override val viewModel: LanguageSelectViewModel by viewModel()
+
     override val screenContent: @Composable (LanguageSelectViewModel) -> Unit =
         { LanguageSelectScreenContent(viewModel) }
 

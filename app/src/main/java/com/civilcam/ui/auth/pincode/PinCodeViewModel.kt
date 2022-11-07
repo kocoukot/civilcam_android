@@ -219,7 +219,7 @@ class PinCodeViewModel(
 	}
 	
 	private fun showKeyboard(show: Boolean) {
-		_state.value = _state.value.copy(showKeyboard = show)
+//		_state.value = _state.value.copy(showKeyboard = show)
 	}
 	private fun goNewPinCodeConfirm() {
 		_state.value = _state.value.copy(screenState = PinCodeFlow.CONFIRM_NEW_PIN_CODE, isDataLoaded = true)
