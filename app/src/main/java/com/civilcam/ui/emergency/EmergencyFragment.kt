@@ -26,7 +26,6 @@ import com.civilcam.ui.emergency.model.EmergencyRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-
 class EmergencyFragment : Fragment() {
 	private val viewModel: EmergencyViewModel by viewModel()
 
@@ -46,9 +45,7 @@ class EmergencyFragment : Fragment() {
 		mSocket.setSocket()
 		mSocket.establishConnection()
 	}
-
-
-
+	
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,

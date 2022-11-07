@@ -7,16 +7,16 @@ import com.civilcam.domainLayer.model.alerts.AlertModel
 import com.civilcam.domainLayer.model.alerts.AlertStatus
 
 class AlertListMapper(
-    private val personMapper: PersonMapper = PersonMapper()
+	private val personMapper: PersonMapper = PersonMapper()
 ) : Mapper<AlertPersonResponse, AlertModel>(
-    fromData = {
-        AlertModel(
-            alertId = it.id,
-            alertDate = it.date,
-            alertLocation = it.location,
-            alertUrl = it.url,
-            alertStatus = AlertStatus.byDomain(it.status),
-            userInfo = personMapper.mapData(it.person),
-        )
-    }
+	fromData = {
+		AlertModel(
+			alertId = it.id,
+			alertDate = it.date,
+			alertLocation = it.location,
+			alertUrl = it.url,
+			alertStatus = AlertStatus.byDomain(it.status),
+			userInfo = it.person?.let { value -> personMapper.mapData(value) },
+		)
+	}
 )

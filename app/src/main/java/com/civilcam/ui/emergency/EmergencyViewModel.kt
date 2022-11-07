@@ -39,11 +39,11 @@ class EmergencyViewModel(
 	private var geocoder = Geocoder(instance, Locale.US)
 	private val _effect = MutableSharedFlow<CameraEffect>()
 	val effect: SharedFlow<CameraEffect> = _effect
-
+	
 	private val mSocket = SocketHandler.getSocket()
-
+	
 	private val gson = Gson()
-
+	
 	init {
 		getLocalCurrentUserUseCase().let { user ->
 			if (user.sessionUser.userState == UserState.alert) {
@@ -51,18 +51,17 @@ class EmergencyViewModel(
 			}
 		}
 	}
-
+	
 	fun loadAvatar() {
 		getLocalCurrentUserUseCase().let { user ->
 			_state.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
 		}
 	}
-
+	
 	fun fetchUserLocation() {
 		if (!state.value.isLocationAllowed) {
 			viewModelScope.launch {
-				fetchUserLocationUseCase()
-					.onEach { location ->
+				fetchUserLocationUseCase().onEach { location ->
 						if (_state.value.emergencyButton == EmergencyButton.InDangerButton) {
 							emitMsg(
 								JsonDataParser(
@@ -74,32 +73,27 @@ class EmergencyViewModel(
 						_state.update {
 							it.copy(
 								emergencyUserModel = it.emergencyUserModel?.copy(
-									userLocation = location.first,
-									userBearing = location.second
+									userLocation = location.first, userBearing = location.second
 								) ?: EmergencyUserModel(
 									userLocation = location.first,
 									userBearing = location.second,
-								),
-								isLoading = false
+								), isLoading = false
 							)
 						}
-
+						
 						Timber.i("fetchUserLocationUseCase latlng ${location.first} bearing ${location.second}")
 						val addressList: MutableList<Address>
 						var address = ""
 						try {
 							addressList = geocoder.getFromLocation(
-								location.first.latitude,
-								location.first.longitude,
-								1
-                            )?.toMutableList() ?: mutableListOf()
-							if (addressList.isNotEmpty())
-								address =
-									addressList[0].getAddressLine(0).takeIf { it.isNotEmpty() }
-										?: address
-
+								location.first.latitude, location.first.longitude, 1
+							)?.toMutableList() ?: mutableListOf()
+							if (addressList.isNotEmpty()) address =
+								addressList[0].getAddressLine(0).takeIf { it.isNotEmpty() }
+									?: address
+							
 						} catch (e: Exception) {
-
+						
 						}
 						_state.update {
 							it.copy(
@@ -107,12 +101,11 @@ class EmergencyViewModel(
 							)
 						}
 						Timber.i("fetchUserLocationUseCase $address")
-					}
-					.launchIn(viewModelScope)
+					}.launchIn(viewModelScope)
 			}
 		}
 	}
-
+	
 	override fun setInputActions(action: EmergencyActions) {
 		when (action) {
 			EmergencyActions.DoubleClickSos -> doubleClickSos()
@@ -129,12 +122,12 @@ class EmergencyViewModel(
 			EmergencyActions.ClickCloseAlert -> clearErrorText()
 		}
 	}
-
+	
 	private fun checkPermission() {
 		Timber.i("checkPermission ")
 		navigateRoute(EmergencyRoute.CheckPermission(false))
 	}
-
+	
 	private fun screenChange(newScreenState: EmergencyScreen) {
 		Timber.d("changeMode $newScreenState")
 		_state.update { it.copy(emergencyScreen = newScreenState) }
@@ -142,38 +135,39 @@ class EmergencyViewModel(
 			EmergencyScreen.NORMAL, EmergencyScreen.COUPLED -> {
 				navigateRoute(EmergencyRoute.HideSystemUI)
 			}
-			EmergencyScreen.MAP_EXTENDED, EmergencyScreen.LIVE_EXTENDED ->
-				navigateRoute(EmergencyRoute.ShowSystemUI)
+			EmergencyScreen.MAP_EXTENDED, EmergencyScreen.LIVE_EXTENDED -> navigateRoute(
+				EmergencyRoute.ShowSystemUI
+			)
 		}
 	}
-
+	
 	private fun goBack() {
 		navigateRoute(EmergencyRoute.HideSystemUI)
 		_state.update { it.copy(emergencyScreen = EmergencyScreen.COUPLED) }
 	}
-
+	
 	private fun goSettings() {
 		navigateRoute(EmergencyRoute.GoSettings)
 	}
-
+	
 	private fun goUserProfile() {
 		navigateRoute(EmergencyRoute.GoUserProfile)
 	}
-
+	
 	private fun goPinCode() {
 		navigateRoute(EmergencyRoute.GoPinCode)
 	}
-
+	
 	private fun doubleClickSos() {
 		navigateRoute(EmergencyRoute.CheckPermission(true))
 	}
-
+	
 	private fun oneClickSafe() {
 		if (state.value.emergencyButton == EmergencyButton.InDangerButton) {
 			goPinCode()
 		}
 	}
-
+	
 	fun setSosState() {
 		navigateRoute(EmergencyRoute.IsNavBarVisible(false))
 		_state.update {
@@ -186,7 +180,7 @@ class EmergencyViewModel(
 			fetchUserLocation()
 		}, 400)
 	}
-
+	
 	fun launchSos() {
 		if (state.value.emergencyButton == EmergencyButton.InSafeButton) {
 			_state.value.emergencyUserModel?.let { user ->
@@ -197,12 +191,13 @@ class EmergencyViewModel(
 							coords = user.userLocation,
 						)
 					},
-					onSuccess = {
+					onSuccess = { response ->
 						navigateRoute(EmergencyRoute.IsNavBarVisible(false))
 						_state.update {
 							it.copy(
 								emergencyScreen = EmergencyScreen.COUPLED,
 								emergencyButton = EmergencyButton.InDangerButton,
+								alertInfo = response
 							)
 						}
 					},
@@ -216,7 +211,7 @@ class EmergencyViewModel(
 			}
 		}
 	}
-
+	
 	private fun disableSosStatus() {
 		navigateRoute(EmergencyRoute.HideSystemUI)
 		_state.update {
@@ -227,17 +222,17 @@ class EmergencyViewModel(
 			)
 		}
 	}
-
+	
 	fun isLocationAllowed(isAllowed: Boolean) {
 		_state.update { it.copy(isLocationAllowed = isAllowed) }
 	}
-
+	
 	private fun onStopTapped() {
 		viewModelScope.launch {
 			_effect.emit(CameraEffect.StopRecording)
 		}
 	}
-
+	
 	private fun onRecordStarted() {
 		viewModelScope.launch {
 			try {
@@ -248,7 +243,7 @@ class EmergencyViewModel(
 			}
 		}
 	}
-
+	
 	private fun onCameraInitialized(cameraLensInfo: HashMap<Int, CameraInfo>) {
 		if (cameraLensInfo.isNotEmpty()) {
 			val defaultLens = if (cameraLensInfo[CameraSelector.LENS_FACING_BACK] != null) {
@@ -260,13 +255,12 @@ class EmergencyViewModel(
 			}
 			_state.update {
 				it.copy(
-					lens = it.lens ?: defaultLens,
-					lensInfo = cameraLensInfo
+					lens = it.lens ?: defaultLens, lensInfo = cameraLensInfo
 				)
 			}
 		}
 	}
-
+	
 	private fun onCameraFlip() {
 		val lens = if (_state.value.lens == CameraSelector.LENS_FACING_FRONT) {
 			CameraSelector.LENS_FACING_BACK
@@ -275,7 +269,7 @@ class EmergencyViewModel(
 		}
 		_state.update { it.copy(lens = lens) }
 	}
-
+	
 	private fun onFlashTapped() {
 		_state.update {
 			when (_state.value.torchState) {
@@ -284,9 +278,9 @@ class EmergencyViewModel(
 				else -> it.copy(torchState = TorchState.OFF)
 			}
 		}
-    }
-
-    fun screenStateCheck() {
+	}
+	
+	fun screenStateCheck() {
 		when (_state.value.emergencyScreen) {
 			EmergencyScreen.NORMAL, EmergencyScreen.COUPLED -> navigateRoute(EmergencyRoute.HideSystemUI)
 			EmergencyScreen.MAP_EXTENDED, EmergencyScreen.LIVE_EXTENDED -> navigateRoute(
@@ -299,15 +293,15 @@ class EmergencyViewModel(
 			)
 		}, 100)
 	}
-
+	
 	override fun clearErrorText() {
 		_state.update { it.copy(errorText = "") }
 	}
-
+	
 	fun addListeners() {
 		mSocket.on(SocketMapEvents.INCOME_GUARDIANS.msgType) { args ->
 			Timber.d("socket args $args")
-
+			
 			val data: JSONArray = args[0] as JSONArray
 			Timber.d("socket data $data")
 			val mutableGuardList = mutableListOf<AlertGuardianModel>()
@@ -315,8 +309,7 @@ class EmergencyViewModel(
 				val item = (data[i] as JSONObject).toString()
 				mutableGuardList.add(
 					gson.fromJson(
-						item,
-						AlertGuardianModel::class.java
+						item, AlertGuardianModel::class.java
 					)
 				)
 				Timber.d("socket casted ${data[i] as JSONObject}")
@@ -324,7 +317,7 @@ class EmergencyViewModel(
 			_state.update { it.copy(emergencyUserModel = it.emergencyUserModel?.copy(guardsLocation = mutableGuardList.toList())) }
 		}
 	}
-
+	
 	private fun emitMsg(msg: JsonDataParser) {
 		if (mSocket.connected()) {
 			Timber.d("socket out ${JSONObject(gson.toJson(msg))}")
@@ -334,7 +327,7 @@ class EmergencyViewModel(
 			mSocket.connect()
 		}
 	}
-
+	
 	fun removeSocketListeners() {
 		mSocket.off(SocketMapEvents.INCOME_GUARDIANS.msgType)
 	}

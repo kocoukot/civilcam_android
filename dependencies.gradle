@@ -179,6 +179,10 @@ ext {
         implementation("androidx.camera:camera-video:${camerax_version}")
         implementation("androidx.camera:camera-view:${camerax_version}")
     }
+
+    mux = dependencyGroup {
+        implementation 'com.github.pedroSG94.rtmp-rtsp-stream-client-java:rtplibrary:2.2.1'
+    }
 }
 //
 //dependencies {

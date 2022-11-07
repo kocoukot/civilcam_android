@@ -8,5 +8,5 @@ data class AlertModel(
     val alertLocation: String,
     val alertUrl: String?,
     var alertStatus: AlertStatus,
-    val userInfo: PersonModel,
+    val userInfo: PersonModel?,
 )
