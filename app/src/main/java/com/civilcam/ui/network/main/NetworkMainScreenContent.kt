@@ -47,10 +47,11 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
 
     }
 
-    val searchList = if (state.value.screenState == NetworkScreen.SEARCH_GUARD)
-        viewModel.searchList.collectAsLazyPagingItems()
-    else
-        null
+    val searchList =
+        if (state.value.screenState == NetworkScreen.ADD_GUARD || state.value.screenState == NetworkScreen.SEARCH_GUARD)
+            viewModel.searchList.collectAsLazyPagingItems()
+        else
+            null
 
 //    Timber.tag("networkSearch").i("lazyList ${list?.itemCount}")
     if (state.value.refreshList == Unit) {
