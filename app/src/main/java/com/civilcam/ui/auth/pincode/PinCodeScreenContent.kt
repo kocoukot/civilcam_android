@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -30,19 +31,17 @@ import com.civilcam.ui.common.compose.inputs.PinCodeInputField
 fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 
 	val state = viewModel.state.collectAsState()
-	
+
 	val keyboardController = LocalSoftwareKeyboardController.current
-	
+
 	BackHandler {
 		viewModel.setInputActions(
 			PinCodeActions.GoBack
 		)
 	}
-	
-	if (state.value.showKeyboard) {
+
+	LaunchedEffect(key1 = true) {
 		keyboardController?.show()
-	} else {
-		keyboardController?.hide()
 	}
 
 	if (state.value.isLoading) DialogLoadingContent()
