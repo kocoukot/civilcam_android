@@ -168,7 +168,7 @@ class EmergencyViewModel(
 		}
 	}
 	
-	fun setSosState() {
+	private fun setSosState() {
 		navigateRoute(EmergencyRoute.IsNavBarVisible(false))
 		_state.update {
 			it.copy(
@@ -200,6 +200,8 @@ class EmergencyViewModel(
 								alertInfo = response
 							)
 						}
+						response.alertModel.alertKey?.let { EmergencyRoute.GoLive(it) }
+							?.let { navigateRoute(it) }
 					},
 					onFailure = { error ->
 						error.serviceCast { msg, _, _ ->
@@ -214,6 +216,7 @@ class EmergencyViewModel(
 	
 	private fun disableSosStatus() {
 		navigateRoute(EmergencyRoute.HideSystemUI)
+		navigateRoute(EmergencyRoute.StopStream)
 		_state.update {
 			it.copy(
 				emergencyScreen = EmergencyScreen.NORMAL,
@@ -225,23 +228,6 @@ class EmergencyViewModel(
 	
 	fun isLocationAllowed(isAllowed: Boolean) {
 		_state.update { it.copy(isLocationAllowed = isAllowed) }
-	}
-	
-	private fun onStopTapped() {
-		viewModelScope.launch {
-			_effect.emit(CameraEffect.StopRecording)
-		}
-	}
-	
-	private fun onRecordStarted() {
-		viewModelScope.launch {
-			try {
-				//val filePath = fileManager.createFile("videos", "mp4")
-				_effect.emit(CameraEffect.RecordVideo("filePath"))
-			} catch (exception: IllegalArgumentException) {
-				Timber.e(exception)
-			}
-		}
 	}
 	
 	private fun onCameraInitialized(cameraLensInfo: HashMap<Int, CameraInfo>) {
@@ -262,6 +248,7 @@ class EmergencyViewModel(
 	}
 	
 	private fun onCameraFlip() {
+		navigateRoute(EmergencyRoute.ChangeCamera)
 		val lens = if (_state.value.lens == CameraSelector.LENS_FACING_FRONT) {
 			CameraSelector.LENS_FACING_BACK
 		} else {

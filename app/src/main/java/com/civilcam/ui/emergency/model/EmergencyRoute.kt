@@ -6,9 +6,12 @@ sealed class EmergencyRoute : ComposeFragmentRoute {
     object GoUserProfile : EmergencyRoute()
     object GoSettings : EmergencyRoute()
     object GoPinCode : EmergencyRoute()
-    data class CheckPermission(val isSos: Boolean) : EmergencyRoute()
+    object ChangeCamera : EmergencyRoute()
     object ShowSystemUI : EmergencyRoute()
     object HideSystemUI : EmergencyRoute()
+    object StopStream : EmergencyRoute()
+    data class CheckPermission(val isSos: Boolean) : EmergencyRoute()
+    data class GoLive(val streamKey: String) : EmergencyRoute()
     data class IsNavBarVisible(val isVisible: Boolean) : EmergencyRoute()
 
 }

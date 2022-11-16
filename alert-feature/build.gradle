@@ -54,6 +54,7 @@ dependencies {
     nav()
     androidX()
     socket()
+    exoPlayer()
     implementation 'androidx.core:core-animation:1.0.0-alpha02'
     implementation 'androidx.camera:camera-view:1.0.0-alpha26'
     implementation 'androidx.camera:camera-core:1.0.0'

@@ -3,6 +3,7 @@ package com.civilcam.data.mapper.alerts
 import com.civilcam.data.mapper.Mapper
 import com.civilcam.data.mapper.guardian.PersonMapper
 import com.civilcam.data.network.model.response.alert.AlertPersonResponse
+import com.civilcam.domainLayer.model.StreamStatusType
 import com.civilcam.domainLayer.model.alerts.AlertModel
 import com.civilcam.domainLayer.model.alerts.AlertStatus
 
@@ -17,6 +18,8 @@ class AlertListMapper(
 			alertUrl = it.url,
 			alertStatus = AlertStatus.byDomain(it.status),
 			userInfo = it.person?.let { value -> personMapper.mapData(value) },
+			alertKey = it.key,
+			streamStatus = StreamStatusType.byDomain(it.streamStatus)
 		)
 	}
 )
