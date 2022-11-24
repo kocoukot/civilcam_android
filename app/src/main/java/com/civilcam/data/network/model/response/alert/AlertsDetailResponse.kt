@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName
 class AlertsDetailResponse(
     @SerializedName("alert") val alert: AlertPersonResponse,
     @SerializedName("resolvers") val resolvers: List<ResolverResponse>,
+    @SerializedName("downloads") val downloads: List<AlertInfoResponse.DownloadResponse>
 ) {
     class ResolverResponse(
         @SerializedName("id") val id: Int,

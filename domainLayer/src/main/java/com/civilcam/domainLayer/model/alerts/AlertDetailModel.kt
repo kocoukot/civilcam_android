@@ -4,8 +4,8 @@ import com.civilcam.domainLayer.model.guard.PersonModel
 
 data class AlertDetailModel(
     val alertModel: AlertModel,
-    val alertResolvers: List<AlertResolver>
-
+    val alertResolvers: List<AlertResolver>,
+    val alertDownloads: List<AlertInfoModel.DownloadInfo>
 ) {
     class AlertResolver(
         val resolveId: Int,

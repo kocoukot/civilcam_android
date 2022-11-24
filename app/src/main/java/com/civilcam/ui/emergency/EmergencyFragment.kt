@@ -1,18 +1,19 @@
 package com.civilcam.ui.emergency
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.civilcam.BuildConfig
 import com.civilcam.R
-import com.civilcam.databinding.FragmentEmergencyBinding
+import com.civilcam.databinding.FragmentLiveBinding
+import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.alert.AlertDialogTypes
 import com.civilcam.ext_features.ext.hideSystemUI
 import com.civilcam.ext_features.ext.showSystemUI
@@ -27,13 +28,14 @@ import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.common.alert.DialogAlertFragment
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyRoute
-import com.pedro.encoder.input.video.CameraHelper
 import com.pedro.rtplibrary.rtmp.RtmpCamera1
 import net.ossrs.rtmp.ConnectCheckerRtmp
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class EmergencyFragment : Fragment(R.layout.fragment_emergency), ConnectCheckerRtmp {
+
+class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp, SurfaceHolder.Callback {
+	private val binding by viewBinding(FragmentLiveBinding::bind)
 	private val viewModel: EmergencyViewModel by viewModel()
 	
 	private val permissionsDelegate = registerForPermissionsResult(
@@ -44,7 +46,6 @@ class EmergencyFragment : Fragment(R.layout.fragment_emergency), ConnectCheckerR
 	) { onPermissionsGranted(it) }
 	
 	private var pendingAction: (() -> Unit)? = null
-	
 	private val mSocket = SocketHandler
 	private var rtmpCamera: RtmpCamera1? = null
 	
@@ -52,13 +53,35 @@ class EmergencyFragment : Fragment(R.layout.fragment_emergency), ConnectCheckerR
 		super.onCreate(savedInstanceState)
 		mSocket.setSocket()
 		mSocket.establishConnection()
-		rtmpCamera = RtmpCamera1(requireContext(), this)
-		rtmpCamera?.setReTries(1000)
 	}
 	
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-	): View {
+	): View? {
+		return inflater.inflate(R.layout.fragment_live, container, false)
+	}
+	
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		
+		with(binding) {
+			composable.setContent {
+				LiveScreenContent(viewModel = viewModel)
+			}
+			liveSurfaceView.videoScale.setOnClickListener {
+				viewModel.setInputActions(EmergencyActions.ChangeLiveScreen)
+			}
+			liveSurfaceView.cameraTorch.setOnClickListener {
+				viewModel.setInputActions(EmergencyActions.ControlTorch)
+			}
+			liveSurfaceView.cameraSwitch.setOnClickListener {
+				switchCamera()
+			}
+			liveSurfaceView.backButton.setOnClickListener {
+				viewModel.setInputActions(EmergencyActions.GoBack)
+			}
+		}
+		
 		setFragmentResultListener(PinCodeFragment.RESULT_BACK_STACK) { _, _ ->
 			viewModel.setInputActions(EmergencyActions.DisableSos)
 		}
@@ -71,30 +94,76 @@ class EmergencyFragment : Fragment(R.layout.fragment_emergency), ConnectCheckerR
 					R.id.pinCodeFragment,
 					PinCodeFragment.createArgs(PinCodeFlow.SOS_PIN_CODE, false)
 				)
-				EmergencyRoute.HideSystemUI -> {
-					rtmpCamera?.stopStream()
-					hideSystemUI()
-				}
+				EmergencyRoute.HideSystemUI -> hideSystemUI()
 				EmergencyRoute.ShowSystemUI -> showSystemUI()
-				EmergencyRoute.StopStream -> stopStream()
-				EmergencyRoute.ChangeCamera -> rtmpCamera?.switchCamera()
 				is EmergencyRoute.CheckPermission -> checkPermissions(route.isSos)
 				is EmergencyRoute.IsNavBarVisible -> (activity as MainActivity).showBottomNavBar(
 					route.isVisible
 				)
 				is EmergencyRoute.GoLive -> goLive(route.streamKey)
-				
+				else -> {}
 			}
 		}
-		return ComposeView(requireContext()).apply {
-			setViewCompositionStrategy(
-				ViewCompositionStrategy.DisposeOnLifecycleDestroyed(
-					viewLifecycleOwner
-				)
-			)
-			
-			setContent {
-				EmergencyScreenContent(viewModel)
+		
+		observeLiveData()
+	}
+	
+	private fun observeLiveData() = with(viewModel) {
+		screenState.observeNonNull(viewLifecycleOwner) {
+			changeScreenState(it)
+		}
+		currentTime.observeNonNull(viewLifecycleOwner) {
+			binding.liveSurfaceView.videoCurrentTime.text = it
+		}
+		stopStream.observeNonNull(viewLifecycleOwner) {
+			stopStream()
+		}
+		controlTorch.observeNonNull(viewLifecycleOwner) {
+			controlTorch(it)
+		}
+	}
+	
+	@SuppressLint("UseCompatLoadingForDrawables")
+	private fun changeScreenState(screen: EmergencyScreen) {
+		Timber.i("Live screen state: $screen")
+		with(binding) {
+			when (screen) {
+				EmergencyScreen.NORMAL -> {
+					livePreview.isVisible = false
+					mapPreview.isVisible = true
+					
+					liveSurfaceView.liveExtendedBlock.isVisible = false
+				}
+				EmergencyScreen.COUPLED -> {
+					livePreview.isVisible = true
+					mapPreview.isVisible = true
+					
+					liveSurfaceView.liveExtendedBlock.isVisible = false
+					liveSurfaceView.liveToolbar.isVisible = false
+					liveSurfaceView.videoScale.setImageDrawable(
+						resources.getDrawable(
+							R.drawable.ic_live_extend,
+							null
+						)
+					)
+				}
+				EmergencyScreen.LIVE_EXTENDED -> {
+					livePreview.isVisible = true
+					mapPreview.isVisible = false
+					
+					liveSurfaceView.liveExtendedBlock.isVisible = true
+					liveSurfaceView.liveToolbar.isVisible = true
+					liveSurfaceView.videoScale.setImageDrawable(
+						resources.getDrawable(
+							R.drawable.ic_live_minimize,
+							null
+						)
+					)
+				}
+				EmergencyScreen.MAP_EXTENDED -> {
+					livePreview.isVisible = false
+					mapPreview.isVisible = true
+				}
 			}
 		}
 	}
@@ -126,18 +195,48 @@ class EmergencyFragment : Fragment(R.layout.fragment_emergency), ConnectCheckerR
 		}
 	}
 	
+	private fun switchCamera() {
+		rtmpCamera?.switchCamera()
+	}
+	
 	private fun stopStream() {
 		rtmpCamera?.stopStream()
 	}
 	
 	private fun goLive(streamKey: String) {
-		rtmpCamera?.prepareVideo(
-			640, 360, 30, 1000 * 1024, 2, CameraHelper.getCameraOrientation(requireContext())
-		)
-		rtmpCamera?.prepareAudio(
-			128 * 1024, 48000, true
-		)
-		rtmpCamera?.startStream(BuildConfig.RTMP_ENDPOINT + streamKey)
+		rtmpCamera = RtmpCamera1(binding.liveSurfaceView.surfaceView, this)
+		rtmpCamera?.setReTries(1000)
+		binding.liveSurfaceView.surfaceView.apply {
+			holder.addCallback(this@EmergencyFragment)
+		}
+		rtmpCamera?.apply {
+			prepareVideo()
+			prepareAudio(
+				128 * 1024,
+				48000,
+				true
+			)
+			startStream(BuildConfig.RTMP_ENDPOINT + streamKey)
+		}
+	}
+	
+	@SuppressLint("UseCompatLoadingForDrawables")
+	private fun controlTorch(isEnable: Boolean) {
+		if (isEnable) {
+			binding.liveSurfaceView.cameraTorch.setImageDrawable(
+				resources.getDrawable(
+					R.drawable.ic_flash_on,
+					null
+				)
+			)
+		} else {
+			binding.liveSurfaceView.cameraTorch.setImageDrawable(
+				resources.getDrawable(
+					R.drawable.ic_flash_off,
+					null
+				)
+			)
+		}
 	}
 	
 	override fun onStart() {
@@ -160,7 +259,9 @@ class EmergencyFragment : Fragment(R.layout.fragment_emergency), ConnectCheckerR
 	
 	override fun onConnectionSuccessRtmp() {}
 	
-	override fun onConnectionFailedRtmp(reason: String) {}
+	override fun onConnectionFailedRtmp(reason: String) {
+		rtmpCamera?.reTry(5000, reason)
+	}
 	
 	override fun onNewBitrateRtmp(bitrate: Long) {}
 	
@@ -169,4 +270,11 @@ class EmergencyFragment : Fragment(R.layout.fragment_emergency), ConnectCheckerR
 	override fun onAuthErrorRtmp() {}
 	
 	override fun onAuthSuccessRtmp() {}
+	
+	override fun surfaceCreated(p0: SurfaceHolder) {}
+	
+	override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {}
+	
+	override fun surfaceDestroyed(p0: SurfaceHolder) {}
+	
 }

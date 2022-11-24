@@ -7,17 +7,17 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.media3.common.C
-import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
-import androidx.media3.datasource.DefaultHttpDataSource
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.source.ProgressiveMediaSource
-import androidx.media3.ui.AspectRatioFrameLayout
-import androidx.media3.ui.PlayerView
+import com.google.android.exoplayer2.C
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.source.hls.HlsMediaSource
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
+import com.google.android.exoplayer2.ui.PlayerView
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 
 @Composable
-private fun AlertVideoContent(
+fun AlertVideoContent(
 	url: String
 ) {
 	val exoPlayer = rememberExoPlayerWithLifecycle(url)
@@ -48,9 +48,9 @@ fun rememberExoPlayerWithLifecycle(
 			repeatMode = Player.REPEAT_MODE_ONE
 			setHandleAudioBecomingNoisy(true)
 			val defaultDataSource = DefaultHttpDataSource.Factory()
-			val source = ProgressiveMediaSource.Factory(defaultDataSource)
-				.createMediaSource(MediaItem.fromUri(reelUrl))
-			setMediaSource(source)
+			val hlsMediaSource: HlsMediaSource =
+				HlsMediaSource.Factory(defaultDataSource).createMediaSource(MediaItem.fromUri(reelUrl))
+			setMediaSource(hlsMediaSource)
 			prepare()
 		}
 	}

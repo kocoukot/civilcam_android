@@ -37,6 +37,7 @@ fun AlertStreamScreenContent(
     modifier: Modifier = Modifier,
     alertScreenState: EmergencyScreen,
     cameraState: Int,
+    liveUrl: String?,
     onActionClick: (LiveMapActions) -> Unit
 ) {
 
@@ -47,10 +48,15 @@ fun AlertStreamScreenContent(
 
 
     Box(modifier = modifier.background(CCTheme.colors.cianColor)) {
-        EmergencyCameraPreview(
-            cameraState = cameraState,
-            modifier = Modifier.fillMaxSize()
-        )
+//        EmergencyCameraPreview(
+//            cameraState = cameraState,
+//            modifier = Modifier.fillMaxSize()
+//        )
+        liveUrl?.let {
+            AlertVideoContent(
+                url = it
+            )
+        }
         LiveVideoBottomBar(
             modifier = Modifier
                 .fillMaxWidth()
