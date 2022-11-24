@@ -15,8 +15,8 @@ import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.compose.elements.LocationData
 import com.civilcam.ext_features.compose.elements.LocationDetectButton
 import com.civilcam.ext_features.ext.loadIcon
-import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyUserModel
+import com.civilcam.ui.emergency.model.EmergencyActions
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun EmergencyMapContent(
+fun LiveMapContent(
     modifier: Modifier = Modifier,
     avatarUrl: String?,
     screenState: EmergencyScreen,
@@ -104,8 +104,8 @@ fun EmergencyMapContent(
                 }
             }
         }
-
-        EmergencyTopBarContent(
+    
+        LiveTopBarContent(
             modifier = tobBarModifier,
             avatarUrl = avatarUrl,
             locationDetectContent = {

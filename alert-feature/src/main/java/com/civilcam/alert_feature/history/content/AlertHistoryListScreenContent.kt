@@ -45,14 +45,14 @@ fun AlertHistoryListScreenContent(
                 item?.let {
                     InformationRow(
                         title = if (alertType == AlertType.RECEIVED)
-                            item.userInfo.personFullName
+                            item.userInfo?.personFullName ?: ""
                         else
                             stringResource(id = R.string.alerts_history_sent_alert),
                         text = alertDateFormat(item.alertDate),
                         needDivider = index < alertListData.itemCount - 1,
                         leadingIcon = {
                             if (alertType == AlertType.RECEIVED)
-                                item.userInfo.personAvatar?.imageUrl?.let { avatar ->
+                                item.userInfo?.personAvatar?.imageUrl?.let { avatar ->
                                     CircleUserAvatar(avatar, 36)
                                 }
                         },

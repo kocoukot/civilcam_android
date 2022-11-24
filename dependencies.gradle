@@ -179,6 +179,22 @@ ext {
         implementation("androidx.camera:camera-video:${camerax_version}")
         implementation("androidx.camera:camera-view:${camerax_version}")
     }
+
+    mux = dependencyGroup {
+        implementation 'com.github.pedroSG94.rtmp-rtsp-stream-client-java:rtplibrary:1.9.5'
+    }
+
+    exoPlayer = dependencyGroup {
+//        implementation 'androidx.media3:media3-exoplayer:1.0.0-alpha03'
+//        implementation "androidx.media3:media3-ui:1.0.0-alpha03"
+
+        implementation 'com.google.android.exoplayer:exoplayer:2.18.2'
+        implementation 'com.google.android.exoplayer:exoplayer-core:2.18.2'
+        implementation 'com.google.android.exoplayer:exoplayer-dash:2.18.2'
+        implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.2'
+        implementation 'com.google.android.exoplayer:exoplayer-hls:2.18.2'
+
+    }
 }
 //
 //dependencies {

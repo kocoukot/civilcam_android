@@ -54,6 +54,7 @@ dependencies {
     nav()
     androidX()
     socket()
+    exoPlayer()
     implementation 'androidx.core:core-animation:1.0.0-alpha02'
     implementation 'androidx.camera:camera-view:1.0.0-alpha26'
     implementation 'androidx.camera:camera-core:1.0.0'
@@ -67,6 +68,7 @@ dependencies {
     //Timber
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.jakewharton.timber:timber:5.0.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-alpha01'
     implementation project(path: ':domainLayer')
     implementation project(path: ':ext-features')
     implementation project(path: ':socket-feature')

@@ -45,7 +45,7 @@ fun AlertHistoryDetailScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(16.dp))
-            alertDetail.alertModel.userInfo.personAvatar?.imageUrl?.let { avatar ->
+            alertDetail.alertModel.userInfo?.personAvatar?.imageUrl?.let { avatar ->
                 CircleUserAvatar(
                     avatar = avatar,
                     avatarSize = 120,
@@ -53,7 +53,7 @@ fun AlertHistoryDetailScreenContent(
             }
 
             Text(
-                text = alertDetail.alertModel.userInfo.personFullName,
+                text = alertDetail.alertModel.userInfo?.personFullName ?: "",
                 style = CCTheme.typography.button_text,
                 color = CCTheme.colors.black,
                 modifier = Modifier.padding(vertical = 16.dp)
@@ -69,7 +69,7 @@ fun AlertHistoryDetailScreenContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (alertType == AlertType.RECEIVED) {
-                    alertDetail.alertModel.userInfo.personPhone?.let {
+                    alertDetail.alertModel.userInfo?.personPhone?.let {
                         InformationBoxContent(
                             text = it.phoneNumberFormat(),
                             modifier = Modifier.weight(1f),

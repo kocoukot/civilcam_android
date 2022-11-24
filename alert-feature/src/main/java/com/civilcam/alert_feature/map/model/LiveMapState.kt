@@ -2,6 +2,7 @@ package com.civilcam.alert_feature.map.model
 
 import androidx.camera.core.CameraSelector
 import com.civilcam.domainLayer.EmergencyScreen
+import com.civilcam.domainLayer.model.alerts.AlertDetailModel
 import com.civilcam.ext_features.compose.ComposeFragmentState
 
 data class LiveMapState(
@@ -14,4 +15,6 @@ data class LiveMapState(
     val onGuardUserInformation: OnGuardUserData? = null,
     val currentUserLocationData: UserAlertLocationData? = null,
     val cameraState: Int = CameraSelector.LENS_FACING_BACK, // todo fix later
+    val liveUrl: String? = null,
+    val alertDetailModel: AlertDetailModel? = null
 ) : ComposeFragmentState

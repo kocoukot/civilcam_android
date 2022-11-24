@@ -1,10 +1,8 @@
 package com.civilcam.ui.emergency.model
 
-import androidx.camera.core.CameraInfo
 import com.civilcam.domainLayer.EmergencyScreen
-import com.civilcam.ext_features.compose.ComposeFragmentActions
 
-sealed class EmergencyActions : ComposeFragmentActions {
+sealed class EmergencyActions {
 	object DoubleClickSos : EmergencyActions()
 	object DisableSos : EmergencyActions()
 	object OneClickSafe : EmergencyActions()
@@ -12,13 +10,11 @@ sealed class EmergencyActions : ComposeFragmentActions {
 	object GoSettings : EmergencyActions()
 	object GoBack : EmergencyActions()
 	object DetectLocation : EmergencyActions()
-	object ControlFlash : EmergencyActions()
-	object ChangeCamera : EmergencyActions()
-
-	data class CameraInitialized(val cameraLensInfo: HashMap<Int, CameraInfo>) :
-		EmergencyActions()
-
-	data class ClickChangeScreen(val screenState: EmergencyScreen) : EmergencyActions()
-
 	object ClickCloseAlert : EmergencyActions()
+	object ChangeLiveScreen : EmergencyActions()
+	object ControlTorch : EmergencyActions()
+	
+	data class ClickChangeScreen(val screenState: EmergencyScreen) : EmergencyActions()
+	data class LiveCurrentTime(val time: String) : EmergencyActions()
+	
 }

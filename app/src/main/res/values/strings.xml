@@ -172,6 +172,8 @@
 
     <string name="location_alert_title">Location permission</string>
     <string name="location_alert_text">The app need your permission to track your location. Please go to settings and allow</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

@@ -128,7 +128,8 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                         .fillMaxWidth(),
                     cameraState = state.cameraState,
                     alertScreenState = state.emergencyScreen,
-                    onActionClick = viewModel::setInputActions
+                    onActionClick = viewModel::setInputActions,
+                    liveUrl = state.alertDetailModel?.alertModel?.alertUrl
                 )
 
                 AlertMapScreenContent(

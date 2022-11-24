@@ -111,11 +111,11 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                 itemsIndexed(alertList, key = { _, item -> item.alertId }) { index, item ->
                     item?.let {
                         InformationRow(
-                            title = item.userInfo.personFullName,
+                            title = item.userInfo?.personFullName ?: "",
                             text = alertDateFormat(item.alertDate),
                             needDivider = index < alertList.itemCount - 1,
                             leadingIcon = {
-                                item.userInfo.personAvatar?.imageUrl?.let { avatar ->
+                                item.userInfo?.personAvatar?.imageUrl?.let { avatar ->
                                     CircleUserAvatar(avatar, 36)
                                 }
                             },
