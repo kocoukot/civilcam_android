@@ -3,13 +3,17 @@ package com.civilcam.ui.emergency
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.postDelayed
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.lifecycleScope
 import com.civilcam.BuildConfig
 import com.civilcam.R
 import com.civilcam.databinding.FragmentLiveBinding
@@ -29,12 +33,15 @@ import com.civilcam.ui.common.alert.DialogAlertFragment
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyRoute
 import com.pedro.rtplibrary.rtmp.RtmpCamera1
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.ossrs.rtmp.ConnectCheckerRtmp
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 
-class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp, SurfaceHolder.Callback {
+class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
+	SurfaceHolder.Callback {
 	private val binding by viewBinding(FragmentLiveBinding::bind)
 	private val viewModel: EmergencyViewModel by viewModel()
 	
@@ -64,6 +71,12 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp, 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		
+		rtmpCamera = RtmpCamera1(binding.liveSurfaceView.surfaceView, this)
+		rtmpCamera?.setReTries(1000)
+		binding.liveSurfaceView.surfaceView.apply {
+			holder.addCallback(this@EmergencyFragment)
+		}
+		
 		with(binding) {
 			composable.setContent {
 				LiveScreenContent(viewModel = viewModel)
@@ -84,6 +97,10 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp, 
 		
 		setFragmentResultListener(PinCodeFragment.RESULT_BACK_STACK) { _, _ ->
 			viewModel.setInputActions(EmergencyActions.DisableSos)
+		}
+		
+		setFragmentResultListener(PinCodeFragment.RESULT_SAVED_NEW_PIN) { _, _ ->
+		
 		}
 		
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
@@ -142,8 +159,7 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp, 
 					liveSurfaceView.liveToolbar.isVisible = false
 					liveSurfaceView.videoScale.setImageDrawable(
 						resources.getDrawable(
-							R.drawable.ic_live_extend,
-							null
+							R.drawable.ic_live_extend, null
 						)
 					)
 				}
@@ -155,8 +171,7 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp, 
 					liveSurfaceView.liveToolbar.isVisible = true
 					liveSurfaceView.videoScale.setImageDrawable(
 						resources.getDrawable(
-							R.drawable.ic_live_minimize,
-							null
+							R.drawable.ic_live_minimize, null
 						)
 					)
 				}
@@ -204,17 +219,10 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp, 
 	}
 	
 	private fun goLive(streamKey: String) {
-		rtmpCamera = RtmpCamera1(binding.liveSurfaceView.surfaceView, this)
-		rtmpCamera?.setReTries(1000)
-		binding.liveSurfaceView.surfaceView.apply {
-			holder.addCallback(this@EmergencyFragment)
-		}
 		rtmpCamera?.apply {
 			prepareVideo()
 			prepareAudio(
-				128 * 1024,
-				48000,
-				true
+				128 * 1024, 48000, true
 			)
 			startStream(BuildConfig.RTMP_ENDPOINT + streamKey)
 		}
@@ -225,15 +233,13 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp, 
 		if (isEnable) {
 			binding.liveSurfaceView.cameraTorch.setImageDrawable(
 				resources.getDrawable(
-					R.drawable.ic_flash_on,
-					null
+					R.drawable.ic_flash_on, null
 				)
 			)
 		} else {
 			binding.liveSurfaceView.cameraTorch.setImageDrawable(
 				resources.getDrawable(
-					R.drawable.ic_flash_off,
-					null
+					R.drawable.ic_flash_off, null
 				)
 			)
 		}
@@ -249,12 +255,18 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp, 
 		super.onStop()
 		showSystemUI()
 		viewModel.removeSocketListeners()
+//		if (rtmpCamera?.isRecording == true) {
+//			rtmpCamera?.pauseRecord()
+//		}
 	}
 	
 	override fun onResume() {
 		super.onResume()
 		viewModel.loadAvatar()
 		viewModel.addListeners()
+//		if (rtmpCamera?.isStreaming == true) {
+//			rtmpCamera?.resumeRecord()
+//		}
 	}
 	
 	override fun onConnectionSuccessRtmp() {}
