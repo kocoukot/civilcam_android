@@ -11,6 +11,7 @@ import com.civilcam.ui.common.NavigationDirection
 import com.civilcam.ui.terms.TermsFragment
 import com.civilcam.ui.verification.VerificationFragment
 import com.google.android.gms.tasks.Task
+import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -86,12 +87,15 @@ fun NavController.navigateByDirection(
 }
 
 suspend fun <T> Task<T>.awaitResult() = suspendCoroutine<T?> { continuation ->
-    if (isComplete) {
-        if (isSuccessful) continuation.resume(this.result)
-        else continuation.resume(null)
-        return@suspendCoroutine
-    }
-    addOnSuccessListener { continuation.resume(this.result) }
-    addOnFailureListener { continuation.resume(null) }
-    addOnCanceledListener { continuation.resume(null) }
+	if (isComplete) {
+		if (isSuccessful) continuation.resume(this.result)
+		else continuation.resume(null)
+		return@suspendCoroutine
+	}
+	addOnSuccessListener { continuation.resume(this.result) }
+	addOnFailureListener {
+		Timber.tag("autocomplete").i("task exception $it ")
+		continuation.resume(null)
+	}
+	addOnCanceledListener { continuation.resume(null) }
 }
