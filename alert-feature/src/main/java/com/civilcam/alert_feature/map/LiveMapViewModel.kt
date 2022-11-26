@@ -1,11 +1,14 @@
 package com.civilcam.alert_feature.map
 
 import androidx.lifecycle.viewModelScope
-import com.civilcam.alert_feature.history.model.AlertHistoryScreen
-import com.civilcam.alert_feature.map.model.*
+import com.civilcam.alert_feature.map.model.LiveMapActions
+import com.civilcam.alert_feature.map.model.LiveMapRoute
+import com.civilcam.alert_feature.map.model.LiveMapState
+import com.civilcam.alert_feature.map.model.UserAlertLocationData
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.model.JsonDataParser
+import com.civilcam.domainLayer.model.OnGuardUserData
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.GetAlertDetailUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetMapAlertUserDataUseCase
@@ -78,9 +81,11 @@ class LiveMapViewModel(
         networkRequest(
             action = { getAlertDetailUseCase(alertId) },
             onSuccess = { detail ->
+                detail
                 _state.update {
                     it.copy(
-                        alertDetailModel = detail
+                        alertDetailModel = detail,
+                        onGuardUserInformation = detail.toOnGuardDetailModel()
                     )
                 }
             },
@@ -172,7 +177,7 @@ class LiveMapViewModel(
             when (person.status) {
                 OnGuardUserData.AlertSocketStatus.active -> _state.update {
                     it.copy(
-                        onGuardUserInformation = person
+                        onGuardUserInformation = person.copy()
                     )
                 }
                 OnGuardUserData.AlertSocketStatus.resolved -> viewModelScope.launch(Dispatchers.Main) {

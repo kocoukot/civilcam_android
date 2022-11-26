@@ -95,7 +95,7 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBarContent(
-                title = stringResource(id = R.string.alert_user_detail_title),
+                title = stringResource(id = state.emergencyScreen.alertTitle),
                 navigationItem = {
                     BackButton {
                         viewModel.setInputActions(LiveMapActions.ClickGoBack)
@@ -126,7 +126,6 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                     modifier = Modifier
                         .height(liveHeight)
                         .fillMaxWidth(),
-                    cameraState = state.cameraState,
                     alertScreenState = state.emergencyScreen,
                     onActionClick = viewModel::setInputActions,
                     liveUrl = state.alertDetailModel?.alertModel?.alertUrl

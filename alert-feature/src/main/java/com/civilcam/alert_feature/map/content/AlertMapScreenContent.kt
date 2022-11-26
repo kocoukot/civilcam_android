@@ -17,9 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.civilcam.alert_feature.R
 import com.civilcam.alert_feature.map.model.LiveMapActions
-import com.civilcam.alert_feature.map.model.OnGuardUserData
 import com.civilcam.alert_feature.map.model.UserAlertLocationData
 import com.civilcam.domainLayer.EmergencyScreen
+import com.civilcam.domainLayer.model.OnGuardUserData
 import com.civilcam.ext_features.compose.elements.IconActionButton
 import com.civilcam.ext_features.compose.elements.LocationData
 import com.civilcam.ext_features.compose.elements.LocationDetectButton
@@ -89,21 +89,24 @@ fun AlertMapScreenContent(
                 )
             }
 
-            guardianInformation?.let {
-                val onGuardUser by remember { derivedStateOf { it } }
-                Marker(
-                    state = MarkerState(
-                        position = LatLng(
-                            onGuardUser.person.latitude,
-                            onGuardUser.person.longitude
-                        )
-                    ),
-                    icon = loadIcon(
-                        LocalContext.current,
-                        onGuardUser.person.avatar.imageUrl,
-                        R.drawable.img_avatar
-                    ),
-                )
+            guardianInformation?.let { onGuardUser ->
+//                val onGuardUser by remember { derivedStateOf { it } }
+                if (onGuardUser.person.latitude != null && onGuardUser.person.longitude != null
+                ) {
+                    Marker(
+                        state = MarkerState(
+                            position = LatLng(
+                                onGuardUser.person.latitude!!,
+                                onGuardUser.person.longitude!!
+                            )
+                        ),
+                        icon = loadIcon(
+                            LocalContext.current,
+                            onGuardUser.person.avatar.imageUrl,
+                            R.drawable.img_avatar
+                        ),
+                    )
+                }
             }
 
         }
