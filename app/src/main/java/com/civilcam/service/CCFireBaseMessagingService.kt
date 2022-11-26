@@ -159,7 +159,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
 
             setAutoCancel(true)
             setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
-            priority = NotificationCompat.PRIORITY_MAX
+            priority = NotificationManager.IMPORTANCE_HIGH
 
 
             notificationBuilder.contentView.apply {
@@ -306,7 +306,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
 
             setAutoCancel(true)
             setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
-            priority = NotificationCompat.PRIORITY_MAX
+            priority = NotificationManager.IMPORTANCE_HIGH
 
 
             notificationBuilder.contentView.apply {

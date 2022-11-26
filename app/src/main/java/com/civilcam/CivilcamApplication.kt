@@ -90,9 +90,7 @@ class CivilcamApplication : Application() {
 
         val channel =
             NotificationChannel(LOCATION_CHANNEL_ID, "Location", NotificationManager.IMPORTANCE_LOW)
-                .apply {
-                    setShowBadge(false)
-                }
+                .apply { setShowBadge(false) }
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
