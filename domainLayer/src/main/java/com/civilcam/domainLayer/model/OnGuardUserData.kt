@@ -1,8 +1,8 @@
-package com.civilcam.alert_feature.map.model
+package com.civilcam.domainLayer.model
 
 import com.civilcam.domainLayer.model.alerts.AlertGuardianModel
 
-class OnGuardUserData(
+data class OnGuardUserData(
     val id: Int,
     val date: String,
     val location: String,

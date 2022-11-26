@@ -15,8 +15,8 @@ import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.compose.elements.LocationData
 import com.civilcam.ext_features.compose.elements.LocationDetectButton
 import com.civilcam.ext_features.ext.loadIcon
-import com.civilcam.ui.emergency.model.EmergencyUserModel
 import com.civilcam.ui.emergency.model.EmergencyActions
+import com.civilcam.ui.emergency.model.EmergencyUserModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -95,11 +95,17 @@ fun LiveMapContent(
                             avatarUrl,
                             R.drawable.img_avatar
                         )
-
-                        Marker(
-                            state = MarkerState(position = LatLng(user.latitude, user.longitude)),
-                            icon = bitmap,
-                        )
+                        if (user.latitude != null && user.longitude != null) {
+                            Marker(
+                                state = MarkerState(
+                                    position = LatLng(
+                                        user.latitude!!,
+                                        user.longitude!!
+                                    )
+                                ),
+                                icon = bitmap,
+                            )
+                        }
                     }
                 }
             }
