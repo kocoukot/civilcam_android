@@ -11,14 +11,14 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.AlertDialogComp
 
 
 class DialogAlertFragment(
     private val dialogTitle: String,
     private val dialogText: String,
-    private val alertType: AlertDialogTypes
+    private val alertType: AlertDialogButtons
 ) :
     DialogFragment() {
     private var onItemSelected: ((Boolean) -> Unit)? = null
@@ -63,7 +63,7 @@ class DialogAlertFragment(
         fun create(
             fragmentManager: FragmentManager,
             text: String,
-            alertType: AlertDialogTypes,
+            alertType: AlertDialogButtons,
             onOptionSelected: ((Boolean) -> Unit)? = null
         ) {
             with(fragmentManager) {
@@ -77,7 +77,7 @@ class DialogAlertFragment(
             fragmentManager: FragmentManager,
             title: String = "",
             text: String,
-            alertType: AlertDialogTypes,
+            alertType: AlertDialogButtons,
             onOptionSelected: ((Boolean) -> Unit)? = null
         ) {
             with(fragmentManager) {

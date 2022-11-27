@@ -11,7 +11,7 @@ import androidx.fragment.app.setFragmentResultListener
 import com.civilcam.BuildConfig
 import com.civilcam.R
 import com.civilcam.common.ext.navigateToRoot
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ext_features.navController
 import com.civilcam.ui.auth.pincode.PinCodeFragment
@@ -129,7 +129,7 @@ class UserProfileFragment : Fragment() {
 		DialogAlertFragment.create(
 			parentFragmentManager,
 			text,
-			AlertDialogTypes.OK
+			AlertDialogButtons.OK
 		)
 	}
 }

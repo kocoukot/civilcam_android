@@ -15,6 +15,7 @@ data class SessionUser(
     val isTermsAndPolicyAccepted: Boolean = false,
     val isUserProfileSetupRequired: Boolean = false,
     val isPinCodeSet: Boolean = false,
+    val isSubscriptionActive: Boolean = false,
     val canChangeEmail: Boolean = false,
     val canChangePassword: Boolean = false,
     val userState: UserState = UserState.safe

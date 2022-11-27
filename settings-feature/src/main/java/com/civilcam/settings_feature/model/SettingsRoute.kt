@@ -1,5 +1,6 @@
 package com.civilcam.settings_feature.model
 
+import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
 import com.civilcam.ext_features.arch.ComposeRouteNavigation
 import com.civilcam.ext_features.compose.ComposeFragmentRoute
 
@@ -14,7 +15,7 @@ sealed class SettingsRoute : ComposeFragmentRoute {
     object GoSubManage : SettingsRoute(), ComposeRouteNavigation.DeepLinkNavigate {
         override val destination: Int =
             com.civilcam.ext_features.R.string.direction_subscriptionFragment
-        override val arguments = "/${true}"
+        override val arguments = "/${UserSubscriptionState.SUB_RESELECT}"
     }
 
     object ForceLogout : SettingsRoute(), ComposeRouteNavigation.NavigateToStart

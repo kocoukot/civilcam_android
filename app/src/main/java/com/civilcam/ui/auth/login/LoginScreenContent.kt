@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.domainLayer.model.profile.PasswordInputDataType
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.auth.create.SocialImage
@@ -38,7 +38,7 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 	if (state.value.alertError.isNotEmpty()) {
 		AlertDialogComp(
 			dialogText = state.value.alertError,
-			alertType = AlertDialogTypes.OK,
+			alertType = AlertDialogButtons.OK,
 			onOptionSelected = { viewModel.setInputActions(LoginActions.ClearErrorText) }
 		)
 	}
@@ -63,10 +63,10 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 		
 		Column(
 			modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxSize()
-                .imePadding()
-                .verticalScroll(rememberScrollState()),
+				.padding(horizontal = 16.dp)
+				.fillMaxSize()
+				.imePadding()
+				.verticalScroll(rememberScrollState()),
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
 			
@@ -135,9 +135,9 @@ fun LoginScreenContent(viewModel: LoginViewModel) {
 			
 			ComposeButton(
 				title = stringResource(id = R.string.log_in),
-                Modifier
-                    .padding(horizontal = 8.dp)
-                    .padding(top = 40.dp),
+				Modifier
+					.padding(horizontal = 8.dp)
+					.padding(top = 40.dp),
 				isActivated = state.value.isFilled,
 				buttonClick = {
 					viewModel.setInputActions(

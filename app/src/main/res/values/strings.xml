@@ -143,6 +143,9 @@
     <string name="subscription_purchase_success_title">Welcome to CivilCam family!</string>
     <string name="subscription_purchase_success_description">Your purchase was successful.</string>
     <string name="subscriptions_change_plan">Change plan</string>
+    <string name="subscriptions_resubscribe_plan">Subscribe!</string>
+
+
     <string name="pin_code_enter_title">Enter pin-code</string>
 
     <string name="notification_request_title">You received a request</string>
@@ -172,8 +175,12 @@
 
     <string name="location_alert_title">Location permission</string>
     <string name="location_alert_text">The app need your permission to track your location. Please go to settings and allow</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="subscription_expired_alert_title">Subscription expired</string>
+    <string name="subscription_expired_alert_text">Your subscription has ended</string>
+
+    <string name="subscription_confirm_alert_title">Confirm purchase</string>
+    <string name="subscription_confirm_alert_text">Pay %s for monthly subscription plan starting %s</string>
 
 
 </resources>

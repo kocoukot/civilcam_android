@@ -11,11 +11,15 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
+import com.civilcam.R
 import com.civilcam.common.ext.navigateByDirection
+import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.databinding.ActivityMainBinding
 import com.civilcam.domainLayer.castSafe
+import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.domainLayer.usecase.user.IsUserLoggedInUseCase
+import com.civilcam.ext_features.DateUtils
 import com.civilcam.ext_features.SupportBottomBar
 import com.civilcam.ext_features.setupWithNavController
 import com.civilcam.langselect.LanguageSelectFragment
@@ -24,6 +28,7 @@ import com.civilcam.service.location.LocationService
 import com.civilcam.service.location.LocationService.Companion.ACTION_START
 import com.civilcam.service.location.LocationService.Companion.ACTION_STOP
 import com.civilcam.ui.common.NavigationDirection
+import com.civilcam.ui.subscription.SubscriptionFragment
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -32,7 +37,11 @@ class MainActivity : AppCompatActivity() {
     private val isUserLoggedInUseCase: IsUserLoggedInUseCase by inject()
     private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase by inject()
 
+    private val currentSessionUser by lazy {
+        getLocalCurrentUserUseCase()
+    }
 
+    //    2022-12-27T10:57:13.000Z  sub date format
     private lateinit var binding: ActivityMainBinding
     private var navHost: NavHostFragment? = null
 
@@ -42,6 +51,26 @@ class MainActivity : AppCompatActivity() {
 
     private val currentVisibleFragment: Fragment?
         get() = navHost?.childFragmentManager?.fragments?.first()
+
+    private val onBackStackChangedListener by lazy {
+        FragmentManager.OnBackStackChangedListener {
+            binding.navBarGroup.isVisible = currentVisibleFragment is SupportBottomBar
+            if (currentVisibleFragment is LanguageSelectFragment) stopLocationService()
+            checkSubscriptionState()
+        }
+    }
+
+    private fun checkSubscriptionState() {
+        if (isUserLoggedInUseCase()) {
+            if (!DateUtils.isSubValid(currentSessionUser.subscription.expiredAt)) {
+                navHost?.navController?.navigateToRoot(
+                    R.id.subscriptionFragment, args = SubscriptionFragment.createArgs(
+                        UserSubscriptionState.SUB_EXPIRED
+                    )
+                )
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +92,7 @@ class MainActivity : AppCompatActivity() {
                 navController = nav.navController
             ) {}
         }
+
         intent?.extras?.getParcelable<NavigationDirection>(EXTRA_DIRECTION)
             ?.let(::navigateByDirection)
             ?: run {
@@ -82,7 +112,11 @@ class MainActivity : AppCompatActivity() {
 //        Logger.getLogger(Manager::class.java.name).level = Level.ALL
         if (isUserLoggedInUseCase()) startLocationService()
         Timber.tag("alert notif ID").i("main activity on create")
+    }
 
+    override fun onStart() {
+        super.onStart()
+        checkSubscriptionState()
     }
 
     fun startLocationService() {
@@ -113,12 +147,6 @@ class MainActivity : AppCompatActivity() {
         navHost?.navController?.navigateByDirection(direction)
     }
 
-    private val onBackStackChangedListener by lazy {
-        FragmentManager.OnBackStackChangedListener {
-            binding.navBarGroup.isVisible = currentVisibleFragment is SupportBottomBar
-            if (currentVisibleFragment is LanguageSelectFragment) stopLocationService()
-        }
-    }
 
     fun showBottomNavBar(isVisible: Boolean) {
         binding.navBarGroup.isVisible = isVisible
