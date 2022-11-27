@@ -1,5 +1,6 @@
 package com.civilcam.common.ext
 
+import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -18,7 +19,8 @@ import kotlin.coroutines.suspendCoroutine
 
 fun NavController.navigateToRoot(
 	@IdRes rootScreen: Int,
-	@IdRes vararg backStack: Int = intArrayOf()
+	@IdRes vararg backStack: Int = intArrayOf(),
+	args: Bundle? = null
 ) {
 	backStack.forEachIndexed { index, screen ->
 		if (index == 0) {
@@ -34,7 +36,7 @@ fun NavController.navigateToRoot(
 		}
 	}
 	navigate(
-		rootScreen, null,
+		rootScreen, args,
 		NavOptions.Builder()
 			.setPopUpTo(backStack.lastOrNull() ?: R.id.nav_graph, false)
 			.build()
