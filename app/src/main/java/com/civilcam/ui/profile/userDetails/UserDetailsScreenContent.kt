@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.domainLayer.model.guard.GuardianStatus
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.AlertDialogComp
 import com.civilcam.ext_features.compose.elements.BackButton
 import com.civilcam.ext_features.compose.elements.DialogLoadingContent
@@ -48,7 +48,7 @@ fun UserDetailsScreenContent(viewModel: UserDetailsViewModel) {
                 stringResource(id = R.string.user_details_alert_remove_guard)
             else
                 stringResource(id = R.string.user_details_alert_stop_guarding),
-            alertType = AlertDialogTypes.CONFIRM_CANCEL,
+            alertType = AlertDialogButtons.CONFIRM_CANCEL,
             onOptionSelected = {
                 if (it) {
                     viewModel.setInputActions(

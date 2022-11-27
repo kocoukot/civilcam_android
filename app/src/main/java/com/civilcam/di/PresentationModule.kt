@@ -86,6 +86,7 @@ val authModule = module {
 			isReselect,
 			get(),
 			get(),
+			get(),
 			get()
 		)
 	}

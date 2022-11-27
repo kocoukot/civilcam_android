@@ -9,8 +9,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.domainLayer.model.VerificationFlow
-import com.civilcam.ext_features.alert.AlertDialogTypes
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.ext.formatToPhoneNumber
 import com.civilcam.ext_features.theme.CCTheme

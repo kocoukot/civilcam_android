@@ -26,7 +26,7 @@ import com.civilcam.alert_feature.map.content.UserInformationContent
 import com.civilcam.alert_feature.map.model.LiveMapActions
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.Constant.ANIMATION_DURATION
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
 
@@ -82,7 +82,7 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
         AlertDialogComp(
             dialogTitle = stringResource(id = com.civilcam.alert_feature.R.string.resolve_alert_title),
             dialogText = stringResource(id = com.civilcam.alert_feature.R.string.resolve_alert_text),
-            alertType = AlertDialogTypes.CANCEL_RESOLVE,
+            alertType = AlertDialogButtons.CANCEL_RESOLVE,
             onOptionSelected = {
                 viewModel.setInputActions(LiveMapActions.ClickResolveAlertAnswer(it))
             })

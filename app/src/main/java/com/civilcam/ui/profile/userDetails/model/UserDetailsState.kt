@@ -2,7 +2,7 @@ package com.civilcam.ui.profile.userDetails.model
 
 import androidx.compose.runtime.Composable
 import com.civilcam.domainLayer.model.guard.PersonModel
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.ComposeFragmentState
 import com.civilcam.ext_features.compose.elements.AlertDialogComp
 
@@ -16,7 +16,7 @@ data class UserDetailsState(
     @Composable
     fun showAlert(alertAction: () -> Unit) = if (errorText.isNotEmpty()) AlertDialogComp(
         dialogText = errorText,
-        alertType = AlertDialogTypes.OK,
+        alertType = AlertDialogButtons.OK,
         onOptionSelected = { alertAction.invoke() }
     ) else null
 }

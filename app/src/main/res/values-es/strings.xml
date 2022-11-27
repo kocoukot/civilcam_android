@@ -173,4 +173,11 @@
 
     <string name="location_alert_title">Location permission</string>
     <string name="location_alert_text">The app need your permission to track your location. Please go to settings and allow</string>
+
+    <string name="subscription_expired_alert_title">Subscription expired</string>
+    <string name="subscription_expired_alert_text">Your subscription has ended</string>
+
+    <string name="subscription_confirm_alert_title">Confirm purchase</string>
+    <string name="subscription_confirm_alert_text">Pay %s for monthly subscription plan starting %s</string>
+
 </resources>

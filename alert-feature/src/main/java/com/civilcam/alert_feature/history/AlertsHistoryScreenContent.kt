@@ -15,7 +15,7 @@ import com.civilcam.alert_feature.history.content.AlertHistoryDetailScreenConten
 import com.civilcam.alert_feature.history.content.AlertHistoryListScreenContent
 import com.civilcam.alert_feature.history.model.AlertHistoryActions
 import com.civilcam.alert_feature.history.model.AlertHistoryScreen
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.AlertDialogComp
 import com.civilcam.ext_features.compose.elements.BackButton
 import com.civilcam.ext_features.compose.elements.DialogLoadingContent
@@ -40,7 +40,7 @@ fun AlertsListScreenContent(viewModel: AlertsHistoryViewModel) {
     if (state.errorText.isNotEmpty()) {
         AlertDialogComp(
             dialogText = state.errorText,
-            alertType = AlertDialogTypes.OK,
+            alertType = AlertDialogButtons.OK,
             onOptionSelected = { viewModel.setInputActions(AlertHistoryActions.ClearErrorText) }
         )
     }

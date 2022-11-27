@@ -18,7 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.auth.pincode.content.PinCodeErrorBlock
@@ -49,7 +49,7 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 	if (state.value.errorText.isNotEmpty()) {
 		AlertDialogComp(
 			dialogText = state.value.errorText,
-			alertType = AlertDialogTypes.OK,
+			alertType = AlertDialogButtons.OK,
 			onOptionSelected = { viewModel.setInputActions(PinCodeActions.ClickCloseAlert) }
 		)
 	}

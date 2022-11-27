@@ -1,6 +1,5 @@
 package com.civilcam.ui.subscription
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -30,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.civilcam.R
 import com.civilcam.domainLayer.model.subscription.SubscriptionsList
 import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogType
 import com.civilcam.ext_features.compose.elements.AlertDialogComp
 import com.civilcam.ext_features.compose.elements.ComposeButton
 import com.civilcam.ext_features.compose.elements.DialogLoadingContent
@@ -42,35 +41,25 @@ import com.civilcam.ui.subscription.model.SubscriptionActions
 @Composable
 fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 
-    val state = viewModel.state.collectAsState()
+	val state = viewModel.state.collectAsState()
 
-    var selectedSubscription by remember { mutableStateOf(state.value.selectedSubscriptionType) }
+	var selectedSubscription by remember { mutableStateOf(state.value.selectedSubscriptionType) }
 
-    if (state.value.isLoading) {
-        DialogLoadingContent()
-    }
+	if (state.value.isLoading) {
+		DialogLoadingContent()
+	}
 
-    state.value.errorText
-        .takeIf { it.isNotEmpty() }
-        ?.let {
-            AlertDialogComp(
-                dialogText = it,
-                alertType = AlertDialogTypes.OK,
-            ) {
-                viewModel.setInputActions(SubscriptionActions.ClearErrorText)
-            }
-        }
-
-
-    Crossfade(targetState = state.value.purchaseSuccess) { purchaseSuccess ->
-        if (purchaseSuccess) {
-            AlertDialogComp(
-                dialogTitle = stringResource(id = R.string.subscription_purchase_success_title),
-                dialogText = stringResource(id = R.string.subscription_purchase_success_description),
-                AlertDialogTypes.OK,
-            ) { viewModel.setInputActions(SubscriptionActions.GoProfileSetup) }
-        }
-    }
+	state.value.alert
+		.takeIf { it != AlertDialogType.Empty }
+		?.let { alert ->
+			AlertDialogComp(
+				dialogTitle = alert.title(),
+				dialogText = alert.text(),
+				alertType = alert.alertButtons(),
+			) {
+				viewModel.setInputActions(SubscriptionActions.CloseAlert(it))
+			}
+		}
 
 	Surface(modifier = Modifier.fillMaxSize()) {
 
@@ -79,21 +68,21 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 			contentAlignment = Alignment.TopCenter,
 		) {
 
-            Image(
-                painter = painterResource(R.drawable.img_subscription_background),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.TopCenter),
-                contentScale = ContentScale.FillWidth
-            )
+			Image(
+				painter = painterResource(R.drawable.img_subscription_background),
+				contentDescription = null,
+				modifier = Modifier
+					.fillMaxWidth()
+					.align(Alignment.TopCenter),
+				contentScale = ContentScale.FillWidth
+			)
 
             IconActionButton(
-                modifier = Modifier
-                    .padding(top = 24.dp, start = 16.dp)
-                    .align(Alignment.TopStart),
-                buttonIcon = R.drawable.ic_back_navigation, tint = CCTheme.colors.white
-            ) {
+				modifier = Modifier
+					.padding(top = 24.dp, start = 16.dp)
+					.align(Alignment.TopStart),
+				buttonIcon = R.drawable.ic_back_navigation, tint = CCTheme.colors.white
+			) {
                 viewModel.setInputActions(SubscriptionActions.GoBack)
             }
 
@@ -111,8 +100,8 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 				),
 				backgroundColor = CCTheme.colors.white,
 				modifier = Modifier
-                    .fillMaxWidth()
-                    .navigationBarsPadding(),
+					.fillMaxWidth()
+					.navigationBarsPadding(),
 				elevation = 8.dp,
 			) {
 				Column(
@@ -141,9 +130,9 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 					)
 
                     Column(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp),
+						Modifier
+							.fillMaxWidth()
+							.padding(top = 16.dp),
 						horizontalAlignment = Alignment.Start
 					) {
 						for (textString in listOf(
@@ -184,8 +173,8 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
                             }
                         ),
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .navigationBarsPadding(),
+							.fillMaxWidth()
+							.navigationBarsPadding(),
                         buttonClick = {
                             viewModel.setInputActions(
                                 SubscriptionActions.OnSubSelect(
@@ -237,16 +226,16 @@ fun SubscriptionPlanRow(
 	val textColor = if (isActivated) CCTheme.colors.white else CCTheme.colors.grayOne
 
     Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 6.dp)
-        .clip(RoundedCornerShape(8.dp))
-        .border(
-            1.dp, borderColor, RoundedCornerShape(8.dp)
-        )
-        .drawBehind {
-            drawRect(color = backgroundColor)
-        }
-        .clickable { onButtonClicked.invoke(subscriptionInfo.title) },
+		.fillMaxWidth()
+		.padding(vertical = 6.dp)
+		.clip(RoundedCornerShape(8.dp))
+		.border(
+			1.dp, borderColor, RoundedCornerShape(8.dp)
+		)
+		.drawBehind {
+			drawRect(color = backgroundColor)
+		}
+		.clickable { onButtonClicked.invoke(subscriptionInfo.title) },
 		horizontalAlignment = Alignment.Start
 	) {
 
@@ -262,7 +251,7 @@ fun SubscriptionPlanRow(
 				IN_APP_TRIAL -> stringResource(id = R.string.subscription_trial_description)
 				else -> stringResource(
 					id = R.string.subscription_description,
-					subscriptionInfo.cost,
+					subscriptionInfo.cost / 100,
 					subscriptionInfo.unitType
 				)
 			},

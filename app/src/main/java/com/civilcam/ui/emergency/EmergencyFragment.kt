@@ -3,22 +3,18 @@ package com.civilcam.ui.emergency
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.postDelayed
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.lifecycleScope
 import com.civilcam.BuildConfig
 import com.civilcam.R
 import com.civilcam.databinding.FragmentLiveBinding
 import com.civilcam.domainLayer.EmergencyScreen
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.ext.hideSystemUI
 import com.civilcam.ext_features.ext.showSystemUI
 import com.civilcam.ext_features.live_data.observeNonNull
@@ -33,8 +29,6 @@ import com.civilcam.ui.common.alert.DialogAlertFragment
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyRoute
 import com.pedro.rtplibrary.rtmp.RtmpCamera1
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import net.ossrs.rtmp.ConnectCheckerRtmp
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -205,7 +199,7 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 			DialogAlertFragment.create(fragmentManager = parentFragmentManager,
 				title = getString(R.string.location_alert_title),
 				text = getString(R.string.location_alert_text),
-				alertType = AlertDialogTypes.OK,
+				alertType = AlertDialogButtons.OK,
 				onOptionSelected = {})
 		}
 	}

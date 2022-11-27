@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.Constant.ANIMATION_DURATION
 import com.civilcam.ext_features.DateUtils
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.emergency.content.LiveButtonContent
@@ -36,7 +36,7 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 	if (state.errorText.isNotEmpty()) {
 		AlertDialogComp(
 			dialogText = state.errorText,
-			alertType = AlertDialogTypes.OK,
+			alertType = AlertDialogButtons.OK,
 			onOptionSelected = { viewModel.setInputActions(EmergencyActions.ClickCloseAlert) }
 		)
 	}
@@ -104,9 +104,9 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 				LiveButtonContent(
 					emergencyButton = state.emergencyButton,
 					modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .size(150.dp)
-                        .offset(y = (-36).dp),
+						.align(Alignment.BottomCenter)
+						.size(150.dp)
+						.offset(y = (-36).dp),
 					onButtonClick = viewModel::setInputActions,
 				)
 			}

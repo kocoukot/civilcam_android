@@ -21,7 +21,7 @@ import com.civilcam.alert_feature.list.model.AlertListActions
 import com.civilcam.domainLayer.model.alerts.AlertStatus
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.ext_features.DateUtils.alertDateFormat
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
 import timber.log.Timber
@@ -43,7 +43,7 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
         AlertDialogComp(
             dialogTitle = stringResource(id = R.string.resolve_alert_title),
             dialogText = stringResource(id = R.string.resolve_alert_text),
-            alertType = AlertDialogTypes.CONFIRM_CANCEL,
+            alertType = AlertDialogButtons.CONFIRM_CANCEL,
             onOptionSelected = {
                 viewModel.setInputActions(AlertListActions.ClickConfirmResolve(it))
             })
@@ -52,7 +52,7 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
     if (state.value.errorText.isNotEmpty()) {
         AlertDialogComp(
             dialogText = state.value.errorText,
-            alertType = AlertDialogTypes.OK,
+            alertType = AlertDialogButtons.OK,
             onOptionSelected = { viewModel.setInputActions(AlertListActions.ClearErrorText) }
         )
     }

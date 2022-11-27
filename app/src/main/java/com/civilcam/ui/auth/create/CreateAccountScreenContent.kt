@@ -19,7 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
 import com.civilcam.domainLayer.model.profile.PasswordInputDataType
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.compose.elements.passwordCheck.PasswordStrategyBlocks
 import com.civilcam.ext_features.compose.elements.passwordCheck.PasswordStrategyState
@@ -42,7 +42,7 @@ fun CreateAccountScreenContent(viewModel: CreateAccountViewModel) {
     if (state.value.alertErrorText.isNotEmpty()) {
         AlertDialogComp(
             dialogText = state.value.alertErrorText,
-            alertType = AlertDialogTypes.OK,
+            alertType = AlertDialogButtons.OK,
             onOptionSelected = { viewModel.setInputActions(CreateAccountActions.ClickOkAlert) })
     }
     Scaffold(

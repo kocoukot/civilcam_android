@@ -12,6 +12,7 @@ import com.civilcam.R
 import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
 import com.civilcam.ext_features.ext.hideSystemUI
+import com.civilcam.ext_features.ext.navigateToStart
 import com.civilcam.ext_features.ext.showSystemUI
 import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ext_features.navController
@@ -37,6 +38,7 @@ class SubscriptionFragment : Fragment() {
 				SubscriptionRoute.GoBack -> navController.popBackStack()
 				SubscriptionRoute.GoProfileSetup -> navController.navigate(R.id.profileSetupFragment)
 				SubscriptionRoute.GoMap -> navController.navigateToRoot(R.id.emergency_root)
+				SubscriptionRoute.GoCreateAccount -> navigateToStart()
 			}
 		}
 		return ComposeView(requireContext()).apply {
