@@ -6,6 +6,7 @@ import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.subscriptions.GetSubscriptionsUseCase
 import com.civilcam.domainLayer.usecase.subscriptions.GetUserSubscriptionUseCase
 import com.civilcam.domainLayer.usecase.subscriptions.SetUserSubscriptionUseCase
+import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.domainLayer.usecase.user.LogoutUseCase
 import com.civilcam.ext_features.DateUtils
 import com.civilcam.ext_features.alert.AlertDialogType
@@ -27,7 +28,8 @@ class SubscriptionViewModel(
 	private val getSubscriptionsUseCase: GetSubscriptionsUseCase,
 	private val setUserSubscriptionUseCase: SetUserSubscriptionUseCase,
 	private val getSubscriptionUseCase: GetUserSubscriptionUseCase,
-	private val logoutUseCase: LogoutUseCase
+	private val logoutUseCase: LogoutUseCase,
+	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
 ) : ComposeViewModel<SubscriptionState, SubscriptionRoute, SubscriptionActions>() {
 	override var _state: MutableStateFlow<SubscriptionState> = MutableStateFlow(SubscriptionState())
 
@@ -102,7 +104,9 @@ class SubscriptionViewModel(
 			when (userSubState) {
 				UserSubscriptionState.FIRST_LAUNCH -> SubscriptionRoute.GoProfileSetup
 				UserSubscriptionState.SUB_RESELECT -> SubscriptionRoute.GoBack
-				UserSubscriptionState.SUB_EXPIRED -> SubscriptionRoute.GoMap
+				UserSubscriptionState.SUB_EXPIRED -> {
+					if (getLocalCurrentUserUseCase().sessionUser.isPinCodeSet) SubscriptionRoute.GoMap else SubscriptionRoute.GoPinCode
+				}
 			}
 		)
 		_state.update { it.copy(purchaseSuccess = false) }

@@ -17,6 +17,8 @@ import com.civilcam.ext_features.ext.showSystemUI
 import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ext_features.navController
 import com.civilcam.ext_features.requireArg
+import com.civilcam.ui.auth.pincode.PinCodeFragment
+import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.subscription.model.SubscriptionRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -39,6 +41,13 @@ class SubscriptionFragment : Fragment() {
 				SubscriptionRoute.GoProfileSetup -> navController.navigate(R.id.profileSetupFragment)
 				SubscriptionRoute.GoMap -> navController.navigateToRoot(R.id.emergency_root)
 				SubscriptionRoute.GoCreateAccount -> navigateToStart()
+				SubscriptionRoute.GoPinCode -> {
+					navController.popBackStack()
+					navController.navigate(
+						R.id.pinCodeFragment,
+						PinCodeFragment.createArgs(PinCodeFlow.CREATE_PIN_CODE, true)
+					)
+				}
 			}
 		}
 		return ComposeView(requireContext()).apply {

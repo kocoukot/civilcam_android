@@ -7,5 +7,7 @@ sealed class SubscriptionRoute : ComposeFragmentRoute {
 	object GoProfileSetup : SubscriptionRoute()
 	object GoMap : SubscriptionRoute()
 	object GoCreateAccount : SubscriptionRoute()
+	object GoPinCode : SubscriptionRoute()
+
 
 }

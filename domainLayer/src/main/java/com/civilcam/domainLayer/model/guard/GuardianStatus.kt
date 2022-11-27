@@ -5,8 +5,9 @@ enum class GuardianStatus(val domain: String) {
     PENDING("pending"),
     DECLINED("declined"),
     ACCEPTED("accepted"),
-    NEED_HELP("need_help"),
+    NEED_HELP("alert"),
     SAFE("safe");
+
 
     companion object {
         fun byDomain(domain: String): GuardianStatus =
