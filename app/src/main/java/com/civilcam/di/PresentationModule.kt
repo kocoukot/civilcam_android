@@ -4,6 +4,7 @@ import com.civilcam.alert_feature.history.AlertsHistoryViewModel
 import com.civilcam.alert_feature.list.AlertsListViewModel
 import com.civilcam.alert_feature.map.LiveMapViewModel
 import com.civilcam.domainLayer.model.VerificationFlow
+import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
 import com.civilcam.ext_features.GlobalKoinInjector
 import com.civilcam.ext_features.KoinInjector
 import com.civilcam.langselect.LanguageSelectViewModel
@@ -79,8 +80,15 @@ val authModule = module {
 			get()
 		)
 	}
-	
-	viewModel { (isReselect: Boolean) -> SubscriptionViewModel(isReselect, get(), get(), get()) }
+
+	viewModel { (isReselect: UserSubscriptionState) ->
+		SubscriptionViewModel(
+			isReselect,
+			get(),
+			get(),
+			get()
+		)
+	}
 }
 
 

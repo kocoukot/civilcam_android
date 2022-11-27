@@ -144,6 +144,7 @@
     <string name="subscription_purchase_success_description">Your purchase was successful.</string>
     <string name="subscriptions_change_plan">Change plan</string>
     <string name="pin_code_enter_title">Enter pin-code</string>
+    <string name="subscriptions_resubscribe_plan">Subscribe!</string>
 
     <string name="notification_request_title">You received a request</string>
     <string name="notification_request_text">needs you as a guardian</string>

@@ -149,8 +149,7 @@
         android:label="SubscriptionFragment">
         <argument
             android:name="subscription_flow"
-            android:defaultValue="true"
-            app:argType="boolean" />
+            app:argType="com.civilcam.domainLayer.model.subscription.UserSubscriptionState" />
         <deepLink app:uri="civilcam://subscriptionFragment/{subscription_flow}" />
 
     </fragment>

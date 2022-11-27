@@ -9,6 +9,8 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.R
+import com.civilcam.common.ext.navigateToRoot
+import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
 import com.civilcam.ext_features.ext.hideSystemUI
 import com.civilcam.ext_features.ext.showSystemUI
 import com.civilcam.ext_features.live_data.observeNonNull
@@ -20,11 +22,11 @@ import org.koin.core.parameter.parametersOf
 
 class SubscriptionFragment : Fragment() {
 	private val viewModel: SubscriptionViewModel by viewModel {
-		parametersOf(isReselect)
+		parametersOf(useSubState)
 	}
-	
-	private val isReselect: Boolean by requireArg(ARG_FLOW)
-	
+
+	private val useSubState: UserSubscriptionState by requireArg(ARG_FLOW)
+
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
@@ -34,6 +36,7 @@ class SubscriptionFragment : Fragment() {
 			when (route) {
 				SubscriptionRoute.GoBack -> navController.popBackStack()
 				SubscriptionRoute.GoProfileSetup -> navController.navigate(R.id.profileSetupFragment)
+				SubscriptionRoute.GoMap -> navController.navigateToRoot(R.id.emergency_root)
 			}
 		}
 		return ComposeView(requireContext()).apply {
@@ -47,22 +50,22 @@ class SubscriptionFragment : Fragment() {
 			}
 		}
 	}
-	
+
 	override fun onResume() {
 		super.onResume()
 		hideSystemUI()
 	}
-	
+
 	override fun onStop() {
 		super.onStop()
 		showSystemUI()
 	}
-	
+
 	companion object {
 		private const val ARG_FLOW = "subscription_flow"
 		const val IN_APP_TRIAL = "in_app_trial"
-		
-		fun createArgs(isReselect: Boolean) = bundleOf(
+
+		fun createArgs(isReselect: UserSubscriptionState) = bundleOf(
 			ARG_FLOW to isReselect
 		)
 	}

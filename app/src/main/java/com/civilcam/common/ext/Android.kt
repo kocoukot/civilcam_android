@@ -8,6 +8,7 @@ import com.civilcam.domainLayer.model.VerificationFlow
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.common.NavigationDirection
+import com.civilcam.ui.subscription.SubscriptionFragment
 import com.civilcam.ui.terms.TermsFragment
 import com.civilcam.ui.verification.VerificationFragment
 import com.google.android.gms.tasks.Task
@@ -52,9 +53,9 @@ fun NavController.navigateByDirection(
 				R.id.verificationFragment,
 				VerificationFragment.createArgs(
                     VerificationFlow.CURRENT_EMAIL,
-                    direction.email,
-                    ""
-                )
+					direction.email,
+					""
+				)
 			)
 		}
 		is NavigationDirection.ProfileSetup -> {
@@ -62,6 +63,10 @@ fun NavController.navigateByDirection(
 				R.id.profileSetupFragment,
 			)
 		}
+		is NavigationDirection.SubscriptionNotActive -> navigate(
+			R.id.subscriptionFragment, SubscriptionFragment.createArgs(direction.state)
+
+		)
 		is NavigationDirection.PinCodeSetup -> {
 			navigate(
 				R.id.pinCodeFragment,
@@ -71,7 +76,7 @@ fun NavController.navigateByDirection(
 		is NavigationDirection.TermsAndPolicyAccept -> {
 			navigate(
 				R.id.termsFragment,
-                TermsFragment.createArgs()
+				TermsFragment.createArgs()
 			)
 		}
 		is NavigationDirection.PhoneVerification -> {

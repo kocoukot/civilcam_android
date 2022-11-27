@@ -18,4 +18,3 @@ class SubscriptionResponse(
 		@SerializedName("status") val status: SubscriptionStatus
 	)
 }
-

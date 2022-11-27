@@ -12,9 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,8 +28,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
-import com.civilcam.domainLayer.model.SubscriptionType
 import com.civilcam.domainLayer.model.subscription.SubscriptionsList
+import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
 import com.civilcam.ext_features.alert.AlertDialogTypes
 import com.civilcam.ext_features.compose.elements.AlertDialogComp
 import com.civilcam.ext_features.compose.elements.ComposeButton
@@ -43,78 +41,78 @@ import com.civilcam.ui.subscription.model.SubscriptionActions
 
 @Composable
 fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
-	
-	val state = viewModel.state.collectAsState()
-	
-	if (state.value.isLoading) {
-		DialogLoadingContent()
-	}
-	
-	Crossfade(targetState = state.value.purchaseFail) { purchaseFail ->
-		if (purchaseFail) {
-			AlertDialogComp(
-				dialogTitle = stringResource(id = R.string.subscription_purchase_fail_title),
-				dialogText = stringResource(id = R.string.subscription_purchase_fail_description),
-				AlertDialogTypes.OK,
-			) {}
-		}
-	}
-	
-	Crossfade(targetState = state.value.purchaseSuccess) { purchaseSuccess ->
-		if (purchaseSuccess) {
-			AlertDialogComp(
-				dialogTitle = stringResource(id = R.string.subscription_purchase_success_title),
-				dialogText = stringResource(id = R.string.subscription_purchase_success_description),
-				AlertDialogTypes.OK,
-			) { viewModel.setInputActions(SubscriptionActions.GoProfileSetup) }
-		}
-	}
-	
+
+    val state = viewModel.state.collectAsState()
+
+    var selectedSubscription by remember { mutableStateOf(state.value.selectedSubscriptionType) }
+
+    if (state.value.isLoading) {
+        DialogLoadingContent()
+    }
+
+    state.value.errorText
+        .takeIf { it.isNotEmpty() }
+        ?.let {
+            AlertDialogComp(
+                dialogText = it,
+                alertType = AlertDialogTypes.OK,
+            ) {
+                viewModel.setInputActions(SubscriptionActions.ClearErrorText)
+            }
+        }
+
+
+    Crossfade(targetState = state.value.purchaseSuccess) { purchaseSuccess ->
+        if (purchaseSuccess) {
+            AlertDialogComp(
+                dialogTitle = stringResource(id = R.string.subscription_purchase_success_title),
+                dialogText = stringResource(id = R.string.subscription_purchase_success_description),
+                AlertDialogTypes.OK,
+            ) { viewModel.setInputActions(SubscriptionActions.GoProfileSetup) }
+        }
+    }
+
 	Surface(modifier = Modifier.fillMaxSize()) {
-		
+
 		Box(
 			modifier = Modifier.fillMaxWidth(),
 			contentAlignment = Alignment.TopCenter,
 		) {
-			
-			
-			Image(
-				painter = painterResource(R.drawable.img_subscription_background),
-				contentDescription = null,
-				modifier = Modifier
-					.fillMaxWidth()
-					.align(Alignment.TopCenter),
-				contentScale = ContentScale.FillWidth
-			)
-			
-			Row(
-				Modifier
-					.fillMaxWidth()
-					.padding(top = 24.dp, start = 16.dp)
-			) {
-				IconActionButton(
-					buttonIcon = R.drawable.ic_back_navigation, tint = CCTheme.colors.white
-				) {
-					viewModel.setInputActions(SubscriptionActions.GoBack)
-				}
-			}
-			
-		}
-		
-		Column(
+
+            Image(
+                painter = painterResource(R.drawable.img_subscription_background),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.TopCenter),
+                contentScale = ContentScale.FillWidth
+            )
+
+            IconActionButton(
+                modifier = Modifier
+                    .padding(top = 24.dp, start = 16.dp)
+                    .align(Alignment.TopStart),
+                buttonIcon = R.drawable.ic_back_navigation, tint = CCTheme.colors.white
+            ) {
+                viewModel.setInputActions(SubscriptionActions.GoBack)
+            }
+
+        }
+
+        Column(
 			modifier = Modifier.navigationBarsPadding(),
 			verticalArrangement = Arrangement.Bottom,
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
-			
-			Card(
+
+            Card(
 				shape = RoundedCornerShape(
 					topStart = 12.dp, topEnd = 12.dp
 				),
 				backgroundColor = CCTheme.colors.white,
 				modifier = Modifier
-					.fillMaxWidth()
-					.navigationBarsPadding(),
+                    .fillMaxWidth()
+                    .navigationBarsPadding(),
 				elevation = 8.dp,
 			) {
 				Column(
@@ -123,29 +121,29 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 					),
 					horizontalAlignment = Alignment.CenterHorizontally,
 				) {
-					
-					Spacer(modifier = Modifier.height(4.dp))
-					
-					Text(
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Text(
 						text = stringResource(R.string.subscription_options_title),
 						style = CCTheme.typography.big_title,
 						color = CCTheme.colors.primaryRed,
 						textAlign = TextAlign.Center,
 					)
-					
-					Spacer(modifier = Modifier.height(12.dp))
-					
-					Text(
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Text(
 						text = stringResource(R.string.subscription_no_commitment_title),
 						style = CCTheme.typography.common_medium_text_regular,
 						color = CCTheme.colors.black,
 						textAlign = TextAlign.Center,
 					)
-					
-					Column(
-						Modifier
-							.fillMaxWidth()
-							.padding(top = 16.dp),
+
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp),
 						horizontalAlignment = Alignment.Start
 					) {
 						for (textString in listOf(
@@ -158,39 +156,44 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 							SubscriptionOption(textString)
 						}
 					}
-					
-					Spacer(modifier = Modifier.height(18.dp))
-					
-					LazyColumn(
+
+                    Spacer(modifier = Modifier.height(18.dp))
+
+                    LazyColumn(
 						modifier = Modifier.fillMaxWidth()
 					) {
-						items(state.value.subscriptionsList.list) { subscription ->
+
+                        items(state.value.subscriptionsList.list) { subscription ->
 							SubscriptionPlanRow(
-								subscriptionInfo = subscription,
-								onButtonClicked = { type ->
-									viewModel.setInputActions(
-										SubscriptionActions.OnSubSelect(type)
-									)
-								},
-								isActivated = state.value.selectedSubscriptionType == subscription.title
-							)
+                                subscriptionInfo = subscription,
+                                isActivated = selectedSubscription == subscription.title,
+                                onButtonClicked = { selectedSubscription = it },
+                            )
 						}
 					}
-					
-					
-					Spacer(modifier = Modifier.height(40.dp))
-					
-					ComposeButton(
-						title = if (state.value.isReselect) stringResource(id = R.string.subscriptions_change_plan)
-						else stringResource(id = R.string.start_text),
-						modifier = Modifier
-							.fillMaxWidth()
-							.navigationBarsPadding(),
-						isActivated = true,
-						buttonClick = {
-							viewModel.setInputActions(SubscriptionActions.GoStart)
-						},
-					)
+
+
+                    Spacer(modifier = Modifier.height(40.dp))
+
+                    ComposeButton(
+                        title = stringResource(
+                            when (state.value.userSubState) {
+                                UserSubscriptionState.FIRST_LAUNCH -> R.string.start_text
+                                UserSubscriptionState.SUB_RESELECT -> R.string.subscriptions_change_plan
+                                UserSubscriptionState.SUB_EXPIRED -> R.string.subscriptions_resubscribe_plan
+                            }
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .navigationBarsPadding(),
+                        buttonClick = {
+                            viewModel.setInputActions(
+                                SubscriptionActions.OnSubSelect(
+                                    selectedSubscription
+                                )
+                            )
+                        },
+                    )
 				}
 			}
 		}
@@ -225,36 +228,36 @@ fun SubscriptionPlanRow(
 	onButtonClicked: (String) -> Unit,
 	isActivated: Boolean = false
 ) {
-	
-	val backgroundColor by animateColorAsState(
+
+    val backgroundColor by animateColorAsState(
 		targetValue = if (isActivated) CCTheme.colors.primaryRed else CCTheme.colors.white
 	)
 	val borderColor = if (isActivated) CCTheme.colors.primaryRed else CCTheme.colors.grayOne
 	val titleColor = if (isActivated) CCTheme.colors.white else CCTheme.colors.black
 	val textColor = if (isActivated) CCTheme.colors.white else CCTheme.colors.grayOne
-	
-	Column(modifier = Modifier
-		.fillMaxWidth()
-		.padding(vertical = 6.dp)
-		.clip(RoundedCornerShape(8.dp))
-		.border(
-			1.dp, borderColor, RoundedCornerShape(8.dp)
-		)
-		.drawBehind {
-			drawRect(color = backgroundColor)
-		}
-		.clickable { onButtonClicked.invoke(subscriptionInfo.title) },
+
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 6.dp)
+        .clip(RoundedCornerShape(8.dp))
+        .border(
+            1.dp, borderColor, RoundedCornerShape(8.dp)
+        )
+        .drawBehind {
+            drawRect(color = backgroundColor)
+        }
+        .clickable { onButtonClicked.invoke(subscriptionInfo.title) },
 		horizontalAlignment = Alignment.Start
 	) {
-		
-		Text(
+
+        Text(
 			text = subscriptionInfo.title,
 			style = CCTheme.typography.common_text_medium,
 			color = titleColor,
 			modifier = Modifier.padding(start = 12.dp, top = 12.dp)
 		)
-		
-		Text(
+
+        Text(
 			text = when (subscriptionInfo.productId) {
 				IN_APP_TRIAL -> stringResource(id = R.string.subscription_trial_description)
 				else -> stringResource(

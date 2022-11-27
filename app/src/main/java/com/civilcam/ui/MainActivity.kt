@@ -43,6 +43,13 @@ class MainActivity : AppCompatActivity() {
     private val currentVisibleFragment: Fragment?
         get() = navHost?.childFragmentManager?.fragments?.first()
 
+    private val onBackStackChangedListener by lazy {
+        FragmentManager.OnBackStackChangedListener {
+            binding.navBarGroup.isVisible = currentVisibleFragment is SupportBottomBar
+            if (currentVisibleFragment is LanguageSelectFragment) stopLocationService()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(
@@ -113,12 +120,6 @@ class MainActivity : AppCompatActivity() {
         navHost?.navController?.navigateByDirection(direction)
     }
 
-    private val onBackStackChangedListener by lazy {
-        FragmentManager.OnBackStackChangedListener {
-            binding.navBarGroup.isVisible = currentVisibleFragment is SupportBottomBar
-            if (currentVisibleFragment is LanguageSelectFragment) stopLocationService()
-        }
-    }
 
     fun showBottomNavBar(isVisible: Boolean) {
         binding.navBarGroup.isVisible = isVisible
