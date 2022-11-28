@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import com.civilcam.alert_feature.map.model.LiveMapRoute
 import com.civilcam.ext_features.ext.callPhone
 import com.civilcam.ext_features.ext.navController
-import com.civilcam.ext_features.ext.phoneNumberFormat
+import com.civilcam.ext_features.ext.serverPhoneNumberFormat
 import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ext_features.requireArg
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -35,7 +35,7 @@ class LiveMapFragment : Fragment() {
         viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
             when (route) {
                 LiveMapRoute.CloseAlert, LiveMapRoute.GoBack -> navController.popBackStack()
-                is LiveMapRoute.CallUserPhone -> callPhone(route.userPhoneNumber.phoneNumberFormat())
+                is LiveMapRoute.CallUserPhone -> callPhone(route.userPhoneNumber.serverPhoneNumberFormat())
                 LiveMapRoute.CallPolice -> callPhone("911")
                 LiveMapRoute.AlertResolved -> navController.popBackStack()
             }

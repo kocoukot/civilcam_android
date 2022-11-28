@@ -28,7 +28,7 @@ fun String.formatPhoneNumber(): String = String.format(
     this.substring(6, 10)
 )
 
-fun String.phoneNumberFormat() =
+fun String.serverPhoneNumberFormat() =
     this.clearPhone()
         .let {
             if (this.length == 10)

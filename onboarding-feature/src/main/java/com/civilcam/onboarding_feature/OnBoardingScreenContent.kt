@@ -3,7 +3,7 @@ package com.civilcam.onboarding_feature
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Surface
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,7 +54,10 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
             }
     }
 
-    Surface(modifier = Modifier.fillMaxSize()) {
+
+    Scaffold(modifier = Modifier
+        .fillMaxSize()
+        .navigationBarsPadding()) { screenPadding ->
 
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -64,9 +67,7 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
                 itemSpacing = 0.dp,
                 count = onboardPages.size,
                 state = firstPagerState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
+                modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.Top
             ) { page ->
                 PageUI(page = onboardPages[page])
@@ -84,8 +85,7 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
         }
 
         Column(
-            modifier = Modifier
-                .navigationBarsPadding(),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -128,7 +128,7 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
                         title = stringResource(id = R.string.get_start_text),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .navigationBarsPadding(),
+                            .padding(bottom = screenPadding.calculateBottomPadding()),
                         isActivated = secondPagerState.currentPage == 2,
                         buttonClick = {
                             viewModel.setInputActions(OnboardingActions.ClickContinue)

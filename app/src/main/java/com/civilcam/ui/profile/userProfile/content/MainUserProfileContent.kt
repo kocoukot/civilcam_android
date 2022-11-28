@@ -8,7 +8,7 @@ import androidx.compose.ui.res.stringResource
 import com.civilcam.domainLayer.model.user.CurrentUser
 import com.civilcam.ext_features.compose.elements.ProfileRow
 import com.civilcam.ext_features.compose.elements.RowDivider
-import com.civilcam.ext_features.ext.formatPhoneNumber
+import com.civilcam.ext_features.ext.serverPhoneNumberFormat
 import com.civilcam.ui.profile.userProfile.model.UserProfileActions
 import com.civilcam.ui.profile.userProfile.model.UserProfileType
 
@@ -23,7 +23,7 @@ fun MainProfileContent(
         RowDivider()
 		for (type in UserProfileType.values()) {
 			val rowValue = when (type) {
-				UserProfileType.PHONE_NUMBER -> data.userBaseInfo.phone.formatPhoneNumber()
+				UserProfileType.PHONE_NUMBER -> data.userBaseInfo.phone.serverPhoneNumberFormat()
 				UserProfileType.EMAIL -> data.sessionUser.email
 				UserProfileType.PIN_CODE -> "••••"
 			}

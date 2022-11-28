@@ -117,21 +117,23 @@ class LiveMapViewModel(
     private fun resolverAlertAnswered(answer: Boolean) {
         _state.update { it.copy(isResolveAlertVisible = false) }
         if (answer) {
-            networkRequest(
-                action = {
-                    _state.update { it.copy(isLoading = true) }
-                    resolveAlertUseCase(alertId = alertId)
-                },
-                onSuccess = {
-                    navigateRoute(LiveMapRoute.AlertResolved)
-                },
-                onFailure = { error ->
-                    error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
-                },
-                onComplete = {
-                    _state.update { it.copy(isLoading = false) }
-                },
-            )
+            _state.value.onGuardUserInformation?.id?.let { alertIdResolve ->
+                networkRequest(
+                    action = {
+                        _state.update { it.copy(isLoading = true) }
+                        resolveAlertUseCase(alertId = alertIdResolve)
+                    },
+                    onSuccess = {
+                        navigateRoute(LiveMapRoute.AlertResolved)
+                    },
+                    onFailure = { error ->
+                        error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
+                    },
+                    onComplete = {
+                        _state.update { it.copy(isLoading = false) }
+                    },
+                )
+            }
         }
     }
 
@@ -169,10 +171,8 @@ class LiveMapViewModel(
             Timber.d("socket args $args")
             val data: JSONObject = args[0] as JSONObject
             Timber.d("socket data $data")
-            val person = gson.fromJson(
-                (data).toString(),
-                OnGuardUserData::class.java
-            )
+            val person = gson.fromJson((data).toString(), OnGuardUserData::class.java)
+
             Timber.d("socket person ${person.status}")
             when (person.status) {
                 OnGuardUserData.AlertSocketStatus.active -> _state.update {

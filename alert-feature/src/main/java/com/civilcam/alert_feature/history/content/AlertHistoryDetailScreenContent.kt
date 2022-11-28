@@ -28,7 +28,7 @@ import com.civilcam.ext_features.compose.elements.CircleUserAvatar
 import com.civilcam.ext_features.compose.elements.InformationBoxContent
 import com.civilcam.ext_features.compose.elements.InformationRow
 import com.civilcam.ext_features.compose.elements.RowDivider
-import com.civilcam.ext_features.ext.phoneNumberFormat
+import com.civilcam.ext_features.ext.serverPhoneNumberFormat
 import com.civilcam.ext_features.theme.CCTheme
 
 @Composable
@@ -71,7 +71,7 @@ fun AlertHistoryDetailScreenContent(
                 if (alertType == AlertType.RECEIVED) {
                     alertDetail.alertModel.userInfo?.personPhone?.let {
                         InformationBoxContent(
-                            text = it.phoneNumberFormat(),
+                            text = it.serverPhoneNumberFormat(),
                             modifier = Modifier.weight(1f),
                             onButtonClick = {
                                 onScreenAction.invoke(AlertHistoryActions.CLickCallUser)
