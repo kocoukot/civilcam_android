@@ -17,7 +17,7 @@ import com.civilcam.domainLayer.usecase.alerts.GetAlertDetailUseCase
 import com.civilcam.ext_features.KoinInjector
 import com.civilcam.ext_features.arch.BaseViewModel
 import com.civilcam.ext_features.compose.ComposeFragmentActions
-import com.civilcam.ext_features.ext.phoneNumberFormat
+import com.civilcam.ext_features.ext.serverPhoneNumberFormat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
@@ -39,7 +39,7 @@ class AlertsHistoryViewModel(
             is AlertHistoryActions.ClickAlertTypeChange -> changeAlertType(action.alertType)
             AlertHistoryActions.CLickCallUser -> getState()
                 .alertDetailModel?.alertModel?.userInfo?.personPhone?.let { phoneNumber ->
-                    sendRoute(AlertHistoryRoute.CallUser(phoneNumber.phoneNumberFormat()))
+                    sendRoute(AlertHistoryRoute.CallUser(phoneNumber.serverPhoneNumberFormat()))
                 }
             AlertHistoryActions.CLickUploadVideo -> {} //todo
             AlertHistoryActions.StopRefresh -> stopRefresh()
