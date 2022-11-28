@@ -163,12 +163,12 @@ class MainActivity : AppCompatActivity() {
         // Timber.d("message received new logic intent ${intent}")
 
         intent?.extras?.let { extras ->
-            Timber.tag("alert notif ID")
+            Timber.tag("alert_notif_ID")
                 .i("main activity userId ${extras.getInt(CCFireBaseMessagingService.EXTRAS_NOTIFICATION_ALERT_ID)}")
 
             extras.getInt(CCFireBaseMessagingService.EXTRAS_NOTIFICATION_ALERT_ID).takeIf { it > 0 }
                 ?.let { alertId ->
-                    Timber.tag("alert notif ID").i("main activity userId $alertId")
+                    Timber.tag("alert_notif_ID").i("main activity userId $alertId")
 
                     CCFireBaseMessagingService.cancelAlertProgress()
                     (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(

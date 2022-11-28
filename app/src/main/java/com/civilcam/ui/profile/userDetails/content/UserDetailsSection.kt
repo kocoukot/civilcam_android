@@ -103,18 +103,19 @@ fun UserDetailsSection(
             }
 
 
-
-        ComposeButton(
-            title = buttonTitle,
-            modifier = Modifier.padding(horizontal = 16.dp),
-            textFontWeight = FontWeight.W500,
-            isActivated = userData.outputRequest?.status != GuardianStatus.PENDING,
-            buttonClick = {
-                myGuardenceChange.invoke(
-                    UserDetailsActions.ClickShowAlert(StopGuardAlertType.REMOVE_GUARDIAN)
-                )
-            }
-        )
+        userData.outputRequest?.status?.takeIf { it != GuardianStatus.DECLINED }?.let {
+            ComposeButton(
+                title = buttonTitle,
+                modifier = Modifier.padding(horizontal = 16.dp),
+                textFontWeight = FontWeight.W500,
+                isActivated = userData.outputRequest?.status != GuardianStatus.PENDING,
+                buttonClick = {
+                    myGuardenceChange.invoke(
+                        UserDetailsActions.ClickShowAlert(StopGuardAlertType.REMOVE_GUARDIAN)
+                    )
+                }
+            )
+        }
         Spacer(modifier = Modifier.height(12.dp))
         RowDivider()
     }
