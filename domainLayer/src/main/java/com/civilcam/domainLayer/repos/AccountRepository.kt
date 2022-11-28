@@ -12,5 +12,5 @@ interface AccountRepository {
 
     fun loginUser(sessionToken: String, user: CurrentUser)
 
-    fun getUser(): CurrentUser
+    fun getUser(): CurrentUser?
 }

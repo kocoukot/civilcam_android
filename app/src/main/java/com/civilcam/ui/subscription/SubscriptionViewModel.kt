@@ -105,7 +105,7 @@ class SubscriptionViewModel(
 				UserSubscriptionState.FIRST_LAUNCH -> SubscriptionRoute.GoProfileSetup
 				UserSubscriptionState.SUB_RESELECT -> SubscriptionRoute.GoBack
 				UserSubscriptionState.SUB_EXPIRED -> {
-					if (getLocalCurrentUserUseCase().sessionUser.isPinCodeSet) SubscriptionRoute.GoMap else SubscriptionRoute.GoPinCode
+					if (getLocalCurrentUserUseCase()?.sessionUser?.isPinCodeSet == true) SubscriptionRoute.GoMap else SubscriptionRoute.GoPinCode
 				}
 			}
 		)

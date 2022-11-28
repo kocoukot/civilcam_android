@@ -64,7 +64,7 @@ class EmergencyViewModel(
 	
 	init {
 		getLocalCurrentUserUseCase().let { user ->
-			if (user.sessionUser.userState == UserState.alert) {
+			if (user?.sessionUser?.userState == UserState.alert) {
 				setSosState()
 			}
 		}
@@ -72,7 +72,7 @@ class EmergencyViewModel(
 	
 	fun loadAvatar() {
 		getLocalCurrentUserUseCase().let { user ->
-			_composeState.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
+			_composeState.update { it.copy(userAvatar = user?.userBaseInfo?.avatar) }
 		}
 	}
 	

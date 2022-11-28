@@ -67,7 +67,7 @@ class NetworkMainViewModel(
 
     fun loadAvatar() {
         getLocalCurrentUserUseCase().let { user ->
-            _state.update { it.copy(userAvatar = user.userBaseInfo.avatar) }
+            _state.update { it.copy(userAvatar = user?.userBaseInfo?.avatar) }
         }
     }
 
