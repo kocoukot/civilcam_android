@@ -18,6 +18,7 @@ import com.civilcam.ext_features.DateUtils
 import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
+import com.civilcam.ui.emergency.content.EmergencyToastContent
 import com.civilcam.ui.emergency.content.LiveButtonContent
 import com.civilcam.ui.emergency.content.LiveMapContent
 import com.civilcam.ui.emergency.model.EmergencyActions
@@ -109,6 +110,19 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 						.navigationBarsPadding()
 						.offset(y = (-36).dp),
 					onButtonClick = viewModel::setInputActions,
+				)
+			}
+			
+			AnimatedVisibility(
+				visible = state.toastActivated,
+				enter = fadeIn(animationSpec = tween(100)),
+				exit = fadeOut(animationSpec = tween(100))
+			) {
+				EmergencyToastContent(
+					progress = state.toastProgress,
+					onCloseClicked = {
+						viewModel.setInputActions(EmergencyActions.CloseToast)
+					}
 				)
 			}
 		}

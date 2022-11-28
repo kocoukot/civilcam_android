@@ -26,6 +26,12 @@ import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyRoute
 import com.civilcam.ui.emergency.model.EmergencyState
 import com.google.gson.Gson
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -33,6 +39,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class EmergencyViewModel(
 	private val fetchUserLocationUseCase: FetchUserLocationUseCase,
@@ -61,6 +68,8 @@ class EmergencyViewModel(
 	private var geocoder = Geocoder(CivilcamApplication.instance, Locale.US)
 	private val mSocket = SocketHandler.getSocket()
 	private val gson = Gson()
+	
+	private val compositeDisposable = CompositeDisposable()
 	
 	init {
 		getLocalCurrentUserUseCase().let { user ->
@@ -135,6 +144,7 @@ class EmergencyViewModel(
 			EmergencyActions.ClickCloseAlert -> clearErrorText()
 			EmergencyActions.ChangeLiveScreen -> changeLiveScreen()
 			EmergencyActions.ControlTorch -> controlTorch()
+			EmergencyActions.CloseToast -> closeToast()
 			is EmergencyActions.ClickChangeScreen -> screenChange(action.screenState)
 			is EmergencyActions.LiveCurrentTime -> _currentTime.value = action.time
 		}
@@ -205,6 +215,38 @@ class EmergencyViewModel(
 		if (composeState.value.emergencyButton == EmergencyButton.InDangerButton) {
 			goPinCode()
 		}
+		if (composeState.value.emergencyButton == EmergencyButton.InSafeButton) {
+			startEmergencyToast()
+		}
+	}
+	
+	private fun startEmergencyToast() {
+		_composeState.update { it.copy(toastActivated = true) }
+		Observable.intervalRange(
+			0L,
+			MAX_WAITING_MILLIS,
+			0L,
+			1L,
+			TimeUnit.MILLISECONDS,
+			Schedulers.computation()
+		)
+			.observeOn(AndroidSchedulers.mainThread())
+			.subscribeBy(
+				onNext = { count -> _composeState.update { it.copy(toastProgress = count.toInt()) }},
+				onComplete = { _composeState.update { it.copy(toastActivated = false) } },
+				onError = {}
+			)
+			.addTo(compositeDisposable)
+	}
+	
+	private fun closeToast() {
+		_composeState.update { it.copy(toastActivated = false) }
+		compositeDisposable.clear()
+	}
+	
+	override fun onCleared() {
+		compositeDisposable.clear()
+		super.onCleared()
 	}
 	
 	private fun setSosState() {
@@ -324,6 +366,10 @@ class EmergencyViewModel(
 	
 	fun removeSocketListeners() {
 		mSocket.off(SocketMapEvents.INCOME_GUARDIANS.msgType)
+	}
+	
+	companion object {
+		private const val MAX_WAITING_MILLIS = 3_000L
 	}
 	
 }

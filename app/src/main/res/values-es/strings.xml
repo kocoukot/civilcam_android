@@ -179,5 +179,7 @@
 
     <string name="subscription_confirm_alert_title">Confirm purchase</string>
     <string name="subscription_confirm_alert_text">Pay %s for monthly subscription plan starting %s</string>
+    <string name="emergency_toast_title">Double tap “SOS” to activate</string>
+    <string name="emergency_toast_description">"After the emergency mode activation your network will see your help request  "</string>
 
 </resources>
