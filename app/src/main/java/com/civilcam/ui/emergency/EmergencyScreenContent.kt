@@ -106,6 +106,7 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 					modifier = Modifier
 						.align(Alignment.BottomCenter)
 						.size(150.dp)
+						.navigationBarsPadding()
 						.offset(y = (-36).dp),
 					onButtonClick = viewModel::setInputActions,
 				)
