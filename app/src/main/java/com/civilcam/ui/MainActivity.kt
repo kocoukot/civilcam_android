@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         FragmentManager.OnBackStackChangedListener {
             binding.navBarGroup.isVisible = currentVisibleFragment is SupportBottomBar
             if (currentVisibleFragment is LanguageSelectFragment) stopLocationService()
-            checkSubscriptionState()
+            //checkSubscriptionState()
         }
     }
 
