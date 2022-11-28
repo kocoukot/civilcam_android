@@ -82,7 +82,7 @@ class AccountStorage(
 		accountManager.setUserData(getOrCreateAccount(), USER, gson.toJson(user))
 
 	fun updateUserBaseInfo(userBaseInfo: UserBaseInfo) =
-		updateUser(getUser().copy(userBaseInfo = userBaseInfo))
+		getUser()?.copy(userBaseInfo = userBaseInfo)?.let { updateUser(it) }
 
 
 	private fun updateUser(currentAccount: Account, user: CurrentUser) =
@@ -95,7 +95,7 @@ class AccountStorage(
 		isSos: Boolean,
 	) {
 		var user = getUser()
-		user = user.copy(
+		user = user?.copy(
 			sessionUser = user.sessionUser.copy(
 				userState = UserState.resolveState(isSos)
 			)
@@ -114,7 +114,7 @@ class AccountStorage(
 	private fun getAccount(): Account? =
 		accountManager.getAccountsByType(ACCOUNT_TYPE).singleOrNull()
 	
-	fun getUser(): CurrentUser =
+	fun getUser(): CurrentUser? =
 		getAccount().let { account ->
 			accountManager.getUserData(account, USER)
 				.takeIf { it.isNotEmpty() }

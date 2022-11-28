@@ -31,7 +31,7 @@ class AlertsListViewModel(
 
     fun loadAvatar() {
         getLocalCurrentUserUseCase().let { user ->
-            updateInfo { copy(userAvatar = user.userBaseInfo.avatar) }
+            updateInfo { copy(userAvatar = user?.userBaseInfo?.avatar) }
         }
     }
 

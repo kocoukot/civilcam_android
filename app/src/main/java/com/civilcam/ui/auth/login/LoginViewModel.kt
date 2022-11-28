@@ -61,7 +61,7 @@ class LoginViewModel(
 				}
 				.onFailure { error ->
 					error.castSafe<ServiceException>()?.let { casted ->
-						if (casted.errorCode == ServerErrors.EMAIL_ALREADY_REGISTERED)
+						if (casted.errorCode == ServerErrors.INCORRECT_EMAIL_OR_PASSWORD)
 							_state.update {
 								it.copy(
 									credError = true,

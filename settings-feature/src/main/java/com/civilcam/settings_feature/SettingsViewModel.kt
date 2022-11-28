@@ -29,14 +29,16 @@ class SettingsViewModel(
 ) : BaseViewModel.Base<SettingsState>(
 	mState = MutableStateFlow(SettingsState())
 ) {
-
-
+	
+	
 	init {
 		getLocalCurrentUserUseCase().let { user ->
-			updateInfo { copy(canChangePassword = user.sessionUser.canChangePassword) }
+			if (user != null) {
+				updateInfo { copy(canChangePassword = user.sessionUser.canChangePassword) }
+			}
 		}
 	}
-
+	
 	override fun setInputActions(action: ComposeFragmentActions) {
 		when (action) {
 			SettingsActions.ClickGoBack -> goBack()
@@ -88,8 +90,7 @@ class SettingsViewModel(
 		updateInfo { copy(isLoading = true) }
 		viewModelScope.launch {
 			kotlin.runCatching { if (isLogOut) logoutUseCase() else deleteAccountUseCase() }
-				.onSuccess { sendRoute(SettingsRoute.GoStartScreen) }
-				.onFailure { error ->
+				.onSuccess { sendRoute(SettingsRoute.GoStartScreen) }.onFailure { error ->
 					error.serviceCast { msg, _, isForceLogout ->
 						if (isForceLogout) sendRoute(SettingsRoute.ForceLogout)
 						updateInfo { copy(errorText = msg) }
@@ -101,13 +102,12 @@ class SettingsViewModel(
 	
 	private fun fetchSubscriptionPlan() {
 		viewModelScope.launch {
-			kotlin.runCatching { getUserSubscriptionUseCase.getUserSubscription() }
-				.onSuccess {
-					val response = getUserSubscriptionUseCase.getUserSubscription()
-					updateInfo { copy(data = data.copy(subscriptionData = response)) }
-				}.onFailure {
-				
-				}
+			kotlin.runCatching { getUserSubscriptionUseCase.getUserSubscription() }.onSuccess {
+				val response = getUserSubscriptionUseCase.getUserSubscription()
+				updateInfo { copy(data = data.copy(subscriptionData = response)) }
+			}.onFailure {
+			
+			}
 		}
 	}
 	
@@ -127,17 +127,19 @@ class SettingsViewModel(
 		when (section) {
 			SettingsType.ALERTS -> {
 				viewModelScope.launch {
-					getLocalCurrentUserUseCase().settings.let { settings ->
+					getLocalCurrentUserUseCase()?.settings.let { settings ->
 						Timber.i("getLocalCurrentUserUseCase ${getLocalCurrentUserUseCase.invoke()}")
-						updateInfo {
-							copy(
-								settingsType = section, data = data.copy(
-									alertsSectionData = SettingsAlertsSectionData(
-										isSMS = settings.smsNotifications,
-										isEmail = settings.emailNotification
+						if (settings != null) {
+							updateInfo {
+								copy(
+									settingsType = section, data = data.copy(
+										alertsSectionData = SettingsAlertsSectionData(
+											isSMS = settings.smsNotifications,
+											isEmail = settings.emailNotification
+										)
 									)
 								)
-							)
+							}
 						}
 					}
 				}
@@ -145,15 +147,17 @@ class SettingsViewModel(
 			
 			SettingsType.CONTACT_SUPPORT -> {
 				getLocalCurrentUserUseCase().let { user ->
-					updateInfo {
-						copy(
-							settingsType = section, data = data.copy(
-								contactSupportSectionData = ContactSupportSectionData(
-									replyEmail = if (user.sessionUser.authType == AuthType.email) user.sessionUser.email else "",
-									canChangeEmail = user.sessionUser.canChangeEmail
+					if (user != null) {
+						updateInfo {
+							copy(
+								settingsType = section, data = data.copy(
+									contactSupportSectionData = ContactSupportSectionData(
+										replyEmail = if (user.sessionUser.authType == AuthType.email) user.sessionUser.email else "",
+										canChangeEmail = user.sessionUser.canChangeEmail
+									)
 								)
 							)
-						)
+						}
 					}
 				}
 			}
@@ -232,7 +236,7 @@ class SettingsViewModel(
 						if (isForceLogout) sendRoute(SettingsRoute.ForceLogout)
 						updateInfo { copy(errorText = msg) }
 					}
-					}
+				}
 				updateInfo { copy(isLoading = false) }
 			}
 		}
