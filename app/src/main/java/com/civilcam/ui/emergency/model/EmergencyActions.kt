@@ -13,9 +13,6 @@ sealed class EmergencyActions {
 	object ClickCloseAlert : EmergencyActions()
 	object ChangeLiveScreen : EmergencyActions()
 	object ControlTorch : EmergencyActions()
-	object CloseToast : EmergencyActions()
-	
+
 	data class ClickChangeScreen(val screenState: EmergencyScreen) : EmergencyActions()
-	data class LiveCurrentTime(val time: String) : EmergencyActions()
-	
 }

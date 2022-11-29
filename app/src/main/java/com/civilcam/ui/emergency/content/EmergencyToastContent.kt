@@ -21,8 +21,8 @@ import timber.log.Timber
 
 @Composable
 fun EmergencyToastContent(
+	progress: Float,
 	onCloseClicked: () -> Unit,
-	progress: Int
 ) {
 	Timber.i("toast progress: $progress")
 	val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
@@ -71,7 +71,7 @@ fun EmergencyToastContent(
 						.background(color = Color.Magenta),
 					backgroundColor = CCTheme.colors.primaryRed40,
 					color = CCTheme.colors.primaryRed,
-					progress = (progress / 3000f)
+					progress = progress
 				)
 			}
 		}
