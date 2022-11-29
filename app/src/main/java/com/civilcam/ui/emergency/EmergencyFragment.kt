@@ -2,11 +2,16 @@ package com.civilcam.ui.emergency
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context.CAMERA_SERVICE
+import android.content.pm.PackageManager
+import android.hardware.camera2.CameraAccessException
+import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -17,6 +22,7 @@ import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.ext.hideSystemUI
 import com.civilcam.ext_features.ext.showSystemUI
+import com.civilcam.ext_features.ext.showToast
 import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ext_features.navController
 import com.civilcam.ext_features.registerForPermissionsResult
@@ -49,6 +55,7 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 	private var pendingAction: (() -> Unit)? = null
 	private val mSocket = SocketHandler
 	private var rtmpCamera: RtmpCamera1? = null
+	private var cameraManager: CameraManager? = null
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -71,6 +78,8 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 			holder.addCallback(this@EmergencyFragment)
 		}
 		
+		cameraManager = activity?.getSystemService(CAMERA_SERVICE) as CameraManager
+		
 		with(binding) {
 			composable.setContent {
 				LiveScreenContent(viewModel = viewModel)
@@ -91,10 +100,6 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 		
 		setFragmentResultListener(PinCodeFragment.RESULT_BACK_STACK) { _, _ ->
 			viewModel.setInputActions(EmergencyActions.DisableSos)
-		}
-		
-		setFragmentResultListener(PinCodeFragment.RESULT_SAVED_NEW_PIN) { _, _ ->
-		
 		}
 		
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
@@ -236,6 +241,19 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 					R.drawable.ic_flash_off, null
 				)
 			)
+		}
+		if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) == true) {
+			if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH) == true) {
+				try {
+					cameraManager?.setTorchMode("0", isEnable)
+				} catch (e: CameraAccessException) {
+					showToast(e.localizedMessage)
+				}
+			} else {
+				showToast("This device has no flash")
+			}
+		} else {
+			showToast("This device has no camera")
 		}
 	}
 	
