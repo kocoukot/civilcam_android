@@ -14,6 +14,4 @@ data class EmergencyState(
 	val userAvatar: ImageInfo? = null,
 	val alertInfo: AlertInfoModel? = null,
 	val isFlashEnabled: Boolean = false,
-	val toastProgress: Int = 0,
-	val toastActivated: Boolean = false
 )
