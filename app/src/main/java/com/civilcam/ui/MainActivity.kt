@@ -154,10 +154,14 @@ class MainActivity : AppCompatActivity() {
 	}
 	
 	override fun onNewIntent(intent: Intent?) {
+		intent?.extras?.let { extras ->
+			Timber.tag("alert_notif_ID")
+				.i("main activity extras ${extras.getInt(CCFireBaseMessagingService.EXTRAS_NOTIFICATION_ALERT_ID)}")
+		}
 		super.onNewIntent(intent)
 		this.intent = intent
 		getNewIntentLogic(intent)
-		Timber.tag("alert notif ID").i("main activity onNewIntent}")
+		Timber.tag("alert_notif_ID").i("main activity onNewIntent")
 	}
 	
 	private fun getNewIntentLogic(intent: Intent?) {

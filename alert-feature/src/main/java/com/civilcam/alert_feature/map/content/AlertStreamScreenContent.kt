@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -38,8 +39,15 @@ fun AlertStreamScreenContent(
     )
 
 
-    Box(modifier = modifier.background(CCTheme.colors.cianColor)) {
-        liveUrl?.let { AlertVideoContent(url = it) }
+    Box(modifier = modifier.background(CCTheme.colors.grayThree)) {
+        liveUrl
+            ?.let { AlertVideoContent(url = it) }
+            ?: run {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center),
+                    color = CCTheme.colors.primaryRed
+                )
+            }
 
         LiveVideoBottomBar(
             modifier = Modifier
