@@ -9,10 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -38,6 +35,7 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
     val screenHeight = configuration.screenHeightDp.dp
     val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
 
+    val liveUrl = remember { derivedStateOf { state.onGuardUserInformation?.url } }
     val permissionRequest = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
         onResult = {
@@ -80,8 +78,8 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
 
     if (state.isResolveAlertVisible) {
         AlertDialogComp(
-            dialogTitle = stringResource(id = com.civilcam.alert_feature.R.string.resolve_alert_title),
-            dialogText = stringResource(id = com.civilcam.alert_feature.R.string.resolve_alert_text),
+            dialogTitle = stringResource(id = R.string.resolve_alert_title),
+            dialogText = stringResource(id = R.string.resolve_alert_text),
             alertType = AlertDialogButtons.CANCEL_RESOLVE,
             onOptionSelected = {
                 viewModel.setInputActions(LiveMapActions.ClickResolveAlertAnswer(it))
@@ -103,7 +101,7 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                 },
                 actionItem = {
                     TextActionButton(
-                        actionTitle = stringResource(id = com.civilcam.alert_feature.R.string.resolve_text),
+                        actionTitle = stringResource(id = R.string.resolve_text),
                         modifier = Modifier,
                         isEnabled = !state.isResolved,
                         actionAction = {
@@ -128,7 +126,7 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                         .fillMaxWidth(),
                     alertScreenState = state.emergencyScreen,
                     onActionClick = viewModel::setInputActions,
-                    liveUrl = state.alertDetailModel?.alertModel?.alertUrl
+                    liveUrl = liveUrl.value
                 )
 
                 AlertMapScreenContent(
@@ -142,8 +140,8 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                     detectLocation = {
                         permissionRequest.launch(
                             arrayOf(
-                                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION,
                             )
                         )
                     },

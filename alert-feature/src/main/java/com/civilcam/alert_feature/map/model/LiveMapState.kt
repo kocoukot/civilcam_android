@@ -2,7 +2,6 @@ package com.civilcam.alert_feature.map.model
 
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.domainLayer.model.OnGuardUserData
-import com.civilcam.domainLayer.model.alerts.AlertDetailModel
 import com.civilcam.ext_features.compose.ComposeFragmentState
 
 data class LiveMapState(
@@ -14,6 +13,4 @@ data class LiveMapState(
     val isLocationAllowed: Boolean = false,
     val onGuardUserInformation: OnGuardUserData? = null,
     val currentUserLocationData: UserAlertLocationData? = null,
-    val liveUrl: String? = null,
-    val alertDetailModel: AlertDetailModel? = null
 ) : ComposeFragmentState

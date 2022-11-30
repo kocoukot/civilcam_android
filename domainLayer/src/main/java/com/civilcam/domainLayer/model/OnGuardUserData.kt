@@ -7,9 +7,15 @@ data class OnGuardUserData(
     val date: String,
     val location: String,
     val person: AlertGuardianModel,
-    val status: AlertSocketStatus
+    val status: AlertSocketStatus,
+    val url: String?,
+    val streamStatus: AlertStreamStatus
 ) {
     enum class AlertSocketStatus {
         active, resolved, deleted,
+    }
+
+    enum class AlertStreamStatus {
+        active, idle, disabled,
     }
 }

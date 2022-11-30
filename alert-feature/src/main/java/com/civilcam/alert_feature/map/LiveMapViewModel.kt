@@ -10,7 +10,6 @@ import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.model.JsonDataParser
 import com.civilcam.domainLayer.model.OnGuardUserData
 import com.civilcam.domainLayer.serviceCast
-import com.civilcam.domainLayer.usecase.alerts.GetAlertDetailUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetMapAlertUserDataUseCase
 import com.civilcam.domainLayer.usecase.alerts.ResolveAlertUseCase
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
@@ -33,14 +32,13 @@ class LiveMapViewModel(
     private val fetchUserLocationUseCase: FetchUserLocationUseCase,
     private val getAlertUserDataUseCase: GetMapAlertUserDataUseCase,
     private val resolveAlertUseCase: ResolveAlertUseCase,
-    private val getAlertDetailUseCase: GetAlertDetailUseCase
 ) : ComposeViewModel<LiveMapState, LiveMapRoute, LiveMapActions>() {
     override var _state: MutableStateFlow<LiveMapState> = MutableStateFlow(LiveMapState())
     private val mSocket = SocketHandler.getSocket()
     private val gson = Gson()
     
     init {
-    	goAlertDetails(alertId)
+        _state.update { it.copy(isLoading = true) }
     }
 
     private fun fetchUserLocation() {
@@ -74,28 +72,6 @@ class LiveMapViewModel(
                 }
             }
         }
-    }
-    
-    private fun goAlertDetails(alertId: Int) {
-        _state.update { it.copy(isLoading = true) }
-        networkRequest(
-            action = { getAlertDetailUseCase(alertId) },
-            onSuccess = { detail ->
-                detail
-                _state.update {
-                    it.copy(
-                        alertDetailModel = detail,
-                        onGuardUserInformation = detail.toOnGuardDetailModel()
-                    )
-                }
-            },
-            onFailure = { error ->
-                error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
-            },
-            onComplete = {
-                _state.update { it.copy(isLoading = false) }
-            },
-        )
     }
 
     override fun setInputActions(action: LiveMapActions) {
@@ -177,6 +153,7 @@ class LiveMapViewModel(
             when (person.status) {
                 OnGuardUserData.AlertSocketStatus.active -> _state.update {
                     it.copy(
+                        isLoading = false,
                         onGuardUserInformation = person.copy()
                     )
                 }
