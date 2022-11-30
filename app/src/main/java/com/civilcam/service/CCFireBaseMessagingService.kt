@@ -67,7 +67,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
             when {
                 data[ARG_NOTICE_TYPE_KEY] == ARG_NOTICE_TYPE_ALERT -> {
                     data[ARG_ALERT_ID_KEY]?.toInt()?.let { alertId ->
-                        Timber.tag("alert_notif_ID").d("onNewIntent user id body data $alertId")
+//                        Timber.tag("alert_notif_ID").d("onNewIntent user id body data $alertId")
                         showAlertNotification(
                             context = applicationContext,
                             alertId,
@@ -77,7 +77,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                 }
                 data[ARG_NOTICE_TYPE_KEY] == ARG_NOTICE_TYPE_REQUEST -> {
                     data[ARG_REQUEST_ID_KEY]?.toInt()?.let { requestId ->
-                        Timber.tag("alert_notif_ID").d("onNewIntent user id data $requestId")
+//                        Timber.tag("alert_notif_ID").d("onNewIntent user id data $requestId")
                         showRequestNotification(
                             context = applicationContext,
                             requestId,
@@ -258,6 +258,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
             putExtra(EXTRAS_NOTIFICATION_ALERT_ID, alertId)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             addCategory(Intent.CATEGORY_LAUNCHER)
+            action = System.currentTimeMillis().toString()
         }
 
         val broadcastPendingIntentClose =
@@ -275,7 +276,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
             addNextIntentWithParentStack(activityIntent)
             // Get the PendingIntent containing the entire back stack
             getPendingIntent(
-                1,
+                88,
                 // mutability flag required when targeting Android12 or higher
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
             )
