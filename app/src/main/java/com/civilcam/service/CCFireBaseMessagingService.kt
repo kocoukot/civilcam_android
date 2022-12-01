@@ -91,7 +91,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
     }
 
     @SuppressLint("RestrictedApi")
-    fun showRequestNotification(context: Context, requestId: Int, userName: String) {
+    private fun showRequestNotification(context: Context, requestId: Int, userName: String) {
         val maxProgress = 5
         var mProgressStatus = 0
         showRequestProgress = true
@@ -152,12 +152,23 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
             )
 
-
+        val clickIntent = Intent(context, MainActivity::class.java).apply {
+            putExtra(EXTRAS_NOTIFICATION_REQUEST_ID_KEY, requestId)
+            action = System.currentTimeMillis().toString()
+            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            addCategory(Intent.CATEGORY_LAUNCHER)
+        }
+        val clickPendingIntent = PendingIntent.getActivity(
+            context,
+            55,
+            clickIntent,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
+        )
         notificationBuilder.apply {
             setOnlyAlertOnce(true)
             setCustomContentView(notificationLayout)
             setCustomBigContentView(notificationLayoutExpanded)
-
+            setContentIntent(clickPendingIntent)
             setProgress(maxProgress, 0, false)
             setSmallIcon(R.drawable.ic_launcher_foreground)
             setLargeIcon(
@@ -166,7 +177,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                     R.drawable.ic_launcher_foreground
                 )
             )
-            //todo setContentIntent
+
             setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             setOngoing(false)
 
@@ -235,7 +246,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
 
 
     @SuppressLint("RestrictedApi")
-    fun showAlertNotification(context: Context, alertId: Int, userName: String) {
+    private fun showAlertNotification(context: Context, alertId: Int, userName: String) {
         val maxProgress = 5
         var mProgressStatus = 0
         showAlertProgress = true
@@ -289,12 +300,6 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
             )
         }
-//            val broadcastPendingIntentDetail =
-//            PendingIntent.getBroadcast(context, 12, activityIntent.apply {
-//                putExtra(EXTRAS_NOTIFICATION_KEY, "detail")
-//                putExtra(EXTRAS_NOTIFICATION_ALERT_ID, alertId)
-//                //  flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-//            }, PendingIntent.FLAG_IMMUTABLE)
 
 
         notificationBuilder.apply {
