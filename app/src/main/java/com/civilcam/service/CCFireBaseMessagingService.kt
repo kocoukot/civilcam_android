@@ -90,7 +90,8 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
         }
     }
 
-    private fun showRequestNotification(context: Context, requestId: Int, userName: String) {
+    @SuppressLint("RestrictedApi")
+    fun showRequestNotification(context: Context, requestId: Int, userName: String) {
         val maxProgress = 5
         var mProgressStatus = 0
         showRequestProgress = true
@@ -157,27 +158,6 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
             setCustomContentView(notificationLayout)
             setCustomBigContentView(notificationLayoutExpanded)
 
-            notificationLayout.apply {
-                setProgressBar(R.id.progressBar, maxProgress, 0, false)
-
-                setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
-
-                setOnClickPendingIntent(R.id.button_notification_deny, broadcastPendingIntentDeny)
-
-                setOnClickPendingIntent(
-                    R.id.button_notification_accept,
-                    broadcastPendingIntentAccept
-                )
-            }
-            notificationLayoutExpanded.apply {
-                setProgressBar(R.id.progressBar, maxProgress, 0, false)
-                setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
-                setOnClickPendingIntent(R.id.button_notification_deny, broadcastPendingIntentDeny)
-                setOnClickPendingIntent(
-                    R.id.button_notification_accept,
-                    broadcastPendingIntentAccept
-                )
-            }
             setProgress(maxProgress, 0, false)
             setSmallIcon(R.drawable.ic_launcher_foreground)
             setLargeIcon(
@@ -186,12 +166,40 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                     R.drawable.ic_launcher_foreground
                 )
             )
+            //todo setContentIntent
             setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             setOngoing(false)
 
             setAutoCancel(true)
             setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
             priority = NotificationManager.IMPORTANCE_HIGH
+
+
+            contentView.apply {
+                setProgressBar(R.id.progressBar, maxProgress, 0, false)
+
+                setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
+
+                setOnClickPendingIntent(R.id.button_notification_deny, broadcastPendingIntentDeny)
+
+                setOnClickPendingIntent(
+                    R.id.button_notification_accept,
+                    broadcastPendingIntentAccept
+                )
+            }
+            bigContentView.apply {
+                setProgressBar(R.id.progressBar, maxProgress, 0, false)
+
+                setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
+                setOnClickPendingIntent(R.id.button_notification_deny, broadcastPendingIntentDeny)
+
+                setOnClickPendingIntent(
+                    R.id.button_notification_accept,
+                    broadcastPendingIntentAccept
+                )
+
+            }
+
 
         }
 
@@ -204,14 +212,14 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                     false
                 )
 
-                notificationLayout.setProgressBar(
+                notificationBuilder.contentView.setProgressBar(
                     R.id.progressBar,
                     maxProgress,
                     mProgressStatus,
                     false
                 )
 
-                notificationLayoutExpanded.setProgressBar(
+                notificationBuilder.bigContentView.setProgressBar(
                     R.id.progressBar,
                     maxProgress,
                     mProgressStatus,
@@ -293,8 +301,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
             setOnlyAlertOnce(true)
             setCustomContentView(notificationLayout)
             setCustomBigContentView(notificationLayoutExpanded)
-            contentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
-            bigContentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
+
             setProgress(maxProgress, 0, false)
             setSmallIcon(R.drawable.ic_launcher_foreground)
             setLargeIcon(
@@ -321,7 +328,8 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
             priority = NotificationManager.IMPORTANCE_HIGH
 
 
-            notificationBuilder.contentView.apply {
+            contentView.apply {
+                setProgressBar(R.id.progressBar, maxProgress, 0, false)
                 setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
 
                 setOnClickPendingIntent(
@@ -331,7 +339,8 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
             }
 
 
-            notificationBuilder.bigContentView.apply {
+            bigContentView.apply {
+                setProgressBar(R.id.progressBar, maxProgress, 0, false)
                 setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
                 setOnClickPendingIntent(
                     R.id.button_notification_detail,
