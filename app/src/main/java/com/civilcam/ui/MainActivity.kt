@@ -28,6 +28,8 @@ import com.civilcam.service.location.LocationService
 import com.civilcam.service.location.LocationService.Companion.ACTION_START
 import com.civilcam.service.location.LocationService.Companion.ACTION_STOP
 import com.civilcam.ui.common.NavigationDirection
+import com.civilcam.ui.network.main.NetworkMainFragment
+import com.civilcam.ui.network.main.model.NetworkScreen
 import com.civilcam.ui.subscription.SubscriptionFragment
 import org.koin.android.ext.android.inject
 import timber.log.Timber
@@ -36,19 +38,16 @@ import timber.log.Timber
 class MainActivity : AppCompatActivity() {
 	private val isUserLoggedInUseCase: IsUserLoggedInUseCase by inject()
 	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase by inject()
-	
-	private val currentSessionUser by lazy {
-		getLocalCurrentUserUseCase()
-	}
-	
-	//    2022-12-27T10:57:13.000Z  sub date format
+
+	private val currentSessionUser by lazy { getLocalCurrentUserUseCase() }
+
 	private lateinit var binding: ActivityMainBinding
 	private var navHost: NavHostFragment? = null
-	
+
 	private val notificationManager by lazy {
 		getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 	}
-	
+
 	private val currentVisibleFragment: Fragment?
 		get() = navHost?.childFragmentManager?.fragments?.first()
 	
@@ -112,7 +111,7 @@ class MainActivity : AppCompatActivity() {
 //        Logger.getLogger(SocketHandler::class.java.name).level = Level.ALL
 //        Logger.getLogger(Manager::class.java.name).level = Level.ALL
 		if (isUserLoggedInUseCase()) startLocationService()
-		Timber.tag("alert notif ID").i("main activity on create")
+		Timber.tag("alert_notif_ID").i("main activity on create")
 	}
 	
 	override fun onStart() {
@@ -128,8 +127,8 @@ class MainActivity : AppCompatActivity() {
 			}
 		}
 	}
-	
-	fun stopLocationService() {
+
+	private fun stopLocationService() {
 		val service = getSystemService(LocationService::class.java)
 		if (isUserLoggedInUseCase()) {
 			Intent(applicationContext, LocationService::class.java).apply {
@@ -154,10 +153,6 @@ class MainActivity : AppCompatActivity() {
 	}
 	
 	override fun onNewIntent(intent: Intent?) {
-		intent?.extras?.let { extras ->
-			Timber.tag("alert_notif_ID")
-				.i("main activity extras ${extras.getInt(CCFireBaseMessagingService.EXTRAS_NOTIFICATION_ALERT_ID)}")
-		}
 		super.onNewIntent(intent)
 		this.intent = intent
 		getNewIntentLogic(intent)
@@ -174,13 +169,30 @@ class MainActivity : AppCompatActivity() {
 			extras.getInt(CCFireBaseMessagingService.EXTRAS_NOTIFICATION_ALERT_ID).takeIf { it > 0 }
 				?.let { alertId ->
 					Timber.tag("alert_notif_ID").i("main activity userId $alertId")
-					
+
 					CCFireBaseMessagingService.cancelAlertProgress()
 					(getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(
 						CCFireBaseMessagingService.NOTIFICATION_ALERT_ID
 					)
 					Handler(Looper.getMainLooper()).postDelayed({
 						navHost?.navController?.navigate("civilcam://liveMapFragment/$alertId".toUri())
+					}, 500)
+				}
+
+			extras.getInt(CCFireBaseMessagingService.EXTRAS_NOTIFICATION_REQUEST_ID_KEY)
+				.takeIf { it > 0 }
+				?.let { requestId ->
+					Timber.tag("alert_notif_ID").i("main activity userId $requestId")
+
+					CCFireBaseMessagingService.cancelRequestProgress()
+					(getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(
+						CCFireBaseMessagingService.NOTIFICATION_REQUESTS_ID
+					)
+					Handler(Looper.getMainLooper()).postDelayed({
+						navHost?.navController?.navigate(
+							R.id.network_root,
+							NetworkMainFragment.createArgs(NetworkScreen.REQUESTS)
+						)
 					}, 500)
 				}
 		}

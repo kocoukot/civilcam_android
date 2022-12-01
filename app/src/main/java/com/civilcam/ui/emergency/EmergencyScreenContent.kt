@@ -68,7 +68,11 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 		Box(
 			modifier = Modifier.fillMaxSize()
 		) {
-			
+			val defaultButtonModifier = Modifier
+				.align(Alignment.BottomCenter)
+				.size(150.dp)
+				.offset(y = (-36).dp)
+
 			Column {
 				LiveMapContent(
 					modifier = Modifier.fillMaxSize(),
@@ -79,7 +83,11 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 					onActionClicked = viewModel::setInputActions,
 				)
 			}
-			
+			val buttonModifier = if (state.emergencyScreen == EmergencyScreen.MAP_EXTENDED)
+				defaultButtonModifier.navigationBarsPadding()
+			else
+				defaultButtonModifier
+
 			AnimatedVisibility(
 				visible = state.emergencyScreen == EmergencyScreen.NORMAL || state.emergencyScreen == EmergencyScreen.MAP_EXTENDED,
 				enter = fadeIn(animationSpec = tween(ANIMATION_DURATION)),
@@ -87,11 +95,7 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 			) {
 				LiveButtonContent(
 					emergencyButton = state.emergencyButton,
-					modifier = Modifier
-						.align(Alignment.BottomCenter)
-						.size(150.dp)
-						.navigationBarsPadding()
-						.offset(y = (-36).dp),
+					modifier = buttonModifier,
 					onButtonClick = { action ->
 						when (action) {
 							is EmergencyActions.DoubleClickSos -> {
@@ -110,7 +114,7 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 					},
 				)
 			}
-			
+
 			AnimatedVisibility(
 				visible = toastState,
 				enter = slideInVertically(animationSpec = tween(300)),

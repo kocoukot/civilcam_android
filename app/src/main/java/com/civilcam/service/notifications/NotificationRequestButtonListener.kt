@@ -26,8 +26,6 @@ class NotificationRequestButtonListener : KoinComponent, BroadcastReceiver() {
     private val setRequestReactionUseCase: SetRequestReactionUseCase by inject()
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        // val pendingResult: PendingResult = goAsync()
-
 
         Timber.i("onNewIntent notify close ${intent?.extras?.getString(EXTRAS_NOTIFICATION_KEY)}")
         intent?.extras?.getString(EXTRAS_NOTIFICATION_KEY)?.let { type ->
@@ -46,30 +44,29 @@ class NotificationRequestButtonListener : KoinComponent, BroadcastReceiver() {
                     )
                 }
                 NotificationAction.DENY -> {
-                    intent.extras?.getInt(EXTRAS_NOTIFICATION_REQUEST_ID_KEY)?.let { requestId ->
-                        Timber.tag("alert notif ID").i("broadcast userId deny  $requestId")
-                        answerRequest(requestId, ButtonAnswer.DECLINE)
-                    }
-
                     context?.let {
                         CCFireBaseMessagingService.cancelRequestProgress()
                         (it.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
                             NOTIFICATION_REQUESTS_ID
                         )
+                    }
+
+                    intent.extras?.getInt(EXTRAS_NOTIFICATION_REQUEST_ID_KEY)?.let { requestId ->
+                        Timber.tag("alert_notif_ID").i("broadcast userId deny  $requestId")
+                        answerRequest(requestId, ButtonAnswer.DECLINE)
                     }
                 }
                 NotificationAction.ACCEPT -> {
-
-                    intent.extras?.getInt(EXTRAS_NOTIFICATION_REQUEST_ID_KEY)?.let { requestId ->
-                        Timber.tag("alert notif ID").i("broadcast userId accept $requestId")
-                        answerRequest(requestId, ButtonAnswer.ACCEPT)
-                    }
-
                     context?.let {
                         CCFireBaseMessagingService.cancelRequestProgress()
                         (it.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
                             NOTIFICATION_REQUESTS_ID
                         )
+                    }
+
+                    intent.extras?.getInt(EXTRAS_NOTIFICATION_REQUEST_ID_KEY)?.let { requestId ->
+                        Timber.tag("alert_notif_ID").i("broadcast userId accept $requestId")
+                        answerRequest(requestId, ButtonAnswer.ACCEPT)
                     }
                 }
                 else -> {}
@@ -79,11 +76,11 @@ class NotificationRequestButtonListener : KoinComponent, BroadcastReceiver() {
 
     private fun answerRequest(requestId: Int, answerType: ButtonAnswer) {
         scope.launch(Dispatchers.IO) {
-            try {
-                setRequestReactionUseCase(answerType, requestId)
-            } finally {
-                //    pendingResult.finish()
-            }
+            kotlin.runCatching { setRequestReactionUseCase(answerType, requestId) }
+                .onSuccess { }
+                .onFailure {
+                    Timber.tag("alert_notif_ID").e("request error ${it.localizedMessage}")
+                }
         }
     }
 }
