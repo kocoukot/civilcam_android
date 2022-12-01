@@ -1,6 +1,7 @@
 package com.civilcam.ui.subscription
 
 import androidx.lifecycle.viewModelScope
+import com.civilcam.domainLayer.model.subscription.SubscriptionsList
 import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.subscriptions.GetSubscriptionsUseCase
@@ -17,11 +18,11 @@ import com.civilcam.ui.subscription.data.SubExpired
 import com.civilcam.ui.subscription.model.SubscriptionActions
 import com.civilcam.ui.subscription.model.SubscriptionRoute
 import com.civilcam.ui.subscription.model.SubscriptionState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.util.*
 
 class SubscriptionViewModel(
 	private val userSubState: UserSubscriptionState,
@@ -33,6 +34,7 @@ class SubscriptionViewModel(
 ) : ComposeViewModel<SubscriptionState, SubscriptionRoute, SubscriptionActions>() {
 	override var _state: MutableStateFlow<SubscriptionState> = MutableStateFlow(SubscriptionState())
 
+	private lateinit var selectedSubType: SubscriptionsList.SubscriptionInfo
 	init {
 		_state.update { it.copy(userSubState = userSubState) }
 		if (userSubState == UserSubscriptionState.SUB_EXPIRED) {
@@ -52,12 +54,8 @@ class SubscriptionViewModel(
 
 	private fun onCloseAlert(isConfirm: Boolean) {
 		when (state.value.alert) {
-			is SubConfirmAlert -> {
-				if (isConfirm) onConfirmSubscription()
-			}
-			is SubConfirmed -> {
-				goProfileSetup()
-			}
+			is SubConfirmAlert -> if (isConfirm) onConfirmSubscription()
+			is SubConfirmed -> goProfileSetup()
 		}
 		_state.update { it.copy(alert = AlertDialogType.Empty) }
 	}
@@ -126,12 +124,28 @@ class SubscriptionViewModel(
 	}
 
 	private fun onConfirmSubscription() {
-		//todo api request for subscription
-
+		//todo add google receipt later
 		viewModelScope.launch {
 			_state.update { it.copy(isLoading = true) }
-			delay(2000)
-			_state.update { it.copy(alert = SubConfirmed, isLoading = false) }
+			networkRequest(
+				action = {
+					setUserSubscriptionUseCase(
+						receipt = UUID.randomUUID().toString(),
+						productId = selectedSubType.productId
+					)
+				},
+				onSuccess = {
+					_state.update { it.copy(alert = SubConfirmed, isLoading = false) }
+				},
+				onFailure = { error ->
+					error.serviceCast { errorText, _, _ ->
+						_state.update { it.copy(alert = AlertDialogType.ErrorAlert(errorText)) }
+					}
+				},
+				onComplete = {
+					_state.update { it.copy(isLoading = false) }
+				},
+			)
 		}
 	}
 
@@ -141,17 +155,12 @@ class SubscriptionViewModel(
 		} else {
 			_state.value.subscriptionsList.list.find { it.title == subscriptionType }
 				?.let { selectedSub ->
-					var date = LocalDate.now()
-					date = when (selectedSub.unitType) {
-						"month" -> date.plusMonths(1)
-						"year" -> date.plusYears(1)
-						else -> date
-					}
+					selectedSubType = selectedSub
 					_state.update {
 						it.copy(
 							alert = SubConfirmAlert(
 								"$${selectedSub.cost / 100}",
-								date.format(DateUtils.dateOfBirthFormatter)
+								LocalDate.now().format(DateUtils.dateOfBirthFormatter)
 							)
 						)
 					}

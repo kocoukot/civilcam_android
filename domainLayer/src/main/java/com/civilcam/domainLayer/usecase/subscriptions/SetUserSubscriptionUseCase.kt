@@ -5,6 +5,6 @@ import com.civilcam.domainLayer.repos.SubscriptionsRepository
 class SetUserSubscriptionUseCase(
 	private val subscriptionsRepository: SubscriptionsRepository
 ) {
-	suspend fun invoke(receipt: String, productId: String) =
+	suspend operator fun invoke(receipt: String, productId: String) =
 		subscriptionsRepository.setGoogleSubscription(receipt, productId)
 }

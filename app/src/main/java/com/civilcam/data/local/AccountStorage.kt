@@ -2,10 +2,13 @@ package com.civilcam.data.local
 
 import android.accounts.Account
 import android.accounts.AccountManager
+import com.civilcam.domainLayer.model.SubscriptionStatus
 import com.civilcam.domainLayer.model.user.CurrentUser
 import com.civilcam.domainLayer.model.user.UserBaseInfo
 import com.civilcam.domainLayer.model.user.UserState
+import com.civilcam.ext_features.DateUtils
 import com.google.gson.Gson
+import java.time.LocalDateTime
 import java.util.*
 
 
@@ -113,14 +116,42 @@ class AccountStorage(
 
 	private fun getAccount(): Account? =
 		accountManager.getAccountsByType(ACCOUNT_TYPE).singleOrNull()
-	
+
 	fun getUser(): CurrentUser? =
 		getAccount().let { account ->
 			accountManager.getUserData(account, USER)
 				.takeIf { it.isNotEmpty() }
 				.let { gson.fromJson(it, CurrentUser::class.java) }
 		}
-	
+
+	fun updateSubscription(productId: String) {
+		//todo remove after test
+		var currentDate = LocalDateTime.now()
+		currentDate = when (productId) {
+			"Monthly5" -> {
+				currentDate.plusMonths(1)
+			}
+			"Yearly50" -> {
+				currentDate.plusYears(1)
+			}
+			else -> currentDate
+		}
+
+		var user = getUser()
+		if (user != null) {
+			user = user.copy(
+				sessionUser = user.sessionUser.copy(isSubscriptionActive = true),
+				subscription = user.subscription.copy(
+					productId = productId,
+					status = SubscriptionStatus.active,
+					expiredAt = currentDate.format(DateUtils.isoDateFormatter)
+				)
+			)
+			println("saved user $user")
+			accountManager.setUserData(getOrCreateAccount(), USER, gson.toJson(user))
+		}
+	}
+
 	companion object {
 		private const val ACCOUNT_NAME = "CivilCam"
 		private const val ACCOUNT_TYPE = "com.civilcam.civilcam"
