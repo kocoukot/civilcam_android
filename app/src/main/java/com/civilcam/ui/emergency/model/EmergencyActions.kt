@@ -14,5 +14,6 @@ sealed class EmergencyActions {
 	object ChangeLiveScreen : EmergencyActions()
 	object ControlTorch : EmergencyActions()
 
+	data class ChangeCurrentTime(val time: Long) : EmergencyActions()
 	data class ClickChangeScreen(val screenState: EmergencyScreen) : EmergencyActions()
 }

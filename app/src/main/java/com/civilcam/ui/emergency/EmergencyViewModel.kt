@@ -17,6 +17,7 @@ import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.SendEmergencySosUseCase
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
+import com.civilcam.ext_features.DateUtils
 import com.civilcam.ext_features.live_data.SingleLiveEvent
 import com.civilcam.socket_feature.SocketHandler
 import com.civilcam.socket_feature.SocketMapEvents
@@ -135,7 +136,12 @@ class EmergencyViewModel(
 			EmergencyActions.ChangeLiveScreen -> changeLiveScreen()
 			EmergencyActions.ControlTorch -> controlTorch()
 			is EmergencyActions.ClickChangeScreen -> screenChange(action.screenState)
+			is EmergencyActions.ChangeCurrentTime -> changeCurrentTime(action.time)
 		}
+	}
+	
+	private fun changeCurrentTime(time: Long) {
+		_currentTime.value = DateUtils.getFullDateAndTimeString(time)
 	}
 	
 	private fun controlTorch() {

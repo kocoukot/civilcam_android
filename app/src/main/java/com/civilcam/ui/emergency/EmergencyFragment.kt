@@ -7,10 +7,7 @@ import android.content.pm.PackageManager
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraManager
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.SurfaceHolder
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -71,6 +68,7 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 		
 		rtmpCamera = RtmpCamera1(binding.liveSurfaceView.surfaceView, this)
 		rtmpCamera?.setReTries(1000)

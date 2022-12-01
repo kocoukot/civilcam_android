@@ -22,6 +22,9 @@ import com.civilcam.ui.emergency.content.LiveButtonContent
 import com.civilcam.ui.emergency.content.LiveMapContent
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyButton
+import kotlinx.coroutines.delay
+import timber.log.Timber
+import kotlin.time.Duration.Companion.seconds
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -37,6 +40,16 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 		animationSpec = tween(durationMillis = 5000, easing = LinearEasing, delayMillis = 500),
 		finishedListener = { toastState = false }// ProgressIndicatorDefaults.ProgressAnimationSpec
 	)
+	
+	var currentLongTime by remember { mutableStateOf(System.currentTimeMillis()) }
+	LaunchedEffect(Unit) {
+		while (true) {
+			Timber.i("LaunchedEffect $currentLongTime")
+			delay(1.seconds)
+			currentLongTime += 1000
+			viewModel.setInputActions(EmergencyActions.ChangeCurrentTime(currentLongTime))
+		}
+	}
 	
 	if (state.errorText.isNotEmpty()) {
 		AlertDialogComp(dialogText = state.errorText,
