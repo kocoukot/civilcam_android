@@ -13,7 +13,7 @@ object DateUtils {
 	
 	private val dateOfBirthTimeFormatter = DateTimeFormatter.ofPattern("MM.dd.yyyy", Locale.US)
 	private val dateOfBirthISOFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US)
-	private val isoDateFormatter =
+	val isoDateFormatter =
 		DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
 	var dateDeadlineFormatter: DateTimeFormatter =
 		DateTimeFormatter.ofPattern("MM.dd.yyyy, h:mm a", Locale.US)
