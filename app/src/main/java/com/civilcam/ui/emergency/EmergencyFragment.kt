@@ -70,12 +70,6 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 		super.onViewCreated(view, savedInstanceState)
 		activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 		
-		rtmpCamera = RtmpCamera1(binding.liveSurfaceView.surfaceView, this)
-		rtmpCamera?.setReTries(1000)
-		binding.liveSurfaceView.surfaceView.apply {
-			holder.addCallback(this@EmergencyFragment)
-		}
-		
 		cameraManager = activity?.getSystemService(CAMERA_SERVICE) as CameraManager
 		
 		with(binding) {
@@ -216,6 +210,11 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 	}
 	
 	private fun goLive(streamKey: String) {
+		rtmpCamera = RtmpCamera1(binding.liveSurfaceView.surfaceView, this)
+		rtmpCamera?.setReTries(1000)
+		binding.liveSurfaceView.surfaceView.apply {
+			holder.addCallback(this@EmergencyFragment)
+		}
 		rtmpCamera?.apply {
 			prepareVideo()
 			prepareAudio(
