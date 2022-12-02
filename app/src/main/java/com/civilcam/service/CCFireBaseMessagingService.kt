@@ -89,7 +89,16 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                     data[ARG_FULL_NAME_KEY]?.let { fullName ->
                         val notificationText =
                             applicationContext.getString(R.string.notification_safe_text, fullName)
-                        showCommonNotification(context = applicationContext, notificationText)
+                        val alertId = data[ARG_ALERT_ID_KEY]?.toInt() ?: 0
+                        showCommonNotification(
+                            context = applicationContext,
+                            notificationText,
+                            alertId
+                        )
+
+                        (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(
+                            NOTIFICATION_ALERT_ID + alertId
+                        )
                     }
                 }
                 else -> {
@@ -99,7 +108,11 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
         }
     }
 
-    private fun showCommonNotification(context: Context, notificationText: String) {
+    private fun showCommonNotification(
+        context: Context,
+        notificationText: String,
+        alertId: Int = 0,
+    ) {
         val channelId = "${context.packageName}-${NotificationType.COMMON.notifyName}"
         val notificationTitle = context.getString(R.string.notification_safe_title)
 
@@ -162,7 +175,8 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                 0,
                 broadcastIntentClose.apply {
                     putExtra(EXTRAS_NOTIFICATION_KEY, "close_request")
-                    EXTRAS_NOTIFICATION_REQUEST_ID_KEY
+                    putExtra(EXTRAS_NOTIFICATION_REQUEST_ID_KEY, requestId)
+                    action = System.currentTimeMillis().toString()
                 },
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
             )
@@ -174,7 +188,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                 broadcastIntentClose.apply {
                     putExtra(EXTRAS_NOTIFICATION_KEY, "deny")
                     putExtra(EXTRAS_NOTIFICATION_REQUEST_ID_KEY, requestId)
-
+                    action = System.currentTimeMillis().toString()
                 },
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
             )
@@ -186,7 +200,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                 broadcastIntentClose.apply {
                     putExtra(EXTRAS_NOTIFICATION_KEY, "accept")
                     putExtra(EXTRAS_NOTIFICATION_REQUEST_ID_KEY, requestId)
-
+                    action = System.currentTimeMillis().toString()
                 },
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
             )
@@ -276,7 +290,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                     false
                 )
 
-                notify(NOTIFICATION_REQUESTS_ID, notificationBuilder.build())
+                notify(NOTIFICATION_REQUESTS_ID + requestId, notificationBuilder.build())
                 Thread.sleep(1000)
                 mProgressStatus++
             }
@@ -324,7 +338,8 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                 context, 11,
                 broadcastIntent.apply {
                     putExtra(EXTRAS_NOTIFICATION_KEY, "close_alert")
-
+                    putExtra(EXTRAS_NOTIFICATION_ALERT_ID, alertId)
+                    action = System.currentTimeMillis().toString()
                 },
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
             )
@@ -415,7 +430,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                     false
                 )
 
-                notify(NOTIFICATION_ALERT_ID, notificationBuilder.build())
+                notify(NOTIFICATION_ALERT_ID + alertId, notificationBuilder.build())
                 Thread.sleep(1000)
                 mProgressStatus++
             }

@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity() {
 
 					CCFireBaseMessagingService.cancelAlertProgress()
 					(getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(
-						CCFireBaseMessagingService.NOTIFICATION_ALERT_ID
+						CCFireBaseMessagingService.NOTIFICATION_ALERT_ID + alertId
 					)
 					Handler(Looper.getMainLooper()).postDelayed({
 						navHost?.navController?.navigate("civilcam://liveMapFragment/$alertId".toUri())
@@ -184,7 +184,7 @@ class MainActivity : AppCompatActivity() {
 
 					CCFireBaseMessagingService.cancelRequestProgress()
 					(getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(
-						CCFireBaseMessagingService.NOTIFICATION_REQUESTS_ID
+						CCFireBaseMessagingService.NOTIFICATION_REQUESTS_ID + requestId
 					)
 					Handler(Looper.getMainLooper()).postDelayed({
 						navHost?.navController?.navigate(
