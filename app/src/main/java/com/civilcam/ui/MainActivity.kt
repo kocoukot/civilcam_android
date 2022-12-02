@@ -39,8 +39,6 @@ class MainActivity : AppCompatActivity() {
 	private val isUserLoggedInUseCase: IsUserLoggedInUseCase by inject()
 	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase by inject()
 
-	private val currentSessionUser by lazy { getLocalCurrentUserUseCase() }
-
 	private lateinit var binding: ActivityMainBinding
 	private var navHost: NavHostFragment? = null
 
@@ -61,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 	
 	private fun checkSubscriptionState() {
 		if (isUserLoggedInUseCase()) {
-			currentSessionUser?.let {
+			getLocalCurrentUserUseCase()?.let {
 				if (!DateUtils.isSubValid(it.subscription.expiredAt)) {
 					navHost?.navController?.navigateToRoot(
 						R.id.subscriptionFragment, args = SubscriptionFragment.createArgs(
