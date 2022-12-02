@@ -8,7 +8,6 @@ import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import android.view.*
-import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -281,7 +280,11 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 	override fun onConnectionSuccessRtmp() {}
 	
 	override fun onConnectionFailedRtmp(reason: String) {
-		rtmpCamera?.reTry(5000, reason)
+		try {
+			rtmpCamera?.reTry(5000, reason)
+		} catch (e: Throwable) {
+			Timber.e("rtmpCamera error ${e.localizedMessage}")
+		}
 	}
 	
 	override fun onNewBitrateRtmp(bitrate: Long) {}

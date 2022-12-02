@@ -39,8 +39,6 @@ class MainActivity : AppCompatActivity() {
 	private val isUserLoggedInUseCase: IsUserLoggedInUseCase by inject()
 	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase by inject()
 
-	private val currentSessionUser by lazy { getLocalCurrentUserUseCase() }
-
 	private lateinit var binding: ActivityMainBinding
 	private var navHost: NavHostFragment? = null
 
@@ -61,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 	
 	private fun checkSubscriptionState() {
 		if (isUserLoggedInUseCase()) {
-			currentSessionUser?.let {
+			getLocalCurrentUserUseCase()?.let {
 				if (!DateUtils.isSubValid(it.subscription.expiredAt)) {
 					navHost?.navController?.navigateToRoot(
 						R.id.subscriptionFragment, args = SubscriptionFragment.createArgs(
@@ -172,7 +170,7 @@ class MainActivity : AppCompatActivity() {
 
 					CCFireBaseMessagingService.cancelAlertProgress()
 					(getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(
-						CCFireBaseMessagingService.NOTIFICATION_ALERT_ID
+						CCFireBaseMessagingService.NOTIFICATION_ALERT_ID + alertId
 					)
 					Handler(Looper.getMainLooper()).postDelayed({
 						navHost?.navController?.navigate("civilcam://liveMapFragment/$alertId".toUri())
@@ -186,7 +184,7 @@ class MainActivity : AppCompatActivity() {
 
 					CCFireBaseMessagingService.cancelRequestProgress()
 					(getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(
-						CCFireBaseMessagingService.NOTIFICATION_REQUESTS_ID
+						CCFireBaseMessagingService.NOTIFICATION_REQUESTS_ID + requestId
 					)
 					Handler(Looper.getMainLooper()).postDelayed({
 						navHost?.navController?.navigate(

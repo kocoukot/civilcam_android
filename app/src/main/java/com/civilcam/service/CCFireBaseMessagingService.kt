@@ -85,8 +85,60 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                         )
                     }
                 }
-                else -> {}
+                data[ARG_NOTICE_TYPE_KEY] == ARG_NOTICE_TYPE_SAFE -> {
+                    data[ARG_FULL_NAME_KEY]?.let { fullName ->
+                        val notificationText =
+                            applicationContext.getString(R.string.notification_safe_text, fullName)
+                        val alertId = data[ARG_ALERT_ID_KEY]?.toInt() ?: 0
+                        showCommonNotification(
+                            context = applicationContext,
+                            notificationText,
+                            alertId
+                        )
+
+                        (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(
+                            NOTIFICATION_ALERT_ID + alertId
+                        )
+                    }
+                }
+                else -> {
+                    showCommonNotification(context = applicationContext, "text notification")
+                }
             }
+        }
+    }
+
+    private fun showCommonNotification(
+        context: Context,
+        notificationText: String,
+        alertId: Int = 0,
+    ) {
+        val channelId = "${context.packageName}-${NotificationType.COMMON.notifyName}"
+        val notificationTitle = context.getString(R.string.notification_safe_title)
+
+        val notificationBuilder = NotificationCompat.Builder(context, channelId)
+        notificationBuilder.apply {
+
+            setContentTitle(notificationTitle)
+            setContentText(notificationText)
+            setSmallIcon(R.drawable.ic_launcher_foreground)
+            setLargeIcon(
+                BitmapFactory.decodeResource(
+                    context.resources,
+                    R.drawable.ic_launcher_foreground
+                )
+            )
+
+            setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            setOngoing(false)
+
+            setAutoCancel(true)
+            setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
+            priority = NotificationManager.IMPORTANCE_HIGH
+        }
+
+        NotificationManagerCompat.from(context).apply {
+            notify(NOTIFICATION_SAFE_ID, notificationBuilder.build())
         }
     }
 
@@ -123,7 +175,8 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                 0,
                 broadcastIntentClose.apply {
                     putExtra(EXTRAS_NOTIFICATION_KEY, "close_request")
-                    EXTRAS_NOTIFICATION_REQUEST_ID_KEY
+                    putExtra(EXTRAS_NOTIFICATION_REQUEST_ID_KEY, requestId)
+                    action = System.currentTimeMillis().toString()
                 },
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
             )
@@ -135,7 +188,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                 broadcastIntentClose.apply {
                     putExtra(EXTRAS_NOTIFICATION_KEY, "deny")
                     putExtra(EXTRAS_NOTIFICATION_REQUEST_ID_KEY, requestId)
-
+                    action = System.currentTimeMillis().toString()
                 },
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
             )
@@ -147,7 +200,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                 broadcastIntentClose.apply {
                     putExtra(EXTRAS_NOTIFICATION_KEY, "accept")
                     putExtra(EXTRAS_NOTIFICATION_REQUEST_ID_KEY, requestId)
-
+                    action = System.currentTimeMillis().toString()
                 },
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
             )
@@ -237,7 +290,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                     false
                 )
 
-                notify(NOTIFICATION_REQUESTS_ID, notificationBuilder.build())
+                notify(NOTIFICATION_REQUESTS_ID + requestId, notificationBuilder.build())
                 Thread.sleep(1000)
                 mProgressStatus++
             }
@@ -285,7 +338,8 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                 context, 11,
                 broadcastIntent.apply {
                     putExtra(EXTRAS_NOTIFICATION_KEY, "close_alert")
-
+                    putExtra(EXTRAS_NOTIFICATION_ALERT_ID, alertId)
+                    action = System.currentTimeMillis().toString()
                 },
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
             )
@@ -376,7 +430,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                     false
                 )
 
-                notify(NOTIFICATION_ALERT_ID, notificationBuilder.build())
+                notify(NOTIFICATION_ALERT_ID + alertId, notificationBuilder.build())
                 Thread.sleep(1000)
                 mProgressStatus++
             }
@@ -425,9 +479,12 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
 
         private const val ARG_NOTICE_TYPE_ALERT = "alert"
         private const val ARG_NOTICE_TYPE_REQUEST = "request"
+        private const val ARG_NOTICE_TYPE_SAFE = "safe"
 
         const val NOTIFICATION_REQUESTS_ID = 1002
         const val NOTIFICATION_ALERT_ID = 1003
+        const val NOTIFICATION_SAFE_ID = 1005
+
         private var showRequestProgress = true
         private var showAlertProgress = true
         var EXTRAS_NOTIFICATION_KEY = "notification_type"

@@ -31,42 +31,48 @@ class NotificationRequestButtonListener : KoinComponent, BroadcastReceiver() {
         intent?.extras?.getString(EXTRAS_NOTIFICATION_KEY)?.let { type ->
             when (NotificationAction.byDescription(type)) {
                 NotificationAction.CLOSE_ALERT -> {
-                    CCFireBaseMessagingService.cancelAlertProgress()
-                    (context?.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
-                        CCFireBaseMessagingService.NOTIFICATION_ALERT_ID
-                    )
+                    intent.extras?.getInt(CCFireBaseMessagingService.EXTRAS_NOTIFICATION_ALERT_ID)
+                        ?.let { alertId ->
+                            CCFireBaseMessagingService.cancelAlertProgress()
+                            (context?.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
+                                CCFireBaseMessagingService.NOTIFICATION_ALERT_ID + alertId
+                            )
+                        }
                 }
 
                 NotificationAction.CLOSE_REQUEST -> {
-                    CCFireBaseMessagingService.cancelRequestProgress()
-                    (context?.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
-                        NOTIFICATION_REQUESTS_ID
-                    )
-                }
-                NotificationAction.DENY -> {
-                    context?.let {
+                    intent.extras?.getInt(EXTRAS_NOTIFICATION_REQUEST_ID_KEY)?.let { requestId ->
                         CCFireBaseMessagingService.cancelRequestProgress()
-                        (it.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
-                            NOTIFICATION_REQUESTS_ID
+                        (context?.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
+                            NOTIFICATION_REQUESTS_ID + requestId
                         )
                     }
+                }
 
+                NotificationAction.DENY -> {
                     intent.extras?.getInt(EXTRAS_NOTIFICATION_REQUEST_ID_KEY)?.let { requestId ->
                         Timber.tag("alert_notif_ID").i("broadcast userId deny  $requestId")
                         answerRequest(requestId, ButtonAnswer.DECLINE)
+
+                        context?.let {
+                            CCFireBaseMessagingService.cancelRequestProgress()
+                            (it.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
+                                NOTIFICATION_REQUESTS_ID + requestId
+                            )
+                        }
                     }
                 }
                 NotificationAction.ACCEPT -> {
-                    context?.let {
-                        CCFireBaseMessagingService.cancelRequestProgress()
-                        (it.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
-                            NOTIFICATION_REQUESTS_ID
-                        )
-                    }
-
                     intent.extras?.getInt(EXTRAS_NOTIFICATION_REQUEST_ID_KEY)?.let { requestId ->
                         Timber.tag("alert_notif_ID").i("broadcast userId accept $requestId")
                         answerRequest(requestId, ButtonAnswer.ACCEPT)
+                        context?.let {
+                            CCFireBaseMessagingService.cancelRequestProgress()
+                            (it.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager).cancel(
+                                NOTIFICATION_REQUESTS_ID + requestId
+                            )
+                        }
+
                     }
                 }
                 else -> {}
