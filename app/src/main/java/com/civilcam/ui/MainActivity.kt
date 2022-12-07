@@ -28,6 +28,7 @@ import com.civilcam.service.location.LocationService
 import com.civilcam.service.location.LocationService.Companion.ACTION_START
 import com.civilcam.service.location.LocationService.Companion.ACTION_STOP
 import com.civilcam.socket_feature.SocketHandler
+import com.civilcam.service.voice.VoiceRecognition
 import com.civilcam.ui.common.NavigationDirection
 import com.civilcam.ui.network.main.NetworkMainFragment
 import com.civilcam.ui.network.main.model.NetworkScreen
@@ -40,6 +41,9 @@ class MainActivity : AppCompatActivity() {
 	private val isUserLoggedInUseCase: IsUserLoggedInUseCase by inject()
 	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase by inject()
 
+	private val recognizer = VoiceRecognition.Base(this) {
+		navHost?.navController?.navigateToRoot(R.id.emergency_root)
+	}
 	private lateinit var binding: ActivityMainBinding
 	private var navHost: NavHostFragment? = null
 
@@ -109,26 +113,40 @@ class MainActivity : AppCompatActivity() {
 //        Logger.getLogger(Socket::class.java.name).level = Level.ALL
 //        Logger.getLogger(SocketHandler::class.java.name).level = Level.ALL
 //        Logger.getLogger(Manager::class.java.name).level = Level.ALL
-		if (isUserLoggedInUseCase()) startLocationService()
+		if (isUserLoggedInUseCase()) {
+			startLocationService()
+			recognizer.initRecorder()
+		}
 		Timber.tag("alert_notif_ID").i("main activity on create")
 	}
-	
+
+	private fun startVoiceRecord() {
+		recognizer.startRecord()
+	}
+
 	override fun onStart() {
 		super.onStart()
 		checkSubscriptionState()
 	}
-	
+
+	override fun onResume() {
+		super.onResume()
+		if (isUserLoggedInUseCase()) {
+			startVoiceRecord()
+		}
+	}
+
 	fun startLocationService() {
 		if (isUserLoggedInUseCase()) {
 			Intent(applicationContext, LocationService::class.java).apply {
 				action = ACTION_START
 				startService(this)
 			}
+
 		}
 	}
 
 	private fun stopLocationService() {
-		val service = getSystemService(LocationService::class.java)
 		if (isUserLoggedInUseCase()) {
 			Intent(applicationContext, LocationService::class.java).apply {
 				action = ACTION_STOP
