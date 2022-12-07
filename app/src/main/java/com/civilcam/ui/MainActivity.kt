@@ -30,6 +30,7 @@ import com.civilcam.service.location.LocationService.Companion.ACTION_STOP
 import com.civilcam.socket_feature.SocketHandler
 import com.civilcam.service.voice.VoiceRecognition
 import com.civilcam.ui.common.NavigationDirection
+import com.civilcam.ui.emergency.EmergencyFragment
 import com.civilcam.ui.network.main.NetworkMainFragment
 import com.civilcam.ui.network.main.model.NetworkScreen
 import com.civilcam.ui.subscription.SubscriptionFragment
@@ -42,7 +43,10 @@ class MainActivity : AppCompatActivity() {
 	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase by inject()
 
 	private val recognizer = VoiceRecognition.Base(this) {
-		navHost?.navController?.navigateToRoot(R.id.emergency_root)
+		navHost?.navController?.navigateToRoot(
+			R.id.emergency_root,
+			args = EmergencyFragment.createArgs(true)
+		)
 	}
 	private lateinit var binding: ActivityMainBinding
 	private var navHost: NavHostFragment? = null
@@ -159,6 +163,7 @@ class MainActivity : AppCompatActivity() {
 		super.onDestroy()
 		stopLocationService()
 		SocketHandler.closeConnection()
+		recognizer.destroy()
 	}
 	
 	private fun navigateByDirection(direction: NavigationDirection) {

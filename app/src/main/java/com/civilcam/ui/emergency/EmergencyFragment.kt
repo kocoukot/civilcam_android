@@ -8,6 +8,7 @@ import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import android.view.*
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -16,6 +17,7 @@ import com.civilcam.R
 import com.civilcam.databinding.FragmentLiveBinding
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.alert.AlertDialogButtons
+import com.civilcam.ext_features.arg
 import com.civilcam.ext_features.ext.hideSystemUI
 import com.civilcam.ext_features.ext.showSystemUI
 import com.civilcam.ext_features.ext.showToast
@@ -33,21 +35,23 @@ import com.civilcam.ui.emergency.model.EmergencyRoute
 import com.pedro.rtplibrary.rtmp.RtmpCamera1
 import net.ossrs.rtmp.ConnectCheckerRtmp
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 
 class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 	SurfaceHolder.Callback {
 	private val binding by viewBinding(FragmentLiveBinding::bind)
-	private val viewModel: EmergencyViewModel by viewModel()
-	
+	private val viewModel: EmergencyViewModel by viewModel { parametersOf(isVoiceActivation) }
+
+	private val isVoiceActivation by arg<Boolean>(ARG_IS_VOICE_ACTIVATION, false)
 	private val permissionsDelegate = registerForPermissionsResult(
 		Manifest.permission.ACCESS_FINE_LOCATION,
 		Manifest.permission.ACCESS_COARSE_LOCATION,
 		Manifest.permission.CAMERA,
 		Manifest.permission.RECORD_AUDIO
 	) { onPermissionsGranted(it) }
-	
+
 	private var pendingAction: (() -> Unit)? = null
 	private val mSocket = SocketHandler
 	private var rtmpCamera: RtmpCamera1? = null
@@ -290,15 +294,23 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 	override fun onNewBitrateRtmp(bitrate: Long) {}
 	
 	override fun onDisconnectRtmp() {}
-	
+
 	override fun onAuthErrorRtmp() {}
-	
+
 	override fun onAuthSuccessRtmp() {}
-	
+
 	override fun surfaceCreated(p0: SurfaceHolder) {}
-	
+
 	override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {}
-	
+
 	override fun surfaceDestroyed(p0: SurfaceHolder) {}
-	
+
+	companion object {
+		private const val ARG_IS_VOICE_ACTIVATION = "is_voice"
+
+		fun createArgs(isVoice: Boolean) = bundleOf(
+			ARG_IS_VOICE_ACTIVATION to isVoice
+		)
+	}
+
 }

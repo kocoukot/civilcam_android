@@ -33,49 +33,50 @@ import timber.log.Timber
 import java.util.*
 
 class EmergencyViewModel(
+	isVoiceActivation: Boolean,
 	private val fetchUserLocationUseCase: FetchUserLocationUseCase,
 	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
 	private val sendEmergencySosUseCase: SendEmergencySosUseCase
 ) : ViewModel() {
-	
+
 	private val _composeState: MutableStateFlow<EmergencyState> = MutableStateFlow(EmergencyState())
 	val composeState: StateFlow<EmergencyState> = _composeState
-	
+
 	private val _steps: SingleLiveEvent<EmergencyRoute> = SingleLiveEvent()
 	val steps: SingleLiveEvent<EmergencyRoute> = _steps
-	
+
 	private val _screenState = MutableLiveData<EmergencyScreen>()
 	val screenState: LiveData<EmergencyScreen> = _screenState
-	
+
 	private val _currentTime = MutableLiveData<String>()
 	val currentTime: LiveData<String> = _currentTime
-	
+
 	private val _stopStream = MutableLiveData<Unit>()
 	val stopStream: LiveData<Unit> = _stopStream
-	
+
 	private val _controlTorch = MutableLiveData<Boolean>()
 	val controlTorch: LiveData<Boolean> = _controlTorch
-	
+
 	private var geocoder = Geocoder(CivilcamApplication.instance, Locale.US)
 	private val mSocket = SocketHandler.getSocket()
 	private val gson = Gson()
-	
+
 	private val compositeDisposable = CompositeDisposable()
-	
+
 	init {
 		getLocalCurrentUserUseCase().let { user ->
-			if (user?.sessionUser?.userState == UserState.alert) {
+			if (user?.sessionUser?.userState == UserState.alert || isVoiceActivation) {
 				setSosState()
 			}
 		}
 	}
-	
+
 	fun loadAvatar() {
 		getLocalCurrentUserUseCase().let { user ->
 			_composeState.update { it.copy(userAvatar = user?.userBaseInfo?.avatar) }
 		}
 	}
-	
+
 	fun fetchUserLocation() {
 		if (!composeState.value.isLocationAllowed) {
 			viewModelScope.launch {
@@ -98,7 +99,7 @@ class EmergencyViewModel(
 							), isLoading = false
 						)
 					}
-					
+
 					Timber.i("fetchUserLocationUseCase latlng ${location.first} bearing ${location.second}")
 					val addressList: MutableList<Address>
 					var address = ""
@@ -108,9 +109,9 @@ class EmergencyViewModel(
 						)?.toMutableList() ?: mutableListOf()
 						if (addressList.isNotEmpty()) address =
 							addressList[0].getAddressLine(0).takeIf { it.isNotEmpty() } ?: address
-						
+
 					} catch (e: Exception) {
-					
+
 					}
 					_composeState.update {
 						it.copy(
@@ -122,7 +123,7 @@ class EmergencyViewModel(
 			}
 		}
 	}
-	
+
 	fun setInputActions(action: EmergencyActions) {
 		when (action) {
 			EmergencyActions.DoubleClickSos -> doubleClickSos()
@@ -139,16 +140,16 @@ class EmergencyViewModel(
 			is EmergencyActions.ChangeCurrentTime -> changeCurrentTime(action.time)
 		}
 	}
-	
+
 	private fun changeCurrentTime(time: Long) {
 		_currentTime.value = DateUtils.getFullDateAndTimeString(time)
 	}
-	
+
 	private fun controlTorch() {
 		_composeState.update { it.copy(isFlashEnabled = !_composeState.value.isFlashEnabled) }
 		_controlTorch.value = _composeState.value.isFlashEnabled
 	}
-	
+
 	private fun changeLiveScreen() {
 		if (_composeState.value.emergencyScreen == EmergencyScreen.COUPLED) {
 			_composeState.update { it.copy(emergencyScreen = EmergencyScreen.LIVE_EXTENDED) }
@@ -159,52 +160,52 @@ class EmergencyViewModel(
 		}
 		_screenState.value = _composeState.value.emergencyScreen
 	}
-	
+
 	private fun clearErrorText() {
 		_composeState.update { it.copy(errorText = "") }
 	}
-	
+
 	private fun checkPermission() {
 		Timber.i("checkPermission ")
 		_steps.value = EmergencyRoute.CheckPermission(false)
 	}
-	
+
 	private fun screenChange(newScreenState: EmergencyScreen) {
 		_composeState.update { it.copy(emergencyScreen = newScreenState) }
 		_screenState.value = newScreenState
-		
+
 		when (newScreenState) {
 			EmergencyScreen.NORMAL, EmergencyScreen.COUPLED -> {
 				steps.value = EmergencyRoute.HideSystemUI
 			}
 			EmergencyScreen.MAP_EXTENDED, EmergencyScreen.LIVE_EXTENDED -> steps.value =
 				EmergencyRoute.ShowSystemUI
-			
+
 		}
 	}
-	
+
 	private fun goBack() {
 		_steps.value = EmergencyRoute.HideSystemUI
 		_screenState.value = EmergencyScreen.COUPLED
 		_composeState.update { it.copy(emergencyScreen = EmergencyScreen.COUPLED) }
 	}
-	
+
 	private fun goSettings() {
 		_steps.value = EmergencyRoute.GoSettings
 	}
-	
+
 	private fun goUserProfile() {
 		_steps.value = EmergencyRoute.GoUserProfile
 	}
-	
+
 	private fun goPinCode() {
 		_steps.value = EmergencyRoute.GoPinCode
 	}
-	
+
 	private fun doubleClickSos() {
 		_steps.value = EmergencyRoute.CheckPermission(true)
 	}
-	
+
 	private fun oneClickSafe() {
 		if (composeState.value.emergencyButton == EmergencyButton.InDangerButton) {
 			goPinCode()
@@ -216,11 +217,11 @@ class EmergencyViewModel(
 		compositeDisposable.clear()
 		super.onCleared()
 	}
-	
+
 	private fun setSosState() {
 		_steps.value = EmergencyRoute.IsNavBarVisible(false)
 		_screenState.value = EmergencyScreen.COUPLED
-		
+
 		_composeState.update {
 			it.copy(
 				emergencyScreen = EmergencyScreen.COUPLED,
@@ -231,7 +232,7 @@ class EmergencyViewModel(
 			fetchUserLocation()
 		}, 400)
 	}
-	
+
 	fun launchSos() {
 		if (composeState.value.emergencyButton == EmergencyButton.InSafeButton) {
 			_composeState.value.emergencyUserModel?.let { user ->
@@ -244,7 +245,7 @@ class EmergencyViewModel(
 					}.onSuccess { response ->
 						_steps.value = EmergencyRoute.IsNavBarVisible(false)
 						_screenState.value = EmergencyScreen.COUPLED
-						
+
 						_composeState.update {
 							it.copy(
 								emergencyScreen = EmergencyScreen.COUPLED,
@@ -264,12 +265,12 @@ class EmergencyViewModel(
 			}
 		}
 	}
-	
+
 	private fun disableSosStatus() {
 		_screenState.value = EmergencyScreen.NORMAL
 		_stopStream.value = Unit
 		_steps.value = EmergencyRoute.HideSystemUI
-		
+
 		_composeState.update {
 			it.copy(
 				emergencyScreen = EmergencyScreen.NORMAL,
@@ -278,11 +279,11 @@ class EmergencyViewModel(
 			)
 		}
 	}
-	
+
 	fun isLocationAllowed(isAllowed: Boolean) {
 		_composeState.update { it.copy(isLocationAllowed = isAllowed) }
 	}
-	
+
 	fun screenStateCheck() {
 		_screenState.value = _composeState.value.emergencyScreen
 		when (_composeState.value.emergencyScreen) {
@@ -295,11 +296,11 @@ class EmergencyViewModel(
 				EmergencyRoute.IsNavBarVisible(_composeState.value.emergencyButton == EmergencyButton.InSafeButton)
 		}, 100)
 	}
-	
+
 	fun addListeners() {
 		mSocket.on(SocketMapEvents.INCOME_GUARDIANS.msgType) { args ->
 			Timber.d("socket args $args")
-			
+
 			val data: JSONArray = args[0] as JSONArray
 			Timber.d("socket data $data")
 			val mutableGuardList = mutableListOf<AlertGuardianModel>()
@@ -321,7 +322,7 @@ class EmergencyViewModel(
 			}
 		}
 	}
-	
+
 	private fun emitMsg(msg: JsonDataParser) {
 		if (mSocket.connected()) {
 			Timber.d("socket out ${JSONObject(gson.toJson(msg))}")
@@ -331,13 +332,13 @@ class EmergencyViewModel(
 			mSocket.connect()
 		}
 	}
-	
+
 	fun removeSocketListeners() {
 		mSocket.off(SocketMapEvents.INCOME_GUARDIANS.msgType)
 	}
-	
+
 	companion object {
 		private const val MAX_WAITING_MILLIS = 3_000L
 	}
-	
+
 }
