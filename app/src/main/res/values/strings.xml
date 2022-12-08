@@ -5,11 +5,6 @@
     <string name="and_text">and</string>
     <string name="decline_text">Decline</string>
     <string name="accept_text">Accept</string>
-    <string name="cancel_text_caps">CANCEL</string>
-    <string name="ok_text_caps">OK</string>
-
-    <string name="yes_text_caps">YES</string>
-    <string name="confirm_text_caps">CONFIRM</string>
 
     <string name="search_text">Search</string>
     <string name="add_text">Add</string>
@@ -42,10 +37,7 @@
     <string name="profile_setup_date_of_birth_placeholder">MM.DD.YYYY</string>
     <string name="profile_setup_address_label">Address (Street, City, State, Zip)</string>
     <string name="profile_setup_address_placeholder">eg: 1456 Broadway, New York, NY, 10023</string>
-    <string name="profile_setup_phone_number_label">Phone number</string>
-    <string name="profile_setup_phone_number_placeholder">(123) 456 7890</string>
     <string name="profile_setup_date_of_birth">Date of birth</string>
-    <string name="profile_setup_phone_error">Please, enter a valid phone number</string>
 
     <string name="profile_setup_address_select_title">Address</string>
 
@@ -63,18 +55,13 @@
     <string name="create_account_email_placeholder">Your email</string>
     <string name="already_have_account">Already have an account?</string>
     <string name="log_in">Log in</string>
-    <string name="invalid_email">Invalid email. Please try again. (eg:email@gmail.com)</string>
 
-
-    <string name="verification_code">Verification code</string>
-    <string name="verification_code_placeholder">000 000</string>
     <string name="email_verification">Email verification</string>
     <string name="phone_verification">Phone verification</string>
     <string name="reset_password">Reset password</string>
     <string name="code_sent_title">The code was sent to</string>
     <string name="code_arrive">It should arrive within one minute</string>
     <string name="resend_code">Resend code</string>
-    <string name="otp_error_code">OTP code is incorrect or has expired. Please try to retype or resend the code</string>
     <string name="otp_code_timer">Resend code in %s seconds</string>
     <string name="password_no_match">Passwords don’t match, please check and try again</string>
     <string name="dont_have_account">Don’t have an account?</string>
@@ -145,9 +132,7 @@
     <string name="subscriptions_change_plan">Change plan</string>
     <string name="subscriptions_resubscribe_plan">Subscribe!</string>
 
-
     <string name="pin_code_enter_title">Enter pin-code</string>
-
     <string name="notification_request_title">You received a request</string>
     <string name="notification_request_text">needs you as a guardian</string>
 
@@ -157,9 +142,6 @@
     <string name="notification_alert_title">Emergency alert</string>
     <string name="notification_alert_text">is in emergency and needs your help!</string>
     <string name="notification_alert_details">Details</string>
-    <string name="emergency_live_title">Live</string>
-    <string name="emergency_map_title">Map</string>
-    <string name="emergency_live_stream_title">Live stream</string>
 
     <string name="something_went_wrong">Something went wrong!</string>
     <string name="privacy_button">Privacy Policy</string>
@@ -169,7 +151,6 @@
     <string name="change_credentials_new_email_title">New email</string>
     <string name="user_profile_email_change_desc">Your email has been successfully changed. Now you can log in with new email </string>
     <string name="user_profile_phone_change_desc">Your phone number has been changed. Now it will be displayed in your profile</string>
-    <string name="pincode_changed_alert_text">Your pin-code has been successfully changed. Please remember it.</string>
     <string name="change_credentials_email_title">Change email</string>
     <string name="verification_current_email_title">Current email verification</string>
     <string name="verification_new_email_title">New email verification</string>
@@ -185,7 +166,7 @@
     <string name="subscription_confirm_alert_title">Confirm purchase</string>
     <string name="subscription_confirm_alert_text">Pay %s for monthly subscription plan starting %s</string>
     <string name="emergency_toast_title">Double tap “SOS” to activate</string>
-    <string name="emergency_toast_description">"After the emergency mode activation your network will see your help request  "</string>
+    <string name="emergency_toast_description">"After the emergency mode activation your network will see your help request"</string>
 
 
 </resources>

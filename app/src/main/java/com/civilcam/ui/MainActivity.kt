@@ -27,6 +27,7 @@ import com.civilcam.service.CCFireBaseMessagingService
 import com.civilcam.service.location.LocationService
 import com.civilcam.service.location.LocationService.Companion.ACTION_START
 import com.civilcam.service.location.LocationService.Companion.ACTION_STOP
+import com.civilcam.socket_feature.SocketHandler
 import com.civilcam.ui.common.NavigationDirection
 import com.civilcam.ui.network.main.NetworkMainFragment
 import com.civilcam.ui.network.main.model.NetworkScreen
@@ -139,6 +140,7 @@ class MainActivity : AppCompatActivity() {
 	override fun onDestroy() {
 		super.onDestroy()
 		stopLocationService()
+		SocketHandler.closeConnection()
 	}
 	
 	private fun navigateByDirection(direction: NavigationDirection) {
