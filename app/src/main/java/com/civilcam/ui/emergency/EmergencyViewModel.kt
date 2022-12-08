@@ -65,10 +65,12 @@ class EmergencyViewModel(
 
 	init {
 		getLocalCurrentUserUseCase().let { user ->
-			if (user?.sessionUser?.userState == UserState.alert || isVoiceActivation) {
+			if (user?.sessionUser?.userState == UserState.alert) {
 				setSosState()
 			}
 		}
+
+		if (isVoiceActivation) doubleClickSos()
 	}
 
 	fun loadAvatar() {

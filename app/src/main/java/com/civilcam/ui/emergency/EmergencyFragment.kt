@@ -17,6 +17,7 @@ import com.civilcam.R
 import com.civilcam.databinding.FragmentLiveBinding
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.alert.AlertDialogButtons
+import com.civilcam.ext_features.arch.VoiceRecord
 import com.civilcam.ext_features.arg
 import com.civilcam.ext_features.ext.hideSystemUI
 import com.civilcam.ext_features.ext.showSystemUI
@@ -44,7 +45,7 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 	private val binding by viewBinding(FragmentLiveBinding::bind)
 	private val viewModel: EmergencyViewModel by viewModel { parametersOf(isVoiceActivation) }
 
-	private val isVoiceActivation by arg<Boolean>(ARG_IS_VOICE_ACTIVATION, false)
+	private val isVoiceActivation by arg(ARG_IS_VOICE_ACTIVATION, false)
 	private val permissionsDelegate = registerForPermissionsResult(
 		Manifest.permission.ACCESS_FINE_LOCATION,
 		Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -138,17 +139,22 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 	private fun changeScreenState(screen: EmergencyScreen) {
 		Timber.i("Live screen state: $screen")
 		with(binding) {
+			if (screen == EmergencyScreen.NORMAL)
+				(requireActivity() as VoiceRecord).startVoiceRecord()
+			else
+				(requireActivity() as VoiceRecord).stopVoiceRecord()
+
 			when (screen) {
 				EmergencyScreen.NORMAL -> {
 					livePreview.isVisible = false
 					mapPreview.isVisible = true
-					
+
 					liveSurfaceView.liveExtendedBlock.isVisible = false
 				}
 				EmergencyScreen.COUPLED -> {
 					livePreview.isVisible = true
 					mapPreview.isVisible = true
-					
+
 					liveSurfaceView.liveExtendedBlock.isVisible = false
 					liveSurfaceView.liveToolbar.isVisible = false
 					liveSurfaceView.videoScale.setImageDrawable(
@@ -160,7 +166,7 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 				EmergencyScreen.LIVE_EXTENDED -> {
 					livePreview.isVisible = true
 					mapPreview.isVisible = false
-					
+
 					liveSurfaceView.liveExtendedBlock.isVisible = true
 					liveSurfaceView.liveToolbar.isVisible = true
 					liveSurfaceView.videoScale.setImageDrawable(

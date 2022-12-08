@@ -17,12 +17,13 @@ interface VoiceRecognition {
     fun destroy()
 
     class Base(private val context: Context, onActivate: () -> Unit) : VoiceRecognition {
-
+        var isListening = false
         private var listener = SpeechRecognitionListener(
             onVoiceRecognized = { result ->
                 Timber.tag("recognise").i("recognition result $result")
                 if (result.replace(" ", "").lowercase() in (KEY_VOICE_PHRASE)) {
                     stopRecord()
+                    isListening = false
                     onActivate.invoke()
                 }
             },
@@ -32,9 +33,7 @@ interface VoiceRecognition {
             }
         )
         private val speechRecognizer: SpeechRecognizer by lazy {
-            SpeechRecognizer.createSpeechRecognizer(
-                context
-            )
+            SpeechRecognizer.createSpeechRecognizer(context)
         }
 
         override fun initRecorder() {
@@ -52,16 +51,20 @@ interface VoiceRecognition {
                 putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
                 putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
                 putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
-
             }
-            speechRecognizer.startListening(recognizerIntent)
+            if (!isListening) {
+                speechRecognizer.startListening(recognizerIntent)
+                isListening = true
+            }
         }
 
         override fun stopRecord() {
+            isListening = false
             speechRecognizer.cancel()
         }
 
         override fun destroy() {
+            isListening = false
             speechRecognizer.destroy()
         }
 

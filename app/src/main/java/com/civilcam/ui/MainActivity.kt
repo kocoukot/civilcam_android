@@ -21,6 +21,7 @@ import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.domainLayer.usecase.user.IsUserLoggedInUseCase
 import com.civilcam.ext_features.DateUtils
 import com.civilcam.ext_features.SupportBottomBar
+import com.civilcam.ext_features.arch.VoiceRecord
 import com.civilcam.ext_features.setupWithNavController
 import com.civilcam.langselect.LanguageSelectFragment
 import com.civilcam.service.CCFireBaseMessagingService
@@ -38,7 +39,7 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), VoiceRecord {
 	private val isUserLoggedInUseCase: IsUserLoggedInUseCase by inject()
 	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase by inject()
 
@@ -124,8 +125,12 @@ class MainActivity : AppCompatActivity() {
 		Timber.tag("alert_notif_ID").i("main activity on create")
 	}
 
-	private fun startVoiceRecord() {
+	override fun startVoiceRecord() {
 		recognizer.startRecord()
+	}
+
+	override fun stopVoiceRecord() {
+		recognizer.stopRecord()
 	}
 
 	override fun onStart() {

@@ -20,7 +20,7 @@ class SpeechRecognitionListener(
     }
 
     override fun onRmsChanged(rmsdB: Float) {
-//        Timber.tag("recognise").d("speech onRmsChanged")
+        Timber.tag("recognise").d("speech onRmsChanged")
     }
 
     override fun onBufferReceived(buffer: ByteArray?) {
