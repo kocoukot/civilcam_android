@@ -1,29 +1,29 @@
 package com.civilcam.alert_feature.list.model
 
-import android.os.Bundle
 import com.civilcam.alert_feature.R
 import com.civilcam.alert_feature.map.LiveMapFragment
 import com.civilcam.ext_features.arch.ComposeRouteNavigation
 import com.civilcam.ext_features.compose.ComposeFragmentRoute
 
 sealed class AlertListRoute : ComposeFragmentRoute {
-    object GoMyProfile : AlertListRoute(), ComposeRouteNavigation.DeepLinkNavigate {
-        override val destination: Int =
-            com.civilcam.ext_features.R.string.direction_userProfileFragment
+    object GoMyProfile : AlertListRoute() {
+        override fun handleRoute(): ComposeRouteNavigation =
+            ComposeRouteNavigation.DeepLinkNavigate(destination = com.civilcam.ext_features.R.string.direction_userProfileFragment)
     }
 
-    object GoSettings : AlertListRoute(), ComposeRouteNavigation.DeepLinkNavigate {
-        override val destination: Int =
-            com.civilcam.ext_features.R.string.direction_settingsFragment
+    object GoSettings : AlertListRoute() {
+        override fun handleRoute(): ComposeRouteNavigation =
+            ComposeRouteNavigation.DeepLinkNavigate(destination = com.civilcam.ext_features.R.string.direction_settingsFragment)
     }
 
-    object GoAlertHistory : AlertListRoute(), ComposeRouteNavigation.GraphNavigate {
-        override val destination: Int = R.id.action_alerts_root_to_alertsHistoryFragment
+    object GoAlertHistory : AlertListRoute() {
+        override fun handleRoute(): ComposeRouteNavigation =
+            ComposeRouteNavigation.GraphNavigate(destination = R.id.action_alerts_root_to_alertsHistoryFragment)
     }
 
-    data class GoUserAlert(val alertId: Int) : AlertListRoute(),
-        ComposeRouteNavigation.GraphNavigate {
-        override val destination: Int = R.id.liveMapFragment
-        override val bundle: Bundle = LiveMapFragment.createArgs(alertId)
+    data class GoUserAlert(private val alertId: Int) : AlertListRoute() {
+        override fun handleRoute(): ComposeRouteNavigation = ComposeRouteNavigation.GraphNavigate(
+            destination = R.id.liveMapFragment, LiveMapFragment.createArgs(alertId)
+        )
     }
 }
