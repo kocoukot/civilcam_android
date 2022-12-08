@@ -110,14 +110,14 @@ fun DatePickerContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 TextActionButton(
-                    actionTitle = stringResource(id = R.string.cancel_text_caps),
+                    actionTitle = stringResource(id = com.civilcam.ext_features.R.string.cancel_text_caps),
                     textColor = CCTheme.colors.cianColor,
                     actionAction = { onPickerAction.invoke(null) }
                 )
 
                 TextActionButton(
                     isEnabled = isAllowed,
-                    actionTitle = stringResource(id = R.string.ok_text_caps),
+                    actionTitle = stringResource(id = com.civilcam.ext_features.R.string.ok_text_caps),
                     textColor = CCTheme.colors.cianColor,
                     actionAction = {
                         val date = Calendar.getInstance().apply {

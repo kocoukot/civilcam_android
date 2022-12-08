@@ -2,7 +2,6 @@ package com.civilcam.ui.auth.create
 
 import androidx.lifecycle.viewModelScope
 import com.civilcam.CivilcamApplication.Companion.instance
-import com.civilcam.R
 import com.civilcam.domainLayer.ServerErrors
 import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.castSafe
@@ -79,7 +78,7 @@ class CreateAccountViewModel(
             it.copy(
                 email = email,
                 isEmail = if (email.isEmpty()) true else email.isEmail(),
-                emailErrorText = instance.getString(R.string.invalid_email)
+                emailErrorText = instance.getString(com.civilcam.ext_features.R.string.invalid_email)
             )
         }
     }
