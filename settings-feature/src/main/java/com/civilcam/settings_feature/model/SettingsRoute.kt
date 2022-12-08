@@ -6,18 +6,31 @@ import com.civilcam.ext_features.compose.ComposeFragmentRoute
 
 
 sealed class SettingsRoute : ComposeFragmentRoute {
-    object GoBack : SettingsRoute(), ComposeRouteNavigation.PopNavigation
-    object GoTerms : SettingsRoute(), ComposeRouteNavigation.DeepLinkNavigate {
-        override val destination: Int = com.civilcam.ext_features.R.string.direction_termsFragment
-        override val arguments = "/${true}"
+    object GoBack : SettingsRoute() {
+        override fun handleRoute(): ComposeRouteNavigation = ComposeRouteNavigation.PopNavigation
     }
 
-    object GoSubManage : SettingsRoute(), ComposeRouteNavigation.DeepLinkNavigate {
-        override val destination: Int =
-            com.civilcam.ext_features.R.string.direction_subscriptionFragment
-        override val arguments = "/${UserSubscriptionState.SUB_RESELECT}"
+    object GoTerms : SettingsRoute() {
+        override fun handleRoute(): ComposeRouteNavigation =
+            ComposeRouteNavigation.DeepLinkNavigate(
+                destination = com.civilcam.ext_features.R.string.direction_termsFragment,
+                arguments = "/${true}"
+            )
     }
 
-    object ForceLogout : SettingsRoute(), ComposeRouteNavigation.NavigateToStart
-    object GoStartScreen : SettingsRoute(), ComposeRouteNavigation.NavigateToStart
+    object GoSubManage : SettingsRoute() {
+        override fun handleRoute(): ComposeRouteNavigation =
+            ComposeRouteNavigation.DeepLinkNavigate(
+                destination = com.civilcam.ext_features.R.string.direction_subscriptionFragment,
+                arguments = "/${UserSubscriptionState.SUB_RESELECT}"
+            )
+    }
+
+    object ForceLogout : SettingsRoute() {
+        override fun handleRoute(): ComposeRouteNavigation = ComposeRouteNavigation.NavigateToStart
+    }
+
+    object GoStartScreen : SettingsRoute() {
+        override fun handleRoute(): ComposeRouteNavigation = ComposeRouteNavigation.NavigateToStart
+    }
 }

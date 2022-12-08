@@ -60,7 +60,7 @@ class UserProfileFragment : Fragment() {
 
 		setFragmentResultListener(PinCodeFragment.RESULT_SAVED_NEW_PIN) { key, bundle ->
 			if (bundle.getBoolean(key)) {
-				showAlert(resources.getString(R.string.pincode_changed_alert_text))
+				showAlert(resources.getString(com.civilcam.ext_features.R.string.pincode_changed_alert_text))
 			}
 		}
 
