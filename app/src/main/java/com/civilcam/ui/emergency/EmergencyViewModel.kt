@@ -72,7 +72,7 @@ class EmergencyViewModel(
 		if (isVoiceActivation) {
 			viewModelScope.launch {
 				delay(300)
-				launchSos()
+				doubleClickSos()
 			}
 		}
 	}
