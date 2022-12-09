@@ -1,5 +1,6 @@
 package com.civilcam.ext_features
 
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.time.*
 import java.time.format.DateTimeFormatter
@@ -45,9 +46,11 @@ object DateUtils {
 	}
 
 	fun isSubValid(date: String): Boolean {
-		val current = LocalDateTime.now()
-		return isoDateToLong(date) > ZonedDateTime.of(current, ZoneId.systemDefault()).toInstant()
+		val current = ZonedDateTime.of(LocalDateTime.now(), ZoneId.systemDefault()).toInstant()
 			.toEpochMilli()
+		val expiredAt = isoDateToLong(date)
+		Timber.tag("subscription").i("expiredAt $expiredAt current $current")
+		return expiredAt > current
 	}
 
 	fun getDateFromIso(date: String): String {

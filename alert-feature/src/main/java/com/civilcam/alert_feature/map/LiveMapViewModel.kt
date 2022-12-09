@@ -69,6 +69,7 @@ class LiveMapViewModel(
                             }
                         }.launchIn(viewModelScope)
                 } catch (e: ServiceException) {
+                    Timber.d("ServiceException $e")
                 }
             }
         }
