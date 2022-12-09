@@ -21,14 +21,17 @@ import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.domainLayer.usecase.user.IsUserLoggedInUseCase
 import com.civilcam.ext_features.DateUtils
 import com.civilcam.ext_features.SupportBottomBar
+import com.civilcam.ext_features.arch.VoiceRecord
 import com.civilcam.ext_features.setupWithNavController
 import com.civilcam.langselect.LanguageSelectFragment
 import com.civilcam.service.CCFireBaseMessagingService
 import com.civilcam.service.location.LocationService
 import com.civilcam.service.location.LocationService.Companion.ACTION_START
 import com.civilcam.service.location.LocationService.Companion.ACTION_STOP
+import com.civilcam.service.voice.VoiceRecognition
 import com.civilcam.socket_feature.SocketHandler
 import com.civilcam.ui.common.NavigationDirection
+import com.civilcam.ui.emergency.EmergencyFragment
 import com.civilcam.ui.network.main.NetworkMainFragment
 import com.civilcam.ui.network.main.model.NetworkScreen
 import com.civilcam.ui.subscription.SubscriptionFragment
@@ -36,10 +39,16 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), VoiceRecord {
 	private val isUserLoggedInUseCase: IsUserLoggedInUseCase by inject()
 	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase by inject()
 
+	private val recognizer = VoiceRecognition.Base(this) {
+		navHost?.navController?.navigateToRoot(
+			R.id.emergency_root,
+			args = EmergencyFragment.createArgs(true)
+		)
+	}
 	private lateinit var binding: ActivityMainBinding
 	private var navHost: NavHostFragment? = null
 
@@ -109,26 +118,45 @@ class MainActivity : AppCompatActivity() {
 //        Logger.getLogger(Socket::class.java.name).level = Level.ALL
 //        Logger.getLogger(SocketHandler::class.java.name).level = Level.ALL
 //        Logger.getLogger(Manager::class.java.name).level = Level.ALL
-		if (isUserLoggedInUseCase()) startLocationService()
+		recognizer.initRecorder()
+		if (isUserLoggedInUseCase()) {
+			startLocationService()
+
+		}
 		Timber.tag("alert_notif_ID").i("main activity on create")
 	}
-	
+
+	override fun startVoiceRecord() {
+		recognizer.startRecord()
+	}
+
+	override fun stopVoiceRecord() {
+		recognizer.stopRecord()
+	}
+
 	override fun onStart() {
 		super.onStart()
 		checkSubscriptionState()
 	}
-	
+
+	override fun onResume() {
+		super.onResume()
+		if (isUserLoggedInUseCase()) {
+			startVoiceRecord()
+		}
+	}
+
 	fun startLocationService() {
 		if (isUserLoggedInUseCase()) {
 			Intent(applicationContext, LocationService::class.java).apply {
 				action = ACTION_START
 				startService(this)
 			}
+
 		}
 	}
 
 	private fun stopLocationService() {
-		val service = getSystemService(LocationService::class.java)
 		if (isUserLoggedInUseCase()) {
 			Intent(applicationContext, LocationService::class.java).apply {
 				action = ACTION_STOP
@@ -141,6 +169,7 @@ class MainActivity : AppCompatActivity() {
 		super.onDestroy()
 		stopLocationService()
 		SocketHandler.closeConnection()
+		recognizer.destroy()
 	}
 	
 	private fun navigateByDirection(direction: NavigationDirection) {
