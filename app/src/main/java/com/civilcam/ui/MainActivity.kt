@@ -139,6 +139,11 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 		checkSubscriptionState()
 	}
 
+	override fun onStop() {
+		super.onStop()
+		stopVoiceRecord()
+	}
+
 	override fun onResume() {
 		super.onResume()
 		if (isUserLoggedInUseCase()) {
