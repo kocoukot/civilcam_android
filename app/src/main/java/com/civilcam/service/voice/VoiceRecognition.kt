@@ -46,13 +46,13 @@ interface VoiceRecognition {
         }
 
         override fun startRecord() {
-            val recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US")
-                putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
-                putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
-                putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
-            }
             if (!isListening) {
+                val recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                    putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US")
+                    putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
+                    putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
+                    putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
+                }
                 speechRecognizer.startListening(recognizerIntent)
                 isListening = true
             }

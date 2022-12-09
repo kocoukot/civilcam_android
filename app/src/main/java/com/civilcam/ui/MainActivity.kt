@@ -28,8 +28,8 @@ import com.civilcam.service.CCFireBaseMessagingService
 import com.civilcam.service.location.LocationService
 import com.civilcam.service.location.LocationService.Companion.ACTION_START
 import com.civilcam.service.location.LocationService.Companion.ACTION_STOP
-import com.civilcam.socket_feature.SocketHandler
 import com.civilcam.service.voice.VoiceRecognition
+import com.civilcam.socket_feature.SocketHandler
 import com.civilcam.ui.common.NavigationDirection
 import com.civilcam.ui.emergency.EmergencyFragment
 import com.civilcam.ui.network.main.NetworkMainFragment
@@ -118,9 +118,10 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 //        Logger.getLogger(Socket::class.java.name).level = Level.ALL
 //        Logger.getLogger(SocketHandler::class.java.name).level = Level.ALL
 //        Logger.getLogger(Manager::class.java.name).level = Level.ALL
+		recognizer.initRecorder()
 		if (isUserLoggedInUseCase()) {
 			startLocationService()
-			recognizer.initRecorder()
+
 		}
 		Timber.tag("alert_notif_ID").i("main activity on create")
 	}
