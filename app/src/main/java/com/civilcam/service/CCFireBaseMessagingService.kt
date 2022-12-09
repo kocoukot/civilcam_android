@@ -102,7 +102,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                     }
                 }
                 else -> {
-                    showCommonNotification(context = applicationContext, "text notification")
+                 //   showCommonNotification(context = applicationContext, "text notification")
                 }
             }
         }
