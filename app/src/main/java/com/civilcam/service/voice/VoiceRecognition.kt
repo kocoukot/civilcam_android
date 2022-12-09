@@ -17,10 +17,10 @@ interface VoiceRecognition {
     fun destroy()
 
     class Base(private val context: Context, onActivate: () -> Unit) : VoiceRecognition {
-        var isListening = false
+        var recognizerState = RecognizerState.DESTROYED
         private var listener = SpeechRecognitionListener(
             onVoiceRecognized = { result ->
-                isListening = false
+                recognizerState = RecognizerState.STOPED
 
                 Timber.tag("recognise").i("recognition result $result")
                 if (result.replace(" ", "").lowercase() in (KEY_VOICE_PHRASE)) {
@@ -31,7 +31,8 @@ interface VoiceRecognition {
                 }
             },
             onErrorRecognizing = { errorText, needContinue ->
-                isListening = false
+                recognizerState = RecognizerState.STOPED
+
                 Timber.tag("recognise").i(errorText)
                 if (needContinue) startRecord()
             }
@@ -50,25 +51,37 @@ interface VoiceRecognition {
         }
 
         override fun startRecord() {
-            if (!isListening) {
-                val recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                    putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US")
-                    putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
-                    putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
-                    putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
+            when (recognizerState) {
+                RecognizerState.DESTROYED -> {
+                    initRecorder()
+                    launch()
                 }
-                speechRecognizer.startListening(recognizerIntent)
-                isListening = true
+                RecognizerState.INITTED, RecognizerState.STOPED -> {
+                    launch()
+                }
+                else -> {}
+
             }
         }
 
+        private fun launch() {
+            val recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US")
+                putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
+                putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
+                putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
+            }
+            speechRecognizer.startListening(recognizerIntent)
+            recognizerState = RecognizerState.LISTENING
+        }
+
         override fun stopRecord() {
-            isListening = false
-            speechRecognizer.cancel()
+            recognizerState = RecognizerState.DESTROYED
+            speechRecognizer.destroy()
         }
 
         override fun destroy() {
-            isListening = false
+            recognizerState = RecognizerState.DESTROYED
             speechRecognizer.destroy()
         }
 
@@ -79,6 +92,13 @@ interface VoiceRecognition {
                 "activatecivilcom",
                 "activatecivilcomm"
             )
+        }
+
+        enum class RecognizerState {
+            DESTROYED,
+            INITTED,
+            LISTENING,
+            STOPED
         }
     }
 }

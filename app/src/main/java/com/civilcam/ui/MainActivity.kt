@@ -141,7 +141,7 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 
 	override fun onStop() {
 		super.onStop()
-		stopVoiceRecord()
+		recognizer.destroy()
 	}
 
 	override fun onResume() {
