@@ -69,8 +69,12 @@ class EmergencyViewModel(
 				setSosState()
 			}
 		}
-
-		if (isVoiceActivation) doubleClickSos()
+		if (isVoiceActivation) {
+			viewModelScope.launch {
+				delay(300)
+				launchSos()
+			}
+		}
 	}
 
 	fun loadAvatar() {

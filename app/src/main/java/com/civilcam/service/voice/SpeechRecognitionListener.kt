@@ -67,8 +67,8 @@ class SpeechRecognitionListener(
     override fun onResults(results: Bundle?) {
         val result =
             results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.first().orEmpty()
-        onVoiceRecognized(result)
         Timber.tag("recognise").d("speech onResults $result ")
+        onVoiceRecognized(result)
     }
 
 

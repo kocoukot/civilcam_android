@@ -20,14 +20,18 @@ interface VoiceRecognition {
         var isListening = false
         private var listener = SpeechRecognitionListener(
             onVoiceRecognized = { result ->
+                isListening = false
+
                 Timber.tag("recognise").i("recognition result $result")
                 if (result.replace(" ", "").lowercase() in (KEY_VOICE_PHRASE)) {
                     stopRecord()
-                    isListening = false
                     onActivate.invoke()
+                } else {
+                    startRecord()
                 }
             },
             onErrorRecognizing = { errorText, needContinue ->
+                isListening = false
                 Timber.tag("recognise").i(errorText)
                 if (needContinue) startRecord()
             }
