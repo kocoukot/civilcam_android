@@ -1,5 +1,7 @@
 package com.civilcam.alert_feature.history
 
+import android.Manifest
+import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -112,17 +114,18 @@ fun AlertsListScreenContent(viewModel: AlertsHistoryViewModel) {
                     AlertHistoryScreen.VIDEO_DOWNLOAD -> {
                         VideoDownloadScreenContent(
                             state.alertDetailModel?.alertDownloads.orEmpty(),
-//                            viewModel::setInputActions
                         ) { action ->
-                            selectedVideo = action
-                            viewModel.setInputActions(action)
-//                            permissionRequest.launch(
-//                                arrayOf(
-//                                    Manifest.permission.READ_EXTERNAL_STORAGE,
-//                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-//                                )
-//                            )
-
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                viewModel.setInputActions(action)
+                            } else {
+                                selectedVideo = action
+                                permissionRequest.launch(
+                                    arrayOf(
+                                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                    )
+                                )
+                            }
                         }
                     }
                 }

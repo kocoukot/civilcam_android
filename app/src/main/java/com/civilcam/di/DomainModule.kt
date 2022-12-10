@@ -135,4 +135,6 @@ val domainModule = module {
     factory { GetUserSubscriptionUseCase(get()) }
 
     factory { CheckIfVideoLoadedUseCase(get()) }
+
+    factory { GetVideoUriUseCase(get()) }
 }

@@ -124,7 +124,7 @@ val alertsRootModule = module {
 
 	viewModel { AlertsListViewModel(get(), get(), get()) }
 	
-	viewModel { AlertsHistoryViewModel(get(), get(), get(), get()) }
+	viewModel { AlertsHistoryViewModel(get(), get(), get(), get(), get()) }
 
 	viewModel { (userId: Int) -> LiveMapViewModel(userId, get(), get(), get()) }
 }

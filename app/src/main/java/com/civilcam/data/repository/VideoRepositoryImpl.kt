@@ -1,7 +1,9 @@
 package com.civilcam.data.repository
 
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import androidx.core.net.toUri
 import androidx.work.*
 import com.civilcam.CivilcamApplication.Companion.instance
 import com.civilcam.domainLayer.repos.VideoRepository
@@ -40,21 +42,27 @@ class VideoRepositoryImpl : VideoRepository {
     }
 
     override suspend fun checkIfExists(videoName: String): Boolean {
-        val isVideoExists = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        return getFile(videoName).isFile
+    }
+
+    override suspend fun getVideoUri(videoName: String): Uri {
+        return getFile(videoName).toUri()
+    }
+
+
+    override fun getFile(videoName: String): File {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val file1 =
                 File("${Environment.getExternalStorageDirectory().path}/$DOWNLOAD_FOLDER/$videoName")
             Timber.tag("video").i("file1 $file1 videoName $videoName")
-            file1.isFile
+            file1
         } else {
             val file2 = File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                "$videoName"
+                videoName
             )
             Timber.tag("video").i("file2 $file2")
-
-            file2.isFile
+            file2
         }
-        Timber.tag("video").i("isVideoExists $isVideoExists")
-        return isVideoExists
     }
 }

@@ -1,6 +1,5 @@
 package com.civilcam.alert_feature.history.content
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,7 +23,6 @@ import com.civilcam.domainLayer.model.alerts.VideoLoadingState
 import com.civilcam.ext_features.compose.elements.RowDivider
 import com.civilcam.ext_features.compose.elements.RowDividerGrayThree
 import com.civilcam.ext_features.theme.CCTheme
-import kotlinx.coroutines.CoroutineScope
 import timber.log.Timber
 
 @Composable
@@ -65,8 +63,6 @@ private fun DownLoadRow(
         val work = WorkManager.getInstance(context)
         work.getWorkInfosForUniqueWorkLiveData("one_time_work" + rowInfo.id)
             .observe(lifecycle) {
-                Timber.tag("video").d("workId ${it.first().state}")
-
                 if (it.isNotEmpty()) {
                     when (it.first().state) {
                         WorkInfo.State.RUNNING -> {
@@ -122,13 +118,4 @@ private fun DownLoadRow(
             onRowAction.invoke(AlertHistoryActions.ClickDownloadVideo(rowInfo))
         }
     }
-}
-
-@Composable
-fun CheckState(
-    context: Context,
-    workId: String,
-    scope: CoroutineScope
-) {
-
 }

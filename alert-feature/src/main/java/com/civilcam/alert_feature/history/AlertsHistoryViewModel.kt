@@ -18,6 +18,7 @@ import com.civilcam.domainLayer.repos.VideoRepository
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.CheckIfVideoLoadedUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetAlertDetailUseCase
+import com.civilcam.domainLayer.usecase.alerts.GetVideoUriUseCase
 import com.civilcam.ext_features.KoinInjector
 import com.civilcam.ext_features.arch.BaseViewModel
 import com.civilcam.ext_features.compose.ComposeFragmentActions
@@ -27,12 +28,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 class AlertsHistoryViewModel(
     injector: KoinInjector,
     private val getAlertDetailUseCase: GetAlertDetailUseCase,
     private val downloadVideoUseCase: VideoRepository,
     private val checkIfVideoLoadedUseCase: CheckIfVideoLoadedUseCase,
+    private val getVideoUriUseCase: GetVideoUriUseCase,
 ) : BaseViewModel.Base<AlertHistoryState>(
     mState = MutableStateFlow(AlertHistoryState())
 ), KoinInjector by injector {
@@ -50,17 +53,27 @@ class AlertsHistoryViewModel(
             AlertHistoryActions.ClickShowVideoList -> showDownloadScreen()
             AlertHistoryActions.StopRefresh -> stopRefresh()
             AlertHistoryActions.ClearErrorText -> clearErrorText()
-            is AlertHistoryActions.ClickOpenVideo -> {}
+            is AlertHistoryActions.ClickOpenVideo -> openVideo(action.videoToOpen)
             is AlertHistoryActions.ClickDownloadVideo -> startDownLoading(action.videoToLoad)
         }
     }
+
+    private fun openVideo(videoToLoad: AlertDetailModel.DownloadInfo) {
+        viewModelScope.launch {
+            val videoUri = getVideoUriUseCase.invoke(getFullVideoName(videoToLoad))
+            Timber.tag("video").i("videoUri VM $videoUri")
+            sendRoute(AlertHistoryRoute.OpenVideo(videoUri))
+        }
+    }
+
 
     private fun startDownLoading(videoToLoad: AlertDetailModel.DownloadInfo) {
         getState().alertDetailModel?.alertDownloads?.takeIf { it.isNotEmpty() && videoToLoad.url?.isNotEmpty() == true }
             ?.let { videosList ->
                 videosList.find { it.id == videoToLoad.id }?.videoState = VideoLoadingState.Loading
                 downloadVideoUseCase.downloadVideo(
-                    videoToLoad.url!!, "${getState().alertDetailModel?.getNameForVideo()}",
+                    videoToLoad.url!!,
+                    getFullVideoName(videoToLoad),
                     videoToLoad.id
                 )
                 updateInfo {
@@ -92,21 +105,20 @@ class AlertsHistoryViewModel(
         networkRequest(
             action = { getAlertDetailUseCase(alertId) },
             onSuccess = { detail ->
-                detail.alertDownloads.forEach { video ->
-                    viewModelScope.launch {
-                        kotlin.runCatching { checkIfVideoLoadedUseCase(detail.getNameForVideo()) }
-                            .onSuccess { result ->
-                                if (result) video.videoState = VideoLoadingState.DownLoaded
-                            }
-
-                    }
-                }
-
                 updateInfo {
                     copy(
                         alertHistoryScreen = AlertHistoryScreen.HISTORY_DETAIL,
                         alertDetailModel = detail
                     )
+                }
+                detail.alertDownloads.forEach { video ->
+                    viewModelScope.launch {
+                        kotlin.runCatching { checkIfVideoLoadedUseCase(getFullVideoName(video)) }
+                            .onSuccess { result ->
+                                if (result) video.videoState = VideoLoadingState.DownLoaded
+                            }
+
+                    }
                 }
             },
             onFailure = { error ->
@@ -142,6 +154,12 @@ class AlertsHistoryViewModel(
 
     private fun stopRefresh() {
         updateInfo { copy(refreshList = null) }
+    }
+
+
+    private fun getFullVideoName(video: AlertDetailModel.DownloadInfo): String {
+        val firstPart = getState().alertDetailModel?.getNameForVideo().orEmpty()
+        return video.makeVideoName(firstPart)
     }
 
 

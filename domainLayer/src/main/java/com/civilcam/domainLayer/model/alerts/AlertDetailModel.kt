@@ -21,14 +21,16 @@ data class AlertDetailModel(
         val duration: Int,
         val url: String?,
         var videoState: VideoLoadingState = VideoLoadingState.ReadyToLoad
-    )
+    ) {
+        fun makeVideoName(namePart: String): String = "${namePart}_$fileName.mp4"
+    }
 
     fun getNameForVideo(): String = "${
         alertModel.userInfo?.personFullName?.replace(
             " ",
             "_"
         )
-    }_${alertModel.alertDate.replace(":", "_")}.mp4"
+    }_${alertModel.alertDate.replace(":", "_")}"
 
 
 }
