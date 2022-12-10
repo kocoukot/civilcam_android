@@ -20,9 +20,9 @@ import com.civilcam.domainLayer.usecase.verify.VerifyEmailOtpUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
-	factory { SingUpUseCase(get(), get()) }
+    factory { SingUpUseCase(get(), get()) }
 
-	factory { SignInUseCase(get(), get()) }
+    factory { SignInUseCase(get(), get()) }
 
     factory { CheckEmailUseCase(get()) }
 
@@ -74,21 +74,21 @@ val domainModule = module {
 
     factory { GetMapAlertUserDataUseCase(get()) }
 
-	factory { GoogleSignInUseCase(get(), get()) }
+    factory { GoogleSignInUseCase(get(), get()) }
 
-	factory { ResetPasswordUseCase(get()) }
+    factory { ResetPasswordUseCase(get()) }
 
-	factory { VerifyResetPasswordOtpUseCase(get()) }
+    factory { VerifyResetPasswordOtpUseCase(get()) }
 
-	factory { RecoverPasswordUseCase(get()) }
+    factory { RecoverPasswordUseCase(get()) }
 
-	factory { SaveFcmTokenUseCase(get()) }
+    factory { SaveFcmTokenUseCase(get()) }
 
-	factory { SetFCMTokenUseCase(get()) }
+    factory { SetFCMTokenUseCase(get()) }
 
-	factory { DeleteAccountUseCase(get()) }
+    factory { DeleteAccountUseCase(get()) }
 
-	factory { GetLocalCurrentUserUseCase(get()) }
+    factory { GetLocalCurrentUserUseCase(get()) }
 
     factory { IsUserLoggedInUseCase(get()) }
 
@@ -129,8 +129,12 @@ val domainModule = module {
     factory { GetUserSessionTokenUseCase(get()) }
 
     factory { SetUserCoordsUseCase(get()) }
-    
+
     factory { SetUserSubscriptionUseCase(get()) }
-    
+
     factory { GetUserSubscriptionUseCase(get()) }
+
+    factory { CheckIfVideoLoadedUseCase(get()) }
+
+    factory { GetVideoUriUseCase(get()) }
 }

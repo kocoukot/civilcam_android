@@ -33,6 +33,7 @@ fun AlertDialogComp(
                         ),
                         onDismissRequest = {
                             openDialog.value = false
+                            onOptionSelected.invoke(false)
                         },
                         title = {
                             Text(

@@ -124,7 +124,7 @@ val alertsRootModule = module {
 
 	viewModel { AlertsListViewModel(get(), get(), get()) }
 	
-	viewModel { AlertsHistoryViewModel(get(), get()) }
+	viewModel { AlertsHistoryViewModel(get(), get(), get(), get(), get()) }
 
 	viewModel { (userId: Int) -> LiveMapViewModel(userId, get(), get(), get()) }
 }
@@ -158,14 +158,14 @@ val profileModule = module {
 }
 
 val emergencyModule = module {
-	viewModel { (isVoiceActivation: Boolean) ->
-		EmergencyViewModel(
-			isVoiceActivation,
-			get(),
-			get(),
-			get()
-		)
-	}
+	viewModel { (isVoiceActivation: Boolean?) ->
+        EmergencyViewModel(
+            isVoiceActivation,
+            get(),
+            get(),
+            get()
+        )
+    }
 }
 
 

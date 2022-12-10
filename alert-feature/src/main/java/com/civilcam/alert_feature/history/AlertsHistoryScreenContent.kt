@@ -1,18 +1,23 @@
 package com.civilcam.alert_feature.history
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.civilcam.alert_feature.history.content.AlertHistoryDetailScreenContent
 import com.civilcam.alert_feature.history.content.AlertHistoryListScreenContent
+import com.civilcam.alert_feature.history.content.VideoDownloadScreenContent
 import com.civilcam.alert_feature.history.model.AlertHistoryActions
 import com.civilcam.alert_feature.history.model.AlertHistoryScreen
 import com.civilcam.ext_features.alert.AlertDialogButtons
@@ -27,6 +32,33 @@ fun AlertsListScreenContent(viewModel: AlertsHistoryViewModel) {
 
     val state by viewModel.state.collectAsState()
     val alertList = viewModel.searchList.collectAsLazyPagingItems()
+
+    BackHandler {
+        viewModel.setInputActions(AlertHistoryActions.ClickGoBack)
+    }
+
+    var selectedVideo by remember {
+        mutableStateOf<AlertHistoryActions?>(null)
+    }
+
+    val permissionRequest = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = { permissionsMap ->
+            if (permissionsMap.all { it.value }) {
+                selectedVideo?.let { action ->
+                    viewModel.setInputActions(action)
+                }
+            }
+        }
+    )
+
+    val topAppBarColor by
+    animateColorAsState(
+        targetValue = if (state.alertHistoryScreen == AlertHistoryScreen.VIDEO_DOWNLOAD)
+            CCTheme.colors.lightGray
+        else
+            CCTheme.colors.white
+    )
 
     if (state.refreshList == Unit) {
         alertList.refresh()
@@ -49,6 +81,7 @@ fun AlertsListScreenContent(viewModel: AlertsHistoryViewModel) {
         backgroundColor = CCTheme.colors.lightGray,
         topBar = {
             TopAppBarContent(
+                backgroundColor = topAppBarColor,
                 title = stringResource(id = state.alertHistoryScreen.screenTitle),
                 navigationItem = {
                     BackButton {
@@ -77,6 +110,23 @@ fun AlertsListScreenContent(viewModel: AlertsHistoryViewModel) {
                             onScreenAction = viewModel::setInputActions,
                             alertType = state.alertType
                         )
+                    }
+                    AlertHistoryScreen.VIDEO_DOWNLOAD -> {
+                        VideoDownloadScreenContent(
+                            state.alertDetailModel?.alertDownloads.orEmpty(),
+                        ) { action ->
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                viewModel.setInputActions(action)
+                            } else {
+                                selectedVideo = action
+                                permissionRequest.launch(
+                                    arrayOf(
+                                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                    )
+                                )
+                            }
+                        }
                     }
                 }
             }

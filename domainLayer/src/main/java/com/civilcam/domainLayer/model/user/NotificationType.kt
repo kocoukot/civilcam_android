@@ -4,6 +4,8 @@ enum class NotificationType(var notifyName: String) {
     REQUESTS("Request"),
     ALERTS("Alerts"),
     LOCATION("Location"),
+    DOWNLOAD("Download"),
+
     COMMON("Common"),
 
 }

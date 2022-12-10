@@ -1,7 +1,7 @@
 package com.civilcam.ui.emergency.model
 
 import com.civilcam.domainLayer.EmergencyScreen
-import com.civilcam.domainLayer.model.alerts.AlertInfoModel
+import com.civilcam.domainLayer.model.alerts.AlertDetailModel
 import com.civilcam.domainLayer.model.user.ImageInfo
 
 data class EmergencyState(
@@ -12,6 +12,6 @@ data class EmergencyState(
 	val emergencyButton: EmergencyButton = EmergencyButton.InSafeButton,
 	val emergencyUserModel: EmergencyUserModel? = null,
 	val userAvatar: ImageInfo? = null,
-	val alertInfo: AlertInfoModel? = null,
+	val alertInfo: AlertDetailModel? = null,
 	val isFlashEnabled: Boolean = false,
 )

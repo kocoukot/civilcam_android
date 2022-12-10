@@ -2,14 +2,13 @@ package com.civilcam.domainLayer.repos
 
 import com.civilcam.domainLayer.model.PaginationRequest
 import com.civilcam.domainLayer.model.alerts.AlertDetailModel
-import com.civilcam.domainLayer.model.alerts.AlertInfoModel
 import com.civilcam.domainLayer.model.alerts.AlertModel
 import com.google.android.gms.maps.model.LatLng
 
 
 interface AlertsRepository {
 
-    suspend fun setSosCoords(location: String, coords: LatLng): AlertInfoModel
+    suspend fun setSosCoords(location: String, coords: LatLng): AlertDetailModel
 
     suspend fun getAlertsList(page: PaginationRequest.Pagination): List<AlertModel>
 
