@@ -8,7 +8,7 @@ sealed class AlertHistoryActions : ComposeFragmentActions {
     data class ClickAlertTypeChange(val alertType: AlertType) : AlertHistoryActions()
     data class ClickGoAlertDetails(val alertId: Int) : AlertHistoryActions()
     object CLickCallUser : AlertHistoryActions()
-    object CLickUploadVideo : AlertHistoryActions()
+    object ClickDownloadVideo : AlertHistoryActions()
 
     object StopRefresh : AlertHistoryActions()
 

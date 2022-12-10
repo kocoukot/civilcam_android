@@ -10,83 +10,82 @@ import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
 import com.civilcam.domainLayer.model.PaginationRequest
 import com.civilcam.domainLayer.model.alerts.AlertDetailModel
-import com.civilcam.domainLayer.model.alerts.AlertInfoModel
 import com.civilcam.domainLayer.model.alerts.AlertModel
 import com.civilcam.domainLayer.repos.AlertsRepository
 import com.google.android.gms.maps.model.LatLng
 
 
 class AlertsRepositoryImpl(
-	private val accountStorage: AccountStorage,
-	private val alertService: AlertService,
+    private val accountStorage: AccountStorage,
+    private val alertService: AlertService,
 ) : AlertsRepository, BaseRepository() {
-	
-	private val alertListMapper = AlertListMapper()
-	private val alertDetailMapper = AlertDetailMapper()
-	private val alertInfoMapper = AlertInfoMapper()
-	
-	override suspend fun setSosCoords(location: String, coords: LatLng): AlertInfoModel =
-		safeApiCall {
-			alertService.postSosCoordinates(
-				SosCoordsRequest(
-					location = location,
-					coords = CoordsRequest(
-						latitude = coords.latitude, longitude = coords.longitude
-					),
-				)
-			)
-		}.let { response ->
-			when (response) {
-				is Resource.Success -> {
-					accountStorage.setSosState(true)
-					alertInfoMapper.mapData(response.value)
-				}
-				is Resource.Failure -> throw response.serviceException
-			}
-		}
-	
-	override suspend fun getAlertsList(page: PaginationRequest.Pagination): List<AlertModel> =
-		safeApiCall {
-			alertService.getAlertsList(PaginationRequest(page))
-		}.let { response ->
-			when (response) {
-				is Resource.Success -> response.value.list.map { alertListMapper.mapData(it) }
-				is Resource.Failure -> throw response.serviceException
-			}
-		}
-	
-	override suspend fun getAlertsHistory(
-		historyType: String, page: PaginationRequest.Pagination
-	): List<AlertModel> = safeApiCall {
-		alertService.getAlertsHistory(
-			AlertHistoryRequest(
-				pageInfo = page, alertsType = historyType
-			)
-		)
-	}.let { response ->
-		when (response) {
-			is Resource.Success -> response.value.list.map { alertListMapper.mapData(it) }
-			is Resource.Failure -> throw response.serviceException
-		}
-	}
-	
-	override suspend fun getAlertDetail(alertId: Int): AlertDetailModel = safeApiCall {
-		alertService.getAlertDetails(
-			AlertDetailRequest(id = alertId)
-		)
-	}.let { response ->
-		when (response) {
-			is Resource.Success -> alertDetailMapper.mapData(response.value)
-			is Resource.Failure -> throw response.serviceException
-		}
-	}
-	
-	override suspend fun resolveAlert(alertId: Int): Boolean = safeApiCall {
-		alertService.resolveAlert(AlertResolveRequest(id = alertId))
-	}.let { response ->
-		when (response) {
-			is Resource.Success -> response.value.ok
-			is Resource.Failure -> throw response.serviceException
-		}
-	}
+
+    private val alertListMapper = AlertListMapper()
+    private val alertDetailMapper = AlertDetailMapper()
+    private val alertInfoMapper = AlertInfoMapper()
+
+    override suspend fun setSosCoords(location: String, coords: LatLng): AlertDetailModel =
+        safeApiCall {
+            alertService.postSosCoordinates(
+                SosCoordsRequest(
+                    location = location,
+                    coords = CoordsRequest(
+                        latitude = coords.latitude, longitude = coords.longitude
+                    ),
+                )
+            )
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> {
+                    accountStorage.setSosState(true)
+                    alertInfoMapper.mapData(response.value)
+                }
+                is Resource.Failure -> throw response.serviceException
+            }
+        }
+
+    override suspend fun getAlertsList(page: PaginationRequest.Pagination): List<AlertModel> =
+        safeApiCall {
+            alertService.getAlertsList(PaginationRequest(page))
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> response.value.list.map { alertListMapper.mapData(it) }
+                is Resource.Failure -> throw response.serviceException
+            }
+        }
+
+    override suspend fun getAlertsHistory(
+        historyType: String, page: PaginationRequest.Pagination
+    ): List<AlertModel> = safeApiCall {
+        alertService.getAlertsHistory(
+            AlertHistoryRequest(
+                pageInfo = page, alertsType = historyType
+            )
+        )
+    }.let { response ->
+        when (response) {
+            is Resource.Success -> response.value.list.map { alertListMapper.mapData(it) }
+            is Resource.Failure -> throw response.serviceException
+        }
+    }
+
+    override suspend fun getAlertDetail(alertId: Int): AlertDetailModel = safeApiCall {
+        alertService.getAlertDetails(
+            AlertDetailRequest(id = alertId)
+        )
+    }.let { response ->
+        when (response) {
+            is Resource.Success -> alertDetailMapper.mapData(response.value)
+            is Resource.Failure -> throw response.serviceException
+        }
+    }
+
+    override suspend fun resolveAlert(alertId: Int): Boolean = safeApiCall {
+        alertService.resolveAlert(AlertResolveRequest(id = alertId))
+    }.let { response ->
+        when (response) {
+            is Resource.Success -> response.value.ok
+            is Resource.Failure -> throw response.serviceException
+        }
+    }
 }

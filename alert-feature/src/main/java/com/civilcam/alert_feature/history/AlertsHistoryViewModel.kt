@@ -41,12 +41,15 @@ class AlertsHistoryViewModel(
                 .alertDetailModel?.alertModel?.userInfo?.personPhone?.let { phoneNumber ->
                     sendRoute(AlertHistoryRoute.CallUser(phoneNumber.serverPhoneNumberFormat()))
                 }
-            AlertHistoryActions.CLickUploadVideo -> {} //todo
+            AlertHistoryActions.ClickDownloadVideo -> showDownloadScreen()
             AlertHistoryActions.StopRefresh -> stopRefresh()
             AlertHistoryActions.ClearErrorText -> clearErrorText()
         }
     }
 
+    private fun showDownloadScreen() {
+        updateInfo { copy(alertHistoryScreen = AlertHistoryScreen.VIDEO_DOWNLOAD) }
+    }
 
     private fun goBack() {
         when (getState().alertHistoryScreen) {
@@ -54,6 +57,7 @@ class AlertsHistoryViewModel(
             AlertHistoryScreen.HISTORY_DETAIL -> {
                 updateInfo { copy(alertHistoryScreen = AlertHistoryScreen.HISTORY_LIST) }
             }
+            AlertHistoryScreen.VIDEO_DOWNLOAD -> updateInfo { copy(alertHistoryScreen = AlertHistoryScreen.HISTORY_DETAIL) }
         }
     }
 

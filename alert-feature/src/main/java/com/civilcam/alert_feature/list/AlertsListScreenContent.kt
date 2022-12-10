@@ -4,8 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,7 +32,9 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
     val state = viewModel.state.collectAsState()
 
     val alertList = viewModel.searchList.collectAsLazyPagingItems()
-
+    var isListLoading by remember {
+        mutableStateOf(false)
+    }
     if (state.value.refreshList == Unit) {
         alertList.refresh()
         viewModel.setInputActions(AlertListActions.StopRefresh)
@@ -98,7 +99,9 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
             AlertHistoryRowSection {
                 viewModel.setInputActions(AlertListActions.ClickGoAlertsHistory)
             }
-
+            if (isListLoading) {
+                AppCircularProgress(modifier = Modifier.fillMaxSize())
+            }
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -149,8 +152,9 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
 
         alertList.apply {
             Timber.d("lazyPlace loadState $loadState")
+            isListLoading = false
             when {
-                loadState.source.refresh is LoadState.Loading -> DialogLoadingContent()
+                loadState.source.refresh is LoadState.Loading -> isListLoading = true
                 loadState.source.refresh is LoadState.NotLoading &&
                         loadState.append.endOfPaginationReached &&
                         itemCount < 1 -> {

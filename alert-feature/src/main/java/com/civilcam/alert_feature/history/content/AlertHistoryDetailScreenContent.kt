@@ -86,14 +86,16 @@ fun AlertHistoryDetailScreenContent(
                 } else {
                     Modifier
                 }
-                InformationBoxContent(
-                    text = stringResource(id = R.string.history_detail_download_video),
-                    modifier = buttonModifier,
-                    textModifier = Modifier.padding(horizontal = if (alertType == AlertType.RECEIVED) 0.dp else 34.dp),
-                    onButtonClick = {
-                        onScreenAction.invoke(AlertHistoryActions.CLickUploadVideo)
-                    }
-                )
+                if (alertDetail.alertDownloads.isNotEmpty()) {
+                    InformationBoxContent(
+                        text = stringResource(id = R.string.history_detail_download_video),
+                        modifier = buttonModifier,
+                        textModifier = Modifier.padding(horizontal = if (alertType == AlertType.RECEIVED) 0.dp else 34.dp),
+                        onButtonClick = {
+                            onScreenAction.invoke(AlertHistoryActions.ClickDownloadVideo)
+                        }
+                    )
+                }
             }
             RowDivider()
             Divider(
@@ -117,7 +119,7 @@ fun AlertHistoryDetailScreenContent(
             InformationRow(
                 title = stringResource(id = R.string.alert_user_detail_location_title),
                 titleFont = FontFamily(Font(com.civilcam.ext_features.R.font.roboto_regular)),
-                needDivider = true,
+                needDivider = alertDetail.alertResolvers.isNotEmpty(),
                 isClickable = false,
                 trailingIcon = {
                     DetailInformationText(
@@ -125,54 +127,54 @@ fun AlertHistoryDetailScreenContent(
                         alertDetail.alertModel.alertLocation
                     )
                 }) {}
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = stringResource(id = R.string.alert_user_detail_resolved_by_title),
-                    style = CCTheme.typography.common_text_regular,
-                    color = CCTheme.colors.black,
-                    modifier = Modifier.padding(start = 16.dp)
-                )
-
-                LazyColumn(
+            if (alertDetail.alertResolvers.isNotEmpty()) {
+                Row(
                     modifier = Modifier
-                        .padding(end = 16.dp)
-
+                        .fillMaxWidth()
+                        .padding(vertical = 12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    items(if (alertType == AlertType.RECEIVED) alertDetail.alertResolvers.take(1) else alertDetail.alertResolvers) { item ->
-                        Text(
-                            buildAnnotatedString {
-                                withStyle(
-                                    style = SpanStyle(
-                                        color = CCTheme.colors.primaryRed,
-                                        fontWeight = FontWeight.W400,
-                                        fontSize = 13.sp
-                                    ),
-                                ) {
-                                    append("${item.userInfo.personFullName} ")
-                                }
+                    Text(
+                        text = stringResource(id = R.string.alert_user_detail_resolved_by_title),
+                        style = CCTheme.typography.common_text_regular,
+                        color = CCTheme.colors.black,
+                        modifier = Modifier.padding(start = 16.dp)
+                    )
 
-                                withStyle(
-                                    style = SpanStyle(
-                                        color = CCTheme.colors.grayOne,
-                                        fontWeight = FontWeight.W400,
-                                        fontSize = 13.sp
-                                    ),
-                                ) {
-                                    append(alertDateFormat(item.resolveDate))
-                                }
-                            },
-                            modifier = Modifier.padding(vertical = 2.dp)
-                        )
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+
+                    ) {
+                        items(if (alertType == AlertType.RECEIVED) alertDetail.alertResolvers.take(1) else alertDetail.alertResolvers) { item ->
+                            Text(
+                                buildAnnotatedString {
+                                    withStyle(
+                                        style = SpanStyle(
+                                            color = CCTheme.colors.primaryRed,
+                                            fontWeight = FontWeight.W400,
+                                            fontSize = 13.sp
+                                        ),
+                                    ) {
+                                        append("${item.userInfo.personFullName} ")
+                                    }
+
+                                    withStyle(
+                                        style = SpanStyle(
+                                            color = CCTheme.colors.grayOne,
+                                            fontWeight = FontWeight.W400,
+                                            fontSize = 13.sp
+                                        ),
+                                    ) {
+                                        append(alertDateFormat(item.resolveDate))
+                                    }
+                                },
+                                modifier = Modifier.padding(vertical = 2.dp)
+                            )
+                        }
                     }
                 }
             }
-
             RowDivider()
         }
     }

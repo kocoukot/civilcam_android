@@ -27,10 +27,16 @@ fun AlertHistoryListScreenContent(
 ) {
     var tabPage by remember { mutableStateOf(alertType) }
 
+    var isListLoading by remember {
+        mutableStateOf(false)
+    }
     Column(modifier = Modifier.fillMaxSize()) {
         AlertHistoryTabRow(tabPage) {
             tabPage = it
             onScreenAction.invoke(AlertHistoryActions.ClickAlertTypeChange(it))
+        }
+        if (isListLoading) {
+            AppCircularProgress(modifier = Modifier.fillMaxSize())
         }
         LazyColumn(
             modifier = Modifier
@@ -70,11 +76,13 @@ fun AlertHistoryListScreenContent(
 
         alertListData.apply {
             Timber.d("lazyPlace loadState $loadState")
+            isListLoading = false
             when {
-                loadState.source.refresh is LoadState.Loading -> DialogLoadingContent()
+                loadState.source.refresh is LoadState.Loading -> isListLoading = true
                 loadState.source.refresh is LoadState.NotLoading &&
                         loadState.append.endOfPaginationReached &&
                         itemCount < 1 -> {
+
                     Box(
                         modifier = Modifier
                             .fillMaxSize(),

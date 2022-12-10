@@ -158,14 +158,14 @@ val profileModule = module {
 }
 
 val emergencyModule = module {
-	viewModel { (isVoiceActivation: Boolean) ->
-		EmergencyViewModel(
-			isVoiceActivation,
-			get(),
-			get(),
-			get()
-		)
-	}
+	viewModel { (isVoiceActivation: Boolean?) ->
+        EmergencyViewModel(
+            isVoiceActivation,
+            get(),
+            get(),
+            get()
+        )
+    }
 }
 
 

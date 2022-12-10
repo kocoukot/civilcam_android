@@ -33,7 +33,7 @@ import timber.log.Timber
 import java.util.*
 
 class EmergencyViewModel(
-	isVoiceActivation: Boolean,
+	isVoiceActivation: Boolean?,
 	private val fetchUserLocationUseCase: FetchUserLocationUseCase,
 	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
 	private val sendEmergencySosUseCase: SendEmergencySosUseCase
@@ -69,7 +69,7 @@ class EmergencyViewModel(
 				setSosState()
 			}
 		}
-		if (isVoiceActivation) {
+		if (isVoiceActivation == true) {
 			viewModelScope.launch {
 				delay(300)
 				doubleClickSos()
