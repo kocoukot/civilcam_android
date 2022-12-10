@@ -94,17 +94,25 @@ class CivilcamApplication : Application() {
             "Notification channel for common"
         )
 
-        val channel =
-            NotificationChannel(
-                NotificationType.LOCATION.notifyName,
-                "Location",
-                NotificationManager.IMPORTANCE_LOW
-            )
-                .apply { setShowBadge(false) }
+        val channel = NotificationChannel(
+            NotificationType.LOCATION.notifyName,
+            "Location",
+            NotificationManager.IMPORTANCE_LOW
+        )
+            .apply { setShowBadge(false) }
+
+        val downloadChannel = NotificationChannel(
+            NotificationType.DOWNLOAD.notifyName,
+            "Download",
+            NotificationManager.IMPORTANCE_LOW
+        )
+            .apply { setShowBadge(false) }
+
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         notificationManager.createNotificationChannel(channel)
+        notificationManager.createNotificationChannel(downloadChannel)
     }
 
 

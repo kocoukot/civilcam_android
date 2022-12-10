@@ -33,12 +33,7 @@ interface VideoLoadingState {
         @Composable
         override fun StateIcon(modifier: Modifier, onIconClick: () -> Unit) =
             Icon(
-                modifier = modifier.clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(color = Color(0xFF000000)),
-                    onClick = {
-                        onIconClick.invoke()
-                    }),
+                modifier = modifier,
                 painter = painterResource(id = R.drawable.ic_download_done),
                 contentDescription = "video downloaded",
                 tint = Color(0xFF00C26F)

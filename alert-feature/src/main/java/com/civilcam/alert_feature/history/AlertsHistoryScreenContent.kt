@@ -94,9 +94,10 @@ fun AlertsListScreenContent(viewModel: AlertsHistoryViewModel) {
                         )
                     }
                     AlertHistoryScreen.VIDEO_DOWNLOAD -> {
-                        VideoDownloadScreenContent(state.alertDetailModel?.alertDownloads.orEmpty()) {
-
-                        }
+                        VideoDownloadScreenContent(
+                            state.alertDetailModel?.alertDownloads.orEmpty(),
+                            viewModel::setInputActions
+                        )
                     }
                 }
             }

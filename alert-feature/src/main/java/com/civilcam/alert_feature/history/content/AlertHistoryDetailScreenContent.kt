@@ -92,7 +92,7 @@ fun AlertHistoryDetailScreenContent(
                         modifier = buttonModifier,
                         textModifier = Modifier.padding(horizontal = if (alertType == AlertType.RECEIVED) 0.dp else 34.dp),
                         onButtonClick = {
-                            onScreenAction.invoke(AlertHistoryActions.ClickDownloadVideo)
+                            onScreenAction.invoke(AlertHistoryActions.ClickShowVideoList)
                         }
                     )
                 }

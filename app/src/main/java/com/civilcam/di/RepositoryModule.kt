@@ -30,4 +30,7 @@ val repositoryModule = module {
 
     factory<AlertsRepository> { AlertsRepositoryImpl(get(), get()) }
 
+    factory<VideoRepository> { VideoRepositoryImpl() }
+
+
 }
