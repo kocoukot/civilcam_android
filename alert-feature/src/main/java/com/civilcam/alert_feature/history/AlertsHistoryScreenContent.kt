@@ -1,15 +1,15 @@
 package com.civilcam.alert_feature.history
 
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -34,6 +34,22 @@ fun AlertsListScreenContent(viewModel: AlertsHistoryViewModel) {
     BackHandler {
         viewModel.setInputActions(AlertHistoryActions.ClickGoBack)
     }
+
+    var selectedVideo by remember {
+        mutableStateOf<AlertHistoryActions?>(null)
+    }
+
+    val permissionRequest = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = { permissionsMap ->
+            if (permissionsMap.all { it.value }) {
+                selectedVideo?.let { action ->
+                    viewModel.setInputActions(action)
+                }
+            }
+        }
+    )
+
     val topAppBarColor by
     animateColorAsState(
         targetValue = if (state.alertHistoryScreen == AlertHistoryScreen.VIDEO_DOWNLOAD)
@@ -96,8 +112,18 @@ fun AlertsListScreenContent(viewModel: AlertsHistoryViewModel) {
                     AlertHistoryScreen.VIDEO_DOWNLOAD -> {
                         VideoDownloadScreenContent(
                             state.alertDetailModel?.alertDownloads.orEmpty(),
-                            viewModel::setInputActions
-                        )
+//                            viewModel::setInputActions
+                        ) { action ->
+                            selectedVideo = action
+                            viewModel.setInputActions(action)
+//                            permissionRequest.launch(
+//                                arrayOf(
+//                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+//                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+//                                )
+//                            )
+
+                        }
                     }
                 }
             }

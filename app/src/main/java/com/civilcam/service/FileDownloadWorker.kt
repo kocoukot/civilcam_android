@@ -14,6 +14,7 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.civilcam.R
 import com.civilcam.domainLayer.model.user.NotificationType
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
@@ -34,18 +35,25 @@ class FileDownloadWorker(
             .setProgress(0, 0, true)
 
         NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, builder.build())
+        var uri: Uri? = null
+        var error = ""
+        try {
 
-        val uri = getSavedFileUri(
-            fileName = fileName,
-            fileUrl = fileUrl,
-            context = context
-        )
+            uri = getSavedFileUri(
+                fileName = fileName,
+                fileUrl = fileUrl,
+                context = context
+            )
+        } catch (e: Throwable) {
+            error = e.localizedMessage.orEmpty()
+        }
 
         NotificationManagerCompat.from(context).cancel(NOTIFICATION_ID)
+        Timber.tag("video").i("")
         return if (uri != null) {
-            Result.success(workDataOf(KEY_FILE_URI to uri.toString()))
+            Result.success()
         } else {
-            Result.failure()
+            Result.failure(workDataOf(KEY_LOADING_ERROR to error))
         }
     }
 
@@ -101,6 +109,7 @@ class FileDownloadWorker(
         const val KEY_FILE_NAME = "key_file_name"
         const val KEY_FILE_URI = "key_file_uri"
         const val WORK_MANAGER_ID = "one_time_work"
+        const val KEY_LOADING_ERROR = "key_loading_error"
 
         const val NOTIFICATION_ID = 333
         const val DOWNLOAD_FOLDER = "Download/Civilcam"

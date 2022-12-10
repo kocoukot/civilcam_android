@@ -1,6 +1,7 @@
 package com.civilcam.alert_feature.history.content
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -64,14 +65,25 @@ private fun DownLoadRow(
         val work = WorkManager.getInstance(context)
         work.getWorkInfosForUniqueWorkLiveData("one_time_work" + rowInfo.id)
             .observe(lifecycle) {
+                Timber.tag("video").d("workId ${it.first().state}")
+
                 if (it.isNotEmpty()) {
-                    Timber.tag("video").d("workId ${it.first().state}")
                     when (it.first().state) {
                         WorkInfo.State.RUNNING -> {
                             fileState = VideoLoadingState.Loading
                         }
                         WorkInfo.State.SUCCEEDED -> {
-                            fileState = VideoLoadingState.DownLoaded
+                            if (fileState == VideoLoadingState.Loading) fileState =
+                                VideoLoadingState.DownLoaded
+                        }
+                        WorkInfo.State.FAILED -> {
+                            Timber.tag("video").d("workId FAILED ${it.first()}")
+                            fileState = VideoLoadingState.ReadyToLoad
+                            Toast.makeText(
+                                context,
+                                it.first().outputData.getString("key_loading_error"),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                         else -> {}
                     }
