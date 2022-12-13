@@ -62,7 +62,10 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 	private val onBackStackChangedListener by lazy {
 		FragmentManager.OnBackStackChangedListener {
 			binding.navBarGroup.isVisible = currentVisibleFragment is SupportBottomBar
-			if (currentVisibleFragment is LanguageSelectFragment) stopLocationService()
+			if (currentVisibleFragment is LanguageSelectFragment) {
+				stopLocationService()
+				recognizer.destroy()
+			}
 			checkSubscriptionState()
 		}
 	}
