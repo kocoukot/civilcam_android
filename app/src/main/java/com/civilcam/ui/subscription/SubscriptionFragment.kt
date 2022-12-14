@@ -8,9 +8,10 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import com.android.billingclient.api.*
+import com.android.billingclient.api.ProductDetails
 import com.civilcam.R
 import com.civilcam.common.ext.navigateToRoot
+import com.civilcam.common.ext.showAlertDialogFragment
 import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
 import com.civilcam.ext_features.ext.hideSystemUI
 import com.civilcam.ext_features.ext.navigateToStart
@@ -20,33 +21,26 @@ import com.civilcam.ext_features.navController
 import com.civilcam.ext_features.requireArg
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
+import com.civilcam.ui.subscription.model.BillingClientService
+import com.civilcam.ui.subscription.model.BillingEvent
+import com.civilcam.ui.subscription.model.SubscriptionActions
 import com.civilcam.ui.subscription.model.SubscriptionRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
-class SubscriptionFragment : Fragment() {
+class SubscriptionFragment : Fragment(), BillingEvent {
 	private val viewModel: SubscriptionViewModel by viewModel {
 		parametersOf(useSubState)
 	}
 
 	private val useSubState: UserSubscriptionState by requireArg(ARG_FLOW)
-
-
-	private val purchasesUpdatedListener =
-		PurchasesUpdatedListener { billingResult, purchases ->
+	
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		BillingClientService.apply {
+			init(requireContext(), requireActivity(), this@SubscriptionFragment)
+			initializeBillingClient()
 		}
-
-	private val billingClient by lazy {
-		BillingClient.newBuilder(requireContext())
-			.setListener(purchasesUpdatedListener)
-			.enablePendingPurchases()
-			.build()
-	}
-
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-		super.onViewCreated(view, savedInstanceState)
-		billStartConnection()
 	}
 
 	override fun onCreateView(
@@ -67,6 +61,7 @@ class SubscriptionFragment : Fragment() {
 						PinCodeFragment.createArgs(PinCodeFlow.CREATE_PIN_CODE, true)
 					)
 				}
+				is SubscriptionRoute.LaunchPurchase -> launchPurchase(route.purchase)
 			}
 		}
 		return ComposeView(requireContext()).apply {
@@ -80,86 +75,40 @@ class SubscriptionFragment : Fragment() {
 			}
 		}
 	}
-
+	
+	private fun launchPurchase(purchase: ProductDetails) {
+		BillingClientService.launchPurchaseFlow(purchase)
+	}
+	
 	override fun onResume() {
 		super.onResume()
 		hideSystemUI()
+		BillingClientService.handlePurchaseVerification()
 	}
 
 	override fun onStop() {
 		super.onStop()
 		showSystemUI()
 	}
-
-	private fun billStartConnection() {
-		billingClient.startConnection(object : BillingClientStateListener {
-			override fun onBillingSetupFinished(billingResult: BillingResult) {
-				if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-
-				}
-			}
-
-			override fun onBillingServiceDisconnected() {
-				billStartConnection()
-			}
-		})
+	
+	override fun onProductListReady(list: List<ProductDetails>) {
+		viewModel.setInputActions(SubscriptionActions.SetProductList(list))
 	}
-
-	private fun getProductsList() {
-		val queryProductDetailsParams =
-			QueryProductDetailsParams.newBuilder()
-				.setProductList(
-					listOf(
-						QueryProductDetailsParams.Product.newBuilder()
-//							.setProductId(ONE_TRY_PRODUCT_ID)
-//							.setProductType(BillingClient.ProductType.INAPP)
-							.build(),
-
-						QueryProductDetailsParams.Product.newBuilder()
-//							.setProductId(ONE_DAY_PRODUCT_ID)
-//							.setProductType(BillingClient.ProductType.INAPP)
-							.build()
-					)
-				)
-				.build()
-
-		billingClient.queryProductDetailsAsync(queryProductDetailsParams) { billingResult, productDetailsList ->
-			if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-				Timber.i("productDetailsList $productDetailsList")
-//				viewModel.onBillsGot(productDetailsList.toList())
-			}
+	
+	override fun setPurchaseToken(token: String) {
+		viewModel.setInputActions(SubscriptionActions.SetPurchaseToken(token))
+	}
+	
+	override fun onConnectionError(message: String) {
+		showAlertDialogFragment(message, "") {
+			navController.popBackStack()
 		}
 	}
-
-	private fun launchBillFlow(product: ProductDetails) {
-		val productDetailsParamsList = listOf(
-			BillingFlowParams.ProductDetailsParams.newBuilder()
-				.setProductDetails(product)
-				.build()
-		)
-
-		val billingFlowParams = BillingFlowParams.newBuilder()
-			.setProductDetailsParamsList(productDetailsParamsList)
-			.build()
-		billingClient.launchBillingFlow(requireActivity(), billingFlowParams)
-	}
-
-	private fun handlePurchase(purchase: Purchase) {
-		val consumeParams =
-			ConsumeParams.newBuilder()
-				.setPurchaseToken(purchase.purchaseToken)
-				.build()
-//		lifecycleScope.launch {
-//			withContext(Dispatchers.IO) {
-//				billingClient.consumePurchase(consumeParams)
-//			}
-//		}
-	}
-
+	
 	companion object {
 		private const val ARG_FLOW = "subscription_flow"
 		const val IN_APP_TRIAL = "in_app_trial"
-
+		
 		fun createArgs(isReselect: UserSubscriptionState) = bundleOf(
 			ARG_FLOW to isReselect
 		)

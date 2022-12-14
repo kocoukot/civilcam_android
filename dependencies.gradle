@@ -199,6 +199,11 @@ ext {
         implementation 'com.google.android.exoplayer:exoplayer-hls:2.18.2'
 
     }
+
+    subscription = dependencyGroup {
+        def billing_version = "5.0.0"
+        implementation "com.android.billingclient:billing-ktx:$billing_version"
+    }
 }
 //
 //dependencies {

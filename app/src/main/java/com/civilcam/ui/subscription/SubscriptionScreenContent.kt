@@ -40,15 +40,15 @@ import com.civilcam.ui.subscription.model.SubscriptionActions
 
 @Composable
 fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
-
+	
 	val state = viewModel.state.collectAsState()
-
+	
 	var selectedSubscription by remember { mutableStateOf(state.value.selectedSubscriptionType) }
-
+	
 	if (state.value.isLoading) {
 		DialogLoadingContent()
 	}
-
+	
 	state.value.alert
 		.takeIf { it != AlertDialogType.Empty }
 		?.let { alert ->
@@ -60,14 +60,14 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 				viewModel.setInputActions(SubscriptionActions.CloseAlert(it))
 			}
 		}
-
+	
 	Surface(modifier = Modifier.fillMaxSize()) {
-
+		
 		Box(
 			modifier = Modifier.fillMaxWidth(),
 			contentAlignment = Alignment.TopCenter,
 		) {
-
+			
 			Image(
 				painter = painterResource(R.drawable.img_subscription_background),
 				contentDescription = null,
@@ -76,25 +76,25 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 					.align(Alignment.TopCenter),
 				contentScale = ContentScale.FillWidth
 			)
-
-            IconActionButton(
+			
+			IconActionButton(
 				modifier = Modifier
 					.padding(top = 24.dp, start = 16.dp)
 					.align(Alignment.TopStart),
 				buttonIcon = R.drawable.ic_back_navigation, tint = CCTheme.colors.white
 			) {
-                viewModel.setInputActions(SubscriptionActions.GoBack)
-            }
-
-        }
-
-        Column(
+				viewModel.setInputActions(SubscriptionActions.GoBack)
+			}
+			
+		}
+		
+		Column(
 			modifier = Modifier.navigationBarsPadding(),
 			verticalArrangement = Arrangement.Bottom,
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
-
-            Card(
+			
+			Card(
 				shape = RoundedCornerShape(
 					topStart = 12.dp, topEnd = 12.dp
 				),
@@ -110,26 +110,26 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 					),
 					horizontalAlignment = Alignment.CenterHorizontally,
 				) {
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    Text(
+					
+					Spacer(modifier = Modifier.height(4.dp))
+					
+					Text(
 						text = stringResource(R.string.subscription_options_title),
 						style = CCTheme.typography.big_title,
 						color = CCTheme.colors.primaryRed,
 						textAlign = TextAlign.Center,
 					)
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Text(
+					
+					Spacer(modifier = Modifier.height(12.dp))
+					
+					Text(
 						text = stringResource(R.string.subscription_no_commitment_title),
 						style = CCTheme.typography.common_medium_text_regular,
 						color = CCTheme.colors.black,
 						textAlign = TextAlign.Center,
 					)
-
-                    Column(
+					
+					Column(
 						Modifier
 							.fillMaxWidth()
 							.padding(top = 16.dp),
@@ -145,44 +145,46 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 							SubscriptionOption(textString)
 						}
 					}
-
-                    Spacer(modifier = Modifier.height(18.dp))
-
-                    LazyColumn(
+					
+					Spacer(modifier = Modifier.height(18.dp))
+					
+					LazyColumn(
 						modifier = Modifier.fillMaxWidth()
 					) {
-
-                        items(state.value.subscriptionsList.list) { subscription ->
+						
+						items(state.value.subscriptionsList.list) { subscription ->
 							SubscriptionPlanRow(
-                                subscriptionInfo = subscription,
-                                isActivated = selectedSubscription == subscription.title,
-                                onButtonClicked = { selectedSubscription = it },
-                            )
+								subscriptionInfo = subscription,
+								isActivated = selectedSubscription == subscription.title,
+								onButtonClicked = {
+									selectedSubscription = it
+								},
+							)
 						}
 					}
-
-
-                    Spacer(modifier = Modifier.height(40.dp))
-
-                    ComposeButton(
-                        title = stringResource(
-                            when (state.value.userSubState) {
-                                UserSubscriptionState.FIRST_LAUNCH -> R.string.start_text
-                                UserSubscriptionState.SUB_RESELECT -> R.string.subscriptions_change_plan
-                                UserSubscriptionState.SUB_EXPIRED -> R.string.subscriptions_resubscribe_plan
-                            }
-                        ),
-                        modifier = Modifier
+					
+					
+					Spacer(modifier = Modifier.height(40.dp))
+					
+					ComposeButton(
+						title = stringResource(
+							when (state.value.userSubState) {
+								UserSubscriptionState.FIRST_LAUNCH -> R.string.start_text
+								UserSubscriptionState.SUB_RESELECT -> R.string.subscriptions_change_plan
+								UserSubscriptionState.SUB_EXPIRED -> R.string.subscriptions_resubscribe_plan
+							}
+						),
+						modifier = Modifier
 							.fillMaxWidth()
 							.navigationBarsPadding(),
-                        buttonClick = {
-                            viewModel.setInputActions(
-                                SubscriptionActions.OnSubSelect(
-                                    selectedSubscription
-                                )
-                            )
-                        },
-                    )
+						buttonClick = {
+							viewModel.setInputActions(
+								SubscriptionActions.OnSubSelect(
+									selectedSubscription
+								)
+							)
+						},
+					)
 				}
 			}
 		}
@@ -217,15 +219,15 @@ fun SubscriptionPlanRow(
 	onButtonClicked: (String) -> Unit,
 	isActivated: Boolean = false
 ) {
-
-    val backgroundColor by animateColorAsState(
+	
+	val backgroundColor by animateColorAsState(
 		targetValue = if (isActivated) CCTheme.colors.primaryRed else CCTheme.colors.white
 	)
 	val borderColor = if (isActivated) CCTheme.colors.primaryRed else CCTheme.colors.grayOne
 	val titleColor = if (isActivated) CCTheme.colors.white else CCTheme.colors.black
 	val textColor = if (isActivated) CCTheme.colors.white else CCTheme.colors.grayOne
-
-    Column(modifier = Modifier
+	
+	Column(modifier = Modifier
 		.fillMaxWidth()
 		.padding(vertical = 6.dp)
 		.clip(RoundedCornerShape(8.dp))
@@ -238,15 +240,15 @@ fun SubscriptionPlanRow(
 		.clickable { onButtonClicked.invoke(subscriptionInfo.title) },
 		horizontalAlignment = Alignment.Start
 	) {
-
-        Text(
+		
+		Text(
 			text = subscriptionInfo.title,
 			style = CCTheme.typography.common_text_medium,
 			color = titleColor,
 			modifier = Modifier.padding(start = 12.dp, top = 12.dp)
 		)
-
-        Text(
+		
+		Text(
 			text = when (subscriptionInfo.productId) {
 				IN_APP_TRIAL -> stringResource(id = R.string.subscription_trial_description)
 				else -> stringResource(

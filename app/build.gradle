@@ -156,6 +156,7 @@ dependencies {
     firebase()
     socket()
     mux()
+    subscription()
     //Timber
     implementation 'com.jakewharton.timber:timber:5.0.1'
 

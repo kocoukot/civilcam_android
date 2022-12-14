@@ -1,6 +1,7 @@
 package com.civilcam.ui.subscription
 
 import androidx.lifecycle.viewModelScope
+import com.android.billingclient.api.ProductDetails
 import com.civilcam.domainLayer.model.subscription.SubscriptionsList
 import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
 import com.civilcam.domainLayer.serviceCast
@@ -49,9 +50,41 @@ class SubscriptionViewModel(
 			SubscriptionActions.GoBack -> goBack()
 			is SubscriptionActions.OnSubSelect -> onSubSelected(action.title)
 			is SubscriptionActions.CloseAlert -> onCloseAlert(action.alertDecision)
+			is SubscriptionActions.SetProductList -> setProductList(action.list)
+			is SubscriptionActions.SetPurchaseToken -> setPurchaseToken(action.token)
+			else -> {}
 		}
 	}
-
+	
+	private fun setPurchaseToken(token: String) {
+		viewModelScope.launch {
+			_state.update { it.copy(isLoading = true) }
+			networkRequest(
+				action = {
+					setUserSubscriptionUseCase(
+						receipt = token,
+						productId = selectedSubType.productId
+					)
+				},
+				onSuccess = {
+					_state.update { it.copy(alert = SubConfirmed, isLoading = false) }
+				},
+				onFailure = { error ->
+					error.serviceCast { errorText, _, _ ->
+						_state.update { it.copy(alert = AlertDialogType.ErrorAlert(errorText)) }
+					}
+				},
+				onComplete = {
+					_state.update { it.copy(isLoading = false) }
+				},
+			)
+		}
+	}
+	
+	private fun setProductList(list: List<ProductDetails>) {
+		_state.update { it.copy(productList = list) }
+	}
+	
 	private fun onCloseAlert(isConfirm: Boolean) {
 		when (state.value.alert) {
 			is SubConfirmAlert -> if (isConfirm) onConfirmSubscription()
@@ -124,29 +157,7 @@ class SubscriptionViewModel(
 	}
 
 	private fun onConfirmSubscription() {
-		//todo add google receipt later
-		viewModelScope.launch {
-			_state.update { it.copy(isLoading = true) }
-			networkRequest(
-				action = {
-					setUserSubscriptionUseCase(
-						receipt = UUID.randomUUID().toString(),
-						productId = selectedSubType.productId
-					)
-				},
-				onSuccess = {
-					_state.update { it.copy(alert = SubConfirmed, isLoading = false) }
-				},
-				onFailure = { error ->
-					error.serviceCast { errorText, _, _ ->
-						_state.update { it.copy(alert = AlertDialogType.ErrorAlert(errorText)) }
-					}
-				},
-				onComplete = {
-					_state.update { it.copy(isLoading = false) }
-				},
-			)
-		}
+		steps.value = _state.value.selectedProductDetails?.let { SubscriptionRoute.LaunchPurchase(it) }
 	}
 
 	private fun onSubSelected(subscriptionType: String) {
@@ -164,6 +175,10 @@ class SubscriptionViewModel(
 							)
 						)
 					}
+					_state.value.productList.find { it.title == subscriptionType }
+						.let { productDetails ->
+							_state.update { it.copy(selectedProductDetails = productDetails) }
+						}
 
 				}
 		}
