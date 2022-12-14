@@ -104,7 +104,7 @@ private fun DownLoadRow(
         )
 
         Text(
-            text = videoData.duration.toString(),
+            text = videoData.getFileSize(),
             style = CCTheme.typography.common_text_regular,
             color = CCTheme.colors.grayOne
         )

@@ -10,8 +10,8 @@ class AlertDownloadMapper :
             id = it.id,
             quality = it.quality,
             fileName = it.fileName,
+            fileSize = it.fileSize,
             duration = it.duration,
             url = it.url
-
         )
     })

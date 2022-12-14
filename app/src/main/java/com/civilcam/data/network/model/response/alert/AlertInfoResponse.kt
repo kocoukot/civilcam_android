@@ -12,8 +12,8 @@ class AlertInfoResponse(
 		@SerializedName("id") val id: Int,
 		@SerializedName("quality") val quality: String?,
 		@SerializedName("fileName") val fileName: String,
+		@SerializedName("fileSize") val fileSize: Int,
 		@SerializedName("duration") val duration: Int,
 		@SerializedName("url") val url: String?
 	)
-	
 }
