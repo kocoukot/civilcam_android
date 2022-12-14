@@ -165,12 +165,11 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 	}
 
 	private fun stopLocationService() {
-		if (isUserLoggedInUseCase()) {
-			Intent(applicationContext, LocationService::class.java).apply {
-				action = ACTION_STOP
-				startService(this)
-			}
+		Intent(applicationContext, LocationService::class.java).apply {
+			action = ACTION_STOP
+			startService(this)
 		}
+
 	}
 	
 	override fun onDestroy() {

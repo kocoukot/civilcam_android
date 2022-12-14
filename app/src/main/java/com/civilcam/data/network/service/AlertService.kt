@@ -18,7 +18,8 @@ interface AlertService {
 	
 	@POST(Endpoint.Alerts.SOS_COORDINATES)
 	suspend fun postSosCoordinates(@Body request: SosCoordsRequest): AlertInfoResponse
-	
+
+
 	@POST(Endpoint.Alerts.ALERTS_LIST)
 	suspend fun getAlertsList(@Body request: PaginationRequest): AlertsListResponse
 	
