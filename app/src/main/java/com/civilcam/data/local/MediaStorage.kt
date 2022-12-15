@@ -2,6 +2,7 @@ package com.civilcam.data.local
 
 import android.content.ContentValues
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -10,7 +11,10 @@ import com.civilcam.data.local.model.ImageMetadata
 import com.civilcam.ext_features.Constant
 import com.civilcam.utils.FileUtils
 import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.format
 import id.zelory.compressor.constraint.quality
+import id.zelory.compressor.constraint.resolution
+import id.zelory.compressor.constraint.size
 import io.reactivex.Maybe
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
@@ -85,14 +89,16 @@ class MediaStorage(private val context: Context) {
     fun getImageFile(uri: Uri): Maybe<File> = getImageMetadata(uri)
         .flatMap { metadata ->
             Maybe.fromCallable {
-                FileUtils.createFileFromUri(context, "civilcam_${metadata.name}", uri)
-                    ?.also {
-                        runBlocking {
-                            Compressor.compress(context, it) {
-                                quality(Constant.IMAGE_COMPRESSION_QUALITY)
-                            }
-                        }
+                val imageFile =
+                    FileUtils.createFileFromUri(context, "civilcam_${metadata.name}", uri)
+                runBlocking {
+                    Compressor.compress(context, imageFile!!) {
+                        resolution(1280, 720)
+                        format(Bitmap.CompressFormat.JPEG)
+                        size(4_718_592) // 5 MB
+                        quality(Constant.IMAGE_COMPRESSION_QUALITY)
                     }
+                }
             }
         }
 
