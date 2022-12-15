@@ -26,8 +26,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.civilcam.ext_features.theme.CCTheme
-import com.civilcam.ui.emergency.model.EmergencyButton
 import com.civilcam.ui.emergency.model.EmergencyActions
+import com.civilcam.ui.emergency.model.EmergencyButton
 import kotlinx.coroutines.delay
 import timber.log.Timber
 
@@ -35,6 +35,7 @@ import timber.log.Timber
 @Composable
 fun LiveButtonContent(
     emergencyButton: EmergencyButton,
+    buttonBoxM: Modifier,
     modifier: Modifier,
     onButtonClick: (EmergencyActions) -> Unit,
 ) {
@@ -42,7 +43,7 @@ fun LiveButtonContent(
     val buttonColorAnimated by animateColorAsState(targetValue = emergencyButton.buttonColor)
 
     with(emergencyButton) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = buttonBoxM) {
             if (emergencyButton is EmergencyButton.InDangerButton) {
                 WavesAnimation(modifier)
             }

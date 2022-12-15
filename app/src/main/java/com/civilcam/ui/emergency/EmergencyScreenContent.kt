@@ -86,6 +86,13 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 				.size(150.dp)
 				.offset(y = (-36).dp)
 
+			val buttonBox = if (state.emergencyScreen == EmergencyScreen.MAP_EXTENDED)
+				Modifier
+					.fillMaxSize()
+					.navigationBarsPadding()
+			else
+				Modifier.fillMaxSize()
+
 			Column {
 				LiveMapContent(
 					modifier = Modifier.fillMaxSize(),
@@ -96,10 +103,6 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 					onActionClicked = viewModel::setInputActions,
 				)
 			}
-			val buttonModifier = if (state.emergencyScreen == EmergencyScreen.MAP_EXTENDED)
-				defaultButtonModifier.navigationBarsPadding()
-			else
-				defaultButtonModifier
 
 			AnimatedVisibility(
 				visible = state.emergencyScreen == EmergencyScreen.NORMAL || state.emergencyScreen == EmergencyScreen.MAP_EXTENDED,
@@ -108,7 +111,8 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 			) {
 				LiveButtonContent(
 					emergencyButton = state.emergencyButton,
-					modifier = buttonModifier,
+					buttonBoxM = buttonBox,
+					modifier = defaultButtonModifier,
 					onButtonClick = { action ->
 						when (action) {
 							is EmergencyActions.DoubleClickSos -> {
