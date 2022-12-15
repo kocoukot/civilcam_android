@@ -89,7 +89,7 @@ private fun DownLoadRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
+            .clickable(enabled = fileState is VideoLoadingState.DownLoaded) {
                 onRowAction.invoke(AlertHistoryActions.ClickOpenVideo(rowInfo))
             },
         verticalAlignment = Alignment.CenterVertically,
