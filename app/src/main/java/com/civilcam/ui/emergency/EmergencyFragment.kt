@@ -252,9 +252,7 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 			if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH) == true) {
 				try {
 					cameraManager?.setTorchMode("0", isEnable)
-				} catch (e: CameraAccessException) {
-					showToast(e.localizedMessage)
-				}
+				} catch (e: CameraAccessException) {}
 			} else {
 				showToast("This device has no flash")
 			}
