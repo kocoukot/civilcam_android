@@ -235,19 +235,7 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 	
 	@SuppressLint("UseCompatLoadingForDrawables")
 	private fun controlTorch(isEnable: Boolean) {
-		if (isEnable) {
-			binding.liveSurfaceView.cameraTorch.setImageDrawable(
-				resources.getDrawable(
-					R.drawable.ic_flash_on, null
-				)
-			)
-		} else {
-			binding.liveSurfaceView.cameraTorch.setImageDrawable(
-				resources.getDrawable(
-					R.drawable.ic_flash_off, null
-				)
-			)
-		}
+		binding.liveSurfaceView.cameraTorch.isActivated = isEnable
 		if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) == true) {
 			if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH) == true) {
 				try {
