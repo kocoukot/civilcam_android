@@ -17,6 +17,12 @@ class AccountStorage(
 	private val gson: Gson,
 	private val sharedPreferencesStorage: SharedPreferencesStorage,
 ) {
+	var streamKey: String
+		get() = accountManager.peekAuthToken(getOrCreateAccount(), STREAM_KEY).orEmpty()
+		set(value) {
+			accountManager.setAuthToken(getOrCreateAccount(), STREAM_KEY, value)
+		}
+
 	var sessionToken: String?
 		get() = accountManager.peekAuthToken(getOrCreateAccount(), SESSION_TOKEN)
 		set(value) {
@@ -57,7 +63,7 @@ class AccountStorage(
 		set(value) {
 			accountManager.setUserData(getOrCreateAccount(), IS_USER_LOGGED_IN, value.toString())
 		}
-	
+
 	fun logOut() {
 		accountManager.apply {
 			clearProfile()
@@ -65,9 +71,9 @@ class AccountStorage(
 			sessionToken = null
 		}
 	}
-	
+
 	private fun clearProfile() = accountManager.setUserData(getOrCreateAccount(), USER, null)
-	
+
 	fun loginUser(sessionToken: String?, user: CurrentUser) {
 		getOrCreateAccount()
             .let {
@@ -160,6 +166,8 @@ class AccountStorage(
 
 		private const val DEVICE_ID_TOKEN = "$ACCOUNT_TYPE.deviceid.token"
 		private const val SESSION_TOKEN = "$ACCOUNT_TYPE.session.token"
+		private const val STREAM_KEY = "$ACCOUNT_TYPE.stream.key"
+
 		private const val IS_USER_LOGGED_IN = "$ACCOUNT_TYPE.user.isLoggedIn"
 		private const val IS_SOS_STATE = "$ACCOUNT_TYPE.sos.state"
 

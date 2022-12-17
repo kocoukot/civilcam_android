@@ -12,6 +12,9 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.civilcam.BuildConfig
 import com.civilcam.R
 import com.civilcam.databinding.FragmentLiveBinding
@@ -34,6 +37,10 @@ import com.civilcam.ui.common.alert.DialogAlertFragment
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyRoute
 import com.pedro.rtplibrary.rtmp.RtmpCamera1
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import net.ossrs.rtmp.ConnectCheckerRtmp
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -133,11 +140,20 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 		controlTorch.observeNonNull(viewLifecycleOwner) {
 			controlTorch(it)
 		}
+
+		lifecycleScope.launch {
+			repeatOnLifecycle(Lifecycle.State.RESUMED) {
+				streamKey.onEach { streamKey ->
+					delay(500)
+					goLive(streamKey)
+				}.launchIn(lifecycleScope)
+			}
+		}
 	}
 	
 	@SuppressLint("UseCompatLoadingForDrawables")
 	private fun changeScreenState(screen: EmergencyScreen) {
-		Timber.i("Live screen state: $screen")
+		Timber.tag("stream_flow").i("Live screen state: $screen")
 		with(binding) {
 			if (screen == EmergencyScreen.NORMAL)
 				(requireActivity() as VoiceRecord).startVoiceRecord()
@@ -240,7 +256,9 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 			if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH) == true) {
 				try {
 					cameraManager?.setTorchMode("0", isEnable)
-				} catch (e: CameraAccessException) {}
+				} catch (e: CameraAccessException) {
+					showToast("Torch error ${e.localizedMessage}")
+				}
 			} else {
 				showToast("This device has no flash")
 			}

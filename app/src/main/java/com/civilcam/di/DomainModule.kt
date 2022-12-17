@@ -137,4 +137,6 @@ val domainModule = module {
     factory { CheckIfVideoLoadedUseCase(get()) }
 
     factory { GetVideoUriUseCase(get()) }
+
+    factory { GetStreamKeyUseCase(get()) }
 }

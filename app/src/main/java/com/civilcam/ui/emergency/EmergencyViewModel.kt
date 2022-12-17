@@ -14,6 +14,7 @@ import com.civilcam.domainLayer.model.JsonDataParser
 import com.civilcam.domainLayer.model.alerts.AlertGuardianModel
 import com.civilcam.domainLayer.model.user.UserState
 import com.civilcam.domainLayer.serviceCast
+import com.civilcam.domainLayer.usecase.alerts.GetStreamKeyUseCase
 import com.civilcam.domainLayer.usecase.alerts.SendEmergencySosUseCase
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
@@ -24,6 +25,7 @@ import com.civilcam.socket_feature.SocketMapEvents
 import com.civilcam.ui.emergency.model.*
 import com.google.gson.Gson
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -36,7 +38,8 @@ class EmergencyViewModel(
 	isVoiceActivation: Boolean?,
 	private val fetchUserLocationUseCase: FetchUserLocationUseCase,
 	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
-	private val sendEmergencySosUseCase: SendEmergencySosUseCase
+	private val sendEmergencySosUseCase: SendEmergencySosUseCase,
+	private val getStreamKeyUseCase: GetStreamKeyUseCase,
 ) : ViewModel() {
 
 	private val _composeState: MutableStateFlow<EmergencyState> = MutableStateFlow(EmergencyState())
@@ -57,6 +60,9 @@ class EmergencyViewModel(
 	private val _controlTorch = MutableLiveData<Boolean>()
 	val controlTorch: LiveData<Boolean> = _controlTorch
 
+	private val _streamKey = Channel<String>()
+	val streamKey = _streamKey.receiveAsFlow()
+
 	private var geocoder = Geocoder(CivilcamApplication.instance, Locale.US)
 	private val mSocket = SocketHandler.getSocket()
 	private val gson = Gson()
@@ -67,6 +73,13 @@ class EmergencyViewModel(
 		getLocalCurrentUserUseCase().let { user ->
 			if (user?.sessionUser?.userState == UserState.alert) {
 				setSosState()
+				getStreamKeyUseCase().takeIf { it.isNotEmpty() }
+					?.let {
+						Timber.tag("stream_flow").d("stream key $it")
+						viewModelScope.launch {
+							_streamKey.send(it)
+						}
+					}
 			}
 		}
 		if (isVoiceActivation == true) {

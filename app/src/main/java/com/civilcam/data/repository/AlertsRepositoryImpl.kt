@@ -38,6 +38,7 @@ class AlertsRepositoryImpl(
             when (response) {
                 is Resource.Success -> {
                     accountStorage.setSosState(true)
+                    accountStorage.streamKey = response.value.alert.key.orEmpty()
                     alertInfoMapper.mapData(response.value)
                 }
                 is Resource.Failure -> throw response.serviceException
@@ -88,4 +89,7 @@ class AlertsRepositoryImpl(
             is Resource.Failure -> throw response.serviceException
         }
     }
+
+    override fun getStreamKey(): String = accountStorage.streamKey
+
 }

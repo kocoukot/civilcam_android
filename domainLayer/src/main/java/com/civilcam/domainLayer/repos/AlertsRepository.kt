@@ -21,5 +21,6 @@ interface AlertsRepository {
 
     suspend fun resolveAlert(alertId: Int): Boolean
 
+    fun getStreamKey(): String
 
 }
