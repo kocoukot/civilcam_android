@@ -231,7 +231,11 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 	}
 	
 	private fun stopStream() {
-		rtmpCamera?.stopStream()
+		rtmpCamera?.let {
+			rtmpCamera?.pauseRecord()
+			rtmpCamera?.stopStream()
+			rtmpCamera = null
+		}
 	}
 	
 	private fun goLive(streamKey: String) {
@@ -277,6 +281,7 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 		super.onStop()
 		showSystemUI()
 		viewModel.removeSocketListeners()
+		stopStream()
 //		if (rtmpCamera?.isRecording == true) {
 //			rtmpCamera?.pauseRecord()
 //		}
@@ -286,6 +291,9 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 		super.onResume()
 		viewModel.loadAvatar()
 		viewModel.addListeners()
+		if (viewModel.screenState.value != EmergencyScreen.NORMAL) {
+			viewModel.resumeStream()
+		}
 //		if (rtmpCamera?.isStreaming == true) {
 //			rtmpCamera?.resumeRecord()
 //		}

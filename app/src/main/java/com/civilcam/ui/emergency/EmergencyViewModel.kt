@@ -356,6 +356,12 @@ class EmergencyViewModel(
 		mSocket.off(SocketMapEvents.INCOME_GUARDIANS.msgType)
 	}
 
+	fun resumeStream() {
+		viewModelScope.launch {
+			_streamKey.send(getStreamKeyUseCase())
+		}
+	}
+
 	companion object {
 		private const val MAX_WAITING_MILLIS = 3_000L
 	}
