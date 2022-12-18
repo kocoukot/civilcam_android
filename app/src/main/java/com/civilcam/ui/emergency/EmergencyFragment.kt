@@ -4,8 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context.CAMERA_SERVICE
 import android.content.pm.PackageManager
-import android.hardware.camera2.CameraAccessException
-import android.hardware.camera2.CameraManager
+import android.hardware.camera2.*
 import android.os.Bundle
 import android.view.*
 import androidx.core.os.bundleOf
@@ -253,13 +252,16 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 		}
 	}
 	
-	@SuppressLint("UseCompatLoadingForDrawables")
 	private fun controlTorch(isEnable: Boolean) {
 		binding.liveSurfaceView.cameraTorch.isActivated = isEnable
 		if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) == true) {
 			if (activity?.packageManager?.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH) == true) {
 				try {
-					cameraManager?.setTorchMode("0", isEnable)
+					if (isEnable) {
+						rtmpCamera?.enableLantern()
+					} else {
+						rtmpCamera?.disableLantern()
+					}
 				} catch (e: CameraAccessException) {
 					showToast("Torch error ${e.localizedMessage}")
 				}
