@@ -13,6 +13,7 @@ ext {
     paging_version = "3.0.0"
     accompanist_version = "0.16.0"
     moshiVersion = '1.9.3'
+    billing_version = "5.1.0"
 
     compression = dependencyGroup {
         implementation 'id.zelory:compressor:3.0.1'
@@ -93,6 +94,8 @@ ext {
         implementation 'com.google.android.libraries.places:places:2.4.0'
         implementation 'com.google.code.gson:gson:2.8.6'
         implementation 'com.android.volley:volley:1.2.1'
+        implementation "com.android.billingclient:billing-ktx:$billing_version"
+
     }
 
     facebook = dependencyGroup {
