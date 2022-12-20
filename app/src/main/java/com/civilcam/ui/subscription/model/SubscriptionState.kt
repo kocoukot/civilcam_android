@@ -1,5 +1,6 @@
 package com.civilcam.ui.subscription.model
 
+import com.android.billingclient.api.ProductDetails
 import com.civilcam.domainLayer.model.subscription.SubscriptionBaseInfo
 import com.civilcam.domainLayer.model.subscription.SubscriptionsList
 import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
@@ -15,4 +16,6 @@ data class SubscriptionState(
 	val subscriptionsList: SubscriptionsList = SubscriptionsList(list = listOf()),
 	val subscription: SubscriptionBaseInfo = SubscriptionBaseInfo(),
 	val purchaseSuccess: Boolean = false,
+	val productList: List<ProductDetails> = listOf(),
+	val selectedProductDetails: ProductDetails? = null
 ) : ComposeFragmentState
