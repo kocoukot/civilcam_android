@@ -4,6 +4,7 @@ import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.mapper.subscriptions.SubscriptionBaseInfoMapper
 import com.civilcam.data.mapper.subscriptions.SubscriptionInfoMapper
 import com.civilcam.data.mapper.subscriptions.SubscriptionsMapper
+import com.civilcam.data.network.model.request.subscriptions.SubscriptionRequest
 import com.civilcam.data.network.service.SubscriptionsService
 import com.civilcam.data.network.support.BaseRepository
 import com.civilcam.data.network.support.Resource
@@ -42,21 +43,18 @@ class SubscriptionsRepositoryImpl(
 			}
 		}
 	}
-
+	
 	override suspend fun setGoogleSubscription(
 		receipt: String,
 		productId: String
 	): SubscriptionBaseInfo =
 		safeApiCall {
-			//todo remove after test
-
-			accountStorage.updateSubscription(productId)
-//		subscriptionsService.setGoogleSubscription(SubscriptionRequest(receipt, productId))
+			subscriptionsService.setGoogleSubscription(SubscriptionRequest(receipt, productId))
 		}.let { response ->
 			when (response) {
 				is Resource.Success -> {
-					SubscriptionBaseInfo()
-				}//subscriptionBaseInfoMapper.mapData(response.value)
+					subscriptionBaseInfoMapper.mapData(response.value)
+				}
 				is Resource.Failure -> {
 					throw response.serviceException
 				}

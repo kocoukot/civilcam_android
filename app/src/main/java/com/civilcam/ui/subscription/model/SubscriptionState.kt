@@ -12,7 +12,7 @@ data class SubscriptionState(
 	val alert: AlertDialogType = AlertDialogType.Empty,
 //	val errorText: String = "",
 	val userSubState: UserSubscriptionState = UserSubscriptionState.FIRST_LAUNCH,
-	val selectedSubscriptionType: String = "Trial",
+	val selectedSubscriptionType: SubscriptionsList.SubscriptionInfo = SubscriptionsList.SubscriptionInfo(),
 	val subscriptionsList: SubscriptionsList = SubscriptionsList(list = listOf()),
 	val subscription: SubscriptionBaseInfo = SubscriptionBaseInfo(),
 	val purchaseSuccess: Boolean = false,

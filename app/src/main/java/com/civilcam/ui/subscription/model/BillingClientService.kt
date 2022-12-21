@@ -1,28 +1,20 @@
 package com.civilcam.ui.subscription.model
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import androidx.annotation.NonNull
 import com.android.billingclient.api.*
 import com.google.common.collect.ImmutableList
 import kotlinx.coroutines.runBlocking
 
-@SuppressLint("StaticFieldLeak")
-object BillingClientService {
+class BillingClientService(
+	private val mContext: Context,
+	private val mActivity: Activity,
+	private val billingEvent: BillingEvent
+) {
 	
 	private lateinit var billingClient: BillingClient
-	private lateinit var mContext: Context
-	private lateinit var mActivity: Activity
-	private var billingEvent: BillingEvent? = null
-	
-	fun init(context: Context, activity: Activity, event: BillingEvent) {
-		mContext = context
-		mActivity = activity
-		billingEvent = event
-	}
 	
 	fun initializeBillingClient() {
 		billingClient = BillingClient.newBuilder(mContext).setListener(purchasesUpdatedListener)
@@ -69,7 +61,7 @@ object BillingClientService {
 					verifySubPurchase(purchase)
 				}
 				if (purchase.purchaseState == Purchase.PurchaseState.PENDING) {
-					billingEvent?.onConnectionError(billingResult.debugMessage)
+					billingEvent.onConnectionError(billingResult.debugMessage)
 				}
 			}
 		}
@@ -81,7 +73,7 @@ object BillingClientService {
 				if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
 					showProducts()
 				} else {
-					billingEvent?.onConnectionError(billingResult.debugMessage)
+					billingEvent.onConnectionError(billingResult.debugMessage)
 				}
 			}
 			
@@ -100,7 +92,7 @@ object BillingClientService {
 				acknowledgePurchaseParams
 			) { billingResult ->
 				if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-					billingEvent?.setPurchaseToken(purchase.purchaseToken)
+					billingEvent.setPurchaseToken(purchase.purchaseToken)
 				}
 			}
 		}, 100)
@@ -119,15 +111,15 @@ object BillingClientService {
 		billingClient.queryProductDetailsAsync(queryProductDetailsParams) { billingResult, productDetailsList ->
 			if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
 				Handler(Looper.getMainLooper()).postDelayed({
-					billingEvent?.onProductListReady(productDetailsList)
+					billingEvent.onProductListReady(productDetailsList)
 				}, 0)
 			}
 		}
 	}
 	
 	object PRODUCT {
-		const val PREMIUM_MONTHLY = "Monthly5"
-		const val PREMIUM_YEARLY = "Yearly50"
+		const val PREMIUM_MONTHLY = "monthly5"
+		const val PREMIUM_YEARLY = "yearly50"
 	}
 }
 

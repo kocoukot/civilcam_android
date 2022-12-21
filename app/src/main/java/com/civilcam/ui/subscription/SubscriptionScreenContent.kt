@@ -155,7 +155,7 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 						items(state.value.subscriptionsList.list) { subscription ->
 							SubscriptionPlanRow(
 								subscriptionInfo = subscription,
-								isActivated = selectedSubscription == subscription.title,
+								isActivated = selectedSubscription.productId == subscription.productId,
 								onButtonClicked = {
 									selectedSubscription = it
 								},
@@ -216,7 +216,7 @@ fun SubscriptionOption(
 @Composable
 fun SubscriptionPlanRow(
 	subscriptionInfo: SubscriptionsList.SubscriptionInfo,
-	onButtonClicked: (String) -> Unit,
+	onButtonClicked: (SubscriptionsList.SubscriptionInfo) -> Unit,
 	isActivated: Boolean = false
 ) {
 	
@@ -237,7 +237,7 @@ fun SubscriptionPlanRow(
 		.drawBehind {
 			drawRect(color = backgroundColor)
 		}
-		.clickable { onButtonClicked.invoke(subscriptionInfo.title) },
+		.clickable { onButtonClicked.invoke(subscriptionInfo) },
 		horizontalAlignment = Alignment.Start
 	) {
 		
