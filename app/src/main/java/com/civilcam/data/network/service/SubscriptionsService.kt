@@ -2,6 +2,7 @@ package com.civilcam.data.network.service
 
 import com.civilcam.data.network.Endpoint
 import com.civilcam.data.network.model.request.subscriptions.SubscriptionRequest
+import com.civilcam.data.network.model.response.auth.UserResponse
 import com.civilcam.data.network.model.response.subscriptions.SubscriptionResponse
 import com.civilcam.data.network.model.response.subscriptions.SubscriptionsListResponse
 import retrofit2.http.Body
@@ -17,7 +18,7 @@ interface SubscriptionsService {
 	suspend fun getUserSubscription(): SubscriptionResponse
 	
 	@POST(Endpoint.Subscriptions.SET_GOOGLE_SUBSCRIPTION)
-	suspend fun setGoogleSubscription(@Body request: SubscriptionRequest): SubscriptionResponse.UserSubscriptionResponse
+	suspend fun setGoogleSubscription(@Body request: SubscriptionRequest): UserResponse
 	
 }
 

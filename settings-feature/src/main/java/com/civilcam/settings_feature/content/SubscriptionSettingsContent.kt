@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -22,8 +23,14 @@ fun SubscriptionSettingsContent(
 	subscriptionPlan: SubscriptionBaseInfo,
 	onManageClicked: () -> Unit,
 	onRestoreClicked: () -> Unit,
-	onSubscriptionPlanClick: () -> Unit
+	onSubscriptionPlanClick: () -> Unit,
+	requestData: () -> Unit
 ) {
+	
+	LaunchedEffect(key1 = true) {
+		requestData.invoke()
+	}
+	
 	Column(
 		Modifier.fillMaxWidth()
 	) {
@@ -86,7 +93,7 @@ fun SubscriptionStatus(
 				IN_APP_TRIAL -> stringResource(id = R.string.subscription_trial_description)
 				else -> stringResource(
 					id = R.string.subscription_description,
-					subscriptionPlan.cost * 0.1,
+					subscriptionPlan.cost / 100.0,
 					subscriptionPlan.unitType
 				)
 			},
