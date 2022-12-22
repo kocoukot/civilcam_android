@@ -5,12 +5,12 @@ data class SubscriptionsList(
 ) {
 	
 	data class SubscriptionInfo(
-		val productId: String,
-		val title: String,
-		val description: String,
-		val cost: Float,
-		val term: Float,
-		val unitType: String
+		val productId: String = "",
+		val title: String = "",
+		val description: String = "",
+		val cost: Float = 0f,
+		val term: Float = 0f,
+		val unitType: String = ""
 	)
 	
 }

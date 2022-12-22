@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.util.*
 
 class SubscriptionViewModel(
 	private val userSubState: UserSubscriptionState,
@@ -34,25 +33,25 @@ class SubscriptionViewModel(
 	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
 ) : ComposeViewModel<SubscriptionState, SubscriptionRoute, SubscriptionActions>() {
 	override var _state: MutableStateFlow<SubscriptionState> = MutableStateFlow(SubscriptionState())
-
+	
 	private lateinit var selectedSubType: SubscriptionsList.SubscriptionInfo
+	
 	init {
 		_state.update { it.copy(userSubState = userSubState) }
 		if (userSubState == UserSubscriptionState.SUB_EXPIRED) {
 			_state.update { it.copy(alert = SubExpired) }
-
+			
 		}
 		getCurrentSubscription()
 	}
-
+	
 	override fun setInputActions(action: SubscriptionActions) {
 		when (action) {
 			SubscriptionActions.GoBack -> goBack()
-			is SubscriptionActions.OnSubSelect -> onSubSelected(action.title)
+			is SubscriptionActions.OnSubSelect -> onSubSelected(action.subscription)
 			is SubscriptionActions.CloseAlert -> onCloseAlert(action.alertDecision)
 			is SubscriptionActions.SetProductList -> setProductList(action.list)
 			is SubscriptionActions.SetPurchaseToken -> setPurchaseToken(action.token)
-			else -> {}
 		}
 	}
 	
@@ -92,7 +91,7 @@ class SubscriptionViewModel(
 		}
 		_state.update { it.copy(alert = AlertDialogType.Empty) }
 	}
-
+	
 	private fun getSubscriptions() {
 		_state.update { it.copy(isLoading = true) }
 		viewModelScope.launch {
@@ -110,14 +109,17 @@ class SubscriptionViewModel(
 			_state.update { it.copy(isLoading = false) }
 		}
 	}
-
+	
 	private fun getCurrentSubscription() {
 		_state.value = _state.value.copy(isLoading = true)
 		viewModelScope.launch {
 			kotlin.runCatching { getSubscriptionUseCase.getUserSubscription() }.onSuccess { data ->
 				_state.update {
 					it.copy(
-						subscription = data, selectedSubscriptionType = data.title
+						subscription = data,
+						selectedSubscriptionType = SubscriptionsList.SubscriptionInfo(
+							data.productId ?: "", data.title
+						)
 					)
 				}
 				getSubscriptions()
@@ -129,7 +131,7 @@ class SubscriptionViewModel(
 			_state.value = _state.value.copy(isLoading = false)
 		}
 	}
-
+	
 	private fun goProfileSetup() {
 		navigateRoute(
 			when (userSubState) {
@@ -142,7 +144,7 @@ class SubscriptionViewModel(
 		)
 		_state.update { it.copy(purchaseSuccess = false) }
 	}
-
+	
 	private fun goBack() {
 		if (userSubState == UserSubscriptionState.SUB_EXPIRED) {
 			networkRequest(
@@ -155,16 +157,17 @@ class SubscriptionViewModel(
 			navigateRoute(SubscriptionRoute.GoBack)
 		}
 	}
-
+	
 	private fun onConfirmSubscription() {
-		steps.value = _state.value.selectedProductDetails?.let { SubscriptionRoute.LaunchPurchase(it) }
+		steps.value =
+			_state.value.selectedProductDetails?.let { SubscriptionRoute.LaunchPurchase(it) }
 	}
-
-	private fun onSubSelected(subscriptionType: String) {
-		if (subscriptionType == TRIAL) {
+	
+	private fun onSubSelected(subscriptionType: SubscriptionsList.SubscriptionInfo) {
+		if (subscriptionType.title == TRIAL) {
 			_state.value = _state.value.copy(alert = SubConfirmed)
 		} else {
-			_state.value.subscriptionsList.list.find { it.title == subscriptionType }
+			_state.value.subscriptionsList.list.find { it == subscriptionType }
 				?.let { selectedSub ->
 					selectedSubType = selectedSub
 					_state.update {
@@ -175,19 +178,19 @@ class SubscriptionViewModel(
 							)
 						)
 					}
-					_state.value.productList.find { it.title == subscriptionType }
+					_state.value.productList.find { it.productId == subscriptionType.productId }
 						.let { productDetails ->
 							_state.update { it.copy(selectedProductDetails = productDetails) }
 						}
-
+					
 				}
 		}
 	}
-
+	
 	override fun clearErrorText() {
 		_state.update { it.copy(alert = AlertDialogType.Empty) }
 	}
-
+	
 	companion object {
 		private const val TRIAL = "Trial"
 	}

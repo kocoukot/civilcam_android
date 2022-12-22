@@ -27,26 +27,26 @@ import com.civilcam.ui.subscription.model.SubscriptionActions
 import com.civilcam.ui.subscription.model.SubscriptionRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
 
 class SubscriptionFragment : Fragment(), BillingEvent {
 	private val viewModel: SubscriptionViewModel by viewModel {
 		parametersOf(useSubState)
 	}
-
+	
 	private val useSubState: UserSubscriptionState by requireArg(ARG_FLOW)
+	
+	private val billService by lazy {
+		BillingClientService(requireContext(), requireActivity(), this@SubscriptionFragment)
+	}
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		BillingClientService.apply {
-			init(requireContext(), requireActivity(), this@SubscriptionFragment)
-			initializeBillingClient()
-		}
+		billService.initializeBillingClient()
 	}
-
+	
 	override fun onCreateView(
-		inflater: LayoutInflater,
-		container: ViewGroup?,
-		savedInstanceState: Bundle?
+		inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
 	): View {
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
@@ -77,15 +77,15 @@ class SubscriptionFragment : Fragment(), BillingEvent {
 	}
 	
 	private fun launchPurchase(purchase: ProductDetails) {
-		BillingClientService.launchPurchaseFlow(purchase)
+		billService.launchPurchaseFlow(purchase)
 	}
 	
 	override fun onResume() {
 		super.onResume()
 		hideSystemUI()
-		BillingClientService.handlePurchaseVerification()
+		billService.handlePurchaseVerification()
 	}
-
+	
 	override fun onStop() {
 		super.onStop()
 		showSystemUI()
@@ -93,6 +93,7 @@ class SubscriptionFragment : Fragment(), BillingEvent {
 	
 	override fun onProductListReady(list: List<ProductDetails>) {
 		viewModel.setInputActions(SubscriptionActions.SetProductList(list))
+		Timber.i("Product list: $list")
 	}
 	
 	override fun setPurchaseToken(token: String) {

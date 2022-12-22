@@ -2,6 +2,7 @@ package com.civilcam.domainLayer.repos
 
 import com.civilcam.domainLayer.model.subscription.SubscriptionBaseInfo
 import com.civilcam.domainLayer.model.subscription.SubscriptionsList
+import com.civilcam.domainLayer.model.user.CurrentUser
 
 interface SubscriptionsRepository {
 	
@@ -9,6 +10,6 @@ interface SubscriptionsRepository {
 	
 	suspend fun getUserSubscription(): SubscriptionBaseInfo
 	
-	suspend fun setGoogleSubscription(receipt: String, productId: String): SubscriptionBaseInfo
+	suspend fun setGoogleSubscription(receipt: String, productId: String): CurrentUser
 	
 }
