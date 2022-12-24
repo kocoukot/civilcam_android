@@ -47,12 +47,17 @@ object DateUtils {
 
 	fun isSubValid(date: String): Boolean {
 		val current = ZonedDateTime.of(LocalDateTime.now(), ZoneId.systemDefault()).toInstant()
-			.toEpochMilli()
-		val expiredAt = isoDateToLong(date)
-		Timber.tag("subscription").i("expiredAt $expiredAt current $current")
-		return expiredAt > current
+		val currentMillis = current.toEpochMilli()
+		val expiredAt =
+			LocalDateTime.parse(date, isoDateFormatter).toInstant(ZoneOffset.UTC).toEpochMilli()
+		Timber.tag("subscription")
+			.i("expiredAt $date in millis $expiredAt \n current $current in millis $currentMillis ")
+		return expiredAt > currentMillis
 	}
 
+	//	2022-12-24T12:53:42.783Z
+//	Saturday, 24 December 2022 г., 7:41:44
+//	Saturday, 24 December 2022 г., 12:35:30.466
 	fun getDateFromIso(date: String): String {
 		val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
 		val output = SimpleDateFormat("dd.MM.yyyy")

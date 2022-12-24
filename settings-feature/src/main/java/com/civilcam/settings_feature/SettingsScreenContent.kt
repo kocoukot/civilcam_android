@@ -203,11 +203,10 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 				}
 				SettingsType.SUBSCRIPTION -> {
 					SubscriptionSettingsContent(
-						onManageClicked = { viewModel.setInputActions(SettingsActions.GoSubscriptionManage) },
-						onRestoreClicked = {},
 						subscriptionPlan = state.value.data.subscriptionData,
+						onAction = viewModel::setInputActions,
+						onRestoreClicked = {},
 						onSubscriptionPlanClick = {},
-						requestData = { viewModel.setInputActions(SettingsActions.ClickGoSubscription) }
 					)
 				}
 

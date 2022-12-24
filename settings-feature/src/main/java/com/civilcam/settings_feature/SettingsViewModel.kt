@@ -103,7 +103,7 @@ class SettingsViewModel(
 	private fun fetchSubscriptionPlan() {
 		updateInfo { copy(isLoading = true) }
 		viewModelScope.launch {
-			kotlin.runCatching { getUserSubscriptionUseCase.getUserSubscription() }.onSuccess {
+			kotlin.runCatching { getUserSubscriptionUseCase() }.onSuccess {
 				updateInfo { copy(data = data.copy(subscriptionData = it), isLoading = false) }
 			}.onFailure { error ->
 				error.serviceCast { msg, _, isForceLogout ->
