@@ -12,8 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import com.civilcam.R
 import com.civilcam.common.ext.navigateToRoot
-import com.civilcam.ext_features.*
+import com.civilcam.ext_features.hideKeyboard
 import com.civilcam.ext_features.live_data.observeNonNull
+import com.civilcam.ext_features.navController
+import com.civilcam.ext_features.registerForPermissionsResult
+import com.civilcam.ext_features.requireArg
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.auth.pincode.model.PinCodeRoute
 import com.civilcam.ui.network.main.NetworkMainFragment
@@ -104,33 +107,23 @@ class PinCodeFragment : Fragment() {
 			permissionsDelegate.requestPermissions()
 		}
 	}
-	
+
 	private fun onPermissionsGranted(isGranted: Boolean) {
 		pendingAction?.invoke()
 		pendingAction = null
 	}
-	
-	override fun onStart() {
-		super.onStart()
-		showKeyboard()
-	}
-	
-	override fun onPause() {
-		super.onPause()
+
+	override fun onDestroyView() {
+		super.onDestroyView()
 		hideKeyboard()
 	}
-	
-	override fun onStop() {
-		super.onStop()
-		hideKeyboard()
-	}
-	
+
 	companion object {
 		private const val ARG_FLOW = "pin_code_flow"
 		private const val ARG_IS_LOGIN = "is_login"
 		const val RESULT_BACK_STACK = "back_stack"
 		const val RESULT_SAVED_NEW_PIN = "saved_new_pin"
-		
+
 		fun createArgs(flow: PinCodeFlow, isLogin: Boolean) = bundleOf(
 			ARG_FLOW to flow,
 			ARG_IS_LOGIN to isLogin

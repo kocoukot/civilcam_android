@@ -29,5 +29,5 @@ class AccountRepositoryImpl(
         accountStorage.loginUser(sessionToken, user)
     }
 
-    override fun getUser(): CurrentUser = accountStorage.getUser()
+    override fun getUser(): CurrentUser? = accountStorage.getUser()
 }

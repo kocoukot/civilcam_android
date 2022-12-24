@@ -13,6 +13,7 @@ ext {
     paging_version = "3.0.0"
     accompanist_version = "0.16.0"
     moshiVersion = '1.9.3'
+    billing_version = "5.1.0"
 
     compression = dependencyGroup {
         implementation 'id.zelory:compressor:3.0.1'
@@ -93,6 +94,8 @@ ext {
         implementation 'com.google.android.libraries.places:places:2.4.0'
         implementation 'com.google.code.gson:gson:2.8.6'
         implementation 'com.android.volley:volley:1.2.1'
+        implementation "com.android.billingclient:billing-ktx:$billing_version"
+
     }
 
     facebook = dependencyGroup {
@@ -142,6 +145,7 @@ ext {
         implementation "androidx.activity:activity-ktx:1.6.0"
         implementation "androidx.fragment:fragment-ktx:1.3.2"
         implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+        implementation "androidx.work:work-runtime-ktx:2.7.1"
     }
 
     koin = dependencyGroup {
@@ -178,6 +182,21 @@ ext {
         implementation("androidx.camera:camera-lifecycle:${camerax_version}")
         implementation("androidx.camera:camera-video:${camerax_version}")
         implementation("androidx.camera:camera-view:${camerax_version}")
+    }
+
+    mux = dependencyGroup {
+        implementation 'com.github.pedroSG94.rtmp-rtsp-stream-client-java:rtplibrary:1.9.5'
+    }
+
+    exoPlayer = dependencyGroup {
+//        implementation 'androidx.media3:media3-exoplayer:1.0.0-alpha03'
+//        implementation "androidx.media3:media3-ui:1.0.0-alpha03"
+
+        implementation 'com.google.android.exoplayer:exoplayer:2.18.2'
+        implementation 'com.google.android.exoplayer:exoplayer-core:2.18.2'
+        implementation 'com.google.android.exoplayer:exoplayer-dash:2.18.2'
+        implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.2'
+        implementation 'com.google.android.exoplayer:exoplayer-hls:2.18.2'
     }
 }
 //

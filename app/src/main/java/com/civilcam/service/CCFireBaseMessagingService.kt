@@ -2,10 +2,13 @@ package com.civilcam.service
 
 import android.annotation.SuppressLint
 import android.app.*
+import android.app.PendingIntent.FLAG_MUTABLE
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.media.RingtoneManager
+import android.os.Build
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
@@ -29,10 +32,6 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
 
     private val saveFcmTokenUseCase: SaveFcmTokenUseCase by inject()
 
-    private val notificationManager by lazy {
-        getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-    }
-
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Timber.d("create a new FCM Token $token")
@@ -40,6 +39,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
         saveFcmTokenUseCase(token)
     }
 
+    @Suppress("DEPRECATION")
     override fun handleIntent(intent: Intent) {
         try {
             if (intent.extras != null) {
@@ -57,41 +57,93 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
     }
 
     // To show Notification in Foreground
-    @SuppressLint("UnspecifiedImmutableFlag", "ResourceAsColor")
+    @SuppressLint("ResourceAsColor")
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
         message.data.let { data ->
-            Timber.d("onNewIntent user id data ${message.data}")
+            Timber.tag("alert_notif_ID").d("onNewIntent user id data ${message.data}")
 
             when {
                 data[ARG_NOTICE_TYPE_KEY] == ARG_NOTICE_TYPE_ALERT -> {
                     data[ARG_ALERT_ID_KEY]?.toInt()?.let { alertId ->
-                        Timber.d("onNewIntent user id body  data $alertId")
+//                        Timber.tag("alert_notif_ID").d("onNewIntent user id body data $alertId")
                         showAlertNotification(
                             context = applicationContext,
                             alertId,
-                            data[ARG_FULL_NAME_KEY] ?: ""
+                            data[ARG_FULL_NAME_KEY].orEmpty()
                         )
                     }
                 }
                 data[ARG_NOTICE_TYPE_KEY] == ARG_NOTICE_TYPE_REQUEST -> {
                     data[ARG_REQUEST_ID_KEY]?.toInt()?.let { requestId ->
-                        Timber.d("onNewIntent user id data $requestId")
+//                        Timber.tag("alert_notif_ID").d("onNewIntent user id data $requestId")
                         showRequestNotification(
                             context = applicationContext,
                             requestId,
-                            data[ARG_FULL_NAME_KEY] ?: ""
+                            data[ARG_FULL_NAME_KEY].orEmpty()
                         )
                     }
                 }
-                else -> {}
+                data[ARG_NOTICE_TYPE_KEY] == ARG_NOTICE_TYPE_SAFE -> {
+                    data[ARG_FULL_NAME_KEY]?.let { fullName ->
+                        val notificationText =
+                            applicationContext.getString(R.string.notification_safe_text, fullName)
+                        val alertId = data[ARG_ALERT_ID_KEY]?.toInt() ?: 0
+                        showCommonNotification(
+                            context = applicationContext,
+                            notificationText,
+                            alertId
+                        )
+
+                        (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(
+                            NOTIFICATION_ALERT_ID + alertId
+                        )
+                    }
+                }
+                else -> {
+                 //   showCommonNotification(context = applicationContext, "text notification")
+                }
             }
         }
     }
 
+    private fun showCommonNotification(
+        context: Context,
+        notificationText: String,
+        alertId: Int = 0,
+    ) {
+        val channelId = "${context.packageName}-${NotificationType.COMMON.notifyName}"
+        val notificationTitle = context.getString(R.string.notification_safe_title)
+
+        val notificationBuilder = NotificationCompat.Builder(context, channelId)
+        notificationBuilder.apply {
+
+            setContentTitle(notificationTitle)
+            setContentText(notificationText)
+            setSmallIcon(R.drawable.ic_launcher_foreground)
+            setLargeIcon(
+                BitmapFactory.decodeResource(
+                    context.resources,
+                    R.drawable.ic_launcher_foreground
+                )
+            )
+
+            setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            setOngoing(false)
+
+            setAutoCancel(true)
+            setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
+            priority = NotificationManager.IMPORTANCE_HIGH
+        }
+
+        NotificationManagerCompat.from(context).apply {
+            notify(NOTIFICATION_SAFE_ID, notificationBuilder.build())
+        }
+    }
+
     @SuppressLint("RestrictedApi")
-    fun showRequestNotification(context: Context, requestId: Int, userName: String) {
+    private fun showRequestNotification(context: Context, requestId: Int, userName: String) {
         val maxProgress = 5
         var mProgressStatus = 0
         showRequestProgress = true
@@ -110,7 +162,6 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
 
         val notificationLayoutExpanded =
             RemoteViews(context.packageName, R.layout.view_notification_request_small)
-
         notificationLayoutExpanded.setTextViewText(R.id.notification_title, notificationTitle)
         notificationLayoutExpanded.setTextViewText(R.id.notification_content, notificationText)
 
@@ -119,33 +170,58 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
         val broadcastIntentClose = Intent(context, NotificationRequestButtonListener::class.java)
 
         val broadcastPendingIntentClose =
-            PendingIntent.getBroadcast(context, 0, broadcastIntentClose.apply {
-                putExtra(EXTRAS_NOTIFICATION_KEY, "close_request")
-                EXTRAS_NOTIFICATION_REQUEST_ID_KEY
-            }, 0)
+            PendingIntent.getBroadcast(
+                context,
+                0,
+                broadcastIntentClose.apply {
+                    putExtra(EXTRAS_NOTIFICATION_KEY, "close_request")
+                    putExtra(EXTRAS_NOTIFICATION_REQUEST_ID_KEY, requestId)
+                    action = System.currentTimeMillis().toString()
+                },
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
+            )
 
         val broadcastPendingIntentDeny =
-            PendingIntent.getBroadcast(context, 1, broadcastIntentClose.apply {
-                putExtra(EXTRAS_NOTIFICATION_KEY, "deny")
-                putExtra(EXTRAS_NOTIFICATION_REQUEST_ID_KEY, requestId)
-
-            }, 0)
+            PendingIntent.getBroadcast(
+                context,
+                1,
+                broadcastIntentClose.apply {
+                    putExtra(EXTRAS_NOTIFICATION_KEY, "deny")
+                    putExtra(EXTRAS_NOTIFICATION_REQUEST_ID_KEY, requestId)
+                    action = System.currentTimeMillis().toString()
+                },
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
+            )
 
         val broadcastPendingIntentAccept =
-            PendingIntent.getBroadcast(context, 2, broadcastIntentClose.apply {
-                putExtra(EXTRAS_NOTIFICATION_KEY, "accept")
-                putExtra(EXTRAS_NOTIFICATION_REQUEST_ID_KEY, requestId)
+            PendingIntent.getBroadcast(
+                context,
+                2,
+                broadcastIntentClose.apply {
+                    putExtra(EXTRAS_NOTIFICATION_KEY, "accept")
+                    putExtra(EXTRAS_NOTIFICATION_REQUEST_ID_KEY, requestId)
+                    action = System.currentTimeMillis().toString()
+                },
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
+            )
 
-            }, 0)
-
-
-
+        val clickIntent = Intent(context, MainActivity::class.java).apply {
+            putExtra(EXTRAS_NOTIFICATION_REQUEST_ID_KEY, requestId)
+            action = System.currentTimeMillis().toString()
+            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            addCategory(Intent.CATEGORY_LAUNCHER)
+        }
+        val clickPendingIntent = PendingIntent.getActivity(
+            context,
+            55,
+            clickIntent,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
+        )
         notificationBuilder.apply {
             setOnlyAlertOnce(true)
             setCustomContentView(notificationLayout)
             setCustomBigContentView(notificationLayoutExpanded)
-            contentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
-            bigContentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
+            setContentIntent(clickPendingIntent)
             setProgress(maxProgress, 0, false)
             setSmallIcon(R.drawable.ic_launcher_foreground)
             setLargeIcon(
@@ -154,15 +230,18 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                     R.drawable.ic_launcher_foreground
                 )
             )
+
             setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             setOngoing(false)
 
             setAutoCancel(true)
             setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
-            priority = NotificationCompat.PRIORITY_MAX
+            priority = NotificationManager.IMPORTANCE_HIGH
 
 
-            notificationBuilder.contentView.apply {
+            contentView.apply {
+                setProgressBar(R.id.progressBar, maxProgress, 0, false)
+
                 setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
 
                 setOnClickPendingIntent(R.id.button_notification_deny, broadcastPendingIntentDeny)
@@ -172,28 +251,26 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                     broadcastPendingIntentAccept
                 )
             }
+            bigContentView.apply {
+                setProgressBar(R.id.progressBar, maxProgress, 0, false)
 
-
-            notificationBuilder.bigContentView.apply {
                 setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
                 setOnClickPendingIntent(R.id.button_notification_deny, broadcastPendingIntentDeny)
+
                 setOnClickPendingIntent(
                     R.id.button_notification_accept,
                     broadcastPendingIntentAccept
                 )
+
             }
+
+
         }
 
         NotificationManagerCompat.from(context).apply {
             while (mProgressStatus <= maxProgress && showRequestProgress) {
                 Timber.i("mProgressStatus $mProgressStatus")
                 notificationBuilder.setProgress(
-                    maxProgress,
-                    mProgressStatus,
-                    false
-                )
-                notificationBuilder.bigContentView.setProgressBar(
-                    R.id.progressBar,
                     maxProgress,
                     mProgressStatus,
                     false
@@ -206,7 +283,14 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                     false
                 )
 
-                notify(NOTIFICATION_REQUESTS_ID, notificationBuilder.build())
+                notificationBuilder.bigContentView.setProgressBar(
+                    R.id.progressBar,
+                    maxProgress,
+                    mProgressStatus,
+                    false
+                )
+
+                notify(NOTIFICATION_REQUESTS_ID + requestId, notificationBuilder.build())
                 Thread.sleep(1000)
                 mProgressStatus++
             }
@@ -215,7 +299,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
 
 
     @SuppressLint("RestrictedApi")
-    fun showAlertNotification(context: Context, alertId: Int, userName: String) {
+    private fun showAlertNotification(context: Context, alertId: Int, userName: String) {
         val maxProgress = 5
         var mProgressStatus = 0
         showAlertProgress = true
@@ -226,7 +310,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
             msgText = context.getString(R.string.notification_alert_text),
             context = context,
         )
-        Timber.tag("alert notif ID").i("FCM userId $alertId")
+        Timber.tag("alert_notif_ID").i("FCM alertId $alertId")
 
         val notificationLayout =
             RemoteViews(context.packageName, R.layout.view_notification_alert_small)
@@ -235,7 +319,6 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
 
         val notificationLayoutExpanded =
             RemoteViews(context.packageName, R.layout.view_notification_alert_small)
-
         notificationLayoutExpanded.setTextViewText(R.id.notification_title, notificationTitle)
         notificationLayoutExpanded.setTextViewText(R.id.notification_content, notificationText)
 
@@ -247,6 +330,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
             putExtra(EXTRAS_NOTIFICATION_ALERT_ID, alertId)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             addCategory(Intent.CATEGORY_LAUNCHER)
+            action = System.currentTimeMillis().toString()
         }
 
         val broadcastPendingIntentClose =
@@ -254,9 +338,10 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                 context, 11,
                 broadcastIntent.apply {
                     putExtra(EXTRAS_NOTIFICATION_KEY, "close_alert")
-
+                    putExtra(EXTRAS_NOTIFICATION_ALERT_ID, alertId)
+                    action = System.currentTimeMillis().toString()
                 },
-                PendingIntent.FLAG_IMMUTABLE,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
             )
 
         val activityPendingIntent: PendingIntent? = TaskStackBuilder.create(context).run {
@@ -264,25 +349,18 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
             addNextIntentWithParentStack(activityIntent)
             // Get the PendingIntent containing the entire back stack
             getPendingIntent(
-                0,
+                88,
                 // mutability flag required when targeting Android12 or higher
-                PendingIntent.FLAG_IMMUTABLE
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
             )
         }
-//            val broadcastPendingIntentDetail =
-//            PendingIntent.getBroadcast(context, 12, activityIntent.apply {
-//                putExtra(EXTRAS_NOTIFICATION_KEY, "detail")
-//                putExtra(EXTRAS_NOTIFICATION_ALERT_ID, alertId)
-//                //  flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-//            }, PendingIntent.FLAG_IMMUTABLE)
 
 
         notificationBuilder.apply {
             setOnlyAlertOnce(true)
             setCustomContentView(notificationLayout)
             setCustomBigContentView(notificationLayoutExpanded)
-            contentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
-            bigContentView.setProgressBar(R.id.progressBar, maxProgress, 0, false)
+
             setProgress(maxProgress, 0, false)
             setSmallIcon(R.drawable.ic_launcher_foreground)
             setLargeIcon(
@@ -297,7 +375,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                         context,
                         88,
                         activityIntent,
-                        PendingIntent.FLAG_IMMUTABLE
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) FLAG_MUTABLE else FLAG_UPDATE_CURRENT
                     )
             )
 
@@ -306,10 +384,11 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
 
             setAutoCancel(true)
             setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
-            priority = NotificationCompat.PRIORITY_MAX
+            priority = NotificationManager.IMPORTANCE_HIGH
 
 
-            notificationBuilder.contentView.apply {
+            contentView.apply {
+                setProgressBar(R.id.progressBar, maxProgress, 0, false)
                 setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
 
                 setOnClickPendingIntent(
@@ -319,7 +398,8 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
             }
 
 
-            notificationBuilder.bigContentView.apply {
+            bigContentView.apply {
+                setProgressBar(R.id.progressBar, maxProgress, 0, false)
                 setOnClickPendingIntent(R.id.button_close_notification, broadcastPendingIntentClose)
                 setOnClickPendingIntent(
                     R.id.button_notification_detail,
@@ -350,7 +430,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
                     false
                 )
 
-                notify(NOTIFICATION_ALERT_ID, notificationBuilder.build())
+                notify(NOTIFICATION_ALERT_ID + alertId, notificationBuilder.build())
                 Thread.sleep(1000)
                 mProgressStatus++
             }
@@ -399,13 +479,12 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
 
         private const val ARG_NOTICE_TYPE_ALERT = "alert"
         private const val ARG_NOTICE_TYPE_REQUEST = "request"
-
-
-        const val ALERT_NOTIFICATION_TEXT = "is in emergency"
-        const val REQUEST_NOTIFICATION_TEXT = "needs you as a guardian"
+        private const val ARG_NOTICE_TYPE_SAFE = "safe"
 
         const val NOTIFICATION_REQUESTS_ID = 1002
         const val NOTIFICATION_ALERT_ID = 1003
+        const val NOTIFICATION_SAFE_ID = 1005
+
         private var showRequestProgress = true
         private var showAlertProgress = true
         var EXTRAS_NOTIFICATION_KEY = "notification_type"

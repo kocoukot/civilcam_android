@@ -9,7 +9,6 @@ import com.civilcam.di.source.sourceModule
 import com.civilcam.domainLayer.model.user.NotificationType
 import com.civilcam.domainLayer.usecase.auth.SaveFcmTokenUseCase
 import com.civilcam.service.CCFireBaseMessagingService
-import com.civilcam.service.location.LocationService.Companion.LOCATION_CHANNEL_ID
 import com.facebook.appevents.AppEventsLogger
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -84,19 +83,36 @@ class CivilcamApplication : Application() {
 
         CCFireBaseMessagingService.createNotificationChannel(
             this,
-            NotificationType.ALERTS.notifyName,
+            NotificationType.LOCATION.notifyName,
             "Notification channel for location"
         )
 
-        val channel =
-            NotificationChannel(LOCATION_CHANNEL_ID, "Location", NotificationManager.IMPORTANCE_LOW)
-                .apply {
-                    setShowBadge(false)
-                }
+
+        CCFireBaseMessagingService.createNotificationChannel(
+            this,
+            NotificationType.COMMON.notifyName,
+            "Notification channel for common"
+        )
+
+        val channel = NotificationChannel(
+            NotificationType.LOCATION.notifyName,
+            "Location",
+            NotificationManager.IMPORTANCE_LOW
+        )
+            .apply { setShowBadge(false) }
+
+        val downloadChannel = NotificationChannel(
+            NotificationType.DOWNLOAD.notifyName,
+            "Download",
+            NotificationManager.IMPORTANCE_LOW
+        )
+            .apply { setShowBadge(false) }
+
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         notificationManager.createNotificationChannel(channel)
+        notificationManager.createNotificationChannel(downloadChannel)
     }
 
 

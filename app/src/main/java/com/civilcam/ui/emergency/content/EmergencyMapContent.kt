@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun EmergencyMapContent(
+fun LiveMapContent(
     modifier: Modifier = Modifier,
     avatarUrl: String?,
     screenState: EmergencyScreen,
@@ -95,17 +95,23 @@ fun EmergencyMapContent(
                             avatarUrl,
                             R.drawable.img_avatar
                         )
-
-                        Marker(
-                            state = MarkerState(position = LatLng(user.latitude, user.longitude)),
-                            icon = bitmap,
-                        )
+                        if (user.latitude != null && user.longitude != null) {
+                            Marker(
+                                state = MarkerState(
+                                    position = LatLng(
+                                        user.latitude!!,
+                                        user.longitude!!
+                                    )
+                                ),
+                                icon = bitmap,
+                            )
+                        }
                     }
                 }
             }
         }
-
-        EmergencyTopBarContent(
+    
+        LiveTopBarContent(
             modifier = tobBarModifier,
             avatarUrl = avatarUrl,
             locationDetectContent = {

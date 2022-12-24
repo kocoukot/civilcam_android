@@ -149,8 +149,9 @@ class UserRepositoryImpl(
 			when (response) {
 				is Resource.Success -> {
 					accountStorage.setSosState(false)
-                    true
-                }
+					accountStorage.streamKey = ""
+					true
+				}
                 is Resource.Failure -> throw response.serviceException
             }
 		}

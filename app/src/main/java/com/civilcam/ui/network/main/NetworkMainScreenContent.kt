@@ -22,7 +22,7 @@ import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.castSafe
 import com.civilcam.domainLayer.model.guard.GuardianItem
 import com.civilcam.domainLayer.model.guard.NetworkType
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.common.compose.inputs.SearchInputField
@@ -47,10 +47,11 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
 
     }
 
-    val searchList = if (state.value.screenState == NetworkScreen.SEARCH_GUARD)
-        viewModel.searchList.collectAsLazyPagingItems()
-    else
-        null
+    val searchList =
+        if (state.value.screenState == NetworkScreen.ADD_GUARD || state.value.screenState == NetworkScreen.SEARCH_GUARD)
+            viewModel.searchList.collectAsLazyPagingItems()
+        else
+            null
 
 //    Timber.tag("networkSearch").i("lazyList ${list?.itemCount}")
     if (state.value.refreshList == Unit) {
@@ -65,7 +66,7 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
     if (state.value.errorText.isNotEmpty()) {
         AlertDialogComp(
             dialogText = state.value.errorText,
-            alertType = AlertDialogTypes.OK,
+            alertType = AlertDialogButtons.OK,
             onOptionSelected = { viewModel.setInputActions(NetworkMainActions.ClearErrorText) }
         )
     }
@@ -118,8 +119,7 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                     }
                 }
                 AnimatedVisibility(
-                    visible = state.value.screenState == NetworkScreen.MAIN ||
-                            state.value.screenState == NetworkScreen.SEARCH_GUARD ||
+                    visible = state.value.screenState == NetworkScreen.SEARCH_GUARD ||
                             state.value.screenState == NetworkScreen.ADD_GUARD
                 ) {
                     Column {

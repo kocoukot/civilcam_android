@@ -9,7 +9,6 @@ sealed class LiveMapRoute : ComposeFragmentRoute {
     object CallPolice : LiveMapRoute()
 
     object AlertResolved : LiveMapRoute()
-    object CheckPermission : LiveMapRoute()
     object CloseAlert : LiveMapRoute()
 
 }

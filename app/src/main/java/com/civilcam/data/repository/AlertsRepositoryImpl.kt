@@ -2,6 +2,7 @@ package com.civilcam.data.repository
 
 import com.civilcam.data.local.AccountStorage
 import com.civilcam.data.mapper.alerts.AlertDetailMapper
+import com.civilcam.data.mapper.alerts.AlertInfoMapper
 import com.civilcam.data.mapper.alerts.AlertListMapper
 import com.civilcam.data.network.model.request.alert.*
 import com.civilcam.data.network.service.AlertService
@@ -21,15 +22,15 @@ class AlertsRepositoryImpl(
 
     private val alertListMapper = AlertListMapper()
     private val alertDetailMapper = AlertDetailMapper()
+    private val alertInfoMapper = AlertInfoMapper()
 
-    override suspend fun setSosCoords(location: String, coords: LatLng): Boolean =
+    override suspend fun setSosCoords(location: String, coords: LatLng): AlertDetailModel =
         safeApiCall {
             alertService.postSosCoordinates(
                 SosCoordsRequest(
                     location = location,
                     coords = CoordsRequest(
-                        latitude = coords.latitude,
-                        longitude = coords.longitude
+                        latitude = coords.latitude, longitude = coords.longitude
                     ),
                 )
             )
@@ -37,7 +38,8 @@ class AlertsRepositoryImpl(
             when (response) {
                 is Resource.Success -> {
                     accountStorage.setSosState(true)
-                    true
+                    accountStorage.streamKey = response.value.alert.key.orEmpty()
+                    alertInfoMapper.mapData(response.value)
                 }
                 is Resource.Failure -> throw response.serviceException
             }
@@ -54,42 +56,40 @@ class AlertsRepositoryImpl(
         }
 
     override suspend fun getAlertsHistory(
-        historyType: String,
-        page: PaginationRequest.Pagination
-    ): List<AlertModel> =
-        safeApiCall {
-            alertService.getAlertsHistory(
-                AlertHistoryRequest(
-                    pageInfo = page,
-                    alertsType = historyType
-                )
+        historyType: String, page: PaginationRequest.Pagination
+    ): List<AlertModel> = safeApiCall {
+        alertService.getAlertsHistory(
+            AlertHistoryRequest(
+                pageInfo = page, alertsType = historyType
             )
-        }.let { response ->
-            when (response) {
-                is Resource.Success -> response.value.list.map { alertListMapper.mapData(it) }
-                is Resource.Failure -> throw response.serviceException
-            }
+        )
+    }.let { response ->
+        when (response) {
+            is Resource.Success -> response.value.list.map { alertListMapper.mapData(it) }
+            is Resource.Failure -> throw response.serviceException
         }
+    }
 
-    override suspend fun getAlertDetail(alertId: Int): AlertDetailModel =
-        safeApiCall {
-            alertService.getAlertDetails(
-                AlertDetailRequest(id = alertId)
-            )
-        }.let { response ->
-            when (response) {
-                is Resource.Success -> alertDetailMapper.mapData(response.value)
-                is Resource.Failure -> throw response.serviceException
-            }
+    override suspend fun getAlertDetail(alertId: Int): AlertDetailModel = safeApiCall {
+        alertService.getAlertDetails(
+            AlertDetailRequest(id = alertId)
+        )
+    }.let { response ->
+        when (response) {
+            is Resource.Success -> alertDetailMapper.mapData(response.value)
+            is Resource.Failure -> throw response.serviceException
         }
+    }
 
-    override suspend fun resolveAlert(alertId: Int): Boolean =
-        safeApiCall {
-            alertService.resolveAlert(AlertResolveRequest(id = alertId))
-        }.let { response ->
-            when (response) {
-                is Resource.Success -> response.value.ok
-                is Resource.Failure -> throw response.serviceException
-            }
+    override suspend fun resolveAlert(alertId: Int): Boolean = safeApiCall {
+        alertService.resolveAlert(AlertResolveRequest(id = alertId))
+    }.let { response ->
+        when (response) {
+            is Resource.Success -> response.value.ok
+            is Resource.Failure -> throw response.serviceException
         }
+    }
+
+    override fun getStreamKey(): String = accountStorage.streamKey
+
 }

@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.civilcam.R
 import com.civilcam.data.repository.LocationRepositoryImpl
+import com.civilcam.domainLayer.model.user.NotificationType
 import com.civilcam.domainLayer.repos.LocationRepository
 import com.civilcam.domainLayer.usecase.user.SetUserCoordsUseCase
 import kotlinx.coroutines.*
@@ -43,11 +44,12 @@ class LocationService : Service() {
 
     private fun start() {
         if (!isFetching) {
-            val notification = NotificationCompat.Builder(this, LOCATION_CHANNEL_ID)
-                .setContentTitle("Tracking location")
-                .setContentText("Location tracking for your safe")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setOngoing(true)
+            val notification =
+                NotificationCompat.Builder(this, NotificationType.LOCATION.notifyName)
+                    .setContentTitle("Tracking location")
+                    .setContentText("Location tracking for your safe")
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setOngoing(true)
 
             val notificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -91,7 +93,6 @@ class LocationService : Service() {
     companion object {
         const val ACTION_START = "ACTION_START"
         const val ACTION_STOP = "ACTION_STOP"
-        const val LOCATION_CHANNEL_ID = "location"
 
     }
 }

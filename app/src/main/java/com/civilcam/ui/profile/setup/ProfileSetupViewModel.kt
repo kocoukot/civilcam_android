@@ -156,22 +156,22 @@ class ProfileSetupViewModel(
     }
 
     private fun goAvatarSelect() {
-        navigateRoute(ProfileSetupRoute.GoGalleryOpen)
+//        navigateRoute(ProfileSetupRoute.GoGalleryOpen)
     }
 
     fun onPictureUriReceived(uri: Uri) {
         mediaStorage.getImageMetadata(uri)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                if (it.sizeMb > 5f) {
-                    _state.value = _state.value.copy(errorText = "Max image size is 5MB")
-                } else {
-                    val data = _state.value.data?.copy() ?: UserSetupModel()
-                    data.profileImage =
-                        PictureModel(it.name, it.uri, it.sizeMb)
-                    _state.value = _state.value.copy(data = data)
+//                if (it.sizeMb > 5f) {
+//                    _state.value = _state.value.copy(errorText = "Max image size is 5MB")
+//                } else {
+                val data = _state.value.data?.copy() ?: UserSetupModel()
+                data.profileImage =
+                    PictureModel(it.name, it.uri, it.sizeMb)
+                _state.value = _state.value.copy(data = data)
 
-                }
+//                }
             }
             .addTo(disposables)
     }

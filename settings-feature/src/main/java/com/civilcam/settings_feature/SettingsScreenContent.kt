@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import com.civilcam.domainLayer.ext.LocaleHelper
 import com.civilcam.domainLayer.ext.LocaleHelper.SetLanguageCompose
 import com.civilcam.domainLayer.model.user.LanguageType
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.ext.isEmail
 import com.civilcam.ext_features.theme.CCTheme
@@ -45,14 +45,14 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 	if (state.value.errorText.isNotEmpty()) {
 		AlertDialogComp(
 			dialogText = state.value.errorText,
-			alertType = AlertDialogTypes.OK,
+			alertType = AlertDialogButtons.OK,
 			onOptionSelected = { viewModel.setInputActions(SettingsActions.ClearErrorText) }
 		)
 	}
 	state.value.screenAlert?.let { alert ->
 		AlertDialogComp(
 			dialogText = stringResource(id = alert.text),
-			alertType = AlertDialogTypes.OK,
+			alertType = AlertDialogButtons.OK,
 			onOptionSelected = { viewModel.setInputActions(SettingsActions.ClickCloseScreenAlert) }
 		)
 	}
@@ -190,7 +190,7 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 							stringResource(id = R.string.settings_log_out_alert_text)
 						else
 							stringResource(id = R.string.settings_delete_account_alert_text),
-						alertType = AlertDialogTypes.YES_CANCEL,
+						alertType = AlertDialogButtons.YES_CANCEL,
 						onOptionSelected = {
 							viewModel.setInputActions(
 								SettingsActions.ClickCloseAlertDialog(
@@ -202,12 +202,11 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 					)
 				}
 				SettingsType.SUBSCRIPTION -> {
-					viewModel.setInputActions(SettingsActions.ClickGoSubscription)
 					SubscriptionSettingsContent(
-						onManageClicked = { viewModel.setInputActions(SettingsActions.GoSubscriptionManage) },
-						onRestoreClicked = {},
 						subscriptionPlan = state.value.data.subscriptionData,
-						onSubscriptionPlanClick = {}
+						onAction = viewModel::setInputActions,
+						onRestoreClicked = {},
+						onSubscriptionPlanClick = {},
 					)
 				}
 

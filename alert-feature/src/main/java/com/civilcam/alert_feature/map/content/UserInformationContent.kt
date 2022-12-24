@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.civilcam.alert_feature.R
 import com.civilcam.alert_feature.map.model.LiveMapActions
-import com.civilcam.alert_feature.map.model.OnGuardUserData
+import com.civilcam.domainLayer.model.OnGuardUserData
 import com.civilcam.ext_features.DateUtils.alertOnGuardDateFormat
 import com.civilcam.ext_features.compose.elements.CircleUserAvatar
 import com.civilcam.ext_features.compose.elements.IconActionButton

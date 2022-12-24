@@ -1,6 +1,9 @@
 package com.civilcam.ui.network.contacts
 
+import android.Manifest
 import android.annotation.SuppressLint
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.civilcam.R
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.ext.clearPhone
 import com.civilcam.ext_features.theme.CCTheme
@@ -33,11 +36,19 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
     if (state.value.errorText.isNotEmpty()) {
         AlertDialogComp(
             dialogText = state.value.errorText,
-            alertType = AlertDialogTypes.OK,
+            alertType = AlertDialogButtons.OK,
             onOptionSelected = { viewModel.setInputActions(ContactsActions.ClearErrorText) }
         )
     }
 
+
+    val permissionRequest = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { if (it) viewModel.fetchContacts() })
+
+    LaunchedEffect(key1 = true) {
+        permissionRequest.launch(Manifest.permission.READ_CONTACTS)
+    }
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
         topBar = {

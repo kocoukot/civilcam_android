@@ -2,10 +2,13 @@ package com.civilcam.data.local
 
 import android.accounts.Account
 import android.accounts.AccountManager
+import com.civilcam.domainLayer.model.SubscriptionStatus
 import com.civilcam.domainLayer.model.user.CurrentUser
 import com.civilcam.domainLayer.model.user.UserBaseInfo
 import com.civilcam.domainLayer.model.user.UserState
+import com.civilcam.ext_features.DateUtils
 import com.google.gson.Gson
+import java.time.LocalDateTime
 import java.util.*
 
 
@@ -14,6 +17,12 @@ class AccountStorage(
 	private val gson: Gson,
 	private val sharedPreferencesStorage: SharedPreferencesStorage,
 ) {
+	var streamKey: String
+		get() = accountManager.peekAuthToken(getOrCreateAccount(), STREAM_KEY).orEmpty()
+		set(value) {
+			accountManager.setAuthToken(getOrCreateAccount(), STREAM_KEY, value)
+		}
+
 	var sessionToken: String?
 		get() = accountManager.peekAuthToken(getOrCreateAccount(), SESSION_TOKEN)
 		set(value) {
@@ -54,7 +63,7 @@ class AccountStorage(
 		set(value) {
 			accountManager.setUserData(getOrCreateAccount(), IS_USER_LOGGED_IN, value.toString())
 		}
-	
+
 	fun logOut() {
 		accountManager.apply {
 			clearProfile()
@@ -62,9 +71,9 @@ class AccountStorage(
 			sessionToken = null
 		}
 	}
-	
+
 	private fun clearProfile() = accountManager.setUserData(getOrCreateAccount(), USER, null)
-	
+
 	fun loginUser(sessionToken: String?, user: CurrentUser) {
 		getOrCreateAccount()
             .let {
@@ -82,7 +91,7 @@ class AccountStorage(
 		accountManager.setUserData(getOrCreateAccount(), USER, gson.toJson(user))
 
 	fun updateUserBaseInfo(userBaseInfo: UserBaseInfo) =
-		updateUser(getUser().copy(userBaseInfo = userBaseInfo))
+		getUser()?.copy(userBaseInfo = userBaseInfo)?.let { updateUser(it) }
 
 
 	private fun updateUser(currentAccount: Account, user: CurrentUser) =
@@ -95,7 +104,7 @@ class AccountStorage(
 		isSos: Boolean,
 	) {
 		var user = getUser()
-		user = user.copy(
+		user = user?.copy(
 			sessionUser = user.sessionUser.copy(
 				userState = UserState.resolveState(isSos)
 			)
@@ -113,14 +122,42 @@ class AccountStorage(
 
 	private fun getAccount(): Account? =
 		accountManager.getAccountsByType(ACCOUNT_TYPE).singleOrNull()
-	
-	fun getUser(): CurrentUser =
+
+	fun getUser(): CurrentUser? =
 		getAccount().let { account ->
 			accountManager.getUserData(account, USER)
 				.takeIf { it.isNotEmpty() }
 				.let { gson.fromJson(it, CurrentUser::class.java) }
 		}
-	
+
+	fun updateSubscription(productId: String) {
+		//todo remove after test
+		var currentDate = LocalDateTime.now()
+		currentDate = when (productId) {
+			"Monthly5" -> {
+				currentDate.plusMonths(1)
+			}
+			"Yearly50" -> {
+				currentDate.plusYears(1)
+			}
+			else -> currentDate
+		}
+
+		var user = getUser()
+		if (user != null) {
+			user = user.copy(
+				sessionUser = user.sessionUser.copy(isSubscriptionActive = true),
+				subscription = user.subscription.copy(
+					productId = productId,
+					status = SubscriptionStatus.active,
+					expiredAt = currentDate.format(DateUtils.isoDateFormatter)
+				)
+			)
+			println("saved user $user")
+			accountManager.setUserData(getOrCreateAccount(), USER, gson.toJson(user))
+		}
+	}
+
 	companion object {
 		private const val ACCOUNT_NAME = "CivilCam"
 		private const val ACCOUNT_TYPE = "com.civilcam.civilcam"
@@ -129,6 +166,8 @@ class AccountStorage(
 
 		private const val DEVICE_ID_TOKEN = "$ACCOUNT_TYPE.deviceid.token"
 		private const val SESSION_TOKEN = "$ACCOUNT_TYPE.session.token"
+		private const val STREAM_KEY = "$ACCOUNT_TYPE.stream.key"
+
 		private const val IS_USER_LOGGED_IN = "$ACCOUNT_TYPE.user.isLoggedIn"
 		private const val IS_SOS_STATE = "$ACCOUNT_TYPE.sos.state"
 

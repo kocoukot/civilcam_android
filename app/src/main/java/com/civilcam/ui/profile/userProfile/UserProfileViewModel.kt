@@ -236,14 +236,14 @@ class UserProfileViewModel(
 		mediaStorage.getImageMetadata(uri)
 			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe { image ->
-				if (image.sizeMb > 5f) {
-					_state.update { it.copy(errorText = "Max image size is 5MB") }
-				} else {
-					val data = getUserInfo()
-					data.userBaseInfo.avatar =
-						ImageInfo(imageUrl = image.uri.toString(), sizeMb = image.sizeMb)
-					_state.update { it.copy(data = data, profileImage = image.uri.toString()) }
-				}
+//				if (image.sizeMb > 5f) {
+//					_state.update { it.copy(errorText = "Max image size is 5MB") }
+//				} else {
+				val data = getUserInfo()
+				data.userBaseInfo.avatar =
+					ImageInfo(imageUrl = image.uri.toString(), sizeMb = image.sizeMb)
+				_state.update { it.copy(data = data, profileImage = image.uri.toString()) }
+//				}
 			}
 			.addTo(disposables)
 	}

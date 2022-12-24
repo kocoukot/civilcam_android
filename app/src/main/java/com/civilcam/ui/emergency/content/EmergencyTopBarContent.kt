@@ -22,72 +22,72 @@ import com.civilcam.ui.emergency.model.EmergencyActions
 
 
 @Composable
-fun EmergencyTopBarContent(
-    modifier: Modifier = Modifier,
-    avatarUrl: String?,
-    onClick: (EmergencyActions) -> Unit,
-    locationDetectContent: (@Composable () -> Unit),
-    locationDataContent: (@Composable () -> Unit),
-    screen: EmergencyScreen
+fun LiveTopBarContent(
+	modifier: Modifier = Modifier,
+	avatarUrl: String?,
+	onClick: (EmergencyActions) -> Unit,
+	locationDetectContent: (@Composable () -> Unit),
+	locationDataContent: (@Composable () -> Unit),
+	screen: EmergencyScreen
 ) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Top
-    ) {
-
-        Column(
-            modifier = Modifier,
-            verticalArrangement = Arrangement.spacedBy(88.dp)
-        ) {
-            AnimatedVisibility(visible = screen == EmergencyScreen.NORMAL) {
-                AvatarButton(avatarUrl) {
-                    onClick.invoke(EmergencyActions.GoUserProfile)
-                }
-            }
-            locationDetectContent()
-        }
-
-        locationDataContent()
-
-
-        Crossfade(targetState = screen) { targetState ->
-            when (targetState) {
-                EmergencyScreen.NORMAL -> {
-                    IconActionButton(
-                        buttonIcon = R.drawable.ic_settings,
-                        buttonClick = { onClick.invoke(EmergencyActions.GoSettings) },
-                        tint = CCTheme.colors.primaryRed,
-                        modifier = Modifier
+	Row(
+		modifier = modifier,
+		horizontalArrangement = Arrangement.SpaceBetween,
+		verticalAlignment = Alignment.Top
+	) {
+		
+		Column(
+			modifier = Modifier,
+			verticalArrangement = Arrangement.spacedBy(88.dp)
+		) {
+			AnimatedVisibility(visible = screen == EmergencyScreen.NORMAL) {
+				AvatarButton(avatarUrl) {
+					onClick.invoke(EmergencyActions.GoUserProfile)
+				}
+			}
+			locationDetectContent()
+		}
+		
+		locationDataContent()
+		
+		
+		Crossfade(targetState = screen) { targetState ->
+			when (targetState) {
+				EmergencyScreen.NORMAL -> {
+					IconActionButton(
+						buttonIcon = R.drawable.ic_settings,
+						buttonClick = { onClick.invoke(EmergencyActions.GoSettings) },
+						tint = CCTheme.colors.primaryRed,
+						modifier = Modifier
                             .clip(RoundedCornerShape(4.dp))
                             .background(color = CCTheme.colors.white)
                             .size(28.dp)
-                    )
-                }
-                else -> {
-                    IconActionButton(
-                        buttonIcon = if (targetState == EmergencyScreen.COUPLED)
-                            R.drawable.ic_map_extended
-                        else
-                            R.drawable.ic_map_minimize,
-                        buttonClick = {
-                            onClick.invoke(
-                                if (targetState == EmergencyScreen.COUPLED)
-                                    EmergencyActions.ClickChangeScreen(EmergencyScreen.MAP_EXTENDED)
-                                else
-                                    EmergencyActions.ClickChangeScreen(EmergencyScreen.COUPLED)
-                            )
-                        },
-                        tint = CCTheme.colors.primaryRed,
-                        modifier = Modifier
+					)
+				}
+				else -> {
+					IconActionButton(
+						buttonIcon = if (targetState == EmergencyScreen.COUPLED)
+							R.drawable.ic_map_extended
+						else
+							R.drawable.ic_map_minimize,
+						buttonClick = {
+							onClick.invoke(
+								if (targetState == EmergencyScreen.COUPLED)
+									EmergencyActions.ClickChangeScreen(EmergencyScreen.MAP_EXTENDED)
+								else
+									EmergencyActions.ClickChangeScreen(EmergencyScreen.COUPLED)
+							)
+						},
+						tint = CCTheme.colors.primaryRed,
+						modifier = Modifier
                             .clip(RoundedCornerShape(4.dp))
                             .background(color = CCTheme.colors.white)
                             .size(28.dp)
-
-                    )
-                }
-            }
-        }
-    }
+					
+					)
+				}
+			}
+		}
+	}
 }
 

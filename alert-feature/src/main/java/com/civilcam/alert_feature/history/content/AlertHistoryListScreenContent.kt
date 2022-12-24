@@ -27,10 +27,16 @@ fun AlertHistoryListScreenContent(
 ) {
     var tabPage by remember { mutableStateOf(alertType) }
 
+    var isListLoading by remember {
+        mutableStateOf(false)
+    }
     Column(modifier = Modifier.fillMaxSize()) {
         AlertHistoryTabRow(tabPage) {
             tabPage = it
             onScreenAction.invoke(AlertHistoryActions.ClickAlertTypeChange(it))
+        }
+        if (isListLoading) {
+            AppCircularProgress(modifier = Modifier.fillMaxSize())
         }
         LazyColumn(
             modifier = Modifier
@@ -45,14 +51,14 @@ fun AlertHistoryListScreenContent(
                 item?.let {
                     InformationRow(
                         title = if (alertType == AlertType.RECEIVED)
-                            item.userInfo.personFullName
+                            item.userInfo?.personFullName ?: ""
                         else
                             stringResource(id = R.string.alerts_history_sent_alert),
                         text = alertDateFormat(item.alertDate),
                         needDivider = index < alertListData.itemCount - 1,
                         leadingIcon = {
                             if (alertType == AlertType.RECEIVED)
-                                item.userInfo.personAvatar?.imageUrl?.let { avatar ->
+                                item.userInfo?.personAvatar?.imageUrl?.let { avatar ->
                                     CircleUserAvatar(avatar, 36)
                                 }
                         },
@@ -70,11 +76,13 @@ fun AlertHistoryListScreenContent(
 
         alertListData.apply {
             Timber.d("lazyPlace loadState $loadState")
+            isListLoading = false
             when {
-                loadState.source.refresh is LoadState.Loading -> DialogLoadingContent()
+                loadState.source.refresh is LoadState.Loading -> isListLoading = true
                 loadState.source.refresh is LoadState.NotLoading &&
                         loadState.append.endOfPaginationReached &&
                         itemCount < 1 -> {
+
                     Box(
                         modifier = Modifier
                             .fillMaxSize(),

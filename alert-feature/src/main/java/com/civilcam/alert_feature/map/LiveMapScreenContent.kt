@@ -1,14 +1,15 @@
 package com.civilcam.alert_feature.map
 
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -22,7 +23,7 @@ import com.civilcam.alert_feature.map.content.UserInformationContent
 import com.civilcam.alert_feature.map.model.LiveMapActions
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.Constant.ANIMATION_DURATION
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
 
@@ -33,6 +34,29 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
+
+    val liveUrl = remember { derivedStateOf { state.onGuardUserInformation?.url } }
+    val permissionRequest = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions(),
+        onResult = {
+            viewModel.setInputActions(
+                LiveMapActions.SelectLocationPermission(
+                    it.values.contains(
+                        true
+                    )
+                )
+            )
+        }
+    )
+
+    LaunchedEffect(key1 = true) {
+        permissionRequest.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+            )
+        )
+    }
 
     val liveHeight by animateDpAsState(
         targetValue = when (state.emergencyScreen) {
@@ -54,9 +78,9 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
 
     if (state.isResolveAlertVisible) {
         AlertDialogComp(
-            dialogTitle = stringResource(id = com.civilcam.alert_feature.R.string.resolve_alert_title),
-            dialogText = stringResource(id = com.civilcam.alert_feature.R.string.resolve_alert_text),
-            alertType = AlertDialogTypes.CANCEL_RESOLVE,
+            dialogTitle = stringResource(id = R.string.resolve_alert_title),
+            dialogText = stringResource(id = R.string.resolve_alert_text),
+            alertType = AlertDialogButtons.CANCEL_RESOLVE,
             onOptionSelected = {
                 viewModel.setInputActions(LiveMapActions.ClickResolveAlertAnswer(it))
             })
@@ -69,7 +93,7 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBarContent(
-                title = stringResource(id = R.string.alert_user_detail_title),
+                title = stringResource(id = state.emergencyScreen.alertTitle),
                 navigationItem = {
                     BackButton {
                         viewModel.setInputActions(LiveMapActions.ClickGoBack)
@@ -77,7 +101,7 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                 },
                 actionItem = {
                     TextActionButton(
-                        actionTitle = stringResource(id = com.civilcam.alert_feature.R.string.resolve_text),
+                        actionTitle = stringResource(id = R.string.resolve_text),
                         modifier = Modifier,
                         isEnabled = !state.isResolved,
                         actionAction = {
@@ -100,9 +124,9 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                     modifier = Modifier
                         .height(liveHeight)
                         .fillMaxWidth(),
-                    cameraState = state.cameraState,
                     alertScreenState = state.emergencyScreen,
-                    onActionClick = viewModel::setInputActions
+                    onActionClick = viewModel::setInputActions,
+                    liveUrl = liveUrl.value
                 )
 
                 AlertMapScreenContent(
@@ -113,6 +137,14 @@ fun LiveMapScreenContent(viewModel: LiveMapViewModel) {
                     alertScreenState = state.emergencyScreen,
                     guardianInformation = state.onGuardUserInformation,
                     userAlertLocationData = state.currentUserLocationData,
+                    detectLocation = {
+                        permissionRequest.launch(
+                            arrayOf(
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION,
+                            )
+                        )
+                    },
                     onActionClick = viewModel::setInputActions
                 )
             }

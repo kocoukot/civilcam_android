@@ -33,8 +33,9 @@ import timber.log.Timber
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun EmergencyButtonContent(
+fun LiveButtonContent(
     emergencyButton: EmergencyButton,
+    buttonBoxM: Modifier,
     modifier: Modifier,
     onButtonClick: (EmergencyActions) -> Unit,
 ) {
@@ -42,7 +43,7 @@ fun EmergencyButtonContent(
     val buttonColorAnimated by animateColorAsState(targetValue = emergencyButton.buttonColor)
 
     with(emergencyButton) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = buttonBoxM) {
             if (emergencyButton is EmergencyButton.InDangerButton) {
                 WavesAnimation(modifier)
             }

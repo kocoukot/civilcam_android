@@ -13,6 +13,7 @@
 
     <string name="history_detail_title">Alert details</string>
     <string name="history_detail_download_video">Download video</string>
+    <string name="video_download_title">Download alert video</string>
 
     <string name="resolve_text">Resolve</string>
     <string name="resolve_alert_title">Resolve alert</string>

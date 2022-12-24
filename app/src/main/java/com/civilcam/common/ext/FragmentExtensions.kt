@@ -5,14 +5,14 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.fragment.app.Fragment
 import com.civilcam.CivilcamApplication.Companion.instance
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ui.common.alert.DialogAlertFragment
 
 
 fun Fragment.showAlertDialogFragment(
     title: String = "Something went wrong",
     text: String = "",
-    alertType: AlertDialogTypes = AlertDialogTypes.OK,
+    alertType: AlertDialogButtons = AlertDialogButtons.OK,
     onOptionSelected: ((Boolean) -> Unit)? = null
 ) {
     DialogAlertFragment.create(

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import com.civilcam.R
 import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.ext_features.SupportBottomBar
+import com.civilcam.ext_features.arch.VoiceRecord
 import com.civilcam.ext_features.arg
 import com.civilcam.ext_features.ext.setPan
 import com.civilcam.ext_features.ext.setResize
@@ -43,6 +44,7 @@ class NetworkMainFragment : Fragment(), SupportBottomBar {
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
+		(requireActivity() as VoiceRecord).startVoiceRecord()
 		(activity as MainActivity)
 			.showBottomNavBar(screen == NetworkScreen.MAIN)
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->

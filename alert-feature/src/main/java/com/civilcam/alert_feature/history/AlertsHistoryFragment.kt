@@ -1,40 +1,31 @@
 package com.civilcam.alert_feature.history
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.fragment.app.Fragment
+import android.content.Intent
+import androidx.compose.runtime.Composable
 import com.civilcam.alert_feature.history.model.AlertHistoryRoute
-import com.civilcam.ext_features.ext.navController
-import com.civilcam.ext_features.ext.navigateToStart
-import com.civilcam.ext_features.live_data.observeNonNull
+import com.civilcam.ext_features.arch.BaseFragment
+import com.civilcam.ext_features.compose.ComposeFragmentRoute
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
-class AlertsHistoryFragment : Fragment() {
-    private val viewModel: AlertsHistoryViewModel by viewModel()
+class AlertsHistoryFragment : BaseFragment<AlertsHistoryViewModel>() {
+    override val viewModel: AlertsHistoryViewModel by viewModel()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
+    override val screenContent: @Composable (AlertsHistoryViewModel) -> Unit =
+        { AlertsListScreenContent(viewModel) }
+
+    override fun observeData(composeRoute: ((ComposeFragmentRoute) -> Unit)?) {
+        super.observeData { route ->
             when (route) {
-                AlertHistoryRoute.GoBack -> navController.popBackStack()
-                AlertHistoryRoute.ForceLogout -> navigateToStart()
-            }
-        }
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(
-                    viewLifecycleOwner
-                )
-            )
-            setContent {
-                AlertsListScreenContent(viewModel)
+                is AlertHistoryRoute.OpenVideo -> {
+                    Timber.tag("video").i("videoUri ${route.videoUri}")
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        data = route.videoUri
+                        type = "video/mp4"
+
+                    }
+                    startActivity(intent)
+                }
             }
         }
     }

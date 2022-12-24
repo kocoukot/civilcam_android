@@ -13,6 +13,8 @@ import java.net.URISyntaxException
 
 
 object SocketHandler : KoinComponent {
+    private const val KEY_HEADER = "X-Session-Key"
+
     private const val DIGI_NAMESPACE = "/sos"
     private lateinit var mSocket: Socket
     private val getUserSessionTokenUseCase: GetUserSessionTokenUseCase by inject()
@@ -26,13 +28,13 @@ object SocketHandler : KoinComponent {
                 timeout = 30000
                 reconnection = true
                 extraHeaders =
-                    mapOf("X-Session-Key" to listOf(SocketHandler.getUserSessionTokenUseCase()))
+                    mapOf(KEY_HEADER to listOf(getUserSessionTokenUseCase()))
             }
 
             val manager = Manager(URI.create(address), options)
             mSocket = manager.socket(DIGI_NAMESPACE)
 
-            Timber.d("socket  try connect options $options key ${SocketHandler.getUserSessionTokenUseCase()}")
+            Timber.d("socket  try connect options $options key ${getUserSessionTokenUseCase()}")
 
         } catch (e: URISyntaxException) {
             Timber.d("socket error ${e.localizedMessage}")
@@ -68,7 +70,9 @@ object SocketHandler : KoinComponent {
 
     @Synchronized
     fun closeConnection() {
-        mSocket.disconnect()
+        if (this::mSocket.isInitialized) {
+            mSocket.disconnect()
+        }
     }
 
 }

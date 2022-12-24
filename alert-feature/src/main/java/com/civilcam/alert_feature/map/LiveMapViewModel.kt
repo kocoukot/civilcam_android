@@ -1,10 +1,14 @@
 package com.civilcam.alert_feature.map
 
 import androidx.lifecycle.viewModelScope
-import com.civilcam.alert_feature.map.model.*
+import com.civilcam.alert_feature.map.model.LiveMapActions
+import com.civilcam.alert_feature.map.model.LiveMapRoute
+import com.civilcam.alert_feature.map.model.LiveMapState
+import com.civilcam.alert_feature.map.model.UserAlertLocationData
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.model.JsonDataParser
+import com.civilcam.domainLayer.model.OnGuardUserData
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.GetMapAlertUserDataUseCase
 import com.civilcam.domainLayer.usecase.alerts.ResolveAlertUseCase
@@ -32,8 +36,12 @@ class LiveMapViewModel(
     override var _state: MutableStateFlow<LiveMapState> = MutableStateFlow(LiveMapState())
     private val mSocket = SocketHandler.getSocket()
     private val gson = Gson()
+    
+    init {
+        _state.update { it.copy(isLoading = true) }
+    }
 
-    fun fetchUserLocation() {
+    private fun fetchUserLocation() {
         if (!state.value.isLocationAllowed) {
             viewModelScope.launch {
                 try {
@@ -61,6 +69,7 @@ class LiveMapViewModel(
                             }
                         }.launchIn(viewModelScope)
                 } catch (e: ServiceException) {
+                    Timber.d("ServiceException $e")
                 }
             }
         }
@@ -74,12 +83,8 @@ class LiveMapViewModel(
             is LiveMapActions.ClickResolveAlertAnswer -> resolverAlertAnswered(action.answer)
             LiveMapActions.ClickCallPolice -> callPolice()
             is LiveMapActions.ClickScreenChange -> screenChange(action.screenState)
-            LiveMapActions.ClickDetectLocation -> checkPermission()
+            is LiveMapActions.SelectLocationPermission -> isLocationAllowed(action.isAllowed)
         }
-    }
-
-    private fun checkPermission() {
-        navigateRoute(LiveMapRoute.CheckPermission)
     }
 
     private fun screenChange(newScreenState: EmergencyScreen) {
@@ -89,25 +94,28 @@ class LiveMapViewModel(
     private fun resolverAlertAnswered(answer: Boolean) {
         _state.update { it.copy(isResolveAlertVisible = false) }
         if (answer) {
-            networkRequest(
-                action = {
-                    _state.update { it.copy(isLoading = true) }
-                    resolveAlertUseCase(alertId = alertId)
-                },
-                onSuccess = {
-                    navigateRoute(LiveMapRoute.AlertResolved)
-                },
-                onFailure = { error ->
-                    error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
-                },
-                onComplete = {
-                    _state.update { it.copy(isLoading = false) }
-                },
-            )
+            _state.value.onGuardUserInformation?.id?.let { alertIdResolve ->
+                networkRequest(
+                    action = {
+                        _state.update { it.copy(isLoading = true) }
+                        resolveAlertUseCase(alertId = alertIdResolve)
+                    },
+                    onSuccess = {
+                        navigateRoute(LiveMapRoute.AlertResolved)
+                    },
+                    onFailure = { error ->
+                        error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
+                    },
+                    onComplete = {
+                        _state.update { it.copy(isLoading = false) }
+                    },
+                )
+            }
         }
     }
 
-    fun isLocationAllowed(isAllowed: Boolean) {
+    private fun isLocationAllowed(isAllowed: Boolean) {
+        if (isAllowed) fetchUserLocation()
         _state.update { it.copy(isLocationAllowed = isAllowed) }
     }
 
@@ -131,6 +139,7 @@ class LiveMapViewModel(
     }
 
     override fun clearErrorText() {
+        _state.update { it.copy(errorText = "") }
 
     }
 
@@ -139,15 +148,14 @@ class LiveMapViewModel(
             Timber.d("socket args $args")
             val data: JSONObject = args[0] as JSONObject
             Timber.d("socket data $data")
-            val person = gson.fromJson(
-                (data).toString(),
-                OnGuardUserData::class.java
-            )
+            val person = gson.fromJson((data).toString(), OnGuardUserData::class.java)
+
             Timber.d("socket person ${person.status}")
             when (person.status) {
                 OnGuardUserData.AlertSocketStatus.active -> _state.update {
                     it.copy(
-                        onGuardUserInformation = person
+                        isLoading = false,
+                        onGuardUserInformation = person.copy()
                     )
                 }
                 OnGuardUserData.AlertSocketStatus.resolved -> viewModelScope.launch(Dispatchers.Main) {

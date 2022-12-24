@@ -26,6 +26,9 @@
     }
 
     -keepclassmembers class com.civilcam.domainLayer.** { <fields>; }
+    -keep class com.civilcam.domainLayer.model.subscription.UserSubscriptionState
+    -keep class * extends androidx.fragment.app.Fragment{}
+    -keepnames class androidx.navigation.fragment.NavHostFragment
 
     -keepclassmembers class * implements java.io.Serializable {
             private static final java.io.ObjectStreamField[] serialPersistentFields;

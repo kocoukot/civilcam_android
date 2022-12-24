@@ -37,6 +37,8 @@
     <string name="confirm_password">Confirm password</string>
     <string name="re_enter_password">Re-enter password</string>
 
+    <string name="empty_string" translatable="false"></string>
+
     <string name="direction_startScreen" translatable="false">civilcam://startScreen</string>
     <string name="direction_languageSelectFragment" translatable="false">civilcam://languageSelectFragment</string>
     <string name="direction_onBoardingFragment" translatable="false">civilcam://onBoardingFragment</string>

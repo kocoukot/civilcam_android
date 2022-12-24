@@ -16,7 +16,7 @@ import com.civilcam.ext_features.compose.elements.CircleUserAvatar
 import com.civilcam.ext_features.compose.elements.ComposeButton
 import com.civilcam.ext_features.compose.elements.InformationBoxContent
 import com.civilcam.ext_features.compose.elements.RowDivider
-import com.civilcam.ext_features.ext.phoneNumberFormat
+import com.civilcam.ext_features.ext.serverPhoneNumberFormat
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.profile.userDetails.model.StopGuardAlertType
 import com.civilcam.ui.profile.userDetails.model.UserDetailsActions
@@ -70,7 +70,7 @@ fun UserDetailsSection(
             ) {
                 userData.personPhone?.let { phone ->
                         InformationBoxContent(
-                            text = phone.phoneNumberFormat(),
+                            text = phone.serverPhoneNumberFormat(),
                             modifier = Modifier.weight(1f),
                         )
                 }
@@ -103,18 +103,19 @@ fun UserDetailsSection(
             }
 
 
-
-        ComposeButton(
-            title = buttonTitle,
-            modifier = Modifier.padding(horizontal = 16.dp),
-            textFontWeight = FontWeight.W500,
-            isActivated = userData.outputRequest?.status != GuardianStatus.PENDING,
-            buttonClick = {
-                myGuardenceChange.invoke(
-                    UserDetailsActions.ClickShowAlert(StopGuardAlertType.REMOVE_GUARDIAN)
-                )
-            }
-        )
+        userData.outputRequest?.status?.takeIf { it != GuardianStatus.DECLINED }?.let {
+            ComposeButton(
+                title = buttonTitle,
+                modifier = Modifier.padding(horizontal = 16.dp),
+                textFontWeight = FontWeight.W500,
+                isActivated = userData.outputRequest?.status != GuardianStatus.PENDING,
+                buttonClick = {
+                    myGuardenceChange.invoke(
+                        UserDetailsActions.ClickShowAlert(StopGuardAlertType.REMOVE_GUARDIAN)
+                    )
+                }
+            )
+        }
         Spacer(modifier = Modifier.height(12.dp))
         RowDivider()
     }

@@ -11,14 +11,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.theme.CCTheme
 
 @Composable
 fun AlertDialogComp(
     dialogTitle: String = "",
     dialogText: String,
-    alertType: AlertDialogTypes,
+    alertType: AlertDialogButtons,
     onOptionSelected: (Boolean) -> Unit
 ) {
     MaterialTheme {
@@ -33,6 +33,7 @@ fun AlertDialogComp(
                         ),
                         onDismissRequest = {
                             openDialog.value = false
+                            onOptionSelected.invoke(false)
                         },
                         title = {
                             Text(
@@ -70,7 +71,7 @@ fun AlertDialogComp(
                         },
 
                         dismissButton = {
-                            if (alertType == AlertDialogTypes.OK //||
+                            if (alertType == AlertDialogButtons.OK //||
 //                            alertType == AlertDialogTypes.GOT_IT ||
 //                            alertType == AlertDialogTypes.GREAT
                             ) {
@@ -134,7 +135,7 @@ fun AlertDialogComp(
                         },
 
                         dismissButton = {
-                            if (alertType == AlertDialogTypes.OK //||
+                            if (alertType == AlertDialogButtons.OK //||
 //                            alertType == AlertDialogTypes.GOT_IT ||
 //                            alertType == AlertDialogTypes.GREAT
                             ) {

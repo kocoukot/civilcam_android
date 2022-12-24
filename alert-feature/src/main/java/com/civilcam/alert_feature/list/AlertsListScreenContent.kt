@@ -4,8 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,7 +20,7 @@ import com.civilcam.alert_feature.list.model.AlertListActions
 import com.civilcam.domainLayer.model.alerts.AlertStatus
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.ext_features.DateUtils.alertDateFormat
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
 import timber.log.Timber
@@ -33,7 +32,9 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
     val state = viewModel.state.collectAsState()
 
     val alertList = viewModel.searchList.collectAsLazyPagingItems()
-
+    var isListLoading by remember {
+        mutableStateOf(false)
+    }
     if (state.value.refreshList == Unit) {
         alertList.refresh()
         viewModel.setInputActions(AlertListActions.StopRefresh)
@@ -43,7 +44,7 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
         AlertDialogComp(
             dialogTitle = stringResource(id = R.string.resolve_alert_title),
             dialogText = stringResource(id = R.string.resolve_alert_text),
-            alertType = AlertDialogTypes.CONFIRM_CANCEL,
+            alertType = AlertDialogButtons.CONFIRM_CANCEL,
             onOptionSelected = {
                 viewModel.setInputActions(AlertListActions.ClickConfirmResolve(it))
             })
@@ -52,7 +53,7 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
     if (state.value.errorText.isNotEmpty()) {
         AlertDialogComp(
             dialogText = state.value.errorText,
-            alertType = AlertDialogTypes.OK,
+            alertType = AlertDialogButtons.OK,
             onOptionSelected = { viewModel.setInputActions(AlertListActions.ClearErrorText) }
         )
     }
@@ -98,7 +99,9 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
             AlertHistoryRowSection {
                 viewModel.setInputActions(AlertListActions.ClickGoAlertsHistory)
             }
-
+            if (isListLoading) {
+                AppCircularProgress(modifier = Modifier.fillMaxSize())
+            }
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -111,11 +114,11 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                 itemsIndexed(alertList, key = { _, item -> item.alertId }) { index, item ->
                     item?.let {
                         InformationRow(
-                            title = item.userInfo.personFullName,
+                            title = item.userInfo?.personFullName ?: "",
                             text = alertDateFormat(item.alertDate),
                             needDivider = index < alertList.itemCount - 1,
                             leadingIcon = {
-                                item.userInfo.personAvatar?.imageUrl?.let { avatar ->
+                                item.userInfo?.personAvatar?.imageUrl?.let { avatar ->
                                     CircleUserAvatar(avatar, 36)
                                 }
                             },
@@ -149,8 +152,9 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
 
         alertList.apply {
             Timber.d("lazyPlace loadState $loadState")
+            isListLoading = false
             when {
-                loadState.source.refresh is LoadState.Loading -> DialogLoadingContent()
+                loadState.source.refresh is LoadState.Loading -> isListLoading = true
                 loadState.source.refresh is LoadState.NotLoading &&
                         loadState.append.endOfPaginationReached &&
                         itemCount < 1 -> {

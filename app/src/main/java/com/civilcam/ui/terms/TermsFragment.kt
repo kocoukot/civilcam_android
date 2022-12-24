@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.civilcam.R
+import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
 import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ext_features.navController
 import com.civilcam.ext_features.requireArg
@@ -30,13 +31,12 @@ class TermsFragment : Fragment() {
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View {
-		arguments
 		viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
 			when (route) {
 				TermsRoute.GoBack -> navController.popBackStack()
 				TermsRoute.GoSubscription -> navController.navigate(
 					R.id.subscriptionFragment,
-					SubscriptionFragment.createArgs(false)
+					SubscriptionFragment.createArgs(UserSubscriptionState.FIRST_LAUNCH)
 				)
 				is TermsRoute.GoWebView -> navController.navigate(
 					R.id.action_termsFragment_to_webViewFragment,

@@ -6,16 +6,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.civilcam.R
-import com.civilcam.ext_features.alert.AlertDialogTypes
+import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.*
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.auth.pincode.content.PinCodeErrorBlock
@@ -23,10 +26,13 @@ import com.civilcam.ui.auth.pincode.model.PinCodeActions
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
 import com.civilcam.ui.common.compose.inputs.PinCodeInputField
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 
 	val state = viewModel.state.collectAsState()
+
+	val keyboardController = LocalSoftwareKeyboardController.current
 
 	BackHandler {
 		viewModel.setInputActions(
@@ -34,12 +40,16 @@ fun PinCodeScreenContent(viewModel: PinCodeViewModel) {
 		)
 	}
 
+	LaunchedEffect(key1 = true) {
+		keyboardController?.show()
+	}
+
 	if (state.value.isLoading) DialogLoadingContent()
 
 	if (state.value.errorText.isNotEmpty()) {
 		AlertDialogComp(
 			dialogText = state.value.errorText,
-			alertType = AlertDialogTypes.OK,
+			alertType = AlertDialogButtons.OK,
 			onOptionSelected = { viewModel.setInputActions(PinCodeActions.ClickCloseAlert) }
 		)
 	}

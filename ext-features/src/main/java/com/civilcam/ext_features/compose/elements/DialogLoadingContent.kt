@@ -16,13 +16,20 @@ fun DialogLoadingContent() {
         onDismissRequest = { },
         DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = false)
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            CircularProgressIndicator(
-                color = CCTheme.colors.primaryRed,
-            )
-        }
+        AppCircularProgress(modifier = Modifier.fillMaxSize())
+    }
+}
+
+@Composable
+fun AppCircularProgress(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+    ) {
+        CircularProgressIndicator(
+            color = CCTheme.colors.primaryRed,
+        )
     }
 }

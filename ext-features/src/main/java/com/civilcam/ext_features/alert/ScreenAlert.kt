@@ -6,7 +6,7 @@ import com.civilcam.ext_features.R
 
 sealed class ScreenAlert(
     @StringRes val text: Int,
-    val alertType: AlertDialogTypes = AlertDialogTypes.OK
+    val alertType: AlertDialogButtons = AlertDialogButtons.OK
 ) {
     object ReportSentAlert : ScreenAlert(R.string.contact_support_alert_sent_text)
     object PasswordChangedAlert : ScreenAlert(R.string.password_changed_alert_text)
