@@ -70,7 +70,9 @@ object SocketHandler : KoinComponent {
 
     @Synchronized
     fun closeConnection() {
-        mSocket.disconnect()
+        if (this::mSocket.isInitialized) {
+            mSocket.disconnect()
+        }
     }
 
 }

@@ -113,7 +113,7 @@ class SubscriptionViewModel(
 	private fun getCurrentSubscription() {
 		_state.value = _state.value.copy(isLoading = true)
 		viewModelScope.launch {
-			kotlin.runCatching { getSubscriptionUseCase.getUserSubscription() }.onSuccess { data ->
+			kotlin.runCatching { getSubscriptionUseCase() }.onSuccess { data ->
 				_state.update {
 					it.copy(
 						subscription = data,

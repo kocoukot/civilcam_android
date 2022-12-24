@@ -56,7 +56,10 @@ class SubscriptionsRepositoryImpl(
 			subscriptionsService.setGoogleSubscription(SubscriptionRequest(receipt, productId))
 		}.let { response ->
 			when (response) {
-				is Resource.Success -> { userMapper.mapData(response.value) }
+				is Resource.Success -> {
+					userMapper.mapData(response.value)
+						.also { accountStorage.updateUser(it) }
+				}
 				is Resource.Failure -> {
 					throw response.serviceException
 				}
