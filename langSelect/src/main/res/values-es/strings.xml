@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="language_select_hello">Hola, bienvenido a CivilCam!</string>
-    <string name="language_select_settings">Siempre puedes cambiarlo en la configuración</string>
+    <string name="language_select_settings">Siempre puedes cambiar esto más tarde en la configuración</string>
 
 </resources>
