@@ -129,7 +129,6 @@ fun OnBoardingScreenContent(viewModel: OnBoardingViewModel) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = screenPadding.calculateBottomPadding()),
-                        isActivated = secondPagerState.currentPage == 2,
                         buttonClick = {
                             viewModel.setInputActions(OnboardingActions.ClickContinue)
                         },
