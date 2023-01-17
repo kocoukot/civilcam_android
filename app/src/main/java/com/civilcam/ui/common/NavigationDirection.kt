@@ -36,7 +36,7 @@ sealed class NavigationDirection : Parcelable {
 				user.sessionUser.isUserProfileSetupRequired -> ProfileSetup
 //				user.subscription.status != SubscriptionStatus.active && !user.sessionUser.isUserProfileSetupRequired -> SubscriptionNotActive
 				//todo fix may be latter
-				user.subscription.status != SubscriptionStatus.active -> SubscriptionNotActive(
+				user.subscription?.status != SubscriptionStatus.active -> SubscriptionNotActive(
 					state = if (user.sessionUser.isUserProfileSetupRequired)
 						UserSubscriptionState.FIRST_LAUNCH
 					else

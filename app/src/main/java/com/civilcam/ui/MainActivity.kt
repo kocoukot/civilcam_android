@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 	private fun checkSubscriptionState() {
 		if (isUserLoggedInUseCase()) {
 			getLocalCurrentUserUseCase()?.let {
-				if (!DateUtils.isSubValid(it.subscription.expiredAt)) {
+				if (!it.subscription?.expiredAt?.let { date -> DateUtils.isSubValid(date) }!!) {
 					navHost?.navController?.navigateToRoot(
 						R.id.subscriptionFragment, args = SubscriptionFragment.createArgs(
 							UserSubscriptionState.SUB_EXPIRED

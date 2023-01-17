@@ -10,5 +10,5 @@ data class CurrentUser(
     val sessionUser: SessionUser = SessionUser(),
     val userBaseInfo: UserBaseInfo = UserBaseInfo(),
     val settings: UserSettings = UserSettings(),
-    val subscription: SubscriptionBaseInfo = SubscriptionBaseInfo()
+    val subscription: SubscriptionBaseInfo? = SubscriptionBaseInfo()
 ) : Parcelable

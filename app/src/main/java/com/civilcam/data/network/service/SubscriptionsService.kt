@@ -2,6 +2,7 @@ package com.civilcam.data.network.service
 
 import com.civilcam.data.network.Endpoint
 import com.civilcam.data.network.model.request.subscriptions.SubscriptionRequest
+import com.civilcam.data.network.model.request.subscriptions.TrialSubscriptionRequest
 import com.civilcam.data.network.model.response.auth.UserResponse
 import com.civilcam.data.network.model.response.subscriptions.SubscriptionResponse
 import com.civilcam.data.network.model.response.subscriptions.SubscriptionsListResponse
@@ -19,6 +20,9 @@ interface SubscriptionsService {
 	
 	@POST(Endpoint.Subscriptions.SET_GOOGLE_SUBSCRIPTION)
 	suspend fun setGoogleSubscription(@Body request: SubscriptionRequest): UserResponse
+	
+	@POST(Endpoint.Subscriptions.SET_TRIAL_SUBSCRIPTION)
+	suspend fun setTrialSubscription(@Body request: TrialSubscriptionRequest): UserResponse
 	
 }
 

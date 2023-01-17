@@ -7,6 +7,7 @@ import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.subscriptions.GetSubscriptionsUseCase
 import com.civilcam.domainLayer.usecase.subscriptions.GetUserSubscriptionUseCase
+import com.civilcam.domainLayer.usecase.subscriptions.SetTrialSubscriptionUseCase
 import com.civilcam.domainLayer.usecase.subscriptions.SetUserSubscriptionUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.domainLayer.usecase.user.LogoutUseCase
@@ -28,6 +29,7 @@ class SubscriptionViewModel(
 	private val userSubState: UserSubscriptionState,
 	private val getSubscriptionsUseCase: GetSubscriptionsUseCase,
 	private val setUserSubscriptionUseCase: SetUserSubscriptionUseCase,
+	private val setTrialSubscriptionUseCase: SetTrialSubscriptionUseCase,
 	private val getSubscriptionUseCase: GetUserSubscriptionUseCase,
 	private val logoutUseCase: LogoutUseCase,
 	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
@@ -42,7 +44,10 @@ class SubscriptionViewModel(
 			_state.update { it.copy(alert = SubExpired) }
 			
 		}
-		getCurrentSubscription()
+		if (getLocalCurrentUserUseCase()?.subscription != null) {
+			getCurrentSubscription()
+		}
+		getSubscriptions()
 	}
 	
 	override fun setInputActions(action: SubscriptionActions) {
@@ -52,6 +57,30 @@ class SubscriptionViewModel(
 			is SubscriptionActions.CloseAlert -> onCloseAlert(action.alertDecision)
 			is SubscriptionActions.SetProductList -> setProductList(action.list)
 			is SubscriptionActions.SetPurchaseToken -> setPurchaseToken(action.token)
+		}
+	}
+	
+	private fun setTrialSubscription() {
+		viewModelScope.launch {
+			_state.update { it.copy(isLoading = true) }
+			networkRequest(
+				action = {
+					setTrialSubscriptionUseCase(
+						productId = selectedSubType.productId
+					)
+				},
+				onSuccess = {
+					_state.update { it.copy(alert = SubConfirmed, isLoading = false) }
+				},
+				onFailure = { error ->
+					error.serviceCast { errorText, _, _ ->
+						_state.update { it.copy(alert = AlertDialogType.ErrorAlert(errorText)) }
+					}
+				},
+				onComplete = {
+					_state.update { it.copy(isLoading = false) }
+				},
+			)
 		}
 	}
 	
@@ -122,7 +151,6 @@ class SubscriptionViewModel(
 						)
 					)
 				}
-				getSubscriptions()
 			}.onFailure { error ->
 				error.serviceCast { errorText, _, _ ->
 					_state.update { it.copy(alert = AlertDialogType.ErrorAlert(errorText)) }
@@ -164,12 +192,12 @@ class SubscriptionViewModel(
 	}
 	
 	private fun onSubSelected(subscriptionType: SubscriptionsList.SubscriptionInfo) {
-		if (subscriptionType.title == TRIAL) {
-			_state.value = _state.value.copy(alert = SubConfirmed)
-		} else {
-			_state.value.subscriptionsList.list.find { it == subscriptionType }
-				?.let { selectedSub ->
-					selectedSubType = selectedSub
+		_state.value.subscriptionsList.list.find { it == subscriptionType }
+			?.let { selectedSub ->
+				selectedSubType = selectedSub
+				if (subscriptionType.title == TRIAL) {
+					setTrialSubscription()
+				} else {
 					_state.update {
 						it.copy(
 							alert = SubConfirmAlert(
@@ -182,9 +210,8 @@ class SubscriptionViewModel(
 						.let { productDetails ->
 							_state.update { it.copy(selectedProductDetails = productDetails) }
 						}
-					
 				}
-		}
+			}
 	}
 	
 	override fun clearErrorText() {

@@ -10,10 +10,7 @@ import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.domainLayer.usecase.location.GetLastKnownLocationUseCase
 import com.civilcam.domainLayer.usecase.places.GetPlacesAutocompleteUseCase
 import com.civilcam.domainLayer.usecase.profile.*
-import com.civilcam.domainLayer.usecase.subscriptions.GetCurrentSubscriptionPlanUseCase
-import com.civilcam.domainLayer.usecase.subscriptions.GetSubscriptionsUseCase
-import com.civilcam.domainLayer.usecase.subscriptions.GetUserSubscriptionUseCase
-import com.civilcam.domainLayer.usecase.subscriptions.SetUserSubscriptionUseCase
+import com.civilcam.domainLayer.usecase.subscriptions.*
 import com.civilcam.domainLayer.usecase.user.*
 import com.civilcam.domainLayer.usecase.verify.SendOtpCodeUseCase
 import com.civilcam.domainLayer.usecase.verify.VerifyEmailOtpUseCase
@@ -139,4 +136,6 @@ val domainModule = module {
     factory { GetVideoUriUseCase(get()) }
 
     factory { GetStreamKeyUseCase(get()) }
+    
+    factory { SetTrialSubscriptionUseCase(get()) }
 }

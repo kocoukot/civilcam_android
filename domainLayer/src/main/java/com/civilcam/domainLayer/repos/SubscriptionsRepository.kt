@@ -12,4 +12,6 @@ interface SubscriptionsRepository {
 	
 	suspend fun setGoogleSubscription(receipt: String, productId: String): CurrentUser
 	
+	suspend fun setTrialSubscription(productId: String): CurrentUser
+	
 }
