@@ -9,5 +9,5 @@ class UserResponse(
     @SerializedName("sessionUser") val sessionUser: SessionUserResponse,
     @SerializedName("profile") val userProfile: UseBaseInfoResponse,
     @SerializedName("settings") val settings: UserSettingsResponse,
-    @SerializedName("subscription") val subscription: SubscriptionResponse.UserSubscriptionResponse,
+    @SerializedName("subscription") val subscription: SubscriptionResponse.UserSubscriptionResponse?,
 )

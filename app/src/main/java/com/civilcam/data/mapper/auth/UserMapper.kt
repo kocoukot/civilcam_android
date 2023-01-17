@@ -3,6 +3,7 @@ package com.civilcam.data.mapper.auth
 import com.civilcam.data.mapper.Mapper
 import com.civilcam.data.mapper.subscriptions.SubscriptionBaseInfoMapper
 import com.civilcam.data.network.model.response.auth.UserResponse
+import com.civilcam.domainLayer.model.subscription.SubscriptionBaseInfo
 import com.civilcam.domainLayer.model.user.CurrentUser
 import com.civilcam.domainLayer.model.user.UserSettings
 
@@ -22,7 +23,7 @@ class UserMapper(
                     emailNotification = it.settings.isEmailAlertOn,
                     faceId = it.settings.isFaceIdOn,
                 ),
-                subscription = subscriptionMapper.mapData(it.subscription)
+                subscription = it.subscription?.let { data -> subscriptionMapper.mapData(data) }
             )
         }
     }

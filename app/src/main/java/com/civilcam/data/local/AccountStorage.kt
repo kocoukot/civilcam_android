@@ -147,7 +147,7 @@ class AccountStorage(
 		if (user != null) {
 			user = user.copy(
 				sessionUser = user.sessionUser.copy(isSubscriptionActive = true),
-				subscription = user.subscription.copy(
+				subscription = user.subscription?.copy(
 					productId = productId,
 					status = SubscriptionStatus.active,
 					expiredAt = currentDate.format(DateUtils.isoDateFormatter)

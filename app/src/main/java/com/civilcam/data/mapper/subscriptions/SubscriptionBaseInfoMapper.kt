@@ -7,13 +7,13 @@ import com.civilcam.domainLayer.model.subscription.SubscriptionBaseInfo
 class SubscriptionBaseInfoMapper :
 	Mapper<SubscriptionResponse.UserSubscriptionResponse, SubscriptionBaseInfo>(fromData = { response ->
 		SubscriptionBaseInfo(
-			response.id,
-			response.productId,
-			response.title,
-			response.cost,
-			response.term,
-			response.unitType,
-			response.expiredAt,
-			response.status
+			id = response.id,
+			productId = response.productId,
+			title = response.title,
+			cost = response.cost,
+			term = response.term,
+			unitType = response.unitType,
+			expiredAt = response.expiredAt,
+			status = response.status
 		)
 	})
