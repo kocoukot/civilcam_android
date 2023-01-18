@@ -38,7 +38,11 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 	val animatedProgress by animateFloatAsState(
 		targetValue = if (toastState) 1f else 0.0f,
 		animationSpec = tween(durationMillis = 5000, easing = LinearEasing, delayMillis = 500),
-		finishedListener = { toastState = false }// ProgressIndicatorDefaults.ProgressAnimationSpec
+		finishedListener = {
+			Timber.tag("civil_activation").i("finishedListener")
+			toastState = false
+			viewModel.setInputActions(EmergencyActions.DoubleClickSos)
+		}
 	)
 	
 	var currentLongTime by remember { mutableStateOf(System.currentTimeMillis()) }
@@ -121,7 +125,8 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 							}
 							is EmergencyActions.OneClickSafe -> {
 								if (state.emergencyButton == EmergencyButton.InSafeButton) {
-									toastState = true
+									if (toastState) viewModel.setInputActions(EmergencyActions.DoubleClickSos)
+									toastState = !toastState
 								} else {
 									viewModel.setInputActions(action)
 								}
