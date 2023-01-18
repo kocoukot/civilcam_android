@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 
 	private val currentVisibleFragment: Fragment?
 		get() = navHost?.childFragmentManager?.fragments?.first()
-	
+
 	private val onBackStackChangedListener by lazy {
 		FragmentManager.OnBackStackChangedListener {
 			binding.navBarGroup.isVisible = currentVisibleFragment is SupportBottomBar
@@ -69,38 +69,42 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 			checkSubscriptionState()
 		}
 	}
-	
+
 	private fun checkSubscriptionState() {
 		if (isUserLoggedInUseCase()) {
-			getLocalCurrentUserUseCase()?.let {
-				if (!it.subscription?.expiredAt?.let { date -> DateUtils.isSubValid(date) }!!) {
-					navHost?.navController?.navigateToRoot(
-						R.id.subscriptionFragment, args = SubscriptionFragment.createArgs(
-							UserSubscriptionState.SUB_EXPIRED
+			getLocalCurrentUserUseCase()?.let { user ->
+				user.subscription?.expiredAt?.let { expiredAtString ->
+					if (!DateUtils.isSubValid(expiredAtString)) {
+						stopLocationService()
+						recognizer.destroy()
+						navHost?.navController?.navigateToRoot(
+							R.id.subscriptionFragment, args = SubscriptionFragment.createArgs(
+								UserSubscriptionState.SUB_EXPIRED
+							)
 						)
-					)
+					}
 				}
 			}
 		}
 	}
-	
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(ActivityMainBinding.inflate(layoutInflater).also { binding = it }.root)
-		
+
 		navHost = supportFragmentManager.findFragmentById(binding.navHostView.id)
 			.castSafe<NavHostFragment>()
-		
+
 		navHost?.apply {
 			childFragmentManager.addOnBackStackChangedListener(onBackStackChangedListener)
 		}
-		
+
 		navHost?.let { nav ->
 			binding.bottomNavigationView.setupWithNavController(
 				navController = nav.navController
 			) {}
 		}
-		
+
 		intent?.extras?.getParcelable<NavigationDirection>(EXTRA_DIRECTION)
 			?.let(::navigateByDirection) ?: run {
 			if (isUserLoggedInUseCase()) getLocalCurrentUserUseCase()?.let {
@@ -171,37 +175,37 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 		}
 
 	}
-	
+
 	override fun onDestroy() {
 		super.onDestroy()
 		stopLocationService()
 		SocketHandler.closeConnection()
 		recognizer.destroy()
 	}
-	
+
 	private fun navigateByDirection(direction: NavigationDirection) {
 		navHost?.navController?.navigateByDirection(direction)
 	}
-	
-	
+
+
 	fun showBottomNavBar(isVisible: Boolean) {
 		binding.navBarGroup.isVisible = isVisible
 	}
-	
+
 	override fun onNewIntent(intent: Intent?) {
 		super.onNewIntent(intent)
 		this.intent = intent
 		getNewIntentLogic(intent)
 		Timber.tag("alert_notif_ID").i("main activity onNewIntent")
 	}
-	
+
 	private fun getNewIntentLogic(intent: Intent?) {
 		// Timber.d("message received new logic intent ${intent}")
-		
+
 		intent?.extras?.let { extras ->
 			Timber.tag("alert_notif_ID")
 				.i("main activity userId ${extras.getInt(CCFireBaseMessagingService.EXTRAS_NOTIFICATION_ALERT_ID)}")
-			
+
 			extras.getInt(CCFireBaseMessagingService.EXTRAS_NOTIFICATION_ALERT_ID).takeIf { it > 0 }
 				?.let { alertId ->
 					Timber.tag("alert_notif_ID").i("main activity userId $alertId")
@@ -233,7 +237,7 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 				}
 		}
 	}
-	
+
 	companion object {
 		const val FROM_NOTIFICATION = "fromNotification"
 		const val EXTRA_DIRECTION = "extra_nav_direction"
