@@ -12,11 +12,7 @@ fun CharSequence?.isEmail() =
 
 
 fun String.clearPhone() = this
-    .replace("+", "")
-    .replace("(", "")
-    .replace(")", "")
-    .replace(" ", "")
-    .replace("-", "")
+    .replace(Regex("[ ()\\-+]"), "")
 
 fun String.formatToPhoneNumber(): String = String.format(
     "%s (%s) %s %s", this.substring(0, 2), this.substring(2, 5),

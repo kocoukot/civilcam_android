@@ -28,4 +28,7 @@ interface GuardiansRepository {
 
     suspend fun deleteGuardian(personId: Int): PersonModel
 
+    suspend fun matchByPhone(phoneList: List<String>): List<MatchedPhones>
+
+
 }

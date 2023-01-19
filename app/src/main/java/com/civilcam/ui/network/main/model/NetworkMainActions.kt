@@ -22,5 +22,6 @@ sealed class NetworkMainActions : ComposeFragmentActions {
 
     data class SetRequestReaction(val user: GuardianItem, val reaction: ButtonAnswer) :
         NetworkMainActions()
+    object MatchContacts : NetworkMainActions()
 
 }

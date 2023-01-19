@@ -41,4 +41,8 @@ interface GuardiansService {
 
     @HTTP(method = "DELETE", path = Endpoint.Guardians.STOP_GUARDING, hasBody = true)
     suspend fun stopGuarding(@Body request: PersonIdRequest): PersonDetailResponse
+
+    @POST(Endpoint.Guardians.MATCH_BY_PHONES)
+    suspend fun matchByPhones(@Body request: MatchUsersByPhoneRequest): MatchUsersByPhoneResponse
 }
+

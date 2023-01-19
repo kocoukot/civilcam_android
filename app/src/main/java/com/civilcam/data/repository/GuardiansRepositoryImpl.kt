@@ -165,6 +165,25 @@ class GuardiansRepositoryImpl(
             }
         }
 
+    override suspend fun matchByPhone(phoneList: List<String>): List<MatchedPhones> =
+        safeApiCall {
+            guardiansService.matchByPhones(MatchUsersByPhoneRequest(phoneList))
+        }.let { response ->
+            when (response) {
+                is Resource.Success -> response.value.list.map {
+                    MatchedPhones(
+                        phone = it.phone,
+                        userId = it.userId
+                    )
+                }
+                is Resource.Failure -> {
+                    response.checkIfLogOut { accountStorage.logOut() }
+                    throw response.serviceException
+                }
+            }
+        }
+
+
     override suspend fun stopGuarding(personId: Int): PersonModel =
         safeApiCall {
             guardiansService.stopGuarding(PersonIdRequest(personId))

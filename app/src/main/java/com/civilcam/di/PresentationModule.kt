@@ -110,14 +110,16 @@ val networkRootModule = module {
 
 	viewModel { (screen: NetworkScreen) ->
 		NetworkMainViewModel(
-			get(),
-			screen,
-			get(),
-			get(),
-			get(),
-			get(),
-			get(),
-		)
+            get(),
+            screen,
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
     }
 }
 

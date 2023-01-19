@@ -11,5 +11,7 @@ data class NetworkMainState(
     val userAvatar: ImageInfo? = null,
     val screenState: NetworkScreen = NetworkScreen.MAIN,
     val networkType: NetworkType = NetworkType.ON_GUARD,
-    val data: NetworkMainModel = NetworkMainModel()
-) : ComposeFragmentState
+    val data: NetworkMainModel = NetworkMainModel(),
+    val random: Int = 0,
+
+    ) : ComposeFragmentState

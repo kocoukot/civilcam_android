@@ -136,6 +136,10 @@ val domainModule = module {
     factory { GetVideoUriUseCase(get()) }
 
     factory { GetStreamKeyUseCase(get()) }
-    
+
     factory { SetTrialSubscriptionUseCase(get()) }
+
+    factory { MatchUserByPhoneUseCase(get()) }
+
+
 }

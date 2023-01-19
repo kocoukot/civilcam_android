@@ -2,6 +2,8 @@ package com.civilcam.ui.network.main
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -45,6 +47,18 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
 
     BackHandler(false) {
 
+    }
+
+    val contract = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            if (isGranted) viewModel.setInputActions(NetworkMainActions.MatchContacts)
+        })
+
+    if (state.value.screenState == NetworkScreen.ADD_GUARD) {
+        LaunchedEffect(key1 = null) {
+            contract.launch(android.Manifest.permission.READ_CONTACTS)
+        }
     }
 
     val searchList =
@@ -198,6 +212,7 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
                             GuardianSearchContent(
                                 searchList,
                                 pendingList = state.value.data.searchScreenSectionModel.pendingList,
+                                data.contactsList,
                                 data.searchText,
                                 onSearchAction = viewModel::setInputActions
                             )

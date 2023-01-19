@@ -7,18 +7,18 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.civilcam.data.local.ContactsStorage
+import com.civilcam.data.local.model.PersonContactFilter
 import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.model.guard.*
 import com.civilcam.domainLayer.serviceCast
-import com.civilcam.domainLayer.usecase.guardians.AskToGuardUseCase
-import com.civilcam.domainLayer.usecase.guardians.GetNetworkRequestsUseCase
-import com.civilcam.domainLayer.usecase.guardians.GetUserNetworkUseCase
-import com.civilcam.domainLayer.usecase.guardians.SetRequestReactionUseCase
+import com.civilcam.domainLayer.usecase.guardians.*
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.ext_features.KoinInjector
 import com.civilcam.ext_features.SearchQuery
 import com.civilcam.ext_features.compose.ComposeViewModel
+import com.civilcam.ext_features.ext.clearPhone
 import com.civilcam.ui.network.main.model.*
 import com.civilcam.ui.network.source.SearchGuardiansDataSource
 import kotlinx.coroutines.flow.Flow
@@ -37,7 +37,9 @@ class NetworkMainViewModel(
     private val getUserNetworkUseCase: GetUserNetworkUseCase,
     private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase,
     private val setRequestReactionUseCase: SetRequestReactionUseCase,
-    private val getNetworkRequestsUseCase: GetNetworkRequestsUseCase
+    private val getNetworkRequestsUseCase: GetNetworkRequestsUseCase,
+    private val contactsStorage: ContactsStorage,
+    private val matchUserByPhoneUseCase: MatchUserByPhoneUseCase
 ) : ComposeViewModel<NetworkMainState, NetworkMainRoute, NetworkMainActions>(), SearchQuery,
     KoinInjector by injector {
     override var _state: MutableStateFlow<NetworkMainState> = MutableStateFlow(NetworkMainState())
@@ -82,7 +84,8 @@ class NetworkMainViewModel(
                         data = NetworkMainModel(
                             requestsList = data.requestsList,
                             guardiansList = mapToItems(data.guardiansList),
-                            onGuardList = mapToItems(data.onGuardList)
+                            onGuardList = mapToItems(data.onGuardList),
+                            contactsList = emptyList()
                         )
                     )
                 }
@@ -117,6 +120,46 @@ class NetworkMainViewModel(
                 action.user,
                 action.reaction
             )
+            NetworkMainActions.MatchContacts -> getAndMatchContacts()
+        }
+    }
+
+    private fun getAndMatchContacts() {
+        viewModelScope.launch {
+            contactsStorage.getContacts(PersonContactFilter()).sortedBy { it.name }
+                .let { contacts ->
+                    Timber.tag("civil_contacts")
+                        .i("contacts list ${contacts.map { it.phoneNumber }}")
+
+                    networkRequest(
+                        action = {
+                            matchUserByPhoneUseCase.invoke(contacts.map { contact -> contact.phoneNumber.clearPhone() })
+                        },
+                        onSuccess = { result ->
+                            val filtered = contacts.filter {
+                                it.phoneNumber.clearPhone()
+                                    .takeLast(10) in result.map { phones -> phones.phone }
+                            }
+                            filtered.forEach { contact ->
+                                contact.contactId = result.find {
+                                    it.phone == contact.phoneNumber.clearPhone().takeLast(10)
+                                }?.userId ?: 0
+//                                 contact.status = result.find { it.phone ==  contact.phoneNumber.clearPhone().takeLast(10)}?.userId ?: 0
+                            }
+                            Timber.tag("civil_contacts").i("filtered list $filtered")
+                            _state.update {
+                                it.copy(
+                                    random = (0..100).random(),
+                                    data = it.data.copy(
+                                        contactsList = filtered,
+                                    )
+                                )
+                            }
+                        },
+                        onFailure = {},
+                        onComplete = {},
+                    )
+                }
         }
     }
 
@@ -149,9 +192,9 @@ class NetworkMainViewModel(
                     error.serviceCast { msg, _, _ -> _state.update { it.copy(errorText = msg) } }
                 },
                 onComplete = {
-                _state.update { it.copy(isLoading = false) }
-            },
-        )
+                    _state.update { it.copy(isLoading = false) }
+                },
+            )
         }
     }
 
@@ -243,7 +286,14 @@ class NetworkMainViewModel(
 
     private fun searchContact(searchString: String) {
         Timber.tag("networkSearch").i("searchString $searchString")
-        _state.update { it.copy(data = _state.value.data.copy(searchText = searchString)) }
+        _state.update {
+            it.copy(
+                data = it.data.copy(
+                    searchText = searchString,
+                    contactsList = emptyList()
+                )
+            )
+        }
         mTextSearch.value = searchString
     }
 

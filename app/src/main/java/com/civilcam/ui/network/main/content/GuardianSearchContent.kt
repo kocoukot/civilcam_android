@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
@@ -18,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.civilcam.R
+import com.civilcam.data.local.model.Contact
+import com.civilcam.domainLayer.model.guard.GuardianItem
 import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.domainLayer.model.guard.PersonModel
 import com.civilcam.ext_features.compose.elements.*
@@ -29,24 +32,29 @@ import timber.log.Timber
 fun GuardianSearchContent(
     lazyData: LazyPagingItems<PersonModel>?,
     pendingList: List<Int>,
+    contactsList: List<Contact>,
     searchPart: String,
     onSearchAction: (NetworkMainActions) -> Unit,
 ) {
     Timber.tag("networkSearch").i("lazyList ${lazyData?.itemSnapshotList}")
 
-    Crossfade(targetState = (lazyData?.itemCount ?: 0) > 0) { targetState ->
+    Crossfade(
+        targetState = (lazyData?.itemCount ?: 0) > 0 || contactsList.isNotEmpty()
+    ) { targetState ->
         when (targetState) {
             false -> EmptySearchScreenState()
-            true -> SearchResults(
-                lazyData,
-                pendingList,
-                searchPart,
-                onRowAction = onSearchAction::invoke
-            )
+            true -> {
+                SearchResults(
+                    lazyData,
+                    contactsList,
+                    pendingList,
+                    searchPart,
+                    onRowAction = onSearchAction::invoke
+                )
+            }
         }
     }
 }
-
 
 @Composable
 private fun EmptySearchScreenState() {
@@ -72,6 +80,7 @@ private fun EmptySearchScreenState() {
 @Composable
 private fun SearchResults(
     results: LazyPagingItems<PersonModel>?,
+    contactsList: List<Contact>,
     pendingList: List<Int>,
     searchPart: String,
     onRowAction: (NetworkMainActions) -> Unit,
@@ -79,13 +88,70 @@ private fun SearchResults(
     Timber.tag("networkSearch").i("lazyList ${results?.itemCount}")
 
     LazyColumn {
-        item {
-            HeaderTitleText(
-                stringResource(id = R.string.add_guardian_header_title),
-                needTop = results?.itemCount == 0
-            )
+        itemsIndexed(contactsList, key = { _, item -> item.contactId }) { index, contact ->
+            var userStatus by remember { mutableStateOf(contact.status) }
 
+            SearchRow(
+                title = contact.name,
+                needDivider = index < contactsList.lastIndex,
+                leadingIcon = {
+                    contact.avatar.let {
+                        CircleUserAvatar(
+                            avatar = it,
+                            avatarSize = 36
+                        )
+                    }
+                },
+                trailingIcon = {
+                    when {
+                        userStatus == GuardianStatus.ACCEPTED -> {}
+                        userStatus == GuardianStatus.PENDING || contact.contactId in pendingList -> {
+                            Text(
+                                text = stringResource(id = R.string.pending_text),
+                                style = CCTheme.typography.common_text_medium,
+                                modifier = Modifier.padding(end = 16.dp),
+                                color = CCTheme.colors.grayOne,
+                            )
+                        }
+                        else -> {
+                            TextActionButton(actionTitle = stringResource(id = R.string.add_text)) {
+                                userStatus = GuardianStatus.PENDING
+                                onRowAction.invoke(
+                                    NetworkMainActions.ClickAddUser(
+                                        (PersonModel(
+                                            personId = contact.contactId
+                                        ))
+                                    )
+                                )
+                            }
+                        }
+                    }
+                },
+                rowClick = {
+                    onRowAction.invoke(
+                        NetworkMainActions.ClickUser(
+                            GuardianItem(
+                                guardianId = contact.contactId,
+                                guardianName = contact.name,
+                                guardianAvatar = null,
+                                guardianStatus = GuardianStatus.NEW,
+                                statusId = 0,
+                            )
+                        )
+                    )
+                },
+            )
         }
+        if ((results?.itemCount ?: 0) > 0) {
+            item {
+                HeaderTitleText(
+                    stringResource(id = R.string.add_guardian_header_title),
+                    needTop = results?.itemCount == 0
+                )
+
+            }
+        }
+
         results?.let {
             itemsIndexed(results, key = { _, item -> item.personId }) { index, item ->
                 Timber.tag("networkSearch").i("lazyList ${results.itemCount}")
@@ -143,7 +209,7 @@ private fun SearchResults(
 @Composable
 fun SearchRow(
     title: String,
-    searchPart: String,
+    searchPart: String = "",
     needDivider: Boolean = true,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,

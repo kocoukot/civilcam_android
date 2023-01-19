@@ -58,6 +58,7 @@ object Endpoint {
         const val GUARDIANS = "guardians"
         const val DELETE_GUARDIAN = "guardian"
         const val STOP_GUARDING = "stop-guarding"
+        const val MATCH_BY_PHONES = "match-by-phones"
     }
 
     object Subscriptions {
