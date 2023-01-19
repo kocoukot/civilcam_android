@@ -104,6 +104,14 @@ private fun SearchResults(
                 },
                 trailingIcon = {
                     when {
+                        userStatus == GuardianStatus.DECLINED -> {
+                            Text(
+                                text = stringResource(id = R.string.decline_text),
+                                style = CCTheme.typography.common_text_medium,
+                                modifier = Modifier.padding(end = 16.dp),
+                                color = CCTheme.colors.primaryRed,
+                            )
+                        }
                         userStatus == GuardianStatus.NEW -> TextActionButton(
                             actionTitle = stringResource(
                                 id = R.string.add_text
