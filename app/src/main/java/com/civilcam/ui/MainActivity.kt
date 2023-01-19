@@ -10,6 +10,7 @@ import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import com.civilcam.R
 import com.civilcam.common.ext.navigateByDirection
@@ -35,6 +36,9 @@ import com.civilcam.ui.emergency.EmergencyFragment
 import com.civilcam.ui.network.main.NetworkMainFragment
 import com.civilcam.ui.network.main.model.NetworkScreen
 import com.civilcam.ui.subscription.SubscriptionFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -75,13 +79,16 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 			getLocalCurrentUserUseCase()?.let { user ->
 				user.subscription?.expiredAt?.let { expiredAtString ->
 					if (!DateUtils.isSubValid(expiredAtString)) {
-						stopLocationService()
-						recognizer.destroy()
 						navHost?.navController?.navigateToRoot(
 							R.id.subscriptionFragment, args = SubscriptionFragment.createArgs(
 								UserSubscriptionState.SUB_EXPIRED
 							)
 						)
+						stopLocationService()
+						lifecycleScope.launch(Dispatchers.IO) {
+							delay(500)
+							recognizer.destroy()
+						}
 					}
 				}
 			}
@@ -125,10 +132,10 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 //        Logger.getLogger(Socket::class.java.name).level = Level.ALL
 //        Logger.getLogger(SocketHandler::class.java.name).level = Level.ALL
 //        Logger.getLogger(Manager::class.java.name).level = Level.ALL
-		recognizer.initRecorder()
+
 		if (isUserLoggedInUseCase()) {
 			startLocationService()
-
+			//recognizer.initRecorder()
 		}
 		Timber.tag("alert_notif_ID").i("main activity on create")
 	}
@@ -154,7 +161,7 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 	override fun onResume() {
 		super.onResume()
 		if (isUserLoggedInUseCase()) {
-			startVoiceRecord()
+			//startVoiceRecord()
 		}
 	}
 
@@ -239,7 +246,6 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 	}
 
 	companion object {
-		const val FROM_NOTIFICATION = "fromNotification"
 		const val EXTRA_DIRECTION = "extra_nav_direction"
 	}
 }
