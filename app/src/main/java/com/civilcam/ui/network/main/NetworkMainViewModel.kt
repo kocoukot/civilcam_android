@@ -136,17 +136,21 @@ class NetworkMainViewModel(
                             matchUserByPhoneUseCase.invoke(contacts.map { contact -> contact.phoneNumber.clearPhone() })
                         },
                         onSuccess = { result ->
+                            Timber.tag("civil_contacts").d("result list $result")
+
                             val filtered = contacts.filter {
                                 it.phoneNumber.clearPhone()
                                     .takeLast(10) in result.map { phones -> phones.phone }
                             }
                             filtered.forEach { contact ->
-                                contact.contactId = result.find {
+                                result.find {
                                     it.phone == contact.phoneNumber.clearPhone().takeLast(10)
-                                }?.userId ?: 0
-//                                 contact.status = result.find { it.phone ==  contact.phoneNumber.clearPhone().takeLast(10)}?.userId ?: 0
+                                }?.let {
+                                    contact.contactId = it.userId
+                                    contact.status = it.status
+                                }
                             }
-                            Timber.tag("civil_contacts").i("filtered list $filtered")
+                            Timber.tag("civil_contacts").d("filtered list $filtered")
                             _state.update {
                                 it.copy(
                                     random = (0..100).random(),

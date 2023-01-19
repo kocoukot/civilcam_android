@@ -8,5 +8,6 @@ class MatchUsersByPhoneResponse(
     class MatchedUserResponse(
         @SerializedName("phone") val phone: String,
         @SerializedName("userId") val userId: Int,
+        @SerializedName("status") val status: String?,
     )
 }

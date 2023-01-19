@@ -104,7 +104,20 @@ private fun SearchResults(
                 },
                 trailingIcon = {
                     when {
-                        userStatus == GuardianStatus.ACCEPTED -> {}
+                        userStatus == GuardianStatus.NEW -> TextActionButton(
+                            actionTitle = stringResource(
+                                id = R.string.add_text
+                            )
+                        ) {
+                            userStatus = GuardianStatus.PENDING
+                            onRowAction.invoke(
+                                NetworkMainActions.ClickAddUser(
+                                    (PersonModel(
+                                        personId = contact.contactId
+                                    ))
+                                )
+                            )
+                        }
                         userStatus == GuardianStatus.PENDING || contact.contactId in pendingList -> {
                             Text(
                                 text = stringResource(id = R.string.pending_text),
@@ -114,16 +127,7 @@ private fun SearchResults(
                             )
                         }
                         else -> {
-                            TextActionButton(actionTitle = stringResource(id = R.string.add_text)) {
-                                userStatus = GuardianStatus.PENDING
-                                onRowAction.invoke(
-                                    NetworkMainActions.ClickAddUser(
-                                        (PersonModel(
-                                            personId = contact.contactId
-                                        ))
-                                    )
-                                )
-                            }
+
                         }
                     }
                 },

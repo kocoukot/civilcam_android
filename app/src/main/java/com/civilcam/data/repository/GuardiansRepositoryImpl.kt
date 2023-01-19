@@ -171,9 +171,12 @@ class GuardiansRepositoryImpl(
         }.let { response ->
             when (response) {
                 is Resource.Success -> response.value.list.map {
+
                     MatchedPhones(
                         phone = it.phone,
-                        userId = it.userId
+                        userId = it.userId,
+                        status = it.status?.let { status -> GuardianStatus.byDomain(status) }
+                            ?: GuardianStatus.NEW
                     )
                 }
                 is Resource.Failure -> {
