@@ -49,7 +49,6 @@ class NetworkMainFragment : BaseFragment<NetworkMainViewModel>(), SupportBottomB
         viewModel.loadAvatar()
         viewModel.checkNavBarStatus()
 		viewModel.loadRequestsList()
-		viewModel.getAndMatchContacts()
 		setPan()
 	}
 	

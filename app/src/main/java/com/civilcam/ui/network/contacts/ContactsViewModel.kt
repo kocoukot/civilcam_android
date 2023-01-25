@@ -40,6 +40,20 @@ class ContactsViewModel(
                 onComplete = { updateInfo { copy(isLoading = false) } },
             )
         }
+
+    }
+
+    override fun setInputActions(action: ComposeFragmentActions) {
+        when (action) {
+            ContactsActions.ClickGoBack -> goBack()
+            ContactsActions.ClickGoInviteByNumber -> moveToInvite()
+            is ContactsActions.ClickInvite -> inviteContact(action.contact)
+            is ContactsActions.ClickSearch -> searchContact(action.searchString)
+            ContactsActions.ClearErrorText -> clearErrorText()
+        }
+    }
+
+    fun queryContacts() {
         query(viewModelScope) { query ->
             viewModelScope.launch {
                 val contactList =
@@ -51,16 +65,17 @@ class ContactsViewModel(
                         }
                 mapToItems(contactList)
             }
+
         }
     }
 
-    override fun setInputActions(action: ComposeFragmentActions) {
-        when (action) {
-            ContactsActions.ClickGoBack -> goBack()
-            ContactsActions.ClickGoInviteByNumber -> moveToInvite()
-            is ContactsActions.ClickInvite -> inviteContact(action.contact)
-            is ContactsActions.ClickSearch -> searchContact(action.searchString)
-            ContactsActions.ClearErrorText -> clearErrorText()
+    fun fetchContacts() {
+        viewModelScope.launch {
+            contactsStorage.getContacts(PersonContactFilter())
+                .sortedBy { it.name }
+                .let {
+                    mapToItems(it)
+                }
         }
     }
 
@@ -99,16 +114,6 @@ class ContactsViewModel(
         )
     }
 
-
-    fun fetchContacts() {
-        viewModelScope.launch {
-            contactsStorage.getContacts(PersonContactFilter())
-                .sortedBy { it.name }
-                .let {
-                    mapToItems(it)
-                }
-        }
-    }
 
     private fun mapToItems(contacts: List<Contact>) {
         val items = mutableListOf<ContactItem>()

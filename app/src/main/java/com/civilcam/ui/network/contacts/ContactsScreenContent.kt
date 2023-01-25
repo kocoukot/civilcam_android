@@ -44,7 +44,7 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
 
     val permissionRequest = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
-        onResult = { if (it) viewModel.fetchContacts() })
+        onResult = { if (it) viewModel.queryContacts() })
 
     LaunchedEffect(key1 = true) {
         permissionRequest.launch(Manifest.permission.READ_CONTACTS)
