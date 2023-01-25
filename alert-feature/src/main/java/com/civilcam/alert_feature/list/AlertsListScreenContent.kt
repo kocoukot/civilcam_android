@@ -17,6 +17,8 @@ import androidx.paging.compose.itemsIndexed
 import com.civilcam.alert_feature.R
 import com.civilcam.alert_feature.list.content.AlertHistoryRowSection
 import com.civilcam.alert_feature.list.model.AlertListActions
+import com.civilcam.domainLayer.ServiceException
+import com.civilcam.domainLayer.castSafe
 import com.civilcam.domainLayer.model.alerts.AlertStatus
 import com.civilcam.domainLayer.serviceCast
 import com.civilcam.ext_features.DateUtils.alertDateFormat
@@ -169,9 +171,14 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
                     }
                 }
                 loadState.refresh is LoadState.Error -> {
-                    (loadState.refresh as LoadState.Error).error.serviceCast { error, _, _ ->
-                        viewModel.setInputActions(AlertListActions.SetErrorText(error))
-                    }
+                    (loadState.refresh as LoadState.Error).error
+                        .castSafe<ServiceException>()
+                        ?.let { error -> viewModel.resolveSearchError(error) }
+                        ?: run {
+                            (loadState.refresh as LoadState.Error).error.serviceCast { error, _, _ ->
+                                viewModel.setInputActions(AlertListActions.SetErrorText(error))
+                            }
+                        }
                 }
                 else -> {}
             }

@@ -55,6 +55,12 @@ interface ComposeRouteNavigation {
 
     }
 
+    object EndSubscriptionRoute : ComposeRouteNavigation {
+        override fun handleNavigation(fragment: Fragment, block: (() -> Unit)?) {
+            (fragment.requireActivity() as EndSubscription).subscriptionEnd()
+        }
+    }
+
     object CustomRoute : ComposeRouteNavigation {
         override fun handleNavigation(fragment: Fragment, block: (() -> Unit)?) {
             block?.invoke()

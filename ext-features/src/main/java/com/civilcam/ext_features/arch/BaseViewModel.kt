@@ -2,9 +2,12 @@ package com.civilcam.ext_features.arch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.civilcam.domainLayer.ServerErrors
+import com.civilcam.domainLayer.serviceCast
 import com.civilcam.ext_features.compose.ComposeFragmentActions
 import com.civilcam.ext_features.compose.ComposeFragmentRoute
 import com.civilcam.ext_features.compose.ComposeFragmentState
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -41,10 +44,11 @@ interface BaseViewModel : RouteCommunication {
         protected fun <Response> networkRequest(
             action: suspend () -> Response,
             onSuccess: (Response) -> Unit,
-            onFailure: (Throwable) -> Unit,
-            onComplete: (() -> Unit)? = null
+            onFailure: (String) -> Unit,
+            onComplete: (() -> Unit)? = null,
+            dispatcher: CoroutineDispatcher = Dispatchers.IO
         ) {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(dispatcher) {
                 kotlin.runCatching { action.invoke() }
                     .onSuccess {
                         withContext(Dispatchers.Main) {
@@ -52,7 +56,17 @@ interface BaseViewModel : RouteCommunication {
                         }
                     }
                     .onFailure { error ->
-                        onFailure.invoke(error)
+                        error.serviceCast { msg, errorCode, isForceLogout ->
+                            if (errorCode == ServerErrors.SUBSCRIPTION_NOT_FOUND) {
+                                sendRoute(ComposeFragmentRoute.SubEnd)
+                                return@serviceCast
+                            }
+                            if (isForceLogout) {
+                                sendRoute(ComposeFragmentRoute.ForceLogout)
+                                return@serviceCast
+                            }
+                            onFailure.invoke(msg)
+                        }
                     }.also { onComplete?.invoke() }
             }
         }

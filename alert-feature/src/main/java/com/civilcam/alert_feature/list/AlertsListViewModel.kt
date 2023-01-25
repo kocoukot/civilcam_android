@@ -9,13 +9,15 @@ import com.civilcam.alert_feature.list.model.AlertListActions
 import com.civilcam.alert_feature.list.model.AlertListRoute
 import com.civilcam.alert_feature.list.model.AlertListState
 import com.civilcam.alert_feature.list.source.AlertListDataSource
+import com.civilcam.domainLayer.ServerErrors
+import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.model.alerts.AlertModel
-import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.ResolveAlertUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.ext_features.KoinInjector
 import com.civilcam.ext_features.arch.BaseViewModel
 import com.civilcam.ext_features.compose.ComposeFragmentActions
+import com.civilcam.ext_features.compose.ComposeFragmentRoute
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -25,7 +27,8 @@ class AlertsListViewModel(
     private val resolveAlertUseCase: ResolveAlertUseCase,
 ) : BaseViewModel.Base<AlertListState>(
     mState = MutableStateFlow(AlertListState())
-), KoinInjector by injector {
+),
+    KoinInjector by injector {
 
     var searchList = loadAlertsList()
 
@@ -73,9 +76,7 @@ class AlertsListViewModel(
                 onSuccess = {
                     refreshList()
                 },
-                onFailure = { error ->
-                    error.serviceCast { msg, _, _ -> updateInfo { copy(errorText = msg) } }
-                },
+                onFailure = { error -> updateInfo { copy(errorText = error) } },
                 onComplete = { updateInfo { copy(isLoading = false) } },
             )
         }
@@ -99,5 +100,11 @@ class AlertsListViewModel(
 
     private fun stopRefresh() {
         updateInfo { copy(refreshList = null) }
+    }
+
+    fun resolveSearchError(error: ServiceException) {
+        if (error.isForceLogout) sendRoute(ComposeFragmentRoute.ForceLogout)
+        if (error.errorCode == ServerErrors.SUBSCRIPTION_NOT_FOUND) sendRoute(ComposeFragmentRoute.SubEnd)
+        else updateInfo { copy(errorText = error.errorMessage) }
     }
 }

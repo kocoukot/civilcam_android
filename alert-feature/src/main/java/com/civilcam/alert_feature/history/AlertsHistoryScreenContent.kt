@@ -14,18 +14,24 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.civilcam.alert_feature.history.content.AlertHistoryDetailScreenContent
 import com.civilcam.alert_feature.history.content.AlertHistoryListScreenContent
 import com.civilcam.alert_feature.history.content.VideoDownloadScreenContent
 import com.civilcam.alert_feature.history.model.AlertHistoryActions
 import com.civilcam.alert_feature.history.model.AlertHistoryScreen
+import com.civilcam.alert_feature.list.model.AlertListActions
+import com.civilcam.domainLayer.ServiceException
+import com.civilcam.domainLayer.castSafe
+import com.civilcam.domainLayer.serviceCast
 import com.civilcam.ext_features.alert.AlertDialogButtons
 import com.civilcam.ext_features.compose.elements.AlertDialogComp
 import com.civilcam.ext_features.compose.elements.BackButton
 import com.civilcam.ext_features.compose.elements.DialogLoadingContent
 import com.civilcam.ext_features.compose.elements.TopAppBarContent
 import com.civilcam.ext_features.theme.CCTheme
+import timber.log.Timber
 
 @Composable
 fun AlertsListScreenContent(viewModel: AlertsHistoryViewModel) {
@@ -130,6 +136,23 @@ fun AlertsListScreenContent(viewModel: AlertsHistoryViewModel) {
                     }
                 }
             }
+        }
+    }
+
+    alertList.apply {
+        Timber.d("lazyPlace loadState $loadState")
+        when {
+            loadState.refresh is LoadState.Error -> {
+                (loadState.refresh as LoadState.Error).error
+                    .castSafe<ServiceException>()
+                    ?.let { error -> viewModel.resolveSearchError(error) }
+                    ?: run {
+                        (loadState.refresh as LoadState.Error).error.serviceCast { error, _, _ ->
+                            viewModel.setInputActions(AlertListActions.SetErrorText(error))
+                        }
+                    }
+            }
+            else -> {}
         }
     }
 }

@@ -3,19 +3,18 @@ package com.civilcam.ui.profile.userDetails
 import com.civilcam.domainLayer.model.ButtonAnswer
 import com.civilcam.domainLayer.model.guard.GuardianStatus
 import com.civilcam.domainLayer.model.guard.PersonModel
-import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.GetUserDetailUseCase
 import com.civilcam.domainLayer.usecase.guardians.AskToGuardUseCase
 import com.civilcam.domainLayer.usecase.guardians.DeleteGuardianUseCase
 import com.civilcam.domainLayer.usecase.guardians.SetRequestReactionUseCase
 import com.civilcam.domainLayer.usecase.guardians.StopGuardingUseCase
-import com.civilcam.ext_features.compose.ComposeViewModel
+import com.civilcam.ext_features.arch.BaseViewModel
+import com.civilcam.ext_features.compose.ComposeFragmentActions
 import com.civilcam.ui.profile.userDetails.model.StopGuardAlertType
 import com.civilcam.ui.profile.userDetails.model.UserDetailsActions
 import com.civilcam.ui.profile.userDetails.model.UserDetailsRoute
 import com.civilcam.ui.profile.userDetails.model.UserDetailsState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import timber.log.Timber
 
 class UserDetailsViewModel(
@@ -25,34 +24,31 @@ class UserDetailsViewModel(
     private val setRequestReactionUseCase: SetRequestReactionUseCase,
     private val stopGuardingUseCase: StopGuardingUseCase,
     private val deleteGuardianUseCase: DeleteGuardianUseCase,
-) : ComposeViewModel<UserDetailsState, UserDetailsRoute, UserDetailsActions>() {
+) : BaseViewModel.Base<UserDetailsState>(
+    mState = MutableStateFlow(UserDetailsState())
+) {
 
-    override var _state: MutableStateFlow<UserDetailsState> = MutableStateFlow(UserDetailsState())
 
     init {
         Timber.i("userDetail id $userId")
-        _state.update { it.copy(isLoading = true) }
+        updateInfo { copy(isLoading = true) }
         networkRequest(
             action = { getUserInformationUseCase(userId) },
             onSuccess = { user ->
                 Timber.i("userDetail id $user")
-                _state.update { it.copy(data = user) }
+                updateInfo { copy(data = user) }
             },
-            onFailure = { error ->
-                error.serviceCast { msg, _, isForceLogout ->
-                    _state.update { it.copy(errorText = msg) }
-                }
-            },
-            onComplete = { _state.update { it.copy(isLoading = false) } }
+            onFailure = { error -> updateInfo { copy(errorText = error) } },
+            onComplete = { updateInfo { copy(isLoading = false) } }
         )
     }
 
-    private fun updateInfo(info: (PersonModel.() -> PersonModel)) {
-        _state.update { it.copy(data = info.invoke(getData()), alertType = null) }
+    private fun updateUserInfo(info: (PersonModel.() -> PersonModel)) {
+        updateInfo { copy(data = info.invoke(getData()), alertType = null) }
     }
 
 
-    override fun setInputActions(action: UserDetailsActions) {
+    override fun setInputActions(action: ComposeFragmentActions) {
         when (action) {
             UserDetailsActions.ClickGoBack -> goBack()
             UserDetailsActions.ClickGuardenceChange -> changeGuardence()
@@ -65,25 +61,25 @@ class UserDetailsViewModel(
     }
 
     override fun clearErrorText() {
-        _state.update { it.copy(errorText = "") }
+        updateInfo { copy(errorText = "") }
     }
 
     private fun goBack() {
-        navigateRoute(UserDetailsRoute.GoBack)
+        sendRoute(UserDetailsRoute.GoBack)
     }
 
     private fun changeGuardence() {
-        _state.update { it.copy(isLoading = true) }
+        updateInfo { copy(isLoading = true) }
         networkRequest(
             action = {
-                if (_state.value.data?.outputRequest?.status == GuardianStatus.ACCEPTED)
+                if (getState().data?.outputRequest?.status == GuardianStatus.ACCEPTED)
                     deleteGuardianUseCase(userId)
                 else
                     askToGuardUseCase(userId)
             },
             onSuccess = { response ->
                 response.outputRequest?.let { outputRequest ->
-                    updateInfo {
+                    updateUserInfo {
                         copy(
                             isGuardian = response.isGuardian,
                             outputRequest = PersonModel.PersonStatus(
@@ -94,37 +90,29 @@ class UserDetailsViewModel(
                     }
                 }
             },
-            onFailure = { error ->
-                error.serviceCast { msg, _, isForceLogout ->
-                    _state.update { it.copy(errorText = msg) }
-                }
-            },
-            onComplete = { _state.update { it.copy(isLoading = false) } }
+            onFailure = { error -> updateInfo { copy(errorText = error) } },
+            onComplete = { updateInfo { copy(isLoading = false) } }
         )
     }
 
 
     private fun stopGuarding() {
-        _state.update { it.copy(isLoading = true) }
+        updateInfo { copy(isLoading = true) }
         networkRequest(
             action = { stopGuardingUseCase(userId) },
-            onSuccess = { updateInfo { copy(isOnGuard = null) } },
-            onFailure = { error ->
-                error.serviceCast { msg, _, isForceLogout ->
-                    _state.update { it.copy(errorText = msg) }
-                }
-            },
-            onComplete = { _state.update { it.copy(isLoading = false) } },
+            onSuccess = { updateUserInfo { copy(isOnGuard = null) } },
+            onFailure = { error -> updateInfo { copy(errorText = error) } },
+            onComplete = { updateInfo { copy(isLoading = false) } },
         )
     }
 
     private fun requestAnswer(isAccepted: ButtonAnswer) {
-        _state.value.data?.inputRequest?.let { status ->
-            _state.update { it.copy(isLoading = true) }
+        getState().data?.inputRequest?.let { status ->
+            updateInfo { copy(isLoading = true) }
             networkRequest(
                 action = { setRequestReactionUseCase(isAccepted, status.statusId) },
                 onSuccess = { response ->
-                    updateInfo {
+                    updateUserInfo {
                         copy(
                             personPhone = response.personPhone,
                             personAddress = response.personAddress,
@@ -133,13 +121,9 @@ class UserDetailsViewModel(
                         )
                     }
                 },
-                onFailure = { error ->
-                    error.serviceCast { msg, _, isForceLogout ->
-                        _state.update { it.copy(errorText = msg) }
-                    }
-                },
+                onFailure = { error -> updateInfo { copy(errorText = error) } },
                 onComplete = {
-                    _state.update { it.copy(isLoading = false) }
+                    updateInfo { copy(isLoading = false) }
                 },
             )
         }
@@ -148,11 +132,12 @@ class UserDetailsViewModel(
     private fun showAlert(alertType: StopGuardAlertType) {
         when (alertType) {
             StopGuardAlertType.STOP_GUARDING -> {
-                _state.update { it.copy(alertType = alertType) }
+                updateInfo { copy(alertType = alertType) }
             }
             StopGuardAlertType.REMOVE_GUARDIAN ->
-                if (_state.value.data?.isGuardian == true) {
-                    _state.update { it.copy(alertType = alertType) }
+                if (getState().data?.isGuardian == true
+                ) {
+                    updateInfo { copy(alertType = alertType) }
                 } else {
                     changeGuardence()
                 }
@@ -160,9 +145,9 @@ class UserDetailsViewModel(
     }
 
     private fun closeAlert() {
-        _state.update { it.copy(alertType = null) }
+        updateInfo { copy(alertType = null) }
     }
 
-    private fun getData() = _state.value.data?.copy() ?: PersonModel()
+    private fun getData() = getState().data?.copy() ?: PersonModel()
 
 }

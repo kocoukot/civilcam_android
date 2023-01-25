@@ -75,11 +75,9 @@ class SettingsViewModel(
 	private fun onLanguageChange(languageType: LanguageType) {
 		updateInfo { copy(isLoading = true) }
 		networkRequest(action = { setUserLanguageUseCase(languageType) },
-			onSuccess = { goBack() },
-			onFailure = { error ->
-				error.serviceCast { msg, _, _ -> updateInfo { copy(errorText = msg) } }
-			},
-			onComplete = { updateInfo { copy(isLoading = false) } })
+            onSuccess = { goBack() },
+            onFailure = { error -> updateInfo { copy(errorText = error) } },
+            onComplete = { updateInfo { copy(isLoading = false) } })
 	}
 	
 	override fun clearErrorText() {

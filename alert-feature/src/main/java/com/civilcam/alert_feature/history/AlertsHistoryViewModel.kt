@@ -10,18 +10,20 @@ import com.civilcam.alert_feature.history.model.AlertHistoryRoute
 import com.civilcam.alert_feature.history.model.AlertHistoryScreen
 import com.civilcam.alert_feature.history.model.AlertHistoryState
 import com.civilcam.alert_feature.history.source.AlertHistoryListDataSource
+import com.civilcam.domainLayer.ServerErrors
+import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.model.alerts.AlertDetailModel
 import com.civilcam.domainLayer.model.alerts.AlertModel
 import com.civilcam.domainLayer.model.alerts.AlertType
 import com.civilcam.domainLayer.model.alerts.VideoLoadingState
 import com.civilcam.domainLayer.repos.VideoRepository
-import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.alerts.CheckIfVideoLoadedUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetAlertDetailUseCase
 import com.civilcam.domainLayer.usecase.alerts.GetVideoUriUseCase
 import com.civilcam.ext_features.KoinInjector
 import com.civilcam.ext_features.arch.BaseViewModel
 import com.civilcam.ext_features.compose.ComposeFragmentActions
+import com.civilcam.ext_features.compose.ComposeFragmentRoute
 import com.civilcam.ext_features.ext.serverPhoneNumberFormat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -121,9 +123,7 @@ class AlertsHistoryViewModel(
                     }
                 }
             },
-            onFailure = { error ->
-                error.serviceCast { msg, _, _ -> updateInfo { copy(errorText = msg) } }
-            },
+            onFailure = { error -> updateInfo { copy(errorText = error) } },
             onComplete = {
                 updateInfo { copy(isLoading = false) }
             },
@@ -162,5 +162,10 @@ class AlertsHistoryViewModel(
         return video.makeVideoName(firstPart)
     }
 
+    fun resolveSearchError(error: ServiceException) {
+        if (error.isForceLogout) sendRoute(ComposeFragmentRoute.ForceLogout)
+        if (error.errorCode == ServerErrors.SUBSCRIPTION_NOT_FOUND) sendRoute(ComposeFragmentRoute.SubEnd)
+        else updateInfo { copy(errorText = error.errorMessage) }
 
+    }
 }

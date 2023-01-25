@@ -20,8 +20,8 @@ import com.civilcam.domainLayer.castSafe
 import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.domainLayer.usecase.user.IsUserLoggedInUseCase
-import com.civilcam.ext_features.DateUtils
 import com.civilcam.ext_features.SupportBottomBar
+import com.civilcam.ext_features.arch.EndSubscription
 import com.civilcam.ext_features.arch.VoiceRecord
 import com.civilcam.ext_features.setupWithNavController
 import com.civilcam.langselect.LanguageSelectFragment
@@ -43,7 +43,7 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 
-class MainActivity : AppCompatActivity(), VoiceRecord {
+class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription {
 	private val isUserLoggedInUseCase: IsUserLoggedInUseCase by inject()
 	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase by inject()
 
@@ -70,28 +70,7 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 				stopLocationService()
 				recognizer.destroy()
 			}
-			checkSubscriptionState()
-		}
-	}
-
-	private fun checkSubscriptionState() {
-		if (isUserLoggedInUseCase()) {
-			getLocalCurrentUserUseCase()?.let { user ->
-				user.subscription?.expiredAt?.let { expiredAtString ->
-					if (!DateUtils.isSubValid(expiredAtString)) {
-						navHost?.navController?.navigateToRoot(
-							R.id.subscriptionFragment, args = SubscriptionFragment.createArgs(
-								UserSubscriptionState.SUB_EXPIRED
-							)
-						)
-						stopLocationService()
-						lifecycleScope.launch(Dispatchers.Main) {
-							delay(500)
-							recognizer.destroy()
-						}
-					}
-				}
-			}
+			//checkSubscriptionState()
 		}
 	}
 
@@ -146,11 +125,6 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 
 	override fun stopVoiceRecord() {
 		recognizer.stopRecord()
-	}
-
-	override fun onStart() {
-		super.onStart()
-		checkSubscriptionState()
 	}
 
 	override fun onStop() {
@@ -242,6 +216,23 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 						)
 					}, 500)
 				}
+		}
+	}
+
+
+	override fun subscriptionEnd() {
+		if (isUserLoggedInUseCase()) {
+			binding.bottomNavigationView.isVisible = false
+			navHost?.navController?.navigateToRoot(
+				R.id.subscriptionFragment, args = SubscriptionFragment.createArgs(
+					UserSubscriptionState.SUB_EXPIRED
+				)
+			)
+			stopLocationService()
+			lifecycleScope.launch(Dispatchers.Main) {
+				delay(500)
+				recognizer.destroy()
+			}
 		}
 	}
 

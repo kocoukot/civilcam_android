@@ -19,6 +19,7 @@ import com.civilcam.R
 import com.civilcam.databinding.FragmentLiveBinding
 import com.civilcam.domainLayer.EmergencyScreen
 import com.civilcam.ext_features.alert.AlertDialogButtons
+import com.civilcam.ext_features.arch.EndSubscription
 import com.civilcam.ext_features.arch.VoiceRecord
 import com.civilcam.ext_features.arg
 import com.civilcam.ext_features.ext.hideSystemUI
@@ -119,7 +120,7 @@ class EmergencyFragment : Fragment(R.layout.fragment_live), ConnectCheckerRtmp,
 					route.isVisible
 				)
 				is EmergencyRoute.GoLive -> goLive(route.streamKey)
-				else -> {}
+				EmergencyRoute.SubscriptionEnd -> (activity as EndSubscription).subscriptionEnd()
 			}
 		}
 		

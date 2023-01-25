@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.civilcam.CivilcamApplication
 import com.civilcam.domainLayer.EmergencyScreen
+import com.civilcam.domainLayer.ServerErrors
 import com.civilcam.domainLayer.model.JsonDataParser
 import com.civilcam.domainLayer.model.alerts.AlertGuardianModel
 import com.civilcam.domainLayer.model.user.UserState
@@ -276,7 +277,11 @@ class EmergencyViewModel(
 						response.alertModel.alertKey?.let { EmergencyRoute.GoLive(it) }
 							?.let { _steps.value = it }
 					}.onFailure { error ->
-						error.serviceCast { msg, _, _ ->
+						error.serviceCast { msg, serverError, _ ->
+							if (serverError == ServerErrors.SUBSCRIPTION_NOT_FOUND) {
+								_steps.value = EmergencyRoute.SubscriptionEnd
+								return@serviceCast
+							}
 							_composeState.update { it.copy(errorText = msg) }
 						}
 					}
