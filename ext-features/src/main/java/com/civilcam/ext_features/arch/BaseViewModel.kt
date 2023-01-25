@@ -7,6 +7,7 @@ import com.civilcam.domainLayer.serviceCast
 import com.civilcam.ext_features.compose.ComposeFragmentActions
 import com.civilcam.ext_features.compose.ComposeFragmentRoute
 import com.civilcam.ext_features.compose.ComposeFragmentState
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -43,10 +44,11 @@ interface BaseViewModel : RouteCommunication {
         protected fun <Response> networkRequest(
             action: suspend () -> Response,
             onSuccess: (Response) -> Unit,
-            onFailure: (Throwable) -> Unit,
-            onComplete: (() -> Unit)? = null
+            onFailure: (String) -> Unit,
+            onComplete: (() -> Unit)? = null,
+            dispatcher: CoroutineDispatcher = Dispatchers.IO
         ) {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch(dispatcher) {
                 kotlin.runCatching { action.invoke() }
                     .onSuccess {
                         withContext(Dispatchers.Main) {
@@ -59,7 +61,11 @@ interface BaseViewModel : RouteCommunication {
                                 sendRoute(ComposeFragmentRoute.SubEnd)
                                 return@serviceCast
                             }
-                            onFailure.invoke(error)
+                            if (isForceLogout) {
+                                sendRoute(ComposeFragmentRoute.ForceLogout)
+                                return@serviceCast
+                            }
+                            onFailure.invoke(msg)
                         }
                     }.also { onComplete?.invoke() }
             }

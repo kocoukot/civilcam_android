@@ -230,10 +230,7 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
         when {
             loadState.refresh is LoadState.Error -> {
                 (loadState.refresh as LoadState.Error).error.castSafe<ServiceException>()
-                    ?.let { error ->
-                        viewModel.resolveSearchError(error)
-
-                    }
+                    ?.let { error -> viewModel.resolveSearchError(error) }
             }
             else -> {}
         }
