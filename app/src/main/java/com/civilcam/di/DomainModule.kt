@@ -141,5 +141,6 @@ val domainModule = module {
 
     factory { MatchUserByPhoneUseCase(get()) }
 
+    factory { SetExpiredSubscriptionUseCase(get()) }
 
 }

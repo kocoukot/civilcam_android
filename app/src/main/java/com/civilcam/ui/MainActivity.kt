@@ -18,6 +18,7 @@ import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.databinding.ActivityMainBinding
 import com.civilcam.domainLayer.castSafe
 import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
+import com.civilcam.domainLayer.usecase.subscriptions.SetExpiredSubscriptionUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.domainLayer.usecase.user.IsUserLoggedInUseCase
 import com.civilcam.ext_features.SupportBottomBar
@@ -46,6 +47,7 @@ import timber.log.Timber
 class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription {
 	private val isUserLoggedInUseCase: IsUserLoggedInUseCase by inject()
 	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase by inject()
+	private val setExpiredSubscriptionUseCase: SetExpiredSubscriptionUseCase by inject()
 
 	private val recognizer = VoiceRecognition.Base(this) {
 		navHost?.navController?.navigateToRoot(
@@ -222,6 +224,7 @@ class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription {
 
 	override fun subscriptionEnd() {
 		if (isUserLoggedInUseCase()) {
+			setExpiredSubscriptionUseCase()
 			binding.bottomNavigationView.isVisible = false
 			navHost?.navController?.navigateToRoot(
 				R.id.subscriptionFragment, args = SubscriptionFragment.createArgs(

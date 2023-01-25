@@ -81,4 +81,8 @@ class SubscriptionsRepositoryImpl(
 				}
 			}
 		}
+
+	override fun setExpiredSub() {
+		accountStorage.setExpiredSubState()
+	}
 }
