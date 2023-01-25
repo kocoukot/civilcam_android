@@ -1,45 +1,24 @@
 package com.civilcam.ui.network.contacts
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.fragment.app.Fragment
-import com.civilcam.R
-import com.civilcam.ext_features.live_data.observeNonNull
-import com.civilcam.ext_features.navController
-import com.civilcam.ui.network.contacts.model.ContactsRoute
+import androidx.compose.runtime.Composable
+import androidx.core.os.bundleOf
+import com.civilcam.ext_features.arch.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class ContactsFragment : Fragment() {
-    private val viewModel: ContactsViewModel by viewModel()
+class ContactsFragment : BaseFragment<ContactsViewModel>() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        viewModel.steps.observeNonNull(viewLifecycleOwner) { route ->
-            when (route) {
-                ContactsRoute.GoBack -> navController.popBackStack()
-                ContactsRoute.GoInviteByNumber -> navController.navigate(R.id.action_contactsFragment_to_inviteByNumberFragment)
-            }
-        }
+    override val viewModel: ContactsViewModel by viewModel()
 
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(
-                    viewLifecycleOwner
-                )
-            )
-
-            setContent {
-                ContactsScreenContent(viewModel)
-            }
-        }
+    override val screenContent: @Composable (ContactsViewModel) -> Unit = {
+        ContactsScreenContent(viewModel)
     }
 
+    companion object {
+        private const val ARG_IN_APP_NUMBERS = "in_app_numbers"
+
+        fun createArgs(numbersList: List<String>) = bundleOf(
+            ARG_IN_APP_NUMBERS to numbersList
+        )
+    }
 }

@@ -5,14 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.civilcam.data.local.ContactsStorage
 import com.civilcam.data.local.model.Contact
 import com.civilcam.data.local.model.PersonContactFilter
-import com.civilcam.domainLayer.serviceCast
 import com.civilcam.domainLayer.usecase.guardians.GetPhoneInvitesUseCase
 import com.civilcam.domainLayer.usecase.guardians.InviteByNumberUseCase
 import com.civilcam.ext_features.SearchQuery
-import com.civilcam.ext_features.compose.ComposeViewModel
+import com.civilcam.ext_features.arch.BaseViewModel
+import com.civilcam.ext_features.compose.ComposeFragmentActions
 import com.civilcam.ui.network.contacts.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -20,20 +19,21 @@ class ContactsViewModel(
     private val contactsStorage: ContactsStorage,
     private val inviteByNumberUseCase: InviteByNumberUseCase,
     private val getPhoneInvitesUseCase: GetPhoneInvitesUseCase
-) : ComposeViewModel<ContactsState, ContactsRoute, ContactsActions>(), SearchQuery {
-    override var _state: MutableStateFlow<ContactsState> = MutableStateFlow(ContactsState())
+) : BaseViewModel.Base<ContactsState>(
+    mState = MutableStateFlow(ContactsState())
+),
+    SearchQuery {
+
     override val mTextSearch = MutableStateFlow("")
 
     init {
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
+            updateInfo { copy(isLoading = true) }
             networkRequest(
                 action = { getPhoneInvitesUseCase() },
-                onSuccess = { list -> _state.update { it.copy(invitesList = list) } },
-                onFailure = { error ->
-                    error.serviceCast { msg, _, isForceLogout -> _state.update { it.copy(errorText = msg) } }
-                },
-                onComplete = { _state.update { it.copy(isLoading = false) } },
+                onSuccess = { list -> updateInfo { copy(invitesList = list) } },
+                onFailure = { error -> updateInfo { copy(errorText = error) } },
+                onComplete = { updateInfo { copy(isLoading = false) } },
             )
         }
         query(viewModelScope) { query ->
@@ -50,7 +50,7 @@ class ContactsViewModel(
         }
     }
 
-    override fun setInputActions(action: ContactsActions) {
+    override fun setInputActions(action: ComposeFragmentActions) {
         when (action) {
             ContactsActions.ClickGoBack -> goBack()
             ContactsActions.ClickGoInviteByNumber -> moveToInvite()
@@ -61,15 +61,15 @@ class ContactsViewModel(
     }
 
     override fun clearErrorText() {
-        _state.update { it.copy(errorText = "") }
+        updateInfo { copy(errorText = "") }
     }
 
     private fun goBack() {
-        navigateRoute(ContactsRoute.GoBack)
+        sendRoute(ContactsRoute.GoBack)
     }
 
     private fun moveToInvite() {
-        navigateRoute(ContactsRoute.GoInviteByNumber)
+        sendRoute(ContactsRoute.GoInviteByNumber)
     }
 
     private fun searchContact(searchString: String) {
@@ -77,23 +77,19 @@ class ContactsViewModel(
     }
 
     private fun inviteContact(contact: PersonContactItem) {
-        _state.update { it.copy(isLoading = true) }
+        updateInfo { copy(isLoading = true) }
         networkRequest(
             action = { inviteByNumberUseCase.invoke(contact.phoneNumber) },
             onSuccess = {
-                val contactsModel = _state.value.data?.contactsList ?: mutableListOf()
+                val contactsModel = getState().data?.contactsList ?: mutableListOf()
                 contactsModel.let { contacts ->
                     (contacts.find { it is PersonContactItem && it.name == contact.name && it.phoneNumber == contact.phoneNumber } as PersonContactItem).isInvited =
                         true
                 }
-                _state.update { it.copy(data = ContactsModel(contactsModel)) }
+                updateInfo { copy(data = ContactsModel(contactsModel)) }
             },
-            onFailure = { error ->
-                error.serviceCast { errorMessage, _, isForceLogout ->
-                    _state.update { it.copy(errorText = errorMessage) }
-                }
-            },
-            onComplete = { _state.update { it.copy(isLoading = false) } }
+            onFailure = { error -> updateInfo { copy(errorText = error) } },
+            onComplete = { updateInfo { copy(isLoading = false) } }
         )
     }
 
@@ -122,7 +118,7 @@ class ContactsViewModel(
                 addAll(value)
             }
         }
-        _state.update { it.copy(data = ContactsModel(items)) }
+        updateInfo { copy(data = ContactsModel(items)) }
     }
 
 }
