@@ -1,7 +1,6 @@
 package com.civilcam.ui.common
 
 import android.os.Parcelable
-import com.civilcam.domainLayer.model.SubscriptionStatus
 import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
 import com.civilcam.domainLayer.model.user.CurrentUser
 import kotlinx.parcelize.Parcelize
@@ -36,7 +35,7 @@ sealed class NavigationDirection : Parcelable {
 				user.sessionUser.isUserProfileSetupRequired -> ProfileSetup
 //				user.subscription.status != SubscriptionStatus.active && !user.sessionUser.isUserProfileSetupRequired -> SubscriptionNotActive
 				//todo fix may be latter
-				user.subscription?.status != SubscriptionStatus.active -> SubscriptionNotActive(
+				!user.sessionUser.isSubscriptionActive -> SubscriptionNotActive(
 					state = if (user.sessionUser.isUserProfileSetupRequired)
 						UserSubscriptionState.FIRST_LAUNCH
 					else

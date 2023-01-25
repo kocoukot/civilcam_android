@@ -6,8 +6,6 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
 
-    factory<MockRepository> { MockRepositoryImpl() }
-
     factory<PlacesRepository> { PlacesRepositoryImpl(get()) }
 
     factory<AccountRepository> { AccountRepositoryImpl(get()) }
