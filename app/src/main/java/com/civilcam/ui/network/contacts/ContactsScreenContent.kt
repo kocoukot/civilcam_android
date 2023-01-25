@@ -22,6 +22,7 @@ import com.civilcam.ext_features.ext.clearPhone
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.common.compose.inputs.SearchInputField
 import com.civilcam.ui.network.contacts.model.ContactsActions
+import com.civilcam.ui.network.contacts.model.InvitationState
 import com.civilcam.ui.network.contacts.model.LetterContactItem
 import com.civilcam.ui.network.contacts.model.PersonContactItem
 
@@ -41,7 +42,6 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
         )
     }
 
-
     val permissionRequest = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { if (it) viewModel.fetchContacts() })
@@ -49,6 +49,7 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
     LaunchedEffect(key1 = true) {
         permissionRequest.launch(Manifest.permission.READ_CONTACTS)
     }
+
     Scaffold(
         backgroundColor = CCTheme.colors.lightGray,
         topBar = {
@@ -76,14 +77,14 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
                     isFocused = {},
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                if (state.value.data?.contactsList.isNullOrEmpty()) RowDivider()
+                if (state.value.contactsList.isNullOrEmpty()) RowDivider()
             }
         }) {
 
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            state.value.data?.contactsList?.let { data ->
+            state.value.contactsList?.let { data ->
                 LazyColumn {
                     itemsIndexed(data) { index, contact ->
                         when (contact) {
@@ -92,8 +93,17 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
                             }
                             is PersonContactItem -> {
                                 var isInvited by remember { mutableStateOf(contact.isInvited) }
+
                                 isInvited =
-                                    contact.isInvited || contact.phoneNumber.clearPhone() in state.value.invitesList.map { it.phone.clearPhone() }
+                                    if (contact.isInvited == InvitationState.IN_APP) InvitationState.IN_APP
+                                    else {
+                                        if (contact.isInvited == InvitationState.PENDING || contact.phoneNumber.clearPhone() in state.value.invitesList.map { it.phone.clearPhone() }) {
+                                            InvitationState.PENDING
+                                        } else {
+                                            InvitationState.NEW
+                                        }
+                                    }
+
                                 InformationRow(
                                     needDivider = (if (index == data.lastIndex) {
                                         false
@@ -108,21 +118,25 @@ fun ContactsScreenContent(viewModel: ContactsViewModel) {
                                         )
                                     },
                                     trailingIcon = {
-                                        if (isInvited) {
-                                            Text(
+                                        when (isInvited) {
+                                            InvitationState.NEW -> TextActionButton(
+                                                actionTitle = stringResource(
+                                                    id = R.string.invite_text
+                                                )
+                                            ) {
+                                                isInvited = InvitationState.PENDING
+                                                viewModel.setInputActions(
+                                                    ContactsActions.ClickInvite(contact)
+                                                )
+                                            }
+                                            InvitationState.PENDING -> Text(
                                                 stringResource(id = R.string.invite_sent_text),
                                                 textAlign = TextAlign.End,
                                                 style = CCTheme.typography.common_text_medium,
                                                 modifier = Modifier.padding(end = 16.dp),
                                                 color = CCTheme.colors.grayOne
                                             )
-                                        } else {
-                                            TextActionButton(actionTitle = stringResource(id = R.string.invite_text)) {
-                                                isInvited = true
-                                                viewModel.setInputActions(
-                                                    ContactsActions.ClickInvite(contact)
-                                                )
-                                            }
+                                            InvitationState.IN_APP -> {}
                                         }
                                     }
                                 ) {}

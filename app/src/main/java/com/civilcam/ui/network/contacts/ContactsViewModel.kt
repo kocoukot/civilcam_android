@@ -10,12 +10,15 @@ import com.civilcam.domainLayer.usecase.guardians.InviteByNumberUseCase
 import com.civilcam.ext_features.SearchQuery
 import com.civilcam.ext_features.arch.BaseViewModel
 import com.civilcam.ext_features.compose.ComposeFragmentActions
+import com.civilcam.ext_features.ext.clearPhone
 import com.civilcam.ui.network.contacts.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.*
 
 class ContactsViewModel(
+    private val phonesList: List<String>,
     private val contactsStorage: ContactsStorage,
     private val inviteByNumberUseCase: InviteByNumberUseCase,
     private val getPhoneInvitesUseCase: GetPhoneInvitesUseCase
@@ -27,6 +30,7 @@ class ContactsViewModel(
     override val mTextSearch = MutableStateFlow("")
 
     init {
+        Timber.tag("civil_my_contacts").d("civil_contacts $phonesList")
         viewModelScope.launch {
             updateInfo { copy(isLoading = true) }
             networkRequest(
@@ -81,12 +85,14 @@ class ContactsViewModel(
         networkRequest(
             action = { inviteByNumberUseCase.invoke(contact.phoneNumber) },
             onSuccess = {
-                val contactsModel = getState().data?.contactsList ?: mutableListOf()
+                val contactsModel = getState().contactsList ?: mutableListOf()
                 contactsModel.let { contacts ->
                     (contacts.find { it is PersonContactItem && it.name == contact.name && it.phoneNumber == contact.phoneNumber } as PersonContactItem).isInvited =
-                        true
+                        InvitationState.PENDING
                 }
-                updateInfo { copy(data = ContactsModel(contactsModel)) }
+                updateInfo { copy(contactsList = contactsModel) }
+                Timber.tag("civil_my_contacts").d("civil_contacts has ${getState().contactsList}")
+
             },
             onFailure = { error -> updateInfo { copy(errorText = error) } },
             onComplete = { updateInfo { copy(isLoading = false) } }
@@ -96,9 +102,11 @@ class ContactsViewModel(
 
     fun fetchContacts() {
         viewModelScope.launch {
-            contactsStorage.getContacts(PersonContactFilter()).sortedBy { it.name }.let {
-                mapToItems(it)
-            }
+            contactsStorage.getContacts(PersonContactFilter())
+                .sortedBy { it.name }
+                .let {
+                    mapToItems(it)
+                }
         }
     }
 
@@ -109,8 +117,21 @@ class ContactsViewModel(
         }
         contacts.forEach {
             val charKey = if (it.name.first().isLetter()) it.name.first() else '#'
+            Timber.tag("civil_my_contacts")
+                .d("civil_contacts has ${it.phoneNumber.clearPhone().takeLast(10)}")
+
+
             groupedContacts.getOrPut(charKey) { mutableListOf() }
-                .add(PersonContactItem(it.name, it.phoneNumber, it.avatar.toUri()))
+                .add(
+                    PersonContactItem(
+                        it.name,
+                        it.phoneNumber,
+                        it.avatar.toUri(),
+                        if (it.phoneNumber.clearPhone()
+                                .takeLast(10) in phonesList
+                        ) InvitationState.IN_APP else InvitationState.NEW
+                    )
+                )
         }
         groupedContacts.forEach { (key, value) ->
             items.apply {
@@ -118,7 +139,10 @@ class ContactsViewModel(
                 addAll(value)
             }
         }
-        updateInfo { copy(data = ContactsModel(items)) }
+
+        Timber.tag("civil_my_contacts").d("civil_contacts $items")
+
+        updateInfo { copy(contactsList = items) }
     }
 
 }

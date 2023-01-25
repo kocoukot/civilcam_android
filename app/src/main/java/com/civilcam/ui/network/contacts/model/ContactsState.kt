@@ -8,8 +8,8 @@ import com.civilcam.ext_features.compose.elements.DialogLoadingContent
 data class ContactsState(
     val isLoading: Boolean = false,
     val errorText: String = "",
-    val data: ContactsModel? = null,
-    val invitesList: List<UserInviteModel> = emptyList()
+    val contactsList: MutableList<ContactItem>? = null,
+    val invitesList: List<UserInviteModel> = emptyList(),
 ) : ComposeFragmentState {
 
     @Composable

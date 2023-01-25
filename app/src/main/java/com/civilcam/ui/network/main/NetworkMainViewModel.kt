@@ -159,6 +159,7 @@ class NetworkMainViewModel(
                                     random = (0..100).random(),
                                     data = data.copy(
                                         contactsList = filtered,
+                                        inAppContactsList = result.map { it.phone }
                                     )
                                 )
                             }
@@ -222,7 +223,7 @@ class NetworkMainViewModel(
     }
 
     private fun goContacts() {
-        sendRoute(NetworkMainRoute.GoContacts)
+        sendRoute(NetworkMainRoute.GoContacts(getState().data.inAppContactsList))
     }
 
     private fun goMyProfile() {
@@ -349,5 +350,6 @@ class NetworkMainViewModel(
     fun resolveSearchError(error: ServiceException) {
         if (error.isForceLogout) sendRoute(ComposeFragmentRoute.ForceLogout)
         if (error.errorCode == ServerErrors.SUBSCRIPTION_NOT_FOUND) sendRoute(ComposeFragmentRoute.SubEnd)
+        else updateInfo { copy(errorText = error.errorMessage) }
     }
 }

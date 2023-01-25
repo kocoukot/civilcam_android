@@ -48,7 +48,6 @@ fun NetworkMainScreenContent(viewModel: NetworkMainViewModel) {
     BackHandler(false) {
 
     }
-
     val contract = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted ->

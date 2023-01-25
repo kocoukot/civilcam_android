@@ -17,7 +17,14 @@ data class PersonContactItem(
     val name: String,
     val phoneNumber: String,
     val avatar: Uri,
-    var isInvited: Boolean = false
+    var isInvited: InvitationState
 ) : ContactItem(ITEM_TYPE_PERSON), Parcelable
 
 class LetterContactItem(val letter: String) : ContactItem(ITEM_TYPE_LETTER)
+
+enum class InvitationState {
+    NEW,
+    PENDING,
+    IN_APP
+
+}

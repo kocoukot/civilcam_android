@@ -104,7 +104,7 @@ val networkRootModule = module {
 		)
 	}
 
-	viewModel { ContactsViewModel(get(), get(), get()) }
+	viewModel { (phonesList: List<String>) -> ContactsViewModel(phonesList, get(), get(), get()) }
 
 	viewModel { InviteByNumberViewModel(get(), get()) }
 

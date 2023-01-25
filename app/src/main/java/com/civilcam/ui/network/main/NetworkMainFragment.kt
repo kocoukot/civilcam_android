@@ -1,11 +1,9 @@
 package com.civilcam.ui.network.main
 
-import android.Manifest
 import android.os.Bundle
 import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.core.os.bundleOf
-import com.civilcam.R
 import com.civilcam.ext_features.SupportBottomBar
 import com.civilcam.ext_features.arch.BaseFragment
 import com.civilcam.ext_features.arch.VoiceRecord
@@ -13,8 +11,6 @@ import com.civilcam.ext_features.arg
 import com.civilcam.ext_features.compose.ComposeFragmentRoute
 import com.civilcam.ext_features.ext.setPan
 import com.civilcam.ext_features.ext.setResize
-import com.civilcam.ext_features.navController
-import com.civilcam.ext_features.registerForPermissionsResult
 import com.civilcam.ui.MainActivity
 import com.civilcam.ui.network.main.model.NetworkMainRoute
 import com.civilcam.ui.network.main.model.NetworkScreen
@@ -30,11 +26,6 @@ class NetworkMainFragment : BaseFragment<NetworkMainViewModel>(), SupportBottomB
 		NetworkMainScreenContent(viewModel)
 	}
 
-	private val contactsPermissionDelegate = registerForPermissionsResult(
-		Manifest.permission.READ_CONTACTS
-	) { onContactsPermissionsGranted(it) }
-	private var pendingAction: (() -> Unit)? = null
-
 	private val screen: NetworkScreen by arg(ARG_NETWORK_SCREEN, NetworkScreen.MAIN)
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +38,6 @@ class NetworkMainFragment : BaseFragment<NetworkMainViewModel>(), SupportBottomB
 	override fun observeData(composeRoute: ((ComposeFragmentRoute) -> Unit)?) {
 		super.observeData { route ->
 			when (route) {
-				NetworkMainRoute.GoContacts -> checkContactsPermission()
 				is NetworkMainRoute.IsNavBarVisible -> (activity as MainActivity)
 					.showBottomNavBar(route.isVisible)
 			}
@@ -67,26 +57,9 @@ class NetworkMainFragment : BaseFragment<NetworkMainViewModel>(), SupportBottomB
 		super.onStop()
 		setResize()
 	}
-	
-	
-	private fun checkContactsPermission() {
-		if (contactsPermissionDelegate.checkSelfPermissions()) {
-			navController.navigate(R.id.action_network_root_to_contactsFragment)
-		} else {
-			pendingAction = { navController.navigate(R.id.action_network_root_to_contactsFragment) }
-			contactsPermissionDelegate.requestPermissions()
-		}
-	}
-	
-	
-	private fun onContactsPermissionsGranted(isGranted: Boolean) {
-		if (isGranted) {
-			pendingAction?.invoke()
-			pendingAction = null
-		}
-	}
 
-    companion object {
+
+	companion object {
 		private const val ARG_NETWORK_SCREEN = "network_screen"
 
         fun createArgs(screen: NetworkScreen = NetworkScreen.MAIN) = bundleOf(

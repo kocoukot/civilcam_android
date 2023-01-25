@@ -11,6 +11,7 @@ data class NetworkMainModel(
     var searchText: String = "",
     val searchScreenSectionModel: SearchScreenSectionModel = SearchScreenSectionModel(),
     val contactsList: List<Contact> = emptyList(),
+    val inAppContactsList: List<String> = emptyList(),
 )
 
 data class SearchScreenSectionModel(
