@@ -484,6 +484,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
         const val NOTIFICATION_REQUESTS_ID = 1002
         const val NOTIFICATION_ALERT_ID = 1003
         const val NOTIFICATION_SAFE_ID = 1005
+        const val NOTIFICATION_LOCATION_ID = 911
 
         private var showRequestProgress = true
         private var showAlertProgress = true

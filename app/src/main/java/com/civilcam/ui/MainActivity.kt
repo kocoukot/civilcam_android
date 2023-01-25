@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 							)
 						)
 						stopLocationService()
-						lifecycleScope.launch(Dispatchers.IO) {
+						lifecycleScope.launch(Dispatchers.Main) {
 							delay(500)
 							recognizer.destroy()
 						}
@@ -184,10 +184,10 @@ class MainActivity : AppCompatActivity(), VoiceRecord {
 	}
 
 	override fun onDestroy() {
-		super.onDestroy()
 		stopLocationService()
 		SocketHandler.closeConnection()
 		recognizer.destroy()
+		super.onDestroy()
 	}
 
 	private fun navigateByDirection(direction: NavigationDirection) {

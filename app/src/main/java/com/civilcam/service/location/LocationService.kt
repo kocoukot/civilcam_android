@@ -12,6 +12,7 @@ import com.civilcam.data.repository.LocationRepositoryImpl
 import com.civilcam.domainLayer.model.user.NotificationType
 import com.civilcam.domainLayer.repos.LocationRepository
 import com.civilcam.domainLayer.usecase.user.SetUserCoordsUseCase
+import com.civilcam.service.CCFireBaseMessagingService.Companion.NOTIFICATION_LOCATION_ID
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
@@ -67,7 +68,10 @@ class LocationService : Service() {
                             kotlin.runCatching {
                                 setUserCoordsUseCase(location.first)
                             }
-                            notificationManager.notify(1, updateNotification.build())
+                            notificationManager.notify(
+                                NOTIFICATION_LOCATION_ID,
+                                updateNotification.build()
+                            )
                         }
                         .launchIn(serviceScope)
                 } catch (e: Exception) {
@@ -83,6 +87,9 @@ class LocationService : Service() {
         isFetching = false
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(NOTIFICATION_LOCATION_ID)
     }
 
     override fun onDestroy() {
@@ -93,6 +100,5 @@ class LocationService : Service() {
     companion object {
         const val ACTION_START = "ACTION_START"
         const val ACTION_STOP = "ACTION_STOP"
-
     }
 }
