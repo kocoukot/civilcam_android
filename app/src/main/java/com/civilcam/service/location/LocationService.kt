@@ -79,7 +79,7 @@ class LocationService : Service() {
                         .show()
                 }
             }
-            startForeground(1, notification.build())
+            startForeground(NOTIFICATION_LOCATION_ID, notification.build())
         }
     }
 
