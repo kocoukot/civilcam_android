@@ -79,6 +79,7 @@ class NetworkMainFragment : Fragment(), SupportBottomBar {
         viewModel.loadAvatar()
         viewModel.checkNavBarStatus()
 		viewModel.loadRequestsList()
+		viewModel.getAndMatchContacts()
 		setPan()
 	}
 	

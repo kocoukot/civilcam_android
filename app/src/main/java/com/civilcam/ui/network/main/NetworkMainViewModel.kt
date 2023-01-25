@@ -48,7 +48,7 @@ class NetworkMainViewModel(
 
     init {
         _state.update { it.copy(screenState = screen) }
-//        if (screen ==NetworkScreen.ADD_GUARD ) searchList = loadRPlacesList()
+
         Timber.i("Screen type $screen")
         checkNavBarStatus()
 
@@ -124,7 +124,9 @@ class NetworkMainViewModel(
         }
     }
 
-    private fun getAndMatchContacts() {
+    fun getAndMatchContacts() {
+        if (_state.value.screenState != NetworkScreen.ADD_GUARD) return
+        if (mTextSearch.value.isNotEmpty()) return
         viewModelScope.launch {
             contactsStorage.getContacts(PersonContactFilter()).sortedBy { it.name }
                 .let { contacts ->
