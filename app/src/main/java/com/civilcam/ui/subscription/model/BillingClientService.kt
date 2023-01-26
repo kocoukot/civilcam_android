@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import com.android.billingclient.api.*
+import com.civilcam.ui.subscription.model.BillingClientService.PRODUCT.BOUGHT_SUB
 import com.google.common.collect.ImmutableList
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
@@ -23,9 +24,19 @@ class BillingClientService(
 		billingClient = BillingClient.newBuilder(mContext).setListener(purchasesUpdatedListener)
 			.enablePendingPurchases().build()
 		establishConnection()
+
+
 	}
-	
+
+	// launch product buy
 	fun launchPurchaseFlow(productDetails: ProductDetails) {
+		BOUGHT_SUB.find { bought ->
+			bought.products.first() == productDetails.productId
+		}?.let { purchase ->
+			billingEvent.setPurchaseToken(purchase.purchaseToken)
+			return
+		}
+
 		val productDetailsParamsList =
 			listOf(productDetails.subscriptionOfferDetails?.get(0)?.offerToken?.let {
 				BillingFlowParams.ProductDetailsParams.newBuilder()
@@ -37,8 +48,9 @@ class BillingClientService(
 				.setObfuscatedAccountId(userId)
 				.build()
 		billingClient.launchBillingFlow(mActivity, billingFlowParams)
+
 	}
-	
+
 	fun handlePurchaseVerification() {
 		val params =
 			QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.SUBS)
@@ -46,6 +58,7 @@ class BillingClientService(
 			billingClient.queryPurchasesAsync(
 				params.build()
 			) { billingResult, list ->
+//				Timber.tag("civil_cam_subs").i("billingResult handlePurchaseVerification $billingResult")
 				when (billingResult.responseCode) {
 					BillingClient.BillingResponseCode.OK -> {
 						for (purchase in list) {
@@ -58,8 +71,10 @@ class BillingClientService(
 			}
 		}
 	}
-	
+
 	private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
+		Timber.tag("civil_cam_subs").i("billingResult purchasesUpdatedListener $billingResult")
+
 		if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
 			for (purchase in purchases) {
 				if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
@@ -96,6 +111,8 @@ class BillingClientService(
 			billingClient.acknowledgePurchase(
 				acknowledgePurchaseParams
 			) { billingResult ->
+				Timber.tag("civil_cam_subs").i("billingResult verifySubPurchase $billingResult")
+
 				if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
 					billingEvent.setPurchaseToken(purchase.purchaseToken)
 				}
@@ -112,7 +129,7 @@ class BillingClientService(
 					.setProductType(BillingClient.ProductType.SUBS).build()
 			)
 		).build()
-		
+
 		billingClient.queryProductDetailsAsync(queryProductDetailsParams) { billingResult, productDetailsList ->
 			if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
 				Handler(Looper.getMainLooper()).postDelayed({
@@ -120,11 +137,26 @@ class BillingClientService(
 				}, 0)
 			}
 		}
+
+		billingClient.queryPurchasesAsync(
+			QueryPurchasesParams
+				.newBuilder()
+				.setProductType(BillingClient.ProductType.SUBS).build()
+		) { _, list ->
+			Timber.tag("civil_cam_subs")
+				.i("billingResult purchasesListener list ${list}")
+			list.filter { it.isAutoRenewing && it.isAcknowledged }.let {
+				BOUGHT_SUB = it
+				Timber.tag("civil_cam_subs")
+					.i("billingResult purchasesListener list ${it.map { it.products }}")
+			}
+		}
 	}
-	
-	object PRODUCT {
+
+	private object PRODUCT {
 		const val PREMIUM_MONTHLY = "monthly5"
 		const val PREMIUM_YEARLY = "yearly50"
+		lateinit var BOUGHT_SUB: List<Purchase>
 	}
 }
 
