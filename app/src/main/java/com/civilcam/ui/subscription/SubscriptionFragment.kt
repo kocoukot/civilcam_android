@@ -13,6 +13,7 @@ import com.civilcam.R
 import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.common.ext.showAlertDialogFragment
 import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
+import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.ext_features.ext.hideSystemUI
 import com.civilcam.ext_features.ext.navigateToStart
 import com.civilcam.ext_features.ext.showSystemUI
@@ -25,6 +26,7 @@ import com.civilcam.ui.subscription.model.BillingClientService
 import com.civilcam.ui.subscription.model.BillingEvent
 import com.civilcam.ui.subscription.model.SubscriptionActions
 import com.civilcam.ui.subscription.model.SubscriptionRoute
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -33,7 +35,7 @@ class SubscriptionFragment : Fragment(), BillingEvent {
 	private val viewModel: SubscriptionViewModel by viewModel {
 		parametersOf(useSubState)
 	}
-	
+	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase by inject()
 	private val useSubState: UserSubscriptionState by requireArg(ARG_FLOW)
 	
 	private val billService by lazy {
@@ -42,7 +44,7 @@ class SubscriptionFragment : Fragment(), BillingEvent {
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		billService.initializeBillingClient()
+		billService.initializeBillingClient(getLocalCurrentUserUseCase.invoke()?.sessionUser?.id.toString())
 	}
 	
 	override fun onCreateView(

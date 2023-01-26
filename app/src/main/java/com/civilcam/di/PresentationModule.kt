@@ -48,7 +48,7 @@ val authModule = module {
 	
 	viewModel { SplashViewModel(get(), get()) }
 	
-	viewModel { (isSettings: Boolean) -> TermsViewModel(isSettings, get(), get()) }
+	viewModel { (isSettings: Boolean) -> TermsViewModel(isSettings, get(), get(), get()) }
 	
 	viewModel { ProfileSetupViewModel(get(), get(), get(), get(), get()) }
 	

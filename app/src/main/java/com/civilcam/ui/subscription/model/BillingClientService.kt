@@ -7,6 +7,7 @@ import android.os.Looper
 import com.android.billingclient.api.*
 import com.google.common.collect.ImmutableList
 import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 
 class BillingClientService(
 	private val mContext: Context,
@@ -15,8 +16,10 @@ class BillingClientService(
 ) {
 	
 	private lateinit var billingClient: BillingClient
+	private lateinit var userId: String
 	
-	fun initializeBillingClient() {
+	fun initializeBillingClient(id: String) {
+		userId = id
 		billingClient = BillingClient.newBuilder(mContext).setListener(purchasesUpdatedListener)
 			.enablePendingPurchases().build()
 		establishConnection()
@@ -28,8 +31,10 @@ class BillingClientService(
 				BillingFlowParams.ProductDetailsParams.newBuilder()
 					.setProductDetails(productDetails).setOfferToken(it).build()
 			})
+		Timber.i("USER_ID: $userId")
 		val billingFlowParams =
 			BillingFlowParams.newBuilder().setProductDetailsParamsList(productDetailsParamsList)
+				.setObfuscatedAccountId(userId)
 				.build()
 		billingClient.launchBillingFlow(mActivity, billingFlowParams)
 	}

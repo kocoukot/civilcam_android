@@ -48,23 +48,22 @@ class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription {
 	private val isUserLoggedInUseCase: IsUserLoggedInUseCase by inject()
 	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase by inject()
 	private val setExpiredSubscriptionUseCase: SetExpiredSubscriptionUseCase by inject()
-
+	
 	private val recognizer = VoiceRecognition.Base(this) {
 		navHost?.navController?.navigateToRoot(
-			R.id.emergency_root,
-			args = EmergencyFragment.createArgs(true)
+			R.id.emergency_root, args = EmergencyFragment.createArgs(true)
 		)
 	}
 	private lateinit var binding: ActivityMainBinding
 	private var navHost: NavHostFragment? = null
-
+	
 	private val notificationManager by lazy {
 		getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 	}
-
+	
 	private val currentVisibleFragment: Fragment?
 		get() = navHost?.childFragmentManager?.fragments?.first()
-
+	
 	private val onBackStackChangedListener by lazy {
 		FragmentManager.OnBackStackChangedListener {
 			binding.navBarGroup.isVisible = currentVisibleFragment is SupportBottomBar
@@ -75,24 +74,24 @@ class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription {
 			//checkSubscriptionState()
 		}
 	}
-
+	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(ActivityMainBinding.inflate(layoutInflater).also { binding = it }.root)
-
+		
 		navHost = supportFragmentManager.findFragmentById(binding.navHostView.id)
 			.castSafe<NavHostFragment>()
-
+		
 		navHost?.apply {
 			childFragmentManager.addOnBackStackChangedListener(onBackStackChangedListener)
 		}
-
+		
 		navHost?.let { nav ->
 			binding.bottomNavigationView.setupWithNavController(
 				navController = nav.navController
 			) {}
 		}
-
+		
 		intent?.extras?.getParcelable<NavigationDirection>(EXTRA_DIRECTION)
 			?.let(::navigateByDirection) ?: run {
 			if (isUserLoggedInUseCase()) getLocalCurrentUserUseCase()?.let {
@@ -113,86 +112,86 @@ class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription {
 //        Logger.getLogger(Socket::class.java.name).level = Level.ALL
 //        Logger.getLogger(SocketHandler::class.java.name).level = Level.ALL
 //        Logger.getLogger(Manager::class.java.name).level = Level.ALL
-
+		
 		if (isUserLoggedInUseCase()) {
 			startLocationService()
 			//recognizer.initRecorder()
 		}
 		Timber.tag("alert_notif_ID").i("main activity on create")
 	}
-
+	
 	override fun startVoiceRecord() {
 		recognizer.startRecord()
 	}
-
+	
 	override fun stopVoiceRecord() {
 		recognizer.stopRecord()
 	}
-
+	
 	override fun onStop() {
 		super.onStop()
 		recognizer.destroy()
 	}
-
+	
 	override fun onResume() {
 		super.onResume()
 		if (isUserLoggedInUseCase()) {
 			//startVoiceRecord()
 		}
 	}
-
+	
 	fun startLocationService() {
 		if (isUserLoggedInUseCase()) {
 			Intent(applicationContext, LocationService::class.java).apply {
 				action = ACTION_START
 				startService(this)
 			}
-
+			
 		}
 	}
-
+	
 	private fun stopLocationService() {
 		Intent(applicationContext, LocationService::class.java).apply {
 			action = ACTION_STOP
 			startService(this)
 		}
-
+		
 	}
-
+	
 	override fun onDestroy() {
 		stopLocationService()
 		SocketHandler.closeConnection()
 		recognizer.destroy()
 		super.onDestroy()
 	}
-
+	
 	private fun navigateByDirection(direction: NavigationDirection) {
 		navHost?.navController?.navigateByDirection(direction)
 	}
-
-
+	
+	
 	fun showBottomNavBar(isVisible: Boolean) {
 		binding.navBarGroup.isVisible = isVisible
 	}
-
+	
 	override fun onNewIntent(intent: Intent?) {
 		super.onNewIntent(intent)
 		this.intent = intent
 		getNewIntentLogic(intent)
 		Timber.tag("alert_notif_ID").i("main activity onNewIntent")
 	}
-
+	
 	private fun getNewIntentLogic(intent: Intent?) {
 		// Timber.d("message received new logic intent ${intent}")
-
+		
 		intent?.extras?.let { extras ->
 			Timber.tag("alert_notif_ID")
 				.i("main activity userId ${extras.getInt(CCFireBaseMessagingService.EXTRAS_NOTIFICATION_ALERT_ID)}")
-
+			
 			extras.getInt(CCFireBaseMessagingService.EXTRAS_NOTIFICATION_ALERT_ID).takeIf { it > 0 }
 				?.let { alertId ->
 					Timber.tag("alert_notif_ID").i("main activity userId $alertId")
-
+					
 					CCFireBaseMessagingService.cancelAlertProgress()
 					(getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(
 						CCFireBaseMessagingService.NOTIFICATION_ALERT_ID + alertId
@@ -201,12 +200,11 @@ class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription {
 						navHost?.navController?.navigate("civilcam://liveMapFragment/$alertId".toUri())
 					}, 500)
 				}
-
+			
 			extras.getInt(CCFireBaseMessagingService.EXTRAS_NOTIFICATION_REQUEST_ID_KEY)
-				.takeIf { it > 0 }
-				?.let { requestId ->
+				.takeIf { it > 0 }?.let { requestId ->
 					Timber.tag("alert_notif_ID").i("main activity userId $requestId")
-
+					
 					CCFireBaseMessagingService.cancelRequestProgress()
 					(getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(
 						CCFireBaseMessagingService.NOTIFICATION_REQUESTS_ID + requestId
@@ -220,8 +218,8 @@ class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription {
 				}
 		}
 	}
-
-
+	
+	
 	override fun subscriptionEnd() {
 		if (isUserLoggedInUseCase()) {
 			setExpiredSubscriptionUseCase()
@@ -238,7 +236,7 @@ class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription {
 			}
 		}
 	}
-
+	
 	companion object {
 		const val EXTRA_DIRECTION = "extra_nav_direction"
 	}
