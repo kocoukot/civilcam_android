@@ -309,13 +309,22 @@ class NetworkMainViewModel(
             networkRequest(
                 action = { askToGuardUseCase(user.personId) },
                 onSuccess = {
-                    var contactsModel =
-                        getState().data.searchScreenSectionModel
+                    var contactsModel = getState().data.searchScreenSectionModel
+                    val phonesList = getState().data.contactsList
+                    phonesList.apply {
+                        find { it.contactId == user.personId }?.let {
+                            it.status = GuardianStatus.PENDING
+                            return@apply
+                        }
+                    }
                     contactsModel =
                         contactsModel.copy(pendingList = contactsModel.pendingList + listOf(user.personId))
                     updateInfo {
                         copy(
-                            data = getState().data.copy(searchScreenSectionModel = contactsModel)
+                            data = getState().data.copy(
+                                searchScreenSectionModel = contactsModel,
+                                contactsList = phonesList
+                            )
                         )
                     }
                 },
