@@ -48,20 +48,20 @@ fun SubscriptionSettingsContent(
 
 		ProfileRow(
 			title = stringResource(id = R.string.settings_manage_subscription_plan),
-			needDivider = true,
+			needDivider = false,
 			rowClick = { onAction.invoke(SettingsActions.GoSubscriptionManage) }
 		)
 
 
-		ProfileRow(
-			title = stringResource(id = R.string.settings_restore_purchase),
-			titleColor = CCTheme.colors.primaryRed,
-			needDivider = false,
-			needRow = false,
-			rowClick = {
-				onAction.invoke(SettingsActions.ClickRestoreSubs)
-			}
-		)
+//		ProfileRow(
+//			title = stringResource(id = R.string.settings_restore_purchase),
+//			titleColor = CCTheme.colors.primaryRed,
+//			needDivider = false,
+//			needRow = false,
+//			rowClick = {
+//				onAction.invoke(SettingsActions.ClickRestoreSubs)
+//			}
+//		)
 		RowDivider()
 	}
 }

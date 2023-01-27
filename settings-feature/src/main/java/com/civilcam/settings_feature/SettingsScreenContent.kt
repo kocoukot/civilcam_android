@@ -205,8 +205,6 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 					SubscriptionSettingsContent(
 						subscriptionPlan = state.value.data.subscriptionData,
 						onAction = viewModel::setInputActions,
-						onRestoreClicked = {},
-						onSubscriptionPlanClick = {},
 					)
 				}
 
