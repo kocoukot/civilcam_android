@@ -166,4 +166,5 @@ dependencies {
     implementation project(path: ':alert-feature')
     implementation project(path: ':settings-feature')
     implementation project(path: ':socket-feature')
+    implementation project(path: ':billing-service')
 }

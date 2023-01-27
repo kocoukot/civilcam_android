@@ -10,6 +10,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.android.billingclient.api.ProductDetails
 import com.civilcam.R
+import com.civilcam.billing_service.BillingClientService
+import com.civilcam.billing_service.BillingEvent
 import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.common.ext.showAlertDialogFragment
 import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
@@ -22,8 +24,6 @@ import com.civilcam.ext_features.navController
 import com.civilcam.ext_features.requireArg
 import com.civilcam.ui.auth.pincode.PinCodeFragment
 import com.civilcam.ui.auth.pincode.model.PinCodeFlow
-import com.civilcam.ui.subscription.model.BillingClientService
-import com.civilcam.ui.subscription.model.BillingEvent
 import com.civilcam.ui.subscription.model.SubscriptionActions
 import com.civilcam.ui.subscription.model.SubscriptionRoute
 import org.koin.android.ext.android.inject
@@ -39,12 +39,15 @@ class SubscriptionFragment : Fragment(), BillingEvent {
 	private val useSubState: UserSubscriptionState by requireArg(ARG_FLOW)
 	
 	private val billService by lazy {
-		BillingClientService(requireContext(), requireActivity(), this@SubscriptionFragment)
+		BillingClientService(this@SubscriptionFragment)
 	}
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		billService.initializeBillingClient(getLocalCurrentUserUseCase.invoke()?.sessionUser?.id.toString())
+		billService.initializeBillingClient(
+			getLocalCurrentUserUseCase.invoke()?.sessionUser?.id.toString(),
+			requireContext()
+		)
 	}
 	
 	override fun onCreateView(
@@ -79,7 +82,7 @@ class SubscriptionFragment : Fragment(), BillingEvent {
 	}
 	
 	private fun launchPurchase(purchase: ProductDetails) {
-		billService.launchPurchaseFlow(purchase)
+		billService.launchPurchaseFlow(purchase, requireActivity())
 	}
 	
 	override fun onResume() {

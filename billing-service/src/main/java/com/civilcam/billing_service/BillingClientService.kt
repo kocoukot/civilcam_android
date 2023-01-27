@@ -1,35 +1,32 @@
-package com.civilcam.ui.subscription.model
+package com.civilcam.billing_service
 
 import android.app.Activity
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import com.android.billingclient.api.*
-import com.civilcam.ui.subscription.model.BillingClientService.PRODUCT.BOUGHT_SUB
-import com.google.common.collect.ImmutableList
+import com.civilcam.billing_service.BillingClientService.PRODUCT.BOUGHT_SUB
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
 class BillingClientService(
-	private val mContext: Context,
-	private val mActivity: Activity,
+//	private val
+//	private val ,
 	private val billingEvent: BillingEvent
 ) {
 	
 	private lateinit var billingClient: BillingClient
 	private lateinit var userId: String
-	
-	fun initializeBillingClient(id: String) {
+
+	fun initializeBillingClient(id: String, mContext: Context) {
 		userId = id
 		billingClient = BillingClient.newBuilder(mContext).setListener(purchasesUpdatedListener)
 			.enablePendingPurchases().build()
 		establishConnection()
-
-
 	}
 
 	// launch product buy
-	fun launchPurchaseFlow(productDetails: ProductDetails) {
+	fun launchPurchaseFlow(productDetails: ProductDetails, mActivity: Activity) {
 		BOUGHT_SUB.find { bought ->
 			bought.products.first() == productDetails.productId
 		}?.let { purchase ->
@@ -122,7 +119,7 @@ class BillingClientService(
 	
 	private fun showProducts() {
 		val queryProductDetailsParams = QueryProductDetailsParams.newBuilder().setProductList(
-			ImmutableList.of(
+			listOf(
 				QueryProductDetailsParams.Product.newBuilder().setProductId(PRODUCT.PREMIUM_MONTHLY)
 					.setProductType(BillingClient.ProductType.SUBS).build(),
 				QueryProductDetailsParams.Product.newBuilder().setProductId(PRODUCT.PREMIUM_YEARLY)
@@ -138,6 +135,10 @@ class BillingClientService(
 			}
 		}
 
+		fetchBoughtSubs {}
+	}
+
+	fun fetchBoughtSubs(subs: (List<ProductDetails>) -> Unit) {
 		billingClient.queryPurchasesAsync(
 			QueryPurchasesParams
 				.newBuilder()
@@ -153,7 +154,8 @@ class BillingClientService(
 		}
 	}
 
-	private object PRODUCT {
+
+	object PRODUCT {
 		const val PREMIUM_MONTHLY = "monthly5"
 		const val PREMIUM_YEARLY = "yearly50"
 		lateinit var BOUGHT_SUB: List<Purchase>
@@ -161,7 +163,10 @@ class BillingClientService(
 }
 
 interface BillingEvent {
-	fun onProductListReady(list: List<ProductDetails>)
-	fun setPurchaseToken(token: String)
-	fun onConnectionError(message: String)
+	fun onProductListReady(list: List<ProductDetails>) {
+
+	}
+
+	fun setPurchaseToken(token: String) {}
+	fun onConnectionError(message: String) {}
 }

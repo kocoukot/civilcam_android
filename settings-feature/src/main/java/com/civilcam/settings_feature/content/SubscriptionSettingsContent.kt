@@ -22,8 +22,6 @@ import com.civilcam.settings_feature.model.SettingsActions
 fun SubscriptionSettingsContent(
 	subscriptionPlan: SubscriptionBaseInfo,
 	onAction: (SettingsActions) -> Unit,
-	onRestoreClicked: () -> Unit,
-	onSubscriptionPlanClick: () -> Unit,
 ) {
 
 	LaunchedEffect(key1 = true) {
@@ -40,7 +38,7 @@ fun SubscriptionSettingsContent(
 
 		SubscriptionStatus(
 			subscriptionPlan = subscriptionPlan,
-			rowClick = { onSubscriptionPlanClick.invoke() }
+			rowClick = {}
 		)
 		RowDivider()
 
@@ -60,7 +58,9 @@ fun SubscriptionSettingsContent(
 			titleColor = CCTheme.colors.primaryRed,
 			needDivider = false,
 			needRow = false,
-			rowClick = onRestoreClicked
+			rowClick = {
+				onAction.invoke(SettingsActions.ClickRestoreSubs)
+			}
 		)
 		RowDivider()
 	}
