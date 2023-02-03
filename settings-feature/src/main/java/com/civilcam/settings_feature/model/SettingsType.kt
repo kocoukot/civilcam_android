@@ -6,7 +6,10 @@ import com.civilcam.settings_feature.R
 enum class SettingsType(@StringRes val rowTitle: Int, @StringRes val actionBtnTitle: Int) {
     MAIN(R.string.settings_title, com.civilcam.ext_features.R.string.empty_string),
 
-    ALERTS(R.string.settings_alerts, com.civilcam.ext_features.R.string.empty_string),
+    ALERTS(
+        com.civilcam.domainLayer.R.string.alerts_root_list_title,
+        com.civilcam.ext_features.R.string.empty_string
+    ),
     SUBSCRIPTION(R.string.settings_subscription, com.civilcam.ext_features.R.string.empty_string),
     CHANGE_PASSWORD(
         R.string.settings_change_password,

@@ -114,7 +114,7 @@ class CCFireBaseMessagingService : FirebaseMessagingService(), KoinComponent {
         alertId: Int = 0,
     ) {
         val channelId = "${context.packageName}-${NotificationType.COMMON.notifyName}"
-        val notificationTitle = context.getString(R.string.notification_safe_title)
+        val notificationTitle = context.getString(R.string.notification_alert_title)
 
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
         notificationBuilder.apply {

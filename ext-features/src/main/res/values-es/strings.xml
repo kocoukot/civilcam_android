@@ -1,40 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="continue_text">"Continuar"</string>
-    <string name="back_text">Atrás</string>
+    <string name="continue_text">Continuar</string>
+    <string name="back_text">Volver</string>
     <string name="cancel_text_caps">CANCELAR</string>
-    <string name="ok_text_caps">OK</string>
+    <string name="ok_text_caps">Ok</string>
     <string name="save_text">Guardar</string>
-    <string name="show_title">Show</string>
-    <string name="hide">Hide</string>
-    <string name="yes_text_caps">YES</string>
-    <string name="confirm_text_caps">CONFIRM</string>
-    <string name="resolve_text_caps">RESOLVE</string>
-    <string name="create_password">Create password</string>
-    <string name="password">Password</string>
-
-    <string name="verification_code">Verification code</string>
+    <string name="show_title">Demostrar</string>
+    <string name="hide">Ocultar</string>
+    <string name="yes_text_caps">Sí</string>
+    <string name="confirm_text_caps">CONFIRMAR</string>
+    <string name="resolve_text_caps">RESOLVER</string>
+    <string name="create_password">Crear contraseña</string>
+    <string name="password">Contraseña</string>
+    <string name="verification_code">Código de verificación</string>
     <string name="verification_code_placeholder">000 000</string>
-    <string name="otp_error_code">OTP code is incorrect or has expired. Please try to retype or resend the code</string>
+    <string name="otp_error_code">El código OTP es incorrecto o ha caducado. Intente volver a escribir o reenviar el código</string>
 
-    <string name="invalid_email">Invalid email. Please try again. (eg:email@gmail.com)</string>
-    <string name="profile_setup_phone_number_label">Phone number</string>
+    <string name="invalid_email">Correo electrónico no válido. Por favor, inténtelo de nuevo. (eg:email@gmail.com)</string>
+    <string name="profile_setup_phone_number_label">Número de teléfono</string>
     <string name="profile_setup_phone_number_placeholder">(123) 456 7890</string>
-    <string name="profile_setup_phone_error">Please, enter a valid phone number</string>
+    <string name="profile_setup_phone_error">Por favor, introduzca un número de teléfono válido</string>
 
-    <string name="contact_support_alert_sent_text">Your message has been sent. Our support team will answer your ASAP</string>
-    <string name="password_changed_alert_text">Your password has been changed successfully! Now you can log in with your new password</string>
-    <string name="pincode_changed_alert_text">Your pin-code has been successfully changed. Please remember it.</string>
-    <string name="emergency_live_title">Live</string>
+    <string name="contact_support_alert_sent_text">Su mensaje ha sido enviado. Nuestro equipo de soporte responderá a su pregunta lo antes posible</string>
+    <string name="password_changed_alert_text">Su contraseña ha sido cambiada con éxito! Ahora puede iniciar sesión con su nueva contraseña</string>
+    <string name="pincode_changed_alert_text">Su código PIN se ha cambiado correctamente. Por favor, recuérdalo.</string>
+    <string name="emergency_live_title">Vivir</string>
 
-    <string name="password_should_contain">Password should contain:</string>
-    <string name="password_should_contain_number">• 1 number</string>
+    <string name="password_should_contain">La contraseña debe contener:</string>
+    <string name="password_should_contain_number">• 1 número</string>
     <string name="password_should_contain_letter">• 1 capital letter</string>
-    <string name="password_should_contain_lowercase">• 1 lowercase letter</string>
-    <string name="password_should_contain_char">• 8 characters</string>
-    <string name="password_should_contain_special_char">• 1 special character</string>
+    <string name="password_should_contain_lowercase">• 1 letra minúscula</string>
+    <string name="password_should_contain_char">• 8 simbolo</string>
+    <string name="password_should_contain_special_char">• 1 carácter especial</string>
 
-    <string name="confirm_password">Confirm password</string>
-    <string name="re_enter_password">Re-enter password</string>
+    <string name="confirm_password">Confirmar contraseña</string>
+    <string name="re_enter_password">Vuelva a introducir la contraseña</string>
 
 </resources>

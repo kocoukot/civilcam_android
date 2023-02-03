@@ -73,7 +73,7 @@ fun AlertsListScreenContent(viewModel: AlertsListViewModel) {
 
 
                 TopAppBarContent(
-                    title = stringResource(id = R.string.alerts_root_list_title),
+                    title = stringResource(id = com.civilcam.domainLayer.R.string.alerts_root_list_title),
                     navigationItem = {
                         state.value.userAvatar?.imageUrl?.let { url ->
                             AvatarButton(url) {

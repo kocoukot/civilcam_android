@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="terms_conditions_terms_button"><![CDATA[Terms & Conditions]]></string>
-    <string name="terms_conditions_privacy_button">Privacy Policy</string>
+    <string name="terms_conditions_terms_button"><![CDATA[Términos y Condiciones]]></string>
+    <string name="terms_conditions_privacy_button">Política de Privacidad</string>
 
-    <string name="email_verification">Email verification</string>
-    <string name="phone_verification">Phone verification</string>
-    <string name="verification_title">Verification</string>
+    <string name="email_verification">Verificación de correo electrónico</string>
+    <string name="phone_verification">Verificación telefónica</string>
+    <string name="verification_title">Verificación</string>
 
-    <string name="emergency_map_title">Map</string>
-    <string name="emergency_live_stream_title">Live stream</string>
+    <string name="emergency_map_title">Asignar</string>
+    <string name="emergency_live_stream_title">Transmisión en vivo</string>
 
-    <string name="alert_map_title_user_in_danger">User in danger</string>
+    <string name="alert_map_title_user_in_danger">Usuario en peligro</string>
+
+    <string name="alerts_root_list_title">Alerta</string>
 
 </resources>

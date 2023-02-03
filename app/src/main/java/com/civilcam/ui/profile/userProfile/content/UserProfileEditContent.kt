@@ -70,17 +70,17 @@ fun UserProfileEditContent(
 		val calendarColor =
 			animateColorAsState(targetValue = if (dateOfBirth.isEmpty()) CCTheme.colors.grayOne else CCTheme.colors.primaryRed)
 		InputField(
-			isEnable = false,
-			text = dateOfBirth,
-			trailingIcon = { CalendarIcon(calendarColor.value) },
-			title = stringResource(id = R.string.profile_setup_date_of_birth_label),
-			placeHolder = stringResource(id = R.string.profile_setup_date_of_birth_placeholder),
-			onTextClicked = {
-				onActionClicked.invoke(UserProfileActions.ClickDateSelect)
-			},
-			onValueChanged = {},
-			isReversed = true
-		)
+            isEnable = false,
+            text = dateOfBirth,
+            trailingIcon = { CalendarIcon(calendarColor.value) },
+            title = stringResource(id = R.string.profile_setup_date_of_birth),
+            placeHolder = stringResource(id = R.string.profile_setup_date_of_birth_placeholder),
+            onTextClicked = {
+                onActionClicked.invoke(UserProfileActions.ClickDateSelect)
+            },
+            onValueChanged = {},
+            isReversed = true
+        )
 		
 		Spacer(
 			modifier = Modifier

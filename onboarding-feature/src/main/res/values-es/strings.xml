@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="onboarding_page_one_title">Safety network</string>
-    <string name="onboarding_page_one_text">If you are worried about someone, become his guardian and be sure that if something happens - you can always help</string>
-    <string name="onboarding_page_two_title">Emergency situations</string>
-    <string name="onboarding_page_two_text">Wherever and whenever your loved ones need help, you’ll be able to know their location and how to help them.</string>
-    <string name="onboarding_page_three_title">Stay safe</string>
-    <string name="onboarding_page_three_text">It\'s never too safe, take care of yourself and your loved ones with CivilCam\n</string>
-    <string name="get_start_text">Empezar</string>
+    <string name="onboarding_page_one_title">Red de seguridad</string>
+    <string name="onboarding_page_one_text">Si está preocupado por alguien, conviértase en su tutor y asegúrese de que si algo sucede, siempre puede ayudar</string>
+    <string name="onboarding_page_two_title">Situaciones de emergencia</string>
+    <string name="onboarding_page_two_text">Dondequiera y cuando sus seres queridos necesiten ayuda, podrá conocer su ubicación y cómo ayudarlos.</string>
+    <string name="onboarding_page_three_title">Mantente a salvo</string>
+    <string name="onboarding_page_three_text">Nunca es demasiado seguro, cuídate a ti mismo y a tus seres queridos con CivilCalm</string>
+    <string name="get_start_text">Comience</string>
+
 
 </resources>

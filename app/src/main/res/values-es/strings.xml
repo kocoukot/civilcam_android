@@ -3,169 +3,148 @@
     <string name="app_name">CivilCam</string>
 
     <string name="and_text">y</string>
-    <string name="decline_text">Rechazar</string>
+    <string name="decline_text">Disminuir</string>
     <string name="accept_text">Aceptar</string>
-
     <string name="search_text">Buscar</string>
     <string name="add_text">Añadir</string>
     <string name="pending_text">Pendiente</string>
     <string name="invite_text">Invitar</string>
 
-    <!--    translate-->
-    <string name="invite_sent_text">Invite sent</string>
+    <string name="invite_sent_text">Invitación enviada</string>
 
-    <string name="phone_number_text">Phone number</string>
-    <string name="phone_number_placeholder">(123) 456 7890</string>
-
-    <string name="terms_conditions_title"><![CDATA[Terms & Conditions]]>\nand Privacy Policy</string>
-    <string name="terms_conditions_subtitle">It\'s never too safe, take care of yourself and your loved ones with CivilCam\n</string>
+    <string name="terms_conditions_title">Términos y Condiciones\ny Política de Privacidad</string>
+    <string name="terms_conditions_subtitle">Nunca es demasiado seguro, cuídate a ti mismo y a tus seres queridos con CivilCalm\n</string>
     <string name="terms_conditions_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem sit lacus nisl donec egestas amet id consequat. Ut velit accumsan in lorem lectus et quis.</string>
-    <string name="terms_conditions_i_agree">I agree to the</string>
+    <string name="terms_conditions_i_agree">Estoy de acuerdo con el</string>
 
-    <string name="navigation_bar_network">Network</string>
-    <string name="navigation_bar_emergency">Emergency</string>
-    <string name="navigation_bar_alerts">Alerts</string>
+    <string name="navigation_bar_network">Red</string>
+    <string name="navigation_bar_emergency">Emergencia</string>
 
-    <string name="profile_setup_title">Set up your account</string>
-    <string name="profile_setup_upload_photo">Upload photo</string>
-    <string name="profile_setup_change_photo">Change photo</string>
-    <string name="profile_setup_first_name_label">First name</string>
-    <string name="profile_setup_first_name_placeholder">Enter your first name</string>
-    <string name="profile_setup_last_name_label">Last name</string>
-    <string name="profile_setup_last_name_placeholder">Enter your last name</string>
-    <string name="profile_setup_date_of_birth_label">Date of birth</string>
+    <string name="profile_setup_title">Configura tu cuenta</string>
+    <string name="profile_setup_upload_photo">Subir foto</string>
+    <string name="profile_setup_change_photo">Cambiar foto</string>
+    <string name="profile_setup_first_name_label">Nombre de pila</string>
+    <string name="profile_setup_first_name_placeholder">Introduzca su nombre</string>
+    <string name="profile_setup_last_name_label">Apellido</string>
+    <string name="profile_setup_last_name_placeholder">Ingrese su apellido</string>
     <string name="profile_setup_date_of_birth_placeholder">MM.DD.YYYY</string>
-    <string name="profile_setup_address_label">Address (Street, City, State, Zip)</string>
+    <string name="profile_setup_address_label">Dirección (Calle, Ciudad, Estado, Código postal)</string>
     <string name="profile_setup_address_placeholder">eg: 1456 Broadway, New York, NY, 10023</string>
-    <string name="profile_setup_date_of_birth">Date of birth</string>
+    <string name="profile_setup_date_of_birth">Fecha de nacimiento</string>
 
-    <string name="profile_setup_address_select_title">Address</string>
+    <string name="profile_setup_address_select_title">Dirección</string>
 
-    <string name="user_details_title">Add guardians</string>
-    <string name="user_details_ask_to_guard">Ask to guard</string>
-    <string name="user_details_stop_guarding">Stop guarding</string>
-    <string name="user_details_remove_gaurdian">Remove guardian</string>
-    <string name="user_details_request_text"> needs you as a guardian</string>
+    <string name="user_details_title">Añadir guardianes</string>
+    <string name="user_details_ask_to_guard">Pedir a la guardia</string>
+    <string name="user_details_stop_guarding">Deja de vigilar</string>
+    <string name="user_details_remove_gaurdian">Quitar guardián</string>
+    <string name="user_details_request_text">te necesita como tutor</string>
+    <string name="user_details_alert_remove_guard">Esta persona ya no recibirá sus alertas.</string>
+    <string name="user_details_alert_stop_guarding">Ya no recibirás alertas de este usuario</string>
+    <string name="create_account">Crear cuenta</string>
+    <string name="create_account_email_label">Correo</string>
+    <string name="create_account_email_placeholder">Tu correo electrónico</string>
+    <string name="already_have_account">Ya tienes una cuenta?</string>
+    <string name="log_in">Iniciar sesión</string>
 
-    <string name="user_details_alert_remove_guard">This person will no longer receive your alerts.</string>
-    <string name="user_details_alert_stop_guarding">You will no longer receive alerts from this user</string>
-
-    <string name="create_account">Create account</string>
-    <string name="create_account_email_label">Email</string>
-    <string name="create_account_email_placeholder">Your email</string>
-    <string name="already_have_account">Already have an account?</string>
-    <string name="log_in">Log in</string>
-
-    <string name="email_verification">Email verification</string>
-    <string name="phone_verification">Phone verification</string>
-    <string name="reset_password">Reset password</string>
-    <string name="code_sent_title">The code was sent to</string>
-    <string name="code_arrive">It should arrive within one minute</string>
-    <string name="resend_code">Resend code</string>
-    <string name="otp_code_timer">Resend code in %s seconds</string>
-    <string name="password_no_match">Passwords don’t match, please check and try again</string>
-    <string name="dont_have_account">Don’t have an account?</string>
-    <string name="register">Register</string>
-    <string name="your_password">Your password</string>
-    <string name="digit_verification_code">We’ll send a 6 digit verification code</string>
-    <string name="save_password">Save password</string>
-    <string name="create_new_password">Create new password</string>
+    <string name="reset_password">Restablecer contraseña</string>
+    <string name="code_sent_title">El código se envió a</string>
+    <string name="code_arrive">Debería llegar en un minuto</string>
+    <string name="resend_code">Reenviar código</string>
+    <string name="otp_code_timer">Reenvío de código en %s segundos</string>
+    <string name="password_no_match">Las contraseñas no coinciden, compruébalo e inténtalo de nuevo</string>
+    <string name="dont_have_account">No tiene una cuenta?</string>
+    <string name="register">Registrar</string>
+    <string name="your_password">Su contraseña</string>
+    <string name="digit_verification_code">Le enviaremos un código de verificación de 6 dígitos</string>
+    <string name="save_password">Guardar contraseña</string>
+    <string name="create_new_password">Crear nueva contraseña</string>
     <string name="verification_phone_mask">+1%s</string>
 
-    <string name="add_from_contacts_title">Contactos</string>
-    <string name="add_from_contacts_invite_by">Invite by number</string>
+    <string name="add_from_contacts_title">Contacto</string>
+    <string name="add_from_contacts_invite_by">Invitar por número</string>
 
-    <string name="invite_by_number_title">Invite by number</string>
-    <string name="invite_by_number_hint">Send an invite to the number that is not on your contact list</string>
-    <string name="invite_by_number_sent">Invite has been sent to</string>
+    <string name="invite_by_number_hint">Enviar una invitación al número que no está en tu lista de contactos</string>
+    <string name="invite_by_number_sent">La invitación se ha enviado a</string>
 
-    <string name="network_main_on_guard">On guard</string>
-    <string name="network_main_guardians">Guardians</string>
-    <string name="network_main_on_guard_list_is_empty">Your “On guard” list is empty</string>
-    <string name="network_main_guardians_list_is_empty">Your “Guardians” list is empty</string>
-    <string name="network_main_requests">Requests</string>
-    <string name="network_main_new_requests">You have new requests</string>
-    <string name="network_main_declined">Declined</string>
-    <string name="network_main_help_me">Help me!</string>
-    <string name="network_main_safe">Safe</string>
-    <string name="pin_code_confirm_title">Confirm your pin-code</string>
-    <string name="pin_code_create_title">Create your pin-code</string>
+    <string name="network_main_on_guard">En guardia</string>
+    <string name="network_main_guardians">Tutor</string>
+    <string name="network_main_on_guard_list_is_empty">Su lista de "En guardia" está vacía</string>
+    <string name="network_main_guardians_list_is_empty">Su lista de "Guardianes" está vacía</string>
+    <string name="network_main_requests">Peticiones</string>
+    <string name="network_main_new_requests">Tiene nuevas solicitudes</string>
+
+    <string name="network_main_declined">Disminuir</string>
+    <string name="network_main_help_me">Ayúdame!</string>
+    <string name="network_main_safe">Seguro</string>
+    <string name="pin_code_confirm_title">Confirme su código pin</string>
+    <string name="pin_code_create_title">Crea tu código pin</string>
 
     <string name="emergency_screen_sos">SOS</string>
-    <string name="emergency_screen_safe">I’m safe</string>
+    <string name="emergency_screen_safe">Estoy a salvo</string>
 
-    <string name="add_guardian_title">Add guardians</string>
-    <string name="add_guardian_search_title">Find your friends</string>
-    <string name="add_guardian_search_text">See which of your contacts are on CivilCam</string>
-    <string name="add_guardian_header_title">Global search</string>
-    <string name="pin_code_re_enter_title">Re-enter your pin-code</string>
-    <string name="pin_code_description">This code will be used to disable emergency state. Please memorize this pin.</string>
-    <string name="verification_title">Verification</string>
-    <string name="pin_code_no_match_title">Pin-codes do not match. Try again or go back and enter a different pin</string>
-    <string name="user_profile_change_image">Change profile image</string>
-    <string name="user_profile_pin_code_title">Pin-code</string>
-    <string name="user_profile_edit_title">Edit</string>
-    <string name="change_credentials_pin_code_title">Pin-code</string>
-    <string name="change_credentials_pin_code_confirm_title">Confirm Pin-code</string>
-    <string name="user_profile_change_profile_image_title">Change profile image</string>
-    <string name="pin_code_new_title">New Pin-code</string>
-    <string name="pin_code_confirm_new_title">Confirm Pin-code</string>
-    <string name="pin_code_current_title">Enter your current Pin-code</string>
-    <string name="pin_code_enter_new_title">Enter your new Pin-code</string>
-    <string name="pin_code_re_enter_new_title">Re-enter your new Pin-code</string>
-    <string name="pin_code_is_incorrect_title">Pin-code is incorrect</string>
-    <string name="pin_code_new_no_match_title">Pin-codes don’t match</string>
+    <string name="add_guardian_search_title">Encuentra a tus amigos</string>
+    <string name="add_guardian_search_text">Vea cuáles de sus contactos están en CivilCam</string>
+    <string name="add_guardian_header_title">Búsqueda global</string>
+    <string name="pin_code_re_enter_title">Vuelva a introducir su código PIN</string>
+    <string name="pin_code_description">Este código se utilizará para desactivar el estado de emergencia. Por favor, memorice este pin.</string>
 
-    <string name="start_text">Start!</string>
-    <string name="subscription_options_title">Subscription options</string>
-    <string name="subscription_no_commitment_title">No commitment. Cancel anytime.</string>
-    <string name="subscription_safety_network">"Safety network "</string>
-    <string name="subscription_emergency_alert">Emergency alert</string>
-    <string name="subscription_live_stream">Emergency live stream</string>
-    <string name="subscription_safety_map">Safety map</string>
-    <string name="subscription_detailed_alert">Alert detailed data</string>
+    <string name="pin_code_no_match_title">Los códigos PIN no coinciden. Inténtalo de nuevo o vuelve atrás e introduce un PIN diferente</string>
+    <string name="user_profile_change_image">Cambiar imagen de perfil</string>
+    <string name="user_profile_pin_code_title">Código PIN</string>
+    <string name="user_profile_edit_title">Editar</string>
+    <string name="change_credentials_pin_code_title">Código PIN</string>
+    <string name="change_credentials_pin_code_confirm_title">Confirmar código Pin</string>
+    <string name="user_profile_change_profile_image_title">Cambiar imagen de perfil</string>
+    <string name="pin_code_new_title">Nuevo código Pin</string>
+    <string name="pin_code_confirm_new_title">Confirmar código Pin</string>
+    <string name="pin_code_current_title">Ingrese su código Pin actual</string>
+    <string name="pin_code_enter_new_title">Ingrese su nuevo código Pin</string>
+    <string name="pin_code_re_enter_new_title">Vuelva a ingresar su nuevo código Pin</string>
+    <string name="pin_code_is_incorrect_title">El código PIN es incorrecto</string>
+    <string name="pin_code_new_no_match_title">Los códigos PIN no coinciden</string>
 
-    <string name="subscription_purchase_fail_title">Purchase failed</string>
-    <string name="subscription_purchase_fail_description">There was an error while making this purchase. Please try again.</string>
-    <string name="subscription_purchase_success_title">Welcome to CivilCam family!</string>
-    <string name="subscription_purchase_success_description">Your purchase was successful.</string>
-    <string name="subscriptions_change_plan">Change plan</string>
-    <string name="subscriptions_resubscribe_plan">Subscribe!</string>
+    <string name="start_text">Empieza!</string>
+    <string name="subscription_options_title">Opciones de suscripción</string>
+    <string name="subscription_no_commitment_title">Sin compromiso. Cancela en cualquier momento.</string>
+    <string name="subscription_safety_network">Red de seguridad</string>
+    <string name="subscription_live_stream">Transmisión en vivo de emergencia</string>
+    <string name="subscription_safety_map">Mapa de seguridad</string>
+    <string name="subscription_detailed_alert">Alerta de datos detallados</string>
 
-    <string name="pin_code_enter_title">Enter pin-code</string>
-    <string name="notification_request_title">You received a request</string>
-    <string name="notification_request_text">needs you as a guardian</string>
+    <string name="subscription_purchase_fail_title">Error en la compra</string>
+    <string name="subscription_purchase_fail_description">Se ha producido un error al realizar esta compra. Por favor, inténtelo de nuevo.</string>
+    <string name="subscription_purchase_success_title">Bienvenido a la familia CivilCam!</string>
+    <string name="subscription_purchase_success_description">La compra se ha realizado correctamente.</string>
+    <string name="subscriptions_change_plan">Plan de cambio</string>
+    <string name="subscriptions_resubscribe_plan">Suscríbete!</string>
 
-    <string name="notification_safe_title">Emergency alert</string>
-    <string name="notification_safe_text">%s is safe now!</string>
+    <string name="pin_code_enter_title">Introduzca el código PIN</string>
+    <string name="notification_request_title">Ha recibido una solicitud</string>
+    <string name="notification_request_text">te necesita como tutor</string>
 
-    <string name="notification_alert_title">Emergency alert</string>
-    <string name="notification_alert_text">is in emergency and needs your help!</string>
-    <string name="notification_alert_details">Details</string>
+    <string name="notification_alert_title">Alerta de emergencia</string>
+    <string name="notification_safe_text">%s está a salvo ahora!</string>
 
-    <string name="something_went_wrong">Something went wrong!</string>
-    <string name="privacy_button">Privacy Policy</string>
-    <string name="terms_button"><![CDATA[Terms & Conditions]]></string>
-    <string name="change_credentials_current_email_title">Current email</string>
-    <string name="change_credentials_new_email_placeholder">Enter your new email</string>
-    <string name="change_credentials_new_email_title">New email</string>
-    <string name="user_profile_email_change_desc">Your email has been successfully changed. Now you can log in with new email </string>
-    <string name="user_profile_phone_change_desc">Your phone number has been changed. Now it will be displayed in your profile</string>
-    <string name="change_credentials_email_title">Change email</string>
-    <string name="verification_current_email_title">Current email verification</string>
-    <string name="verification_new_email_title">New email verification</string>
-    <string name="subscription_description">for $%.2f/%s</string>
-    <string name="subscription_trial_description">for 1 month</string>
+    <string name="notification_alert_text">está en una emergencia y necesita su ayuda!</string>
+    <string name="notification_alert_details">Detalles</string>
 
-    <string name="location_alert_title">Location permission</string>
-    <string name="location_alert_text">The app need your permission to track your location. Please go to settings and allow</string>
-
-    <string name="subscription_expired_alert_title">Subscription expired</string>
-    <string name="subscription_expired_alert_text">Your subscription has ended</string>
-
-    <string name="subscription_confirm_alert_title">Confirm purchase</string>
-    <string name="subscription_confirm_alert_text">Pay %s for monthly subscription plan starting %s</string>
-    <string name="emergency_toast_title">Tap "SOS" again to activate immediately</string>
-    <string name="emergency_toast_description">"After the emergency mode activation your network will see your help request"</string>
+    <string name="something_went_wrong">Algo salió mal!</string>
+    <string name="change_credentials_current_email_title">Correo electrónico actual</string>
+    <string name="change_credentials_new_email_placeholder">Ingrese su nuevo correo electrónico</string>
+    <string name="change_credentials_new_email_title">Nuevo correo electrónico</string>
+    <string name="user_profile_email_change_desc">Su correo electrónico ha sido cambiado con éxito. Ahora puede iniciar sesión con un nuevo correo electrónico</string>
+    <string name="user_profile_phone_change_desc">Su número de teléfono ha sido cambiado. Ahora se mostrará en su perfil</string>
+    <string name="change_credentials_email_title">Cambiar correo electrónico</string>
+    <string name="verification_current_email_title">Verificación de correo electrónico actual</string>
+    <string name="verification_new_email_title">Verificación de correo electrónico nuevo</string>
+    <string name="location_alert_title">Permiso de ubicación</string>
+    <string name="location_alert_text">La aplicación necesita su permiso para rastrear su ubicación. Por favor, vaya a configuración y permitir</string>
+    <string name="subscription_expired_alert_title">La suscripción ha caducado</string>
+    <string name="subscription_expired_alert_text">Su suscripción ha finalizado</string>
+    <string name="subscription_confirm_alert_title">Confirmar la compra</string>
+    <string name="subscription_confirm_alert_text">Pague %s por un plan de suscripción mensual a partir de %s</string>
+    <string name="emergency_toast_title">Toque "SOS" nuevamente para activarlo de inmediato</string>
+    <string name="emergency_toast_description">Después de la activación del modo de emergencia, su red verá su solicitud de ayuda</string>
 
 </resources>

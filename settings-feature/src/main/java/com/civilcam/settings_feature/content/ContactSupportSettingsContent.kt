@@ -81,7 +81,7 @@ fun ContactSupportContent(
             isEnable = !contactSupportModel.canChangeEmail,
             title = stringResource(id = R.string.settings_contact_reply_title),
             placeHolder = stringResource(id = R.string.settings_contact_reply_placeholder),
-            errorMessage = stringResource(id = R.string.settings_contact_error_text),
+            errorMessage = stringResource(id = com.civilcam.ext_features.R.string.invalid_email),
             hasError = isEmailError,
             onValueChanged = {
                 isEmailError = if (it.isEmpty()) false else !it.isEmail()

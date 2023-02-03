@@ -72,15 +72,15 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 				painter = painterResource(R.drawable.img_subscription_background),
 				contentDescription = null,
 				modifier = Modifier
-					.fillMaxWidth()
-					.align(Alignment.TopCenter),
+                    .fillMaxWidth()
+                    .align(Alignment.TopCenter),
 				contentScale = ContentScale.FillWidth
 			)
 			
 			IconActionButton(
 				modifier = Modifier
-					.padding(top = 24.dp, start = 16.dp)
-					.align(Alignment.TopStart),
+                    .padding(top = 24.dp, start = 16.dp)
+                    .align(Alignment.TopStart),
 				buttonIcon = R.drawable.ic_back_navigation, tint = CCTheme.colors.white
 			) {
 				viewModel.setInputActions(SubscriptionActions.GoBack)
@@ -100,8 +100,8 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 				),
 				backgroundColor = CCTheme.colors.white,
 				modifier = Modifier
-					.fillMaxWidth()
-					.navigationBarsPadding(),
+                    .fillMaxWidth()
+                    .navigationBarsPadding(),
 				elevation = 8.dp,
 			) {
 				Column(
@@ -130,18 +130,18 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 					)
 					
 					Column(
-						Modifier
-							.fillMaxWidth()
-							.padding(top = 16.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp),
 						horizontalAlignment = Alignment.Start
 					) {
 						for (textString in listOf(
-							stringResource(id = R.string.subscription_safety_network),
-							stringResource(id = R.string.subscription_emergency_alert),
-							stringResource(id = R.string.subscription_live_stream),
-							stringResource(id = R.string.subscription_safety_map),
-							stringResource(id = R.string.subscription_detailed_alert),
-						)) {
+                            stringResource(id = R.string.subscription_safety_network),
+                            stringResource(id = R.string.notification_alert_title),
+                            stringResource(id = R.string.subscription_live_stream),
+                            stringResource(id = R.string.subscription_safety_map),
+                            stringResource(id = R.string.subscription_detailed_alert),
+                        )) {
 							SubscriptionOption(textString)
 						}
 					}
@@ -175,8 +175,8 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 							}
 						),
 						modifier = Modifier
-							.fillMaxWidth()
-							.navigationBarsPadding(),
+                            .fillMaxWidth()
+                            .navigationBarsPadding(),
 						buttonClick = {
 							viewModel.setInputActions(
 								SubscriptionActions.OnSubSelect(
@@ -228,16 +228,16 @@ fun SubscriptionPlanRow(
 	val textColor = if (isActivated) CCTheme.colors.white else CCTheme.colors.grayOne
 	
 	Column(modifier = Modifier
-		.fillMaxWidth()
-		.padding(vertical = 6.dp)
-		.clip(RoundedCornerShape(8.dp))
-		.border(
-			1.dp, borderColor, RoundedCornerShape(8.dp)
-		)
-		.drawBehind {
-			drawRect(color = backgroundColor)
-		}
-		.clickable { onButtonClicked.invoke(subscriptionInfo) },
+        .fillMaxWidth()
+        .padding(vertical = 6.dp)
+        .clip(RoundedCornerShape(8.dp))
+        .border(
+            1.dp, borderColor, RoundedCornerShape(8.dp)
+        )
+        .drawBehind {
+            drawRect(color = backgroundColor)
+        }
+        .clickable { onButtonClicked.invoke(subscriptionInfo) },
 		horizontalAlignment = Alignment.Start
 	) {
 		
@@ -250,12 +250,12 @@ fun SubscriptionPlanRow(
 		
 		Text(
 			text = when (subscriptionInfo.productId) {
-				IN_APP_TRIAL -> stringResource(id = R.string.subscription_trial_description)
-				else -> stringResource(
-					id = R.string.subscription_description,
-					subscriptionInfo.cost / 100,
-					subscriptionInfo.unitType
-				)
+                IN_APP_TRIAL -> stringResource(id = com.civilcam.settings_feature.R.string.subscription_trial_description)
+                else -> stringResource(
+                    id = com.civilcam.settings_feature.R.string.subscription_description,
+                    subscriptionInfo.cost / 100,
+                    subscriptionInfo.unitType
+                )
 			},
 			style = CCTheme.typography.common_text_small_regular,
 			color = textColor,

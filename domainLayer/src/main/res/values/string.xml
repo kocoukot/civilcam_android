@@ -12,4 +12,6 @@
 
     <string name="alert_map_title_user_in_danger">User in danger</string>
 
+    <string name="alerts_root_list_title">Alerts</string>
+
 </resources>

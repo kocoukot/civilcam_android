@@ -59,8 +59,8 @@ fun SettingsScreenContent(viewModel: SettingsViewModel) {
 
 	Scaffold(
 		modifier = Modifier
-			.fillMaxSize()
-			.background(CCTheme.colors.lightGray),
+            .fillMaxSize()
+            .background(CCTheme.colors.lightGray),
 		backgroundColor = CCTheme.colors.lightGray,
 		topBar = {
 			Column(
@@ -225,7 +225,7 @@ private fun setAction(settingsType: SettingsType, selectedLang: LanguageType): S
 
 private fun screenTitle(settingsType: SettingsType) = when (settingsType) {
 	SettingsType.MAIN, SettingsType.LOG_OUT, SettingsType.TERMS_AND_POLICY, SettingsType.DELETE_ACCOUNT -> R.string.settings_title
-	SettingsType.CHANGE_PASSWORD -> R.string.settings_password_title
-	else -> settingsType.rowTitle
+    SettingsType.CHANGE_PASSWORD -> com.civilcam.ext_features.R.string.password
+    else -> settingsType.rowTitle
 }
 

@@ -17,7 +17,7 @@
         android:id="@+id/alerts_graph"
         android:icon="@drawable/ic_alerts"
         android:iconTint="@color/color_navbar_item"
-        android:title="@string/navigation_bar_alerts" />
+        android:title="@string/alerts_root_list_title" />
 </menu>
 
 

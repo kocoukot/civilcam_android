@@ -67,14 +67,14 @@ fun TermsScreenContent(viewModel: TermsViewModel) {
 
             ) {
                 Text(
-                    text = "Terms & Conditions\nand Privacy Policy",
+                    text = stringResource(id = R.string.terms_conditions_title),
                     style = CCTheme.typography.big_title,
                     modifier = Modifier.padding(bottom = 20.dp),
                     color = CCTheme.colors.grayOneDark
                 )
 
                 Text(
-                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem sit sit lacus nisl donec egestas amet id consequat. Ut velit accumsan in lorem lectus et quis.",
+                    text = stringResource(id = R.string.terms_conditions_text),
                     style = CCTheme.typography.common_text_regular,
                     color = CCTheme.colors.black
 

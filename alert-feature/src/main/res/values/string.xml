@@ -8,7 +8,7 @@
     <string name="alerts_list_received_empty_state">Your haven’t received alerts yet</string>
     <string name="alerts_list_sent_empty_state">Your haven’t sent alerts yet</string>
 
-    <string name="alerts_root_list_title">Alerts</string>
+<!--    <string name="alerts_root_list_title">Alerts</string>-->
     <string name="alerts_history_title">Alerts history</string>
 
     <string name="history_detail_title">Alert details</string>
@@ -19,7 +19,7 @@
     <string name="resolve_alert_title">Resolve alert</string>
     <string name="resolve_alert_text">Are you sure that you want to resolve this alert?</string>
 
-    <string name="alert_user_detail_title">User in danger</string>
+    <!--    <string name="alert_user_detail_title">User in danger</string>-->
     <string name="alert_user_detail_call">Call 911</string>
 
     <string name="alert_user_detail_request_sent">Request sent %s</string>

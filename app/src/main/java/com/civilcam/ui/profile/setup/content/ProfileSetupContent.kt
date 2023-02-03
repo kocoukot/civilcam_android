@@ -88,7 +88,7 @@ fun ProfileSetupContent(
                 isEnable = false,
                 text = dateOfBirth,
                 trailingIcon = { CalendarIcon(calendarColor.value) },
-                title = stringResource(id = R.string.profile_setup_date_of_birth_label),
+                title = stringResource(id = R.string.profile_setup_date_of_birth),
                 placeHolder = stringResource(id = R.string.profile_setup_date_of_birth_placeholder),
                 onTextClicked = {
                     setupAction(ProfileSetupActions.ClickDateSelect)

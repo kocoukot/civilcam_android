@@ -52,7 +52,7 @@ fun InviteByNumberScreenContent(viewModel: InviteByNumberViewModel) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 TopAppBarContent(
-                    title = stringResource(id = R.string.invite_by_number_title),
+                    title = stringResource(id = R.string.add_from_contacts_invite_by),
                     actionItem = {
                         TextActionButton(
                             actionTitle = stringResource(id = R.string.invite_text),
