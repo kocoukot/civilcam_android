@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -24,6 +25,7 @@ import com.civilcam.domainLayer.usecase.user.IsUserLoggedInUseCase
 import com.civilcam.ext_features.SupportBottomBar
 import com.civilcam.ext_features.arch.EndSubscription
 import com.civilcam.ext_features.arch.VoiceRecord
+import com.civilcam.ext_features.ext.LanguageCheck
 import com.civilcam.ext_features.setupWithNavController
 import com.civilcam.langselect.LanguageSelectFragment
 import com.civilcam.service.CCFireBaseMessagingService
@@ -44,11 +46,11 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 
-class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription {
+class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription, LanguageCheck {
 	private val isUserLoggedInUseCase: IsUserLoggedInUseCase by inject()
 	private val getLocalCurrentUserUseCase: GetLocalCurrentUserUseCase by inject()
 	private val setExpiredSubscriptionUseCase: SetExpiredSubscriptionUseCase by inject()
-	
+
 	private val recognizer = VoiceRecognition.Base(this) {
 		navHost?.navController?.navigateToRoot(
 			R.id.emergency_root, args = EmergencyFragment.createArgs(true)
@@ -91,7 +93,7 @@ class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription {
 				navController = nav.navController
 			) {}
 		}
-		
+
 		intent?.extras?.getParcelable<NavigationDirection>(EXTRA_DIRECTION)
 			?.let(::navigateByDirection) ?: run {
 			if (isUserLoggedInUseCase()) getLocalCurrentUserUseCase()?.let {
@@ -119,7 +121,8 @@ class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription {
 		}
 		Timber.tag("alert_notif_ID").i("main activity on create")
 	}
-	
+
+
 	override fun startVoiceRecord() {
 		recognizer.startRecord()
 	}
@@ -236,8 +239,24 @@ class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription {
 			}
 		}
 	}
-	
+
 	companion object {
 		const val EXTRA_DIRECTION = "extra_nav_direction"
+	}
+
+	override fun checkLanguage() {
+		binding.bottomNavigationView.menu.forEach {
+			when (it.itemId) {
+				R.id.network_root -> {
+					it.title = getString(R.string.navigation_bar_network)
+				}
+				R.id.emergency_root -> {
+					it.title = getString(R.string.navigation_bar_emergency)
+				}
+				R.id.alerts_graph -> {
+					it.title = getString(com.civilcam.domainLayer.R.string.alerts_root_list_title)
+				}
+			}
+		}
 	}
 }

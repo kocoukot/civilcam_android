@@ -1,27 +1,40 @@
 package com.civilcam.ext_features.alert
 
+import android.content.Context
+
 interface AlertDialogType {
-    fun title(): String
-    fun text(): String
+    fun title(context: Context): String
+    fun text(context: Context, vararg args: String): String
     fun alertButtons(): AlertDialogButtons = AlertDialogButtons.OK
 
-    open class Base(
-        private val title: String = "",
-        private val text: String,
-        private val alertButtons: AlertDialogButtons = AlertDialogButtons.OK
-    ) : AlertDialogType {
-        override fun title(): String = title
+    fun errorText(): String = ""
 
-        override fun text(): String = text
+
+    open class Base(
+        private val title: Int = 0,
+        private val text: Int = 0,
+        private val alertButtons: AlertDialogButtons = AlertDialogButtons.OK,
+        private val errorText: String = ""
+    ) : AlertDialogType {
+        override fun title(context: Context): String = context.getString(title)
+
+        override fun text(context: Context, vararg args: String): String =
+            if (args.isNotEmpty()) context.getString(text, *args) else context.getString(text)
 
         override fun alertButtons(): AlertDialogButtons = alertButtons
+
+        override fun errorText() = errorText
 
     }
 
     object Empty : AlertDialogType {
-        override fun title(): String = ""
-        override fun text(): String = ""
+        override fun title(context: Context): String = ""
+
+        override fun text(context: Context, vararg args: String): String = ""
+
     }
 
-    class ErrorAlert(private val _errorText: String) : Base(text = _errorText)
+    class ErrorAlert(private val _errorText: String) : Base(errorText = _errorText)
 }
+
+

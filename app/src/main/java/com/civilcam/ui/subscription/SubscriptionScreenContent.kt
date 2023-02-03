@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -36,13 +37,14 @@ import com.civilcam.ext_features.compose.elements.DialogLoadingContent
 import com.civilcam.ext_features.compose.elements.IconActionButton
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.subscription.SubscriptionFragment.Companion.IN_APP_TRIAL
+import com.civilcam.ui.subscription.data.SubConfirmAlert
 import com.civilcam.ui.subscription.model.SubscriptionActions
 
 @Composable
 fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
-	
+
 	val state = viewModel.state.collectAsState()
-	
+	val context = LocalContext.current
 	var selectedSubscription by remember { mutableStateOf(state.value.selectedSubscriptionType) }
 	
 	if (state.value.isLoading) {
@@ -52,9 +54,15 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 	state.value.alert
 		.takeIf { it != AlertDialogType.Empty }
 		?.let { alert ->
+			var date = ""
+			var price = ""
+			if (alert is SubConfirmAlert) {
+				price = alert.getPrice()
+				date = alert.getDate()
+			}
 			AlertDialogComp(
-				dialogTitle = alert.title(),
-				dialogText = alert.text(),
+				dialogTitle = alert.title(context),
+				dialogText = alert.text(context, price, date).ifEmpty { alert.errorText() },
 				alertType = alert.alertButtons(),
 			) {
 				viewModel.setInputActions(SubscriptionActions.CloseAlert(it))
@@ -72,15 +80,15 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 				painter = painterResource(R.drawable.img_subscription_background),
 				contentDescription = null,
 				modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.TopCenter),
+					.fillMaxWidth()
+					.align(Alignment.TopCenter),
 				contentScale = ContentScale.FillWidth
 			)
 			
 			IconActionButton(
 				modifier = Modifier
-                    .padding(top = 24.dp, start = 16.dp)
-                    .align(Alignment.TopStart),
+					.padding(top = 24.dp, start = 16.dp)
+					.align(Alignment.TopStart),
 				buttonIcon = R.drawable.ic_back_navigation, tint = CCTheme.colors.white
 			) {
 				viewModel.setInputActions(SubscriptionActions.GoBack)
@@ -100,8 +108,8 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 				),
 				backgroundColor = CCTheme.colors.white,
 				modifier = Modifier
-                    .fillMaxWidth()
-                    .navigationBarsPadding(),
+					.fillMaxWidth()
+					.navigationBarsPadding(),
 				elevation = 8.dp,
 			) {
 				Column(
@@ -130,9 +138,9 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 					)
 					
 					Column(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp),
+						Modifier
+							.fillMaxWidth()
+							.padding(top = 16.dp),
 						horizontalAlignment = Alignment.Start
 					) {
 						for (textString in listOf(
@@ -175,8 +183,8 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 							}
 						),
 						modifier = Modifier
-                            .fillMaxWidth()
-                            .navigationBarsPadding(),
+							.fillMaxWidth()
+							.navigationBarsPadding(),
 						buttonClick = {
 							viewModel.setInputActions(
 								SubscriptionActions.OnSubSelect(
