@@ -14,7 +14,7 @@
 
     <string name="terms_conditions_title">Términos y Condiciones\ny Política de Privacidad</string>
     <string name="terms_conditions_subtitle">Nunca es demasiado seguro, cuídate a ti mismo y a tus seres queridos con CivilCalm\n</string>
-    <string name="terms_conditions_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem sit lacus nisl donec egestas amet id consequat. Ut velit accumsan in lorem lectus et quis.</string>
+    <string name="terms_conditions_text">Puede seguir los enlaces a continuación para familiarizarse con la documentación de la aplicación:</string>
     <string name="terms_conditions_i_agree">Estoy de acuerdo con el</string>
 
     <string name="navigation_bar_network">Red</string>

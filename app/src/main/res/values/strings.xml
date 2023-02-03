@@ -14,7 +14,7 @@
 
     <string name="terms_conditions_title"><![CDATA[Terms & Conditions]]>\nand Privacy Policy</string>
     <string name="terms_conditions_subtitle">It\'s never too safe, take care of yourself and your loved ones with CivilCam\n</string>
-    <string name="terms_conditions_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem sit lacus nisl donec egestas amet id consequat. Ut velit accumsan in lorem lectus et quis.</string>
+    <string name="terms_conditions_text">You can follow the links below to get acquainted with the app\'s documentation:</string>
     <string name="terms_conditions_i_agree">I agree to the</string>
 
     <string name="navigation_bar_network">Network</string>
