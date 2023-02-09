@@ -2,6 +2,7 @@ package com.civilcam.service.voice
 
 import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import timber.log.Timber
@@ -10,9 +11,9 @@ interface VoiceRecognition {
 
     fun initRecorder()
 
-    fun startRecord()
+    fun startRecord(context: Context)
 
-    fun stopRecord()
+    fun stopRecord(context: Context)
 
     fun destroy()
 
@@ -24,17 +25,17 @@ interface VoiceRecognition {
 
                 Timber.tag("recognise").i("recognition result $result")
                 if (result.replace(" ", "").lowercase() in (KEY_VOICE_PHRASE)) {
-                    stopRecord()
+                    stopRecord(context)
                     onActivate.invoke()
                 } else {
-                    startRecord()
+                    startRecord(context)
                 }
             },
             onErrorRecognizing = { errorText, needContinue ->
                 recognizerState = RecognizerState.STOPED
 
                 Timber.tag("recognise").i(errorText)
-                if (needContinue) startRecord()
+                if (needContinue) startRecord(context)
             }
         )
         private val speechRecognizer: SpeechRecognizer by lazy {
@@ -50,32 +51,42 @@ interface VoiceRecognition {
             }
         }
 
-        override fun startRecord() {
+        override fun startRecord(context: Context) {
             when (recognizerState) {
                 RecognizerState.DESTROYED -> {
                     initRecorder()
-                    launch()
+                    launch(context)
                 }
                 RecognizerState.INITTED, RecognizerState.STOPED -> {
-                    launch()
+                    launch(context)
                 }
                 else -> {}
 
             }
         }
 
-        private fun launch() {
+        private fun launch(context: Context) {
             val recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US")
                 putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.packageName)
                 putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
                 putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
             }
+            (context.getSystemService(Context.AUDIO_SERVICE) as AudioManager).adjustStreamVolume(
+                AudioManager.STREAM_NOTIFICATION,
+                AudioManager.ADJUST_MUTE,
+                0
+            )
             speechRecognizer.startListening(recognizerIntent)
             recognizerState = RecognizerState.LISTENING
         }
 
-        override fun stopRecord() {
+        override fun stopRecord(context: Context) {
+            (context.getSystemService(Context.AUDIO_SERVICE) as AudioManager).adjustStreamVolume(
+                AudioManager.STREAM_NOTIFICATION,
+                AudioManager.ADJUST_UNMUTE,
+                0
+            )
             recognizerState = RecognizerState.DESTROYED
             speechRecognizer.destroy()
         }

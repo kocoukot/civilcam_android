@@ -1,7 +1,9 @@
 package com.civilcam.ui
 
 import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -124,11 +126,11 @@ class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription, Language
 
 
 	override fun startVoiceRecord() {
-		recognizer.startRecord()
+		recognizer.startRecord(this)
 	}
 	
 	override fun stopVoiceRecord() {
-		recognizer.stopRecord()
+		recognizer.stopRecord(this)
 	}
 	
 	override fun onStop() {
@@ -165,6 +167,10 @@ class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription, Language
 		stopLocationService()
 		SocketHandler.closeConnection()
 		recognizer.destroy()
+		(this.getSystemService(Context.AUDIO_SERVICE) as AudioManager).adjustStreamVolume(
+			AudioManager.STREAM_NOTIFICATION, AudioManager.ADJUST_UNMUTE, 0
+		)
+
 		super.onDestroy()
 	}
 	
