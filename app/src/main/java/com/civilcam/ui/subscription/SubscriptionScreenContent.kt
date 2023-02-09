@@ -62,7 +62,7 @@ fun SubscriptionScreenContent(viewModel: SubscriptionViewModel) {
 			}
 			AlertDialogComp(
 				dialogTitle = alert.title(context),
-				dialogText = alert.text(context, price, date).ifEmpty { alert.errorText() },
+				dialogText = alert.text(context, price, date),
 				alertType = alert.alertButtons(),
 			) {
 				viewModel.setInputActions(SubscriptionActions.CloseAlert(it))
@@ -236,16 +236,16 @@ fun SubscriptionPlanRow(
 	val textColor = if (isActivated) CCTheme.colors.white else CCTheme.colors.grayOne
 	
 	Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 6.dp)
-        .clip(RoundedCornerShape(8.dp))
-        .border(
-            1.dp, borderColor, RoundedCornerShape(8.dp)
-        )
-        .drawBehind {
-            drawRect(color = backgroundColor)
-        }
-        .clickable { onButtonClicked.invoke(subscriptionInfo) },
+		.fillMaxWidth()
+		.padding(vertical = 6.dp)
+		.clip(RoundedCornerShape(8.dp))
+		.border(
+			1.dp, borderColor, RoundedCornerShape(8.dp)
+		)
+		.drawBehind {
+			drawRect(color = backgroundColor)
+		}
+		.clickable { onButtonClicked.invoke(subscriptionInfo) },
 		horizontalAlignment = Alignment.Start
 	) {
 		

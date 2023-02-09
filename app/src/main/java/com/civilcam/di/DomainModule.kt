@@ -53,8 +53,6 @@ val domainModule = module {
 
     factory { SearchGuardsResultUseCase(get()) }
 
-    factory { GetCurrentSubscriptionPlanUseCase(get()) }
-
     factory { GetPlacesAutocompleteUseCase(get()) }
 
     factory { FetchUserLocationUseCase(get()) }
@@ -68,8 +66,6 @@ val domainModule = module {
     factory { ChangePasswordUseCase(get()) }
 
     factory { SetUserLanguageUseCase(get()) }
-
-    factory { GetMapAlertUserDataUseCase(get()) }
 
     factory { GoogleSignInUseCase(get(), get()) }
 

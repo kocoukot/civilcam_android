@@ -99,8 +99,8 @@ android {
             buildConfigField "String", "API_GATEWAY", '"https://api.civilcam.cloud/api"'
             buildConfigField "String", "BASE_URL", '"https://api.civilcam.cloud"'
             buildConfigField "String", "API_KEY", '"6wp1oRKGv27Dw1YgkKkcee"'
-            minifyEnabled true
-            debuggable false
+            minifyEnabled false
+            debuggable true
             signingConfig signingConfigs.default_config
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

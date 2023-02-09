@@ -10,7 +10,6 @@ import com.civilcam.domainLayer.ServiceException
 import com.civilcam.domainLayer.model.JsonDataParser
 import com.civilcam.domainLayer.model.OnGuardUserData
 import com.civilcam.domainLayer.serviceCast
-import com.civilcam.domainLayer.usecase.alerts.GetMapAlertUserDataUseCase
 import com.civilcam.domainLayer.usecase.alerts.ResolveAlertUseCase
 import com.civilcam.domainLayer.usecase.location.FetchUserLocationUseCase
 import com.civilcam.ext_features.compose.ComposeViewModel
@@ -30,7 +29,6 @@ import timber.log.Timber
 class LiveMapViewModel(
     private val alertId: Int,
     private val fetchUserLocationUseCase: FetchUserLocationUseCase,
-    private val getAlertUserDataUseCase: GetMapAlertUserDataUseCase,
     private val resolveAlertUseCase: ResolveAlertUseCase,
 ) : ComposeViewModel<LiveMapState, LiveMapRoute, LiveMapActions>() {
     override var _state: MutableStateFlow<LiveMapState> = MutableStateFlow(LiveMapState())

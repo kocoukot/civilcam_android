@@ -129,7 +129,7 @@ val alertsRootModule = module {
 	
 	viewModel { AlertsHistoryViewModel(get(), get(), get(), get(), get()) }
 
-	viewModel { (userId: Int) -> LiveMapViewModel(userId, get(), get(), get()) }
+	viewModel { (userId: Int) -> LiveMapViewModel(userId, get(), get()) }
 }
 
 val profileModule = module {

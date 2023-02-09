@@ -15,14 +15,11 @@ import com.civilcam.ext_features.ext.serverPhoneNumberFormat
 import com.civilcam.ext_features.live_data.observeNonNull
 import com.civilcam.ext_features.requireArg
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 
 class LiveMapFragment : Fragment() {
-    private val viewModel: LiveMapViewModel by viewModel {
-        parametersOf(userId)
-    }
+    private val viewModel: LiveMapViewModel by viewModel()
 
     private val userId by requireArg<Int>(ARG_ALERT_USER_ID)
 
