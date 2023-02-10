@@ -51,14 +51,18 @@ fun AlertMapScreenContent(
         position = CameraPosition.fromLatLngZoom(LatLng(45.0, -98.0), 0f)
     }
 
-    LaunchedEffect(key1 = userAlertLocationData != null) {
-        userAlertLocationData?.let { loc ->
+    LaunchedEffect(key1 = guardianInformation?.person != null) {
+        guardianInformation?.person?.let { guardianModel ->
             scope.launch {
+
                 cameraPositionState
                     .animate(
                         CameraUpdateFactory.newCameraPosition(
                             CameraPosition.fromLatLngZoom(
-                                loc.userLocation,
+                                LatLng(
+                                    guardianModel.latitude ?: 0.0,
+                                    guardianModel.longitude ?: 0.0
+                                ),
                                 15f
                             )
                         ), 500
@@ -93,6 +97,7 @@ fun AlertMapScreenContent(
 //                val onGuardUser by remember { derivedStateOf { it } }
                 if (onGuardUser.person.latitude != null && onGuardUser.person.longitude != null
                 ) {
+
                     Marker(
                         state = MarkerState(
                             position = LatLng(
