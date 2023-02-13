@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -22,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.os.LocaleListCompat
 import com.civilcam.domainLayer.ext.LocaleHelper
 import com.civilcam.domainLayer.model.user.LanguageType
 import com.civilcam.ext_features.compose.elements.ComposeButton
@@ -38,6 +40,9 @@ fun LanguageSelectScreenContent(viewModel: LanguageSelectViewModel) {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     Timber.i("screenHeight $screenHeight")
+
+    var appLocale: LocaleListCompat =
+        LocaleListCompat.forLanguageTags(state.value.selectedLang.langValue)
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         val permissionRequest = rememberLauncherForActivityResult(
@@ -75,7 +80,16 @@ fun LanguageSelectScreenContent(viewModel: LanguageSelectViewModel) {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.BottomCenter
             ) {
-                BottomCard(state.value.selectedLang, viewModel::setInputActions)
+                BottomCard(state.value.selectedLang) {
+                    if (it is LangSelectActions.LanguageSelect) {
+                        appLocale = LocaleListCompat.forLanguageTags(it.language.langValue)
+                        AppCompatDelegate.setApplicationLocales(appLocale)
+                    } else {
+
+                        viewModel.setInputActions(it)
+                    }
+
+                }
             }
         },
     )
@@ -115,7 +129,9 @@ fun BottomCard(
                 )
             }
 
-            SegmentedItem(selectedLang) { actionClicked.invoke(LangSelectActions.LanguageSelect(it)) }
+            SegmentedItem(selectedLang) {
+                actionClicked.invoke(LangSelectActions.LanguageSelect(it))
+            }
             Crossfade(
                 targetState = selectedLang,
                 modifier = Modifier.fillMaxWidth(),
