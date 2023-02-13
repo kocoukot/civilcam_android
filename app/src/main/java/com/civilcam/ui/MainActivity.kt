@@ -21,6 +21,7 @@ import com.civilcam.common.ext.navigateToRoot
 import com.civilcam.databinding.ActivityMainBinding
 import com.civilcam.domainLayer.castSafe
 import com.civilcam.domainLayer.model.subscription.UserSubscriptionState
+import com.civilcam.domainLayer.model.user.LanguageType
 import com.civilcam.domainLayer.usecase.subscriptions.SetExpiredSubscriptionUseCase
 import com.civilcam.domainLayer.usecase.user.GetLocalCurrentUserUseCase
 import com.civilcam.domainLayer.usecase.user.IsUserLoggedInUseCase
@@ -264,5 +265,10 @@ class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription, Language
 				}
 			}
 		}
+	}
+
+	override fun setLanguage(language: LanguageType) {
+//		this.getSystemService(LocaleManager::class.java)
+//			.setApplicationLocales(LocaleList(Locale.forLanguageTag(language.langValue)))
 	}
 }
