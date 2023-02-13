@@ -30,7 +30,7 @@ android {
 
         production {
             buildConfigField "String", "SOCKET_URL", '"https://api.civilcam.cloud"'
-            minifyEnabled true
+            minifyEnabled false
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

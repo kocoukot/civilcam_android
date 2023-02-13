@@ -25,8 +25,13 @@ interface VoiceRecognition {
 
                 Timber.tag("recognise").i("recognition result $result")
                 if (result.replace(" ", "").lowercase() in (KEY_VOICE_PHRASE)) {
-                    stopRecord(context)
-                    onActivate.invoke()
+                    try {
+                        stopRecord(context)
+                        onActivate.invoke()
+                    } catch (e: Exception) {
+                        println("error ${e.stackTrace}")
+                    }
+
                 } else {
                     startRecord(context)
                 }
@@ -92,8 +97,13 @@ interface VoiceRecognition {
         }
 
         override fun destroy() {
-            recognizerState = RecognizerState.DESTROYED
-            speechRecognizer.destroy()
+            try {
+                recognizerState = RecognizerState.DESTROYED
+                speechRecognizer.destroy()
+            } catch (e: Exception) {
+                println("error ${e.stackTrace}")
+            }
+
         }
 
         companion object {
