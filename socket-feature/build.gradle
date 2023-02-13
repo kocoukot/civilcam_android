@@ -19,14 +19,17 @@ android {
 
     buildTypes {
         debug {
+            buildConfigField "String", "SOCKET_URL", '"https://api.staging.civilcam.cloud"'
             minifyEnabled false
         }
 
         sandbox {
+            buildConfigField "String", "SOCKET_URL", '"https://api.staging.civilcam.cloud"'
             minifyEnabled false
         }
 
         production {
+            buildConfigField "String", "SOCKET_URL", '"https://api.civilcam.cloud"'
             minifyEnabled true
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

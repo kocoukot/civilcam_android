@@ -3,6 +3,7 @@ package com.civilcam.langselect
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
@@ -21,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.os.LocaleListCompat
 import com.civilcam.domainLayer.ext.LocaleHelper
 import com.civilcam.domainLayer.model.user.LanguageType
 import com.civilcam.ext_features.compose.elements.ComposeButton
@@ -35,9 +37,15 @@ fun LanguageSelectScreenContent(viewModel: LanguageSelectViewModel) {
     val state = viewModel.state.collectAsState()
     val context = LocalContext.current
 
-    var selectedLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage(context)) }
+    val selectedLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage(context)) }
     LocaleHelper.SetLanguageCompose(selectedLanguage)
 
+    var appLocale: LocaleListCompat =
+        LocaleListCompat.forLanguageTags(selectedLanguage.langValue)
+
+    LaunchedEffect(key1 = selectedLanguage) {
+        Toast.makeText(context, "selected lang $selectedLanguage", Toast.LENGTH_SHORT).show()
+    }
 //    LocaleHelper.SetLanguageCompose(state.value.selectedLang)
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
@@ -79,12 +87,8 @@ fun LanguageSelectScreenContent(viewModel: LanguageSelectViewModel) {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.BottomCenter
             ) {
-                BottomCard(state.value.selectedLang) {
-                    if (it is LangSelectActions.LanguageSelect) {
-                        selectedLanguage = it.language
-                    }
-                    viewModel.setInputActions(it)
-                }
+                BottomCard(state.value.selectedLang, viewModel::setInputActions)
+
             }
         },
     )
