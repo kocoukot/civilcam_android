@@ -44,3 +44,5 @@
         -keep class com.facebook.login.Login
 
         -keep class com.google.android.apps.authenticator.** {*;}
+
+        -keep,allowoptimization class com.google.android.libraries.maps.** { *; }
