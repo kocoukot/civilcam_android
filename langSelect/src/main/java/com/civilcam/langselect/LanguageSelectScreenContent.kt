@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -80,16 +79,17 @@ fun LanguageSelectScreenContent(viewModel: LanguageSelectViewModel) {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.BottomCenter
             ) {
-                BottomCard(state.value.selectedLang) {
-                    if (it is LangSelectActions.LanguageSelect) {
-                        appLocale = LocaleListCompat.forLanguageTags(it.language.langValue)
-                        AppCompatDelegate.setApplicationLocales(appLocale)
-                    } else {
-
-                        viewModel.setInputActions(it)
-                    }
-
-                }
+                BottomCard(state.value.selectedLang, viewModel::setInputActions)
+//                {
+//                    if (it is LangSelectActions.LanguageSelect) {
+//                        appLocale = LocaleListCompat.forLanguageTags(it.language.langValue)
+//                        AppCompatDelegate.setApplicationLocales(appLocale)
+//                    } else {
+//
+//                        viewModel.setInputActions(it)
+//                    }
+//
+//                }
             }
         },
     )
