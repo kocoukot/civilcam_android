@@ -12,12 +12,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -34,7 +33,12 @@ import timber.log.Timber
 fun LanguageSelectScreenContent(viewModel: LanguageSelectViewModel) {
 
     val state = viewModel.state.collectAsState()
-    LocaleHelper.SetLanguageCompose(state.value.selectedLang)
+    val context = LocalContext.current
+
+    var selectedLanguage by remember { mutableStateOf(LocaleHelper.getSelectedLanguage(context)) }
+    LocaleHelper.SetLanguageCompose(selectedLanguage)
+
+//    LocaleHelper.SetLanguageCompose(state.value.selectedLang)
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     Timber.i("screenHeight $screenHeight")
@@ -75,7 +79,12 @@ fun LanguageSelectScreenContent(viewModel: LanguageSelectViewModel) {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.BottomCenter
             ) {
-                BottomCard(state.value.selectedLang, viewModel::setInputActions)
+                BottomCard(state.value.selectedLang) {
+                    if (it is LangSelectActions.LanguageSelect) {
+                        selectedLanguage = it.language
+                    }
+                    viewModel.setInputActions(it)
+                }
             }
         },
     )
