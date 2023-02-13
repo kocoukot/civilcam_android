@@ -14,6 +14,7 @@ object LocaleHelper {
 
     // the method is used to set the language at runtime
     fun setLocale(context: Context, language: String): Context {
+
         persist(context, language)
         return updateResources(context, language)
     }
