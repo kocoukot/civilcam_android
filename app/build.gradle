@@ -35,6 +35,7 @@ android {
         targetSdk rootProject.target_sdk
         versionCode computeVersionCode()
         versionName computeVersionName()
+        resConfigs("en", "es")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
