@@ -3,7 +3,6 @@ package com.civilcam.langselect
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Build
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
@@ -43,9 +42,9 @@ fun LanguageSelectScreenContent(viewModel: LanguageSelectViewModel) {
     var appLocale: LocaleListCompat =
         LocaleListCompat.forLanguageTags(selectedLanguage.langValue)
 
-    LaunchedEffect(key1 = selectedLanguage) {
-        Toast.makeText(context, "selected lang $selectedLanguage", Toast.LENGTH_SHORT).show()
-    }
+//    LaunchedEffect(key1 = selectedLanguage) {
+//        Toast.makeText(context, "selected lang $selectedLanguage", Toast.LENGTH_SHORT).show()
+//    }
 //    LocaleHelper.SetLanguageCompose(state.value.selectedLang)
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
