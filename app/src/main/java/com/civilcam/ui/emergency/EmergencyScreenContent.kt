@@ -3,6 +3,7 @@ package com.civilcam.ui.emergency
 import android.annotation.SuppressLint
 import androidx.compose.animation.*
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
@@ -85,9 +86,11 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 		Box(
 			modifier = Modifier.fillMaxSize()
 		) {
+
+			val animatedButtonSize by animateDpAsState(targetValue = if (state.emergencyScreen == EmergencyScreen.COUPLED) 70.dp else 150.dp)
 			val defaultButtonModifier = Modifier
 				.align(Alignment.BottomCenter)
-				.size(150.dp)
+				.size(animatedButtonSize)
 				.offset(y = (-36).dp)
 
 			val buttonBox = if (state.emergencyScreen == EmergencyScreen.MAP_EXTENDED)
@@ -109,7 +112,7 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 			}
 
 			AnimatedVisibility(
-				visible = state.emergencyScreen == EmergencyScreen.NORMAL || state.emergencyScreen == EmergencyScreen.MAP_EXTENDED,
+				visible = state.emergencyScreen == EmergencyScreen.NORMAL || state.emergencyScreen == EmergencyScreen.MAP_EXTENDED || state.emergencyScreen == EmergencyScreen.COUPLED,
 				enter = fadeIn(animationSpec = tween(ANIMATION_DURATION)),
 				exit = fadeOut(animationSpec = tween(0))
 			) {
@@ -117,6 +120,7 @@ fun LiveScreenContent(viewModel: EmergencyViewModel) {
 					emergencyButton = state.emergencyButton,
 					buttonBoxM = buttonBox,
 					modifier = defaultButtonModifier,
+					isTextBig = state.emergencyScreen != EmergencyScreen.COUPLED,
 					onButtonClick = { action ->
 						when (action) {
 							is EmergencyActions.DoubleClickSos -> {
