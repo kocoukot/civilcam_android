@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.civilcam.ext_features.theme.CCTheme
 import com.civilcam.ui.emergency.model.EmergencyActions
 import com.civilcam.ui.emergency.model.EmergencyButton
@@ -37,6 +38,7 @@ fun LiveButtonContent(
     emergencyButton: EmergencyButton,
     buttonBoxM: Modifier,
     modifier: Modifier,
+    isTextBig: Boolean,
     onButtonClick: (EmergencyActions) -> Unit,
 ) {
 
@@ -45,7 +47,7 @@ fun LiveButtonContent(
     with(emergencyButton) {
         Box(modifier = buttonBoxM) {
             if (emergencyButton is EmergencyButton.InDangerButton) {
-                WavesAnimation(modifier)
+                WavesAnimation(modifier, isTextBig)
             }
 
             Box(
@@ -74,6 +76,7 @@ fun LiveButtonContent(
                         stringResource(buttonText),
                         color = buttonTextColor,
                         style = CCTheme.typography.emergency_button,
+                        fontSize = if (isTextBig) 24.sp else 14.sp,
                         modifier = Modifier,
                         textAlign = TextAlign.Center,
                     )
@@ -84,7 +87,7 @@ fun LiveButtonContent(
 }
 
 @Composable
-fun WavesAnimation(modifier: Modifier) {
+fun WavesAnimation(modifier: Modifier, isBigWaves: Boolean) {
 
     val waves = listOf(
         remember { Animatable(0f) },
@@ -117,7 +120,7 @@ fun WavesAnimation(modifier: Modifier) {
         dys.forEach { dy ->
             Box(
                 Modifier
-                    .size(60.dp)
+                    .size(if (isBigWaves) 60.dp else 30.dp)
                     .align(Alignment.Center)
                     .graphicsLayer {
                         scaleX = dy * 4 + 1
