@@ -102,8 +102,7 @@ fun UserDetailsSection(
                 else -> stringResource(id = R.string.user_details_ask_to_guard)
             }
 
-
-        userData.outputRequest?.status?.takeIf { it != GuardianStatus.DECLINED }?.let {
+        if ((userData.outputRequest?.status ?: GuardianStatus.NEW) != GuardianStatus.DECLINED) {
             ComposeButton(
                 title = buttonTitle,
                 modifier = Modifier.padding(horizontal = 16.dp),
@@ -116,6 +115,9 @@ fun UserDetailsSection(
                 }
             )
         }
+//        userData.outputRequest?.status?.takeIf { it != GuardianStatus.DECLINED }?.let {
+//
+//        }
         Spacer(modifier = Modifier.height(12.dp))
         RowDivider()
     }
