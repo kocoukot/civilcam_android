@@ -14,7 +14,7 @@ class GoogleAuthResultContract : ActivityResultContract<Intent, String?>() {
         val token = intent?.let {
             GoogleSignIn.getSignedInAccountFromIntent(intent)
                 .addOnFailureListener {
-                    Timber.i("login exception ${it.message}")
+                    Timber.i("login exception  ${it.message}")
                 }
         }.takeIf {
             it?.isSuccessful ?: false
