@@ -36,6 +36,14 @@
             "package_name": "com.civilcam",
             "certificate_hash": "37c250b911435b970c2070aa7bb433b648a772df"
           }
+        },
+        {
+          "client_id": "403034509114-v75ni9nqsjdnvka9i1etfrpu53si5eg2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.civilcam",
+            "certificate_hash": "6290a1a1e63c458519effda7e4549bb543fccb1e"
+          }
         }
       ],
       "api_key": [
@@ -49,6 +57,13 @@
             {
               "client_id": "403034509114-i70e7lel3joqeuprgis5cuuu8anbm7ss.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "403034509114-96rshuvu2i1vf70ebd9fbsffrpaf7rop.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.messapps.testing.civilcam-ios"
+              }
             }
           ]
         }
