@@ -41,6 +41,10 @@
         -keepnames class com.facebook.FacebookActivity
         -keepnames class com.facebook.CustomTabActivity
 
+        -keep class com.google.googlesignin.** { *; }
+        -keepnames class com.google.googlesignin.* { *; }
+
+        -keep class com.google.android.gms.auth.** { *; }
         -keep class com.facebook.login.Login
 
         -keep class com.google.android.apps.authenticator.** {*;}
