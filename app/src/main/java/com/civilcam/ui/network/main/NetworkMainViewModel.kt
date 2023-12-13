@@ -23,9 +23,11 @@ import com.civilcam.ext_features.compose.ComposeFragmentRoute
 import com.civilcam.ext_features.ext.clearPhone
 import com.civilcam.ui.network.main.model.*
 import com.civilcam.ui.network.source.SearchGuardiansDataSource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.util.*
@@ -78,24 +80,29 @@ class NetworkMainViewModel(
 
     private fun fetchGuardsList() {
         updateInfo { copy(isLoading = true) }
-        networkRequest(
-            action = { getUserNetworkUseCase(getState().networkType) },
-            onSuccess = { data ->
-                Timber.i("userdata $data")
-                updateInfo {
-                    copy(
-                        data = NetworkMainModel(
-                            requestsList = data.requestsList,
-                            guardiansList = mapToItems(data.guardiansList),
-                            onGuardList = mapToItems(data.onGuardList),
-                            contactsList = emptyList()
-                        )
-                    )
-                }
-            },
-            onFailure = { error -> updateInfo { copy(errorText = error) } },
-            onComplete = { updateInfo { copy(isLoading = false) } },
-        )
+
+        viewModelScope.launch(Dispatchers.Main) {
+//        val result =    getUserNetworkUseCase(getState().networkType)
+//asdfasfasdf
+        }
+//        networkRequest(
+//            action = {  },
+//            onSuccess = { data ->
+//                Timber.i("userdata $data")
+//                updateInfo {
+//                    copy(
+//                        data = NetworkMainModel(
+//                            requestsList = data.requestsList,
+//                            guardiansList = mapToItems(data.guardiansList),
+//                            onGuardList = mapToItems(data.onGuardList),
+//                            contactsList = emptyList()
+//                        )
+//                    )
+//                }
+//            },
+//            onFailure = { error -> updateInfo { copy(errorText = error) } },
+//            onComplete = { updateInfo { copy(isLoading = false) } },
+//        )
     }
 
     fun stopRefresh() {
