@@ -83,7 +83,7 @@ class NetworkMainViewModel(
 
         viewModelScope.launch(Dispatchers.Main) {
 //        val result =    getUserNetworkUseCase(getState().networkType)
-
+//asdfasfasdf
         }
 //        networkRequest(
 //            action = {  },
