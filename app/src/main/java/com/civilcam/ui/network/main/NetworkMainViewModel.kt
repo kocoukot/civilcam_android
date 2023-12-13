@@ -82,7 +82,7 @@ class NetworkMainViewModel(
         updateInfo { copy(isLoading = true) }
 
         viewModelScope.launch(Dispatchers.Main) {
-        val result =    getUserNetworkUseCase(getState().networkType)
+//        val result =    getUserNetworkUseCase(getState().networkType)
 
         }
 //        networkRequest(
