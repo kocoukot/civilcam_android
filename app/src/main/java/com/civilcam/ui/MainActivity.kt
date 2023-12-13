@@ -231,6 +231,10 @@ class MainActivity : AppCompatActivity(), VoiceRecord, EndSubscription, Language
 	
 	
 	override fun subscriptionEnd() {
+		//some extra not usefull comments
+//
+//
+//
 		if (isUserLoggedInUseCase()) {
 			setExpiredSubscriptionUseCase()
 			binding.bottomNavigationView.isVisible = false
