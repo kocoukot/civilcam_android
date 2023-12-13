@@ -1,7 +1,3 @@
-cat .github/workflows/action.yaml
-
----
-
 on:
   issue_comment:
     types: [created]
